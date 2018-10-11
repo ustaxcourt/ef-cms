@@ -1,0 +1,5 @@
+id_dsa*
+id_rsa*
+id_dsa*.pub
+id_rsa*.pub
+*.pem
