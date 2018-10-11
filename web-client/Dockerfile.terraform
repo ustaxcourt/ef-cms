@@ -1,17 +1,12 @@
 FROM alpine
 
-RUN apk add --no-cache terraform
-
 # Versions: https://pypi.python.org/pypi/awscli#downloads
-ENV AWS_CLI_VERSION 1.15.47
+ENV AWS_CLI_VERSION 1.16.31
 
 RUN apk --no-cache update && \
-    apk --no-cache add python py-pip py-setuptools ca-certificates groff less && \
+    apk --no-cache add terraform python py-pip py-setuptools ca-certificates groff less && \
+    apk --no-cache add bash git openssh && \
     pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
     rm -rf /var/cache/apk/*
 
-RUN apk add --no-cache bash git openssh
-
-# RUN mkdir -p /home/tomcat
-
-# WORKDIR /data
+RUN terraform --version
