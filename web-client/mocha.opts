@@ -1,0 +1,5 @@
+# https://mochajs.org/#usage
+
+--require @babel/register
+--require @babel/polyfill
+--timeout 500
