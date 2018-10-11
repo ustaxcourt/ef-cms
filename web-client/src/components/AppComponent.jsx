@@ -2,6 +2,8 @@ import React from 'react';
 import { state, sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
 
+import UsaBanner from './UsaBanner';
+
 export default connect(
   {
     response: state.response,
@@ -11,6 +13,7 @@ export default connect(
   function AppComponent({ response, getHello, getTrivia }) {
     return (
       <React.Fragment>
+        <UsaBanner />
         <h3>App Component</h3>
         <p>Click a button!</p>
         <p>
