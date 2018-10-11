@@ -11,9 +11,9 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          def runner = docker.build 'test', '-f react-client/Dockerfile.test .'
-          runner.inside('-u 0:0') { // really wish I didn't have to use root
-            dir('react-client') {
+          def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+          runner.inside('-u 0:0') {
+            dir('web-client') {
               sh 'npm i'
               sh 'npm run lint'
               sh 'npm run test'
@@ -25,8 +25,20 @@ pipeline {
       }
       post {
         success {
-          dir('react-client') {
+          dir('web-client') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('Terraform') {
+      steps {
+        script {
+          def runner = docker.build 'test', '-f web-client/Dockerfile.terraform .'
+          runner.inside('-u 0:0') {
+            dir('web-client/terraform/dev') {
+              sh 'yes | ./deploy-app.sh'
+            }
           }
         }
       }
@@ -56,13 +68,13 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'test', '-f react-client/Dockerfile.test .'
-  runner.inside('-u 0:0') { // really wish I didn't have to use root
-    dir('react-client') {
+  def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+  runner.inside('-u 0:0') {
+    dir('web-client') {
       sh 'npm i'
       sh 'npm run dist'
       s3Upload(
-        bucket: "ui-${env}.ustc-case-mgmt.flexion.us",
+        bucket: "efcmsui-${env}.ustc-case-mgmt.flexion.us",
         file: 'dist',
         path: "",
         cacheControl: 'no-cache'
