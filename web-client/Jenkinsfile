@@ -46,14 +46,14 @@ pipeline {
         }
       }
     }
-    stage('Deploy dev') {
+    // stage('Deploy dev') {
       // when {
       //   branch 'develop'
       // }
       // steps {
       //   deployTo('dev')
       // }
-    }
+    // }
     stage('Deploy prod') {
       when {
         branch 'master'
