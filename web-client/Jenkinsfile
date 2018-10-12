@@ -69,7 +69,7 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-u 0:0') {
     dir('web-client') {
       sh 'npm i'
