@@ -8,60 +8,67 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('Build') {
+    stage('testing') {
       steps {
         script {
-          def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
-          runner.inside('-u 0:0') {
-            dir('web-client') {
-              sh 'npm i'
-              sh 'npm run lint'
-              sh 'npm run test'
-              // sh 'npx cypress install' // TODO: finish implementing me
-              // sh 'npm run cypress' // // TODO: finish implementing me
-            }
-          }
-        }
-      }
-      post {
-        success {
-          dir('web-client') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-          }
+          sh 'echo "HELLO"'
         }
       }
     }
-    stage('Terraform') {
-      // when {
-      //   branch 'develop'
-      // }
-      steps {
-        script {
-          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
-          runner.inside("-u 0:0") {
-            dir('web-client/terraform/dev') {
-              sh './deploy-app.sh -a'
-            }
-          }
-        }
-      }
-    }
-    stage('Deploy dev') {
-      // when {
-      //   branch 'develop'
-      // }
-      steps {
-        deployTo('dev')
-      }
-    }
-    stage('Deploy prod') {
-      when {
-        branch 'master'
-      }
-      steps {
-        deployTo('prod')
-      }
-    }
+    // stage('Build') {
+    //   steps {
+    //     script {
+    //       def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+    //       runner.inside('-u 0:0') {
+    //         dir('web-client') {
+    //           sh 'npm i'
+    //           sh 'npm run lint'
+    //           sh 'npm run test'
+    //           // sh 'npx cypress install' // TODO: finish implementing me
+    //           // sh 'npm run cypress' // // TODO: finish implementing me
+    //         }
+    //       }
+    //     }
+    //   }
+    //   post {
+    //     success {
+    //       dir('web-client') {
+    //         publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Terraform') {
+    //   // when {
+    //   //   branch 'develop'
+    //   // }
+    //   steps {
+    //     script {
+    //       def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+    //       runner.inside("-u 0:0") {
+    //         dir('web-client/terraform/dev') {
+    //           sh './deploy-app.sh -a'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Deploy dev') {
+    //   // when {
+    //   //   branch 'develop'
+    //   // }
+    //   steps {
+    //     deployTo('dev')
+    //   }
+    // }
+    // stage('Deploy prod') {
+    //   when {
+    //     branch 'master'
+    //   }
+    //   steps {
+    //     deployTo('prod')
+    //   }
+    // }
   }
   // post {
   //   always {
