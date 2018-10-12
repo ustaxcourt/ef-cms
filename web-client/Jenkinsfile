@@ -8,13 +8,6 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    // stage('testing') {
-    //   steps {
-    //     script {
-    //       sh 'echo "HELLO"'
-    //     }
-    //   }
-    // }
     stage('Build') {
       steps {
         script {
@@ -47,29 +40,28 @@ pipeline {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
           runner.inside("-u 0:0") {
             dir('web-client/terraform/dev') {
-              // sh(script: "./deploy-app.sh -a", returnStdout: true)
               sh './deploy-app.sh -a'
             }
           }
         }
       }
     }
-    // stage('Deploy dev') {
-    //   // when {
-    //   //   branch 'develop'
-    //   // }
-    //   steps {
-    //     deployTo('dev')
-    //   }
-    // }
-    // stage('Deploy prod') {
-    //   when {
-    //     branch 'master'
-    //   }
-    //   steps {
-    //     deployTo('prod')
-    //   }
-    // }
+    stage('Deploy dev') {
+      // when {
+      //   branch 'develop'
+      // }
+      steps {
+        deployTo('dev')
+      }
+    }
+    stage('Deploy prod') {
+      when {
+        branch 'master'
+      }
+      steps {
+        deployTo('prod')
+      }
+    }
   }
   // post {
   //   always {
