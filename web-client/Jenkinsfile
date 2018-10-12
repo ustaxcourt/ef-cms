@@ -71,10 +71,10 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
-  runner.inside('-u 0:0') {
-    dir('web-client') {
-      script {
+  script {
+    def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
+    runner.inside('-u 0:0') {
+      dir('web-client') {
         sh 'npm i'
         sh 'npm run dist'
         s3Upload(
