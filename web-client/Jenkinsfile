@@ -30,30 +30,29 @@ pipeline {
           }
         }
       }
+      post {
+        success {
+          dir('web-client') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
     }
-    //   post {
-    //     success {
-    //       dir('web-client') {
-    //         publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('Terraform') {
-    //   // when {
-    //   //   branch 'develop'
-    //   // }
-    //   steps {
-    //     script {
-    //       def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
-    //       runner.inside("-u 0:0") {
-    //         dir('web-client/terraform/dev') {
-    //           sh './deploy-app.sh -a'
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Terraform') {
+      // when {
+      //   branch 'develop'
+      // }
+      steps {
+        script {
+          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+          runner.inside("-u 0:0") {
+            dir('web-client/terraform/dev') {
+              sh './deploy-app.sh -a'
+            }
+          }
+        }
+      }
+    }
     // stage('Deploy dev') {
     //   // when {
     //   //   branch 'develop'
