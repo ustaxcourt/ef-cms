@@ -44,6 +44,7 @@ describe('Main cerebral module', () => {
     await test.runSequence('getTrivia');
     assert.equal(test.getState('response'), 'Bad response!');
   });
+
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetails');
     assert.equal(test.getState('usaBanner.showDetails'), true);

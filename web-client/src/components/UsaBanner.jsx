@@ -6,6 +6,9 @@ import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';
 import iconDotGov from '../../node_modules/uswds/dist/img/icon-dot-gov.svg';
 import iconHttps from '../../node_modules/uswds/dist/img/icon-https.svg';
 
+/**
+ * Official US website banner
+ */
 export default connect(
   {
     showDetails: state.usaBanner.showDetails,
