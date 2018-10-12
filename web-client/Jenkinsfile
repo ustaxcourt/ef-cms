@@ -8,28 +8,29 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('testing') {
+    // stage('testing') {
+    //   steps {
+    //     script {
+    //       sh 'echo "HELLO"'
+    //     }
+    //   }
+    // }
+    stage('Build') {
       steps {
         script {
-          sh 'echo "HELLO"'
+          def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+          runner.inside('-u 0:0') {
+            dir('web-client') {
+              sh 'npm i'
+              sh 'npm run lint'
+              sh 'npm run test'
+              // sh 'npx cypress install' // TODO: finish implementing me
+              // sh 'npm run cypress' // // TODO: finish implementing me
+            }
+          }
         }
       }
     }
-    // stage('Build') {
-    //   steps {
-    //     script {
-    //       def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
-    //       runner.inside('-u 0:0') {
-    //         dir('web-client') {
-    //           sh 'npm i'
-    //           sh 'npm run lint'
-    //           sh 'npm run test'
-    //           // sh 'npx cypress install' // TODO: finish implementing me
-    //           // sh 'npm run cypress' // // TODO: finish implementing me
-    //         }
-    //       }
-    //     }
-    //   }
     //   post {
     //     success {
     //       dir('web-client') {
