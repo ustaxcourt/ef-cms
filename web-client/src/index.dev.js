@@ -1,7 +1,7 @@
 import app from './app';
-import environment from './environments/dev';
+import dev from './environments/dev';
 
 /**
- * Initializes the app with dev environment
+ * Initializes the app with dev environment context
  */
-app.initialize(environment);
+app.initialize(dev);

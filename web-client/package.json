@@ -6,8 +6,8 @@
   "scripts": {
     "cypress": "cypress run",
     "cypress:open": "cypress open --config watchForFileChanges=true",
-    "dev": "parcel --no-cache src/index.dev.html",
-    "dist": "parcel build --no-cache src/index.prod.html",
+    "dev": "USTC_ENV=dev parcel --no-cache src/index.pug",
+    "dist": "USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint -- ./src",
     "test": "nyc mocha --opts ./mocha.opts ./**/**/*.test.js"
   },
@@ -71,5 +71,8 @@
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
     "uswds": "^1.6.8"
+  },
+  "devDependencies": {
+    "pug": "^2.0.3"
   }
 }
