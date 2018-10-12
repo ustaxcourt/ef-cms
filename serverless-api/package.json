@@ -39,7 +39,8 @@
       "*.js"
     ],
     "exclude": [
-      "**/*[tT]est.js"
+      "src/**/*[tT]est.js",
+      "artifacts/**/**"
     ],
     "reporter": [
       "text",
@@ -51,7 +52,7 @@
     "lines": 95,
     "statements": 95,
     "functions": 95,
-    "branches": 95,
+    "branches": 50,
     "cache": true
   },
   "dependencies": {
