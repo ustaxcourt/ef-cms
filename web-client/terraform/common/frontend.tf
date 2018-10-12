@@ -31,11 +31,11 @@ data "aws_iam_policy_document" "allow_public" {
   }
 }
 
-resource "aws_acm_certificate" "certificate" {
-  domain_name       = "${var.environment}-${var.deployment}.${var.dns_domain}"
-  validation_method = "DNS"
-  # subject_alternative_names = ["${var.dns_domain}"]
-}
+# resource "aws_acm_certificate" "certificate" {
+#   domain_name       = "${var.environment}-${var.deployment}.${var.dns_domain}"
+#   validation_method = "DNS"
+#   # subject_alternative_names = ["${var.dns_domain}"]
+# }
 
 module "ui-certificate" {
   source = "github.com/traveloka/terraform-aws-acm-certificate"

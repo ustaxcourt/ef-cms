@@ -32,12 +32,14 @@ pipeline {
       }
     }
     stage('Terraform') {
+      // when {
+      //   branch 'develop'
+      // }
       steps {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
           runner.inside("-u 0:0") {
             dir('web-client/terraform/dev') {
-              sh 'aws apigateway get-rest-apis --output=json --region=us-east-1'
               sh 'yes | ./deploy-app.sh'
             }
           }
@@ -80,6 +82,8 @@ def deployTo(env) {
         path: "",
         cacheControl: 'no-cache'
       )
+      sh 'echo "hello world"'
     }
   }
+  sh 'echo "we are here"'
 }
