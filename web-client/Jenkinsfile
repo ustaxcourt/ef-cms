@@ -11,7 +11,7 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
+          def runner = docker.build 'test', '--file web-client/Dockerfile.test .'
           runner.inside('-u 0:0') {
             dir('web-client') {
               sh 'npm i'
@@ -37,7 +37,7 @@ pipeline {
       // }
       steps {
         script {
-          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+          def runner = docker.build 'terraform', '--file web-client/Dockerfile.terraform .'
           runner.inside("-u 0:0") {
             dir('web-client/terraform/dev') {
               sh './deploy-app.sh -a'
@@ -52,8 +52,6 @@ pipeline {
       // }
       steps {
         deployTo('dev')
-        sh 'echo $?'
-        sh 'echo "we are here"'
       }
     }
     stage('Deploy prod') {
@@ -73,7 +71,7 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
+  def runner = docker.build 'deploy', '--file web-client/Dockerfile.deploy .'
   runner.inside('-u 0:0') {
     dir('web-client') {
       sh 'npm i'
@@ -84,8 +82,6 @@ def deployTo(env) {
         path: "",
         cacheControl: 'no-cache'
       )
-      sh 'echo $?'
     }
   }
-  sh 'echo $?'
 }
