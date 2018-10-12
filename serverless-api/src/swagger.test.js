@@ -1,20 +1,29 @@
 'use strict';
 
 const lambdaTester = require('lambda-tester');
-const expect = require('chai').expect;
 const chai = require('chai');
+const expect = require('chai').expect;
+
 chai.use(require('chai-string'));
 
 const swagger = require('./swagger');
 
 
-describe.only('swagger GET', function() {
+describe('swagger GET', function() {
   it('should GET and return a 200 status', function() {
     return lambdaTester(swagger.handler)
       .event({httpMethod: 'GET'})
       .expectResult((result) => {
-        expect(result.statusCode).to.equal(200);
+        expect(result.statusCode).to.equal('200');
       })
+  });
+
+  it('should GET and return a html body for swagger', function() {
+    return lambdaTester(swagger.handler)
+    .event({httpMethod: 'GET'})
+    .expectResult((result) => {
+      expect(result.body).to.startsWith('"\\n    <html>\\n      <body>\\n        <head>\\n');
+    })
   });
 
 });

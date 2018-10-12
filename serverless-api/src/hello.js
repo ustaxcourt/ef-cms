@@ -10,5 +10,5 @@ exports.handler = (event, context, callback) => {
     },
   });
 
-  done(null, 'Hello World');
-}
+  done(null, { result: 'Hello World' });
+};
