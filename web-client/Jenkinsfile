@@ -46,14 +46,14 @@ pipeline {
         }
       }
     }
-    // stage('Deploy dev') {
+    stage('Deploy dev') {
       // when {
       //   branch 'develop'
       // }
-      // steps {
-      //   deployTo('dev')
-      // }
-    // }
+      steps {
+        deployTo('dev')
+      }
+    }
     stage('Deploy prod') {
       when {
         branch 'master'
@@ -71,19 +71,17 @@ pipeline {
 }
 
 def deployTo(env) {
-  script {
-    def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
-    runner.inside('-u 0:0') {
-      dir('web-client') {
-        // sh 'npm i'
-        // sh 'npm run dist'
-        // s3Upload(
-        //   bucket: "efcmsui-${env}.ustc-case-mgmt.flexion.us",
-        //   file: 'dist',
-        //   path: "",
-        //   cacheControl: 'no-cache'
-        // )
-      }
+  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
+  runner.inside('-u 0:0') {
+    dir('web-client') {
+      sh 'npm i'
+      sh 'npm run dist'
+      s3Upload(
+        bucket: "efcmsui-${env}.ustc-case-mgmt.flexion.us",
+        file: 'dist',
+        path: "",
+        cacheControl: 'no-cache'
+      )
     }
   }
 }
