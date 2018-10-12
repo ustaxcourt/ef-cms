@@ -1,0 +1,115 @@
+service: example-service
+plugins:
+  - serverless-plugin-split-stacks
+  # - serverless-domain-manager
+  - serverless-offline
+  - serverless-aws-documentation
+custom:
+  documentation:
+    api:
+      info:
+        version: '2'
+        title: Example API
+        description: Some example API
+        termsOfService: https://www.google.com
+        contact:
+          name: The contact person
+          url: https://www.serverless.com/framework
+          email: some-fake@email.com
+        license:
+          name: The license
+          url: https://www.github.com
+      tags:
+        -
+          name: Tag1
+          description: The first tag
+        -
+          name: Tag2
+          description: That other tag that we all love
+    models:
+      -
+        name: HelloWorldResponse
+        contentType: "application/json"
+        schema:
+          type: string
+
+  # customDomain:
+  #   domainName: api-${self:provider.stage}.${self:service}.flexion.us
+  #   basePath: ''
+  #   certificateName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
+  #   enabled: true
+  splitStacks:
+    perFunction: true
+    perType: false
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  vars: ${file(./config/${self:custom.stage}.yml)}
+
+provider:
+  name: aws
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: nodejs8.10
+  memorySize: 512
+  timeout: 10
+  logRetentionInDays: 7
+  # role: ${self:custom.vars.role}
+
+  environment:
+    TESTING: '123'
+
+package:
+  include:
+    - src/**
+
+functions:
+  trivia:
+    handler: src/trivia.handler
+    events:
+      - http:
+          path: v1/trivia
+          method: get
+          cors: true
+
+  hello:
+    handler: src/hello.handler
+    documentation:
+      summary: Gets a hello world message, yay
+      tags:
+        - Tag1
+      description: >
+        Demonstrates a GET method. You can see query string parameters,
+        request headers, response body and response headers.
+      # queryParams:
+      #   -
+      #     name: firstParam
+      #     description: The first param that we want, you MUST pass it
+      #     required: true
+      #   -
+      #     name: secondParam
+      #     description: The second param. This one is optional
+      methodResponses:
+        -
+          statusCode: '200'
+          responseModels:
+            "application/json": HelloWorldResponse
+          # responseHeaders:
+          #   -
+          #     name: link
+          #     description: describes other actions that can be taken
+          #     type: string
+    events:
+      - http:
+          path: v1/hello
+          method: get
+          cors: true
+
+  swagger:
+    handler: src/swagger.handler
+    events:
+      - http:
+          path: v1/swagger
+          method: get
+          cors: true
