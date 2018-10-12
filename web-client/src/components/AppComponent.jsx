@@ -4,6 +4,9 @@ import { connect } from '@cerebral/react';
 
 import UsaBanner from './UsaBanner';
 
+/**
+ * Root application component
+ */
 export default connect(
   {
     response: state.response,

@@ -8,6 +8,9 @@ import '@babel/polyfill';
 
 import AppComponent from './components/AppComponent';
 
+/**
+ * Instantiates the Cerebral app with React
+ */
 const app = {
   initialize: environment => {
     mainModule.providers.environment = environment;
