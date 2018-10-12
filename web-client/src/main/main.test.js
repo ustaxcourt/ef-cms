@@ -29,22 +29,6 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('response'), 'Bad response!');
   });
 
-  it('Shows Trivia success', async () => {
-    nock('http://localhost:8080')
-      .get('/trivia')
-      .reply(200, 'Today');
-    await test.runSequence('getTrivia');
-    assert.equal(test.getState('response'), 'Today');
-  });
-
-  it('Shows Trivia failure', async () => {
-    nock('http://localhost:8080')
-      .get('/trivia')
-      .reply(500);
-    await test.runSequence('getTrivia');
-    assert.equal(test.getState('response'), 'Bad response!');
-  });
-
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetails');
     assert.equal(test.getState('usaBanner.showDetails'), true);
