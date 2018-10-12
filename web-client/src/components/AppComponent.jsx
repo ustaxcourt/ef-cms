@@ -3,6 +3,8 @@ import { state, sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
 
 import UsaBanner from './UsaBanner';
+import Header from './Header';
+import Footer from './Footer';
 
 /**
  * Root application component
@@ -11,23 +13,24 @@ export default connect(
   {
     response: state.response,
     getHello: sequences.getHello,
-    getTrivia: sequences.getTrivia,
   },
-  function AppComponent({ response, getHello, getTrivia }) {
+  function AppComponent({ response, getHello }) {
     return (
       <React.Fragment>
         <UsaBanner />
-        <h3>App Component</h3>
-        <p>Click a button!</p>
-        <p>
-          <button id="hello-button" onClick={() => getHello()}>
-            Hello
-          </button>
-          <button id="trivia-button" onClick={() => getTrivia()}>
-            Trivia
-          </button>
-        </p>
-        <p id="response">{response}</p>
+        <Header />
+        <main id="main-content">
+          <section className="usa-section usa-grid">
+            <h2>Hello World!</h2>
+            <p>
+              <button id="hello-button" onClick={() => getHello()}>
+                Hello?
+              </button>
+            </p>
+            <p id="response">{response}</p>
+          </section>
+        </main>
+        <Footer />
       </React.Fragment>
     );
   },

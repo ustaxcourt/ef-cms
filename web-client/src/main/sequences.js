@@ -7,9 +7,4 @@ export const getHello = [
   set(state`response`, props.response),
 ];
 
-export const getTrivia = [
-  actions.getTrivia,
-  set(state`response`, props.response),
-];
-
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
