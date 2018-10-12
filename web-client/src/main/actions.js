@@ -4,10 +4,3 @@ export const getHello = async ({ api, environment }) => {
     response,
   };
 };
-
-export const getTrivia = async ({ api, environment }) => {
-  const response = await api.getTrivia(environment.getBaseUrl());
-  return {
-    response,
-  };
-};
