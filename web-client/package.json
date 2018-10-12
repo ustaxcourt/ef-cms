@@ -19,6 +19,28 @@
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
+  "nyc": {
+    "check-coverage": false,
+    "per-file": true,
+    "extension": [
+      "*.js"
+    ],
+    "exclude": [
+      "**/*[tT]est.js"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "cobertura",
+      "html"
+    ],
+    "report-dir": "./artifacts/coverage",
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 95,
+    "cache": true
+  },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "@babel/cli": "^7.1.2",
