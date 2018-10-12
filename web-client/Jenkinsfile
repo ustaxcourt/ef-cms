@@ -31,10 +31,10 @@ pipeline {
         }
       }
     }
-    stage('Terraform') {
-      // when {
-      //   branch 'develop'
-      // }
+    stage('Terraform - Dev') {
+      when {
+        branch 'develop'
+      }
       steps {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
@@ -47,11 +47,26 @@ pipeline {
       }
     }
     stage('Deploy dev') {
-      // when {
-      //   branch 'develop'
-      // }
+      when {
+        branch 'develop'
+      }
       steps {
         deployTo('dev')
+      }
+    }
+    stage('Terraform - Prod') {
+      when {
+        branch 'master'
+      }
+      steps {
+        script {
+          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+          runner.inside("-u 0:0") {
+            dir('web-client/terraform/prod') {
+              sh './deploy-app.sh -a'
+            }
+          }
+        }
       }
     }
     stage('Deploy prod') {
@@ -71,13 +86,14 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
+  def runner = docker.build 'deploy', '-f web-client/Dockerfile.terraform .'
   runner.inside('-u 0:0') {
     dir('web-client') {
       sh 'npm i'
       sh 'npm run dist'
+      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
       s3Upload(
-        bucket: "efcmsui-${env}.ustc-case-mgmt.flexion.us",
+        bucket: "${bucket}",
         file: 'dist',
         path: "",
         cacheControl: 'no-cache'
