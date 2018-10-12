@@ -35,7 +35,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
-          runner.inside("-u 0:0 -v /etc/passwd:/etc/passwd") {
+          runner.inside("-u 0:0") {
             dir('web-client/terraform/dev') {
               sh 'aws apigateway get-rest-apis --output=json --region=us-east-1'
               sh 'yes | ./deploy-app.sh'
