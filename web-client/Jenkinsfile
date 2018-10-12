@@ -40,7 +40,7 @@ pipeline {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
           runner.inside("-u 0:0") {
             dir('web-client/terraform/dev') {
-              sh 'yes | ./deploy-app.sh'
+              sh './deploy-app.sh -a'
             }
           }
         }
