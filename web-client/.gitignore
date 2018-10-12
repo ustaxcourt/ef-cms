@@ -2,3 +2,4 @@ node_modules/
 dist/
 artifacts/
 .nyc_output/
+cypress/videos
