@@ -52,6 +52,8 @@ pipeline {
       // }
       steps {
         deployTo('dev')
+        echo "$?"
+        echo "we are here"
       }
     }
     stage('Deploy prod') {
@@ -82,8 +84,8 @@ def deployTo(env) {
         path: "",
         cacheControl: 'no-cache'
       )
-      sh 'echo "hello world"'
+      echo "$?"
     }
   }
-  sh 'echo "we are here"'
+  echo "$?"
 }
