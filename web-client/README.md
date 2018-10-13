@@ -18,7 +18,7 @@
   
 - Start the web client in dev mode
 
-  `npm run start`
+  `npm run dev`
   
 - Build distribution to be deployed
 

@@ -1,9 +1,13 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-
-
+const swagger = require('../swagger.json');
+/**
+ * Swagger HTML Page Lambda
+ *
+ * @param event
+ * @param context
+ * @param callback
+ */
 exports.handler = (event, context, callback) => {
 
   const done = (err, res) => callback(null, {
@@ -11,12 +15,9 @@ exports.handler = (event, context, callback) => {
     body: err ? JSON.stringify(err.message) : JSON.stringify(res.result),
     headers: {
       'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
     },
   });
-
-  const swagger = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', 'swagger.json'), 'utf-8'),
-  );
 
   const body = `
     <html>
@@ -38,4 +39,3 @@ exports.handler = (event, context, callback) => {
 
   done(null, { result: body });
 };
-

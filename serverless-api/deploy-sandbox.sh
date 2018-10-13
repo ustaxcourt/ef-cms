@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+function check_env_vars_exist() {
+    echo "Checking appropriate environment variables are set."
+
+    if [[ -z "${ENVIRONMENT}" ]]
+    then
+        echo "No ENVIRONMENT environment variable was specified."
+        exit 1
+    fi
+}
+
+
+function prepare_serverless() {
+    echo "Preparing to run Serverless."
+
+    pushd ./src/
+    rm -rf ./node_modules/
+    npm install
+    popd
+
+    rm -rf ./node_modules/
+    npm install
+}
+
+function run_development() {
+
+    if [[ "${ENVIRONMENT}" == "dev" ]] || [[ "${ENVIRONMENT}" == "staging" ]] || [[ "${ENVIRONMENT}" == "prod" ]]; then
+        echo "Cannot use this script to deploy to dev, staging or prod."
+        exit 1
+    fi
+
+    echo "Running dev contributor setup in AWS for ${ENVIRONMENT}"
+    echo
+    export SLS_STAGE=${ENVIRONMENT}
+
+    pushd ./terraform/dev/
+    terraform init
+    export SLS_DEPLOYMENT_BUCKET=$(terraform output sls_deployment_bucket)
+    popd
+
+    echo "running serverless deploy --stage ${SLS_STAGE}"
+
+    sls deploy --stage ${SLS_STAGE}
+}
+
+check_env_vars_exist
+prepare_serverless
+run_development
+
