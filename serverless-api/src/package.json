@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "sls offline start",
+    "watch": "nodemon -e js,json,yml --exec sls offline start",
+    "lint": "eslint ./*.js",
+    "snyk": "snyk test",
+    "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
+    "test": "nyc -a mocha --exit ./*.test.js",
+    "test:unit:watch": "nodemon ./node_modules/.bin/jasmine --config=jasmine.json",
+    "test:unit": "jasmine --config=jasmine.json",
+    "test:coverage": "nyc jasmine --config=jasmine.json",
+    "test:coverage:watch": "nodemon -e js,json ./node_modules/.bin/nyc jasmine --config=jasmine.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "unlicensed",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-string": "^1.4.0",
+    "eslint": "^5.4.0",
+    "lambda-tester": "^3.4.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "serverless": "^1.32.0",
+    "serverless-aws-documentation": "^1.1.0",
+    "serverless-domain-manager": "^2.6.5",
+    "serverless-offline": "^3.27.0",
+    "serverless-plugin-split-stacks": "^1.5.5",
+    "snyk": "^1.99.1"
+  }
+}

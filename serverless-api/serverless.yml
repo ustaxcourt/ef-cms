@@ -56,13 +56,24 @@ provider:
   timeout: 10
   logRetentionInDays: 7
   # role: ${self:custom.vars.role}
+  deploymentBucket:
+    name: ${env:SLS_DEPLOYMENT_BUCKET}
+    serverSideEncryption: AES256
 
   environment:
     TESTING: '123'
 
 package:
+  exclude:
+    - ./**
   include:
-    - src/**
+    - src/hello.js
+    - src/trivia.js
+    - src/swagger.js
+    - src/package.json
+    - src/node_modules/**
+
+  excludeDevDependencies: true
 
 functions:
   trivia:
