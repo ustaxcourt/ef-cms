@@ -70,6 +70,7 @@ package:
     - src/hello.js
     - src/trivia.js
     - src/swagger.js
+    - swagger.json
     - src/package.json
     - src/node_modules/**
 
