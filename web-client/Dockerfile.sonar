@@ -1,0 +1,7 @@
+FROM node:8
+
+RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip
+RUN unzip sonar-scanner-cli-3.2.0.1227-linux.zip
+RUN sed -i "" 's|#sonar.host.url=http://localhost:9000|sonar.host.url=https://sonarqube-efcms-ops.ustc-case-mgmt.flexion.us|g' sonar-scanner-cli-3.2.0.1227-linux/conf/sonar-scanner.properties
+
+RUN sonar-scanner-3.2.0.1227-linux/bin/sonar-scanner -Dsonar.login=admin -Dsonar.password=Vr9E9ZVQ1rEH
