@@ -22,7 +22,7 @@ describe('swagger GET', function() {
     return lambdaTester(swagger.handler)
     .event({httpMethod: 'GET'})
     .expectResult((result) => {
-      expect(result.body).to.startsWith('"\\n    <html>\\n      <body>\\n        <head>\\n');
+      expect(result.body).to.startsWith('<html>');
     })
   });
 
