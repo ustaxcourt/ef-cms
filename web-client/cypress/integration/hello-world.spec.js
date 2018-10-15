@@ -9,6 +9,7 @@ describe('Hello world!', function() {
     cy.get('#hello-button').click();
     cy.get('#response').should('contain.text', 'Hello World!');
   });
+});
 
 describe('USA Banner', () => {
   it('shows header and hides content', () => {

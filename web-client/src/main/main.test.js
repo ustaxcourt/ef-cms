@@ -14,7 +14,7 @@ describe('Main cerebral module', () => {
   });
 
   it('Shows Hello World success', async () => {
-    nock('http://localhost:8080')
+    nock(environment.getBaseUrl())
       .get('/hello')
       .reply(200, 'Hello World!');
     await test.runSequence('getHello');
@@ -22,7 +22,7 @@ describe('Main cerebral module', () => {
   });
 
   it('Shows Hello World failure', async () => {
-    nock('http://localhost:8080')
+    nock(environment.getBaseUrl())
       .get('/hello')
       .reply(500);
     await test.runSequence('getHello');
