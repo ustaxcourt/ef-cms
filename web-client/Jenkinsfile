@@ -8,6 +8,23 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('sonarqube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {
+            def runner = docker.build 'sonar', -f 'web-client/Dockerfile.sonar .'
+            runner.inside("-u 0:0") {
+              sh """sonar-scanner \
+                    -Dsonar.login=admin \
+                    -Dsonar.password=${SONAR_PASSWORD} \
+                    -Dsonar.host.url=https://$(cd ../management/management/ && terraform output sonarqube_url) \
+                    -Dsonar.projectBaseDir=./src"""
+            }
+            // sh "SONAR_PASSWORD=${SONAR_PASSWORD} ./run-sonar.sh"
+          }
+        }
+      }
+    }
     stage('Build') {
       steps {
         script {

@@ -3,3 +3,4 @@ dist/
 artifacts/
 .nyc_output/
 cypress/videos
+.sonar-cache/
