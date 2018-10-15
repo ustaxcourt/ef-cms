@@ -1,7 +1,7 @@
 import app from './app';
-import environment from './environments/prod';
+import prod from './environments/prod';
 
 /**
- * Initializes the app with prod environment
+ * Initializes the app with prod environment context
  */
-app.initialize(environment);
+app.initialize(prod);
