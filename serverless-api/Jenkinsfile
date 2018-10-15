@@ -15,6 +15,7 @@ pipeline {
           runner.inside('-u 0:0') {
             dir('server') {
               sh 'npm i'
+              sh 'npm run lint'
               sh 'npm run build'
             }
           }

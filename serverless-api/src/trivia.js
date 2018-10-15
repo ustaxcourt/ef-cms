@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Date Handler Lambda for Sample Client
  *

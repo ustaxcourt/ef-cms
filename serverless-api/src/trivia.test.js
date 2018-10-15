@@ -1,5 +1,3 @@
-'use strict';
-
 const trivia = require('./trivia.js');
 const lambdaTester = require('lambda-tester');
 const chai = require('chai');
@@ -11,7 +9,7 @@ describe('trivia GET', function() {
   it('should GET and return a 200 status', function() {
     return lambdaTester(trivia.handler)
     .event({httpMethod: 'GET'})
-    .expectResult((result) => {
+    .expectResult(result => {
       expect(result.statusCode).to.equal('200');
     })
   });
@@ -19,7 +17,7 @@ describe('trivia GET', function() {
   it('should GET a date body', function() {
     return lambdaTester(trivia.handler)
     .event({httpMethod: 'GET'})
-    .expectResult((result) => {
+    .expectResult(result => {
       expect(result.body).to.startsWith('"\\"Today is');
     })
   });

@@ -38,16 +38,15 @@
   "author": "",
   "license": "unlicensed",
   "devDependencies": {
-    "chai": "^4.1.2",
     "chai-string": "^1.4.0",
-    "eslint": "^5.4.0",
+    "chai": "^4.1.2",
     "lambda-tester": "^3.4.1",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
-    "serverless": "^1.32.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-domain-manager": "^2.6.5",
     "serverless-offline": "^3.27.0",
-    "serverless-plugin-split-stacks": "^1.5.5"
+    "serverless-plugin-split-stacks": "^1.5.5",
+    "serverless": "^1.32.0"
   }
 }

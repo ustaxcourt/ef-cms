@@ -11,7 +11,7 @@ describe('hello GET', function() {
   it('should GET and return a 200 status', function() {
     return lambdaTester(hello.handler)
     .event({httpMethod: 'GET'})
-    .expectResult((result) => {
+    .expectResult(result => {
       expect(result.statusCode).to.equal('200');
     })
   });
@@ -19,7 +19,7 @@ describe('hello GET', function() {
   it('should GET a hello world body', function() {
     return lambdaTester(hello.handler)
     .event({httpMethod: 'GET'})
-    .expectResult((result) => {
+    .expectResult(result => {
       expect(result.body).to.equal('"Hello World"');
     })
   });
