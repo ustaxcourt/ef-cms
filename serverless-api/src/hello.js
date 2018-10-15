@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Hello World Simple Lambda
  *
