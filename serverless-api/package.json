@@ -20,6 +20,8 @@
     "install:lambda": "docker pull lambci/lambda",
     "install:dynamodb": "./node_modules/.bin/sls dynamodb install",
     "start:dynamodb": "./node_modules/.bin/sls dynamodb start -p 8000  --migrate true --stage local",
-    "start:local": "./node_modules/.bin/sls offline start --port 3000 -r us-east-1 --noTimeout --stage local"
+    "start:local": "./node_modules/.bin/sls offline start --port 3000 -r us-east-1 --noTimeout --stage local",
+    "start": "sls offline start",
+    "watch": "nodemon -e yml --exec sls offline start",
   }
 }

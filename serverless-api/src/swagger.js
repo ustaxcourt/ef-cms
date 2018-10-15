@@ -1,6 +1,7 @@
 'use strict';
 
 const swagger = require('../swagger.json');
+
 /**
  * Swagger HTML Page Lambda
  *
@@ -12,15 +13,14 @@ exports.handler = (event, context, callback) => {
 
   const done = (err, res) => callback(null, {
     statusCode: err ? '400' : '200',
-    body: err ? JSON.stringify(err.message) : JSON.stringify(res.result),
+    body: err ? JSON.stringify(err.message) : res.result,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'text/html',
       'Access-Control-Allow-Origin': '*'
     },
   });
 
-  const body = `
-    <html>
+  const body = `<html>
       <body>
         <head>
           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.17.4/swagger-ui.css">
@@ -34,8 +34,7 @@ exports.handler = (event, context, callback) => {
           });
         </script>
       </body>
-    </htm>
-  `;
+    </html>`;
 
   done(null, { result: body });
 };

@@ -29,3 +29,13 @@ Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 `ENVIRONMENT=<yourname> ./deploy-Sandbox.sh`
 
 Modify the API_URL in web-client/environments/dev.js to match the URL returned from the serverless deploy.
+
+## Serverless Local
+
+- see https://medium.com/a-man-with-no-server/running-aws-lambda-and-api-gateway-locally-serverless-offline-3c64b3e54772
+for background.  NOTE: Docker is required.
+
+1. `npm run install:lambda` install docker for lambda to run locally with serverless-local
+2. `npm run install:dynamodb` install a local dynamodb (optional)
+3. `npm run start:dynamodb` run the dynamodb on port 8000 (optional)
+4. `npm run start:local` in another terminal run the serverless-local on 3000
