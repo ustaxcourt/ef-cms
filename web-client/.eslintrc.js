@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['prettier', 'eslint:recommended', 'plugin:react/recommended'],
-  plugins: ['prettier', 'jsx-a11y'],
+  plugins: ['prettier', 'jsx-a11y', 'cypress'],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
@@ -28,8 +28,9 @@ module.exports = {
     },
   },
   env: {
-    es6: true,
+    'cypress/globals': true,
     browser: true,
+    es6: true,
     mocha: true,
     node: true,
   },

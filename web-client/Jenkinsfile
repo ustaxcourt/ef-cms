@@ -40,8 +40,6 @@ pipeline {
               sh 'npm i'
               sh 'npm run lint'
               sh 'npm run test'
-              // sh 'npx cypress install' // TODO: finish implementing me
-              // sh 'npm run cypress' // // TODO: finish implementing me
             }
           }
         }

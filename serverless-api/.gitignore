@@ -1,0 +1,4 @@
+.nyc_output/
+.serverless/
+artifacts/
+node_modules/
