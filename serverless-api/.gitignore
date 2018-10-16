@@ -2,4 +2,3 @@
 .serverless/
 artifacts/
 node_modules/
-.snyk/
