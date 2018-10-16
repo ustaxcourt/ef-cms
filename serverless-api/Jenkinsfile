@@ -1,0 +1,89 @@
+pipeline {
+  agent any
+
+  options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
+
+  stages {
+    stage('Test') {
+      steps {
+        script {
+          def runner = docker.build 'test', '-f server/Dockerfile.test .'
+          runner.inside('-u 0:0') {
+            dir('server') {
+              sh 'npm i'
+              sh 'npm run lint'
+              sh 'npm run build'
+            }
+          }
+        }
+      }
+      post {
+        success {
+          dir('server') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('Deploy Pre Prod') {
+      when {
+        branch 'develop'
+      }
+      steps {
+        script {
+          def targets = [
+            [env: 'dev', regions: ['us-east-1']],
+          ]
+          def tasks = createDeployTasks targets
+          parallel tasks
+        }
+      }
+    }
+    stage('Deploy Prod') {
+      when {
+        branch 'master'
+      }
+      steps {
+        script {
+          def targets = [
+            [env: 'prod', regions:['us-east-1']],
+          ]
+          def tasks = createDeployTasks targets
+          parallel tasks
+        }
+      }
+    }
+  }
+}
+
+def createDeployTasks(targets) {
+  def deployTasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    deploy.regions.each { region ->
+      deployTasks["${slsStage} - ${region}"] = {
+        node() {
+          stage("deploy ${slsStage} - ${region}") {
+            checkout scm
+            def runner = docker.build 'serverless', '-f server/Dockerfile.serverless .'
+            runner.inside('-u 0:0') { // really wish I didn't have to use root
+              dir('server') {
+                sh 'npm i'
+                sh 'chmod -R ugo+r .' // TODO: is this actually needed
+                withCredentials([[
+                  $class: 'AmazonWebServicesCredentialsBinding',
+                  credentialsId: 'AWSDeployer', // TODO: this probably needs to be changed
+                ]]) {
+                  // not sure if I really need this....
+                  // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
+                  sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return deployTasks
+}

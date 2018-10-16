@@ -9,7 +9,7 @@ while getopts ":ha" opt; do
       AUTO=true
       ;;
     h )
-      echo "A script to automate the CMS QPP Foundational Components deployment process."
+      echo "A script to automate the US Tax Court deployment process."
       echo "NOTE: This script initiates processes that are potentially destructive and cannot be undone."
       echo ""
       echo "Usage:"
