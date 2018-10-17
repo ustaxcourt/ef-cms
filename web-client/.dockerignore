@@ -2,6 +2,6 @@ node_modules
 .terraform
 .nyc_output
 .scannerwork
-artifacts
+coverage
 dist
 .git

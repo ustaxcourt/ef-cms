@@ -5,6 +5,7 @@
 # able to download the swagger.json from the deployed aws apigateway.
 
 # requires python
+# install jq
 # require YQ to be installed
 #   pip install yq
 STAGE=$1

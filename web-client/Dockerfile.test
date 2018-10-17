@@ -1,3 +1,1 @@
 FROM cypress/base:8
-
-WORKDIR /home/tomcat

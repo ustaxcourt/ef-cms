@@ -1,6 +1,7 @@
 node_modules/
 dist/
-artifacts/
+coverage/
 .nyc_output/
 cypress/videos
 .sonar-cache/
+sonarqube-status.json
