@@ -8,6 +8,7 @@ RUN apk add --no-cache git
 RUN apk add --no-cache python3
 RUN apk add --no-cache --update python3-dev gcc build-base
 RUN apk add --update openssl
+RUN apk add --update jq
 RUN pip3 install --upgrade pip
 RUN pip3 install setuptools
 RUN pip3 install pylint

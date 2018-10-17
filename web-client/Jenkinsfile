@@ -3,42 +3,35 @@ pipeline {
   agent any
 
   environment {
-    HOME = '.' // needed to running 'npm i' on docker without being root
-    CYPRESS_CACHE_FOLDER = './cypress_cache' // needed to be able to run cypress without being root
+    SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
+    npm_config_cache = "/home/tomcat"
+    HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
+    CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
   }
 
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('sonarqube') {
+    stage('Lint') {
       steps {
         script {
-          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {
-            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar ..'
-            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-              sshagent(credentials: ['github']) {
-                dir('management/management') {
-                  sh './deploy-init.sh'
-                }
-                dir('web-client') {
-                  def SONAR_URL = sh(returnStdout: true, script: 'cd ../management/management && terraform output sonarqube_url')
-                  def FULL_URL = "https://${SONAR_URL}"
-                  sh "sonar-scanner -Dsonar.projectBaseDir=. -Dsonar.login=admin -Dsonar.password=${SONAR_PASSWORD} -Dsonar.host.url=${FULL_URL}"
-                }
-              }
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm i'
+              sh 'npm run lint'
             }
           }
         }
       }
     }
-    stage('Build') {
+    stage('Test') {
       steps {
         script {
-          def runner = docker.build 'test', '-f web-client/Dockerfile.test .'
-          runner.inside() {
-            dir('web-client') {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm i'
-              sh 'npm run lint'
               sh 'npm run test'
             }
           }
@@ -47,7 +40,26 @@ pipeline {
       post {
         success {
           dir('web-client') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {
+            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
+            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+              sshagent(credentials: ['github']) {
+                dir('management/management') {
+                  sh './deploy-init.sh'
+                }
+                dir('web-client') {
+                  sh './verify-sonarqube-passed.sh'
+                }
+              }
+            }
           }
         }
       }
@@ -67,7 +79,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy dev') {
+    stage('Deploy Dev') {
       when {
         branch 'develop'
       }
@@ -90,7 +102,7 @@ pipeline {
         }
       }
     }
-    stage('Deploy prod') {
+    stage('Deploy Prod') {
       when {
         branch 'master'
       }
@@ -108,7 +120,7 @@ pipeline {
 
 def deployTo(env) {
   def runner = docker.build 'deploy', '-f web-client/Dockerfile.terraform .'
-  runner.inside() {
+  runner.inside('-v /home/tomcat:/home/tomcat') {
     dir('web-client') {
       sh 'npm i'
       sh 'npm run dist'

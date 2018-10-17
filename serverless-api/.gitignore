@@ -1,4 +1,4 @@
 .nyc_output/
 .serverless/
-artifacts/
+coverage/
 node_modules/
