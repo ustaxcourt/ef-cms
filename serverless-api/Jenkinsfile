@@ -11,14 +11,8 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('Verify "serverless-api/" Changes') {
-      steps {
-        script {
-          sh './serverless-api/exit-when-no-changes.sh'
-        }
-      }
-    }
     stage('Setup') {
+      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
@@ -31,6 +25,7 @@ pipeline {
       }
     }
     stage('Lint') {
+      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
       steps {
         script {
           def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
@@ -43,6 +38,7 @@ pipeline {
       }
     }
     stage('Test') {
+      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
       steps {
         script {
           def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
@@ -63,7 +59,9 @@ pipeline {
     }
     stage('Deploy Pre Prod') {
       when {
-        branch 'develop'
+        expression {
+          return env.BRANCH_NAME == 'develop' && sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE'
+        }
       }
       steps {
         script {
@@ -77,7 +75,9 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        branch 'master'
+        expression {
+          return env.BRANCH_NAME == 'master' && sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE'
+        }
       }
       steps {
         script {
