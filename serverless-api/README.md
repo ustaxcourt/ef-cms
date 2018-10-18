@@ -8,7 +8,35 @@ Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
 `cd src && npm run install`
 
-# Development Workflow
+## API Gateway Execution and Access Request Logging Note
+
+### Execution Logging
+
+Some manual steps are necessary prior but only need to be done once for execution logging.
+
+Go through this [document](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
+
+   In general, you need to:
+
+   1. Create a new IAM role (for example, apigateway-cloudwatch-logs-role) with trust policy apigateway.amazonaws.com
+   2. Attach aws exist policy AmazonAPIGatewayPushToCloudWatchLogs to this role
+   3. Record this IAM role’s ARN
+   4. Add this role’s arn to apigateway -> settings -> CloudWatch log role ARN*
+
+Cloudwatch log is API-Gateway-Execution-Logs_<rest-api-id>/<stage>
+
+# Usage
+
+See the Jenkinsfile.  
+
+In general:
+
+    $cd stageDir && terraform init && terraform apply
+    $serverless deploy --stage myStageName
+
+
+
+# Contribution
 
 ### Starting Serverless Offline
 
