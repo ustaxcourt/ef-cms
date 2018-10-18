@@ -1,6 +1,13 @@
 pipeline {
   agent any
 
+  environment {
+    SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
+    npm_config_cache = "/home/tomcat"
+    HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
+    CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+  }
+
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
@@ -8,7 +15,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
-          runner.inside() {
+          runner.inside('-v /home/tomcat:/home/tomcat') {
             dir('serverless-api') {
               sh 'npm i'
             }
