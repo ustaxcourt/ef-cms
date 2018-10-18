@@ -16,6 +16,9 @@ pipeline {
         expression {
           def OUT = sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh')
           echo "$OUT"
+          if ($OUT == 'CONTINUE') {
+            echo "TESTING"
+          }
           return "$OUT" == "CONTINUE"
         }
       }
