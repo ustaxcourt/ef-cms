@@ -12,7 +12,13 @@ pipeline {
 
   stages {
     stage('Setup') {
-      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
+      when {
+        expression {
+          def OUT = sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh')
+          echo "$OUT"
+          return OUT == 'CONTINUE'
+        }
+      }
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
