@@ -12,6 +12,13 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('Verify "web-client/" Changes') {
+      steps {
+        script {
+          sh './web-client/exit-when-no-changes.sh'
+        }
+      }
+    }
     stage('Lint') {
       steps {
         script {

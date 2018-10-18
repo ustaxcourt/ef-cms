@@ -11,6 +11,13 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('Verify "serverless-api/" Changes') {
+      steps {
+        script {
+          sh './serverless-api/exit-when-no-changes.sh'
+        }
+      }
+    }
     stage('Setup') {
       steps {
         script {
