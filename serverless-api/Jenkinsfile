@@ -105,7 +105,7 @@ def createDeployTasks(targets) {
             runner.inside() {
               dir('serverless-api') {
                 sh 'npm i'
-                // sh 'chmod -R ugo+r .' // TODO: is this actually needed
+                sh 'chmod -R ugo+r .' // TODO: is this actually needed
                 // not sure if I really need this....
                 // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
                 sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
