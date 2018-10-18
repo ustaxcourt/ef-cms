@@ -7,9 +7,9 @@ pipeline {
     stage('Setup') {
       steps {
         script {
-          def runner = docker.build 'setup', '-f server/Dockerfile.test .'
+          def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
           runner.inside() {
-            dir('server') {
+            dir('serverless-api') {
               sh 'npm i'
             }
           }
@@ -19,9 +19,9 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f server/Dockerfile.test .'
+          def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
           runner.inside() {
-            dir('server') {
+            dir('serverless-api') {
               sh 'npm run lint'
             }
           }
@@ -31,9 +31,9 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          def runner = docker.build 'test', '-f server/Dockerfile.test .'
+          def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
           runner.inside() {
-            dir('server') {
+            dir('serverless-api') {
               sh 'npm run test'
             }
           }
@@ -41,7 +41,7 @@ pipeline {
       }
       post {
         success {
-          dir('server') {
+          dir('serverless-api') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
@@ -87,9 +87,9 @@ def createDeployTasks(targets) {
         node() {
           stage("deploy ${slsStage} - ${region}") {
             checkout scm
-            def runner = docker.build 'serverless', '-f server/Dockerfile.serverless .'
+            def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.serverless .'
             runner.inside() {
-              dir('server') {
+              dir('serverless-api') {
                 sh 'npm i'
                 // sh 'chmod -R ugo+r .' // TODO: is this actually needed
                 // not sure if I really need this....
