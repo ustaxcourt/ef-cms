@@ -20,7 +20,7 @@ pipeline {
       post {
         success {
           dir('server') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'artifacts/coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
       }
