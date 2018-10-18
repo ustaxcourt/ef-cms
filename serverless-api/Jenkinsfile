@@ -14,7 +14,7 @@ pipeline {
     stage('Verify "serverless-api/" Changes') {
       steps {
         script {
-          sh './exit-when-no-changes.sh'
+          sh './serverless-api/exit-when-no-changes.sh'
         }
       }
     }
