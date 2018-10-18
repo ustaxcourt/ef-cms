@@ -32,9 +32,9 @@
       "text",
       "text-summary",
       "cobertura",
+      "lcov",
       "html"
     ],
-    "report-dir": "./artifacts/coverage",
     "lines": 95,
     "statements": 95,
     "functions": 95,
