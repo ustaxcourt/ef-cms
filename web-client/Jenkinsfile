@@ -12,14 +12,12 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('Verify "web-client/" Changes') {
-      steps {
-        script {
-          sh './web-client/exit-when-no-changes.sh'
+    stage('Lint') {
+      when {
+        expression {
+          sh(returnStdout: true, script: './web-client/exit-when-no-changes.sh').trim() == 'CONTINUE'
         }
       }
-    }
-    stage('Lint') {
       steps {
         script {
           dir('web-client') {
@@ -33,6 +31,11 @@ pipeline {
       }
     }
     stage('Test') {
+      when {
+        expression {
+          sh(returnStdout: true, script: './web-client/exit-when-no-changes.sh').trim() == 'CONTINUE'
+        }
+      }
       steps {
         script {
           dir('web-client') {
@@ -53,6 +56,11 @@ pipeline {
       }
     }
     stage('SonarQube') {
+      when {
+        expression {
+          sh(returnStdout: true, script: './web-client/exit-when-no-changes.sh').trim() == 'CONTINUE'
+        }
+      }
       steps {
         script {
           withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {

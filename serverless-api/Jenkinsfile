@@ -12,7 +12,11 @@ pipeline {
 
   stages {
     stage('Setup') {
-      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
+      when {
+        expression {
+          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
+        }
+      }
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
@@ -25,7 +29,11 @@ pipeline {
       }
     }
     stage('Lint') {
-      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
+      when {
+        expression {
+          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
+        }
+      }
       steps {
         script {
           def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
@@ -38,7 +46,11 @@ pipeline {
       }
     }
     stage('Test') {
-      when { expression { return sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE' }}
+      when {
+        expression {
+          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
+        }
+      }
       steps {
         script {
           def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
@@ -59,9 +71,7 @@ pipeline {
     }
     stage('Deploy Pre Prod') {
       when {
-        expression {
-          return env.BRANCH_NAME == 'develop' && sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE'
-        }
+        branch 'develop'
       }
       steps {
         script {
@@ -75,9 +85,7 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        expression {
-          return env.BRANCH_NAME == 'master' && sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh') == 'CONTINUE'
-        }
+        branch 'master'
       }
       steps {
         script {
