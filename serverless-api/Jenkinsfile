@@ -4,15 +4,37 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('Setup') {
+      steps {
+        script {
+          def runner = docker.build 'setup', '-f server/Dockerfile.test .'
+          runner.inside() {
+            dir('server') {
+              sh 'npm i'
+            }
+          }
+        }
+      }
+    }
+    stage('Lint') {
+      steps {
+        script {
+          def runner = docker.build 'lint', '-f server/Dockerfile.test .'
+          runner.inside() {
+            dir('server') {
+              sh 'npm run lint'
+            }
+          }
+        }
+      }
+    }
     stage('Test') {
       steps {
         script {
           def runner = docker.build 'test', '-f server/Dockerfile.test .'
-          runner.inside('-u 0:0') {
+          runner.inside() {
             dir('server') {
-              sh 'npm i'
-              sh 'npm run lint'
-              sh 'npm run build'
+              sh 'npm run test'
             }
           }
         }
@@ -66,20 +88,14 @@ def createDeployTasks(targets) {
           stage("deploy ${slsStage} - ${region}") {
             checkout scm
             def runner = docker.build 'serverless', '-f server/Dockerfile.serverless .'
-            runner.inside('-u 0:0') { // really wish I didn't have to use root
+            runner.inside() {
               dir('server') {
                 sh 'npm i'
-                sh 'chmod -R ugo+r .' // TODO: is this actually needed
-                withCredentials([[
-                  $class: 'AmazonWebServicesCredentialsBinding',
-                  credentialsId: 'AWSDeployer', // TODO: this probably needs to be changed
-                ]]) {
-                  // not sure if I really need this....
-                  // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
-                  sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
-                  def restApiId = sh(script: "aws apigateway get-rest-apis --query "items[?name==\'${slsStage}-example-service\'].id" --output text", returnStdout: true)
-                  // sh 'aws apigateway update-stage --rest-api-id "${restApiId.trim()}" --stage-name "${slsStage}" --region us-east-1 --patch-operations op=replace,path=/*/*/logging/dataTrace,value=true'
-                }
+                // sh 'chmod -R ugo+r .' // TODO: is this actually needed
+                // not sure if I really need this....
+                // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
+                sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+                sh "ENVIRONMENT=${slsStage} REGION=${region} ./configure-api-gateway-logging.sh"
               }
             }
           }
