@@ -35,7 +35,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
-          runner.inside() {
+          runner.inside('-v /home/tomcat:/home/tomcat') {
             dir('serverless-api') {
               sh 'npm run lint'
             }
@@ -48,7 +48,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
-          runner.inside() {
+          runner.inside('-v /home/tomcat:/home/tomcat') {
             dir('serverless-api') {
               sh 'npm run test'
             }
