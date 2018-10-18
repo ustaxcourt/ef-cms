@@ -14,7 +14,7 @@ pipeline {
     stage('Setup') {
       when {
         expression {
-          def OUT = sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh')
+          def OUT = sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim()
           echo "$OUT"
           if ("$OUT" == 'CONTINUE') {
             echo "TESTING"
