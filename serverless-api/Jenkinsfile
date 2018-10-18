@@ -102,7 +102,7 @@ def createDeployTasks(targets) {
           stage("deploy ${slsStage} - ${region}") {
             checkout scm
             def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.serverless .'
-            runner.inside() {
+            runner.inside('-v /home/tomcat:/home/tomcat') {
               dir('serverless-api') {
                 sh 'npm i'
                 sh 'chmod -R ugo+r .' // TODO: is this actually needed
