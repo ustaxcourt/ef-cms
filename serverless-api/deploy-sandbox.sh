@@ -45,7 +45,16 @@ function run_development() {
     sls deploy --stage ${SLS_STAGE}
 }
 
+function configure_custom_logging() {
+    export REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${ENVIRONMENT}-example-service'].id" --output text)
+    aws apigateway update-stage \
+        --rest-api-id "${REST_API_ID}" \
+        --stage-name "${ENVIRONMENT}" \
+        --region us-east-1 \
+        --patch-operations op=replace,path=/*/*/logging/dataTrace,value=true
+}
+
 check_env_vars_exist
 prepare_serverless
 run_development
-
+configure_custom_logging

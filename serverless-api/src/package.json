@@ -10,7 +10,6 @@
     "test:watch": "nyc -a mocha --watch ./*.test.js",
     "test:coverage": "nyc check-coverage",
     "test:ci": "nyc --all --reporter=cobertura --reporter=html --report-dir ../artifacts/coverage/ mocha --exit ./*.test.js && npm run test:coverage"
-
   },
   "nyc": {
     "check-coverage": true,

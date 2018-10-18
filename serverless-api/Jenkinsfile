@@ -77,6 +77,8 @@ def createDeployTasks(targets) {
                   // not sure if I really need this....
                   // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
                   sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+                  def restApiId = sh(script: "aws apigateway get-rest-apis --query "items[?name==\'${slsStage}-example-service\'].id" --output text", returnStdout: true)
+                  // sh 'aws apigateway update-stage --rest-api-id "${restApiId.trim()}" --stage-name "${slsStage}" --region us-east-1 --patch-operations op=replace,path=/*/*/logging/dataTrace,value=true'
                 }
               }
             }
