@@ -58,6 +58,8 @@ In general:
 
 Modify the API_URL in web-client/environments/dev.js to match the URL returned from the serverless deploy.
 
+Update the name of the service in the deploy-sandbox.sh script to match your service name from the serverless.yml
+
 ## Serverless Local
 
 - see https://medium.com/a-man-with-no-server/running-aws-lambda-and-api-gateway-locally-serverless-offline-3c64b3e54772
