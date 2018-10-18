@@ -29,3 +29,7 @@ output "jenkins_private_ip" {
 output "sonarqube_private_ip" {
   value = "${module.management.sonarqube_private_ip}"
 }
+
+output "sonarqube_url" {
+  value = "${module.management.sonarqube_url}"
+}
