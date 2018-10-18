@@ -15,7 +15,7 @@ pipeline {
     stage('Verify "web-client/" Changes') {
       steps {
         script {
-          sh './exit-when-no-changes.sh'
+          sh './web-client/exit-when-no-changes.sh'
         }
       }
     }
