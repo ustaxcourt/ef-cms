@@ -5,11 +5,10 @@ pipeline {
   agent any
 
   stages {
-    stage('init') {
+    stage('setup') {
       steps {
         script {
           def scmVars = checkout scm
-          print scmVars
           env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
           env.GIT_COMMIT = scmVars.GIT_COMMIT
         }
