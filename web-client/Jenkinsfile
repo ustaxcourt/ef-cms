@@ -7,7 +7,6 @@ pipeline {
     npm_config_cache = "/home/tomcat"
     HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
     CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
-    TEST = 'abc'
   }
 
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
@@ -79,7 +78,9 @@ pipeline {
     }
     stage('Terraform - Dev') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         script {
@@ -94,7 +95,9 @@ pipeline {
     }
     stage('Deploy Dev') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         deployTo('dev')
@@ -102,7 +105,9 @@ pipeline {
     }
     stage('Terraform - Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         script {
@@ -117,7 +122,9 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         deployTo('prod')

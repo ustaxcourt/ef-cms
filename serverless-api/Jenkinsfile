@@ -68,7 +68,9 @@ pipeline {
     }
     stage('Deploy Pre Prod') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         script {
@@ -82,7 +84,9 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         script {
