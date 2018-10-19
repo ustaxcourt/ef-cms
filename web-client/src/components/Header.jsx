@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from '@cerebral/react';
 
+import close from '../../node_modules/uswds/dist/img/close.svg';
+
 /**
  * Header
  */
@@ -23,7 +25,7 @@ export default connect(
         <nav role="navigation" className="usa-nav">
           <div className="usa-nav-inner">
             <button className="usa-nav-close">
-              <img src="/assets/img/close.svg" alt="close" />
+              <img src={close} alt="close" />
             </button>
             <ul className="usa-nav-primary usa-accordion">
               <li>

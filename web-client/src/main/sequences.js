@@ -8,3 +8,7 @@ export const getHello = [
 ];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
+
+export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
+
+export const gotoHome = [set(state`currentPage`, 'Home')];
