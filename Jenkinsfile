@@ -43,6 +43,6 @@ def checkCommit(folder) {
   } else {
     target = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
   }
-  def matches = sh(returnStatus:true, script: "git diff --name-only ${target} | egrep -q '^${folder}'")
+  def matches = sh(returnStatus:true, script: "git diff --name-only origin/${target} | egrep -q '^${folder}'")
   return !matches
 }
