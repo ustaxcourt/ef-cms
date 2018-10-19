@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           if (env.target_sha1) {
-            sh "git merge ${env.target_sha1}"
+            sh "git merge origin/${env.target_sha1}"
           }
         }
       }
