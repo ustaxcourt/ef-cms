@@ -22,7 +22,7 @@ pipeline {
         }
       }
       steps {
-        build wait:false, job: 'ef-cms-ui', parameters: [[$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"]]
+        build job: 'ef-cms-ui', parameters: [[$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"]]
       }
     }
     stage('serverless-api') {
@@ -32,7 +32,7 @@ pipeline {
         }
       }
       steps {
-        build wait:false, job: 'ef-cms-api', parameters: [[$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"]]
+        build job: 'ef-cms-api', parameters: [[$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"]]
       }
     }
   }
