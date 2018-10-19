@@ -11,6 +11,14 @@ const test = CerebralTest(mainModule);
 describe('Main cerebral module', () => {
   it('Start with silence', () => {
     assert.equal(test.getState('response'), 'Silence!');
+    assert.equal(test.getState('currentPage'), 'Home');
+  });
+
+  it('Handles routing', async () => {
+    await test.runSequence('gotoStyleGuide');
+    assert.equal(test.getState('currentPage'), 'StyleGuide');
+    await test.runSequence('gotoHome');
+    assert.equal(test.getState('currentPage'), 'Home');
   });
 
   it('Shows Hello World success', async () => {
