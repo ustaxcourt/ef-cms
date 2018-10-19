@@ -20,9 +20,7 @@ pipeline {
         }
       }
       steps {
-        dir('web_app') {
-          build 'Jenkinsfile'
-        }
+        build 'ef-cms-ui'
       }
     }
     stage('serverless-api') {
