@@ -11,6 +11,7 @@ pipeline {
           def scmVars = checkout scm
           print scmVars
           env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+          env.GIT_COMMIT = scmVars.GIT_COMMIT
         }
       }
     }
@@ -21,7 +22,7 @@ pipeline {
         }
       }
       steps {
-        build job: 'ef-cms-ui', parameters: [[$class: 'StringParameterValue', name: 'BRANCH_NAME', value: "${BRANCH_NAME}"]]
+        build job: 'ef-cms-ui', parameters: [[$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"]]
       }
     }
     stage('serverless-api') {
