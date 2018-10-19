@@ -11,6 +11,15 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('Merge') {
+      steps {
+        script {
+          if (env.target_sha1) {
+            sh "git merge ${env.target_sha1}"
+          }
+        }
+      }
+    }
     stage('Setup') {
       steps {
         script {
