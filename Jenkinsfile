@@ -20,7 +20,7 @@ pipeline {
         }
       }
       steps {
-        build 'web-client'
+        build './web-client'
       }
     }
     stage('serverless-api') {
@@ -30,7 +30,7 @@ pipeline {
         }
       }
       steps {
-        build 'serverless-api'
+        build './serverless-api'
       }
     }
   }
@@ -43,6 +43,6 @@ def checkCommit(folder) {
   } else {
     target = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
   }
-  def matches = sh(returnStatus:true, script: "git diff --name-only origin/${target} | egrep -q '^${folder}'")
+  def matches = sh(returnStatus:true, script: "git diff --name-only origin/${target} | grep '^${folder}'")
   return !matches
 }
