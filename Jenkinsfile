@@ -47,6 +47,11 @@ pipeline {
       }
     }
   }
+  post {
+    always {
+      deleteDir()
+    }
+  }
 }
 
 def checkCommit(folder) {
