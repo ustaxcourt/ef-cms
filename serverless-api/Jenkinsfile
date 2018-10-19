@@ -11,12 +11,19 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    stage('Setup') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
+    stage('Merge') {
+      steps {
+        script {
+          if (env.target_sha1) {
+            // todo: there is probably a better way to have Jenkins do this for us automatically
+            sh 'git config user.name "EF-CMS Jenkins"'
+            sh 'git config user.email "noop@example.com"'
+            sh "git merge origin/${env.target_sha1}"
+          }
         }
       }
+    }
+    stage('Setup') {
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
@@ -29,11 +36,6 @@ pipeline {
       }
     }
     stage('Lint') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
-        }
-      }
       steps {
         script {
           def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
@@ -46,11 +48,6 @@ pipeline {
       }
     }
     stage('Test') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
-        }
-      }
       steps {
         script {
           def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
@@ -71,7 +68,9 @@ pipeline {
     }
     stage('Deploy Pre Prod') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         script {
@@ -85,7 +84,9 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         script {
