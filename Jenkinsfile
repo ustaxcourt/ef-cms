@@ -63,6 +63,7 @@ def checkCommit(folder) {
     echo 'using git previous successful commit'
     target = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
   }
+  sh 'git fetch origin'
   sh 'git branch -r'
   def matches = sh(returnStatus:true, script: "git diff --name-only origin/${target} | grep '^${folder}'")
   return !matches
