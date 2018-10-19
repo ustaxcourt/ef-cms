@@ -15,30 +15,34 @@ pipeline {
         }
       }
     }
-    stage('web-client') {
-      when {
-        expression {
-          return checkCommit('web-client')
+    stage('modules') {
+      parallel {
+        stage('web-client') {
+          when {
+            expression {
+              return checkCommit('web-client')
+            }
+          }
+          steps {
+            build job: 'ef-cms-ui', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"]
+            ]
+          }
         }
-      }
-      steps {
-        build job: 'ef-cms-ui', parameters: [
-          [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-          [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"]
-        ]
-      }
-    }
-    stage('serverless-api') {
-      when {
-        expression {
-          return checkCommit('serverless-api')
+        stage('serverless-api') {
+          when {
+            expression {
+              return checkCommit('serverless-api')
+            }
+          }
+          steps {
+            build job: 'ef-cms-api', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"]
+            ]
+          }
         }
-      }
-      steps {
-        build job: 'ef-cms-api', parameters: [
-          [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-          [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"]
-        ]
       }
     }
   }
