@@ -20,7 +20,7 @@ pipeline {
         }
       }
       steps {
-        build 'web-client'
+        build 'ef-cms-ui'
       }
     }
     stage('serverless-api') {
@@ -30,7 +30,7 @@ pipeline {
         }
       }
       steps {
-        build 'serverless-api'
+        build 'ef-cms-api'
       }
     }
   }
