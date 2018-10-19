@@ -20,7 +20,7 @@ pipeline {
         }
       }
       steps {
-        build 'ef-cms-ui'
+        build "ef-cms-ui/${env.BRANCH_NAME}"
       }
     }
     stage('serverless-api') {
@@ -30,7 +30,7 @@ pipeline {
         }
       }
       steps {
-        build 'ef-cms-api'
+        build "ef-cms-api/${env.BRANCH_NAME}"
       }
     }
   }
