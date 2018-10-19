@@ -1,7 +1,7 @@
 describe('Hello world!', function() {
   it('visits the first page and finds all the elements', () => {
     cy.visit('http://localhost:1234/');
-    cy.contains('Click a button!');
+    cy.contains('Hello World!');
     cy.contains('#response', 'Silence!');
     cy.contains('#hello-button', 'Hello');
   });
