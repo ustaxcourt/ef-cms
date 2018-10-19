@@ -42,7 +42,7 @@ export default function StyleGuide() {
         <div className="alignment-example">
           <h5>The Grand Canyon</h5>
           <p>
-            Grand Canyon National Park is the United States' 15th oldest
+            Grand Canyon National Park is the United States&apos; 15th oldest
             national park. Named a UNESCO World Heritage Site in 1979, the park
             is located in Arizona.
           </p>
@@ -81,8 +81,8 @@ export default function StyleGuide() {
         <p>
           World renowned for its diversity of plant and animal life, the beauty
           of its ancient mountains, and the quality of its remnants of Southern
-          Appalachian mountain culture, this is America's most visited national
-          park.
+          Appalachian mountain culture, this is America&apos;s most visited
+          national park.
         </p>
         <p>
           Right now scientists think that we only know about 17 percent of the
@@ -99,12 +99,14 @@ export default function StyleGuide() {
       <section className="usa-section usa-grid">
         <h2>Links</h2>
         <p>
-          <a href="javascript:void(0);">This</a> is a text link on a light
-          background.
+          <a href="#a" name="a">
+            This
+          </a>{' '}
+          is a text link on a light background.
         </p>
 
         <p>
-          <a className="usa-color-text-visited" href="javascript:void(0);">
+          <a className="usa-color-text-visited" href="#b" name="b">
             This
           </a>{' '}
           is a visited link.
@@ -123,8 +125,10 @@ export default function StyleGuide() {
 
         <div className="usa-background-dark">
           <p>
-            <a href="javascript:void(0);">This</a> is a text link on a dark
-            background.
+            <a href="#c" name="c">
+              This
+            </a>{' '}
+            is a text link on a dark background.
           </p>
         </div>
       </section>
@@ -198,14 +202,14 @@ export default function StyleGuide() {
         <form className="usa-form">
           <label htmlFor="options">Dropdown label TODO ERIC :D</label>
           <select name="options" id="options">
-            <option value>- Select -</option>
-            <option value="value1">Option A</option>
-            <option value="value2">Option B</option>
-            <option value="value3">Option C</option>
+            <option defaultValue>- Select -</option>
+            <option defaultValue="defaultValue1">Option A</option>
+            <option defaultValue="defaultValue2">Option B</option>
+            <option defaultValue="defaultValue3">Option C</option>
           </select>
         </form>
 
-        <fieldset className="usa-fieldset-inputs usa-sans">
+        <fieldset id="checkboxes" className="usa-fieldset-inputs usa-sans">
           <legend className="usa-sr-only">Historical figures 1</legend>
           <ul className="usa-unstyled-list">
             <li>
@@ -213,8 +217,8 @@ export default function StyleGuide() {
                 id="truth"
                 type="checkbox"
                 name="historical-figures-1"
-                value="truth"
-                checked
+                defaultValue="truth"
+                defaultChecked
               />
               <label htmlFor="truth">Sojourner Truth</label>
             </li>
@@ -223,7 +227,7 @@ export default function StyleGuide() {
                 id="douglass"
                 type="checkbox"
                 name="historical-figures-1"
-                value="douglass"
+                defaultValue="douglass"
               />
               <label htmlFor="douglass">Frederick Douglass</label>
             </li>
@@ -232,7 +236,7 @@ export default function StyleGuide() {
                 id="washington"
                 type="checkbox"
                 name="historical-figures-1"
-                value="washington"
+                defaultValue="washington"
               />
               <label htmlFor="washington">Booker T. Washington</label>
             </li>
@@ -248,16 +252,16 @@ export default function StyleGuide() {
           </ul>
         </fieldset>
 
-        <fieldset className="usa-fieldset-inputs usa-sans">
+        <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
           <legend className="usa-sr-only">Historical figures 2</legend>
           <ul className="usa-unstyled-list">
             <li>
               <input
                 id="stanton"
                 type="radio"
-                checked
+                defaultChecked
                 name="historical-figures-2"
-                value="stanton"
+                defaultValue="stanton"
               />
               <label htmlFor="stanton">Elizabeth Cady Stanton</label>
             </li>
@@ -266,7 +270,7 @@ export default function StyleGuide() {
                 id="anthony"
                 type="radio"
                 name="historical-figures-2"
-                value="anthony"
+                defaultValue="anthony"
               />
               <label htmlFor="anthony">Susan B. Anthony</label>
             </li>
@@ -275,7 +279,7 @@ export default function StyleGuide() {
                 id="tubman"
                 type="radio"
                 name="historical-figures-2"
-                value="tubman"
+                defaultValue="tubman"
               />
               <label htmlFor="tubman">Harriet Tubman</label>
             </li>
@@ -299,7 +303,7 @@ export default function StyleGuide() {
                   type="number"
                   min="1"
                   max="12"
-                  value=""
+                  defaultValue=""
                 />
               </div>
               <div className="usa-form-group usa-form-group-day">
@@ -312,7 +316,7 @@ export default function StyleGuide() {
                   type="number"
                   min="1"
                   max="31"
-                  value=""
+                  defaultValue=""
                 />
               </div>
               <div className="usa-form-group usa-form-group-year">
@@ -325,7 +329,7 @@ export default function StyleGuide() {
                   type="number"
                   min="1900"
                   max="2000"
-                  value=""
+                  defaultValue=""
                 />
               </div>
             </div>
@@ -358,7 +362,7 @@ export default function StyleGuide() {
               data-validate-numerical="\d"
               data-validation-element="#validate-code"
             />
-            <input type="submit" value="Submit code" />
+            <input type="submit" defaultValue="Submit code" />
           </fieldset>
         </form>
 
@@ -370,7 +374,7 @@ export default function StyleGuide() {
             min="0"
             max="100"
             step="10"
-            value="20"
+            defaultValue="20"
           />
         </form>
       </section>
