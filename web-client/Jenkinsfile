@@ -7,6 +7,7 @@ pipeline {
     npm_config_cache = "/home/tomcat"
     HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
     CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+    TEST = 'abc'
   }
 
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
