@@ -12,11 +12,6 @@ pipeline {
 
   stages {
     stage('Setup') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
-        }
-      }
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
@@ -29,11 +24,6 @@ pipeline {
       }
     }
     stage('Lint') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
-        }
-      }
       steps {
         script {
           def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
@@ -46,11 +36,6 @@ pipeline {
       }
     }
     stage('Test') {
-      when {
-        expression {
-          sh(returnStdout: true, script: './serverless-api/exit-when-no-changes.sh').trim() == 'CONTINUE'
-        }
-      }
       steps {
         script {
           def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
