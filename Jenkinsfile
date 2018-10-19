@@ -15,7 +15,7 @@ pipeline {
         }
       }
     }
-    stage('modules') {
+    stage('components') {
       parallel {
         stage('web-client') {
           when {
