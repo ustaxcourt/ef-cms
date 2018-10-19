@@ -12,6 +12,7 @@ pipeline {
           print scmVars
           env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
           env.GIT_LOCAL_BRANCH = scmVars.GIT_LOCAL_BRANCH
+          print env
         }
       }
     }
