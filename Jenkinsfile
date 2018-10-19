@@ -40,7 +40,7 @@ def checkCommit(folder) {
   // def branch = env.BRANCH_NAME
   // def branchToCheck = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
   // if (branch == 'develop' || branch == 'master') {
-  echo "${env.CHANGE_TARGET}"
+  echo "change target: ${CHANGE_TARGET}"
   echo "using diff against commit: ${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
   // branchToCheck = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
   // } else {
