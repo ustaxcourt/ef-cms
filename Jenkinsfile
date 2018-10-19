@@ -9,6 +9,7 @@ pipeline {
       steps {
         script {
           def scmVars = checkout scm
+          print scmVars
           env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
         }
       }
