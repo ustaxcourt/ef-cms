@@ -20,7 +20,7 @@ pipeline {
         }
       }
       steps {
-        build './web-client'
+        build 'web-client'
       }
     }
     stage('serverless-api') {
@@ -30,7 +30,7 @@ pipeline {
         }
       }
       steps {
-        build './serverless-api'
+        build 'serverless-api'
       }
     }
   }
