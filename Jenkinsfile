@@ -21,6 +21,7 @@ pipeline {
       }
       steps {
         build "ef-cms-ui/${env.BRANCH_NAME}"
+        build job: 'PayloadJob', parameters: parameters: [[$class: 'StringParameterValue', name: 'BRANCH_NAME', value: "${BRANCH_NAME}"]]
       }
     }
     stage('serverless-api') {
