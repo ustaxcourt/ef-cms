@@ -37,16 +37,12 @@ pipeline {
 }
 
 def checkCommit(folder) {
-  // def branch = env.BRANCH_NAME
-  // def branchToCheck = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-  // if (branch == 'develop' || branch == 'master') {
-  echo "change target: ${CHANGE_TARGET}"
-  echo "using diff against commit: ${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT}"
-  // branchToCheck = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-  // } else {
-  //   echo "using diff againt branch: ${env.GIT_LOCAL_BRANCH}"
-  //   branchToCheck = env.GIT_LOCAL_BRANCH
-  // }
-  def matches = sh(returnStatus:true, script: "git diff --name-only ${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT} | egrep -q '^${folder}'")
+  def target = null
+  if (env.CHANGE_TARGET) {
+    target = env.CHANGE_TARGET
+  } else {
+    target = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+  }
+  def matches = sh(returnStatus:true, script: "git diff --name-only ${target} | egrep -q '^${folder}'")
   return !matches
 }
