@@ -79,9 +79,6 @@ package:
 
 resources:
   Resources:
-    __deployment__:
-      Properties:
-        StageName: ${opt:stage}
     #####
     # Begin Stage for API Gateway Logging
     #####

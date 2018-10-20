@@ -46,7 +46,7 @@ function run_development() {
 }
 
 function configure_custom_logging() {
-    export REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${ENVIRONMENT}-example-service'].id" --output text)
+    export REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${ENVIRONMENT}-ef-cms'].id" --output text)
     aws apigateway update-stage \
         --rest-api-id "${REST_API_ID}" \
         --stage-name "${ENVIRONMENT}" \
