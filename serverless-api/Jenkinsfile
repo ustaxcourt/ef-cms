@@ -112,7 +112,7 @@ def createDeployTasks(targets) {
             checkout scm
           def trunner = docker.build 'terraform', '-f serverless-api/Dockerfile.terraform .'
           trunner.inside() {
-            dir('serverless-api/terraform/${slsStage}') {
+            dir("serverless-api/terraform/${slsStage}") {
               echo 'Running Terraform'
               sh "rm -rf ./.terraform/"
               sh "terraform init"
