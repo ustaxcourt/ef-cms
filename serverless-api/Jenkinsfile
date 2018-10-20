@@ -6,6 +6,7 @@ pipeline {
     npm_config_cache = "/home/tomcat"
     HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
     CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+    SLS_DEPLOYMENT_BUCKET = ""
   }
 
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
@@ -121,6 +122,7 @@ def createDeployTasks(targets) {
               script {
                 echo 'Setting environment variables based on Terraform run'
                 def bucket = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
+                env.SLS_DEPLOYMENT_BUCKET = bucket
               }
             }
           }
@@ -132,7 +134,7 @@ def createDeployTasks(targets) {
 
               // not sure if I really need this....
               // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
-              sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=${bucket} ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+              sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=${env.SLS_DEPLOYMENT_BUCKET} ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
               sh "ENVIRONMENT=${slsStage} REGION=${region} ./configure-api-gateway-logging.sh"
             }
           }
