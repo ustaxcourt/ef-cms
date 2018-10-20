@@ -110,36 +110,32 @@ def createDeployTasks(targets) {
         node() {
           stage("deploy ${slsStage} - ${region}") {
             checkout scm
-            step {
-              def runner = docker.build 'terraform', '-f serverless-api/Dockerfile.terraform .'
-              runner.inside() {
-                dir('serverless-api/terraform/${slsStage}') {
-                  echo 'Running Terraform'
-                  sh "rm -rf ./.terraform/"
-                  sh "terraform init"
-                  sh "terraform apply -auto-approve"
+          def trunner = docker.build 'terraform', '-f serverless-api/Dockerfile.terraform .'
+          trunner.inside() {
+            dir('serverless-api/terraform/${slsStage}') {
+              echo 'Running Terraform'
+              sh "rm -rf ./.terraform/"
+              sh "terraform init"
+              sh "terraform apply -auto-approve"
 
-                  script {
-                    echo 'Setting environment variables based on Terraform run'
-                    def bucket = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
-                  }
-                }
+              script {
+                echo 'Setting environment variables based on Terraform run'
+                def bucket = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
               }
             }
-            step {
-              def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.serverless .'
-              runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-                dir('serverless-api') {
-                  sh 'npm i'
-                  sh 'chmod -R ugo+r .' // TODO: is this actually needed
+          }
+          def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.serverless .'
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir('serverless-api') {
+              sh 'npm i'
+              sh 'chmod -R ugo+r .' // TODO: is this actually needed
 
-                  // not sure if I really need this....
-                  // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
-                  sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=${bucket} ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
-                  sh "ENVIRONMENT=${slsStage} REGION=${region} ./configure-api-gateway-logging.sh"
-                }
-              }
+              // not sure if I really need this....
+              // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
+              sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=${bucket} ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+              sh "ENVIRONMENT=${slsStage} REGION=${region} ./configure-api-gateway-logging.sh"
             }
+          }
           }
         }
       }
