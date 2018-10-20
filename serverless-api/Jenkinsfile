@@ -115,6 +115,18 @@ def createDeployTasks(targets) {
               dir('serverless-api') {
                 sh 'npm i'
                 sh 'chmod -R ugo+r .' // TODO: is this actually needed
+
+                dir("./terraform/${ENVIRONMENT}/") {
+                  echo 'Running Terraform'
+                  sh "rm -rf ./.terraform/"
+                  sh "terraform init"
+                  sh "terraform apply -auto-approve"
+
+                  script {
+                    echo 'Setting environment variables based on Terraform run'
+                    env.SLS_DEPLOYMENT_BUCKET = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
+                  }
+                }
                 // not sure if I really need this....
                 // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
                 sh "./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
