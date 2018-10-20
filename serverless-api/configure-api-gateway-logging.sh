@@ -4,7 +4,7 @@
 function check_env_vars_exist() {
     echo "Checking appropriate environment variables are set."
 
-    if [[ -z "${ENVIRONMENT}", "${REGION}" ]]
+    if [ -z "${ENVIRONMENT}", "${REGION}" ]
     then
         echo "No ENVIRONMENT or REGION environment variable was specified."
         exit 1
@@ -12,7 +12,7 @@ function check_env_vars_exist() {
 }
 
 function configure_custom_logging() {
-    export REST_API_ID=$(aws apigateway get-rest-apis --region=${REGION} --query "items[?name=='${ENVIRONMENT}-example-service'].id" --output text)
+    export REST_API_ID=$(aws apigateway get-rest-apis --region=${REGION} --query "items[?name=='${ENVIRONMENT}-ef-cms'].id" --output text)
     aws apigateway update-stage \
         --rest-api-id "${REST_API_ID}" \
         --stage-name "${ENVIRONMENT}" \
