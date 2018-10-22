@@ -1,4 +1,4 @@
-FROM alpine
+FROM node:8-alpine
 
 # Versions: https://pypi.python.org/pypi/awscli#downloads
 ENV AWS_CLI_VERSION 1.16.31
