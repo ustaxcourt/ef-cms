@@ -147,7 +147,7 @@ def deployTo(env) {
       def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
       echo "bucket: ${bucket}"
       s3Upload(
-        bucket: "${bucket}",
+        bucket: "testing.a.different.bucket",//"${bucket}",
         file: 'dist',
         path: "",
         cacheControl: 'no-cache'
