@@ -76,23 +76,23 @@ pipeline {
     //     }
     //   }
     // }
-    // stage('Terraform - Dev') {
-    //   when {
-    //     expression {
-    //       env.branch_name == 'develop'
-    //     }
-    //   }
-    //   steps {
-    //     script {
-    //       def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
-    //       runner.inside() {
-    //         dir('web-client/terraform/dev') {
-    //           sh './deploy-app.sh -a'
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Terraform - Dev') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+          runner.inside() {
+            dir('web-client/terraform/dev') {
+              sh './deploy-app.sh -a'
+            }
+          }
+        }
+      }
+    }
     stage('Deploy Dev') {
       // when {
       //   expression {
@@ -145,6 +145,7 @@ def deployTo(env) {
       sh 'npm i'
       sh 'npm run dist'
       def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
+      echo "bucket: ${bucket}"
       s3Upload(
         bucket: "${bucket}",
         file: 'dist',
