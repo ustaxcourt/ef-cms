@@ -9,7 +9,8 @@
     "dev": "USTC_ENV=dev parcel --no-cache src/index.pug",
     "dist": "USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
-    "test": "nyc mocha --opts ./mocha.opts ./**/**/*.test.js"
+    "test": "nyc mocha --opts ./mocha.opts ./**/**/*.test.js",
+    "test:a11y": "node pa11y.js"
   },
   "repository": {
     "type": "git",
@@ -73,5 +74,8 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint": "^9.6.0",
     "uswds": "^1.6.9"
+  },
+  "devDependencies": {
+    "pa11y": "^5.1.0"
   }
 }
