@@ -99,6 +99,11 @@ pipeline {
       }
     }
   }
+  post {
+    always {
+      deleteDir()
+    }
+  }
 }
 
 def createDeployTasks(targets) {
