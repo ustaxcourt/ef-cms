@@ -12,76 +12,76 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
-    // stage('Merge') {
-    //   steps {
-    //     script {
-    //       if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
-    //         // todo: there is probably a better way to have Jenkins do this for us automatically
-    //         sh 'git config user.name "EF-CMS Jenkins"'
-    //         sh 'git config user.email "noop@example.com"'
-    //         sh "git merge origin/${env.target_sha1}"
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('Lint') {
-    //   steps {
-    //     script {
-    //       dir('web-client') {
-    //         def runner = docker.build 'lint', '-f Dockerfile.test .'
-    //         runner.inside('-v /home/tomcat:/home/tomcat') {
-    //           sh 'npm i'
-    //           sh 'npm run lint'
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('Test') {
-    //   steps {
-    //     script {
-    //       dir('web-client') {
-    //         def runner = docker.build 'lint', '-f Dockerfile.test .'
-    //         runner.inside('-v /home/tomcat:/home/tomcat') {
-    //           sh 'npm i'
-    //           sh 'npm run test'
-    //         }
-    //       }
-    //     }
-    //   }
-    //   post {
-    //     success {
-    //       dir('web-client') {
-    //         publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('SonarQube') {
-    //   steps {
-    //     script {
-    //       withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-    //         def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
-    //         runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-    //           sshagent(credentials: ['github']) {
-    //             dir('management/management') {
-    //               sh './deploy-init.sh'
-    //             }
-    //             dir('web-client') {
-    //               sh './verify-sonarqube-passed.sh'
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Merge') {
+      steps {
+        script {
+          if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
+            // todo: there is probably a better way to have Jenkins do this for us automatically
+            sh 'git config user.name "EF-CMS Jenkins"'
+            sh 'git config user.email "noop@example.com"'
+            sh "git merge origin/${env.target_sha1}"
+          }
+        }
+      }
+    }
+    stage('Lint') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm i'
+              sh 'npm run lint'
+            }
+          }
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm i'
+              sh 'npm run test'
+            }
+          }
+        }
+      }
+      post {
+        success {
+          dir('web-client') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
+            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+              sshagent(credentials: ['github']) {
+                dir('management/management') {
+                  sh './deploy-init.sh'
+                }
+                dir('web-client') {
+                  sh './verify-sonarqube-passed.sh'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     stage('Terraform - Dev') {
-      // when {
-      //   expression {
-      //     env.branch_name == 'develop'
-      //   }
-      // }
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
       steps {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
@@ -94,11 +94,11 @@ pipeline {
       }
     }
     stage('Deploy Dev') {
-      // when {
-      //   expression {
-      //     env.branch_name == 'develop'
-      //   }
-      // }
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
       steps {
         deployTo('dev')
       }
@@ -144,10 +144,9 @@ def deployTo(env) {
     dir('web-client') {
       sh 'npm i'
       sh 'npm run dist'
-      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
-      echo "bucket: ${bucket}"
+      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
       s3Upload(
-        bucket: "testing.a.different.bucket",//"${bucket}",
+        bucket: "${bucket}",
         file: 'dist',
         path: "",
         cacheControl: 'no-cache'
