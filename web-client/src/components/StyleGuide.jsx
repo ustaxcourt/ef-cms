@@ -42,7 +42,7 @@ export default function StyleGuide() {
         <div className="alignment-example">
           <h5>The Grand Canyon</h5>
           <p>
-            Grand Canyon National Park is the United States' 15th oldest
+            Grand Canyon National Park is the United States&apos; 15th oldest
             national park. Named a UNESCO World Heritage Site in 1979, the park
             is located in Arizona.
           </p>
@@ -81,8 +81,8 @@ export default function StyleGuide() {
         <p>
           World renowned for its diversity of plant and animal life, the beauty
           of its ancient mountains, and the quality of its remnants of Southern
-          Appalachian mountain culture, this is America's most visited national
-          park.
+          Appalachian mountain culture, this is America&apos;s most visited
+          national park.
         </p>
         <p>
           Right now scientists think that we only know about 17 percent of the
@@ -99,12 +99,14 @@ export default function StyleGuide() {
       <section className="usa-section usa-grid">
         <h2>Links</h2>
         <p>
-          <a href="javascript:void(0);">This</a> is a text link on a light
-          background.
+          <a href="#a" name="a">
+            This
+          </a>{' '}
+          is a text link on a light background.
         </p>
 
         <p>
-          <a className="usa-color-text-visited" href="javascript:void(0);">
+          <a className="usa-color-text-visited" href="#b" name="b">
             This
           </a>{' '}
           is a visited link.
@@ -123,8 +125,10 @@ export default function StyleGuide() {
 
         <div className="usa-background-dark">
           <p>
-            <a href="javascript:void(0);">This</a> is a text link on a dark
-            background.
+            <a href="#c" name="c">
+              This
+            </a>{' '}
+            is a text link on a dark background.
           </p>
         </div>
       </section>
@@ -150,9 +154,10 @@ export default function StyleGuide() {
           </ol>
         </div>
       </section>
+
       <section className="usa-section usa-grid">
         <h2>Form Controls</h2>
-        <form>
+        <form className="usa-form">
           <label htmlFor="input-type-text">Text input label</label>
           <input id="input-type-text" name="input-type-text" type="text" />
 
@@ -168,12 +173,6 @@ export default function StyleGuide() {
             <label className="usa-input-error-label" htmlFor="input-error">
               Text input error
             </label>
-            <input
-              id="input-error"
-              name="input-error"
-              type="text"
-              aria-describedby="input-error-message"
-            />
             <span
               className="usa-input-error-message"
               id="input-error-message"
@@ -181,6 +180,12 @@ export default function StyleGuide() {
             >
               Helpful error message
             </span>
+            <input
+              id="input-error"
+              name="input-error"
+              type="text"
+              aria-describedby="input-error-message"
+            />
           </div>
 
           <label htmlFor="input-success">Text input success</label>
@@ -193,96 +198,92 @@ export default function StyleGuide() {
 
           <label htmlFor="input-type-textarea">Text area label</label>
           <textarea id="input-type-textarea" name="input-type-textarea" />
-        </form>
 
-        <form className="usa-form">
-          <label htmlFor="options">Dropdown label TODO ERIC :D</label>
+          <label htmlFor="options">Dropdown label</label>
           <select name="options" id="options">
-            <option value>- Select -</option>
-            <option value="value1">Option A</option>
-            <option value="value2">Option B</option>
-            <option value="value3">Option C</option>
+            <option defaultValue>- Select -</option>
+            <option defaultValue="defaultValue1">Option A</option>
+            <option defaultValue="defaultValue2">Option B</option>
+            <option defaultValue="defaultValue3">Option C</option>
           </select>
-        </form>
-
-        <fieldset className="usa-fieldset-inputs usa-sans">
-          <legend className="usa-sr-only">Historical figures 1</legend>
-          <ul className="usa-unstyled-list">
-            <li>
-              <input
-                id="truth"
-                type="checkbox"
-                name="historical-figures-1"
-                value="truth"
-                checked
-              />
-              <label htmlFor="truth">Sojourner Truth</label>
-            </li>
-            <li>
-              <input
-                id="douglass"
-                type="checkbox"
-                name="historical-figures-1"
-                value="douglass"
-              />
-              <label htmlFor="douglass">Frederick Douglass</label>
-            </li>
-            <li>
-              <input
-                id="washington"
-                type="checkbox"
-                name="historical-figures-1"
-                value="washington"
-              />
-              <label htmlFor="washington">Booker T. Washington</label>
-            </li>
-            <li>
-              <input
-                id="carver"
-                type="checkbox"
-                name="historical-figures-1"
-                disabled
-              />
-              <label htmlFor="carver">George Washington Carver</label>
-            </li>
-          </ul>
-        </fieldset>
-
-        <fieldset className="usa-fieldset-inputs usa-sans">
-          <legend className="usa-sr-only">Historical figures 2</legend>
-          <ul className="usa-unstyled-list">
-            <li>
-              <input
-                id="stanton"
-                type="radio"
-                checked
-                name="historical-figures-2"
-                value="stanton"
-              />
-              <label htmlFor="stanton">Elizabeth Cady Stanton</label>
-            </li>
-            <li>
-              <input
-                id="anthony"
-                type="radio"
-                name="historical-figures-2"
-                value="anthony"
-              />
-              <label htmlFor="anthony">Susan B. Anthony</label>
-            </li>
-            <li>
-              <input
-                id="tubman"
-                type="radio"
-                name="historical-figures-2"
-                value="tubman"
-              />
-              <label htmlFor="tubman">Harriet Tubman</label>
-            </li>
-          </ul>
-        </fieldset>
-
-        <form>
+          <br />
+          <fieldset id="checkboxes" className="usa-fieldset-inputs usa-sans">
+            <legend>Historical figures 1</legend>
+            <ul className="usa-unstyled-list">
+              <li>
+                <input
+                  id="truth"
+                  type="checkbox"
+                  name="historical-figures-1"
+                  defaultValue="truth"
+                  defaultChecked
+                />
+                <label htmlFor="truth">Sojourner Truth</label>
+              </li>
+              <li>
+                <input
+                  id="douglass"
+                  type="checkbox"
+                  name="historical-figures-1"
+                  defaultValue="douglass"
+                />
+                <label htmlFor="douglass">Frederick Douglass</label>
+              </li>
+              <li>
+                <input
+                  id="washington"
+                  type="checkbox"
+                  name="historical-figures-1"
+                  defaultValue="washington"
+                />
+                <label htmlFor="washington">Booker T. Washington</label>
+              </li>
+              <li>
+                <input
+                  id="carver"
+                  type="checkbox"
+                  name="historical-figures-1"
+                  disabled
+                />
+                <label htmlFor="carver">George Washington Carver</label>
+              </li>
+            </ul>
+          </fieldset>
+          <br />
+          <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+            <legend>Historical figures 2</legend>
+            <ul className="usa-unstyled-list">
+              <li>
+                <input
+                  id="stanton"
+                  type="radio"
+                  defaultChecked
+                  name="historical-figures-2"
+                  defaultValue="stanton"
+                />
+                <label htmlFor="stanton">Elizabeth Cady Stanton</label>
+              </li>
+              <li>
+                <input
+                  id="anthony"
+                  type="radio"
+                  name="historical-figures-2"
+                  defaultValue="anthony"
+                />
+                <label htmlFor="anthony">Susan B. Anthony</label>
+              </li>
+              <li>
+                <input
+                  id="tubman"
+                  type="radio"
+                  name="historical-figures-2"
+                  defaultValue="tubman"
+                />
+                <label htmlFor="tubman">Harriet Tubman</label>
+              </li>
+            </ul>
+          </fieldset>
+          <br />
           <fieldset>
             <legend>Date of birth</legend>
             <span className="usa-form-hint" id="dobHint">
@@ -299,7 +300,7 @@ export default function StyleGuide() {
                   type="number"
                   min="1"
                   max="12"
-                  value=""
+                  defaultValue=""
                 />
               </div>
               <div className="usa-form-group usa-form-group-day">
@@ -312,7 +313,7 @@ export default function StyleGuide() {
                   type="number"
                   min="1"
                   max="31"
-                  value=""
+                  defaultValue=""
                 />
               </div>
               <div className="usa-form-group usa-form-group-year">
@@ -325,14 +326,12 @@ export default function StyleGuide() {
                   type="number"
                   min="1900"
                   max="2000"
-                  value=""
+                  defaultValue=""
                 />
               </div>
             </div>
           </fieldset>
-        </form>
-
-        <form className="usa-form">
+          <br />
           <fieldset>
             <legend className="usa-drop_text">Enter a code</legend>
             <div className="usa-alert usa-alert-info">
@@ -358,11 +357,8 @@ export default function StyleGuide() {
               data-validate-numerical="\d"
               data-validation-element="#validate-code"
             />
-            <input type="submit" value="Submit code" />
           </fieldset>
-        </form>
 
-        <form>
           <label htmlFor="range-slider">Range slider</label>
           <input
             id="range-slider"
@@ -370,8 +366,9 @@ export default function StyleGuide() {
             min="0"
             max="100"
             step="10"
-            value="20"
+            defaultValue="20"
           />
+          <input type="submit" value="Submit code" />
         </form>
       </section>
     </React.Fragment>
