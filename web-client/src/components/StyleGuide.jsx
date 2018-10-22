@@ -297,9 +297,6 @@ export default function StyleGuide() {
         <form className="usa-section">
           <fieldset>
             <legend>Date of birth</legend>
-            <span className="usa-form-hint" id="dobHint">
-              For example: 04 28 1986
-            </span>
             <div className="usa-date-of-birth">
               <div className="usa-form-group usa-form-group-month">
                 <label htmlFor="date_of_birth_1">Month</label>
@@ -342,7 +339,9 @@ export default function StyleGuide() {
               </div>
             </div>
           </fieldset>
-          <input type="submit" value="Submit code" />
+          <span className="usa-form-hint" id="dobHint">
+            For example: 04 28 1986
+          </span>
         </form>
 
         <form className="usa-form usa-section">
