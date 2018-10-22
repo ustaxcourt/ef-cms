@@ -12,6 +12,18 @@ pipeline {
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
   stages {
+    stage('Merge') {
+      steps {
+        script {
+          if (env.target_sha1) {
+            // todo: there is probably a better way to have Jenkins do this for us automatically
+            sh 'git config user.name "EF-CMS Jenkins"'
+            sh 'git config user.email "noop@example.com"'
+            sh "git merge origin/${env.target_sha1}"
+          }
+        }
+      }
+    }
     stage('Lint') {
       steps {
         script {
@@ -48,7 +60,7 @@ pipeline {
     stage('SonarQube') {
       steps {
         script {
-          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {
+          withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
             runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
               sshagent(credentials: ['github']) {
@@ -66,7 +78,9 @@ pipeline {
     }
     stage('Terraform - Dev') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         script {
@@ -81,7 +95,9 @@ pipeline {
     }
     stage('Deploy Dev') {
       when {
-        branch 'develop'
+        expression {
+          env.branch_name == 'develop'
+        }
       }
       steps {
         deployTo('dev')
@@ -89,7 +105,9 @@ pipeline {
     }
     stage('Terraform - Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         script {
@@ -104,7 +122,9 @@ pipeline {
     }
     stage('Deploy Prod') {
       when {
-        branch 'master'
+        expression {
+          env.branch_name == 'master'
+        }
       }
       steps {
         deployTo('prod')
