@@ -55,14 +55,10 @@ pipeline {
 }
 
 def checkCommit(folder) {
-  def target = null
   if (env.CHANGE_TARGET) {
-    echo 'using change target'
-    target = env.CHANGE_TARGET
-  } else {
-    echo 'using git previous successful commit'
-    target = env.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+    def matches = sh(returnStatus:true, script: "git diff --name-only origin/${env.CHANGE_TARGET} | grep '^${folder}'")
+    return !matches
+  } else if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') {
+    return true
   }
-  def matches = sh(returnStatus:true, script: "git diff --name-only origin/${target} | grep '^${folder}'")
-  return !matches
 }
