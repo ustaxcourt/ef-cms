@@ -11,6 +11,7 @@ function check_env_vars_exist() {
     fi
 }
 
+
 function configure_custom_logging() {
     export REST_API_ID=$(aws apigateway get-rest-apis --region=${REGION} --query "items[?name=='${ENVIRONMENT}-ef-cms'].id" --output text)
     aws apigateway update-stage \
