@@ -4,7 +4,7 @@
 function check_env_vars_exist() {
     echo "Checking appropriate environment variables are set."
 
-    if [[ -z "${ENVIRONMENT}", "${REGION}" ]]
+    if [ -z "${ENVIRONMENT}" ] || [ -z "${REGION}" ]
     then
         echo "No ENVIRONMENT or REGION environment variable was specified."
         exit 1
