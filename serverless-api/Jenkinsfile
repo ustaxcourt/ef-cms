@@ -69,7 +69,7 @@ pipeline {
     stage('Deploy Pre Prod') {
       when {
         expression {
-          env.branch_name == 'develop'
+          env.branch_name == 'PR-14'
         }
       }
       steps {

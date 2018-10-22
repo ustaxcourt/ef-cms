@@ -57,25 +57,25 @@ pipeline {
         }
       }
     }
-    // stage('SonarQube') {
-    //   steps {
-    //     script {
-    //       withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_PASSWORD')]) {
-    //         def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
-    //         runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-    //           sshagent(credentials: ['github']) {
-    //             dir('management/management') {
-    //               sh './deploy-init.sh'
-    //             }
-    //             dir('web-client') {
-    //               sh './verify-sonarqube-passed.sh'
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
+            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+              sshagent(credentials: ['github']) {
+                dir('management/management') {
+                  sh './deploy-init.sh'
+                }
+                dir('web-client') {
+                  sh './verify-sonarqube-passed.sh'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     stage('Terraform - Dev') {
       when {
         expression {
