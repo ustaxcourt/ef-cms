@@ -206,12 +206,9 @@ export default function StyleGuide() {
             <option defaultValue="defaultValue2">Option B</option>
             <option defaultValue="defaultValue3">Option C</option>
           </select>
-
-          <fieldset
-            id="checkboxes"
-            className="usa-fieldset-inputs usa-sans usa-section"
-          >
-            <legend className="usa-sr-only">Historical figures 1</legend>
+          <br />
+          <fieldset id="checkboxes" className="usa-fieldset-inputs usa-sans">
+            <legend>Historical figures 1</legend>
             <ul className="usa-unstyled-list">
               <li>
                 <input
@@ -252,12 +249,9 @@ export default function StyleGuide() {
               </li>
             </ul>
           </fieldset>
-
-          <fieldset
-            id="radios"
-            className="usa-fieldset-inputs usa-sans usa-section"
-          >
-            <legend className="usa-sr-only">Historical figures 2</legend>
+          <br />
+          <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+            <legend>Historical figures 2</legend>
             <ul className="usa-unstyled-list">
               <li>
                 <input
@@ -289,7 +283,7 @@ export default function StyleGuide() {
               </li>
             </ul>
           </fieldset>
-
+          <br />
           <fieldset>
             <legend>Date of birth</legend>
             <span className="usa-form-hint" id="dobHint">
@@ -337,7 +331,7 @@ export default function StyleGuide() {
               </div>
             </div>
           </fieldset>
-
+          <br />
           <fieldset>
             <legend className="usa-drop_text">Enter a code</legend>
             <div className="usa-alert usa-alert-info">
