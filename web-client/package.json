@@ -41,6 +41,20 @@
     "branches": 95,
     "cache": true
   },
+  "postcss": {
+    "modules": false,
+    "plugins": {
+      "autoprefixer": {
+        "browsers": [
+          ">2%",
+          "last 4 versions",
+          "Firefox ESR",
+          "not ie < 11"
+        ],
+        "flexbox": "no-2009"
+      }
+    }
+  },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "@babel/cli": "^7.1.2",
@@ -50,6 +64,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@cerebral/react": "^4.0.1",
+    "autoprefixer": "^9.2.1",
     "axios": "^0.18.0",
     "babel-plugin-cerebral": "^1.0.0",
     "cerebral": "^5.0.1",
