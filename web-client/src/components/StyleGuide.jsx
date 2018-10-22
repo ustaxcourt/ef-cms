@@ -197,19 +197,24 @@ export default function StyleGuide() {
 
           <label htmlFor="input-type-textarea">Text area label</label>
           <textarea id="input-type-textarea" name="input-type-textarea" />
+          <input type="submit" value="Submit code" />
         </form>
 
-        <form className="usa-form">
-          <label htmlFor="options">Dropdown label TODO ERIC :D</label>
+        <form className="usa-form usa-section">
+          <label htmlFor="options">Dropdown label</label>
           <select name="options" id="options">
             <option defaultValue>- Select -</option>
             <option defaultValue="defaultValue1">Option A</option>
             <option defaultValue="defaultValue2">Option B</option>
             <option defaultValue="defaultValue3">Option C</option>
           </select>
+          <input type="submit" value="Submit code" />
         </form>
 
-        <fieldset id="checkboxes" className="usa-fieldset-inputs usa-sans">
+        <fieldset
+          id="checkboxes"
+          className="usa-fieldset-inputs usa-sans usa-section"
+        >
           <legend className="usa-sr-only">Historical figures 1</legend>
           <ul className="usa-unstyled-list">
             <li>
@@ -252,7 +257,10 @@ export default function StyleGuide() {
           </ul>
         </fieldset>
 
-        <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+        <fieldset
+          id="radios"
+          className="usa-fieldset-inputs usa-sans usa-section"
+        >
           <legend className="usa-sr-only">Historical figures 2</legend>
           <ul className="usa-unstyled-list">
             <li>
@@ -286,7 +294,7 @@ export default function StyleGuide() {
           </ul>
         </fieldset>
 
-        <form>
+        <form className="usa-section">
           <fieldset>
             <legend>Date of birth</legend>
             <span className="usa-form-hint" id="dobHint">
@@ -334,9 +342,10 @@ export default function StyleGuide() {
               </div>
             </div>
           </fieldset>
+          <input type="submit" value="Submit code" />
         </form>
 
-        <form className="usa-form">
+        <form className="usa-form usa-section">
           <fieldset>
             <legend className="usa-drop_text">Enter a code</legend>
             <div className="usa-alert usa-alert-info">
@@ -362,7 +371,7 @@ export default function StyleGuide() {
               data-validate-numerical="\d"
               data-validation-element="#validate-code"
             />
-            <input type="submit" defaultValue="Submit code" />
+            <input type="submit" value="Submit code" />
           </fieldset>
         </form>
 
@@ -376,6 +385,7 @@ export default function StyleGuide() {
             step="10"
             defaultValue="20"
           />
+          <input type="submit" value="Submit code" />
         </form>
       </section>
     </React.Fragment>
