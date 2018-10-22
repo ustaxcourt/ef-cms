@@ -139,7 +139,7 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'deploy', '-f web-client/Dockerfile.terraform .'
+  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-v /home/tomcat:/home/tomcat') {
     dir('web-client') {
       sh 'npm i'
