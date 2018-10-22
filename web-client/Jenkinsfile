@@ -144,7 +144,7 @@ def deployTo(env) {
     dir('web-client') {
       sh 'npm i'
       sh 'npm run dist'
-      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
+      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
       s3Upload(
         bucket: "${bucket}",
         file: 'dist',
