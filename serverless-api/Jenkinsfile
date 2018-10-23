@@ -97,6 +97,14 @@ pipeline {
         }
       }
     }
+
+    stage('Testing Stuff') {
+      steps {
+        script {
+          echo "we are here"
+        }
+      }
+    }
     stage('Deploy Pre Prod') {
       when {
         expression {
