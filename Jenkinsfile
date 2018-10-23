@@ -21,38 +21,38 @@ pipeline {
         }
       }
     }
-    // stage('components') {
-    //   parallel {
-    //     stage('web-client') {
-    //       when {
-    //         expression {
-    //           return checkCommit('web-client')
-    //         }
-    //       }
-    //       steps {
-    //         build job: 'ef-cms-ui', parameters: [
-    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-    //         ]
-    //       }
-    //     }
-    //     stage('serverless-api') {
-    //       when {
-    //         expression {
-    //           return checkCommit('serverless-api')
-    //         }
-    //       }
-    //       steps {
-    //         build job: 'ef-cms-api', parameters: [
-    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-    //         ]
-    //       }
-    //     }
-    //   }
-    // }
+    stage('components') {
+      parallel {
+        stage('web-client') {
+          when {
+            expression {
+              return checkCommit('web-client')
+            }
+          }
+          steps {
+            build job: 'ef-cms-ui', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+        stage('serverless-api') {
+          when {
+            expression {
+              return checkCommit('serverless-api')
+            }
+          }
+          steps {
+            build job: 'ef-cms-api', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+      }
+    }
     stage('Merge') {
       steps {
         script {
