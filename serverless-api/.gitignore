@@ -2,3 +2,4 @@
 .serverless/
 coverage/
 node_modules/
+.terraform/
