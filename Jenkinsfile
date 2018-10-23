@@ -14,34 +14,70 @@ pipeline {
         }
       }
     }
-    stage('components') {
-      parallel {
-        stage('web-client') {
-          when {
-            expression {
-              return checkCommit('web-client')
+    // stage('components') {
+    //   parallel {
+    //     stage('web-client') {
+    //       when {
+    //         expression {
+    //           return checkCommit('web-client')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-ui', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //     stage('serverless-api') {
+    //       when {
+    //         expression {
+    //           return checkCommit('serverless-api')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-api', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
+    stage('pa11y') {
+      steps {
+        script {
+          def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
+          runner.inside('-v /home/tomcat:/home/tomcat') {
+            dir('serverless-api') {
+              sh 'npm i'
+              sh 'npm run start:local'
             }
-          }
-          steps {
-            build job: 'ef-cms-ui', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
+            dir('web-client') {
+              sh 'npm i'
+              sh 'npm run dev'
+              sh 'npm run test:pa11y'
+            }
           }
         }
-        stage('serverless-api') {
-          when {
-            expression {
-              return checkCommit('serverless-api')
+      }
+    }
+    stage('cypress') {
+      steps {
+        script {
+          def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
+          runner.inside('-v /home/tomcat:/home/tomcat') {
+            dir('serverless-api') {
+              sh 'npm i'
+              sh 'npm run start:local'
             }
-          }
-          steps {
-            build job: 'ef-cms-api', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
+            dir('web-client') {
+              sh 'npm i'
+              sh 'npm run dev'
+              sh 'npm run test:cypress'
+            }
           }
         }
       }
