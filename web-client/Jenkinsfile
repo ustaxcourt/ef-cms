@@ -165,7 +165,6 @@ def deployTo(env) {
   runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
     dir('web-client') {
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
-      echo "restapiId=${restApiId}"
       sh "API_URL=https://${restApiId}.execute-api.us-east-1.amazonaws.com/${env}/v1 npm run dist"
       def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
       s3Upload(
