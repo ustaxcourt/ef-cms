@@ -1,5 +1,7 @@
+#!/bin/bash
+
 FULL_URL="https://sonarcloud.io"
-sonar-scanner -Dsonar.branch.name=${branch_name} -Dsonar.organization=flexion-github -Dsonar.projectBaseDir=. -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=$FULL_URL
+sonar-scanner -Dsonar.branch.name=${branch_name} -Dsonar.organization=flexion-github -Dsonar.projectBaseDir=. -Dsonar.login=${EF_CMS_API_SONAR_TOKEN} -Dsonar.host.url=$FULL_URL
 sleep 5
 PROJECT_KEY=$(grep sonar.projectKey sonar-project.properties | sed 's/sonar.projectKey=\(.*\)/\1/')
 CURL_URL="$FULL_URL/api/qualitygates/project_status?projectKey=$PROJECT_KEY&branch=${branch_name}"
