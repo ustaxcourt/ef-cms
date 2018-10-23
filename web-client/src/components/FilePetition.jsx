@@ -9,19 +9,25 @@ export default function FilePetition() {
         <p>* All are required.</p>
         <form>
           <div className="usa-form-group">
-            <label htmlFor="petition-file">Petition file</label>
+            <label htmlFor="petition-file">1. Petition file (form #)</label>
+            <span>Contains details about your case</span>
             <input id="petition-file" type="file" />
           </div>
           <div className="usa-form-group">
             <label htmlFor="request-for-place-of-trial">
-              Request for place of trial
+              2. Request for place of trial (form #5)
             </label>
+            <span>To submit the city and state for your trial</span>
             <input id="request-for-place-of-trial" type="file" />
           </div>
           <div className="usa-form-group">
             <label htmlFor="statement-of-taxpayer-id">
-              Statement of taxpayer identification number
+              3. Statement of taxpayer identification number (form #4)
             </label>
+            <span>
+              To submit your Social Security number or employee identification
+              number
+            </span>
             <input id="statement-of-taxpayer-id" type="file" />
           </div>
           <input type="submit" value="Upload" />
