@@ -72,27 +72,26 @@ then
       exit 1
 fi
 
-
 # check ssh prerequisites, including possibly symlinked files
-# if [[ ! -e ssh/id_rsa.pub && ! -e ssh/id_rsa ]]; then
-#     echo "No ssh keypair was found.  One is being created."
-#     sh ../bin/generate-ssh-key.sh
-# fi
+if [[ ! -e ssh/id_rsa.pub && ! -e ssh/id_rsa ]]; then
+    echo "No ssh keypair was found.  One is being created."
+    sh ../bin/generate-ssh-key.sh
+fi
 
-# if [[ ! -e ssh/id_rsa.pub || ! -e ssh/id_rsa ]]; then
-#     echo "Both an ssh/id_rsa.pub public key and matching ssh/id_rsa private key must be provided to the provisioning process"
-#     exit 1
-# fi
+if [[ ! -e ssh/id_rsa.pub || ! -e ssh/id_rsa ]]; then
+    echo "Both an ssh/id_rsa.pub public key and matching ssh/id_rsa private key must be provided to the provisioning process"
+    exit 1
+fi
 
-# echo "checking for the ${ENVIRONMENT}-${DEPLOYMENT_NAME}-management key pair in aws..."
-# aws ec2 describe-key-pairs --output text | egrep "\t${ENVIRONMENT}-${DEPLOYMENT_NAME}-management$"
-# result=$?
-# if [ ${result} -ne 0 ]; then
-#   # upload the key
-#   aws ec2 import-key-pair --key-name "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management" --public-key-material file://ssh/id_rsa.pub
-# else
-#   echo "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management ssh kiey pair already exists"
-# fi
+echo "checking for the ${ENVIRONMENT}-${DEPLOYMENT_NAME}-management key pair in aws..."
+aws ec2 describe-key-pairs --output text | egrep "\t${ENVIRONMENT}-${DEPLOYMENT_NAME}-management$"
+result=$?
+if [ ${result} -ne 0 ]; then
+  # upload the key
+  aws ec2 import-key-pair --key-name "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management" --public-key-material file://ssh/id_rsa.pub
+else
+  echo "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management ssh kiey pair already exists"
+fi
 
 BUCKET=${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources
 KEY=common.tfstate
