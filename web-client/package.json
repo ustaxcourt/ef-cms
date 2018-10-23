@@ -9,7 +9,8 @@
     "dev": "USTC_ENV=dev parcel --no-cache src/index.pug",
     "dist": "USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
-    "test": "nyc mocha --opts ./mocha.opts ./**/**/*.test.js"
+    "test": "nyc mocha --opts ./mocha.opts ./**/**/*.test.js",
+    "test:browser": "parcel --no-cache src/test.pug"
   },
   "repository": {
     "type": "git",
