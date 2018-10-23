@@ -69,7 +69,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('serverless-api') {
               sh 'npm i'
               sh 'npm run start:local'
@@ -87,7 +87,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('serverless-api') {
               sh 'npm i'
               sh 'npm run start:local'
