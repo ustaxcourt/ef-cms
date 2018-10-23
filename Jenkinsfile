@@ -4,6 +4,13 @@ pipeline {
 
   agent any
 
+  environment {
+    SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
+    npm_config_cache = "/home/tomcat"
+    HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
+    CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+  }
+
   stages {
     stage('setup') {
       steps {
