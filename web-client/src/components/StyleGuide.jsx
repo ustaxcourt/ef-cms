@@ -368,6 +368,12 @@ export default function StyleGuide() {
             step="10"
             defaultValue="20"
           />
+
+          <div className="usa-form-group">
+            <label htmlFor="file-upload">File Upload</label>
+            <input id="file-upload" type="file" />
+          </div>
+
           <input type="submit" value="Submit code" />
         </form>
       </section>
