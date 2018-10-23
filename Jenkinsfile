@@ -72,11 +72,11 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('serverless-api') {
               sh 'npm i'
-              sh 'npm run start:local'
+              sh 'npm run start:local &'
             }
             dir('web-client') {
               sh 'npm i'
-              sh 'npm run dev'
+              sh 'npm run dev &'
               sh 'npm run test:pa11y'
             }
           }
@@ -90,11 +90,11 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('serverless-api') {
               sh 'npm i'
-              sh 'npm run start:local'
+              sh 'npm run start:local &'
             }
             dir('web-client') {
               sh 'npm i'
-              sh 'npm run dev'
+              sh 'npm run dev &'
               sh 'npm run test:cypress'
             }
           }
