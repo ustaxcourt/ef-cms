@@ -65,26 +65,26 @@ pipeline {
         }
       }
     }
-    stage('pa11y') {
-      steps {
-        script {
-          def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('serverless-api') {
-              sh 'npm i'
-              sh 'npm run start:local &'
-            }
-            dir('web-client') {
-              sh 'npm i'
-              sh 'npm run dev &'
-              sh 'sleep 20'
-              sh 'curl http://localhost:1234'
-              sh 'npm run test:pa11y'
-            }
-          }
-        }
-      }
-    }
+    // stage('pa11y') {
+    //   steps {
+    //     script {
+    //       def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
+    //       runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+    //         dir('serverless-api') {
+    //           sh 'npm i'
+    //           sh 'npm run start:local &'
+    //         }
+    //         dir('web-client') {
+    //           sh 'npm i'
+    //           sh 'npm run dev &'
+    //           sh 'sleep 30'
+    //           sh 'curl http://localhost:1234'
+    //           sh 'npm run test:pa11y'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     stage('cypress') {
       steps {
         script {
@@ -97,6 +97,7 @@ pipeline {
             dir('web-client') {
               sh 'npm i'
               sh 'npm run dev &'
+              sh 'sleep 30'
               sh 'npm run test:cypress'
             }
           }
