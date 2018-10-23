@@ -18,6 +18,9 @@ export default connect(
         </p>
         <p id="response">{response}</p>
         <p>
+          <a href="/file-a-petition">File a Petition</a>
+        </p>
+        <p>
           <a href="/style-guide">Style Guide</a>
         </p>
       </section>
