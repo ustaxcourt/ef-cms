@@ -35,6 +35,18 @@ pipeline {
         }
       }
     }
+    stage('Audit') {
+      steps {
+        script {
+          def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
+          runner.inside('-v /home/tomcat:/home/tomcat') {
+            dir('serverless-api') {
+              sh 'npm audit'
+            }
+          }
+        }
+      }
+    }
     stage('Lint') {
       steps {
         script {
@@ -134,7 +146,6 @@ def createDeployTasks(targets) {
             def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('serverless-api') {
-                sh 'npm i'
                 dir('./src') {
                   echo 'Fix file permissions'
                   sh 'find . -type f -exec chmod -R ugo+r {} ";"'
