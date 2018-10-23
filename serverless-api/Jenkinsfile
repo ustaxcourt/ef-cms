@@ -27,7 +27,7 @@ pipeline {
       steps {
         script {
           def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('serverless-api') {
               sh 'npm i'
             }
