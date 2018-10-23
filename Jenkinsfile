@@ -46,6 +46,18 @@ pipeline {
     //     }
     //   }
     // }
+    stage('Merge') {
+      steps {
+        script {
+          if (env.BRANCH_NAME != 'develop' && env.BRANCH_NAME != 'master' && env.CHANGE_TARGET) {
+            // todo: there is probably a better way to have Jenkins do this for us automatically
+            sh 'git config user.name "EF-CMS Jenkins"'
+            sh 'git config user.email "noop@example.com"'
+            sh "git merge origin/${env.CHANGE_TARGET}"
+          }
+        }
+      }
+    }
     stage('pa11y') {
       steps {
         script {
