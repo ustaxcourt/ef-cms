@@ -1,0 +1,3 @@
+FROM cypress/base:8
+
+RUN apt-get -y install git
