@@ -24,13 +24,36 @@ pipeline {
         }
       }
     }
-    stage('Lint') {
+    stage('Setup') {
       steps {
         script {
           dir('web-client') {
             def runner = docker.build 'lint', '-f Dockerfile.test .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm i'
+            }
+          }
+        }
+      }
+    }
+    stage('Audit') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm audit'
+            }
+          }
+        }
+      }
+    }
+    stage('Lint') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm run lint'
             }
           }
@@ -43,7 +66,6 @@ pipeline {
           dir('web-client') {
             def runner = docker.build 'lint', '-f Dockerfile.test .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
-              sh 'npm i'
               sh 'npm run test'
             }
           }
@@ -142,7 +164,6 @@ def deployTo(env) {
   def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
     dir('web-client') {
-      sh 'npm i'
       sh 'npm run dist'
       def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
       s3Upload(
