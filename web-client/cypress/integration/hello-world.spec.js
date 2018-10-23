@@ -7,7 +7,7 @@ describe('Hello world!', function() {
   });
   it('Updates response when hello button is clicked', () => {
     cy.get('#hello-button').click();
-    cy.get('#response').should('contain.text', 'Hello World!');
+    cy.get('#response').should('contain.text', 'Hello World');
   });
 });
 
