@@ -6,7 +6,7 @@ do
   echo "Found code $code"
   if [ "x$code" = "x200" ]
   then
-        break
+    break
   fi
   sleep 1
 done
