@@ -182,7 +182,7 @@ def createDeployTasks(targets) {
               dir('serverless-api') {
                 echo 'Running smoke test'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${REGION} --query \"items[?name=='${ENVIRONMENT}-ef-cms'].id\" --output text)"
-                sh("API_REGION=${region}.trim() API_STAGE=${slsStage} API_TARGET=${restApiId.trim()} ./node_modules/.bin/artillery run ./smokeTest.yaml --output ./coverage/artillery_smoke_test.json")
+                sh("API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId.trim()} ./node_modules/.bin/artillery run ./smokeTest.yaml --output ./coverage/artillery_smoke_test.json")
                 sh("./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json")
               }
             }
