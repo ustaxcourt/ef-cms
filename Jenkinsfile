@@ -77,6 +77,8 @@ pipeline {
             dir('web-client') {
               sh 'npm i'
               sh 'npm run dev &'
+              sh 'sleep 20'
+              sh 'curl http://localhost:1234'
               sh 'npm run test:pa11y'
             }
           }
