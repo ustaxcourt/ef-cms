@@ -5,7 +5,15 @@ plugins:
   - serverless-offline
   - serverless-aws-documentation
   - serverless-plugin-bind-deployment-id
+  - serverless-plugin-aws-alerts
 custom:
+  alerts:
+    dashboards: true
+    alarms:
+      - functionThrottles
+      - functionErrors
+      - functionInvocations
+      - functionDuration
   documentation:
     api:
       info:
