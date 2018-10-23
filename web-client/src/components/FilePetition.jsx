@@ -4,7 +4,7 @@ export default function FilePetition() {
   return (
     <React.Fragment>
       <section className="usa-section usa-grid">
-        <h1>File a Petition</h1>
+        <h1>File a petition</h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
         <form>
