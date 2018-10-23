@@ -5,6 +5,9 @@ const router = {
     page('/', () => {
       app.getSequence('gotoHome')();
     });
+    page('/file-a-petition', () => {
+      app.getSequence('gotoFilePetition')();
+    });
     page('/style-guide', () => {
       app.getSequence('gotoStyleGuide')();
     });

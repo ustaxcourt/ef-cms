@@ -7,10 +7,12 @@ import Header from './Header';
 import Footer from './Footer';
 
 import Home from './Home';
+import FilePetition from './FilePetition';
 import StyleGuide from './StyleGuide';
 
 const pages = {
   Home,
+  FilePetition,
   StyleGuide,
 };
 
