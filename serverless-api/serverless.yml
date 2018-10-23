@@ -3,11 +3,15 @@ plugins:
   - serverless-plugin-split-stacks
   # - serverless-domain-manager
   - serverless-offline
-  - serverless-aws-documentation
   - serverless-plugin-bind-deployment-id
+  - serverless-aws-documentation
   - serverless-plugin-aws-alerts
 custom:
   alerts:
+    stages:
+      - dev
+      - stg
+      - prod
     dashboards: true
     alarms:
       - functionThrottles
