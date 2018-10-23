@@ -101,7 +101,7 @@ pipeline {
     stage('Terraform - Dev') {
       when {
         expression {
-          env.branch_name == 'develop'
+          env.branch_name == 'PR-56'
         }
       }
       steps {
