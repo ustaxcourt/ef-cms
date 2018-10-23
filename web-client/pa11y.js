@@ -10,7 +10,10 @@ async function runPa11y() {
 
     // Put together some options to use in each test
     const options = {
-      standard: 'WCAG2AAA',
+      standard: 'WCAG2AA',
+      chromeLaunchConfig: {
+        "args": ["--no-sandbox"]
+      },
       log: {
         debug: console.log,
         error: console.error,
