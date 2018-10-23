@@ -79,18 +79,6 @@ pipeline {
         }
       }
     }
-    stage('Pa11y') {
-      steps {
-        script {
-          dir('web-client') {
-            def runner = docker.build 'pa11y', '-f Dockerfile.test .'
-            runner.inside('-v /home/tomcat:/home/tomcat') {
-              sh 'npm run test:a11y'
-            }
-          }
-        }
-      }
-    }
     stage('SonarQube') {
       steps {
         script {
