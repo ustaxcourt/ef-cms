@@ -8,7 +8,7 @@ terraform {
 }
 
 module "management" {
-  source = "git@github.com:flexion/flexion-terraform//management?ref=task/temp_repo"
+  source = "../modules/management"
 
   dns_domain = "${var.dns_domain}"
 
