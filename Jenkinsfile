@@ -98,7 +98,7 @@ pipeline {
               sh 'npm i'
               sh 'npm run dev &'
               sh 'sleep 30'
-              sh 'npm run test:cypress'
+              sh 'npm run cypress'
             }
           }
         }
