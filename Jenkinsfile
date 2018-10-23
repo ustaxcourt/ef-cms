@@ -77,8 +77,7 @@ pipeline {
     //         dir('web-client') {
     //           sh 'npm i'
     //           sh 'npm run dev &'
-    //           sh 'sleep 30'
-    //           sh 'curl http://localhost:1234'
+    //           sh './wait-until.sh http://localhost:1234'
     //           sh 'npm run test:pa11y'
     //         }
     //       }
@@ -97,7 +96,7 @@ pipeline {
             dir('web-client') {
               sh 'npm i'
               sh 'npm run dev &'
-              sh 'sleep 30'
+              sh './wait-until.sh http://localhost:1234'
               sh 'npm run cypress'
             }
           }
