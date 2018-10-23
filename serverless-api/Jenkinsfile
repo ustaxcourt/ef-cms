@@ -14,7 +14,7 @@ pipeline {
     stage('Merge') {
       steps {
         script {
-          if (env.target_sha1) {
+          if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
             // todo: there is probably a better way to have Jenkins do this for us automatically
             sh 'git config user.name "EF-CMS Jenkins"'
             sh 'git config user.email "noop@example.com"'
@@ -30,6 +30,18 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat') {
             dir('serverless-api') {
               sh 'npm i'
+            }
+          }
+        }
+      }
+    }
+    stage('Audit') {
+      steps {
+        script {
+          def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
+          runner.inside('-v /home/tomcat:/home/tomcat') {
+            dir('serverless-api') {
+              sh 'npm audit'
             }
           }
         }
@@ -62,6 +74,25 @@ pipeline {
         success {
           dir('serverless-api') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            def runner = docker.build 'sonar', '-f serverless-api/Dockerfile.sonar .'
+            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+              sshagent(credentials: ['github']) {
+                dir('management/management') {
+                  sh './deploy-init.sh'
+                }
+                dir('serverless-api') {
+                  sh './verify-sonarqube-passed.sh'
+                }
+              }
+            }
           }
         }
       }
@@ -99,6 +130,11 @@ pipeline {
       }
     }
   }
+  post {
+    always {
+      deleteDir()
+    }
+  }
 }
 
 def createDeployTasks(targets) {
@@ -129,7 +165,6 @@ def createDeployTasks(targets) {
             def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('serverless-api') {
-                sh 'npm i'
                 dir('./src') {
                   echo 'Fix file permissions'
                   sh 'find . -type f -exec chmod -R ugo+r {} ";"'

@@ -15,11 +15,35 @@ pipeline {
     stage('Merge') {
       steps {
         script {
-          if (env.target_sha1) {
+          if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
             // todo: there is probably a better way to have Jenkins do this for us automatically
             sh 'git config user.name "EF-CMS Jenkins"'
             sh 'git config user.email "noop@example.com"'
             sh "git merge origin/${env.target_sha1}"
+          }
+        }
+      }
+    }
+    stage('Setup') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm i'
+            }
+          }
+        }
+      }
+    }
+    stage('Audit') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm audit'
+            }
           }
         }
       }
@@ -30,7 +54,6 @@ pipeline {
           dir('web-client') {
             def runner = docker.build 'lint', '-f Dockerfile.test .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
-              sh 'npm i'
               sh 'npm run lint'
             }
           }
@@ -43,7 +66,6 @@ pipeline {
           dir('web-client') {
             def runner = docker.build 'lint', '-f Dockerfile.test .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
-              sh 'npm i'
               sh 'npm run test'
             }
           }
@@ -150,12 +172,11 @@ pipeline {
 }
 
 def deployTo(env) {
-  def runner = docker.build 'deploy', '-f web-client/Dockerfile.terraform .'
-  runner.inside('-v /home/tomcat:/home/tomcat') {
+  def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
+  runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
     dir('web-client') {
-      sh 'npm i'
       sh 'npm run dist'
-      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket")
+      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
       s3Upload(
         bucket: "${bucket}",
         file: 'dist',
