@@ -1,109 +1,84 @@
 {
-  "swagger" : "2.0",
-  "info" : {
-    "description" : "Some example API",
-    "version" : "2018-10-10T19:45:09Z",
-    "title" : "dev-example-service",
-    "termsOfService" : "https://www.google.com",
-    "contact" : {
-      "name" : "The contact person",
-      "url" : "https://www.serverless.com/framework",
-      "email" : "some-fake@email.com"
+  "swagger": "2.0",
+  "info": {
+    "description": "Some example API",
+    "version": "2018-10-10T19:45:09Z",
+    "title": "dev-example-service",
+    "termsOfService": "https://www.google.com",
+    "contact": {
+      "name": "The contact person",
+      "url": "https://www.serverless.com/framework",
+      "email": "some-fake@email.com"
     },
-    "license" : {
-      "name" : "The license",
-      "url" : "https://www.github.com"
+    "license": {
+      "name": "The license",
+      "url": "https://www.github.com"
     }
   },
-  "host" : "1i99opkntb.execute-api.us-east-1.amazonaws.com",
-  "basePath" : "/dev",
-  "tags" : [ {
-    "name" : "Tag1",
-    "description" : "The first tag"
-  }, {
-    "name" : "Tag2",
-    "description" : "That other tag that we all love"
-  } ],
-  "schemes" : [ "https" ],
-  "paths" : {
-    "/v1/hello" : {
-      "get" : {
-        "responses" : { }
+  "host": "1i99opkntb.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/dev",
+  "tags": [
+    {
+      "name": "Tag1",
+      "description": "The first tag"
+    },
+    {
+      "name": "Tag2",
+      "description": "That other tag that we all love"
+    }
+  ],
+  "schemes": ["https"],
+  "paths": {
+    "/v1/document": {
+      "get": {
+        "responses": {}
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/swagger" : {
-      "get" : {
-        "responses" : { }
+    "/v1/swagger": {
+      "get": {
+        "responses": {}
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/trivia" : {
-      "get" : {
-        "responses" : { }
-      },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
-              },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
-              },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
-              },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
