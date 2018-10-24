@@ -1,0 +1,51 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./*.js",
+    "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
+    "test": "nyc -a mocha --exit ./*.test.js",
+    "test:watch": "nyc -a mocha --watch ./*.test.js",
+    "test:coverage": "nyc check-coverage",
+    "test:ci": "nyc --all --reporter=cobertura --reporter=html --report-dir ../artifacts/coverage/ mocha --exit ./*.test.js && npm run test:coverage"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "extension": [
+      "*.js"
+    ],
+    "exclude": [
+      "**/*[tT]est.js"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "cobertura",
+      "html"
+    ],
+    "report-dir": "./artifacts/coverage",
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 50,
+    "cache": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "unlicensed",
+  "devDependencies": {
+    "chai-string": "^1.4.0",
+    "chai": "^4.1.2",
+    "lambda-tester": "^3.4.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "serverless-aws-documentation": "^1.1.0",
+    "serverless-domain-manager": "^2.6.5",
+    "serverless-offline": "^3.27.0",
+    "serverless-plugin-split-stacks": "^1.5.5",
+    "serverless": "^1.32.0"
+  }
+}

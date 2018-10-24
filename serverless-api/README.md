@@ -69,3 +69,13 @@ for background.  NOTE: Docker is required.
 2. `npm run install:dynamodb` install a local dynamodb (optional)
 3. `npm run start:dynamodb` run the dynamodb on port 8000 (optional)
 4. `npm run start:local` in another terminal run the serverless-local on 3000
+
+## Load and Smoke Testing with Artillery
+
+To get the rest api id of the stage to test against auth to aws then run:
+
+`aws apigateway get-rest-apis --region=${region} --query "items[?name=='${stage}-ef-cms'].id"`
+
+Using that rest api id run:
+ 
+`API_REGION=<region> API_TARGET=<rest-api-id> API_STAGE=<stage> artillery run ./smokeTest.yml`
