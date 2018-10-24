@@ -1,2 +1,3 @@
 readCapacityUnits: 1
 writeCapacityUnits: 1
+s3Endpoint: http://localhost:9000
