@@ -89,6 +89,7 @@ provider:
 
   environment:
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
+    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint}
 
   iamRoleStatements:
     - Effect: "Allow"

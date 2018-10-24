@@ -1,2 +1,3 @@
 readCapacityUnits: 1
 writeCapacityUnits: 1
+dynamodbEndpoint: http://localhost:8000
