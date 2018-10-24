@@ -1,12 +1,26 @@
 service: ef-cms
 plugins:
+  - serverless-dynamodb-local
   - serverless-plugin-split-stacks
   # - serverless-domain-manager
-  - serverless-offline
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
+  - serverless-offline
 custom:
+  dynamodb:
+    start:
+      inMemory: true
+      migrate: true
+      port: 8000
+      seed: false
+    # seed:
+    #   test:
+    #     sources:
+    #     - table: ${self:provider.environment.DOCUMENTS_DYNAMODB_TABLE}
+    #       sources:
+    #         - ./spec/fixtures/stuff.json
+
   alerts:
     stages:
       - dev
@@ -119,7 +133,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
           WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: ${env:DOCUMENTS_DYNAMODB_TABLE}
+        TableName: ${self:provider.environment.DOCUMENTS_DYNAMODB_TABLE}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 

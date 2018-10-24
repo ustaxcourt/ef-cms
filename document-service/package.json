@@ -8,6 +8,7 @@
     "aws-sdk-mock": "^4.2.0",
     "chai": "^4.1.2",
     "chai-string": "^1.4.0",
+    "dynamodb-admin": "^3.0.2",
     "eslint": "^5.7.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
@@ -28,17 +29,19 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
+    "postinstall": "sls dynamodb install -s local",
     "install:dynamodb": "./node_modules/.bin/sls dynamodb install",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "./node_modules/.bin/sls dynamodb start -p 8000  --migrate true --stage local",
-    "start:local": "./node_modules/.bin/sls offline start --port 3000 -r us-east-1 --noTimeout --stage local",
-    "start": "sls offline start",
+    "start:local": "./node_modules/.bin/sls offline start --noTimeout --stage local",
+    "start": "npm run start:local",
     "watch": "nodemon -e yml --exec sls offline start",
     "lint": "eslint ./src/**/*.js",
     "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
     "test": "nyc -a mocha --exit ./src/**/*.test.js",
     "test:watch": "nyc -a mocha --watch ./src/**/*.test.js",
-    "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage"
+    "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage",
+    "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
   },
   "nyc": {
     "check-coverage": true,
