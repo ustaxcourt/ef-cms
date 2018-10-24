@@ -1,4 +1,4 @@
-const swagger = require('../swagger.json');
+const swagger = require('../../swagger.json');
 
 /**
  * Swagger HTML Page Lambda

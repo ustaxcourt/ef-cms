@@ -52,7 +52,6 @@
     "exclude": [
       "**/*[tT]est.js",
       "./**/node_modules",
-      "**/artifacts",
       "**/coverage",
       "setup-global-tables.js"
     ],
