@@ -103,6 +103,7 @@ provider:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
+    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -221,7 +222,7 @@ functions:
 #          cors: true
 
   swagger:
-    handler: src/swagger.handler
+    handler: src/swagger/swagger.handler
     events:
       - http:
           path: v1/swagger
