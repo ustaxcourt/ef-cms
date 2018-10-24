@@ -7,9 +7,16 @@ export const getHello = [
   set(state`response`, props.response),
 ];
 
-export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
-
 export const gotoHome = [set(state`currentPage`, 'Home')];
 export const gotoLogIn = [set(state`currentPage`, 'LogIn')];
 export const gotoFilePetition = [set(state`currentPage`, 'FilePetition')];
 export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
+
+export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
+
+export const submitFilePetition = [actions.filePetition];
+export const updatePetitionValue = [
+  set(state`petition.${props`key`}`, props`value`),
+  actions.updatePetition,
+  set(state`petition`, props.petition),
+];
