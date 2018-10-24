@@ -125,11 +125,10 @@ package:
   exclude:
     - ./**
   include:
-    - src/documents/createDocument.js
-    - src/swagger.js
+    - src/**
     - swagger.json
-    - src/package.json
-    - src/node_modules/**
+    - ./package.json
+    - ./node_modules/**
 
   excludeDevDependencies: true
 
