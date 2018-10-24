@@ -9,7 +9,6 @@ const documentService = require('./documentService');
  */
 
 exports.create = (event, context, callback) => {
-
   const done = (err, res) => callback(null, {
     statusCode: err ? '400' : '200',
     body: err ? JSON.stringify(err.message) : JSON.stringify(res),
