@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '@cerebral/react';
 
-import close from '../../node_modules/uswds/dist/img/close.svg';
+// import close from '../../node_modules/uswds/dist/img/close.svg';
 
 /**
  * Header
@@ -22,7 +22,7 @@ export default connect(
           <button className="usa-menu-btn">Menu</button>
         </div>
 
-        <nav role="navigation" className="usa-nav">
+        {/* <nav role="navigation" className="usa-nav">
           <div className="usa-nav-inner">
             <button className="usa-nav-close">
               <img src={close} alt="close" />
@@ -89,18 +89,16 @@ export default connect(
                     Search
                   </button>
                 </li>
-
                 <li>
                   <a href="/">Secondary priority link</a>
                 </li>
-
                 <li>
                   <a href="/">Easy to comprehend</a>
                 </li>
               </ul>
             </div>
           </div>
-        </nav>
+        </nav> */}
       </header>
     );
   },
