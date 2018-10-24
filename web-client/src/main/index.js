@@ -13,5 +13,10 @@ export default {
     usaBanner: {
       showDetails: false,
     },
+    petition: {
+      petitionFile: '',
+      requestForPlaceOfTrial: '',
+      statementOfTaxpayerIdentificationNumber: '',
+    },
   },
 };
