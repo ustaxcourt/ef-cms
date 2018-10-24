@@ -196,7 +196,7 @@ functions:
 #          cors: true
 
   swagger:
-    handler: src/swagger.handler
+    handler: src/swagger/swagger.handler
     events:
       - http:
           path: v1/swagger
