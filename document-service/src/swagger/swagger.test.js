@@ -1,5 +1,3 @@
-'use strict';
-
 const lambdaTester = require('lambda-tester');
 const chai = require('chai');
 const expect = require('chai').expect;

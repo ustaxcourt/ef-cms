@@ -16,12 +16,21 @@ exports.create = (event, context, callback) => {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
     },
+
   });
 
-  const body = JSON.parse(event.body);
+  let body;
+  try {
+    body = JSON.parse(event.body);
+  } catch (error) {
+    done(new Error('problem parsing event body: ' + error));
+    return;
+  }
 
-  if (!body || !body.documentType) {
-    done(new Error('documentType is required'));
+
+  if (!body || !body.documentType || !body.userId) {
+    done(new Error('documentType and userId are required'));
+    return;
   }
 
   return documentService.create(body.userId, body.documentType)
