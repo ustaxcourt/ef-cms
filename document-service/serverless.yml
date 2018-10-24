@@ -74,14 +74,29 @@ provider:
     serverSideEncryption: AES256
 
   environment:
-    TESTING: '123'
+    DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:Scan
+       - dynamodb:GetItem
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+       - dynamodb:DeleteItem
+       - dynamodb:BatchWriteItem
+      Resource:
+        - { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }
+        - { "Fn::Join": [ "/", [
+            { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
+          ]]}
 
 package:
   exclude:
     - ./**
   include:
-    - src/hello.js
-    - src/trivia.js
+    - src/documents/createDocument.js
     - src/swagger.js
     - swagger.json
     - src/package.json
@@ -91,23 +106,20 @@ package:
 
 resources:
   Resources:
-    ParticipantDynamoDbTable:
+    DocumentsDynamoDBTable:
       Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          - AttributeName: pk
-            AttributeType: S
-          - AttributeName: sk
+          - AttributeName: documentId
             AttributeType: S
         KeySchema:
-          - AttributeName: pk
+          - AttributeName: documentId
             KeyType: HASH
-          - AttributeName: sk
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
           WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: efcms-${opt:stage}
+        TableName: ${env:DOCUMENTS_DYNAMODB_TABLE}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -129,46 +141,45 @@ resources:
             ResourcePath: "/*"
             MetricsEnabled: true
 functions:
-  trivia:
-    handler: src/trivia.handler
+  createDocument:
+    handler: src/documents/createDocument.create
     events:
       - http:
-          path: v1/trivia
-          method: get
-          cors: true
+          path: v1/documents
+          method: post
+#          cors: true
 
-  hello:
-    handler: src/hello.handler
-    documentation:
-      summary: Gets a hello world message, yay
-      tags:
-        - Tag1
-      description: >
-        Demonstrates a GET method. You can see query string parameters,
-        request headers, response body and response headers.
-      # queryParams:
-      #   -
-      #     name: firstParam
-      #     description: The first param that we want, you MUST pass it
-      #     required: true
-      #   -
-      #     name: secondParam
-      #     description: The second param. This one is optional
-      methodResponses:
-        -
-          statusCode: '200'
-          responseModels:
-            "application/json": HelloWorldResponse
-          # responseHeaders:
-          #   -
-          #     name: link
-          #     description: describes other actions that can be taken
-          #     type: string
-    events:
-      - http:
-          path: v1/hello
-          method: get
-          cors: true
+#  getDocument:
+#    handler: src/documents/getDocument.handler
+#    documentation:
+#      summary: retrieves a document by document id
+#      tags:
+#        - documents
+#      description: >
+#        Retrieve a document by document id.
+#      # queryParams:
+#      #   -
+#      #     name: firstParam
+#      #     description: The first param that we want, you MUST pass it
+#      #     required: true
+#      #   -
+#      #     name: secondParam
+#      #     description: The second param. This one is optional
+#      methodResponses:
+#        -
+#          statusCode: '200'
+#          responseModels:
+#            "application/json": HelloWorldResponse
+#          # responseHeaders:
+#          #   -
+#          #     name: link
+#          #     description: describes other actions that can be taken
+#          #     type: string
+#    events:
+#      - http:
+#          path: v1/hello
+#          method: get
+#          cors: true
 
   swagger:
     handler: src/swagger.handler

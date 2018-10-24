@@ -189,7 +189,7 @@ def createGlobalTableTasks(targets) {
           dir("serverless-api") {
             def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
             trunner.inside() {
-              sh "node setup-global-tables.js efcms-${slsStage} ${deploy.regions.join(',')}"
+              sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
             }
           }
         }
