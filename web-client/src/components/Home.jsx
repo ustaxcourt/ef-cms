@@ -18,10 +18,13 @@ export default connect(
         </p>
         <p id="response">{response}</p>
         <p>
-          <a href="/file-a-petition">File a Petition</a>
+          <a href="/log-in">Log in</a>
         </p>
         <p>
-          <a href="/style-guide">Style Guide</a>
+          <a href="/file-a-petition">File a petition</a>
+        </p>
+        <p>
+          <a href="/style-guide">Style guide</a>
         </p>
       </section>
     );
