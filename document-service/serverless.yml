@@ -1,6 +1,7 @@
 service: ef-cms
 plugins:
   - serverless-dynamodb-local
+  - serverless-s3-local
   - serverless-plugin-split-stacks
   # - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
@@ -8,6 +9,17 @@ plugins:
   - serverless-plugin-aws-alerts
   - serverless-offline
 custom:
+  s3:
+    host: 0.0.0.0
+    port: 9000
+    directory: /tmp
+    # Uncomment the first line only if you want to use cors with specified policy
+    # Uncomment the second line only if you don't want to use cors
+    # Not uncomment the these lines only if your wanto use cors with default policy
+    # cors: relative/path/to/your/cors/policy/xml
+    # cors: false
+    # Uncomment only if you already have a S3 server running locally
+    # noStart: true
   dynamodb:
     start:
       inMemory: true
@@ -88,6 +100,8 @@ provider:
     serverSideEncryption: AES256
 
   environment:
+    S3_ENDPOINT: ${self:custom.vars.s3Endpoint}
+    DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
 
   iamRoleStatements:
@@ -120,6 +134,10 @@ package:
 
 resources:
   Resources:
+    DocumentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
     DocumentsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain
@@ -155,6 +173,13 @@ resources:
             ResourcePath: "/*"
             MetricsEnabled: true
 functions:
+  createPolicyUrl:
+    handler: src/documents/createPolicyUrl.create
+    events:
+      - http:
+          path: v1/documents/policy
+          method: get
+
   createDocument:
     handler: src/documents/createDocument.create
     events:
