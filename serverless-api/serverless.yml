@@ -91,6 +91,26 @@ package:
 
 resources:
   Resources:
+    ParticipantDynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+          WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
+        TableName: efcms-${opt:stage}
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
     #####
     # Begin Stage for API Gateway Logging
     #####

@@ -1,3 +1,11 @@
+def targets = [
+  [env: 'dev', regions: ['us-east-1', 'us-east-2']],
+]
+
+def prodTargets = [
+  [env: 'prod', regions:['us-east-1']],
+]
+
 pipeline {
   agent any
 
@@ -81,7 +89,7 @@ pipeline {
     stage('SonarQube') {
       steps {
         script {
-          withCredentials([string(credentialsId: 'EF_CMS_API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+          withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             def runner = docker.build 'sonar', '-f serverless-api/Dockerfile.sonar .'
             runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
               sshagent(credentials: ['github']) {
@@ -97,6 +105,19 @@ pipeline {
         }
       }
     }
+    stage('Terraform Pre Prod') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def tasks = createTerraformTasks targets
+          parallel tasks
+        }
+      }
+    }
     stage('Deploy Pre Prod') {
       when {
         expression {
@@ -105,10 +126,33 @@ pipeline {
       }
       steps {
         script {
-          def targets = [
-            [env: 'dev', regions: ['us-east-1']],
-          ]
           def tasks = createDeployTasks targets
+          parallel tasks
+        }
+      }
+    }
+    stage('Create Global Tables - Pre Prod') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def tasks = createGlobalTableTasks targets
+          parallel tasks
+        }
+      }
+    }
+    stage('Smoke Tests - Pre Prod') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def tasks = createSmokeTestTasks targets
           parallel tasks
         }
       }
@@ -121,10 +165,7 @@ pipeline {
       }
       steps {
         script {
-          def targets = [
-            [env: 'prod', regions:['us-east-1']],
-          ]
-          def tasks = createDeployTasks targets
+          def tasks = createDeployTasks prodTargets
           parallel tasks
         }
       }
@@ -137,6 +178,82 @@ pipeline {
   }
 }
 
+def createGlobalTableTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("global tables ${slsStage}") {
+          checkout scm
+          dir("serverless-api") {
+            def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
+            trunner.inside() {
+              sh "node setup-global-tables.js efcms-${slsStage} ${deploy.regions.join(',')}"
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
+}
+
+def createTerraformTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("terraform ${slsStage}") {
+          checkout scm
+          def trunner = docker.build 'terraform', '-f serverless-api/Dockerfile.deploy .'
+          trunner.inside() {
+            dir("serverless-api/terraform/${slsStage}") {
+              echo 'Running Terraform'
+              sh "rm -rf ./.terraform/"
+              sh "terraform init"
+              sh "terraform apply -auto-approve"
+
+              script {
+                echo 'Setting environment variables based on Terraform run'
+                SLS_DEPLOYMENT_BUCKET = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
+}
+
+def createSmokeTestTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    deploy.regions.each { region ->
+      tasks["${slsStage} - ${region}"] = {
+        node() {
+          stage("smoketest ${slsStage} - ${region}") {
+            def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
+            runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+              dir('serverless-api') {
+                echo 'Running smoke test'
+                sh 'mkdir coverage'
+                def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
+                sh("API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId} ./node_modules/.bin/artillery run ./smokeTest.yml --output ./coverage/artillery_smoke_test.json")
+                sh("./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json")
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
+}
+
 def createDeployTasks(targets) {
   def deployTasks = [:]
   targets.each { deploy ->
@@ -144,34 +261,19 @@ def createDeployTasks(targets) {
     deploy.regions.each { region ->
       deployTasks["${slsStage} - ${region}"] = {
         node() {
-          stage("terraform ${slsStage} - ${region}") {
-            checkout scm
-            def trunner = docker.build 'terraform', '-f serverless-api/Dockerfile.deploy .'
-            trunner.inside() {
-              dir("serverless-api/terraform/${slsStage}") {
-                echo 'Running Terraform'
-                sh "rm -rf ./.terraform/"
-                sh "terraform init"
-                sh "terraform apply -auto-approve"
-
-                script {
-                  echo 'Setting environment variables based on Terraform run'
-                  SLS_DEPLOYMENT_BUCKET = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
-                }
-              }
-            }
-          }
           stage("serverless ${slsStage} - ${region}") {
+            checkout scm
             def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('serverless-api') {
+                sh 'npm i'
                 dir('./src') {
                   echo 'Fix file permissions'
                   sh 'find . -type f -exec chmod -R ugo+r {} ";"'
                 }
                 echo 'Build main site distribution'
                 // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
-                sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=${SLS_DEPLOYMENT_BUCKET} ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
+                sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=gov.ustaxcourt.ef-cms.apis.${slsStage}.${region}.deploys ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
                 sh "ENVIRONMENT=${slsStage} REGION=${region} ./configure-api-gateway-logging.sh"
               }
             }

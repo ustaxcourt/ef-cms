@@ -1,1 +1,3 @@
 role: REPLACE_ME
+readCapacityUnits: 1
+writeCapacityUnits: 1
