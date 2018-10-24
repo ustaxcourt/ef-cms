@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "artillery": "^1.6.0-24",
+    "aws-sdk": "^2.341.0",
     "chai": "^4.1.2",
     "chai-string": "^1.4.0",
     "eslint": "^5.7.0",
@@ -47,7 +48,8 @@
       "**/*[tT]est.js",
       "./**/node_modules",
       "**/artifacts",
-      "**/coverage"
+      "**/coverage",
+      "setup-global-tables.js"
     ],
     "reporter": [
       "text",
