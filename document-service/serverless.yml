@@ -227,6 +227,8 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
+        VersioningConfiguration:
+          Status: Enabled
     #####
     # Begin DynamoDB
     #####
