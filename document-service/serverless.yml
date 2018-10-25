@@ -185,6 +185,15 @@ provider:
   iamRoleStatements:
     - Effect: "Allow"
       Action:
+        - "s3:PutObject"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - Ref: DocumentsBucket
+            - "/*"
+    - Effect: "Allow"
+      Action:
        - dynamodb:Query
        - dynamodb:Scan
        - dynamodb:GetItem
