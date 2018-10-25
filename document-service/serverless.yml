@@ -50,13 +50,12 @@ custom:
       info:
         title: EF-CMS Documents API
         description: Documents API for U.S. Tax Court EF-CMS
-#        termsOfService: https://www.google.com
         contact:
           url: https://www.ustaxcourt.gov
           email: webmaster@ustaxcourt.gov
         license:
-          name: Creative Commons
-          url: https://creativecommons.org/licenses/by/2.0/
+          name: Creative Commons 0
+          url: https://creativecommons.org/share-your-work/public-domain/cc0/
       tags:
         -
           name: ef-cms
