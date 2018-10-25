@@ -46,7 +46,7 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          dir('serverless-api') {
+          dir('document-service') {
             def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh './run-shellcheck.sh'
@@ -198,7 +198,7 @@ def createGlobalTableTasks(targets) {
       node() {
         stage("global tables ${slsStage}") {
           checkout scm
-          dir("serverless-api") {
+          dir("document-service") {
             def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
             trunner.inside() {
               sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
@@ -248,9 +248,9 @@ def createSmokeTestTasks(targets) {
       tasks["${slsStage} - ${region}"] = {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
-            def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
+            def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-              dir('serverless-api') {
+              dir('document-service') {
                 echo 'Running smoke test'
                 sh 'mkdir coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
