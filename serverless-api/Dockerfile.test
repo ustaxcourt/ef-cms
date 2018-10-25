@@ -8,3 +8,5 @@ RUN apt-get install -y git
 
 RUN pip install truffleHog
 
+RUN apt-get install -y shellcheck
+

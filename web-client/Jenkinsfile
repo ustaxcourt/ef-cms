@@ -36,6 +36,20 @@ pipeline {
         }
       }
     }
+    stage('ShellCheck') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'shellcheck', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              dir('web-client') {
+                sh './run-shellcheck.sh'
+              }
+            }
+          }
+        }
+      }
+    }
     stage('Audit') {
       steps {
         script {
