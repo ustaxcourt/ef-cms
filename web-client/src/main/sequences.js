@@ -14,7 +14,11 @@ export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
-export const submitFilePetition = [actions.filePetition];
+export const submitFilePetition = [
+  actions.getDocumentPolicy,
+  actions.addDocument,
+  actions.filePetition,
+];
 export const updatePetitionValue = [
   set(state`petition.${props`key`}`, props`value`),
   actions.updatePetition,
