@@ -15,11 +15,6 @@ function check_env_vars_exist() {
 function prepare_serverless() {
     echo "Preparing to run Serverless."
 
-    pushd ./src/
-    rm -rf ./node_modules/
-    npm install
-    popd
-
     rm -rf ./node_modules/
     npm install
 }
@@ -41,7 +36,7 @@ function run_development() {
     export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd
 
-    echo "running serverless deploy --stage ${SLS_STAGE}"
+    echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1"
 
     ./node_modules/.bin/sls deploy --stage "${SLS_STAGE}" --region us-east-1
 }
