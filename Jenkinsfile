@@ -84,26 +84,26 @@ pipeline {
         }
       }
     }
-//   stage('cypress') {
-//      steps {
-//        script {
-//          def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
-//          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-//            dir('document-service') {
-//              sh 'npm i'
-//              sh 'npm run start:local &'
-//            }
-//            dir('web-client') {
-//              sh 'npm i'
-//              sh 'npm run dev &'
-//              sh '../wait-until.sh http://localhost:1234'
-//              sh 'npm run cypress'
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
+    stage('cypress') {
+      steps {
+        script {
+          def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir('document-service') {
+              sh 'npm i'
+              sh 'npm run start:local &'
+            }
+            dir('web-client') {
+              sh 'npm i'
+              sh 'npm run dev &'
+              sh '../wait-until.sh http://localhost:1234'
+              // sh 'npm run cypress'
+            }
+          }
+        }
+      }
+    }
+  }
   post {
     always {
       deleteDir()
