@@ -8,6 +8,7 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-plugin-git-variables
 custom:
   s3:
     host: 0.0.0.0
@@ -66,6 +67,7 @@ custom:
 #          name: documents
 #          description: document service
     summary: 'EF-CMS Documents API'
+    version: "${opt:stage}-${git:sha1}"
     description: 'EF-CMS Documents API documented with OpenAPI specification'
     resources:
       -
