@@ -6,7 +6,9 @@ Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
 `npm run install`
 
-`cd src && npm run install`
+# Contributing
+
+1. `npm start`
 
 ## API Gateway Execution and Access Request Logging Note
 
@@ -27,7 +29,7 @@ Cloudwatch log is API-Gateway-Execution-Logs_<rest-api-id>/<stage>
 
 # Usage
 
-See the Jenkinsfile.  
+See the Jenkinsfile.
 
 In general:
 
@@ -70,6 +72,7 @@ for background.  NOTE: Docker is required.
 3. `npm run start:dynamodb` run the dynamodb on port 8000 (optional)
 4. `npm run start:local` in another terminal run the serverless-local on 3000
 
+
 ## Load and Smoke Testing with Artillery
 
 To get the rest api id of the stage to test against auth to aws then run:
@@ -77,5 +80,5 @@ To get the rest api id of the stage to test against auth to aws then run:
 `aws apigateway get-rest-apis --region=${region} --query "items[?name=='${stage}-ef-cms'].id"`
 
 Using that rest api id run:
- 
+
 `API_REGION=<region> API_TARGET=<rest-api-id> API_STAGE=<stage> artillery run ./smokeTest.yml`

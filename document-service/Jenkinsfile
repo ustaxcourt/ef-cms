@@ -34,9 +34,9 @@ pipeline {
     stage('Setup') {
       steps {
         script {
-          def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
+          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('serverless-api') {
+            dir('document-service') {
               sh 'npm i'
             }
           }
@@ -46,7 +46,7 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          dir('serverless-api') {
+          dir('document-service') {
             def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh './run-shellcheck.sh'
@@ -58,9 +58,9 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          def runner = docker.build 'setup', '-f serverless-api/Dockerfile.test .'
+          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
           runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('serverless-api') {
+            dir('document-service') {
               sh 'npm audit'
             }
           }
@@ -70,9 +70,9 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f serverless-api/Dockerfile.test .'
+          def runner = docker.build 'lint', '-f document-service/Dockerfile.test .'
           runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('serverless-api') {
+            dir('document-service') {
               sh 'npm run lint'
             }
           }
@@ -82,9 +82,9 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          def runner = docker.build 'test', '-f serverless-api/Dockerfile.test .'
+          def runner = docker.build 'test', '-f document-service/Dockerfile.test .'
           runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('serverless-api') {
+            dir('document-service') {
               sh 'npm run test'
             }
           }
@@ -92,7 +92,7 @@ pipeline {
       }
       post {
         success {
-          dir('serverless-api') {
+          dir('document-service') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
@@ -102,13 +102,13 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            def runner = docker.build 'sonar', '-f serverless-api/Dockerfile.sonar .'
+            def runner = docker.build 'sonar', '-f document-service/Dockerfile.sonar .'
             runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
               sshagent(credentials: ['github']) {
                 dir('management/management') {
                   sh './deploy-init.sh'
                 }
-                dir('serverless-api') {
+                dir('document-service') {
                   sh './verify-sonarqube-passed.sh'
                 }
               }
@@ -198,10 +198,10 @@ def createGlobalTableTasks(targets) {
       node() {
         stage("global tables ${slsStage}") {
           checkout scm
-          dir("serverless-api") {
+          dir("document-service") {
             def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
             trunner.inside() {
-              sh "node setup-global-tables.js efcms-${slsStage} ${deploy.regions.join(',')}"
+              sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
             }
           }
         }
@@ -219,9 +219,9 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
-          def trunner = docker.build 'terraform', '-f serverless-api/Dockerfile.deploy .'
+          def trunner = docker.build 'terraform', '-f document-service/Dockerfile.deploy .'
           trunner.inside() {
-            dir("serverless-api/terraform/${slsStage}") {
+            dir("document-service/terraform/${slsStage}") {
               echo 'Running Terraform'
               sh "rm -rf ./.terraform/"
               sh "terraform init"
@@ -248,9 +248,9 @@ def createSmokeTestTasks(targets) {
       tasks["${slsStage} - ${region}"] = {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
-            def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
+            def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-              dir('serverless-api') {
+              dir('document-service') {
                 echo 'Running smoke test'
                 sh 'mkdir coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
@@ -275,9 +275,9 @@ def createDeployTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            def runner = docker.build 'serverless', '-f serverless-api/Dockerfile.deploy .'
+            def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-              dir('serverless-api') {
+              dir('document-service') {
                 sh 'npm i'
                 dir('./src') {
                   echo 'Fix file permissions'
