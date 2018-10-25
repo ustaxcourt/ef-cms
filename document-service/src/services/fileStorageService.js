@@ -1,12 +1,15 @@
 const { S3 } = require('aws-sdk');
 
-const s3 = new S3({
-  region: 'us-east-1',
-  s3ForcePathStyle: true,
-  endpoint: process.env.S3_ENDPOINT
-});
+
 
 exports.createUploadPolicy = () => {
+
+  const s3 = new S3({
+    region: 'us-east-1',
+    s3ForcePathStyle: true,
+    endpoint: process.env.S3_ENDPOINT
+  });
+
   return new Promise((resolve, reject) => {
     s3.createPresignedPost({
       Bucket: process.env.DOCUMENTS_BUCKET_NAME,

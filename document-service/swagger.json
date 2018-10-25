@@ -1,77 +1,107 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Documents API for U.S. Tax Court EF-CMS",
-    "version": "2018-10-24T22:34:18Z",
-    "title": "will-ef-cms",
-    "termsOfService": "https://www.google.com",
-    "contact": {
-      "name": "Jessica Marine",
-      "url": "https://www.ustaxcourt.gov",
-      "email": "webmaster@ustaxcourt.gov"
-    },
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2018-10-25T17:07:25Z",
+    "title" : "will-ef-cms"
   },
-  "host": "fvtnozpme2.execute-api.us-east-1.amazonaws.com",
-  "basePath": "/will",
-  "tags": [
-    {
-      "name": "ef-cms",
-      "description": "EF-CMS"
-    },
-    {
-      "name": "documents",
-      "description": "document service"
-    }
-  ],
-  "schemes": [
-    "https"
-  ],
-  "paths": {
-    "/v1/documents": {
-      "post": {
-        "responses": {}
+  "host" : "fvtnozpme2.execute-api.us-east-1.amazonaws.com",
+  "basePath" : "/will",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/v1/documents" : {
+      "post" : {
+        "responses" : { }
       }
     },
-    "/v1/documents/policy": {
-      "get": {
-        "responses": {}
+    "/v1/documents/policy" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/policyUrl"
+            }
+          }
+        }
       }
     },
-    "/v1/swagger": {
-      "get": {
-        "responses": {}
+    "/v1/swagger" : {
+      "get" : {
+        "responses" : { }
       },
-      "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
               },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
               },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
               },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
               }
             }
           }
         }
       }
+    }
+  },
+  "definitions" : {
+    "policyUrl" : {
+      "type" : "object",
+      "properties" : {
+        "fields" : {
+          "$ref" : "#/definitions/fields"
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "url"
+        }
+      },
+      "description" : "a policy url response"
+    },
+    "fields" : {
+      "type" : "object",
+      "properties" : {
+        "bucket" : {
+          "type" : "string",
+          "description" : "The bucket name."
+        },
+        "Policy" : {
+          "type" : "string",
+          "description" : "The policy."
+        },
+        "X-Amz-Date" : {
+          "type" : "string",
+          "description" : "The date."
+        },
+        "X-Amz-Algorithm" : {
+          "type" : "string",
+          "description" : "The algorithm."
+        },
+        "X-Amz-Signature" : {
+          "type" : "string",
+          "description" : "The signature."
+        },
+        "X-Amz-Security-Token" : {
+          "type" : "string",
+          "description" : "The security token."
+        },
+        "X-Amz-Credential" : {
+          "type" : "string",
+          "description" : "The credential."
+        }
+      },
+      "description" : "a policy url response"
     }
   }
 }
