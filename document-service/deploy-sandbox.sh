@@ -32,7 +32,8 @@ function run_development() {
 
     pushd ./terraform/dev/
     terraform init
-    export SLS_DEPLOYMENT_BUCKET=$(terraform output sls_deployment_bucket)
+    SLS_DEPLOYMENT_BUCKET=$(terraform output sls_deployment_bucket)
+    export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd
 
     echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1"
@@ -41,7 +42,8 @@ function run_development() {
 }
 
 function configure_custom_logging() {
-    export REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${ENVIRONMENT}-ef-cms'].id" --output text)
+    REST_API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${ENVIRONMENT}-ef-cms'].id" --output text)
+    export REST_API_ID=$REST_API_ID
     aws apigateway update-stage \
         --rest-api-id "${REST_API_ID}" \
         --stage-name "${ENVIRONMENT}" \
