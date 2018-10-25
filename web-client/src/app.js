@@ -3,6 +3,7 @@ import App from 'cerebral';
 import mainModule from './main';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Devtools from 'cerebral/devtools';
 
 import '@babel/polyfill';
 
@@ -15,7 +16,12 @@ import router from './router';
 const app = {
   initialize: environment => {
     mainModule.providers.environment = environment;
-    const cerebralApp = App(mainModule);
+    const debugTools = {
+      devtools: Devtools({
+        host: 'localhost:8585',
+      }),
+    };
+    const cerebralApp = App(mainModule, debugTools);
     router.initialize(cerebralApp);
     ReactDOM.render(
       <Container app={cerebralApp}>

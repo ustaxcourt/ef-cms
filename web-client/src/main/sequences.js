@@ -16,8 +16,14 @@ export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
 export const submitFilePetition = [
   actions.getDocumentPolicy,
-  actions.addDocument,
-  actions.filePetition,
+  {
+    success: [
+      set(state`petition.policy`, props`policy`),
+      actions.addDocument,
+      actions.filePetition,
+    ],
+    error: [set(state`alertError`, props`alertError`)],
+  },
 ];
 export const updatePetitionValue = [
   set(state`petition.${props`key`}`, props`value`),
