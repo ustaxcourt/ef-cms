@@ -46,26 +46,24 @@ custom:
       - functionInvocations
       - functionDuration
   documentation:
-#    api:
-#      info:
-#        version: '1'
-#        title: EF-CMS Documents API
-#        description: Documents API for U.S. Tax Court EF-CMS
+    api:
+      info:
+        title: EF-CMS Documents API
+        description: Documents API for U.S. Tax Court EF-CMS
 #        termsOfService: https://www.google.com
-#        contact:
-#          name: Jessica Marine
-#          url: https://www.ustaxcourt.gov
-#          email: webmaster@ustaxcourt.gov
-#        license:
-#          name: MIT
-#          url: https://opensource.org/licenses/MIT
-#      tags:
-#        -
-#          name: ef-cms
-#          description: EF-CMS
-#        -
-#          name: documents
-#          description: document service
+        contact:
+          url: https://www.ustaxcourt.gov
+          email: webmaster@ustaxcourt.gov
+        license:
+          name: MIT
+          url: https://opensource.org/licenses/MIT
+      tags:
+        -
+          name: ef-cms
+          description: EF-CMS
+        -
+          name: documents
+          description: document service
     summary: 'EF-CMS Documents API'
     version: "${opt:stage}-${git:sha1}"
     description: 'EF-CMS Documents API documented with OpenAPI specification'
@@ -266,19 +264,19 @@ functions:
       - http:
           path: v1/documents/policy
           method: get
-    documentation:
-      summary: create a pre-signed url
-      tags:
-        - documents
-      description: >
-        Create a pre-signed url for document uploads to S3.
-      methodResponses:
-        -
-          statusCode: "200"
-          responseBody:
-            description: "pre-signed policy url"
-          responseModels:
-            "application/json": "policyUrl"
+          documentation:
+            summary: create a pre-signed url
+            tags:
+              - documents
+            description: >
+              Create a pre-signed url for document uploads to S3.
+            methodResponses:
+              -
+                statusCode: "200"
+                responseBody:
+                  description: "pre-signed policy url"
+                responseModels:
+                  "application/json": "policyUrl"
 
   createDocument:
     handler: src/documents/createDocument.create
@@ -286,19 +284,19 @@ functions:
       - http:
           path: v1/documents
           method: post
-    documentation:
-      summary: create a document
-      tags:
-        - documents
-      description: >
-        Create a document.
-      methodResponses:
-        -
-          statusCode: '200'
-          responseBody:
-            description: "document meta-data"
-          responseModels:
-            "application/json": document
+          documentation:
+            summary: create a document
+            tags:
+              - documents
+            description: >
+              Create a document.
+            methodResponses:
+              -
+                statusCode: '200'
+                responseBody:
+                  description: "document meta-data"
+                responseModels:
+                  "application/json": document
 
 
 #  getDocument:
