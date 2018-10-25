@@ -10,15 +10,15 @@
 #   pip install yq
 STAGE=$1
 REGION=$2
-NAME=$(cat serverless.yml | yq -r .service)
+NAME=$(yq -r .service < serverless.yml)
 FULL_NAME="$STAGE-$NAME"
-API_ID=$(aws apigateway get-rest-apis --output=json --region=$REGION | jq -r ".items[] | select(.name == \"$FULL_NAME\") | .id")
+API_ID=$(aws apigateway get-rest-apis --output=json --region="${REGION}" | jq -r ".items[] | select(.name == \"${FULL_NAME}\") | .id")
 outputFileName=swagger.json
 
 aws apigateway get-export \
-  --rest-api-id=$API_ID \
-  --stage-name=$STAGE \
+  --rest-api-id="${API_ID}" \
+  --stage-name="${STAGE}" \
   --export-type=swagger \
   --accept=application/json \
-  --region=$REGION \
+  --region="${REGION}" \
   $outputFileName
