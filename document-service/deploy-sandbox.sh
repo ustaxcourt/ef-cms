@@ -38,7 +38,7 @@ function run_development() {
 
     echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1"
 
-    ./node_modules/.bin/sls deploy --stage ${SLS_STAGE} --region us-east-1
+    ./node_modules/.bin/sls deploy --stage "${SLS_STAGE}" --region us-east-1
 }
 
 function configure_custom_logging() {
