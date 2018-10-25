@@ -20,8 +20,8 @@ export const submitFilePetition = [
   {
     success: [
       set(state`petition.policy`, props`policy`),
-      actions.addDocument,
-      actions.filePetition,
+      actions.uploadDocumentToS3,
+      // actions.filePetition,
     ],
     error: [set(state`alertError`, props`alertError`)],
   },
