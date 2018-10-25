@@ -5,21 +5,24 @@ export const getDocumentPolicy = async ({ api, environment, path }) => {
   let response;
   try {
     response = await api.getDocumentPolicy(environment.getBaseUrl());
-    return path.success({ policy: response.fields.Policy });
+    return path.success({ policy: response });
   } catch (error) {
     return path.error({ alertError: 'Document policy retrieval failed' });
   }
 };
 
-export const addDocument = async ({ api, environment }) => {
-  const response = await api.addDocument(environment.getBaseUrl());
+export const addDocumentToUser = async ({ api, environment }) => {
+  const response = await api.addDocumentToUser(environment.getBaseUrl());
   return {
     response,
   };
 };
 
-export const filePetition = async ({ api, environment }) => {
-  const response = await api.filePetition(environment.getBaseUrl());
+export const uploadDocumentToS3 = async ({ api, get }) => {
+  const response = await api.uploadDocumentToS3(
+    get(state.petition.policy),
+    get(state.petition.petitionFile),
+  );
   return {
     response,
   };
