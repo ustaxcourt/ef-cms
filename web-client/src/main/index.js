@@ -9,10 +9,11 @@ export default {
   sequences,
   state: {
     currentPage: 'Home',
-    user: 'Tina Taxpayer',
+    user: 'A. Taxpayer',
     usaBanner: {
       showDetails: false,
     },
+    alertError: 'Document policy retrieval failed',
     petition: {
       petitionFile: '',
       requestForPlaceOfTrial: '',

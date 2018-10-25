@@ -1,19 +1,29 @@
 import React from 'react';
 import { sequences, state } from 'cerebral';
 import { connect } from '@cerebral/react';
+import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
     submitFilePetition: sequences.submitFilePetition,
     updatePetitionValue: sequences.updatePetitionValue,
     petition: state.petition,
+    policy: state.policy,
   },
-  function FilePetition({ submitFilePetition, updatePetitionValue, petition }) {
+  function FilePetition({
+    submitFilePetition,
+    updatePetitionValue,
+    petition,
+    policy,
+  }) {
     return (
       <section className="usa-section usa-grid">
         <h1>File a petition</h1>
         <h2>Please upload the following PDFs</h2>
+        <p>{JSON.stringify(policy)}</p>
+
         <p>* All are required.</p>
+        <ErrorNotification />
         <p>{JSON.stringify(petition)}</p>
         <form
           noValidate

@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
-// import nock from 'nock';
+import nock from 'nock';
 
 import mainModule from './';
 import environment from '../environments/dev';
@@ -21,5 +21,30 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('usaBanner.showDetails'), true);
     await test.runSequence('toggleUsaBannerDetails');
     assert.equal(test.getState('usaBanner.showDetails'), false);
+  });
+
+  it('uploads three petition documents successfully', async () => {
+    nock(environment.getBaseUrl())
+      .get('/documents/policy')
+      .reply(200, {
+        fields: {
+          Policy: 'fakePolicyString',
+        },
+      });
+    await test.runSequence('submitFilePetition');
+    assert.equal(test.getState('petition.policy'), 'fakePolicyString');
+  });
+
+  it('handles document policy error', async () => {
+    nock(environment.getBaseUrl())
+      .get('/documents/policy')
+      .reply(500, {
+        fields: {},
+      });
+    await test.runSequence('submitFilePetition');
+    assert.equal(
+      test.getState('alertError'),
+      'Document policy retrieval failed',
+    );
   });
 });

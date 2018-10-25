@@ -1,11 +1,14 @@
 import { state } from 'cerebral';
 import Petition from '../entities/petition';
 
-export const getDocumentPolicy = async ({ api, environment }) => {
-  const response = await api.getDocumentPolicy(environment.getBaseUrl());
-  return {
-    response,
-  };
+export const getDocumentPolicy = async ({ api, environment, path }) => {
+  let response;
+  try {
+    response = await api.getDocumentPolicy(environment.getBaseUrl());
+    return path.success({ policy: response.fields.Policy });
+  } catch (error) {
+    return path.error({ alertError: 'Document policy retrieval failed' });
+  }
 };
 
 export const addDocument = async ({ api, environment }) => {
