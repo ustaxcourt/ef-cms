@@ -55,8 +55,8 @@ custom:
           url: https://www.ustaxcourt.gov
           email: webmaster@ustaxcourt.gov
         license:
-          name: MIT
-          url: https://opensource.org/licenses/MIT
+          name: Creative Commons
+          url: https://creativecommons.org/licenses/by/2.0/
       tags:
         -
           name: ef-cms
