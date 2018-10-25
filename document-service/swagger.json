@@ -1,60 +1,44 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Some example API",
-    "version": "2018-10-10T19:45:09Z",
-    "title": "dev-example-service",
+    "description": "Documents API for U.S. Tax Court EF-CMS",
+    "version": "2018-10-24T22:34:18Z",
+    "title": "will-ef-cms",
     "termsOfService": "https://www.google.com",
     "contact": {
-      "name": "The contact person",
-      "url": "https://www.serverless.com/framework",
-      "email": "some-fake@email.com"
+      "name": "Jessica Marine",
+      "url": "https://www.ustaxcourt.gov",
+      "email": "webmaster@ustaxcourt.gov"
     },
     "license": {
-      "name": "The license",
-      "url": "https://www.github.com"
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "1i99opkntb.execute-api.us-east-1.amazonaws.com",
-  "basePath": "/dev",
+  "host": "fvtnozpme2.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/will",
   "tags": [
     {
-      "name": "Tag1",
-      "description": "The first tag"
+      "name": "ef-cms",
+      "description": "EF-CMS"
     },
     {
-      "name": "Tag2",
-      "description": "That other tag that we all love"
+      "name": "documents",
+      "description": "document service"
     }
   ],
-  "schemes": ["https"],
+  "schemes": [
+    "https"
+  ],
   "paths": {
-    "/v1/document": {
+    "/v1/documents": {
+      "post": {
+        "responses": {}
+      }
+    },
+    "/v1/documents/policy": {
       "get": {
         "responses": {}
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
       }
     },
     "/v1/swagger": {
@@ -62,8 +46,12 @@
         "responses": {}
       },
       "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
