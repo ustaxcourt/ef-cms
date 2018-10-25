@@ -40,11 +40,9 @@ pipeline {
       steps {
         script {
           dir('web-client') {
-            def runner = docker.build 'shellcheck', '-f Dockerfile.test .'
+            def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
             runner.inside('-v /home/tomcat:/home/tomcat') {
-              dir('web-client') {
-                sh './run-shellcheck.sh'
-              }
+              sh './run-shellcheck.sh'
             }
           }
         }

@@ -46,10 +46,11 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          def runner = docker.build 'shellcheck', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('document-service') {
-              sh './run-shellcheck.sh'
+          dir('document-service') {
+            def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+                sh './run-shellcheck.sh'
+              }
             }
           }
         }
