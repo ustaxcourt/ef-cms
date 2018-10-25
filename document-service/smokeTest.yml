@@ -11,6 +11,4 @@ config:
 scenarios:
   - flow:
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/hello'
-      - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/trivia'
+          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/policy'
