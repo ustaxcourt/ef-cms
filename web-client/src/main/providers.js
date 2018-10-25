@@ -1,18 +1,18 @@
 import axios from 'axios';
 
 export const api = {
-  getHello: async baseUrl => {
+  getDocumentPolicy: async baseUrl => {
     try {
-      const response = await axios.get(`${baseUrl}/hello`);
+      const response = await axios.get(`${baseUrl}/documents/policy`);
       return response.data;
     } catch (error) {
-      return 'Bad response!';
+      return error;
     }
   },
 
   addDocument: async baseUrl => {
     try {
-      const response = await axios.put(`${baseUrl}/document`);
+      const response = await axios.post(`${baseUrl}/document`, {});
       return response.data;
     } catch (error) {
       return error;
@@ -21,7 +21,7 @@ export const api = {
 
   filePetition: async baseUrl => {
     try {
-      const response = await axios.put(`${baseUrl}/petitions`);
+      const response = await axios.post(`${baseUrl}/petitions`);
       return response.data;
     } catch (error) {
       return error;

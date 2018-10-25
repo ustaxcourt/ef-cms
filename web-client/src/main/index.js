@@ -9,7 +9,7 @@ export default {
   sequences,
   state: {
     currentPage: 'Home',
-    response: 'Silence!',
+    user: 'Tina Taxpayer',
     usaBanner: {
       showDetails: false,
     },

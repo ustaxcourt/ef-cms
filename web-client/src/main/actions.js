@@ -1,8 +1,15 @@
 import { state } from 'cerebral';
 import Petition from '../entities/petition';
 
-export const getHello = async ({ api, environment }) => {
-  const response = await api.getHello(environment.getBaseUrl());
+export const getDocumentPolicy = async ({ api, environment }) => {
+  const response = await api.getDocumentPolicy(environment.getBaseUrl());
+  return {
+    response,
+  };
+};
+
+export const addDocument = async ({ api, environment }) => {
+  const response = await api.addDocument(environment.getBaseUrl());
   return {
     response,
   };

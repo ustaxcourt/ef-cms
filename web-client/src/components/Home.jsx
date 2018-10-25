@@ -1,27 +1,18 @@
 import React from 'react';
-import { state, sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
 
 export default connect(
-  {
-    response: state.response,
-    getHello: sequences.getHello,
-  },
-  function Home({ response, getHello }) {
+  {},
+  function Home() {
     return (
       <section className="usa-section usa-grid">
-        <h2>Hello World!</h2>
         <p>
-          <button id="hello-button" onClick={() => getHello()}>
-            Hello?
-          </button>
+          <a className="usa-button" href="/file-a-petition">
+            Start a case
+          </a>
         </p>
-        <p id="response">{response}</p>
         <p>
           <a href="/log-in">Log in</a>
-        </p>
-        <p>
-          <a href="/file-a-petition">File a petition</a>
         </p>
         <p>
           <a href="/style-guide">Style guide</a>
