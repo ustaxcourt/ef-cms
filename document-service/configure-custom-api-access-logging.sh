@@ -22,4 +22,5 @@ JSON=$(sed "s/update_arn/${ARN}/g" "./${cli_input_json}")
 aws apigateway update-stage \
 --rest-api-id "${REST_API_ID}" \
 --stage-name "${stage_name}" \
---cli-input-json "${JSON}"
+--cli-input-json "${JSON}" \
+--region "${region}"
