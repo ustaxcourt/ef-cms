@@ -10,9 +10,12 @@ export const api = {
     }
   },
 
-  addDocument: async baseUrl => {
+  addDocumentToUser: async (baseUrl, user, type) => {
     try {
-      const response = await axios.post(`${baseUrl}/document`, {});
+      const response = await axios.post(`${baseUrl}/documents`, {
+        userId: user,
+        documentType: type,
+      });
       return response.data;
     } catch (error) {
       return error;
@@ -32,7 +35,7 @@ export const api = {
       );
       formData.append('Policy', policy.fields.Policy);
       formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-      formData.append('file', file);
+      formData.append('file', file, 'file');
       await axios.post(policy.url, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });

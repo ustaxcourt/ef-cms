@@ -19,10 +19,10 @@ export const submitFilePetition = [
   actions.getDocumentPolicy,
   {
     success: [
-      set(state`petition.policy`, props`policy`),
-      actions.uploadDocumentToS3,
-      // actions.filePetition,
+      actions.addDocumentToUser,
+      {
+        success: [actions.uploadDocumentToS3],
+      },
     ],
-    error: [set(state`alertError`, props`alertError`)],
   },
 ];
