@@ -58,11 +58,10 @@ export default connect(
               type="file"
               accept=".pdf"
               name="requestForPlaceOfTrial"
-              value={petition.requestForPlaceOfTrial}
               onChange={e => {
                 updatePetitionValue({
                   key: e.target.name,
-                  value: e.target.value,
+                  file: e.target.files[0],
                 });
               }}
             />
@@ -80,11 +79,10 @@ export default connect(
               type="file"
               accept=".pdf"
               name="statementOfTaxpayerIdentificationNumber"
-              value={petition.statementOfTaxpayerIdentificationNumber}
               onChange={e => {
                 updatePetitionValue({
                   key: e.target.name,
-                  value: e.target.value,
+                  file: e.target.files[0],
                 });
               }}
             />
