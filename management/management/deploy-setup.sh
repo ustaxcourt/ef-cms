@@ -26,7 +26,7 @@ echo "Beginning the automated infrastructure deployment process"
 
 if [ "${AUTO}" = "true" ]; then
   echo "Running without end user prompts"
-  ARG_OPTS="-auto-approve=true ${ARG_OPTS}"
+  ARG_OPTS="-auto-approve ${ARG_OPTS}"
 fi
 
 if [[ ! -e terraform.tfvars ]]; then
