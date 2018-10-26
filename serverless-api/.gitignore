@@ -1,5 +1,0 @@
-.nyc_output/
-.serverless/
-coverage/
-node_modules/
-.terraform/
