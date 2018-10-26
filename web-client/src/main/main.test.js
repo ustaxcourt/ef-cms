@@ -1,6 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
-import nock from 'nock';
 
 import mainModule from './';
 import environment from '../environments/dev';
