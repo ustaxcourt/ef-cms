@@ -16,6 +16,8 @@ export const updatePetitionValue = [
 ];
 
 export const submitFilePetition = [
+  // TODO: parallelize this
+  set(state`submitting`, true),
   actions.getDocumentPolicy,
   {
     success: [
@@ -42,7 +44,14 @@ export const submitFilePetition = [
                         success: [
                           actions.uploadDocumentToS3,
                           {
-                            success: [set(state`alertSuccess`, 'You done it')],
+                            success: [
+                              set(state`submitting`, false),
+                              set(
+                                state`alertSuccess`,
+                                'Your files were uploaded successfully.',
+                              ),
+                              actions.goHome,
+                            ],
                           },
                         ],
                       },
