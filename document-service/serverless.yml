@@ -272,6 +272,7 @@ functions:
       - http:
           path: v1/documents/policy
           method: get
+          cors: true
           documentation:
             summary: create a pre-signed url
             tags:
@@ -292,6 +293,7 @@ functions:
       - http:
           path: v1/documents
           method: post
+          cors: true
           documentation:
             summary: create a document
             tags:
