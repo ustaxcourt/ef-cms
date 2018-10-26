@@ -1,22 +1,25 @@
 import React from 'react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import { connect } from '@cerebral/react';
 
-import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
     submitFilePetition: sequences.submitFilePetition,
     updatePetitionValue: sequences.updatePetitionValue,
+    submitting: state.submitting,
   },
-  function FilePetition({ submitFilePetition, updatePetitionValue }) {
+  function FilePetition({
+    submitFilePetition,
+    updatePetitionValue,
+    submitting,
+  }) {
     return (
       <section className="usa-section usa-grid">
         <h1>File a petition</h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
-        <SuccessNotification />
         <ErrorNotification />
         <form
           id="file-a-petition"
@@ -81,7 +84,17 @@ export default connect(
               }}
             />
           </div>
-          <input type="submit" value="Upload" />
+          {!submitting && (
+            <button type="submit">
+              <span>Upload</span>
+            </button>
+          )}
+          {submitting && (
+            <button type="submit" disabled>
+              <span>Uploading...</span>
+              <div className="spinner" />
+            </button>
+          )}
         </form>
       </section>
     );
