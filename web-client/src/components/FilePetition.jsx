@@ -26,6 +26,7 @@ export default connect(
         <ErrorNotification />
         <p>{JSON.stringify(petition)}</p>
         <form
+          id="file-a-petition"
           noValidate
           onSubmit={e => {
             e.preventDefault();
