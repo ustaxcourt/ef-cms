@@ -93,6 +93,7 @@
     "uswds": "^1.6.9"
   },
   "devDependencies": {
+    "eslint-plugin-security": "^1.4.0",
     "pa11y": "^5.1.0"
   }
 }

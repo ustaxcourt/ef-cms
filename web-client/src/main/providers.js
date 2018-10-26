@@ -6,7 +6,7 @@ export const api = {
       const response = await axios.get(`${baseUrl}/documents/policy`);
       return response.data;
     } catch (error) {
-      return error;
+      throw error;
     }
   },
 
