@@ -286,7 +286,7 @@ def createSmokeTestTasks(targets) {
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
                 echo 'Running smoke test'
-                sh 'mkdir coverage'
+                sh 'mkdir -p coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
                 sh("API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId} ./node_modules/.bin/artillery run ./smokeTest.yml --output ./coverage/artillery_smoke_test.json")
                 sh("./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json")
