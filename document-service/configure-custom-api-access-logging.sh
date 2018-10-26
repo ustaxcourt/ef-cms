@@ -12,6 +12,8 @@ region=$3
 REST_API_ID=$(aws apigateway get-rest-apis --region="${region}" --query "items[?name=='${stage_name}-ef-cms'].id" --output text)
 
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account")
+ACCOUNT_ID="${ACCOUNT_ID%\"}"
+ACCOUNT_ID="${ACCOUNT_ID#\"}"
 
 ARN="arn:aws:logs:${region}:${ACCOUNT_ID}:log-group:API-Gateway-Execution-Logs_${REST_API_ID}"
 
