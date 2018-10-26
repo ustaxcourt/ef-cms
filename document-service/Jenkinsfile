@@ -37,7 +37,7 @@ pipeline {
           def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('document-service') {
-              sh 'npm i'
+              sh 'npm i --no-progress'
             }
           }
         }
@@ -312,7 +312,7 @@ def createDeployTasks(targets) {
             def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
-                sh 'npm i'
+                sh 'npm i --no-progress'
                 dir('./src') {
                   echo 'Fix file permissions'
                   sh 'find . -type f -exec chmod -R ugo+r {} ";"'
