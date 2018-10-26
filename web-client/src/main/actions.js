@@ -12,15 +12,9 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   }
 };
 
-export const addDocumentToUser = async ({
-  api,
-  environment,
-  store,
-  path,
-  get,
-}) => {
+export const getDocumentId = async ({ api, environment, store, path, get }) => {
   try {
-    const response = await api.addDocumentToUser(
+    const response = await api.getDocumentId(
       environment.getBaseUrl(),
       get(state.user),
       'type',
@@ -28,18 +22,19 @@ export const addDocumentToUser = async ({
     store.set(state.petition.id, response);
     return path.success();
   } catch (error) {
-    store.set(state.alertError, 'Adding document to user failed');
+    store.set(state.alertError, 'Fetching document ID failed');
   }
 };
 
-export const uploadDocumentToS3 = async ({ api, get }) => {
-  const response = await api.uploadDocumentToS3(
-    get(state.petition.policy),
-    get(state.petition.petitionFile),
-  );
-  return {
-    response,
-  };
+export const uploadDocumentToS3 = async ({ api, get, store }) => {
+  try {
+    await api.uploadDocumentToS3(
+      get(state.petition.policy),
+      get(state.petition.petitionFile.file),
+    );
+  } catch (error) {
+    store.set(state.alertError, 'Uploading document failed');
+  }
 };
 
 export const updatePetition = ({ get }) => {

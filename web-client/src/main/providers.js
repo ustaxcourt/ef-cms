@@ -10,7 +10,7 @@ export const api = {
     }
   },
 
-  addDocumentToUser: async (baseUrl, user, type) => {
+  getDocumentId: async (baseUrl, user, type) => {
     try {
       const response = await axios.post(`${baseUrl}/documents`, {
         userId: user,
@@ -35,12 +35,13 @@ export const api = {
       );
       formData.append('Policy', policy.fields.Policy);
       formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-      formData.append('file', file, 'file');
+      formData.append('file', file, file.name);
       await axios.post(policy.url, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return;
     } catch (error) {
+      console.log('error', error);
       return error;
     }
   },
