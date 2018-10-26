@@ -67,7 +67,7 @@ fi
 NAME_FOR_LENGTH=${DEPLOYMENT_NAME}-${ENVIRONMENT}
 
 if [ ${#NAME_FOR_LENGTH} -ge 30 ]; then
-      echo "The combined app name and environment from the terraform.tfvars file are too long [${NAME_FOR_LENGTH}].  They must be shorter than 30 characters when combined with a dash."
+      echo "The combined - app name and environment from the terraform.tfvars file are too long [${NAME_FOR_LENGTH}].  They must be shorter than 30 characters when combined with a dash."
       exit 1
 fi
 
