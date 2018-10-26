@@ -13,7 +13,7 @@ export default {
     usaBanner: {
       showDetails: false,
     },
-    alertError: 'Document policy retrieval failed',
+    alertError: '',
     petition: {
       petitionFile: {
         file: undefined,

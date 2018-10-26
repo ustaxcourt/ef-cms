@@ -19,9 +19,40 @@ export const submitFilePetition = [
   actions.getDocumentPolicy,
   {
     success: [
+      set(state`documentType`, 'petitionFile'),
       actions.getDocumentId,
       {
-        success: [actions.uploadDocumentToS3],
+        success: [
+          actions.uploadDocumentToS3,
+          {
+            success: [
+              set(state`documentType`, 'requestForPlaceOfTrial'),
+              actions.getDocumentId,
+              {
+                success: [
+                  actions.uploadDocumentToS3,
+                  {
+                    success: [
+                      set(
+                        state`documentType`,
+                        'statementOfTaxpayerIdentificationNumber',
+                      ),
+                      actions.getDocumentId,
+                      {
+                        success: [
+                          actions.uploadDocumentToS3,
+                          {
+                            success: [set(state`successAlert`, 'You done it')],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },
