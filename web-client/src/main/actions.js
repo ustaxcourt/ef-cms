@@ -19,7 +19,7 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
     store.set(state.petition.policy, response);
     return path.success();
   } catch (error) {
-    store.set(state.alertError, 'Document policy retrieval failed');
+    return path.error();
   }
 };
 

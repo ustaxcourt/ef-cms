@@ -10,7 +10,7 @@ describe('Front page', function() {
   });
 
   it('finds footer element', () => {
-    cy.get('footer').contains('contact the Webmaster');
+    cy.get('footer').should('exist');
   });
 
   describe('USA Banner', () => {
