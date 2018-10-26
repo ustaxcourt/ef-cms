@@ -1,31 +1,25 @@
 import React from 'react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
+
+import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
     submitFilePetition: sequences.submitFilePetition,
     updatePetitionValue: sequences.updatePetitionValue,
-    petition: state.petition,
-    policy: state.policy,
   },
-  function FilePetition({
-    submitFilePetition,
-    updatePetitionValue,
-    petition,
-    policy,
-  }) {
+  function FilePetition({ submitFilePetition, updatePetitionValue }) {
     return (
       <section className="usa-section usa-grid">
         <h1>File a petition</h1>
         <h2>Please upload the following PDFs</h2>
-        <p>{JSON.stringify(policy)}</p>
-
         <p>* All are required.</p>
+        <SuccessNotification />
         <ErrorNotification />
-        <p>{JSON.stringify(petition)}</p>
         <form
+          id="file-a-petition"
           noValidate
           onSubmit={e => {
             e.preventDefault();
@@ -58,11 +52,10 @@ export default connect(
               type="file"
               accept=".pdf"
               name="requestForPlaceOfTrial"
-              value={petition.requestForPlaceOfTrial}
               onChange={e => {
                 updatePetitionValue({
                   key: e.target.name,
-                  value: e.target.value,
+                  file: e.target.files[0],
                 });
               }}
             />
@@ -80,11 +73,10 @@ export default connect(
               type="file"
               accept=".pdf"
               name="statementOfTaxpayerIdentificationNumber"
-              value={petition.statementOfTaxpayerIdentificationNumber}
               onChange={e => {
                 updatePetitionValue({
                   key: e.target.name,
-                  value: e.target.value,
+                  file: e.target.files[0],
                 });
               }}
             />
