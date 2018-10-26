@@ -143,6 +143,19 @@ pipeline {
         }
       }
     }
+    stage('Setup S3 Replication Pre Prod') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def tasks = createS3ReplicationTasks targets
+          parallel tasks
+        }
+      }
+    }
     stage('Create Global Tables - Pre Prod') {
       when {
         expression {
@@ -188,6 +201,27 @@ pipeline {
       deleteDir()
     }
   }
+}
+
+def createS3ReplicationTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("global tables ${slsStage}") {
+          checkout scm
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir('document-service') {
+              sh("./setup-s3-replication.sh ${slsStage}")
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
 }
 
 def createGlobalTableTasks(targets) {
@@ -252,7 +286,7 @@ def createSmokeTestTasks(targets) {
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
                 echo 'Running smoke test'
-                sh 'mkdir coverage'
+                sh 'mkdir -p coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
                 sh("API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId} ./node_modules/.bin/artillery run ./smokeTest.yml --output ./coverage/artillery_smoke_test.json")
                 sh("./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json")
