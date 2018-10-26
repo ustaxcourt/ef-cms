@@ -19,7 +19,7 @@ export const submitFilePetition = [
   actions.getDocumentPolicy,
   {
     success: [
-      set(state`documentType`, 'petitionFile'),
+      actions.specifyPetitionFile,
       actions.getDocumentId,
       {
         success: [
@@ -42,7 +42,7 @@ export const submitFilePetition = [
                         success: [
                           actions.uploadDocumentToS3,
                           {
-                            success: [set(state`successAlert`, 'You done it')],
+                            success: [set(state`alertSuccess`, 'You done it')],
                           },
                         ],
                       },
