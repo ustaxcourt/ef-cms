@@ -5,12 +5,11 @@ import { connect } from '@cerebral/react';
 
 export default connect(
   {
-    isValidPetition: state.petition.isValid,
     alertError: state.alertError,
   },
-  function ErrorNotification({ isValidPetition, alertError }) {
-    if (!isValidPetition) {
-      return <div>is valid? {isValidPetition}</div>;
+  function ErrorNotification({ alertError }) {
+    if (!alertError) {
+      return null;
     }
     return (
       <div className="usa-alert usa-alert-error" role="alert">
