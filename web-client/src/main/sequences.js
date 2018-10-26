@@ -10,7 +10,7 @@ export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
 export const updatePetitionValue = [
-  set(state`petition.${props`key`}`, props`value`),
+  set(state`petition.${props`key`}.file`, props`file`),
   actions.updatePetition,
   set(state`petition`, props.petition),
 ];
@@ -19,7 +19,7 @@ export const submitFilePetition = [
   actions.getDocumentPolicy,
   {
     success: [
-      actions.addDocumentToUser,
+      actions.getDocumentId,
       {
         success: [actions.uploadDocumentToS3],
       },

@@ -15,7 +15,10 @@ export default {
     },
     alertError: 'Document policy retrieval failed',
     petition: {
-      petitionFile: '',
+      petitionFile: {
+        file: undefined,
+        documentId: undefined,
+      },
       requestForPlaceOfTrial: '',
       statementOfTaxpayerIdentificationNumber: '',
     },

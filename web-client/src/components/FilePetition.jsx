@@ -40,11 +40,10 @@ export default connect(
               type="file"
               accept=".pdf"
               name="petitionFile"
-              // value={petition.petitionFile}
               onChange={e => {
                 updatePetitionValue({
                   key: e.target.name,
-                  value: e.target.files[0],
+                  file: e.target.files[0],
                 });
               }}
             />
