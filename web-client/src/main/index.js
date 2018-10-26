@@ -19,8 +19,14 @@ export default {
         file: undefined,
         documentId: undefined,
       },
-      requestForPlaceOfTrial: '',
-      statementOfTaxpayerIdentificationNumber: '',
+      requestForPlaceOfTrial: {
+        file: undefined,
+        documentId: undefined,
+      },
+      statementOfTaxpayerIdentificationNumber: {
+        file: undefined,
+        documentId: undefined,
+      },
     },
   },
 };

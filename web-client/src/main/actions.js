@@ -1,6 +1,18 @@
 import { state } from 'cerebral';
 import Petition from '../entities/petition';
 
+export const specifyPetitionFile = async () => {
+  return { documentType: 'petitionFile' };
+};
+
+export const specifyRequestForPlaceOfTrial = async () => {
+  return { documentType: 'requestForPlaceOfTrial' };
+};
+
+export const specifyStatementOfTaxpayerIdentificationNumber = async () => {
+  return { documentType: 'statementOfTaxpayerIdentificationNumber' };
+};
+
 export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   try {
     const response = await api.getDocumentPolicy(environment.getBaseUrl());
@@ -11,26 +23,36 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   }
 };
 
-export const getDocumentId = async ({ api, environment, store, path, get }) => {
+export const getDocumentId = async ({
+  api,
+  environment,
+  store,
+  path,
+  get,
+  props,
+}) => {
   try {
     const response = await api.getDocumentId(
       environment.getBaseUrl(),
       get(state.user),
-      get(state.documentType),
+      get(props.documentType),
     );
-    store.set(state.petition[get(state.documentType)].id, response);
+    store.set(
+      state.petition[get(props.documentType)].documentId,
+      response.documentId,
+    );
     return path.success();
   } catch (error) {
     store.set(state.alertError, 'Fetching document ID failed');
   }
 };
 
-export const uploadDocumentToS3 = async ({ api, get, store, path }) => {
+export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
   try {
     await api.uploadDocumentToS3(
       get(state.petition.policy),
-      get(state.petition[get(state.documentType)].id),
-      get(state.petition[get(state.documentType)].file),
+      get(state.petition[get(props.documentType)].documentId),
+      get(state.petition[get(props.documentType)].file),
     );
     return path.success();
   } catch (error) {
