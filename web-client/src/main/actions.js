@@ -1,10 +1,21 @@
 import { state } from 'cerebral';
 import Petition from '../entities/petition';
 
+export const specifyPetitionFile = async () => {
+  return { documentType: 'petitionFile' };
+};
+
+export const specifyRequestForPlaceOfTrial = async () => {
+  return { documentType: 'requestForPlaceOfTrial' };
+};
+
+export const specifyStatementOfTaxpayerIdentificationNumber = async () => {
+  return { documentType: 'statementOfTaxpayerIdentificationNumber' };
+};
+
 export const getDocumentPolicy = async ({ api, environment, store, path }) => {
-  let response;
   try {
-    response = await api.getDocumentPolicy(environment.getBaseUrl());
+    const response = await api.getDocumentPolicy(environment.getBaseUrl());
     store.set(state.petition.policy, response);
     return path.success();
   } catch (error) {
@@ -12,26 +23,38 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   }
 };
 
-export const getDocumentId = async ({ api, environment, store, path, get }) => {
+export const getDocumentId = async ({
+  api,
+  environment,
+  store,
+  path,
+  get,
+  props,
+}) => {
   try {
     const response = await api.getDocumentId(
       environment.getBaseUrl(),
       get(state.user),
-      'type',
+      get(props.documentType),
     );
-    store.set(state.petition.id, response);
+    store.set(
+      state.petition[get(props.documentType)].documentId,
+      response.documentId,
+    );
     return path.success();
   } catch (error) {
     store.set(state.alertError, 'Fetching document ID failed');
   }
 };
 
-export const uploadDocumentToS3 = async ({ api, get, store }) => {
+export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
   try {
     await api.uploadDocumentToS3(
       get(state.petition.policy),
-      get(state.petition.petitionFile.file),
+      get(state.petition[get(props.documentType)].documentId),
+      get(state.petition[get(props.documentType)].file),
     );
+    return path.success();
   } catch (error) {
     store.set(state.alertError, 'Uploading document failed');
   }

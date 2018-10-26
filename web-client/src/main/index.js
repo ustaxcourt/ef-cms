@@ -13,14 +13,20 @@ export default {
     usaBanner: {
       showDetails: false,
     },
-    alertError: 'Document policy retrieval failed',
+    alertError: '',
     petition: {
       petitionFile: {
         file: undefined,
         documentId: undefined,
       },
-      requestForPlaceOfTrial: '',
-      statementOfTaxpayerIdentificationNumber: '',
+      requestForPlaceOfTrial: {
+        file: undefined,
+        documentId: undefined,
+      },
+      statementOfTaxpayerIdentificationNumber: {
+        file: undefined,
+        documentId: undefined,
+      },
     },
   },
 };
