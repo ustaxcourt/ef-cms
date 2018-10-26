@@ -11,12 +11,6 @@ export default connect(
             Start a case
           </a>
         </p>
-        <p>
-          <a href="/log-in">Log in</a>
-        </p>
-        <p>
-          <a href="/style-guide">Style guide</a>
-        </p>
       </section>
     );
   },

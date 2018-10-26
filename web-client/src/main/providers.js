@@ -22,10 +22,10 @@ export const api = {
     }
   },
 
-  uploadDocumentToS3: async (policy, file) => {
+  uploadDocumentToS3: async (policy, documentId, file) => {
     try {
       let formData = new FormData();
-      formData.append('key', 'lol!');
+      formData.append('key', documentId);
       formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
       formData.append('X-Amz-Credential', policy.fields['X-Amz-Credential']);
       formData.append('X-Amz-Date', policy.fields['X-Amz-Date']);
@@ -41,7 +41,6 @@ export const api = {
       });
       return;
     } catch (error) {
-      console.log('error', error);
       return error;
     }
   },
