@@ -64,5 +64,6 @@ export const submitFilePetition = [
         ],
       },
     ],
+    error: [set(state`alertError`, 'Document policy retrieval failed')],
   },
 ];
