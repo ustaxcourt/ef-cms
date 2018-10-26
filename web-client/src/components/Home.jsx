@@ -5,20 +5,18 @@ import { connect } from '@cerebral/react';
 export default connect(
   {
     response: state.response,
-    getHello: sequences.getHello,
   },
-  function Home({ response, getHello }) {
+  function Home() {
     return (
       <section className="usa-section usa-grid">
-        <h2>Hello World!</h2>
         <p>
-          <button id="hello-button" onClick={() => getHello()}>
-            Hello?
-          </button>
+          <a href="/log-in">Log in</a>
         </p>
-        <p id="response">{response}</p>
         <p>
-          <a href="/style-guide">Style Guide</a>
+          <a href="/file-a-petition">File a petition</a>
+        </p>
+        <p>
+          <a href="/style-guide">Style guide</a>
         </p>
       </section>
     );

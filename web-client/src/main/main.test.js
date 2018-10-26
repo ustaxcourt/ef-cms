@@ -1,6 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
-import nock from 'nock';
 
 import mainModule from './';
 import environment from '../environments/dev';
@@ -19,22 +18,6 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('currentPage'), 'StyleGuide');
     await test.runSequence('gotoHome');
     assert.equal(test.getState('currentPage'), 'Home');
-  });
-
-  it('Shows Hello World success', async () => {
-    nock(environment.getBaseUrl())
-      .get('/hello')
-      .reply(200, 'Hello World!');
-    await test.runSequence('getHello');
-    assert.equal(test.getState('response'), 'Hello World!');
-  });
-
-  it('Shows Hello World failure', async () => {
-    nock(environment.getBaseUrl())
-      .get('/hello')
-      .reply(500);
-    await test.runSequence('getHello');
-    assert.equal(test.getState('response'), 'Bad response!');
   });
 
   it('Toggles USA Banner Content', async () => {
