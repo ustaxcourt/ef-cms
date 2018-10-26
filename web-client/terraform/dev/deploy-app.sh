@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 
-AUTO=false
-ARG_OPTS=""
 # use the bash builtin getops for robust option parsing
 while getopts ":ha" opt; do
   case ${opt} in
-    a )
-      AUTO=true
-      ;;
     h )
       echo "A script to automate the US Tax Court deployment process."
       echo "NOTE: This script initiates processes that are potentially destructive and cannot be undone."
@@ -16,7 +11,6 @@ while getopts ":ha" opt; do
       echo "  $0 [-s]"
       echo "  $0                   Run the complete infrastructure deployment process."
       echo "  $0 -h                Display this help message"
-      echo "  $0 -a                Run the process automatically, without prompting for input."
       exit 0
       ;;
     * )
@@ -26,11 +20,6 @@ while getopts ":ha" opt; do
 done
 
 echo "Beginning the automated infrastructure deployment process"
-
-if [ "${AUTO}" = "true" ]; then
-  echo "Running without end user prompts"
-  ARG_OPTS="-auto-approve ${ARG_OPTS}"
-fi
 
 if [[ ! -e terraform.tfvars ]]; then
     echo "A custom terraform/terraform.tfvars file was not found.  Copying the template terraform/terraform.tfvars.template file for use in your local environment."
@@ -104,4 +93,4 @@ fi
 set -eo pipefail
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply "${ARG_OPTS}"
+TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve
