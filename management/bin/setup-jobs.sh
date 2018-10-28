@@ -7,7 +7,28 @@ ssh-add ssh/id_rsa
 echo $BASTION_PUBLIC_IP
 echo $JENKINS_PRIVATE_IP
 
+# TODO: get from params
+GITHUB_URL=https://github.com/flexion/ef-cms.git
+GITHUB_USER=flexion-ci
+REPO_OWNER=flexion
+REPOSITORY=ef-cms
+
 # TODO: check if there is a better way to setup jobs
+echo "compiling templates"
+sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms/config.xml.tpl \
+  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
+  | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
+  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms/config.xml
+
+sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-ui/config.xml.tpl \
+  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
+  | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
+  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-ui/config.xml
+
+sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-api/config.xml.tpl \
+  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
+  | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
+  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-api/config.xml
 
 echo "creating job directories on Jenkins machine"
 ssh -A -oStrictHostKeyChecking=no ubuntu@${BASTION_PUBLIC_IP} "ssh -oStrictHostKeyChecking=no bitnami@${JENKINS_PRIVATE_IP} 'sudo su -c \"mkdir -p /opt/bitnami/apps/jenkins/jenkins_home/jobs/ef-cms\" tomcat'"

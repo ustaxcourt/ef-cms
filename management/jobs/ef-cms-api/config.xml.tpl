@@ -18,15 +18,13 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>sha1</name>
-          <description>The sha1 for the commit to build.</description>
+          <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>target_sha1</name>
-          <description>The target sha1 that this pr is set to be merged into
-
-(optional)</description>
+          <description></description>
           <defaultValue></defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
@@ -53,8 +51,8 @@
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
           <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-          <url>https://github.com/flexion/ef-cms.git</url>
-          <credentialsId>flexion-ci</credentialsId>
+          <url>GITHUB_URL</url>
+          <credentialsId>GITHUB_USER</credentialsId>
         </hudson.plugins.git.UserRemoteConfig>
       </userRemoteConfigs>
       <branches>
@@ -66,7 +64,7 @@
       <submoduleCfg class="list"/>
       <extensions/>
     </scm>
-    <scriptPath>web-client/Jenkinsfile</scriptPath>
+    <scriptPath>document-service/Jenkinsfile</scriptPath>
     <lightweight>false</lightweight>
   </definition>
   <triggers/>

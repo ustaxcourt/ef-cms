@@ -53,8 +53,8 @@
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
           <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
-          <url>https://github.com/flexion/ef-cms.git</url>
-          <credentialsId>flexion-ci</credentialsId>
+          <url>GITHUB_URL</url>
+          <credentialsId>GITHUB_USER</credentialsId>
         </hudson.plugins.git.UserRemoteConfig>
       </userRemoteConfigs>
       <branches>
