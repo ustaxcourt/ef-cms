@@ -56,7 +56,12 @@ This section outlines the steps necessary for creating the necessary resources n
         - a secret text type
             - id: UI_SONAR_TOKEN
     - setup the jobs via the setup-jobs.sh script
-        - `cd management/management && ../bin/setup-jobs.sh
+        - this script takes 4 arguments in this order
+            - https://github.com/flexion/ef-cms.git // repo url
+            - flexion-ci // gibhub user created in prerequisites section
+            - flexion // organization name
+            - ef-cms // repo name
+        - `cd management/management && ../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion-ci flexion ef-cms
 7. the CI / CD pipeline is ready to operate
 
 # Job Overview
