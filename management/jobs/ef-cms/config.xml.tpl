@@ -31,9 +31,9 @@
       <jenkins.branch.BranchSource>
         <source class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource" plugin="github-branch-source@2.4.0">
           <id>aa923230-bdf4-42f9-976e-4619eec4a89f</id>
-          <credentialsId>flexion-ci</credentialsId>
-          <repoOwner>flexion</repoOwner>
-          <repository>ef-cms</repository>
+          <credentialsId>GITHUB_USER</credentialsId>
+          <repoOwner>REPO_OWNER</repoOwner>
+          <repository>REPOSITORY</repository>
           <traits>
             <org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
               <strategyId>1</strategyId>
