@@ -1,6 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
-import nock from 'nock';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios'
 import { JSDOM } from 'jsdom';
 
 import mainModule from './';
@@ -16,6 +17,7 @@ mainModule.providers.router = {
 const jsdom = new JSDOM('');
 global.window = jsdom.window;
 global.FormData = jsdom.window.FormData;
+
 global.Blob = jsdom.window.Blob;
 
 const test = CerebralTest(mainModule);
@@ -38,6 +40,17 @@ const fakePolicy = {
 };
 
 describe('Main cerebral module', () => {
+  let mock;
+
+  beforeEach(() => {
+    mock = new MockAdapter(axios);
+    test.setState('alertError', '');
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
   it('Handles routing', async () => {
     await test.runSequence('gotoStyleGuide');
     assert.equal(test.getState('currentPage'), 'StyleGuide');
@@ -53,17 +66,14 @@ describe('Main cerebral module', () => {
   });
 
   it('document policy success', async () => {
-    nock(environment.getBaseUrl())
-      .get('/documents/policy')
-      .reply(200, fakePolicy);
+    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
     await test.runSequence('submitFilePetition');
     assert.deepEqual(test.getState('petition.policy'), fakePolicy);
   });
 
   it('document policy error', async () => {
-    nock(environment.getBaseUrl())
-      .get('/documents/policy')
-      .reply(403);
+    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(403);
+
     await test.runSequence('submitFilePetition');
     assert.equal(
       test.getState('alertError'),
@@ -71,7 +81,7 @@ describe('Main cerebral module', () => {
     );
   });
 
-  it('document policy success', async () => {
+  it('documents upload success', async () => {
     test.setState('petition.petitionFile.file', new Blob(['blob']));
     test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
     test.setState(
@@ -86,22 +96,10 @@ describe('Main cerebral module', () => {
       documentType: 'test',
     };
 
-    nock(environment.getBaseUrl())
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .get('/documents/policy')
-      .reply(200, fakePolicy)
-      .post('/documents')
-      .reply(200, fakeDocument)
-      .post(fakePolicy.url)
-      .reply(204)
-      .post('/documents')
-      .reply(200, fakeDocument)
-      .post(fakePolicy.url)
-      .reply(204)
-      .post('/documents')
-      .reply(200, fakeDocument)
-      .post(fakePolicy.url)
-      .reply(204);
+    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
+    mock.onPost(environment.getBaseUrl() + '/documents').reply(200, fakeDocument);
+    mock.onPost(fakePolicy.url).reply(204);
+
 
     await test.runSequence('submitFilePetition');
     assert.deepEqual(test.getState('petition.policy'), fakePolicy);
