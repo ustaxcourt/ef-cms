@@ -1,11 +1,22 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
 import nock from 'nock';
+import { JSDOM } from 'jsdom';
 
 import mainModule from './';
 import environment from '../environments/dev';
 
 mainModule.providers.environment = environment;
+mainModule.providers.router = {
+  route: () => {
+    // no-op, we have no URLs!
+  },
+};
+
+const jsdom = new JSDOM('');
+global.window = jsdom.window;
+global.FormData = jsdom.window.FormData;
+global.Blob = jsdom.window.Blob;
 
 const test = CerebralTest(mainModule);
 
@@ -61,34 +72,60 @@ describe('Main cerebral module', () => {
   });
 
   it('document policy success', async () => {
+    test.setState('petition.petitionFile.file', new Blob(['blob']));
+    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+    test.setState(
+      'petition.statementOfTaxpayerIdentificationNumber.file',
+      new Blob(['blob']),
+    );
+
     const fakeDocument = {
-      "documentId": "691ca306-b30f-429c-b785-17754b8fd019",
-      "createdAt": "2018-10-26T22:13:31.830Z",
-      "userId": "1234",
-      "documentType": "test"
+      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+      createdAt: '2018-10-26T22:13:31.830Z',
+      userId: '1234',
+      documentType: 'test',
     };
 
     nock(environment.getBaseUrl())
-    .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-    .get('/documents/policy')
-    .reply(200, fakePolicy)
-    .post('/documents')
-    .reply(200, fakeDocument)
-    .post(fakePolicy.url)
-    .reply(200)
-    .post('/documents')
-    .reply(200, fakeDocument)
-    .post(fakePolicy.url)
-    .reply(200)
-    .post('/documents')
-    .reply(200, fakeDocument)
-    .post(fakePolicy.url)
-    .reply(200);
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/documents/policy')
+      .reply(200, fakePolicy)
+      .post('/documents')
+      .reply(200, fakeDocument)
+      .post(fakePolicy.url)
+      .reply(204)
+      .post('/documents')
+      .reply(200, fakeDocument)
+      .post(fakePolicy.url)
+      .reply(204)
+      .post('/documents')
+      .reply(200, fakeDocument)
+      .post(fakePolicy.url)
+      .reply(204);
 
     await test.runSequence('submitFilePetition');
     assert.deepEqual(test.getState('petition.policy'), fakePolicy);
-    assert.equal(test.getState('petition.petitionFile.documentId'), fakeDocument.documentId);
-    assert.equal(test.getState('petition.requestForPlaceOfTrial.documentId'), fakeDocument.documentId);
-    assert.equal(test.getState('petition.statementOfTaxpayerIdentificationNumber.documentId'), fakeDocument.documentId);
+    assert.equal(
+      test.getState('petition.petitionFile.documentId'),
+      fakeDocument.documentId,
+      'petitionFile has an ID',
+    );
+    assert.equal(
+      test.getState('petition.requestForPlaceOfTrial.documentId'),
+      fakeDocument.documentId,
+      'requestForPlaceOfTrial has an ID',
+    );
+    assert.equal(
+      test.getState(
+        'petition.statementOfTaxpayerIdentificationNumber.documentId',
+      ),
+      fakeDocument.documentId,
+      'statementOfTaxpayerIdentificationNumber has an ID',
+    );
+    assert.equal(test.getState('alertError'), '');
+    assert.equal(
+      test.getState('alertSuccess'),
+      'Your files were uploaded successfully.',
+    );
   });
 });

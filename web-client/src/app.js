@@ -8,7 +8,7 @@ import Devtools from 'cerebral/devtools';
 import '@babel/polyfill';
 
 import AppComponent from './components/App';
-import { router } from './router';
+import { router, route } from './router';
 
 /**
  * Instantiates the Cerebral app with React
@@ -16,6 +16,9 @@ import { router } from './router';
 const app = {
   initialize: environment => {
     mainModule.providers.environment = environment;
+    mainModule.providers.router = {
+      route,
+    };
     const debugTools = {
       devtools: Devtools({
         host: 'localhost:8585',

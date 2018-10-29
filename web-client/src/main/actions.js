@@ -1,6 +1,4 @@
 import { state } from 'cerebral';
-import Petition from '../entities/petition';
-import { route } from '../router';
 
 export const specifyPetitionFile = async () => {
   return { documentType: 'petitionFile' };
@@ -20,7 +18,7 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
     store.set(state.petition.policy, response);
     return path.success();
   } catch (error) {
-    return path.error();
+    return path.error({ error: 'Document policy retrieval failed' });
   }
 };
 
@@ -44,11 +42,11 @@ export const getDocumentId = async ({
     );
     return path.success();
   } catch (error) {
-    store.set(state.alertError, 'Fetching document ID failed');
+    return path.error({ error: 'Fetching document ID failed' });
   }
 };
 
-export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
+export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
   try {
     await api.uploadDocumentToS3(
       get(state.petition.policy),
@@ -57,16 +55,11 @@ export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
     );
     return path.success();
   } catch (error) {
-    store.set(state.alertError, 'Uploading document failed');
+    console.log(error);
+    return path.error({ error: 'Uploading document failed' });
   }
 };
 
-export const navigateHome = () => {
-  route('/');
-};
-
-export const updatePetition = ({ get }) => {
-  const rawPetition = get(state.petition);
-  const petition = new Petition(rawPetition);
-  return { petition: petition.exportPlainObject() };
+export const navigateHome = ({ router }) => {
+  router.route('/');
 };
