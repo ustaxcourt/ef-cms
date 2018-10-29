@@ -226,7 +226,7 @@ def createRoute53Tasks(targets) {
           checkout scm
           dir("document-service") {
             def runner = docker.build 'serverless', '-f Dockerfile.deploy .'
-            runner.inside() {
+            runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm i --no-progress'
               sh "./setup-regional-route53.sh ${slsStage}"
             }
