@@ -9,11 +9,13 @@ export default connect(
     submitFilePetition: sequences.submitFilePetition,
     updatePetitionValue: sequences.updatePetitionValue,
     submitting: state.submitting,
+    petition: state.petition,
   },
   function FilePetition({
     submitFilePetition,
     updatePetitionValue,
     submitting,
+    petition,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -30,7 +32,12 @@ export default connect(
           }}
         >
           <div className="usa-form-group">
-            <label htmlFor="petition-file">1. Petition file (form #)</label>
+            <label
+              htmlFor="petition-file"
+              className={petition.petitionFile.file && 'validated'}
+            >
+              1. Petition file (form #)
+            </label>
             <span>Contains details about your case</span>
             <input
               id="petition-file"
@@ -46,7 +53,10 @@ export default connect(
             />
           </div>
           <div className="usa-form-group">
-            <label htmlFor="request-for-place-of-trial">
+            <label
+              htmlFor="request-for-place-of-trial"
+              className={petition.requestForPlaceOfTrial.file && 'validated'}
+            >
               2. Request for place of trial (form #5)
             </label>
             <span>To submit the city and state for your trial</span>
@@ -64,7 +74,13 @@ export default connect(
             />
           </div>
           <div className="usa-form-group">
-            <label htmlFor="statement-of-taxpayer-id">
+            <label
+              htmlFor="statement-of-taxpayer-id"
+              className={
+                petition.statementOfTaxpayerIdentificationNumber.file &&
+                'validated'
+              }
+            >
               3. Statement of taxpayer identification number (form #4)
             </label>
             <span>

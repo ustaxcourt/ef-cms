@@ -30,17 +30,14 @@ export const submitFilePetition = [
           actions.uploadDocumentToS3,
           {
             success: [
-              set(state`documentType`, 'requestForPlaceOfTrial'),
+              actions.specifyRequestForPlaceOfTrial,
               actions.getDocumentId,
               {
                 success: [
                   actions.uploadDocumentToS3,
                   {
                     success: [
-                      set(
-                        state`documentType`,
-                        'statementOfTaxpayerIdentificationNumber',
-                      ),
+                      actions.specifyStatementOfTaxpayerIdentificationNumber,
                       actions.getDocumentId,
                       {
                         success: [
