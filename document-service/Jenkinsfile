@@ -143,6 +143,21 @@ pipeline {
         }
       }
     }
+    stage('Update Route53 Regional Record') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          runner.inside() {
+            sh "./setup-regional-route53.sh ${slsStage}"
+          }
+        }
+      }
+    }
     stage('Setup S3 Replication Pre Prod') {
       when {
         expression {
