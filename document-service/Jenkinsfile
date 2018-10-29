@@ -224,9 +224,11 @@ def createRoute53Tasks(targets) {
       node() {
         stage("Route 53 Record ${slsStage}") {
           checkout scm
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
-          runner.inside() {
-            sh "./setup-regional-route53.sh ${slsStage}"
+          dir("document-service") {
+            def runner = docker.build 'serverless', '-f Dockerfile.deploy .'
+            runner.inside() {
+              sh "./setup-regional-route53.sh ${slsStage}"
+            }
           }
         }
       }
