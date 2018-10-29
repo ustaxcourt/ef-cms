@@ -14,4 +14,5 @@ terraform {
 module "ef-cms_apis" {
   source      = "../template/"
   environment = "dev"
+  dns_domain = "ustc-case-mgmt.flexion.us" // this should probably come from the management terraform output?
 }
