@@ -225,8 +225,11 @@ def createRoute53Tasks(targets) {
         stage("Route 53 Record ${slsStage}") {
           checkout scm
           def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
-          runner.inside() {
-            sh "./setup-regional-route53.sh ${slsStage}"
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir("document-service") {
+              sh 'npm i --no-progress'
+              sh "./setup-regional-route53.sh ${slsStage}"
+            }
           }
         }
       }
@@ -246,6 +249,7 @@ def createS3ReplicationTasks(targets) {
           def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('document-service') {
+              sh 'npm i --no-progress'
               sh("./setup-s3-replication.sh ${slsStage}")
             }
           }
@@ -267,6 +271,7 @@ def createGlobalTableTasks(targets) {
           dir("document-service") {
             def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
             trunner.inside() {
+              sh 'npm i --no-progress'
               sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
             }
           }
