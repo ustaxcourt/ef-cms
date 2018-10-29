@@ -3,7 +3,7 @@ plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
   - serverless-plugin-split-stacks
-  # - serverless-domain-manager
+  - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
@@ -148,14 +148,13 @@ custom:
           required:
             - message
 
-
-  # customDomain:
-  #   domainName: api-${self:provider.stage}.${self:service}.flexion.us
-  #   basePath: ''
-  #   certificateName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
-  #   stage: ${self:provider.stage}
-  #   createRoute53Record: true
-  #   enabled: true
+  customDomain:
+    domainName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    basePath: ''
+    certificateName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    enabled: true
   splitStacks:
     perFunction: true
     perType: false
