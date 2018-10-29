@@ -270,7 +270,7 @@ def createGlobalTableTasks(targets) {
           checkout scm
           dir("document-service") {
             def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
-            trunner.inside() {
+            trunner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               sh 'npm i --no-progress'
               sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
             }
