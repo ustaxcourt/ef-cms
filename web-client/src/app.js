@@ -8,7 +8,7 @@ import Devtools from 'cerebral/devtools';
 import '@babel/polyfill';
 
 import AppComponent from './components/App';
-import router from './router';
+import { router } from './router';
 
 /**
  * Instantiates the Cerebral app with React
