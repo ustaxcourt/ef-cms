@@ -151,10 +151,8 @@ pipeline {
       }
       steps {
         script {
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
-          runner.inside() {
-            sh "./setup-regional-route53.sh ${slsStage}"
-          }
+          def tasks = createRoute53Tasks targets
+          parallel tasks
         }
       }
     }
@@ -216,6 +214,25 @@ pipeline {
       deleteDir()
     }
   }
+}
+
+def createRoute53Tasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("Route 53 Record ${slsStage}") {
+          checkout scm
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          runner.inside() {
+            sh "./setup-regional-route53.sh ${slsStage}"
+          }
+        }
+      }
+    }
+  }
+  return tasks
 }
 
 def createS3ReplicationTasks(targets) {
