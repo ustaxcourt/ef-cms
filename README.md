@@ -1,3 +1,6 @@
+# CI/CD Setup
+Please look at the [SETUP.md](SETUP.md)
+
 # Electronic Filing / Case Management System
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work begins in autumn 2018. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
