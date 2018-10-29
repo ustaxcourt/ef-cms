@@ -1,11 +1,8 @@
 const { S3 } = require('aws-sdk');
 
-
-
 exports.createUploadPolicy = () => {
-
   const s3 = new S3({
-    region: 'us-east-1',
+    region: process.env.AWS_REGION,
     s3ForcePathStyle: true,
     endpoint: process.env.S3_ENDPOINT
   });

@@ -3,7 +3,7 @@ plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
   - serverless-plugin-split-stacks
-  # - serverless-domain-manager
+  - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
@@ -148,14 +148,15 @@ custom:
           required:
             - message
 
-
-  # customDomain:
-  #   domainName: api-${self:provider.stage}.${self:service}.flexion.us
-  #   basePath: ''
-  #   certificateName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
-  #   stage: ${self:provider.stage}
-  #   createRoute53Record: true
-  #   enabled: true
+  customDomain:
+    domainName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    basePath: ''
+    endpointType: 'regional'
+    certificateName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    certificateRegion: ${opt:region}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+    enabled: true
   splitStacks:
     perFunction: true
     perType: false
@@ -171,16 +172,18 @@ provider:
   memorySize: 128
   timeout: 10
   logRetentionInDays: 7
+  s3Endpoint: s3.${opt:region}.amazonaws.com
+  dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   # role: ${self:custom.vars.role}
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
 
   environment:
-    S3_ENDPOINT: ${self:custom.vars.s3Endpoint}
+    S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
-    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint}
+    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -227,6 +230,16 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - POST
+              AllowedOrigins:
+                - '*'
+              MaxAge: 3000
         VersioningConfiguration:
           Status: Enabled
     #####
