@@ -2,6 +2,8 @@ import { set, toggle } from 'cerebral/factories';
 import { state, props } from 'cerebral';
 import * as actions from './actions';
 
+import { route } from '../router';
+
 export const gotoHome = [set(state`currentPage`, 'Home')];
 export const gotoLogIn = [set(state`currentPage`, 'LogIn')];
 export const gotoFilePetition = [set(state`currentPage`, 'FilePetition')];
@@ -50,7 +52,7 @@ export const submitFilePetition = [
                                 state`alertSuccess`,
                                 'Your files were uploaded successfully.',
                               ),
-                              actions.goHome,
+                              route('/'),
                             ],
                           },
                         ],
