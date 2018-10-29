@@ -1,4 +1,4 @@
-describe.only('File a petition ', function() {
+describe('File a petition ', function() {
   before(() => {
     cy.visit('/file-a-petition');
   });
@@ -12,22 +12,35 @@ describe.only('File a petition ', function() {
     cy.get('input#statement-of-taxpayer-id').should('exist');
     cy.contains('button[type="submit"]', 'Upload');
   });
-  it('shows validation checkmark when file is selected', () => {
-    cy.fixture('sample.pdf')
-      .as('pdf')
-      .get('form#file-a-petition #petition-file')
-      .then(function(fileInput) {
-        return Cypress.Blob.base64StringToBlob(
-          this.pdf,
-          'application/pdf',
-        ).then(blob => {
-          fileInput[0].files[0] = blob;
-          fileInput[0].dispatchEvent(new Event('change', { bubbles: true }));
-        });
-      });
+
+  it.only('shows validation checkmark when file is selected', () => {
+    cy.get('form#file-a-petition')
+      .find('label[for="petition-file"]')
+      .should('not.have.class', 'validated');
+
+    // select first file
+    cy.upload_file('w3-dummy.pdf', 'form#file-a-petition #petition-file');
 
     cy.get('form#file-a-petition')
       .find('label[for="petition-file"]')
+      .should('have.class', 'validated');
+
+    // select second file
+    cy.upload_file(
+      'w3-dummy.pdf',
+      'form#file-a-petition #request-for-place-of-trial',
+    );
+    cy.get('form#file-a-petition')
+      .find('label[for="request-for-place-of-trial"]')
+      .should('have.class', 'validated');
+
+    // select third file
+    cy.upload_file(
+      'w3-dummy.pdf',
+      'form#file-a-petition #statement-of-taxpayer-id',
+    );
+    cy.get('form#file-a-petition')
+      .find('label[for="statement-of-taxpayer-id"]')
       .should('have.class', 'validated');
   });
 });
