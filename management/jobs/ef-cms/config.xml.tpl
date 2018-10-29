@@ -36,11 +36,15 @@
           <repository>REPOSITORY</repository>
           <traits>
             <org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
-              <strategyId>1</strategyId>
+              <strategyId>3</strategyId>
             </org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait>
             <org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
               <strategyId>2</strategyId>
             </org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait>
+            <jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait plugin="scm-api@2.2.7">
+              <includes>develop master PR*</includes>
+              <excludes></excludes>
+            </jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait>
             <jenkins.plugins.git.traits.RefSpecsSCMSourceTrait plugin="git@3.9.1">
               <templates>
                 <jenkins.plugins.git.traits.RefSpecsSCMSourceTrait_-RefSpecTemplate>
