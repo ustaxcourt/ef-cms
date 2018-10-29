@@ -149,9 +149,9 @@ custom:
             - message
 
   customDomain:
-    domainName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    domainName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
     basePath: ''
-    certificateName: api-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    certificateName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
     stage: ${self:provider.stage}
     createRoute53Record: true
     enabled: true
