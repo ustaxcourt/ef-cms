@@ -180,7 +180,6 @@ provider:
     serverSideEncryption: AES256
 
   environment:
-    AWS_REGION: ${opt:region}
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
