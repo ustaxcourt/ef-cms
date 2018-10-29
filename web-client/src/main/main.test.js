@@ -1,10 +1,12 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
+import nock from 'nock';
 
 import mainModule from './';
 import environment from '../environments/dev';
 
 mainModule.providers.environment = environment;
+
 const test = CerebralTest(mainModule);
 
 const fakePolicy = {
@@ -56,5 +58,37 @@ describe('Main cerebral module', () => {
       test.getState('alertError'),
       'Document policy retrieval failed',
     );
+  });
+
+  it('document policy success', async () => {
+    const fakeDocument = {
+      "documentId": "691ca306-b30f-429c-b785-17754b8fd019",
+      "createdAt": "2018-10-26T22:13:31.830Z",
+      "userId": "1234",
+      "documentType": "test"
+    };
+
+    nock(environment.getBaseUrl())
+    .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+    .get('/documents/policy')
+    .reply(200, fakePolicy)
+    .post('/documents')
+    .reply(200, fakeDocument)
+    .post(fakePolicy.url)
+    .reply(200)
+    .post('/documents')
+    .reply(200, fakeDocument)
+    .post(fakePolicy.url)
+    .reply(200)
+    .post('/documents')
+    .reply(200, fakeDocument)
+    .post(fakePolicy.url)
+    .reply(200);
+
+    await test.runSequence('submitFilePetition');
+    assert.deepEqual(test.getState('petition.policy'), fakePolicy);
+    assert.equal(test.getState('petition.petitionFile.documentId'), fakeDocument.documentId);
+    assert.equal(test.getState('petition.requestForPlaceOfTrial.documentId'), fakeDocument.documentId);
+    assert.equal(test.getState('petition.statementOfTaxpayerIdentificationNumber.documentId'), fakeDocument.documentId);
   });
 });
