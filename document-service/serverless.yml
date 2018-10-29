@@ -172,16 +172,19 @@ provider:
   memorySize: 128
   timeout: 10
   logRetentionInDays: 7
+  s3Endpoint: s3.${opt:region}.amazonaws.com
+  dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   # role: ${self:custom.vars.role}
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
 
   environment:
-    S3_ENDPOINT: ${self:custom.vars.s3Endpoint}
+    AWS_REGION: ${opt:region}
+    S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
-    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint}
+    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
 
   iamRoleStatements:
     - Effect: "Allow"
