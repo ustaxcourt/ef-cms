@@ -62,7 +62,7 @@ export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
 
 // TODO: make this work with page.js
 export const goHome = () => {
-  location.assign('/');
+//  location.assign('/');
 };
 
 export const updatePetition = ({ get }) => {
