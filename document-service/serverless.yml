@@ -151,9 +151,11 @@ custom:
   customDomain:
     domainName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
     basePath: ''
+    endpointType: 'regional'
     certificateName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
-    createRoute53Record: true
+    createRoute53Record: false
     enabled: true
   splitStacks:
     perFunction: true
