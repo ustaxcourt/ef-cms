@@ -236,6 +236,7 @@ resources:
               - Authorization
             AllowedMethods:
               - GET
+              - POST
             AllowedOrigins:
               - '*'
             MaxAge: 3000
