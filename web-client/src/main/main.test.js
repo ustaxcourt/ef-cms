@@ -145,4 +145,30 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('alertError'), 'Fetching document ID failed');
 
   });
+
+  it('documents upload failure', async () => {
+    const fakeDocument = {
+      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+      createdAt: '2018-10-26T22:13:31.830Z',
+      userId: '1234',
+      documentType: 'test',
+    };
+
+    test.setState('petition.petitionFile.file', new Blob(['blob']));
+    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+    test.setState(
+      'petition.statementOfTaxpayerIdentificationNumber.file',
+      new Blob(['blob']),
+    );
+
+
+    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
+    mock.onPost(environment.getBaseUrl() + '/documents').reply(200, fakeDocument);
+    mock.onPost(fakePolicy.url).reply(500);
+
+
+    await test.runSequence('submitFilePetition');
+    assert.equal(test.getState('alertError'), 'Uploading document failed');
+
+  });
 });
