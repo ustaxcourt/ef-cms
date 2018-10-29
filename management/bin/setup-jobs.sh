@@ -4,9 +4,6 @@ BASTION_PUBLIC_IP=$(terraform output bastion_public_ip)
 JENKINS_PRIVATE_IP=$(terraform output jenkins_private_ip)
 ssh-add ssh/id_rsa
 
-echo $BASTION_PUBLIC_IP
-echo $JENKINS_PRIVATE_IP
-
 GITHUB_URL=$1
 GITHUB_USER=$2
 REPO_OWNER=$3

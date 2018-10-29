@@ -62,6 +62,10 @@ This section outlines the steps necessary for creating the necessary resources n
             - flexion // organization name
             - ef-cms // repo name
         - `cd management/management && ../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion-ci flexion ef-cms
+    - increase executors to 5
+        - go to management jenkins and increase the executors from 2 to 5
+    - restart jenkins
+        - https://..../jenkins/safeRestart
 7. the CI / CD pipeline is ready to operate
 
 # Job Overview
