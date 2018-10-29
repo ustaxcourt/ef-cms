@@ -126,4 +126,23 @@ describe('Main cerebral module', () => {
       'Your files were uploaded successfully.',
     );
   });
+
+  it('documents upload failure', async () => {
+    test.setState('petition.petitionFile.file', new Blob(['blob']));
+    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+    test.setState(
+      'petition.statementOfTaxpayerIdentificationNumber.file',
+      new Blob(['blob']),
+    );
+
+
+    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
+    mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
+    mock.onPost(fakePolicy.url).reply(204);
+
+
+    await test.runSequence('submitFilePetition');
+    assert.equal(test.getState('alertError'), 'Fetching document ID failed');
+
+  });
 });
