@@ -55,7 +55,6 @@ export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
     );
     return path.success();
   } catch (error) {
-    console.log(error);
     return path.error({ error: 'Uploading document failed' });
   }
 };
