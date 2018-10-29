@@ -1,4 +1,2 @@
 readCapacityUnits: 1
 writeCapacityUnits: 1
-s3Endpoint: s3.us-east-1.amazonaws.com
-dynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
