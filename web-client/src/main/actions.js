@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 import Petition from '../entities/petition';
+import { route } from '../router';
 
 export const specifyPetitionFile = async () => {
   return { documentType: 'petitionFile' };
@@ -60,9 +61,8 @@ export const uploadDocumentToS3 = async ({ api, get, store, path, props }) => {
   }
 };
 
-// TODO: make this work with page.js
-export const goHome = () => {
-//  location.assign('/');
+export const navigateHome = () => {
+  route('/');
 };
 
 export const updatePetition = ({ get }) => {

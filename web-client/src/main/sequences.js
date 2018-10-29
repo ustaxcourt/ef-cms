@@ -49,7 +49,7 @@ export const submitFilePetition = [
                                 state`alertSuccess`,
                                 'Your files were uploaded successfully.',
                               ),
-                              route('/'),
+                              actions.navigateHome,
                             ],
                           },
                         ],
