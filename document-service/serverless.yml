@@ -232,14 +232,14 @@ resources:
         BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
         CorsConfiguration:
           CorsRules:
-            AllowedHeaders:
-              - Authorization
-            AllowedMethods:
-              - GET
-              - POST
-            AllowedOrigins:
-              - '*'
-            MaxAge: 3000
+            - AllowedHeaders:
+                - Authorization
+              AllowedMethods:
+                - GET
+                - POST
+              AllowedOrigins:
+                - '*'
+              MaxAge: 3000
         VersioningConfiguration:
           Status: Enabled
     #####
