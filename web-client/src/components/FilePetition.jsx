@@ -66,13 +66,6 @@ export default connect(
               accept=".pdf"
               name="requestForPlaceOfTrial"
               onChange={e => {
-                const reader = new FileReader();
-                reader.onloadend = function(readerEvent) {
-                  if (readerEvent.target.readyState == FileReader.DONE) {
-                    console.log(readerEvent.target.result);
-                  }
-                };
-                reader.readAsBinaryString(e.target.files[0]);
                 updatePetitionValue({
                   key: e.target.name,
                   file: e.target.files[0],
