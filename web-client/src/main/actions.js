@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
-export const getUser = async ({ api }) => {
+export const getUser = async ({ api, path }) => {
   // TODO: use the api provider to query our fake API
-  return;
+  return path.success({ user });
 };
 
 export const setUser = async () => {
