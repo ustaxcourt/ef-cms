@@ -1,7 +1,3 @@
-variable "deployment" {
-  type = "string"
-}
-
 variable "environment" {
   type = "string"
 }

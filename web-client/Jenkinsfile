@@ -15,7 +15,7 @@ pipeline {
     stage('Merge') {
       steps {
         script {
-          if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
+          if (env.branch_name != 'develop' && env.branch_name != 'staging' && env.branch_name != 'master' && env.target_sha1) {
             // todo: there is probably a better way to have Jenkins do this for us automatically
             sh 'git config user.name "EF-CMS Jenkins"'
             sh 'git config user.email "noop@example.com"'
@@ -118,8 +118,8 @@ pipeline {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
           runner.inside() {
-            dir('web-client/terraform/dev') {
-              sh './deploy-app.sh -a'
+            dir('web-client/terraform/main') {
+              sh '../bin/deploy-app.sh dev'
             }
           }
         }
@@ -135,6 +135,33 @@ pipeline {
         deployTo('dev')
       }
     }
+    stage('Terraform - Staging') {
+      when {
+        expression {
+          env.branch_name == 'staging'
+        }
+      }
+      steps {
+        script {
+          def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
+          runner.inside() {
+            dir('web-client/terraform/main') {
+              sh '../bin/deploy-app.sh stg'
+            }
+          }
+        }
+      }
+    }
+    stage('Deploy Staging') {
+      when {
+        expression {
+          env.branch_name == 'staging'
+        }
+      }
+      steps {
+        deployTo('stg')
+      }
+    }
     stage('Terraform - Prod') {
       when {
         expression {
@@ -145,8 +172,8 @@ pipeline {
         script {
           def runner = docker.build 'terraform', '-f web-client/Dockerfile.terraform .'
           runner.inside() {
-            dir('web-client/terraform/prod') {
-              sh './deploy-app.sh -a'
+            dir('web-client/terraform/main') {
+              sh '../bin/deploy-app.sh prod'
             }
           }
         }
@@ -176,7 +203,7 @@ def deployTo(env) {
     dir('web-client') {
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
       sh "API_URL=https://documents-${env}.ustc-case-mgmt.flexion.us/v1 npm run dist"
-      def bucket = sh(returnStdout: true, script: "cd terraform/${env} && terraform output bucket").trim()
+      def bucket = sh(returnStdout: true, script: "cd terraform/main && terraform output bucket").trim()
       s3Upload(
         bucket: "${bucket}",
         file: 'dist',
