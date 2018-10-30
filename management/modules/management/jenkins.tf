@@ -15,6 +15,11 @@ resource "aws_instance" "jenkins_web" {
     deployment  = "${var.deployment}"
   }
 
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp2"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo usermod -a -G docker tomcat",
