@@ -18,7 +18,12 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
     store.set(state.petition.policy, response);
     return path.success();
   } catch (error) {
-    return path.error({ error: 'Document policy retrieval failed' });
+    return path.error({
+      alertError: {
+        title: 'There was a probem',
+        message: 'Document policy retrieval failed',
+      },
+    });
   }
 };
 
@@ -42,7 +47,12 @@ export const getDocumentId = async ({
     );
     return path.success();
   } catch (error) {
-    return path.error({ error: 'Fetching document ID failed' });
+    return path.error({
+      alertError: {
+        title: 'There was a probem',
+        message: 'Fetching document ID failed',
+      },
+    });
   }
 };
 
@@ -55,8 +65,50 @@ export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
     );
     return path.success();
   } catch (error) {
-    return path.error({ error: 'Uploading document failed' });
+    return path.error({
+      alertError: {
+        title: 'There was a probem',
+        message: 'Uploading document failed',
+      },
+    });
   }
+};
+
+export const getPetitionUploadAlertSuccess = () => {
+  return {
+    alertSuccess: {
+      title: 'Your files were uploaded successfully.',
+      message: 'Your case has now been created.',
+    },
+  };
+};
+
+export const setFormSubmitting = ({ store }) => {
+  store.set(state.submitting, true);
+};
+
+export const unsetFormSubmitting = ({ store }) => {
+  store.set(state.submitting, false);
+};
+
+export const setAlertError = ({ props, store }) => {
+  store.set(state.alertError, props.alertError);
+};
+
+export const setAlertSuccess = ({ props, store }) => {
+  store.set(state.alertSuccess, props.alertSuccess);
+};
+
+// export const clearAlertError = ({ store }) => {
+//   store.set(state.alertError, {});
+// };
+
+// export const clearAlertSuccess = ({ store }) => {
+//   store.set(state.alertSuccess, {});
+// };
+
+export const clearPetition = ({ store }) => {
+  store.set(state.petition, {});
 };
 
 export const navigateHome = ({ router }) => {
