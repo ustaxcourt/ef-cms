@@ -292,11 +292,8 @@ def createTerraformTasks(targets) {
           checkout scm
           def trunner = docker.build 'terraform', '-f document-service/Dockerfile.deploy .'
           trunner.inside() {
-            dir("document-service/terraform/${slsStage}") {
-              echo 'Running Terraform'
-              sh "rm -rf ./.terraform/"
-              sh "terraform init"
-              sh "terraform apply -auto-approve"
+            dir("document-service/terraform/main") {
+              sh "../bin/deploy-app.sh ${slsStage}"
 
               script {
                 echo 'Setting environment variables based on Terraform run'
