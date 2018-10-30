@@ -12,9 +12,7 @@ export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
-export const updatePetitionValue = [
-  set(state`petition.${props`key`}.file`, props`file`),
-];
+export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
 
 export const submitLogIn = [
   actions.setFormSubmitting,
@@ -24,6 +22,10 @@ export const submitLogIn = [
     success: [actions.setUser, actions.navigateHome],
   },
   actions.unsetFormSubmitting,
+];
+
+export const updatePetitionValue = [
+  set(state`petition.${props`key`}.file`, props`file`),
 ];
 
 export const submitFilePetition = [
