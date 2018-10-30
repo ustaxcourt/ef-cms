@@ -16,7 +16,6 @@ exports.create = (event, context, callback) => {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*'
     },
-
   });
 
   let body;
@@ -33,7 +32,7 @@ exports.create = (event, context, callback) => {
     return;
   }
 
-  return documentService.create(body.userId, body.documentType)
+  documentService.create(body.userId, body.documentType)
     .then(document => {
       done(null, document);
     })
