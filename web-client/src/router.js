@@ -1,5 +1,9 @@
 import page from 'page';
 
+const route = function route(path) {
+  page(path);
+};
+
 const router = {
   initialize: app => {
     page('/', () => {
@@ -18,4 +22,4 @@ const router = {
   },
 };
 
-export default router;
+export { route, router };

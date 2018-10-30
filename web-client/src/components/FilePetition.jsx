@@ -1,38 +1,118 @@
 import React from 'react';
+import { sequences, state } from 'cerebral';
+import { connect } from '@cerebral/react';
 
-export default function FilePetition() {
-  return (
-    <React.Fragment>
+import ErrorNotification from './ErrorNotification';
+
+export default connect(
+  {
+    submitFilePetition: sequences.submitFilePetition,
+    updatePetitionValue: sequences.updatePetitionValue,
+    submitting: state.submitting,
+    petition: state.petition,
+  },
+  function FilePetition({
+    submitFilePetition,
+    updatePetitionValue,
+    submitting,
+    petition,
+  }) {
+    return (
       <section className="usa-section usa-grid">
         <h1>File a petition</h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
-        <form>
+        <ErrorNotification />
+        <form
+          id="file-a-petition"
+          noValidate
+          onSubmit={e => {
+            e.preventDefault();
+            submitFilePetition();
+          }}
+        >
           <div className="usa-form-group">
-            <label htmlFor="petition-file">1. Petition file (form #)</label>
+            <label
+              htmlFor="petition-file"
+              className={petition.petitionFile.file && 'validated'}
+            >
+              1. Petition file (form #)
+            </label>
             <span>Contains details about your case</span>
-            <input id="petition-file" type="file" />
+            <input
+              id="petition-file"
+              type="file"
+              accept=".pdf"
+              name="petitionFile"
+              onChange={e => {
+                updatePetitionValue({
+                  key: e.target.name,
+                  file: e.target.files[0],
+                });
+              }}
+            />
           </div>
           <div className="usa-form-group">
-            <label htmlFor="request-for-place-of-trial">
+            <label
+              htmlFor="request-for-place-of-trial"
+              className={petition.requestForPlaceOfTrial.file && 'validated'}
+            >
               2. Request for place of trial (form #5)
             </label>
             <span>To submit the city and state for your trial</span>
-            <input id="request-for-place-of-trial" type="file" />
+            <input
+              id="request-for-place-of-trial"
+              type="file"
+              accept=".pdf"
+              name="requestForPlaceOfTrial"
+              onChange={e => {
+                updatePetitionValue({
+                  key: e.target.name,
+                  file: e.target.files[0],
+                });
+              }}
+            />
           </div>
           <div className="usa-form-group">
-            <label htmlFor="statement-of-taxpayer-id">
+            <label
+              htmlFor="statement-of-taxpayer-id"
+              className={
+                petition.statementOfTaxpayerIdentificationNumber.file &&
+                'validated'
+              }
+            >
               3. Statement of taxpayer identification number (form #4)
             </label>
             <span>
               To submit your Social Security number or employee identification
               number
             </span>
-            <input id="statement-of-taxpayer-id" type="file" />
+            <input
+              id="statement-of-taxpayer-id"
+              type="file"
+              accept=".pdf"
+              name="statementOfTaxpayerIdentificationNumber"
+              onChange={e => {
+                updatePetitionValue({
+                  key: e.target.name,
+                  file: e.target.files[0],
+                });
+              }}
+            />
           </div>
-          <input type="submit" value="Upload" />
+          {!submitting && (
+            <button type="submit">
+              <span>Upload</span>
+            </button>
+          )}
+          {submitting && (
+            <button type="submit" disabled>
+              <span>Uploading...</span>
+              <div className="spinner" />
+            </button>
+          )}
         </form>
       </section>
-    </React.Fragment>
-  );
-}
+    );
+  },
+);

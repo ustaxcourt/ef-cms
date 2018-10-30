@@ -1,22 +1,18 @@
 import React from 'react';
-import { state, sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
 
+import SuccessNotification from './SuccessNotification';
+
 export default connect(
-  {
-    response: state.response,
-  },
+  {},
   function Home() {
     return (
       <section className="usa-section usa-grid">
+        <SuccessNotification />
         <p>
-          <a href="/log-in">Log in</a>
-        </p>
-        <p>
-          <a href="/file-a-petition">File a petition</a>
-        </p>
-        <p>
-          <a href="/style-guide">Style guide</a>
+          <a className="usa-button" href="/file-a-petition">
+            Start a case
+          </a>
         </p>
       </section>
     );
