@@ -5,24 +5,20 @@ JENKINS_PRIVATE_IP=$(terraform output jenkins_private_ip)
 ssh-add ssh/id_rsa
 
 GITHUB_URL=$1
-GITHUB_USER=$2
-REPO_OWNER=$3
-REPOSITORY=$4
+REPO_OWNER=$2
+REPOSITORY=$3
 
 # TODO: check if there is a better way to setup jobs
 echo "compiling templates"
 sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms/config.xml.tpl \
-  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
   | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
   | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms/config.xml
 
 sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-ui/config.xml.tpl \
-  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
   | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
   | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-ui/config.xml
 
 sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-api/config.xml.tpl \
-  | sed "s|GITHUB_USER|${GITHUB_USER}|g" \
   | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
   | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-api/config.xml
 
