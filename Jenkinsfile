@@ -56,7 +56,7 @@ pipeline {
     stage('Merge') {
       steps {
         script {
-          if (env.BRANCH_NAME != 'develop' && env.BRANCH_NAME != 'master' && env.CHANGE_TARGET) {
+          if (env.BRANCH_NAME != 'develop' && env.BRANCH_NAME != 'staging' && env.BRANCH_NAME != 'master' && env.CHANGE_TARGET) {
             // todo: there is probably a better way to have Jenkins do this for us automatically
             sh 'git config user.name "EF-CMS Jenkins"'
             sh 'git config user.email "noop@example.com"'
@@ -115,7 +115,7 @@ def checkCommit(folder) {
   if (env.CHANGE_TARGET) {
     def matches = sh(returnStatus:true, script: "git diff --name-only origin/${env.CHANGE_TARGET} | grep '^${folder}'")
     return !matches
-  } else if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') {
+  } else if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'staging' || env.BRANCH_NAME == 'master') {
     return true
   }
 }
