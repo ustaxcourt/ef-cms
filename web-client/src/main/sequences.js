@@ -16,14 +16,15 @@ export const updatePetitionValue = [
   set(state`petition.${props`key`}.file`, props`file`),
 ];
 
-// export const submitFilePetition = [
-//   actions.setFormSubmitting,
-//   actions.getDocumentPolicy,
-//   {
-//     error: [actions.setAlertError],
-//     success: [],
-//   },
-// ];
+export const submitLogIn = [
+  actions.setFormSubmitting,
+  actions.getUser,
+  {
+    error: [actions.setAlertError],
+    success: [actions.setUser, actions.navigateHome],
+  },
+  actions.unsetFormSubmitting,
+];
 
 export const submitFilePetition = [
   // TODO: parallelize this
