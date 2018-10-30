@@ -1,3 +1,4 @@
+const { createDone } = require('../services/gatewayHelper');
 const documentService = require('./documentService');
 
 /**
@@ -9,15 +10,7 @@ const documentService = require('./documentService');
  */
 
 exports.create = (event, context, callback) => {
-  const done = (err, res) =>
-    callback(null, {
-      statusCode: err ? '400' : '200',
-      body: err ? JSON.stringify(err.message) : JSON.stringify(res),
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+  const done = createDone(callback);
 
   let body;
   try {
@@ -32,7 +25,7 @@ exports.create = (event, context, callback) => {
     return;
   }
 
-  return documentService
+  documentService
     .create(body.userId, body.documentType)
     .then(document => {
       done(null, document);
