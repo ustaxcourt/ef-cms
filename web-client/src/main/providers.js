@@ -1,6 +1,11 @@
 import axios from 'axios';
 
 export const api = {
+  getUser: name => {
+    // TODO: throw an error if it's not a good name
+    return name;
+  },
+
   getDocumentPolicy: async baseUrl => {
     const response = await axios.get(`${baseUrl}/documents/policy`);
     return response.data;

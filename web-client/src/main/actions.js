@@ -1,5 +1,15 @@
 import { state } from 'cerebral';
 
+export const getUser = async ({ api }) => {
+  // TODO: use the api provider to query our fake API
+  return;
+};
+
+export const setUser = async () => {
+  // TODO: set the user name to the state
+  return;
+};
+
 export const specifyPetitionFile = async () => {
   return { documentType: 'petitionFile' };
 };
@@ -108,7 +118,20 @@ export const setAlertSuccess = ({ props, store }) => {
 // };
 
 export const clearPetition = ({ store }) => {
-  store.set(state.petition, {});
+  store.set(state.petition, {
+    petitionFile: {
+      file: undefined,
+      documentId: undefined,
+    },
+    requestForPlaceOfTrial: {
+      file: undefined,
+      documentId: undefined,
+    },
+    statementOfTaxpayerIdentificationNumber: {
+      file: undefined,
+      documentId: undefined,
+    },
+  });
 };
 
 export const navigateHome = ({ router }) => {

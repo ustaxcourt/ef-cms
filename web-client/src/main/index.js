@@ -12,7 +12,6 @@ export default {
     usaBanner: {
       showDetails: false,
     },
-    alertError: '',
     petition: {},
   },
 };
