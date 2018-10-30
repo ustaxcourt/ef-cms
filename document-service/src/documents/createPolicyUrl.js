@@ -1,5 +1,5 @@
 const fileStorageService = require('../services/fileStorageService');
-const { createDone } = require('../services/gatewayHelper')
+const { createDone } = require('../services/gatewayHelper');
 
 /**
  * Create Document API Lambda
@@ -11,7 +11,8 @@ const { createDone } = require('../services/gatewayHelper')
 
 exports.create = (event, context, callback) => {
   const done = createDone(callback);
-  fileStorageService.createUploadPolicy()
+  fileStorageService
+    .createUploadPolicy()
     .then(policy => {
       done(null, policy);
     })

@@ -97,7 +97,7 @@ pipeline {
               sh 'npm i'
               sh 'npm run dev &'
               sh '../wait-until.sh http://localhost:1234'
-              // sh 'npm run cypress'
+              sh 'npm run cypress'
             }
           }
         }

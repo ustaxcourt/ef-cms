@@ -1,4 +1,5 @@
 import React from 'react';
+import { state } from 'cerebral';
 import { connect } from '@cerebral/react';
 
 // import close from '../../node_modules/uswds/dist/img/close.svg';
@@ -7,8 +8,8 @@ import { connect } from '@cerebral/react';
  * Header
  */
 export default connect(
-  {},
-  function Header() {
+  { user: state.user },
+  function Header({ user }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
@@ -22,12 +23,12 @@ export default connect(
           <button className="usa-menu-btn">Menu</button>
         </div>
 
-        {/* <nav role="navigation" className="usa-nav">
+        <nav role="navigation" className="usa-nav">
           <div className="usa-nav-inner">
-            <button className="usa-nav-close">
+            {/* <button className="usa-nav-close">
               <img src={close} alt="close" />
-            </button>
-            <ul className="usa-nav-primary usa-accordion">
+            </button> */}
+            {/* <ul className="usa-nav-primary usa-accordion">
               <li>
                 <button
                   className="usa-accordion-button usa-nav-link"
@@ -81,24 +82,22 @@ export default connect(
                   <span>Distinct from each other</span>
                 </a>
               </li>
-            </ul>
+            </ul> */}
             <div className="usa-nav-secondary">
               <ul className="usa-unstyled-list usa-nav-secondary-links">
-                <li className="js-search-button-container">
+                {/* <li className="js-search-button-container">
                   <button className="usa-header-search-button js-search-button">
                     Search
                   </button>
                 </li>
                 <li>
                   <a href="/">Secondary priority link</a>
-                </li>
-                <li>
-                  <a href="/">Easy to comprehend</a>
-                </li>
+                </li> */}
+                <li>Hello, {user}</li>
               </ul>
             </div>
           </div>
-        </nav> */}
+        </nav>
       </header>
     );
   },
