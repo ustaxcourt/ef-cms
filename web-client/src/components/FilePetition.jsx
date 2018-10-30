@@ -37,7 +37,7 @@ export default connect(
                 htmlFor="petition-file"
                 className={petition.petitionFile.file && 'validated'}
               >
-                1. Petition file (form #)
+                1. Petition file (form #2)
               </label>
               <span>Contains details about your case</span>
               <input
@@ -85,8 +85,8 @@ export default connect(
                 3. Statement of taxpayer identification number (form #4)
               </label>
               <span>
-                To submit your Social Security number or employee identification
-                number
+                To submit your Taxpayer Identification Number (e.g., your Social
+                Security Number, employee identification number, etc.)
               </span>
               <input
                 id="statement-of-taxpayer-id"

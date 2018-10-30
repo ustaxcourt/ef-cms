@@ -108,7 +108,20 @@ export const setAlertSuccess = ({ props, store }) => {
 // };
 
 export const clearPetition = ({ store }) => {
-  store.set(state.petition, {});
+  store.set(state.petition, {
+    petitionFile: {
+      file: undefined,
+      documentId: undefined,
+    },
+    requestForPlaceOfTrial: {
+      file: undefined,
+      documentId: undefined,
+    },
+    statementOfTaxpayerIdentificationNumber: {
+      file: undefined,
+      documentId: undefined,
+    },
+  });
 };
 
 export const navigateHome = ({ router }) => {
