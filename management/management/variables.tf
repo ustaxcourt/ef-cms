@@ -8,7 +8,6 @@ variable "environment" {}
 variable "deployment" {}
 
 variable "dns_domain" {
-  default = "mgmt.example.com"
 }
  variable "ssh_cidrs" {
   default =  [ ]

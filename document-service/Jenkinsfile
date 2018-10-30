@@ -143,6 +143,19 @@ pipeline {
         }
       }
     }
+    stage('Update Route53 Regional Record') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          def tasks = createRoute53Tasks targets
+          parallel tasks
+        }
+      }
+    }
     stage('Setup S3 Replication Pre Prod') {
       when {
         expression {
@@ -203,6 +216,28 @@ pipeline {
   }
 }
 
+def createRoute53Tasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("Route 53 Record ${slsStage}") {
+          checkout scm
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir("document-service") {
+              sh 'npm i --no-progress'
+              sh "./setup-regional-route53.sh ${slsStage}"
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
+}
+
 def createS3ReplicationTasks(targets) {
   def tasks = [:]
   targets.each { deploy ->
@@ -214,6 +249,7 @@ def createS3ReplicationTasks(targets) {
           def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('document-service') {
+              sh 'npm i --no-progress'
               sh("./setup-s3-replication.sh ${slsStage}")
             }
           }
@@ -232,9 +268,10 @@ def createGlobalTableTasks(targets) {
       node() {
         stage("global tables ${slsStage}") {
           checkout scm
-          dir("document-service") {
-            def trunner = docker.build 'globaltables', '-f Dockerfile.test .'
-            trunner.inside() {
+          def trunner = docker.build 'globaltables', '-f document-service/Dockerfile.test .'
+          trunner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir("document-service") {
+              sh 'npm i --no-progress'
               sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
             }
           }
@@ -318,7 +355,7 @@ def createDeployTasks(targets) {
                   sh 'find . -type f -exec chmod -R ugo+r {} ";"'
                 }
                 echo 'Build main site distribution'
-                // sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
+                sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
                 sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=gov.ustaxcourt.ef-cms.apis.${slsStage}.${region}.deploys ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
                 sh "./configure-custom-api-access-logging.sh ${slsStage} ./config-custom-access-logs.json ${region}"
               }
