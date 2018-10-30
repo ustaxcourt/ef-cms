@@ -13,8 +13,8 @@ export default connect(
         {alertSuccess && (
           <div className="usa-alert usa-alert-success" role="alert">
             <div className="usa-alert-body">
-              <h3 className="usa-alert-heading">Success Status</h3>
-              <p className="usa-alert-text">{alertSuccess}</p>
+              <h3 className="usa-alert-heading">{alertSuccess.title}</h3>
+              <p className="usa-alert-text">{alertSuccess.message}</p>
             </div>
           </div>
         )}

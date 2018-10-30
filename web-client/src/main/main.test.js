@@ -1,7 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
 import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios'
+import axios from 'axios';
 import { JSDOM } from 'jsdom';
 
 import mainModule from './';
@@ -66,7 +66,10 @@ describe('Main cerebral module', () => {
   });
 
   it('document policy success', async () => {
-    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
+    mock
+      .onGet(environment.getBaseUrl() + '/documents/policy')
+      .reply(200, fakePolicy);
+    assert.deepEqual(test.getState('petition'), {});
     await test.runSequence('submitFilePetition');
     assert.deepEqual(test.getState('petition.policy'), fakePolicy);
   });
@@ -76,7 +79,7 @@ describe('Main cerebral module', () => {
 
     await test.runSequence('submitFilePetition');
     assert.equal(
-      test.getState('alertError'),
+      test.getState('alertError.message'),
       'Document policy retrieval failed',
     );
   });
@@ -96,10 +99,13 @@ describe('Main cerebral module', () => {
       documentType: 'test',
     };
 
-    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
-    mock.onPost(environment.getBaseUrl() + '/documents').reply(200, fakeDocument);
+    mock
+      .onGet(environment.getBaseUrl() + '/documents/policy')
+      .reply(200, fakePolicy);
+    mock
+      .onPost(environment.getBaseUrl() + '/documents')
+      .reply(200, fakeDocument);
     mock.onPost(fakePolicy.url).reply(204);
-
 
     await test.runSequence('submitFilePetition');
     assert.deepEqual(test.getState('petition.policy'), fakePolicy);
@@ -122,7 +128,7 @@ describe('Main cerebral module', () => {
     );
     assert.equal(test.getState('alertError'), '');
     assert.equal(
-      test.getState('alertSuccess'),
+      test.getState('alertSuccess.title'),
       'Your files were uploaded successfully.',
     );
   });
@@ -135,15 +141,17 @@ describe('Main cerebral module', () => {
       new Blob(['blob']),
     );
 
-
-    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
+    mock
+      .onGet(environment.getBaseUrl() + '/documents/policy')
+      .reply(200, fakePolicy);
     mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
     mock.onPost(fakePolicy.url).reply(204);
 
-
     await test.runSequence('submitFilePetition');
-    assert.equal(test.getState('alertError'), 'Fetching document ID failed');
-
+    assert.equal(
+      test.getState('alertError.message'),
+      'Fetching document ID failed',
+    );
   });
 
   it('documents upload failure', async () => {
@@ -161,14 +169,18 @@ describe('Main cerebral module', () => {
       new Blob(['blob']),
     );
 
-
-    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(200, fakePolicy);
-    mock.onPost(environment.getBaseUrl() + '/documents').reply(200, fakeDocument);
+    mock
+      .onGet(environment.getBaseUrl() + '/documents/policy')
+      .reply(200, fakePolicy);
+    mock
+      .onPost(environment.getBaseUrl() + '/documents')
+      .reply(200, fakeDocument);
     mock.onPost(fakePolicy.url).reply(500);
 
-
     await test.runSequence('submitFilePetition');
-    assert.equal(test.getState('alertError'), 'Uploading document failed');
-
+    assert.equal(
+      test.getState('alertError.message'),
+      'Uploading document failed',
+    );
   });
 });

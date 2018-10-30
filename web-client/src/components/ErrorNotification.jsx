@@ -13,8 +13,8 @@ export default connect(
         {alertError && (
           <div className="usa-alert usa-alert-error" role="alert">
             <div className="usa-alert-body">
-              <h3 className="usa-alert-heading">Error Status</h3>
-              <p className="usa-alert-text">{alertError}</p>
+              <h3 className="usa-alert-heading">{alertError.title}</h3>
+              <p className="usa-alert-text">{alertError.message}</p>
             </div>
           </div>
         )}
