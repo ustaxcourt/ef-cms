@@ -82,9 +82,7 @@
     "stylelint": "^9.7.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
-    "uswds": "^1.6.9"
-  },
-  "devDependencies": {
+    "uswds": "^1.6.9",
     "@babel/core": "^7.1.2",
     "axios-mock-adapter": "^1.15.0",
     "babel-core": "^7.0.0-bridge.0",
