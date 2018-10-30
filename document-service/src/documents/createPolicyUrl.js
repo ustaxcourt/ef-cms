@@ -11,7 +11,7 @@ const { createDone } = require('../services/gatewayHelper');
 
 exports.create = (event, context, callback) => {
   const done = createDone(callback);
-  return fileStorageService
+  fileStorageService
     .createUploadPolicy()
     .then(policy => {
       done(null, policy);
