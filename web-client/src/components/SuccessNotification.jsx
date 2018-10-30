@@ -11,7 +11,12 @@ export default connect(
     return (
       <React.Fragment>
         {alertSuccess && (
-          <div className="usa-alert usa-alert-success" role="alert">
+          <div
+            className="usa-alert usa-alert-success"
+            aria-label="success"
+            aria-live="polite"
+            role="alert"
+          >
             <div className="usa-alert-body">
               <h3 className="usa-alert-heading">Success Status</h3>
               <p className="usa-alert-text">{alertSuccess}</p>
