@@ -16,9 +16,10 @@ This section outlines the steps necessary for creating the necessary resources n
 - set local machine to use this role or user
 - clone this repo locally
 - setup a github user with access to the repo
-- setup an account in sonarcloud.io
-    - create a project key for the ui
-    - create a project key for the api
+- create an account and setup an organization in sonarcloud.io (https://sonarcloud.io/create-organization)
+    - create a token for use by jenkins (SONAR_TOKEN see https://sonarcloud.io/account/security)
+    - create a project and project key for the ui (UI_SONAR_TOKEN below see https://sonarcloud.io/projects/create?manual=true)
+    - create a project and project key for the api (API_SONAR_TOKEN below)
 
 # Setup Steps
 
