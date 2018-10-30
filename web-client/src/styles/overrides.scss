@@ -6,3 +6,7 @@ label {
   margin-bottom: 0.5em;
   font-weight: 700;
 }
+
+#file-a-petition .usa-button-active:disabled {
+  background-color: $color-primary-darkest;
+}
