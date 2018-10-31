@@ -27,7 +27,7 @@ This section outlines the steps necessary for creating the necessary resources n
 2. run the deploy-infrastructure.sh script:
     - `cd management/management && ./deploy-infrastructure.sh`
     - this command continously prints out "module.management.jenkins-certificate.aws_acm_certificate_validation.dns_validation: Still creating..." until you have finished the next step (step 3) and waited some time for the dns resolutions to happen
-    - this command will generate 2 files (id_rsa / id_rsa.pub)
+    - this command will generate 2 files (`ssh/id_rsa` / `ssh/id_rsa.pub`)
         - backup these keys
         - they are used to ssh into the bastion and jenkins ec2 instances
 3. create NS records on your current DNS to point a subdomain to AWS Route53 DNS
