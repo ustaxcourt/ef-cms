@@ -47,10 +47,8 @@ pipeline {
       steps {
         script {
           dir('document-service') {
-            def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
-            runner.inside('-v /home/tomcat:/home/tomcat') {
-              sh './run-shellcheck.sh'
-            }
+            sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
+            sh 'docker run -rm shellcheck'
           }
         }
       }

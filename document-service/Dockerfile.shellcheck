@@ -1,3 +1,8 @@
 FROM koalaman/shellcheck-alpine
 
 RUN apk add bash
+
+WORKDIR /home/app
+COPY . /home/app
+
+CMD ./run-shellcheck.sh
