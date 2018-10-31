@@ -13,3 +13,7 @@ output "jenkins_elb_url" {
 output "jenkins_private_ip" {
   value = "${module.management.jenkins_private_ip}"
 }
+
+output "dns_domain" {
+  value = "${var.dns_domain}"
+}

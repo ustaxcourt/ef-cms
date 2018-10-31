@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${var.environment}-${var.deployment}.${var.dns_domain}"
+  bucket = "ui-${var.environment}.${var.dns_domain}"
 
   policy = "${data.aws_iam_policy_document.allow_public.json}"
 
@@ -12,7 +12,6 @@ resource "aws_s3_bucket" "frontend" {
 
   tags {
     environment = "${var.environment}"
-    deployment = "${var.deployment}"
   }
 }
 
@@ -27,26 +26,20 @@ data "aws_iam_policy_document" "allow_public" {
     }
 
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.environment}-${var.deployment}.${var.dns_domain}/*"]
+    resources = ["arn:aws:s3:::ui-${var.environment}.${var.dns_domain}/*"]
   }
 }
-
-# resource "aws_acm_certificate" "certificate" {
-#   domain_name       = "${var.environment}-${var.deployment}.${var.dns_domain}"
-#   validation_method = "DNS"
-#   # subject_alternative_names = ["${var.dns_domain}"]
-# }
 
 module "ui-certificate" {
   source = "github.com/traveloka/terraform-aws-acm-certificate"
 
-  domain_name            = "${var.environment}-${var.deployment}.${var.dns_domain}"
+  domain_name            = "ui-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
   is_hosted_zone_private = "false"
   validation_method      = "DNS"
-  certificate_name       = "${var.environment}-${var.deployment}.${var.dns_domain}"
+  certificate_name       = "ui-${var.environment}.${var.dns_domain}"
   environment            = "${var.environment}"
-  description            = "Certificate for ${var.environment}-${var.deployment}.${var.dns_domain}"
+  description            = "Certificate for ui-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
 }
 
@@ -61,7 +54,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
 
     domain_name = "${aws_s3_bucket.frontend.website_endpoint}"
-    origin_id   = "${var.environment}-${var.deployment}.${var.dns_domain}"
+    origin_id   = "ui-${var.environment}.${var.dns_domain}"
   }
 
   enabled             = true
@@ -72,7 +65,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "${var.environment}-${var.deployment}.${var.dns_domain}"
+    target_origin_id       = "ui-${var.environment}.${var.dns_domain}"
     min_ttl                = 0
     default_ttl            = "${var.cloudfront_default_ttl}"
     max_ttl                = "${var.cloudfront_max_ttl}"
@@ -85,7 +78,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  aliases = ["${var.environment}-${var.deployment}.${var.dns_domain}"]
+  aliases = ["ui-${var.environment}.${var.dns_domain}"]
 
   restrictions {
     geo_restriction {
@@ -105,7 +98,7 @@ data "aws_route53_zone" "zone" {
 
 resource "aws_route53_record" "www" {
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
-  name    = "${var.environment}-${var.deployment}.${var.dns_domain}"
+  name    = "ui-${var.environment}.${var.dns_domain}"
   type    = "A"
 
   alias = {
