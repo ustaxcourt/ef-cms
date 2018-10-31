@@ -31,18 +31,18 @@ pipeline {
         }
       }
     }
-    stage('Setup') {
-      steps {
-        script {
-          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
-              sh 'npm i --no-progress'
-            }
-          }
-        }
-      }
-    }
+    // stage('Setup') {
+    //   steps {
+    //     script {
+    //       def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
+    //       runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+    //         dir('document-service') {
+    //           sh 'npm i --no-progress'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     stage('ShellCheck') {
       steps {
         script {
