@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title United States Tax Court Test Suite
+    link(rel="stylesheet" href="../node_modules/mocha/mocha.css")
+  body
+    #mocha
+    script(src="../node_modules/mocha/mocha.js")
+    script.
+      mocha.setup('bdd');
+    script(src="unit.test.js")
+    script.
+      mocha.checkLeaks();
+      mocha.run();

@@ -1,0 +1,4 @@
+.scannerwork/
+.terraform/
+web-client/cypress/screenshots
+web-client/node_modules

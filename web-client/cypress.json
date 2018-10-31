@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost:1234",
+  "reporter": "spec",
+  "reporterOptions": {
+    "toConsole": true
+  }
+}
