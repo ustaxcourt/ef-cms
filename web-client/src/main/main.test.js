@@ -70,11 +70,11 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('currentPage'), 'LogIn');
     await test.runSequence('updateFormValue', {
       key: 'name',
-      value: 'Taxpayer',
+      value: 'Test, Taxpayer',
     });
-    assert.equal(test.getState('form.name'), 'Taxpayer');
+    assert.equal(test.getState('form.name'), 'Test, Taxpayer');
     await test.runSequence('submitLogIn');
-    assert.equal(test.getState('user'), 'Taxpayer');
+    assert.equal(test.getState('user'), 'Test, Taxpayer');
   });
 
   it('log in failure', async () => {
