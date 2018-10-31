@@ -1,8 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
-import assert from 'assert';
-import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios';
 import { JSDOM } from 'jsdom';
+import assert from 'assert';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 import mainModule from './';
 import environment from '../environments/dev';
@@ -63,6 +63,30 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('usaBanner.showDetails'), true);
     await test.runSequence('toggleUsaBannerDetails');
     assert.equal(test.getState('usaBanner.showDetails'), false);
+  });
+
+  it('log in success', async () => {
+    await test.runSequence('gotoLogIn');
+    assert.equal(test.getState('currentPage'), 'LogIn');
+    await test.runSequence('updateFormValue', {
+      key: 'name',
+      value: 'Test, Taxpayer',
+    });
+    assert.equal(test.getState('form.name'), 'Test, Taxpayer');
+    await test.runSequence('submitLogIn');
+    assert.equal(test.getState('user'), 'Test, Taxpayer');
+  });
+
+  it('log in failure', async () => {
+    await test.runSequence('gotoLogIn');
+    assert.equal(test.getState('currentPage'), 'LogIn');
+    await test.runSequence('updateFormValue', {
+      key: 'name',
+      value: 'Bad actor',
+    });
+    assert.equal(test.getState('form.name'), 'Bad actor');
+    await test.runSequence('submitLogIn');
+    assert.equal(test.getState('alertError.title'), 'User not found');
   });
 
   it('document policy success', async () => {

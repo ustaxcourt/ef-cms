@@ -1,6 +1,11 @@
 import axios from 'axios';
 
 export const api = {
+  getUser: name => {
+    if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
+    return name;
+  },
+
   getDocumentPolicy: async baseUrl => {
     const response = await axios.get(`${baseUrl}/documents/policy`);
     return response.data;
