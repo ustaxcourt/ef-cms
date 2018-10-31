@@ -18,3 +18,7 @@ label.validated::after {
   background-repeat: no-repeat;
   content: ' ';
 }
+
+input:focus::placeholder {
+  color: transparent;
+}
