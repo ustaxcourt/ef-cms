@@ -22,3 +22,10 @@ label.validated::after {
 input:focus::placeholder {
   color: transparent;
 }
+
+.progress-bar {
+  max-width: 50rem;
+  height: 2rem;
+  border: 1px solid black;
+  transition: all 2s;
+}

@@ -113,6 +113,22 @@ export default connect(
             <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}
           </button>
+          {submitting && (
+            <React.Fragment>
+              <p>{3 - petition.uploadsFinished} of 3 remaining</p>
+              <div
+                className="progress-bar"
+                style={{
+                  background:
+                    'linear-gradient(to right, #112e51 0%, #112e51 ' +
+                    (petition.uploadsFinished / 3) * 100 +
+                    '%, #fff ' +
+                    (petition.uploadsFinished / 3) * 100 +
+                    '%',
+                }}
+              />
+            </React.Fragment>
+          )}
         </form>
       </section>
     );

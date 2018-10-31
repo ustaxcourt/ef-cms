@@ -39,7 +39,7 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Document policy retrieval failed',
       },
     });
@@ -68,7 +68,7 @@ export const getDocumentId = async ({
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Fetching document ID failed',
       },
     });
@@ -86,7 +86,7 @@ export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Uploading document failed',
       },
     });
@@ -140,6 +140,7 @@ export const clearPetition = ({ store }) => {
       file: undefined,
       documentId: undefined,
     },
+    uploadsFinished: 0,
   });
 };
 

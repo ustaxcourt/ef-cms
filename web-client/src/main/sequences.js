@@ -30,6 +30,7 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   // TODO: parallelize this
+  set(state`petition.uploadsFinished`, 0),
   actions.setFormSubmitting,
   actions.getDocumentPolicy,
   {
@@ -44,6 +45,7 @@ export const submitFilePetition = [
           {
             error: [actions.setAlertError],
             success: [
+              set(state`petition.uploadsFinished`, 1),
               actions.specifyRequestForPlaceOfTrial,
               actions.getDocumentId,
               {
@@ -53,6 +55,7 @@ export const submitFilePetition = [
                   {
                     error: [actions.setAlertError],
                     success: [
+                      set(state`petition.uploadsFinished`, 2),
                       actions.specifyStatementOfTaxpayerIdentificationNumber,
                       actions.getDocumentId,
                       {
@@ -62,6 +65,7 @@ export const submitFilePetition = [
                           {
                             error: [actions.setAlertError],
                             success: [
+                              set(state`petition.uploadsFinished`, 3),
                               actions.unsetFormSubmitting,
                               actions.getPetitionUploadAlertSuccess,
                               actions.setAlertSuccess,
