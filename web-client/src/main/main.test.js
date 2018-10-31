@@ -65,6 +65,30 @@ describe('Main cerebral module', () => {
     assert.equal(test.getState('usaBanner.showDetails'), false);
   });
 
+  it('log in success', async () => {
+    await test.runSequence('gotoLogIn');
+    assert.equal(test.getState('currentPage'), 'LogIn');
+    await test.runSequence('updateFormValue', {
+      key: 'name',
+      value: 'Taxpayer',
+    });
+    assert.equal(test.getState('form.name'), 'Taxpayer');
+    await test.runSequence('submitLogIn');
+    assert.equal(test.getState('user'), 'Taxpayer');
+  });
+
+  it('log in failure', async () => {
+    await test.runSequence('gotoLogIn');
+    assert.equal(test.getState('currentPage'), 'LogIn');
+    await test.runSequence('updateFormValue', {
+      key: 'name',
+      value: 'Bad actor',
+    });
+    assert.equal(test.getState('form.name'), 'Bad actor');
+    await test.runSequence('submitLogIn');
+    assert.equal(test.getState('alertError.title'), 'User not found');
+  });
+
   it('document policy success', async () => {
     mock
       .onGet(environment.getBaseUrl() + '/documents/policy')
