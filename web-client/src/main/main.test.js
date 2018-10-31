@@ -1,8 +1,8 @@
 import { CerebralTest } from 'cerebral/test';
-import assert from 'assert';
-import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios';
 import { JSDOM } from 'jsdom';
+import assert from 'assert';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 import mainModule from './';
 import environment from '../environments/dev';

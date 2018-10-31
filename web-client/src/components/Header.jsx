@@ -1,6 +1,6 @@
-import React from 'react';
-import { state } from 'cerebral';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
+import React from 'react';
 
 // import close from '../../node_modules/uswds/dist/img/close.svg';
 
@@ -93,9 +93,7 @@ export default connect(
                 <li>
                   <a href="/">Secondary priority link</a>
                 </li> */}
-                {user && (
-                  <li>Hello, {user}</li>
-                )}
+                {user && <li>Hello, {user}</li>}
               </ul>
             </div>
           </div>
