@@ -1,26 +1,10 @@
-def targets = [
-  [env: 'dev', regions: ['us-east-1', 'us-east-2']]
-]
+regions = ['us-east-1', 'us-east-2']
 
-def regions = ['us-east-1', 'us-east-2']
-
-def prodTargets = [
-  [env: 'prod', regions:['us-east-1']]
-]
-
-def branchMap = [
+branchMap = [
   develop: 'dev',
   staging: 'stg',
   master: 'prod'
 ]
-
-def shouldDeploy(branchName) {
-  ['develop', 'staging', 'master'].contains(branchName) == true
-}
-
-def getTarget(branchName) {
-  [env: branchMap[branchName], regions: regions]
-}
 
 pipeline {
   agent any
@@ -366,4 +350,14 @@ def createDeployTasks(targets) {
     }
   }
   return deployTasks
+}
+
+def shouldDeploy(branchName) {
+  ['develop', 'staging', 'master'].contains(branchName) == true
+}
+
+def getTarget(branchName) {
+  [
+    [env: branchMap[branchName], regions: regions]
+  ]
 }
