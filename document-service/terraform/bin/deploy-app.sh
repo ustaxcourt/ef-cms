@@ -25,7 +25,7 @@ fi
 set -eo pipefail
 
 pushd ../../../management/management
-./deploy-init.sh
+SKIP_KEYGEN=true ./deploy-init.sh
 DNS_DOMAIN=$(terraform output dns_domain)
 popd
 
