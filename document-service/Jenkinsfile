@@ -65,10 +65,8 @@ pipeline {
       steps {
         script {
           dir('document-service') {
-            sh 'rm -rf coverage'
             sh 'docker build -t test -f Dockerfile.test .'
-            sh 'docker run --rm -v `pwd`/coverage:/home/app/coverage test'
-            sh 'rm -rf coverage'
+            sh 'docker run --rm -u `id -u $USER`:`id -g $USER` -v `pwd`/coverage:/home/app/coverage test'
           }
         }
       }
