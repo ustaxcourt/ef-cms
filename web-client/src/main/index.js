@@ -9,11 +9,10 @@ export default {
   sequences,
   state: {
     currentPage: 'Home',
-    user: 'A. Taxpayer',
     usaBanner: {
       showDetails: false,
     },
-    alertError: '',
     petition: {},
+    form: {},
   },
 };
