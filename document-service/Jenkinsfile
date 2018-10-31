@@ -1,11 +1,11 @@
 def targets = [
-  [env: 'dev', regions: ['us-east-1', 'us-east-2']],
+  [env: 'dev', regions: ['us-east-1', 'us-east-2']]
 ]
 
 def regions = ['us-east-1', 'us-east-2']
 
 def prodTargets = [
-  [env: 'prod', regions:['us-east-1']],
+  [env: 'prod', regions:['us-east-1']]
 ]
 
 def branchMap = [
@@ -19,7 +19,7 @@ def shouldDeploy(branchName) {
 }
 
 def getTarget(branchName) {
-  [env: branchMap[branchName], regions: regions],
+  [env: branchMap[branchName], regions: regions]
 }
 
 pipeline {
