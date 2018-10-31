@@ -31,18 +31,6 @@ pipeline {
         }
       }
     }
-    // stage('Setup') {
-    //   steps {
-    //     script {
-    //       def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
-    //       runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-    //         dir('document-service') {
-    //           sh 'npm i --no-progress'
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
     stage('ShellCheck') {
       steps {
         script {
@@ -80,6 +68,7 @@ pipeline {
             sh 'rm -rf coverage'
             sh 'docker build -t test -f Dockerfile.test .'
             sh 'docker run --rm -v `pwd`/coverage:/home/app/coverage test'
+            sh 'rm -rf coverage'
           }
         }
       }
