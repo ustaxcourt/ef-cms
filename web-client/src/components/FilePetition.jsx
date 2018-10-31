@@ -82,11 +82,11 @@ export default connect(
                   'validated'
                 }
               >
-                3. Statement of taxpayer identification number (form #4)
+                3. Statement of Taxpayer Identification Number (form #4)
               </label>
               <span>
                 To submit your Taxpayer Identification Number (e.g., your Social
-                Security Number, employee identification number, etc.)
+                Security number, Employee Identification Number, etc.)
               </span>
               <input
                 id="statement-of-taxpayer-id"
