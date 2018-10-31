@@ -1,6 +1,11 @@
 describe('File a petition ', function() {
   before(() => {
-    cy.visit('/file-a-petition');
+    // TODO: get logged in with a token and go directly to /file-a-petition
+    cy.visit('/log-in');
+    cy.get('input#name').type('Taxpayer');
+    cy.get('input[type="submit"]').click();
+    cy.url().should('not.include', 'log-in');
+    cy.get('a.usa-button').click();
   });
 
   it('has three file inputs', () => {
@@ -48,7 +53,7 @@ describe('File a petition ', function() {
     cy.get('form#file-a-petition button[type="submit"]').click();
     cy.get('.usa-alert-success', { timeout: 10000 }).should(
       'contain',
-      'Success Status',
+      'uploaded successfully',
     );
   });
 });
