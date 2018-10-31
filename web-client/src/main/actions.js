@@ -1,12 +1,21 @@
 import { state } from 'cerebral';
 
-export const getUser = async ({ api, path }) => {
-  // TODO: use the api provider to query our fake API
-  return path.success({ user });
+export const getUser = async ({ api, path, get }) => {
+  try {
+    const user = api.getUser(get(state.form.name));
+    return path.success({ user });
+  } catch (e) {
+    return path.error({
+      alertError: {
+        title: 'User not found',
+        message: 'Username or password are incorrect',
+      },
+    });
+  }
 };
 
-export const setUser = async () => {
-  // TODO: set the user name to the state
+export const setUser = async ({ store, props }) => {
+  store.set(state.user, props.user);
   return;
 };
 

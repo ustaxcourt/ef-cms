@@ -1,7 +1,8 @@
 import React from 'react';
 import { sequences, state } from 'cerebral';
-
 import { connect } from '@cerebral/react';
+
+import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
@@ -13,6 +14,7 @@ export default connect(
     return (
       <section className="usa-section usa-grid">
         <h1>Log in</h1>
+        <ErrorNotification />
         <form
           id="log-in"
           noValidate

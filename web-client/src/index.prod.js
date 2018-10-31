@@ -1,3 +1,5 @@
+import '@babel/polyfill';
+
 import app from './app';
 import prod from './environments/prod';
 
