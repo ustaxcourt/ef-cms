@@ -48,7 +48,7 @@ pipeline {
         script {
           dir('document-service') {
             sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
-            sh 'docker run -rm shellcheck'
+            sh 'docker run --rm shellcheck'
           }
         }
       }
