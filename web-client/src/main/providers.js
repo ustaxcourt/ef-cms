@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const api = {
   getUser: name => {
-    if (name !== 'Taxpayer') throw new Error('Username is incorrect');
+    if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
     return name;
   },
 
