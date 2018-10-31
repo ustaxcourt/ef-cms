@@ -1,0 +1,9 @@
+FROM node:8
+
+RUN apt-get update
+
+RUN apt-get install -y python
+RUN apt-get install -y python-pip
+RUN apt-get install -y git
+
+RUN pip install truffleHog

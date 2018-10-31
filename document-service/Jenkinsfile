@@ -56,36 +56,25 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('document-service') {
-              sh 'npm audit'
-            }
-          }
+          sh 'docker build -t audit -f Dockerfile.audit .'
+          sh 'docker run --rm audit'
         }
       }
     }
     stage('Lint') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('document-service') {
-              sh 'npm run lint'
-            }
-          }
+          sh 'docker build -t lint -f Dockerfile.lint .'
+          sh 'docker run --rm lint'
         }
       }
     }
     stage('Test') {
       steps {
         script {
-          def runner = docker.build 'test', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('document-service') {
-              sh 'npm run test'
-            }
-          }
+          sh 'rm -rf coverage'
+          sh 'docker build -t test -f Dockerfile.test .'
+          sh 'docker run --rm -v `pwd`/coverage:/home/app/coverage test'
         }
       }
       post {
@@ -100,17 +89,8 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            def runner = docker.build 'sonar', '-f document-service/Dockerfile.sonar .'
-            runner.inside("-e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-              sshagent(credentials: ['github']) {
-                dir('management/management') {
-                  sh './deploy-init.sh'
-                }
-                dir('document-service') {
-                  sh './verify-sonarqube-passed.sh'
-                }
-              }
-            }
+            sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
+            sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
           }
         }
       }
