@@ -12,6 +12,7 @@ This section outlines the steps necessary for creating the necessary resources n
 - install terraform locally
     - https://www.terraform.io/downloads.html
 - create an aws account
+- set up the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) locally, and configure it to use your AWS account
 - setup a user or role with admin privileges
 - set local machine to use this role or user
 - clone this repo locally
