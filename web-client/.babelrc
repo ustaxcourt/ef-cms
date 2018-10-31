@@ -1,4 +1,18 @@
 {
-  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "70",
+          "edge": "42",
+          "firefox": "63",
+          "ie": "11",
+          "safari": "12"
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
   "plugins": ["babel-plugin-cerebral"]
 }
