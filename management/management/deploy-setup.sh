@@ -35,7 +35,7 @@ if [[ ! -e terraform.tfvars ]]; then
     cp terraform.tfvars.template terraform.tfvars
 fi
 
-if grep --quiet "CHANGEME_DEP_NAME" terraform.tfvars; then
+if grep -q "CHANGEME_DEP_NAME" terraform.tfvars; then
   echo "Automatically generating an initial environment name"
   NEW_DEP=$(whoami)
   sed -i.bak -e "s/CHANGEME_DEP_NAME/${NEW_DEP}/" terraform.tfvars
@@ -73,24 +73,26 @@ then
 fi
 
 # check ssh prerequisites, including possibly symlinked files
-if [[ ! -e ssh/id_rsa.pub && ! -e ssh/id_rsa ]]; then
-    echo "No ssh keypair was found.  One is being created."
-    sh ../bin/generate-ssh-key.sh
-fi
+if [ -z ${SKIP_KEYGEN} ]; then
+  if [[ ! -e ssh/id_rsa.pub && ! -e ssh/id_rsa ]]; then
+      echo "No ssh keypair was found.  One is being created."
+      sh ../bin/generate-ssh-key.sh
+  fi
 
-if [[ ! -e ssh/id_rsa.pub || ! -e ssh/id_rsa ]]; then
-    echo "Both an ssh/id_rsa.pub public key and matching ssh/id_rsa private key must be provided to the provisioning process"
-    exit 1
-fi
+  if [[ ! -e ssh/id_rsa.pub || ! -e ssh/id_rsa ]]; then
+      echo "Both an ssh/id_rsa.pub public key and matching ssh/id_rsa private key must be provided to the provisioning process"
+      exit 1
+  fi
 
-echo "checking for the ${ENVIRONMENT}-${DEPLOYMENT_NAME}-management key pair in aws..."
-aws ec2 describe-key-pairs --output text | egrep "\t${ENVIRONMENT}-${DEPLOYMENT_NAME}-management$"
-result=$?
-if [ ${result} -ne 0 ]; then
-  # upload the key
-  aws ec2 import-key-pair --key-name "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management" --public-key-material file://ssh/id_rsa.pub
-else
-  echo "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management ssh kiey pair already exists"
+  echo "checking for the ${ENVIRONMENT}-${DEPLOYMENT_NAME}-management key pair in aws..."
+  aws ec2 describe-key-pairs --output text | egrep "\t${ENVIRONMENT}-${DEPLOYMENT_NAME}-management$"
+  result=$?
+  if [ ${result} -ne 0 ]; then
+    # upload the key
+    aws ec2 import-key-pair --key-name "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management" --public-key-material file://ssh/id_rsa.pub
+  else
+    echo "${ENVIRONMENT}-${DEPLOYMENT_NAME}-management ssh kiey pair already exists"
+  fi
 fi
 
 BUCKET=${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources
