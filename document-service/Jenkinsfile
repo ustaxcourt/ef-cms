@@ -56,25 +56,31 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          sh 'docker build -t audit -f Dockerfile.audit .'
-          sh 'docker run --rm audit'
+          dir('document-service') {
+            sh 'docker build -t audit -f Dockerfile.audit .'
+            sh 'docker run --rm audit'
+          }
         }
       }
     }
     stage('Lint') {
       steps {
         script {
-          sh 'docker build -t lint -f Dockerfile.lint .'
-          sh 'docker run --rm lint'
+          dir('document-service') {
+            sh 'docker build -t lint -f Dockerfile.lint .'
+            sh 'docker run --rm lint'
+          }
         }
       }
     }
     stage('Test') {
       steps {
         script {
-          sh 'rm -rf coverage'
-          sh 'docker build -t test -f Dockerfile.test .'
-          sh 'docker run --rm -v `pwd`/coverage:/home/app/coverage test'
+          dir('document-service') {
+            sh 'rm -rf coverage'
+            sh 'docker build -t test -f Dockerfile.test .'
+            sh 'docker run --rm -v `pwd`/coverage:/home/app/coverage test'
+          }
         }
       }
       post {
@@ -89,8 +95,10 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-            sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
+            dir('document-service') {
+              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
+              sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
+            }
           }
         }
       }
