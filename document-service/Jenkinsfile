@@ -106,12 +106,12 @@ pipeline {
     stage('Serverless') {
       when {
         expression {
-          shouldDeploy(env.branch_name) || true
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createServerlessTasks getTarget('develop')
+          def tasks = createServerlessTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
@@ -293,7 +293,6 @@ def createSmokeTestTasks(targets) {
 
 def createServerlessTasks(targets) {
   def deployTasks = [:]
-  //y
   targets.each { deploy ->
     def slsStage = deploy.env
     deploy.regions.each { region ->
