@@ -1,5 +1,24 @@
 import { state } from 'cerebral';
 
+export const getUser = async ({ api, path, get }) => {
+  try {
+    const user = api.getUser(get(state.form.name));
+    return path.success({ user });
+  } catch (e) {
+    return path.error({
+      alertError: {
+        title: 'User not found',
+        message: 'Username or password are incorrect',
+      },
+    });
+  }
+};
+
+export const setUser = async ({ store, props }) => {
+  store.set(state.user, props.user);
+  return;
+};
+
 export const specifyPetitionFile = async () => {
   return { documentType: 'petitionFile' };
 };
@@ -20,7 +39,7 @@ export const getDocumentPolicy = async ({ api, environment, store, path }) => {
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Document policy retrieval failed',
       },
     });
@@ -49,7 +68,7 @@ export const getDocumentId = async ({
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Fetching document ID failed',
       },
     });
@@ -67,7 +86,7 @@ export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
   } catch (error) {
     return path.error({
       alertError: {
-        title: 'There was a probem',
+        title: 'There was a problem',
         message: 'Uploading document failed',
       },
     });
@@ -107,6 +126,12 @@ export const setAlertSuccess = ({ props, store }) => {
 //   store.set(state.alertSuccess, {});
 // };
 
+export const clearLoginForm = ({ store }) => {
+  store.set(state.form, {
+    name: '',
+  });
+};
+
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
     petitionFile: {
@@ -121,6 +146,7 @@ export const clearPetition = ({ store }) => {
       file: undefined,
       documentId: undefined,
     },
+    uploadsFinished: 0,
   });
 };
 
