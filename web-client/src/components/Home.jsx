@@ -1,5 +1,5 @@
-import React from 'react';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
 

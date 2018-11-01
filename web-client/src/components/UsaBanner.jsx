@@ -1,10 +1,10 @@
-import React from 'react';
-import { state, sequences } from 'cerebral';
 import { connect } from '@cerebral/react';
+import { state, sequences } from 'cerebral';
+import React from 'react';
 
-import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';
 import iconDotGov from '../../node_modules/uswds/dist/img/icon-dot-gov.svg';
 import iconHttps from '../../node_modules/uswds/dist/img/icon-https.svg';
+import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';
 
 /**
  * Official US website banner

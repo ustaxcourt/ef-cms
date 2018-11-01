@@ -1,6 +1,11 @@
 describe('File a petition ', function() {
   before(() => {
-    cy.visit('/file-a-petition');
+    // TODO: get logged in with a token and go directly to /file-a-petition
+    cy.visit('/log-in');
+    cy.get('input#name').type('Test, Taxpayer');
+    cy.get('input[type="submit"]').click();
+    cy.url().should('not.include', 'log-in');
+    cy.get('a.usa-button').click();
   });
 
   it('has three file inputs', () => {
@@ -13,7 +18,7 @@ describe('File a petition ', function() {
     cy.contains('button[type="submit"]', 'Upload');
   });
 
-  it.only('shows validation checkmark when file is selected', () => {
+  it('shows validation checkmark when file is selected', () => {
     cy.get('form#file-a-petition')
       .find('label[for="petition-file"]')
       .should('not.have.class', 'validated');
@@ -42,5 +47,13 @@ describe('File a petition ', function() {
     cy.get('form#file-a-petition')
       .find('label[for="statement-of-taxpayer-id"]')
       .should('have.class', 'validated');
+  });
+
+  it('submits forms and shows a success message', () => {
+    cy.get('form#file-a-petition button[type="submit"]').click();
+    cy.get('.usa-alert-success', { timeout: 10000 }).should(
+      'contain',
+      'uploaded successfully',
+    );
   });
 });
