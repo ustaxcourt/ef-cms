@@ -4,3 +4,4 @@ coverage
 .nyc_output
 .dynamodb
 terraform/main/.terraform
+terraform/template/.terraform
