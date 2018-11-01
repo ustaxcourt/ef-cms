@@ -1,9 +1,9 @@
-def targets = [
-  [env: 'dev', regions: ['us-east-1', 'us-east-2']],
-]
+regions = ['us-east-1', 'us-east-2']
 
-def prodTargets = [
-  [env: 'prod', regions:['us-east-1']],
+branchMap = [
+  develop: 'dev',
+  staging: 'stg',
+  master: 'prod'
 ]
 
 pipeline {
@@ -22,7 +22,7 @@ pipeline {
     stage('Merge') {
       steps {
         script {
-          if (env.branch_name != 'develop' && env.branch_name != 'master' && env.target_sha1) {
+          if (env.branch_name != 'develop' && env.branch_name != 'staging' && env.branch_name != 'master' && env.target_sha1) {
             // todo: there is probably a better way to have Jenkins do this for us automatically
             sh 'git config user.name "EF-CMS Jenkins"'
             sh 'git config user.email "noop@example.com"'
@@ -90,41 +90,41 @@ pipeline {
         }
       }
     }
-    stage('Terraform Pre Prod') {
+    stage('Terraform') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createTerraformTasks targets
+          def tasks = createTerraformTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
     }
-    stage('Deploy Pre Prod') {
+    stage('Serverless') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createDeployTasks targets
+          def tasks = createDeployTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
     }
-    stage('Update Route53 Regional Record') {
+    stage('Setup Active-Active Route53 Regional Record') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createRoute53Tasks targets
+          def tasks = createRoute53Tasks getTarget(env.branch_name)
           parallel tasks
         }
       }
@@ -132,51 +132,38 @@ pipeline {
     stage('Setup S3 Replication Pre Prod') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createS3ReplicationTasks targets
+          def tasks = createS3ReplicationTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
     }
-    stage('Create Global Tables - Pre Prod') {
+    stage('Setup Global Tables') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createGlobalTableTasks targets
+          def tasks = createGlobalTableTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
     }
-    stage('Smoke Tests - Pre Prod') {
+    stage('Smoke Tests') {
       when {
         expression {
-          env.branch_name == 'develop'
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
         script {
-          def tasks = createSmokeTestTasks targets
-          parallel tasks
-        }
-      }
-    }
-    stage('Deploy Prod') {
-      when {
-        expression {
-          env.branch_name == 'master'
-        }
-      }
-      steps {
-        script {
-          def tasks = createDeployTasks prodTargets
+          def tasks = createSmokeTestTasks getTarget(env.branch_name)
           parallel tasks
         }
       }
@@ -289,9 +276,11 @@ def createSmokeTestTasks(targets) {
       tasks["${slsStage} - ${region}"] = {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
+            checkout scm
             def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
+                sh 'npm i --no-progress'
                 echo 'Running smoke test'
                 sh 'mkdir -p coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
@@ -336,4 +325,14 @@ def createDeployTasks(targets) {
     }
   }
   return deployTasks
+}
+
+def shouldDeploy(branchName) {
+  ['develop', 'staging', 'master'].contains(branchName) == true
+}
+
+def getTarget(branchName) {
+  [
+    [env: branchMap[branchName], regions: regions]
+  ]
 }

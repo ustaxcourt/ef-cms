@@ -173,7 +173,7 @@ module "jenkins-certificate" {
   source = "github.com/traveloka/terraform-aws-acm-certificate"
 
   domain_name            = "jenkins-${var.environment}-${var.deployment}.${var.dns_domain}"
-  hosted_zone_name       = "${aws_route53_zone.aws_route53_zone.name}"
+  hosted_zone_name       = "${data.aws_route53_zone.aws_route53_zone.name}"
   is_hosted_zone_private = "false"
   validation_method      = "DNS"
   certificate_name       = "jenkins-${var.environment}-${var.deployment}.${var.dns_domain}"
@@ -183,7 +183,7 @@ module "jenkins-certificate" {
 }
 
 resource "aws_route53_record" "jenkins_www" {
-  zone_id = "${aws_route53_zone.aws_route53_zone.zone_id}"
+  zone_id = "${data.aws_route53_zone.aws_route53_zone.zone_id}"
   name    = "jenkins-${var.environment}-${var.deployment}.${var.dns_domain}"
   type    = "A"
 
