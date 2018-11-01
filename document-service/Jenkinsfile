@@ -98,7 +98,7 @@ pipeline {
       }
       steps {
         script {
-          def tasks = createTerraformTasks getTarget('develop') // TODO: revert
+          def tasks = createTerraformTasks getTarget('staging') // TODO: revert
           parallel tasks
         }
       }
@@ -250,6 +250,7 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
+          // sh 'rm -rf document-service/terraform/main/.terraform'
           sh 'docker build -t terraform -f document-service/Dockerfile.terraform .'
           sh "docker run -e ENV=${slsStage} --rm terraform"
         }
