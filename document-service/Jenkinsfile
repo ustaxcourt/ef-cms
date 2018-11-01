@@ -55,18 +55,18 @@ pipeline {
         }
       }
     }
-    stage('Audit') {
-      steps {
-        script {
-          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
-          runner.inside('-v /home/tomcat:/home/tomcat') {
-            dir('document-service') {
-              sh 'npm audit'
-            }
-          }
-        }
-      }
-    }
+//    stage('Audit') {
+//      steps {
+//        script {
+//          def runner = docker.build 'setup', '-f document-service/Dockerfile.test .'
+//          runner.inside('-v /home/tomcat:/home/tomcat') {
+//            dir('document-service') {
+//              sh 'npm audit'
+//            }
+//          }
+//        }
+//      }
+//    }
     stage('Lint') {
       steps {
         script {
