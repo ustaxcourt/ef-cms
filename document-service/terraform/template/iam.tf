@@ -1,5 +1,5 @@
 resource "aws_iam_role" "s3_replication_role" {
-  name = "s3_replication_role"
+  name = "s3_replication_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "s3_replication_policy" {
-  name = "default"
+  name = "s3_replication_policy_${var.environment}"
   role = "${aws_iam_role.s3_replication_role.id}"
 
   policy = <<EOF

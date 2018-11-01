@@ -9,7 +9,7 @@ resource "aws_api_gateway_account" "account_us_east_2" {
 }
 
 resource "aws_iam_role" "cloudwatch" {
-  name = "api_gateway_cloudwatch_global"
+  name = "api_gateway_cloudwatch_global_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -29,7 +29,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "cloudwatch" {
-  name = "default"
+  name = "cloudwatch_policy_${var.environment}"
   role = "${aws_iam_role.cloudwatch.id}"
 
   policy = <<EOF
