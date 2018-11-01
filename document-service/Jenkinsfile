@@ -298,20 +298,6 @@ def createServerlessTasks(targets) {
             checkout scm
             sh 'docker build -t serverless -f document-service/Dockerfile.serverless .'
             sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
-            // def runner = docker.build 'serverless', '-f document-service/Dockerfile.serverless .'
-            // runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            //   dir('document-service') {
-            //     sh 'npm i --no-progress'
-            //     dir('./src') {
-            //       echo 'Fix file permissions'
-            //       sh 'find . -type f -exec chmod -R ugo+r {} ";"'
-            //     }
-            //     echo 'Build main site distribution'
-            //     sh "./node_modules/.bin/sls create_domain --stage ${slsStage} --region ${region} --verbose"
-            //     sh "ENVIRONMENT=${slsStage} SLS_DEPLOYMENT_BUCKET=gov.ustaxcourt.ef-cms.apis.${slsStage}.${region}.deploys ./node_modules/.bin/sls deploy --stage ${slsStage} --region ${region} --verbose"
-            //     sh "./configure-custom-api-access-logging.sh ${slsStage} ./config-custom-access-logs.json ${region}"
-            //   }
-            // }
           }
         }
       }
