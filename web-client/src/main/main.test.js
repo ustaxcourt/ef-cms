@@ -51,160 +51,167 @@ describe('Main cerebral module', () => {
     mock.restore();
   });
 
-  it('Handles routing', async () => {
-    await test.runSequence('gotoStyleGuide');
-    assert.equal(test.getState('currentPage'), 'StyleGuide');
-    await test.runSequence('gotoHome');
-    assert.equal(test.getState('currentPage'), 'Home');
-  });
-
-  it('Toggles USA Banner Content', async () => {
-    await test.runSequence('toggleUsaBannerDetails');
-    assert.equal(test.getState('usaBanner.showDetails'), true);
-    await test.runSequence('toggleUsaBannerDetails');
-    assert.equal(test.getState('usaBanner.showDetails'), false);
-  });
-
-  it('log in success', async () => {
-    await test.runSequence('gotoLogIn');
-    assert.equal(test.getState('currentPage'), 'LogIn');
-    await test.runSequence('updateFormValue', {
-      key: 'name',
-      value: 'Test, Taxpayer',
+  describe('routing', () => {
+    it('Handles routing', async () => {
+      await test.runSequence('gotoStyleGuide');
+      assert.equal(test.getState('currentPage'), 'StyleGuide');
+      await test.runSequence('gotoHome');
+      assert.equal(test.getState('currentPage'), 'Home');
     });
-    assert.equal(test.getState('form.name'), 'Test, Taxpayer');
-    await test.runSequence('submitLogIn');
-    assert.equal(test.getState('user'), 'Test, Taxpayer');
-  });
 
-  it('log in failure', async () => {
-    await test.runSequence('gotoLogIn');
-    assert.equal(test.getState('currentPage'), 'LogIn');
-    await test.runSequence('updateFormValue', {
-      key: 'name',
-      value: 'Bad actor',
+    it('Handles routing to file petition', async () => {
+      await test.runSequence('gotoFilePetition');
+      assert.equal(test.getState('currentPage'), 'FilePetition');
     });
-    assert.equal(test.getState('form.name'), 'Bad actor');
-    await test.runSequence('submitLogIn');
-    assert.equal(test.getState('alertError.title'), 'User not found');
+
+    it('Toggles USA Banner Content', async () => {
+      await test.runSequence('toggleUsaBannerDetails');
+      assert.equal(test.getState('usaBanner.showDetails'), true);
+      await test.runSequence('toggleUsaBannerDetails');
+      assert.equal(test.getState('usaBanner.showDetails'), false);
+    });
   });
 
-  it('document policy success', async () => {
-    mock
-      .onGet(environment.getBaseUrl() + '/documents/policy')
-      .reply(200, fakePolicy);
-    assert.deepEqual(test.getState('petition'), {});
-    await test.runSequence('submitFilePetition');
-    assert.deepEqual(test.getState('petition.policy'), fakePolicy);
-  });
+  describe('sequences', () => {
+    it('log in success', async () => {
+      await test.runSequence('gotoLogIn');
+      assert.equal(test.getState('currentPage'), 'LogIn');
+      await test.runSequence('updateFormValue', {
+        key: 'name',
+        value: 'Test, Taxpayer',
+      });
+      assert.equal(test.getState('form.name'), 'Test, Taxpayer');
+      await test.runSequence('submitLogIn');
+      assert.equal(test.getState('user'), 'Test, Taxpayer');
+    });
 
-  it('document policy error', async () => {
-    mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(403);
+    it('log in failure', async () => {
+      await test.runSequence('gotoLogIn');
+      assert.equal(test.getState('currentPage'), 'LogIn');
+      await test.runSequence('updateFormValue', {
+        key: 'name',
+        value: 'Bad actor',
+      });
+      assert.equal(test.getState('form.name'), 'Bad actor');
+      await test.runSequence('submitLogIn');
+      assert.equal(test.getState('alertError.title'), 'User not found');
+    });
 
-    await test.runSequence('submitFilePetition');
-    assert.equal(
-      test.getState('alertError.message'),
-      'Document policy retrieval failed',
-    );
-  });
+    it('document policy success', async () => {
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').
+        reply(200, fakePolicy);
+      await test.runSequence('submitFilePetition');
+      assert.deepEqual(test.getState('petition.policy'), fakePolicy);
+    });
 
-  it('documents upload success', async () => {
-    test.setState('petition.petitionFile.file', new Blob(['blob']));
-    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
-    test.setState(
-      'petition.statementOfTaxpayerIdentificationNumber.file',
-      new Blob(['blob']),
-    );
+    it('document policy error', async () => {
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').
+        reply(403);
 
-    const fakeDocument = {
-      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
-      createdAt: '2018-10-26T22:13:31.830Z',
-      userId: '1234',
-      documentType: 'test',
-    };
+      await test.runSequence('submitFilePetition');
+      assert.equal(
+        test.getState('alertError.message'),
+        'Document policy retrieval failed',
+      );
+    });
 
-    mock
-      .onGet(environment.getBaseUrl() + '/documents/policy')
-      .reply(200, fakePolicy);
-    mock
-      .onPost(environment.getBaseUrl() + '/documents')
-      .reply(200, fakeDocument);
-    mock.onPost(fakePolicy.url).reply(204);
+    it('documents upload success', async () => {
+      test.setState('petition.petitionFile.file', new Blob(['blob']));
+      test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+      test.setState(
+        'petition.statementOfTaxpayerIdentificationNumber.file',
+        new Blob(['blob']),
+      );
 
-    await test.runSequence('submitFilePetition');
-    assert.deepEqual(test.getState('petition.policy'), fakePolicy);
-    assert.equal(
-      test.getState('petition.petitionFile.documentId'),
-      fakeDocument.documentId,
-      'petitionFile has an ID',
-    );
-    assert.equal(
-      test.getState('petition.requestForPlaceOfTrial.documentId'),
-      fakeDocument.documentId,
-      'requestForPlaceOfTrial has an ID',
-    );
-    assert.equal(
-      test.getState(
-        'petition.statementOfTaxpayerIdentificationNumber.documentId',
-      ),
-      fakeDocument.documentId,
-      'statementOfTaxpayerIdentificationNumber has an ID',
-    );
-    assert.equal(test.getState('alertError'), '');
-    assert.equal(
-      test.getState('alertSuccess.title'),
-      'Your files were uploaded successfully.',
-    );
-  });
+      const fakeDocument = {
+        documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+        createdAt: '2018-10-26T22:13:31.830Z',
+        userId: '1234',
+        documentType: 'test',
+      };
 
-  it('documents upload failure', async () => {
-    test.setState('petition.petitionFile.file', new Blob(['blob']));
-    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
-    test.setState(
-      'petition.statementOfTaxpayerIdentificationNumber.file',
-      new Blob(['blob']),
-    );
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').
+        reply(200, fakePolicy);
+      mock.onPost(environment.getBaseUrl() + '/documents').
+        reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).
+        reply(204);
 
-    mock
-      .onGet(environment.getBaseUrl() + '/documents/policy')
-      .reply(200, fakePolicy);
-    mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
-    mock.onPost(fakePolicy.url).reply(204);
+      await test.runSequence('submitFilePetition');
+      assert.deepEqual(test.getState('petition.policy'), fakePolicy);
+      assert.equal(
+        test.getState('petition.petitionFile.documentId'),
+        fakeDocument.documentId,
+        'petitionFile has an ID',
+      );
+      assert.equal(
+        test.getState('petition.requestForPlaceOfTrial.documentId'),
+        fakeDocument.documentId,
+        'requestForPlaceOfTrial has an ID',
+      );
+      assert.equal(
+        test.getState(
+          'petition.statementOfTaxpayerIdentificationNumber.documentId',
+        ),
+        fakeDocument.documentId,
+        'statementOfTaxpayerIdentificationNumber has an ID',
+      );
+      assert.equal(test.getState('alertError'), '');
+      assert.equal(
+        test.getState('alertSuccess.title'),
+        'Your files were uploaded successfully.',
+      );
+    });
 
-    await test.runSequence('submitFilePetition');
-    assert.equal(
-      test.getState('alertError.message'),
-      'Fetching document ID failed',
-    );
-  });
+    it('documents upload failure', async () => {
+      test.setState('petition.petitionFile.file', new Blob(['blob']));
+      test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+      test.setState(
+        'petition.statementOfTaxpayerIdentificationNumber.file',
+        new Blob(['blob']),
+      );
 
-  it('documents upload failure', async () => {
-    const fakeDocument = {
-      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
-      createdAt: '2018-10-26T22:13:31.830Z',
-      userId: '1234',
-      documentType: 'test',
-    };
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').
+        reply(200, fakePolicy);
+      mock.onPost(environment.getBaseUrl() + '/documents').
+        reply(500);
+      mock.onPost(fakePolicy.url).
+        reply(204);
 
-    test.setState('petition.petitionFile.file', new Blob(['blob']));
-    test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
-    test.setState(
-      'petition.statementOfTaxpayerIdentificationNumber.file',
-      new Blob(['blob']),
-    );
+      await test.runSequence('submitFilePetition');
+      assert.equal(
+        test.getState('alertError.message'),
+        'Fetching document ID failed',
+      );
+    });
 
-    mock
-      .onGet(environment.getBaseUrl() + '/documents/policy')
-      .reply(200, fakePolicy);
-    mock
-      .onPost(environment.getBaseUrl() + '/documents')
-      .reply(200, fakeDocument);
-    mock.onPost(fakePolicy.url).reply(500);
+    it('documents upload failure', async () => {
+      const fakeDocument = {
+        documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+        createdAt: '2018-10-26T22:13:31.830Z',
+        userId: '1234',
+        documentType: 'test',
+      };
 
-    await test.runSequence('submitFilePetition');
-    assert.equal(
-      test.getState('alertError.message'),
-      'Uploading document failed',
-    );
+      test.setState('petition.petitionFile.file', new Blob(['blob']));
+      test.setState('petition.requestForPlaceOfTrial.file', new Blob(['blob']));
+      test.setState(
+        'petition.statementOfTaxpayerIdentificationNumber.file',
+        new Blob(['blob']),
+      );
+
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').
+        reply(200, fakePolicy);
+      mock.onPost(environment.getBaseUrl() + '/documents').
+        reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).
+        reply(500);
+
+      await test.runSequence('submitFilePetition');
+      assert.equal(
+        test.getState('alertError.message'),
+        'Uploading document failed',
+      );
+    });
   });
 });
