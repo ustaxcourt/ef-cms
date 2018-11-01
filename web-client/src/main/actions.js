@@ -126,6 +126,12 @@ export const setAlertSuccess = ({ props, store }) => {
 //   store.set(state.alertSuccess, {});
 // };
 
+export const clearLoginForm = ({ store }) => {
+  store.set(state.form, {
+    name: '',
+  });
+};
+
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
     petitionFile: {
