@@ -93,7 +93,7 @@ pipeline {
     stage('Terraform') {
       when {
         expression {
-          shouldDeploy(env.branch_name)
+          shouldDeploy(env.branch_name) || true
         }
       }
       steps {
@@ -103,71 +103,71 @@ pipeline {
         }
       }
     }
-    stage('Serverless') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createDeployTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Setup Active-Active Route53 Regional Record') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createRoute53Tasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Setup S3 Replication Pre Prod') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createS3ReplicationTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Setup Global Tables') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createGlobalTableTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Smoke Tests') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createSmokeTestTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
+    // stage('Serverless') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createDeployTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Setup Active-Active Route53 Regional Record') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createRoute53Tasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Setup S3 Replication Pre Prod') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createS3ReplicationTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Setup Global Tables') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createGlobalTableTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Smoke Tests') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createSmokeTestTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
   }
   post {
     always {
@@ -184,7 +184,7 @@ def createRoute53Tasks(targets) {
       node() {
         stage("Route 53 Record ${slsStage}") {
           checkout scm
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir("document-service") {
               sh 'npm i --no-progress'
@@ -206,7 +206,7 @@ def createS3ReplicationTasks(targets) {
       node() {
         stage("global tables ${slsStage}") {
           checkout scm
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+          def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('document-service') {
               sh 'npm i --no-progress'
@@ -250,17 +250,8 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
-          def trunner = docker.build 'terraform', '-f document-service/Dockerfile.deploy .'
-          trunner.inside() {
-            dir("document-service/terraform/main") {
-              sh "../bin/deploy-app.sh ${slsStage}"
-
-              script {
-                echo 'Setting environment variables based on Terraform run'
-                SLS_DEPLOYMENT_BUCKET = sh(script: "terraform output sls_deployment_bucket", returnStdout: true).trim()
-              }
-            }
-          }
+          sh 'docker build -t terraform -f document-service/Dockerfile.terraform .'
+          sh "docker run -e ENV=${slsStage} --rm terraform"
         }
       }
     }
@@ -277,7 +268,7 @@ def createSmokeTestTasks(targets) {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
-            def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+            def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
                 sh 'npm i --no-progress'
@@ -305,7 +296,7 @@ def createDeployTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
+            def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
                 sh 'npm i --no-progress'
