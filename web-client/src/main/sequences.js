@@ -3,7 +3,10 @@ import { state, props } from 'cerebral';
 import * as actions from './actions';
 
 export const gotoHome = [set(state`currentPage`, 'Home')];
-export const gotoLogIn = [set(state`currentPage`, 'LogIn')];
+export const gotoLogIn = [
+  actions.clearLoginForm,
+  set(state`currentPage`, 'LogIn'),
+];
 export const gotoFilePetition = [
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
