@@ -316,9 +316,11 @@ def createSmokeTestTasks(targets) {
       tasks["${slsStage} - ${region}"] = {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
+            checkout scm
             def runner = docker.build 'serverless', '-f document-service/Dockerfile.deploy .'
             runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
               dir('document-service') {
+                sh 'npm i --no-progress'
                 echo 'Running smoke test'
                 sh 'mkdir -p coverage'
                 def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
