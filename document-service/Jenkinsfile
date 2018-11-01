@@ -300,8 +300,10 @@ def createServerlessTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            sh 'docker build -t serverless -f document-service/Dockerfile.serverless .'
-            sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+            dir('document-service') {
+              sh 'docker build -t serverless -f document-service/Dockerfile.serverless .'
+              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+            }
           }
         }
       }
