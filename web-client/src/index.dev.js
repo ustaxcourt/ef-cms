@@ -7,11 +7,14 @@ import dev from './environments/dev';
 /**
  * Initializes the app with dev environment context
  */
-
-const debugTools = {
-  devtools: Devtools({
-    host: 'localhost:8585',
-  }),
-};
+let debugTools = null;
+if (process.env.USTC_DEBUG) {
+  debugTools = {
+    devtools: Devtools({
+      host: 'localhost:8585',
+      allowedTypes: [Blob],
+    }),
+  };
+}
 
 app.initialize(dev, debugTools);
