@@ -1,6 +1,6 @@
-import React from 'react';
-import { sequences, state } from 'cerebral';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -82,11 +82,11 @@ export default connect(
                   'validated'
                 }
               >
-                3. Statement of taxpayer identification number (form #4)
+                3. Statement of Taxpayer Identification Number (form #4)
               </label>
               <span>
                 To submit your Taxpayer Identification Number (e.g., your Social
-                Security Number, employee identification number, etc.)
+                Security number, Employee Identification Number, etc.)
               </span>
               <input
                 id="statement-of-taxpayer-id"
@@ -113,6 +113,17 @@ export default connect(
             <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}
           </button>
+          {submitting && (
+            <div aria-live="assertive" aria-atomic="true">
+              <p>{3 - petition.uploadsFinished} of 3 remaining</p>
+              <div className="progress-container">
+                <div
+                  className="progress-bar"
+                  style={{ width: (petition.uploadsFinished * 100) / 3 + '%' }}
+                />
+              </div>
+            </div>
+          )}
         </form>
       </section>
     );

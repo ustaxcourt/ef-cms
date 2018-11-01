@@ -1,15 +1,14 @@
-import React from 'react';
-import { state } from 'cerebral';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
+import React from 'react';
 
-import UsaBanner from './UsaBanner';
-import Header from './Header';
+import FilePetition from './FilePetition';
 import Footer from './Footer';
-
+import Header from './Header';
 import Home from './Home';
 import LogIn from './LogIn';
-import FilePetition from './FilePetition';
 import StyleGuide from './StyleGuide';
+import UsaBanner from './UsaBanner';
 
 const pages = {
   Home,

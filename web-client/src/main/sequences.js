@@ -3,7 +3,10 @@ import { state, props } from 'cerebral';
 import * as actions from './actions';
 
 export const gotoHome = [set(state`currentPage`, 'Home')];
-export const gotoLogIn = [set(state`currentPage`, 'LogIn')];
+export const gotoLogIn = [
+  actions.clearLoginForm,
+  set(state`currentPage`, 'LogIn'),
+];
 export const gotoFilePetition = [
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
@@ -12,21 +15,25 @@ export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
+export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
+
+export const submitLogIn = [
+  actions.setFormSubmitting,
+  actions.getUser,
+  {
+    error: [actions.setAlertError],
+    success: [actions.setUser, actions.navigateHome],
+  },
+  actions.unsetFormSubmitting,
+];
+
 export const updatePetitionValue = [
   set(state`petition.${props`key`}.file`, props`file`),
 ];
 
-// export const submitFilePetition = [
-//   actions.setFormSubmitting,
-//   actions.getDocumentPolicy,
-//   {
-//     error: [actions.setAlertError],
-//     success: [],
-//   },
-// ];
-
 export const submitFilePetition = [
   // TODO: parallelize this
+  set(state`petition.uploadsFinished`, 0),
   actions.setFormSubmitting,
   actions.getDocumentPolicy,
   {
@@ -41,6 +48,7 @@ export const submitFilePetition = [
           {
             error: [actions.setAlertError],
             success: [
+              set(state`petition.uploadsFinished`, 1),
               actions.specifyRequestForPlaceOfTrial,
               actions.getDocumentId,
               {
@@ -50,6 +58,7 @@ export const submitFilePetition = [
                   {
                     error: [actions.setAlertError],
                     success: [
+                      set(state`petition.uploadsFinished`, 2),
                       actions.specifyStatementOfTaxpayerIdentificationNumber,
                       actions.getDocumentId,
                       {
@@ -59,6 +68,7 @@ export const submitFilePetition = [
                           {
                             error: [actions.setAlertError],
                             success: [
+                              set(state`petition.uploadsFinished`, 3),
                               actions.unsetFormSubmitting,
                               actions.getPetitionUploadAlertSuccess,
                               actions.setAlertSuccess,
