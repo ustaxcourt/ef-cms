@@ -93,12 +93,12 @@ pipeline {
     stage('Terraform') {
       when {
         expression {
-          shouldDeploy(env.branch_name) || true
+          shouldDeploy(env.branch_name) || true // TODO: revert
         }
       }
       steps {
         script {
-          def tasks = createTerraformTasks getTarget(env.branch_name)
+          def tasks = createTerraformTasks getTarget('develop') // TODO: revert
           parallel tasks
         }
       }
