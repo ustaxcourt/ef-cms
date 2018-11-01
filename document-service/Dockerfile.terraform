@@ -23,6 +23,6 @@ COPY document-service/package.json /home/app/document-service/package.json
 RUN cd /home/app/document-service; npm install
 COPY . /home/app
 
-WORKDIR document-service/terraform/main
+WORKDIR /home/app/document-service/terraform/main
 
 CMD ../bin/deploy-app.sh $ENV
