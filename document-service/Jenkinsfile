@@ -323,6 +323,6 @@ def shouldDeploy(branchName) {
 
 def getTarget(branchName) {
   [
-    [env: 'develop', regions: regions]
+    [env: 'dev', regions: regions]
   ]
 }
