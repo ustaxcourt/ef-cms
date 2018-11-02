@@ -1,5 +1,8 @@
 import page from 'page';
 
+page({ hashbang: true });
+page.base('/#!');
+
 const route = function route(path) {
   page(path);
 };
