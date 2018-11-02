@@ -1,0 +1,7 @@
+node_modules
+coverage
+.serverless
+.nyc_output
+.dynamodb
+terraform/main/.terraform
+terraform/template/.terraform
