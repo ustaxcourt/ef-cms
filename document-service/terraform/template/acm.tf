@@ -11,7 +11,7 @@ module "documents-api-certificate" {
   product_domain         = "EFCMS"
 }
 
-module "documents-api-certificate-us-east-2" {
+module "documents-api-certificate-us-west-1" {
   source = "github.com/traveloka/terraform-aws-acm-certificate"
 
   domain_name            = "documents-${var.environment}.${var.dns_domain}"
@@ -23,6 +23,6 @@ module "documents-api-certificate-us-east-2" {
   description            = "Certificate for documents-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
   providers {
-    aws = "aws.us-east-2"
+    aws = "aws.us-west-1"
   }
 }
