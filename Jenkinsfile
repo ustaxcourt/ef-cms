@@ -92,7 +92,7 @@ pipeline {
             dir('document-service') {
               sh 'npm i'
               sh 'npm run start:local &'
-              sh '../wait-until.sh http://localhost:3000'
+              sh '../wait-until.sh http://localhost:3000/v1/documents/policy'
               sh 'curl http://localhost:3000/v1/documents/policy'
             }
             dir('web-client') {
