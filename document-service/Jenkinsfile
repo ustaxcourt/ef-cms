@@ -4,7 +4,6 @@ branchMap = [
   develop: 'dev',
   staging: 'stg',
   master: 'prod',
-  'PR-116': 'dev'
 ]
 
 // test
@@ -34,16 +33,16 @@ pipeline {
         }
       }
     }
-    stage('ShellCheck') {
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
-            sh 'docker run --rm shellcheck'
-          }
-        }
-      }
-    }
+    // stage('ShellCheck') {
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
+    //         sh 'docker run --rm shellcheck'
+    //       }
+    //     }
+    //   }
+    // }
     // stage('Audit') {
     //   steps {
     //     script {
@@ -54,120 +53,120 @@ pipeline {
     //     }
     //   }
     // }
-    stage('Lint') {
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t lint -f Dockerfile.lint .'
-            sh 'docker run --rm lint'
-          }
-        }
-      }
-    }
-    stage('Test') {
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t test -f Dockerfile.test .'
-            sh 'docker run --rm -e COVERAGE_USER=`id -u $USER`:`id -g $USER` -v `pwd`/coverage:/home/app/coverage test'
-          }
-        }
-      }
-      post {
-        success {
-          dir('document-service') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-          }
-        }
-      }
-    }
-    stage('SonarQube') {
-      steps {
-        script {
-          withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            dir('document-service') {
-              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
-            }
-          }
-        }
-      }
-    }
-    stage('Terraform') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createTerraformTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Serverless') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          def tasks = createServerlessTasks getTarget(env.branch_name)
-          parallel tasks
-        }
-      }
-    }
-    stage('Setup Active-Active Route53 Regional Record') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm route53"
-          }
-        }
-      }
-    }
-    stage('Setup S3 Replication Pre Prod') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t s3replication -f Dockerfile.s3replication .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm s3replication"
-          }
-        }
-      }
-    }
-    stage('Setup Global Tables') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          dir('document-service') {
-            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
-          }
-        }
-      }
-    }
+    // stage('Lint') {
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t lint -f Dockerfile.lint .'
+    //         sh 'docker run --rm lint'
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Test') {
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t test -f Dockerfile.test .'
+    //         sh 'docker run --rm -e COVERAGE_USER=`id -u $USER`:`id -g $USER` -v `pwd`/coverage:/home/app/coverage test'
+    //       }
+    //     }
+    //   }
+    //   post {
+    //     success {
+    //       dir('document-service') {
+    //         publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('SonarQube') {
+    //   steps {
+    //     script {
+    //       withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+    //         dir('document-service') {
+    //           sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
+    //           sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Terraform') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createTerraformTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Serverless') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       def tasks = createServerlessTasks getTarget(env.branch_name)
+    //       parallel tasks
+    //     }
+    //   }
+    // }
+    // stage('Setup Active-Active Route53 Regional Record') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t route53 -f Dockerfile.route53 .'
+    //         sh "docker run -e ENV=${branchMap[env.branch_name]} --rm route53"
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Setup S3 Replication Pre Prod') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t s3replication -f Dockerfile.s3replication .'
+    //         sh "docker run -e ENV=${branchMap[env.branch_name]} --rm s3replication"
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Setup Global Tables') {
+    //   when {
+    //     expression {
+    //       shouldDeploy(env.branch_name)
+    //     }
+    //   }
+    //   steps {
+    //     script {
+    //       dir('document-service') {
+    //         sh 'docker build -t globaltables -f Dockerfile.globaltables .'
+    //         sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
+    //       }
+    //     }
+    //   }
+    // }
     stage('Smoke Tests') {
       when {
         expression {
-          shouldDeploy(env.branch_name)
+          true || shouldDeploy(env.branch_name)
         }
       }
       steps {
@@ -183,72 +182,6 @@ pipeline {
       deleteDir()
     }
   }
-}
-
-def createRoute53Tasks(targets) {
-  def tasks = [:]
-  targets.each { deploy ->
-    def slsStage = deploy.env
-    tasks["${slsStage}"] = {
-      node() {
-        stage("Route 53 Record ${slsStage}") {
-          checkout scm
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir("document-service") {
-              sh 'npm i --no-progress'
-              sh "./setup-regional-route53.sh ${slsStage}"
-            }
-          }
-        }
-      }
-    }
-  }
-  return tasks
-}
-
-def createS3ReplicationTasks(targets) {
-  def tasks = [:]
-  targets.each { deploy ->
-    def slsStage = deploy.env
-    tasks["${slsStage}"] = {
-      node() {
-        stage("global tables ${slsStage}") {
-          checkout scm
-          def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
-              sh 'npm i --no-progress'
-              sh("./setup-s3-replication.sh ${slsStage}")
-            }
-          }
-        }
-      }
-    }
-  }
-  return tasks
-}
-
-def createGlobalTableTasks(targets) {
-  def tasks = [:]
-  targets.each { deploy ->
-    def slsStage = deploy.env
-    tasks["${slsStage}"] = {
-      node() {
-        stage("global tables ${slsStage}") {
-          checkout scm
-          def trunner = docker.build 'globaltables', '-f document-service/Dockerfile.test .'
-          trunner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir("document-service") {
-              sh 'npm i --no-progress'
-              sh "node setup-global-tables.js efcms-documents-${slsStage} ${deploy.regions.join(',')}"
-            }
-          }
-        }
-      }
-    }
-  }
-  return tasks
 }
 
 def createTerraformTasks(targets) {
@@ -277,16 +210,9 @@ def createSmokeTestTasks(targets) {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
-            def runner = docker.build 'serverless', '-f document-service/Dockerfile.terraform .'
-            runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-              dir('document-service') {
-                sh 'npm i --no-progress'
-                echo 'Running smoke test'
-                sh 'mkdir -p coverage'
-                def restApiId=sh(script: "aws apigateway get-rest-apis --region=${region} --query \"items[?name=='${slsStage}-ef-cms'].id\" --output text", returnStdout: true).trim()
-                sh("API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId} ./node_modules/.bin/artillery run ./smokeTest.yml --output ./coverage/artillery_smoke_test.json")
-                sh("./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json")
-              }
+            dir('document-service') {
+              sh 'docker build -t smoketest -f Dockerfile.smoketest .'
+              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
             }
           }
         }
@@ -318,9 +244,8 @@ def createServerlessTasks(targets) {
 }
 
 def shouldDeploy(branchName) {
-  true || ['develop', 'staging', 'master'].contains(branchName) == true
+  ['develop', 'staging', 'master'].contains(branchName) == true
 }
-// test
 
 def getTarget(branchName) {
   [
