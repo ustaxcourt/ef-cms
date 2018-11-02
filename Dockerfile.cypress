@@ -2,7 +2,7 @@ FROM cypress/base:8
 
 RUN apt-get -y install git
 RUN apt-get -y install curl
-RUN apt-get -y install default-jdk
+RUN apt-get -y install default-jre
 
 #WORKDIR /home/app
 
