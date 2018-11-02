@@ -21,38 +21,38 @@ pipeline {
         }
       }
     }
-    stage('components') {
-      parallel {
-        stage('web-client') {
-          when {
-            expression {
-              return checkCommit('web-client')
-            }
-          }
-          steps {
-            build job: 'ef-cms-ui', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
-          }
-        }
-        stage('document-service') {
-          when {
-            expression {
-              return checkCommit('document-service')
-            }
-          }
-          steps {
-            build job: 'ef-cms-api', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
-          }
-        }
-      }
-    }
+    // stage('components') {
+    //   parallel {
+    //     stage('web-client') {
+    //       when {
+    //         expression {
+    //           return checkCommit('web-client')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-ui', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //     stage('document-service') {
+    //       when {
+    //         expression {
+    //           return checkCommit('document-service')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-api', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
     stage('Merge') {
       steps {
         script {
@@ -65,25 +65,25 @@ pipeline {
         }
       }
     }
-    stage('pa11y') {
-      steps {
-        script {
-          def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
-              sh 'npm i'
-              sh 'npm run start:local &'
-            }
-            dir('web-client') {
-              sh 'npm i'
-              sh 'npm run dev &'
-              sh '../wait-until.sh http://localhost:1234'
-              sh 'npm run test:pa11y'
-            }
-          }
-        }
-      }
-    }
+    // stage('pa11y') {
+    //   steps {
+    //     script {
+    //       def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
+    //       runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+    //         dir('document-service') {
+    //           sh 'npm i'
+    //           sh 'npm run start:local &'
+    //         }
+    //         dir('web-client') {
+    //           sh 'npm i'
+    //           sh 'npm run dev &'
+    //           sh '../wait-until.sh http://localhost:1234'
+    //           sh 'npm run test:pa11y'
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
     stage('cypress') {
       steps {
         script {
@@ -104,11 +104,11 @@ pipeline {
       }
     }
   }
-  post {
-    always {
-      deleteDir()
-    }
-  }
+  // post {
+  //   always {
+  //     deleteDir()
+  //   }
+  // }
 }
 
 def checkCommit(folder) {
