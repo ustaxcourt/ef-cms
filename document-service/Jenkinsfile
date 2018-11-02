@@ -4,7 +4,7 @@ branchMap = [
   develop: 'dev',
   staging: 'stg',
   master: 'prod',
-  'PR-116': 'cody'
+  'PR-116': 'dev'
 ]
 
 pipeline {
@@ -318,11 +318,8 @@ def shouldDeploy(branchName) {
 }
 // test
 
-  // branchMap[branchName]
-
-
 def getTarget(branchName) {
   [
-    [env: 'dev', regions: regions]
+    [env: branchMap[branchName], regions: regions]
   ]
 }
