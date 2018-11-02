@@ -318,8 +318,11 @@ def shouldDeploy(branchName) {
 }
 // test
 
+  // branchMap[branchName]
+
+
 def getTarget(branchName) {
   [
-    [env: branchMap[branchName], regions: regions]
+    [env: 'develop', regions: regions]
   ]
 }
