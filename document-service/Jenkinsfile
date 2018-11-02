@@ -164,7 +164,7 @@ pipeline {
     stage('Smoke Tests') {
       when {
         expression {
-          true || shouldDeploy(env.branch_name)
+          shouldDeploy(env.branch_name)
         }
       }
       steps {
