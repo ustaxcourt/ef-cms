@@ -91,9 +91,8 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('document-service') {
               sh 'npm i'
-              sh 'npm run start:local'
-              sh '../wait-until.sh http://localhost:3000/v1/documents/policy'
-              sh 'curl http://localhost:3000/v1/documents/policy'
+              sh 'npm run start:local &'
+              sh '../wait-until.sh http://localhost:3000'
             }
             dir('web-client') {
               sh 'npm i'
