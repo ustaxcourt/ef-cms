@@ -3,7 +3,8 @@ regions = ['us-east-1', 'us-east-2']
 branchMap = [
   develop: 'dev',
   staging: 'stg',
-  master: 'prod'
+  master: 'prod',
+  'PR-116': 'cody'
 ]
 
 pipeline {
@@ -313,7 +314,7 @@ def createServerlessTasks(targets) {
 }
 
 def shouldDeploy(branchName) {
-  ['develop', 'staging', 'master'].contains(branchName) == true
+  true || ['develop', 'staging', 'master'].contains(branchName) == true
 }
 
 def getTarget(branchName) {
