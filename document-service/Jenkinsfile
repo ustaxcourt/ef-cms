@@ -155,8 +155,10 @@ pipeline {
       }
       steps {
         script {
-          sh 'docker build -t globaltables -f Dockerfile.globaltables .'
-          sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
+          dir('document-service') {
+            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
+            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
+          }
         }
       }
     }
