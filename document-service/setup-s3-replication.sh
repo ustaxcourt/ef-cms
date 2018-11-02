@@ -1,7 +1,7 @@
 #!/bin/bash
 stage=$1
 BUCKET="efcms-documents-${stage}-us-east-1"
-backup_bucket="efcms-documents-${stage}-us-east-2"
+backup_bucket="efcms-documents-${stage}-us-west-1"
 accountWithQuotes=$(aws sts get-caller-identity --query "Account")
 accountWithQuotePrefix="${accountWithQuotes%\"}"
 account="${accountWithQuotePrefix#\"}"
