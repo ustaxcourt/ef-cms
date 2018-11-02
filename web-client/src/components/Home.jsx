@@ -10,7 +10,7 @@ export default connect(
       <section className="usa-section usa-grid">
         <SuccessNotification />
         <p>
-          <a className="usa-button" href="#!/file-a-petition">
+          <a className="usa-button" href="/#/file-a-petition">
             Start a case
           </a>
         </p>
