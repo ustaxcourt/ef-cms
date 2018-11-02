@@ -3,9 +3,9 @@ resource "aws_api_gateway_account" "account_us_east_1" {
   provider = "aws.us-east-1"
 }
 
-resource "aws_api_gateway_account" "account_us_east_2" {
+resource "aws_api_gateway_account" "account_us_west_2" {
   cloudwatch_role_arn = "${aws_iam_role.cloudwatch.arn}"
-  provider = "aws.us-east-2"
+  provider = "aws.us-west-1"
 }
 
 resource "aws_iam_role" "cloudwatch" {
