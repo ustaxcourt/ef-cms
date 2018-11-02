@@ -1,6 +1,9 @@
+
 FROM node:8-alpine
 
-# Versions: https://pypi.python.org/pypi/awscli#downloads
+RUN apk add --no-cache --update bash
+RUN apk add --no-cache --update git
+
 ENV AWS_CLI_VERSION 1.16.31
 
 RUN apk --no-cache update && \
@@ -10,7 +13,10 @@ RUN apk --no-cache update && \
     pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
     rm -rf /var/cache/apk/*
 
-RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && \
-    unzip -o terraform_0.11.8_linux_amd64.zip terraform
+WORKDIR /home/app
 
-RUN cp terraform /usr/local/bin/
+COPY package.json /home/app/package.json
+RUN npm install
+COPY . /home/app
+
+CMD ./setup-regional-route53.sh $ENV
