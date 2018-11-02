@@ -1,0 +1,16 @@
+aws_region = "us-east-1"
+
+# This should match an existing functional Route53 zone in which DNS records will be created
+dns_domain = "ustc-case-mgmt.flexion.us"
+
+# Add your external IP address here for secured SSH access
+ssh_cidrs = [
+  "CHANGEME_SSH_CIDR_PLACEHOLDER/32", # Placeholder for automatic replacement
+]
+
+# This is used to tag AWS resources and should follow DNS naming rules
+# This is used to tag AWS resources and is generally the project name, with mgmt in this case
+environment = "efcms"
+
+# If you have multiple stacks of infrastructure for the same project, this should change
+deployment = "ops"
