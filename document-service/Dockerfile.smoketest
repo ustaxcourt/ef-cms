@@ -18,9 +18,4 @@ WORKDIR /home/app
 RUN npm install
 COPY . /home/app
 
-# because serverless does not work unless you are in a git repo....
-RUN git config --global user.email "blank@example.com"
-RUN git config --global user.name "Local"
-RUN git init && touch tmp.txt && git add tmp.txt && git commit -m 'rev'
-
-CMD ./run-serverless.sh $STAGE $REGION
+CMD ./run-smoketests.sh $STAGE $REGION
