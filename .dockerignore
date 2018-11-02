@@ -1,0 +1,8 @@
+web-client/.nyc_output
+web-client/.scannerwork
+web-client/.sonar-cache
+web-client/coverage
+web-client/.terraform
+web-client/dist
+web-client/node_modules
+.git
