@@ -1,12 +1,7 @@
 #!/bin/bash
 
-pushd ../management/management
-SKIP_KEYGEN=true ./deploy-init.sh
-DNS_DOMAIN=$(terraform output dns_domain)
-popd
-
 ENVIRONMENT=$1
-DOMAIN="${DNS_DOMAIN}"
+DOMAIN="${EFCMS_DOMAIN}"
 SUBDOMAIN="documents-${ENVIRONMENT}.${DOMAIN}"
 STACKNAME="ef-cms-${ENVIRONMENT}"
 HOSTEDZONE=$(aws route53 list-hosted-zones --query 'HostedZones[?Name==`'${DOMAIN}'.`].Id' --output text)
