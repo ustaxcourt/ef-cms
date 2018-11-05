@@ -93,6 +93,18 @@ export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
   }
 };
 
+// TODO: add this
+// export const createPdfPetition = ({ get, api, factory }) => {
+//   factory
+//     .getFilePetitionInteractor()
+//     .filePetition(
+//       get(state.user),
+//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
+//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
+//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
+//     );
+// };
+
 export const getPetitionUploadAlertSuccess = () => {
   return {
     alertSuccess: {
