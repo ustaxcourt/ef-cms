@@ -41,7 +41,7 @@
     "install:dynamodb": "./node_modules/.bin/sls dynamodb install",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "./node_modules/.bin/sls dynamodb start -p 8000  --migrate true --stage local",
-    "start:local": "./node_modules/.bin/sls offline start --noTimeout --stage local --region us-east-1",
+    "start:local": "SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --noTimeout --stage local --region us-east-1 --domain noop",
     "start": "npm run start:local",
     "watch": "nodemon -e yml --exec sls offline start",
     "lint": "eslint ./src/**/*.js",
