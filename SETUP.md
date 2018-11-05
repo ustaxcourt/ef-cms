@@ -25,7 +25,6 @@ This section outlines the steps necessary for creating the necessary resources n
 # Setup Steps
 
 1. Update dns_domain inside the management/management/terraform.tfvars.template to match your desired domain.
-    - also change environment from "efcms" to "ef-cms"
 2. create a Route53 zone in AWS that matches the same domain in step 1.
 3. run the deploy-infrastructure.sh script:
     - `cd management/management && ./deploy-infrastructure.sh`
