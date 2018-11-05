@@ -30,8 +30,9 @@ function run_development() {
     echo
     export SLS_STAGE=${ENVIRONMENT}
 
-    pushd ./terraform/dev/
-    terraform init
+    pushd ./terraform/main
+    ../bin/deploy-app.sh ${ENVIRONMENT}
+
     SLS_DEPLOYMENT_BUCKET=$(terraform output sls_deployment_bucket)
     export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd

@@ -1,5 +1,5 @@
 const uuidv4 = require('uuid/v4');
-const client = require('../services/dynamodbClientService');
+const client = require('../../services/dynamodbClientService');
 
 const TABLE_NAME =
   process.env.DOCUMENTS_DYNAMODB_TABLE || 'efcms-documents-dev';
