@@ -37,3 +37,24 @@ input:focus::placeholder {
   background-color: $color-primary-darkest;
   transition: all 2s;
 }
+
+.responsive-table {
+  display: inherit;
+}
+
+.responsive-table thead {
+  display: none;
+}
+
+.responsive-table tr {
+  display: block;
+}
+
+.responsive-table td {
+  display: block;
+}
+
+.responsive-table .responsive-label {
+  display: inline-block;
+  margin-right: 4px;
+}

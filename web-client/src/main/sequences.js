@@ -2,7 +2,7 @@ import { set, toggle } from 'cerebral/factories';
 import { state, props } from 'cerebral';
 import * as actions from './actions';
 
-export const gotoHome = [set(state`currentPage`, 'Home')];
+export const gotoDashboard = [set(state`currentPage`, 'Dashboard')];
 export const gotoLogIn = [
   actions.clearLoginForm,
   set(state`currentPage`, 'LogIn'),
@@ -22,9 +22,14 @@ export const submitLogIn = [
   actions.getUser,
   {
     error: [actions.setAlertError],
-    success: [actions.setUser, actions.navigateHome],
+    success: [actions.setUser, actions.navigateToDashboard],
   },
   actions.unsetFormSubmitting,
+];
+
+export const gotoCaseDetail = [
+  set(state`petition.docketNumber`, props`docketNumber`),
+  set(state`currentPage`, 'CaseDetail'),
 ];
 
 export const updatePetitionValue = [
@@ -72,7 +77,7 @@ export const submitFilePetition = [
                               actions.unsetFormSubmitting,
                               actions.getPetitionUploadAlertSuccess,
                               actions.setAlertSuccess,
-                              actions.navigateHome,
+                              actions.navigateToDashboard,
                             ],
                           },
                         ],
