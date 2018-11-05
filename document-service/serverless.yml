@@ -143,10 +143,10 @@ custom:
             - message
 
   customDomain:
-    domainName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    domainName: documents-${self:provider.stage}.${opt:domain}
     basePath: ''
     endpointType: 'regional'
-    certificateName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    certificateName: documents-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
     createRoute53Record: false

@@ -2,7 +2,12 @@
 
 ENVIRONMENT=$1
 
-BUCKET=gov.ustaxcourt.ef-cms.terraform.deploys
+pushd ../../../management/management
+SKIP_KEYGEN=true ./deploy-init.sh
+DNS_DOMAIN=$(terraform output dns_domain)
+popd
+
+BUCKET="${DNS_DOMAIN}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
@@ -23,11 +28,6 @@ fi
 
 # exit on any failure
 set -eo pipefail
-
-pushd ../../../management/management
-SKIP_KEYGEN=true ./deploy-init.sh
-DNS_DOMAIN=$(terraform output dns_domain)
-popd
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${DNS_DOMAIN}" -var "environment=${ENVIRONMENT}"
