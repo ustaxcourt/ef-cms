@@ -95,7 +95,7 @@ if [ -z ${SKIP_KEYGEN} ]; then
   fi
 fi
 
-BUCKET=${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources
+BUCKET="${DNS_NAME}.${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources"
 KEY=common.tfstate
 LOCK_TABLE=${DEPLOYMENT_NAME}-${ENVIRONMENT}-terraform-lock
 
