@@ -150,6 +150,6 @@ export const clearPetition = ({ store }) => {
   });
 };
 
-export const navigateHome = ({ router }) => {
+export const navigateToDashboard = ({ router }) => {
   router.route('/');
 };

@@ -5,7 +5,10 @@ route.base('/');
 const router = {
   initialize: app => {
     route('/', () => {
-      app.getSequence('gotoHome')();
+      app.getSequence('gotoDashboard')();
+    });
+    route('/case-detail/*', docketNumber => {
+      app.getSequence('gotoCaseDetail')({ docketNumber });
     });
     route('/log-in', () => {
       app.getSequence('gotoLogIn')();
