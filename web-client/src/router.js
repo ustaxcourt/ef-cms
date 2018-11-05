@@ -1,5 +1,7 @@
 import route from 'riot-route';
 
+route.base('/');
+
 const router = {
   initialize: app => {
     route('/', () => {
