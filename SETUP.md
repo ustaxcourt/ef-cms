@@ -24,15 +24,16 @@ This section outlines the steps necessary for creating the necessary resources n
 
 # Setup Steps
 
-1. Update dns_domain inside the management/management/terraform.tfvars.template to match your desired domain.
+1. export EFCMS_DOMAIN to your domain
+    - e.g. `export EFCMS_DOMAIN=ustc-case-mgmt.flexion.us`
 2. create a Route53 zone in AWS that matches the same domain in step 1.
-3. run the deploy-infrastructure.sh script:
+4. run the deploy-infrastructure.sh script:
     - `cd management/management && ./deploy-infrastructure.sh`
     - this command continously prints out "module.management.jenkins-certificate.aws_acm_certificate_validation.dns_validation: Still creating..." until you have finished the next step (step 3) and waited some time for the dns resolutions to happen
     - this command will generate 2 files (`ssh/id_rsa` / `ssh/id_rsa.pub`)
         - backup these keys
         - they are used to ssh into the bastion and jenkins ec2 instances
-4. create NS records on your current DNS to point a subdomain to AWS Route53 DNS
+5. create NS records on your current DNS to point a subdomain to AWS Route53 DNS
     - login to aws and navigate to the Route53 console
     - click on "hosted zones"
     - click on your domain
@@ -41,10 +42,10 @@ This section outlines the steps necessary for creating the necessary resources n
     - create the same 4 NS Records to match the ones in the Route53 console
         -  example host: efcms
         -  example value: ns-1212.awsdns-23.org.
-5. If too much time has passed for step 2 as it tries to validate the acm, it may fail.  That's ok!, just re-run the deploy-infrastructure.sh script.
-6. after step 4 is successful, run the setup jenkins script to install necessary plugins onto jenkins:
+6. If too much time has passed for step 2 as it tries to validate the acm, it may fail.  That's ok!, just re-run the deploy-infrastructure.sh script.
+7. after step 4 is successful, run the setup jenkins script to install necessary plugins onto jenkins:
     - `cd management/management && ../bin/setup-jenkins.sh`
-7. additional Jenkins setup
+8. additional Jenkins setup
     - get the Jenkins credentials:
         - `cd management/management && ./show-passwords.sh`
     - make note of the Jenkins username and password
@@ -64,6 +65,9 @@ This section outlines the steps necessary for creating the necessary resources n
         - setup
             - SONAR_ORG
             - your_sonar_org_name // e.g. flexion-github
+        - setup
+            - EFCMS_DOMAIN
+            - your_sub_domain // e.g. ustc-case-mgmt.flexion.us
     - setup the jobs via the setup-jobs.sh script
         - this script takes 3 arguments in this order
             - your_repo_url // example: https://github.com/flexion/ef-cms.git
@@ -74,4 +78,4 @@ This section outlines the steps necessary for creating the necessary resources n
         - go to management jenkins and increase the executors from 2 to 5
     - restart jenkins
         - https://..../jenkins/safeRestart
-8. the CI / CD pipeline is ready to operate
+9. the CI / CD pipeline is ready to operate

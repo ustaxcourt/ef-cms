@@ -206,7 +206,7 @@ def deployTo(env) {
       sh './deploy-init.sh'
     }
     dir('web-client') {
-      def domain=sh(returnStdout: true, script: "cd ../management/management && terraform output dns_domain")
+      def domain="${EFCMS_DOMAIN}"
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
       sh "API_URL=https://documents-${env}.${domain}/v1 npm run dist"
       def bucket = sh(returnStdout: true, script: "cd terraform/main && terraform output bucket").trim()
