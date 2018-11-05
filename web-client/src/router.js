@@ -1,24 +1,22 @@
-import page from 'page';
+import route from 'riot-route';
 
-const route = function route(path) {
-  page(path);
-};
+route.base('/');
 
 const router = {
   initialize: app => {
-    page('/', () => {
+    route('/', () => {
       app.getSequence('gotoHome')();
     });
-    page('/log-in', () => {
+    route('/log-in', () => {
       app.getSequence('gotoLogIn')();
     });
-    page('/file-a-petition', () => {
+    route('/file-a-petition', () => {
       app.getSequence('gotoFilePetition')();
     });
-    page('/style-guide', () => {
+    route('/style-guide', () => {
       app.getSequence('gotoStyleGuide')();
     });
-    page.start();
+    route.start(true);
   },
 };
 
