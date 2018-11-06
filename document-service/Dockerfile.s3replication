@@ -1,3 +1,4 @@
+
 FROM node:8-alpine
 
 RUN apk add --no-cache --update bash
@@ -13,14 +14,9 @@ RUN apk --no-cache update && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /home/app
+
 COPY package.json /home/app/package.json
-WORKDIR /home/app
 RUN npm install
 COPY . /home/app
 
-# because serverless does not work unless you are in a git repo....
-RUN git config --global user.email "blank@example.com"
-RUN git config --global user.name "Local"
-RUN git init && touch tmp.txt && git add tmp.txt && git commit -m 'rev'
-
-CMD ./run-serverless.sh $STAGE $REGION
+CMD ./setup-s3-replication.sh $ENV

@@ -14,13 +14,7 @@ custom:
     host: 0.0.0.0
     port: 9000
     directory: /tmp
-    # Uncomment the first line only if you want to use cors with specified policy
-    # Uncomment the second line only if you don't want to use cors
-    # Not uncomment the these lines only if your wanto use cors with default policy
-    # cors: relative/path/to/your/cors/policy/xml
-    # cors: false
-    # Uncomment only if you already have a S3 server running locally
-    # noStart: true
+    cors: cors-policy.xml
   dynamodb:
     start:
       inMemory: true
@@ -149,10 +143,10 @@ custom:
             - message
 
   customDomain:
-    domainName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    domainName: documents-${self:provider.stage}.${opt:domain}
     basePath: ''
     endpointType: 'regional'
-    certificateName: documents-${self:provider.stage}.ustc-case-mgmt.flexion.us
+    certificateName: documents-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
     createRoute53Record: false
@@ -181,7 +175,7 @@ provider:
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
-    DOCUMENTS_BUCKET_NAME: efcms-documents-${opt:stage}-${opt:region}
+    DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-${opt:region}
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
 
