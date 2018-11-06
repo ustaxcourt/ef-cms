@@ -24,7 +24,8 @@ This section outlines the steps necessary for creating the necessary resources n
 
 # Setup Steps
 
-1. Update dns_domain inside the management/management/terraform.tfvars.template to match your desired domain.
+1. export EFCMS_DOMAIN to your domain
+    - e.g. `export EFCMS_DOMAIN=ustc-case-mgmt.flexion.us`
 2. create a Route53 zone in AWS that matches the same domain in step 1.
 3. run the deploy-infrastructure.sh script:
     - `cd management/management && ./deploy-infrastructure.sh`
@@ -59,6 +60,14 @@ This section outlines the steps necessary for creating the necessary resources n
             - id: API_SONAR_TOKEN
         - a secret text type
             - id: UI_SONAR_TOKEN
+    - setup the sonar organization property inside jenkins
+        - goto: Jenkins -> Manage Jenkins -> Configure System -> Global properties -> Environment variables
+        - setup
+            - SONAR_ORG
+            - your_sonar_org_name // e.g. flexion-github
+        - setup
+            - EFCMS_DOMAIN
+            - your_sub_domain // e.g. ustc-case-mgmt.flexion.us
     - setup the jobs via the setup-jobs.sh script
         - this script takes 3 arguments in this order
             - your_repo_url // example: https://github.com/flexion/ef-cms.git
