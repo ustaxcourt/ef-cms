@@ -21,16 +21,12 @@ export default connect(
           {caseDetail.petitionerName}, Petitioner v. Commissioner of Internal
           Revenue Service, Respondent
         </p>
-        <h2>Required actions</h2>
-        <p>
-          Pay petition filing fee, Deadline: November 7, 2018,{' '}
-          <button>Pay Fee</button>
-        </p>
+        <br />
         <h2>Case activities</h2>
         <table className="responsive-table">
           <thead>
             <tr>
-              <th>Date submitted</th>
+              <th>Activity date</th>
               <th>Filings and proceedings</th>
               <th>Date served</th>
             </tr>
@@ -44,7 +40,7 @@ export default connect(
             {caseDetail.activities.map((item, idx) => (
               <tr key={idx}>
                 <td className="responsive-title">
-                  <span className="responsive-label">Date submitted</span>
+                  <span className="responsive-label">Activity date</span>
                   {item.dateSubmitted}
                 </td>
                 <td>
