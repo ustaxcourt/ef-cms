@@ -126,7 +126,7 @@ pipeline {
         script {
           dir('document-service') {
             sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm route53"
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
           }
         }
       }
@@ -141,7 +141,7 @@ pipeline {
         script {
           dir('document-service') {
             sh 'docker build -t s3replication -f Dockerfile.s3replication .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm s3replication"
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm s3replication"
           }
         }
       }
@@ -191,7 +191,7 @@ def createTerraformTasks(targets) {
         stage("terraform ${slsStage}") {
           checkout scm
           sh 'docker build -t terraform -f document-service/Dockerfile.terraform .'
-          sh "docker run -e ENV=${slsStage} --rm terraform"
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
         }
       }
     }
@@ -231,7 +231,7 @@ def createServerlessTasks(targets) {
             checkout scm
             dir('document-service') {
               sh 'docker build -t serverless -f Dockerfile.serverless .'
-              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+              sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
             }
           }
         }
