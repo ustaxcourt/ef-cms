@@ -2,7 +2,16 @@ web-client/.nyc_output
 web-client/.scannerwork
 web-client/.sonar-cache
 web-client/coverage
-web-client/.terraform
 web-client/dist
 web-client/node_modules
+web-client/terraform/main/.terraform
+web-client/terraform/common/.terraform
+document-service/node_modules
+document-service/.dynamodb
+document-service/.nyc_output
+document-service/.serverless
+document-service/coverage
+document-service/terraform/main/.terraform
+management/management/.terraform
+web-client
 .git
