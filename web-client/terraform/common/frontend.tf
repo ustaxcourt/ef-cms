@@ -57,6 +57,15 @@ resource "aws_cloudfront_distribution" "distribution" {
     origin_id   = "ui-${var.environment}.${var.dns_domain}"
   }
 
+  custom_error_response = [
+    {
+      error_caching_min_ttl = 0
+      error_code = 404
+      response_code = 200
+      response_page_path = "/index.html"
+    }
+  ]
+
   enabled             = true
   default_root_object = "index.html"
 

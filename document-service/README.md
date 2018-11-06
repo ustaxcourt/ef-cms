@@ -4,7 +4,7 @@
 
 Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
-`npm run install`
+`npm i`
 
 # Contributing
 

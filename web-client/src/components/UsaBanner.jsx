@@ -29,7 +29,7 @@ export default connect(
                 onClick={() => toggleUsaBannerDetails()}
               >
                 <span className="usa-banner-button-text">
-                  Here&apos;s how you know&nbsp;
+                  Here’s how you know&nbsp;
                 </span>
               </button>
             </div>

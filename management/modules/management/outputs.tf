@@ -13,6 +13,6 @@ output "bastion_public_ip" {
 }
 
 output "jenkins_elb_dns" {
-  description = "The public IP address assigned to the jeknins elb"
+  description = "The public IP address assigned to the jenkins elb"
   value       = "${aws_elb.jenkins_elb.dns_name}"
 }
