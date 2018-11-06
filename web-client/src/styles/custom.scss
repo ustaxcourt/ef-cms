@@ -38,23 +38,38 @@ input:focus::placeholder {
   transition: all 2s;
 }
 
-.responsive-table {
-  display: inherit;
-}
-
-.responsive-table thead {
-  display: none;
-}
-
-.responsive-table tr {
-  display: block;
-}
-
-.responsive-table td {
-  display: block;
+table {
+  width: 100%;
 }
 
 .responsive-table .responsive-label {
-  display: inline-block;
-  margin-right: 4px;
+  display: none;
+}
+
+@media only screen and (max-width: $small-screen) {
+  .responsive-table {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+      border-bottom: 1px solid black;
+    }
+
+    tr:first-child {
+      border-top: 1px solid black;
+    }
+
+    td {
+      display: block;
+      border: none;
+    }
+
+    .responsive-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+  }
 }

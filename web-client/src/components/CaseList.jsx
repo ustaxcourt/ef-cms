@@ -14,26 +14,35 @@ export default connect(
       <table className="responsive-table">
         <thead>
           <tr>
-            <th>Docket Number</th>
+            <th>Docket number</th>
             <th>Date submitted</th>
-            <th>Petitioner Name</th>
-            <th>Fee Status</th>
+            <th>Petitioner name</th>
+            <th>Fee status</th>
           </tr>
         </thead>
         <tbody>
           {caseList.map(item => (
             <tr key={item.docketNumber}>
               <td>
-                <span className="responsive-label">Docket Number</span>
+                <span className="responsive-label">Docket number</span>
                 <span className="docket-detail">
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumber}
                   </a>
                 </span>
               </td>
-              <td>{item.dateSubmitted}</td>
-              <td>{item.petitionerName}</td>
-              <td>{item.feeStatus}</td>
+              <td>
+                <span className="responsive-label">Date submitted</span>
+                {item.dateSubmitted}
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                {item.petitionerName}
+              </td>
+              <td>
+                <span className="responsive-label">Fee status</span>
+                {item.feeStatus}
+              </td>
             </tr>
           ))}
         </tbody>
