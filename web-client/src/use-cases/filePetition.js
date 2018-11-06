@@ -2,8 +2,8 @@ import User from '../entities/User';
 import Petition from '../entities/Petition';
 
 export default async (
-  environment,
-  persistenceGateway,
+  environment, // pull from applicationContext
+  persistenceGateway, // pull from applicationContext
   rawPetition,
   rawUser,
 ) => {
