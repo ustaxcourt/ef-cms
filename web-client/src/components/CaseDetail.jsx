@@ -1,6 +1,9 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+// import * as Pdf from '../images/pdf.svg';
 
 /**
  * Footer
@@ -24,7 +27,7 @@ export default connect(
           <button>Pay Fee</button>
         </p>
         <h2>Case activities</h2>
-        <table>
+        <table className="responsive-table">
           <thead>
             <tr>
               <th>Date submitted</th>
@@ -40,8 +43,19 @@ export default connect(
             )}
             {caseDetail.activities.map((item, idx) => (
               <tr key={idx}>
-                <td>{item.dateSubmitted}</td>
-                <td>{item.filingsAndProceedings}</td>
+                <td className="responsive-title">
+                  <span className="responsive-label">Date submitted</span>
+                  {item.dateSubmitted}
+                </td>
+                <td>
+                  <span className="responsive-label">
+                    Filings and proceedings
+                  </span>
+                  <a className="pdf-link" href="/">
+                    <FontAwesomeIcon icon="file-pdf" />
+                    {item.filingsAndProceedings}
+                  </a>
+                </td>
                 <td>{item.dateServed}</td>
               </tr>
             ))}
