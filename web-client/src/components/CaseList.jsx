@@ -23,8 +23,7 @@ export default connect(
         <tbody>
           {caseList.map(item => (
             <tr key={item.docketNumber}>
-              <td>
-                <span className="responsive-label">Docket number</span>
+              <td className="responsive-title">
                 <span className="docket-detail">
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumber}
