@@ -75,7 +75,6 @@ const createPdfPetition = async function createPdfPetition(
     statementOfTaxpayerIdentificationNumberId,
     petition.statementOfTaxpayerIdentificationNumber,
   );
-  return 'Success';
 };
 
 const awsPersistenceGateway = {
