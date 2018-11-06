@@ -1,0 +1,11 @@
+terraform.tfvars
+*.backup
+.terraform
+terraform.tfvars-e
+terraform.output
+terraform.tfstate.backup
+.bak
+backup
+backup2
+output
+new-policy.json
