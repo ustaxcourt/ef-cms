@@ -28,7 +28,8 @@ export const submitLogIn = [
 ];
 
 export const gotoCaseDetail = [
-  set(state`petition.docketNumber`, props`docketNumber`),
+  set(state`docketNumber`, props`docketNumber`),
+  actions.getCaseDetail,
   set(state`currentPage`, 'CaseDetail'),
 ];
 
