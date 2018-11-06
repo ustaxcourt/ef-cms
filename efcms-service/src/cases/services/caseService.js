@@ -6,9 +6,9 @@ const TABLE_NAME =
   process.env.CASES_DYNAMODB_TABLE || 'efcms-cases-dev';
 
 
-exports.create = (userId, documents) => {
+exports.create = async (userId, documents) => {
   const caseId = uuidv4();
-  const docketNumber = docketNumberService.createDocketNumber();
+  const docketNumber = await docketNumberService.createDocketNumber();
   const params = {
     TableName: TABLE_NAME,
     Item: {
