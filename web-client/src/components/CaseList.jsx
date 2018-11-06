@@ -24,11 +24,10 @@ export default connect(
           {caseList.map(item => (
             <tr key={item.docketNumber}>
               <td className="responsive-title">
-                <span className="docket-detail">
-                  <a href={'/case-detail/' + item.docketNumber}>
-                    {item.docketNumber}
-                  </a>
-                </span>
+                <span className="responsive-label">Docket number</span>
+                <a href={'/case-detail/' + item.docketNumber}>
+                  {item.docketNumber}
+                </a>
               </td>
               <td>
                 <span className="responsive-label">Date submitted</span>
