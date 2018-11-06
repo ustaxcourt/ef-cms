@@ -46,6 +46,10 @@ input:focus::placeholder {
   display: none;
 }
 
+.fa-file-pdf {
+  margin-right: 1rem;
+}
+
 @media only screen and (max-width: $small-screen) {
   .responsive-table {
     thead {
