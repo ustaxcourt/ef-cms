@@ -15,9 +15,8 @@ export default connect(
         <thead>
           <tr>
             <th>Docket number</th>
-            <th>Date submitted</th>
+            <th>Date filed</th>
             <th>Petitioner name</th>
-            <th>Fee status</th>
           </tr>
         </thead>
         <tbody>
@@ -28,16 +27,12 @@ export default connect(
                 <a href={'/case-detail/' + item.caseId}>{item.docketNumber}</a>
               </td>
               <td>
-                <span className="responsive-label">Date submitted</span>
+                <span className="responsive-label">Date filed</span>
                 {item.dateSubmitted}
               </td>
               <td>
                 <span className="responsive-label">Petitioner name</span>
                 {item.petitionerName}
-              </td>
-              <td>
-                <span className="responsive-label">Fee status</span>
-                {item.feeStatus}
               </td>
             </tr>
           ))}
