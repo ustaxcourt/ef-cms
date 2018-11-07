@@ -30,16 +30,14 @@ function run_development() {
     echo
     export SLS_STAGE=${ENVIRONMENT}
 
-    pushd ./terraform/main
-    ../bin/deploy-app.sh ${ENVIRONMENT}
-
+    pushd ./terraform/main/
+    ../bin/deploy-app.sh "${ENVIRONMENT}"
     SLS_DEPLOYMENT_BUCKET=$(terraform output sls_deployment_bucket)
     export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd
 
     echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1"
-
-    ./node_modules/.bin/sls deploy --stage "${SLS_STAGE}" --region us-east-1
+    ./run-serverless.sh "${SLS_STAGE}" "us-east-1"
 }
 
 function configure_custom_logging() {
