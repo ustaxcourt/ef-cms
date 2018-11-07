@@ -12,7 +12,7 @@ pipeline {
   environment {
     SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
     npm_config_cache = "/home/tomcat"
-    HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
+    HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
     CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
   }
 
@@ -84,7 +84,7 @@ pipeline {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             dir('efcms-service') {
               sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
+              sh "docker run -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
             }
           }
         }
@@ -126,7 +126,7 @@ pipeline {
         script {
           dir('efcms-service') {
             sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm route53"
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
           }
         }
       }
@@ -141,7 +141,7 @@ pipeline {
         script {
           dir('efcms-service') {
             sh 'docker build -t s3replication -f Dockerfile.s3replication .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} --rm s3replication"
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm s3replication"
           }
         }
       }
@@ -191,7 +191,7 @@ def createTerraformTasks(targets) {
         stage("terraform ${slsStage}") {
           checkout scm
           sh 'docker build -t terraform -f efcms-service/Dockerfile.terraform .'
-          sh "docker run -e ENV=${slsStage} --rm terraform"
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
         }
       }
     }
@@ -231,7 +231,7 @@ def createServerlessTasks(targets) {
             checkout scm
             dir('efcms-service') {
               sh 'docker build -t serverless -f Dockerfile.serverless .'
-              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+              sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
             }
           }
         }
