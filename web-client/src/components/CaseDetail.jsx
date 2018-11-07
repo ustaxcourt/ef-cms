@@ -3,8 +3,6 @@ import React from 'react';
 import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// import * as Pdf from '../images/pdf.svg';
-
 /**
  * Footer
  */
