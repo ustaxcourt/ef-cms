@@ -98,15 +98,15 @@ describe('Main cerebral module', () => {
     });
 
     it('document policy success', async () => {
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
       await test.runSequence('submitFilePetition');
       assert.deepEqual(test.getState('petition.policy'), fakePolicy);
     });
 
     it('document policy error', async () => {
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(403);
+      mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(403);
 
       await test.runSequence('submitFilePetition');
       assert.equal(
@@ -130,12 +130,13 @@ describe('Main cerebral module', () => {
         documentType: 'test',
       };
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(200, fakeDocument);
-      mock.onPost(fakePolicy.url).
-        reply(204);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock
+        .onPost(environment.getBaseUrl() + '/documents')
+        .reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).reply(204);
 
       await test.runSequence('submitFilePetition');
       assert.deepEqual(test.getState('petition.policy'), fakePolicy);
@@ -171,12 +172,11 @@ describe('Main cerebral module', () => {
         new Blob(['blob']),
       );
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(500);
-      mock.onPost(fakePolicy.url).
-        reply(204);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
+      mock.onPost(fakePolicy.url).reply(204);
 
       await test.runSequence('submitFilePetition');
       assert.equal(
@@ -200,12 +200,13 @@ describe('Main cerebral module', () => {
         new Blob(['blob']),
       );
 
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').
-        reply(200, fakePolicy);
-      mock.onPost(environment.getBaseUrl() + '/documents').
-        reply(200, fakeDocument);
-      mock.onPost(fakePolicy.url).
-        reply(500);
+      mock
+        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .reply(200, fakePolicy);
+      mock
+        .onPost(environment.getBaseUrl() + '/documents')
+        .reply(200, fakeDocument);
+      mock.onPost(fakePolicy.url).reply(500);
 
       await test.runSequence('submitFilePetition');
       assert.equal(
