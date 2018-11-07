@@ -197,6 +197,8 @@ provider:
   logRetentionInDays: 7
   s3Endpoint: s3.${opt:region}.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
+  masterRegion: us-east-1
+  masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
@@ -207,6 +209,8 @@ provider:
     DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
     CASES_DYNAMODB_TABLE: efcms-cases-${opt:stage}
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
+    MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
 
   iamRoleStatements:
     - Effect: "Allow"
