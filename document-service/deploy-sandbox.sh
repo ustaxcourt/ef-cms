@@ -37,8 +37,7 @@ function run_development() {
     popd
 
     echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1"
-
-    ./node_modules/.bin/sls deploy --stage "${SLS_STAGE}" --domain=${EFCMS_DOMAIN} --region us-east-1
+    ./run-serverless.sh "${SLS_STAGE}" "us-east-1"
 }
 
 function configure_custom_logging() {
