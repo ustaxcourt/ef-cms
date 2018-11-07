@@ -9,12 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default connect(
   {
     caseDetail: state.caseDetail,
-    docketNumber: state.docketNumber,
   },
-  function CaseDetail({ docketNumber, caseDetail }) {
+  function CaseDetail({ caseDetail }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>Docket number: {docketNumber}</h1>
+        <h1>Docket number: {caseDetail.docketNumber}</h1>
         <p>
           {caseDetail.petitionerName}, Petitioner v. Commissioner of Internal
           Revenue Service, Respondent

@@ -30,6 +30,9 @@ export default connect(
     const CurrentPage = pages[currentPage];
     return (
       <React.Fragment>
+        <a tabIndex="0" className="usa-skipnav" href="#main-content">
+          Skip to main content
+        </a>
         <UsaBanner />
         <Header />
         <main id="main-content">
