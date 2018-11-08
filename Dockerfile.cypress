@@ -6,8 +6,8 @@ RUN apt-get -y install default-jre
 
 #WORKDIR /home/app
 
-#COPY document-service/package.json /home/app/document-service/package.json
-#WORKDIR /home/app/document-service
+#COPY efcms-service/package.json /home/app/efcms-service/package.json
+#WORKDIR /home/app/efcms-service
 #RUN npm install
 #COPY . /home/app
 

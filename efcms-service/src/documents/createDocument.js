@@ -1,5 +1,5 @@
-const { createDone } = require('../services/gatewayHelper');
-const documentService = require('./documentService');
+const { createDone } = require('../middleware/apiGatewayHelper');
+const documentService = require('./services/documentService');
 
 /**
  * Create Document API Lambda
