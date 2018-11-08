@@ -12,6 +12,7 @@ exports.createDone = callback => {
 
 exports.getAuthHeader = event => {
   let usernameTokenArray;
+
   if (event['headers'] && event['headers']['Authorization']) {
     usernameTokenArray = event['headers']['Authorization'].split(" ");
     if (!usernameTokenArray || !usernameTokenArray[1]) {
