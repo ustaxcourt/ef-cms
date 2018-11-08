@@ -16,7 +16,7 @@ exports.create = (event, context, callback) => {
   try {
     body = JSON.parse(event.body);
   } catch (error) {
-    done(new Error('problem parsing event body: ' + error));
+    done(new Error('Error: problem parsing event body: ' + error));
     return;
   }
 

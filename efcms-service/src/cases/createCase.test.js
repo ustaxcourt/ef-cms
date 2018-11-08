@@ -104,13 +104,16 @@ describe('Create case lambda', function() {
       {
         httpMethod: 'POST',
         body: JSON.stringify(documents.documents.pop())
+      },
+      {
+        httpMethod: 'POST'
       }
     ].forEach(function(post) {
       it('should return an error on a POST without a Authorization header', function() {
         return lambdaTester(createCase.create)
         .event(post)
         .expectResult(err => {
-          expect(err.body).to.startsWith('"Auth');
+          expect(err.body).to.startsWith('"Error:');
         });
       });
     });

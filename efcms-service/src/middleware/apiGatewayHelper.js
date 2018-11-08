@@ -15,11 +15,11 @@ exports.getAuthHeader = event => {
   if (event['headers'] && event['headers']['Authorization']) {
     usernameTokenArray = event['headers']['Authorization'].split(" ");
     if (!usernameTokenArray || !usernameTokenArray[1]) {
-       throw new Error('Authorization Bearer token is required'); //temp until actual auth is added
+       throw new Error('Error: Authorization Bearer token is required'); //temp until actual auth is added
     }
 
   } else {
-    throw new Error('Authorization is required'); //temp until actual auth is added
+    throw new Error('Error: Authorization is required'); //temp until actual auth is added
   }
 
   return usernameTokenArray[1];
