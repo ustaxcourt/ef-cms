@@ -1,8 +1,10 @@
 import { state } from 'cerebral';
 
-export const getUser = async ({ api, path, get }) => {
+export const getUser = ({ applicationContext, get, path }) => {
   try {
-    const user = api.getUser(get(state.form.name));
+    const user = applicationContext
+      .getPersistenceGateway()
+      .getUser(get(state.form.name));
     return path.success({ user });
   } catch (e) {
     return path.error({
@@ -19,91 +21,15 @@ export const setUser = async ({ store, props }) => {
   return;
 };
 
-export const specifyPetitionFile = async () => {
-  return { documentType: 'petitionFile' };
-};
-
-export const specifyRequestForPlaceOfTrial = async () => {
-  return { documentType: 'requestForPlaceOfTrial' };
-};
-
-export const specifyStatementOfTaxpayerIdentificationNumber = async () => {
-  return { documentType: 'statementOfTaxpayerIdentificationNumber' };
-};
-
-export const getDocumentPolicy = async ({ api, environment, store, path }) => {
-  try {
-    const response = await api.getDocumentPolicy(environment.getBaseUrl());
-    store.set(state.petition.policy, response);
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Document policy retrieval failed',
-      },
-    });
-  }
-};
-
-export const getDocumentId = async ({
-  api,
-  environment,
-  store,
-  path,
-  get,
-  props,
-}) => {
-  try {
-    const response = await api.getDocumentId(
-      environment.getBaseUrl(),
+export const createPdfPetition = ({ get, applicationContext }) => {
+  applicationContext
+    .getPersistenceGateway()
+    .createPdfPetition(
+      applicationContext.getBaseUrl(),
       get(state.user),
-      get(props.documentType),
+      get(state.petition),
     );
-    store.set(
-      state.petition[get(props.documentType)].documentId,
-      response.documentId,
-    );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Fetching document ID failed',
-      },
-    });
-  }
 };
-
-export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
-  try {
-    await api.uploadDocumentToS3(
-      get(state.petition.policy),
-      get(state.petition[get(props.documentType)].documentId),
-      get(state.petition[get(props.documentType)].file),
-    );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Uploading document failed',
-      },
-    });
-  }
-};
-
-// TODO: add this
-// export const createPdfPetition = ({ get, api, factory }) => {
-//   factory
-//     .getFilePetitionInteractor()
-//     .filePetition(
-//       get(state.user),
-//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
-//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
-//       get(state.petition.statementOfTaxpayerIdentificationNumber.file),
-//     );
-// };
 
 export const getPetitionUploadAlertSuccess = () => {
   return {
@@ -130,14 +56,6 @@ export const setAlertSuccess = ({ props, store }) => {
   store.set(state.alertSuccess, props.alertSuccess);
 };
 
-// export const clearAlertError = ({ store }) => {
-//   store.set(state.alertError, {});
-// };
-
-// export const clearAlertSuccess = ({ store }) => {
-//   store.set(state.alertSuccess, {});
-// };
-
 export const clearLoginForm = ({ store }) => {
   store.set(state.form, {
     name: '',
@@ -148,15 +66,12 @@ export const clearPetition = ({ store }) => {
   store.set(state.petition, {
     petitionFile: {
       file: undefined,
-      documentId: undefined,
     },
     requestForPlaceOfTrial: {
       file: undefined,
-      documentId: undefined,
     },
     statementOfTaxpayerIdentificationNumber: {
       file: undefined,
-      documentId: undefined,
     },
     uploadsFinished: 0,
   });
