@@ -4,15 +4,15 @@ import mainModule from './main';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import AppComponent from './components/App';
 import { router, route } from './router';
+import AppComponent from './components/App';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: (environment, debugTools) => {
-    mainModule.providers.environment = environment;
+  initialize: (applicationContext, debugTools) => {
+    mainModule.providers.applicationContext = applicationContext;
     mainModule.providers.router = {
       route,
     };
