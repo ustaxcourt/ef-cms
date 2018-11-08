@@ -34,7 +34,7 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
             sh 'docker run --rm shellcheck'
           }
@@ -44,7 +44,7 @@ pipeline {
     // stage('Audit') {
     //   steps {
     //     script {
-    //       dir('document-service') {
+    //       dir('efcms-service') {
     //         sh 'docker build -t audit -f Dockerfile.audit .'
     //         sh 'docker run --rm audit'
     //       }
@@ -54,7 +54,7 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t lint -f Dockerfile.lint .'
             sh 'docker run --rm lint'
           }
@@ -64,7 +64,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t test -f Dockerfile.test .'
             sh 'docker run --rm -e COVERAGE_USER=`id -u $USER`:`id -g $USER` -v `pwd`/coverage:/home/app/coverage test'
           }
@@ -72,7 +72,7 @@ pipeline {
       }
       post {
         success {
-          dir('document-service') {
+          dir('efcms-service') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
@@ -82,7 +82,7 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
               sh "docker run -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
             }
@@ -124,7 +124,7 @@ pipeline {
       }
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t route53 -f Dockerfile.route53 .'
             sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
           }
@@ -139,7 +139,7 @@ pipeline {
       }
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t s3replication -f Dockerfile.s3replication .'
             sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm s3replication"
           }
@@ -154,7 +154,7 @@ pipeline {
       }
       steps {
         script {
-          dir('document-service') {
+          dir('efcms-service') {
             sh 'docker build -t globaltables -f Dockerfile.globaltables .'
             sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
           }
@@ -190,7 +190,7 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
-          sh 'docker build -t terraform -f document-service/Dockerfile.terraform .'
+          sh 'docker build -t terraform -f efcms-service/Dockerfile.terraform .'
           sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
         }
       }
@@ -208,7 +208,7 @@ def createSmokeTestTasks(targets) {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'docker build -t smoketest -f Dockerfile.smoketest .'
               sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
             }
@@ -229,7 +229,7 @@ def createServerlessTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'docker build -t serverless -f Dockerfile.serverless .'
               sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
             }
