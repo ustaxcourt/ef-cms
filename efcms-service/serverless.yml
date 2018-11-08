@@ -70,7 +70,36 @@ custom:
       -
         path: "v1/documents/policy"
         description: "Path used for retrieving pre-signed policy url."
+      -
+        path: "v1/cases"
+        description: "Path used for creating a case."
     models:
+      -
+        name: "case"
+        description: "a case response"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            caseId:
+              type: string
+              description: id of case
+            userId:
+              type: string
+              description: id of user who created the case
+            documents:
+              type: array
+              items:
+                type: object
+                properties:
+                  documentId:
+                    type: string
+                  documentType:
+                    type: string
+              description: array of document ids and types associated with the case
+            createdAt:
+              type: string
+              description: date case created
       -
         name: "document"
         description: "a document response"
@@ -143,10 +172,10 @@ custom:
             - message
 
   customDomain:
-    domainName: documents-${self:provider.stage}.${opt:domain}
+    domainName: efcms-${self:provider.stage}.${opt:domain}
     basePath: ''
     endpointType: 'regional'
-    certificateName: documents-${self:provider.stage}.${opt:domain}
+    certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
     createRoute53Record: false
@@ -168,7 +197,8 @@ provider:
   logRetentionInDays: 7
   s3Endpoint: s3.${opt:region}.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
-  # role: ${self:custom.vars.role}
+  masterRegion: us-east-1
+  masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
@@ -176,8 +206,10 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-${opt:region}
-    DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
+    MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+    STAGE: ${self:custom.stage}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -202,6 +234,21 @@ provider:
         - { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }
         - { "Fn::Join": [ "/", [
             { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
+          ]]}
+
+    - Effect: "Allow"
+      Action:
+       - dynamodb:Query
+       - dynamodb:Scan
+       - dynamodb:GetItem
+       - dynamodb:PutItem
+       - dynamodb:UpdateItem
+       - dynamodb:DeleteItem
+       - dynamodb:BatchWriteItem
+      Resource:
+        - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
+        - { "Fn::Join": [ "/", [
+            { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
           ]]}
 
 package:
@@ -252,7 +299,23 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
           WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: ${self:provider.environment.DOCUMENTS_DYNAMODB_TABLE}
+        TableName: efcms-documents-${self:custom.stage}
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+    CasesDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: caseId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: caseId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+          WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
+        TableName: efcms-cases-${self:custom.stage}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 
@@ -349,6 +412,28 @@ functions:
 #          path: v1/hello
 #          method: get
 #          cors: true
+
+
+  createCase:
+    handler: src/cases/createCase.create
+    events:
+      - http:
+          path: v1/cases
+          method: post
+          cors: true
+          documentation:
+            summary: create a case
+            tags:
+              - cases
+            description: >
+              Create a case.
+            methodResponses:
+              -
+                statusCode: '200'
+                responseBody:
+                  description: "case"
+                responseModels:
+                  "application/json": case
 
   swagger:
     handler: src/swagger/swagger.handler
