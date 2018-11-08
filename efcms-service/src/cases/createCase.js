@@ -1,5 +1,5 @@
-const { createDone } = require('../services/gatewayHelper');
-const caseService = require('./services/caseService');
+const { createDone, getAuthHeader } = require('../middleware/apiGatewayHelper');
+const caseMiddleware = require('./middleware/caseMiddleware');
 
 /**
  * Create Case API Lambda
@@ -20,28 +20,17 @@ exports.create = (event, context, callback) => {
     return;
   }
 
-  if (!body || !body.documents || !body.documents.constructor === Array || !body.documents.length == 3) {
-    done(new Error('case initiation documents are required'));
+  let userToken;
+
+  try {
+    userToken = getAuthHeader(event);
+  } catch (error) {
+    done(error);
     return;
   }
 
-  //TODO validation on the endpoint for the POST body to match the swagger documents model
-
-  let usernameTokenArray;
-  if (event['headers'] && event['headers']['Authorization']) {
-    usernameTokenArray = event['headers']['Authorization'].split(" ");
-  } else {
-    done(new Error('Authorization is required')); //temp until actual auth is added
-    return;
-  }
-
-  if (!usernameTokenArray || !usernameTokenArray[1]) {
-    done(new Error('Authorization is required')); //temp until actual auth is added
-    return;
-  }
-
-  caseService
-    .create(usernameTokenArray[1], body.documents)
+  caseMiddleware
+    .create(userToken, body.documents)
     .then(caseRecord => {
       done(null, caseRecord);
     })

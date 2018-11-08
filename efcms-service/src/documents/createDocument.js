@@ -1,4 +1,4 @@
-const { createDone } = require('../services/gatewayHelper');
+const { createDone } = require('../middleware/apiGatewayHelper');
 const documentService = require('./services/documentService');
 
 /**

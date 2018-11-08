@@ -1,8 +1,15 @@
-const client = require('../../services/dynamodbClientService');
+const client = require('../../middleware/dynamodbClientService');
 
-const TABLE_NAME =
-  process.env.CASES_DYNAMODB_TABLE || 'efcms-cases-dev';
+const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-dev';
 
+/**
+ * createDocketNumber
+ *
+ * creates a docket number by incrementing the value
+ * in the datastore
+ *
+ * @returns {Promise.<string>}
+ */
 exports.createDocketNumber = async () => {
   const params = {
     TableName: TABLE_NAME,
@@ -18,9 +25,13 @@ exports.createDocketNumber = async () => {
     },
     ReturnValues: "UPDATED_NEW"
   };
+
   const id = await client.updateConsistent(params);
+
   const plus100 = id + 100;
   const last2YearDigits = new Date().getFullYear().toString().substr(-2);
   const pad = `00000${plus100}`.substr(-5);
+
   return `${pad}-${last2YearDigits}`;
-}
+
+};
