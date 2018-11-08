@@ -15,6 +15,7 @@ pipeline {
     stage('setup') {
       steps {
         script {
+          deleteDir()
           def scmVars = checkout scm
           env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
           env.GIT_COMMIT = scmVars.GIT_COMMIT
@@ -105,11 +106,11 @@ pipeline {
       }
     }
   }
-  post {
-    always {
-      deleteDir()
-    }
-  }
+//  post {
+//    always {
+//      deleteDir()
+//    }
+//  }
 }
 
 def checkCommit(folder) {
