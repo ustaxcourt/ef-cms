@@ -1,9 +1,8 @@
-const createPdfPetition = async function createPdfPetition(
-  user,
-  petition,
-  environment,
-) {
-  console.log('local createPdfPetition', user, petition, environment);
+const filePdfPetition = async function filePdfPetition() {
+  // user,
+  // petition,
+  // environment,
+  // TODO: store documents in localStorage
   return;
 };
 
@@ -13,7 +12,7 @@ const getUser = name => {
 };
 
 const localPersistenceGateway = {
-  createPdfPetition,
+  filePdfPetition,
   getUser,
 };
 

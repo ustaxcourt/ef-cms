@@ -63,7 +63,7 @@ describe('Main cerebral module', () => {
       assert.equal(test.getState('alertError.title'), 'User not found');
     });
 
-    it('Create PDF petition', async () => {
+    it('File PDF petition', async () => {
       await test.runSequence('gotoFilePetition');
       await test.runSequence('updatePetitionValue', {
         key: 'petitionFile',

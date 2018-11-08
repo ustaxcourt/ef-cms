@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
 
-export const getUser = ({ applicationContext, get, path }) => {
+export const getUser = async ({ useCases, applicationContext, get, path }) => {
   try {
-    const user = applicationContext
-      .getPersistenceGateway()
-      .getUser(get(state.form.name));
+    const user = await useCases.getUser(
+      applicationContext.getPersistenceGateway(),
+      get(state.form.name),
+    );
     return path.success({ user });
   } catch (e) {
     return path.error({
@@ -21,17 +22,20 @@ export const setUser = async ({ store, props }) => {
   return;
 };
 
-export const createPdfPetition = ({ get, applicationContext }) => {
-  applicationContext
-    .getPersistenceGateway()
-    .createPdfPetition(
-      applicationContext.getBaseUrl(),
-      get(state.user),
-      get(state.petition),
-    );
+export const filePdfPetition = async ({
+  useCases,
+  applicationContext,
+  get,
+}) => {
+  await useCases.filePdfPetition(
+    applicationContext.getBaseUrl(),
+    applicationContext.getPersistenceGateway(),
+    get(state.petition),
+    get(state.user),
+  );
 };
 
-export const getPetitionUploadAlertSuccess = () => {
+export const getFilePdfPetitionAlertSuccess = () => {
   return {
     alertSuccess: {
       title: 'Your files were uploaded successfully.',

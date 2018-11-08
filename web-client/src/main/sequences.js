@@ -33,9 +33,9 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   actions.setFormSubmitting,
-  actions.createPdfPetition,
+  actions.filePdfPetition,
   actions.unsetFormSubmitting,
-  actions.getPetitionUploadAlertSuccess,
+  actions.getFilePdfPetitionAlertSuccess,
   actions.setAlertSuccess,
   actions.navigateHome,
 ];
