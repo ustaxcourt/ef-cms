@@ -28,7 +28,6 @@ const validateDocuments = (documents) => {
  * @returns {Promise.<void>}
  */
 exports.create = async (userId, documents) => {
-  console.log(TABLE_NAME)
   validateDocuments(documents);
 
   const caseId = uuidv4();
