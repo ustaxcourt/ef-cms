@@ -39,24 +39,20 @@ const getUser = name => {
   return name;
 };
 
-const createPdfPetition = async function createPdfPetition(
+const filePdfPetition = async function filePdfPetition(
   user,
   petition,
-  environment,
+  baseUrl,
 ) {
-  const documentPolicy = await getDocumentPolicy(environment.getBaseUrl());
-  const petitionFileId = await getDocumentId(
-    environment.getBaseUrl(),
-    user,
-    'petitionFile',
-  );
+  const documentPolicy = await getDocumentPolicy(baseUrl);
+  const petitionFileId = await getDocumentId(baseUrl, user, 'petitionFile');
   const requestForPlaceOfTrialId = await getDocumentId(
-    environment.getBaseUrl(),
+    baseUrl,
     user,
     'requestForPlaceOfTrial',
   );
   const statementOfTaxpayerIdentificationNumberId = await getDocumentId(
-    environment.getBaseUrl(),
+    baseUrl,
     user,
     'statementOfTaxpayerIdentificationNumber',
   );
@@ -78,7 +74,7 @@ const createPdfPetition = async function createPdfPetition(
 };
 
 const awsPersistenceGateway = {
-  createPdfPetition,
+  filePdfPetition,
   getUser,
 };
 
