@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import FilePetition from './FilePetition';
 import Footer from './Footer';
@@ -20,21 +21,31 @@ const pages = {
 /**
  * Root application component
  */
-export default connect(
-  {
-    currentPage: state.currentPage,
-  },
-  function App({ currentPage }) {
-    const CurrentPage = pages[currentPage];
+class App extends React.Component {
+  componentDidUpdate() {
+    document.querySelector('#app').focus();
+  }
+  render() {
+    const CurrentPage = pages[this.props.currentPage];
     return (
       <React.Fragment>
         <UsaBanner />
         <Header />
-        <main id="main-content">
+        <main tabIndex="-1" id="main-content">
           <CurrentPage />
         </main>
         <Footer />
       </React.Fragment>
     );
+  }
+}
+App.propTypes = {
+  currentPage: PropTypes.string,
+};
+
+export default connect(
+  {
+    currentPage: state.currentPage,
   },
+  App,
 );
