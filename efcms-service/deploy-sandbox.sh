@@ -10,6 +10,12 @@ function check_env_vars_exist() {
         exit 1
     fi
 
+    if [[ -z "${REGION}" ]]
+    then
+        echo "No REGION environment variable was specified."
+        exit 1
+    fi
+
     if [[ -z "${EFCMS_DOMAIN}" ]]
     then
         echo "No EFCMS_DOMAIN environment variable was specified."
@@ -42,8 +48,8 @@ function run_development() {
     export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd
 
-    echo "running serverless deploy --stage ${SLS_STAGE} --region us-east-1 --domain ${EFCMS_DOMAIN}"
-    ./run-serverless.sh "${SLS_STAGE}" "us-east-1"
+    echo "running serverless deploy --stage ${SLS_STAGE} --region "${REGION}" --domain ${EFCMS_DOMAIN}"
+    ./run-serverless.sh "${SLS_STAGE}" "${REGION}"
 }
 
 function configure_custom_logging() {
@@ -52,11 +58,11 @@ function configure_custom_logging() {
     aws apigateway update-stage \
         --rest-api-id "${REST_API_ID}" \
         --stage-name "${ENVIRONMENT}" \
-        --region us-east-1 \
+        --region "${REGION}" \
         --patch-operations op=replace,path=/*/*/logging/dataTrace,value=true
 }
 
 check_env_vars_exist
-#prepare_serverless
+# prepare_serverless
 run_development
 configure_custom_logging
