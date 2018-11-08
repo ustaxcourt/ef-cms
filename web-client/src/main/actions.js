@@ -14,6 +14,12 @@ export const getUser = async ({ api, path, get }) => {
   }
 };
 
+export const getCaseDetail = async ({ store }) => {
+  // TODO: retrieve case detail using state.docketNumber
+  const caseDetail = state.cases[0];
+  store.set(state.caseDetail, caseDetail);
+  return;
+};
 export const setUser = async ({ store, props }) => {
   store.set(state.user, props.user);
   return;
@@ -150,6 +156,6 @@ export const clearPetition = ({ store }) => {
   });
 };
 
-export const navigateHome = ({ router }) => {
+export const navigateToDashboard = ({ router }) => {
   router.route('/');
 };
