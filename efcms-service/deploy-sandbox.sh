@@ -48,7 +48,7 @@ function run_development() {
     export SLS_DEPLOYMENT_BUCKET=$SLS_DEPLOYMENT_BUCKET
     popd
 
-    echo "running serverless deploy --stage ${SLS_STAGE} --region "${REGION}" --domain ${EFCMS_DOMAIN}"
+    echo "running serverless deploy --stage ${SLS_STAGE} --region ${REGION} --domain ${EFCMS_DOMAIN}"
     ./run-serverless.sh "${SLS_STAGE}" "${REGION}"
 }
 
