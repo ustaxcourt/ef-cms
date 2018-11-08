@@ -206,11 +206,10 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-${opt:region}
-    DOCUMENTS_DYNAMODB_TABLE: efcms-documents-${opt:stage}
-    CASES_DYNAMODB_TABLE: efcms-cases-${opt:stage}
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+    STAGE: ${self:custom.stage}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -249,7 +248,7 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
         - { "Fn::Join": [ "/", [
-            { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
+            { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
           ]]}
 
 package:
@@ -300,7 +299,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
           WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: ${self:provider.environment.DOCUMENTS_DYNAMODB_TABLE}
+        TableName: efcms-documents-${self:custom.stage}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
     CasesDynamoDBTable:
@@ -316,7 +315,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
           WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: ${self:provider.environment.CASES_DYNAMODB_TABLE}
+        TableName: efcms-cases-${self:custom.stage}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
 

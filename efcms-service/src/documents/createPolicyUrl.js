@@ -1,5 +1,5 @@
-const fileStorageService = require('../services/fileStorageService');
-const { createDone } = require('../services/gatewayHelper');
+const fileStorageService = require('../middleware/S3Service');
+const { createDone } = require('../middleware/apiGatewayHelper');
 
 /**
  * Create Document API Lambda

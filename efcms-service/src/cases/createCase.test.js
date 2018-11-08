@@ -5,93 +5,130 @@ const createCase = require('./createCase');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
-describe.only('Create case', function() {
+describe('Create case lambda', function() {
 
-  const documents = [{ documentId: '123456789', documentType: 'stin' },{ documentId: '123456780', documentType: 'stin' },{ documentId: '123456781', documentType: 'stin' }]
+  let documents = {
+    documents: [
+      {
+        documentId: '123456789',
+        documentType: 'stin'
+      },
+      {
+        documentId: '123456780',
+        documentType: 'stin'
+      },
+      {
+        documentId: '123456781',
+        documentType: 'stin'
+      }
+    ]
+  };
 
 
-  before(function() {
-    aws.mock('DynamoDB.DocumentClient', 'put', function(params, callback) {
-      callback(null, {
-        Item: {
-          caseId: '123456',
-          userId: 'userId',
-          docketNumber: '456789-18',
-          documents: [],
-          createdAt: '',
-        },
+
+  describe ('success', function() {
+    before(function () {
+      aws.mock('DynamoDB.DocumentClient', 'put', function (params, callback) {
+        callback(null, {
+          Item: {
+            userId: 'userId',
+            docketNumber: '456789-18',
+            documents: documents,
+            createdAt: '',
+          },
+        });
+      });
+      aws.mock('DynamoDB.DocumentClient', 'update', function (params, callback) {
+        callback(null, { Attributes: { id: 1 } });
+      });
+    });
+
+    after(function () {
+      aws.restore('DynamoDB.DocumentClient');
+    });
+
+
+    [
+      {
+        httpMethod: 'POST',
+        body: JSON.stringify(documents),
+        headers: { 'Authorization': 'Bearer userId' }
+      }
+    ].forEach(function (documentBody) {
+      it('should create a case on a POST', function () {
+        return lambdaTester(createCase.create).
+          event(documentBody).
+          expectResult(result => {
+            const data = JSON.parse(result.body);
+            expect(data.userId).
+              to.
+              equal('userId');
+            expect(data.documents.length).
+              to.
+              equal(3);
+            expect(data.caseId).not.to.be.null;
+            expect(data.caseId && /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(data.caseId)).to.be.true;
+
+          });
       });
     });
   });
 
-  after(function() {
-    aws.restore('DynamoDB.DocumentClient');
-  });
-
-
-  [
-    {
-      httpMethod: 'POST',
-      body: JSON.stringify(documents)
-    }
-  ].forEach(function(documentBody) {
-    it('should create a case on a POST', function() {
-      return lambdaTester(createCase.create)
-        .event(documentBody)
-        .expectResult(result => {
-          const data = JSON.parse(result.body);
-          expect(data.caseId).to.not.be.null;
+  describe('error', function() {
+    before(function () {
+      aws.mock('DynamoDB.DocumentClient', 'put', function (params, callback) {
+        callback(null, {
+          Item: {
+            userId: 'userId',
+            docketNumber: '456789-18',
+            documents: documents,
+            createdAt: '',
+          },
         });
+      });
+      aws.mock('DynamoDB.DocumentClient', 'update', function (params, callback) {
+        callback(null, { Attributes: { id: 1 } });
+      });
     });
-  });
 
-  // [
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ userId: '123456789' }),
-  //   },
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ documentType: 'petition' }),
-  //   },
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ userId: '', documentType: 'petition' }),
-  //   },
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ userId: '123456789', documentType: '' }),
-  //   },
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ userId: null, documentType: 'petition' }),
-  //   },
-  //   {
-  //     httpMethod: 'POST',
-  //     body: JSON.stringify({ userId: '123456789', documentType: null }),
-  //   },
-  // ].forEach(function(documentBody) {
-  //   it('should should require userId and documentType', function() {
-  //     return lambdaTester(createCase.create)
-  //       .event(documentBody)
-  //       .expectResult(err => {
-  //         expect(err.body).to.startsWith('"documentType and userId');
-  //       });
-  //   });
-  // });
-  //
-  // [
-  //   {
-  //     httpMethod: 'POST',
-  //     body: 'some string',
-  //   },
-  // ].forEach(function(documentBody) {
-  //   it('should should throw an error if the body is not json', function() {
-  //     return lambdaTester(createCase.create)
-  //       .event(documentBody)
-  //       .expectResult(err => {
-  //         expect(err.body).to.startsWith('"problem parsing event body');
-  //       });
-  //   });
-  // });
+    after(function () {
+      aws.restore('DynamoDB.DocumentClient');
+    });
+
+    [
+      {
+        httpMethod: 'POST',
+        body: JSON.stringify(documents),
+        headers: {'Authorization': 'Bearer'}
+      },
+      {
+        httpMethod: 'POST',
+        body: JSON.stringify(documents.documents.pop())
+      }
+    ].forEach(function(post) {
+      it('should return an error on a POST without a Authorization header', function() {
+        return lambdaTester(createCase.create)
+        .event(post)
+        .expectResult(err => {
+          expect(err.body).to.startsWith('"Auth');
+        });
+      });
+    });
+
+    [
+      {
+        httpMethod: 'POST',
+        body: JSON.stringify(documents),
+        headers: {'Authorization': 'Bearer userId'}
+      }
+    ].forEach(function(post) {
+      it('should return an error on a POST without the required case initiation documents', function() {
+        return lambdaTester(createCase.create)
+        .event(post)
+        .expectResult(err => {
+          expect(err.body).to.startsWith('"Three case initiation');
+        });
+      });
+    });
+  })
 });
