@@ -28,7 +28,7 @@ describe('createCaseMiddleware', function() {
     process.env = {};
     process.env.STAGE = 'test';
 
-    caseMiddleWare = proxyquire('./caseMiddleWare', {
+    caseMiddleWare = proxyquire('./caseMiddleware', {
       '../../middleware/dynamodbClientService' : {
         put: stub
       },
