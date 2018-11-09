@@ -170,6 +170,18 @@ custom:
               type: string
           required:
             - message
+      -
+        name: "unprocessableEntityError"
+        description: "a unprocessable entity error (422), due to a problem in the body or the id in the url"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+          required:
+            - message
+
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -444,19 +456,23 @@ functions:
           path: v1/cases/{caseId}
           method: put
           cors: true
-          # documentation:
-          #   summary: create a pre-signed url for downloads
-          #   tags:
-          #     - documents
-          #   description: >
-          #     Create a pre-signed url for document downloads from S3.
-          #   methodResponses:
-          #     -
-          #       statusCode: "200"
-          #       responseBody:
-          #         description: "pre-signed policy download url"
-          #       responseModels:
-          #         "application/json": "policyUrl"
+          documentation:
+           summary: update a case
+           tags:
+             - cases
+           description: >
+             Update a case.
+           methodResponses:
+             -
+               statusCode: "200"
+               responseBody:
+                 description: "updated case"
+               responseModels:
+                 "application/json": case
+             -
+               statusCode: "422"
+               responseModels:
+                 "application/json": "unprocessableEntityError"
 
 
   createCase:
@@ -472,15 +488,15 @@ functions:
               - cases
             description: >
               Create a case.
-#            parameters:
-#              - name: documents
-#                in: body
-#                required: true
-#                description: test param1
-#                schema:
-#                  type: array
-#                  items:
-#                    $ref: documents
+            parameters:
+              - name: documents
+                in: body
+                required: true
+                description: document metadata
+                schema:
+                  type: array
+                  items:
+                    $ref: documents
             methodResponses:
               -
                 statusCode: '200'
