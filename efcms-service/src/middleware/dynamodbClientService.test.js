@@ -18,7 +18,7 @@ describe('Dynamodb client service', function() {
   let item = null;
 
   before(function() {
-   item = {
+    item = {
       Item: {
         someId: '123456',
       }

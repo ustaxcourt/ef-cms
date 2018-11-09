@@ -113,13 +113,14 @@ exports.getCasesByStatus = async (status, userId) => {
 exports.updateCase = async ({ caseId, caseToUpdate , userId}) => {
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
-  } else {
-    if (caseId !== caseToUpdate.caseId) {
-      throw new UnprocessableEntityError();
-    }
-    return await getPersistence('cases').
-      updateCase({ caseToUpdate });
   }
+
+  if (caseId !== caseToUpdate.caseId) {
+    throw new UnprocessableEntityError();
+  }
+
+  return await getPersistence('cases')
+    .updateCase({ caseToUpdate });
 }
 
 

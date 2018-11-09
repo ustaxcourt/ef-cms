@@ -56,16 +56,16 @@ describe('Create case lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should create a case on a POST', function () {
-        return lambdaTester(createCase.create).
-          event(documentBody).
-          expectResult(result => {
+        return lambdaTester(createCase.create)
+          .event(documentBody)
+          .expectResult(result => {
             const data = JSON.parse(result.body);
-            expect(data.userId).
-              to.
-              equal('userId');
-            expect(data.documents.length).
-              to.
-              equal(3);
+            expect(data.userId)
+              .to
+              .equal('userId');
+            expect(data.documents.length)
+              .to
+              .equal(3);
             expect(data.caseId).not.to.be.null;
             expect(data.caseId && /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(data.caseId)).to.be.true;
 
@@ -111,10 +111,10 @@ describe('Create case lambda', function() {
     ].forEach(function(post) {
       it('should return an error on a POST without a Authorization header', function() {
         return lambdaTester(createCase.create)
-        .event(post)
-        .expectResult(err => {
-          expect(err.body).to.startsWith('"Error:');
-        });
+          .event(post)
+          .expectResult(err => {
+            expect(err.body).to.startsWith('"Error:');
+          });
       });
     });
 
@@ -127,10 +127,10 @@ describe('Create case lambda', function() {
     ].forEach(function(post) {
       it('should return an error on a POST without the required case initiation documents', function() {
         return lambdaTester(createCase.create)
-        .event(post)
-        .expectResult(err => {
-          expect(err.body).to.startsWith('"Three case initiation');
-        });
+          .event(post)
+          .expectResult(err => {
+            expect(err.body).to.startsWith('"Three case initiation');
+          });
       });
     });
   })
