@@ -68,7 +68,7 @@ custom:
         path: "v1/documents/{documentId}"
         description: "Path used for retrieving document with a documentId."
       -
-        path: "v1/documents/policy"
+        path: "v1/documents/uploadPolicy"
         description: "Path used for retrieving pre-signed policy url."
       -
         path: "v1/cases"
@@ -385,7 +385,7 @@ functions:
     handler: src/documents/downloadPolicyUrl.get
     events:
       - http:
-          path: v1/documents/downloadPolicy
+          path: v1/documents/{documentId}/downloadPolicy
           method: get
           cors: true
           documentation:

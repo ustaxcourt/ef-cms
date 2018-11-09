@@ -10,6 +10,36 @@ exports.createDone = callback => {
     });
 };
 
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+}
+
+exports.handle = async fun => {
+  try {
+    const response = await fun();
+    return exports.sendOk(response);
+  } catch (err) {
+    return exports.sendError(err);
+  }
+}
+
+exports.sendError = (err, statusCode = '400') => {
+  return {
+    statusCode,
+    body: JSON.stringify(err.message),
+    headers
+  }
+};
+
+exports.sendOk = (response, statusCode = '200') => {
+  return {
+    statusCode,
+    body: JSON.stringify(response),
+    headers
+  }
+};
+
 exports.getAuthHeader = event => {
   let usernameTokenArray;
 

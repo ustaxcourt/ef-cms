@@ -11,4 +11,4 @@ config:
 scenarios:
   - flow:
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/policy'
+          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/uploadPolicy'

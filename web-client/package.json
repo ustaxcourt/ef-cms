@@ -11,7 +11,8 @@
     "dist": "rm -rf dist; USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
     "test": "jest ./**/**/*.test.js",
-    "test:pa11y": "node pa11y.js"
+    "test:pa11y": "node pa11y.js",
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",

@@ -1,5 +1,5 @@
-const fileStorageService = require('../middleware/S3Service');
-const { createDone } = require('../middleware/apiGatewayHelper');
+const s3Service = require('../middleware/S3Service');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -8,13 +8,9 @@ const { createDone } = require('../middleware/apiGatewayHelper');
  * @param context
  * @param callback
  */
-
-exports.create = (event, context, callback) => {
-  const done = createDone(callback);
-  fileStorageService
-    .createDownloadPolicy()
-    .then(policy => {
-      done(null, policy);
-    })
-    .catch(done);
-};
+exports.get = async event =>
+  handle(() =>
+    s3Service.createDownloadPolicy(
+      event.pathParameters.documentId
+    )
+  );
