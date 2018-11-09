@@ -24,9 +24,9 @@ exports.handle = async fun => {
   }
 }
 
-exports.sendError = (err, statusCode = '400') => {
+exports.sendError = err => {
   return {
-    statusCode,
+    statusCode: err.statusCode || '400',
     body: JSON.stringify(err.message),
     headers
   }

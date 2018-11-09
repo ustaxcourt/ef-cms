@@ -33,3 +33,21 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
     this.statusCode = 404;
   }
 };
+
+/**
+ * UnprocessableEntity error
+ *
+ * @type {module.UnprocessableEntity}
+ */
+module.exports.UnprocessableEntity = class UnprocessableEntity extends Error {
+  /**
+   * constructor
+   *
+   * @param message
+   */
+  constructor(message = "problem in body or url") {
+    super(message);
+
+    this.statusCode = 422;
+  }
+};

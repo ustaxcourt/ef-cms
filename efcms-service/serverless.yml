@@ -394,6 +394,7 @@ functions:
                   description: "pre-signed policy upload url"
                 responseModels:
                   "application/json": "policyUrl"
+
   downloadPolicyUrl:
     handler: src/documents/downloadPolicyUrl.get
     events:
@@ -436,38 +437,26 @@ functions:
                 responseModels:
                   "application/json": document
 
-
-#  getDocument:
-#    handler: src/documents/getDocument.handler
-#    documentation:
-#      summary: retrieves a document by document id
-#      tags:
-#        - documents
-#      description: >
-#        Retrieve a document by document id.
-#      # queryParams:
-#      #   -
-#      #     name: firstParam
-#      #     description: The first param that we want, you MUST pass it
-#      #     required: true
-#      #   -
-#      #     name: secondParam
-#      #     description: The second param. This one is optional
-#      methodResponses:
-#        -
-#          statusCode: '200'
-#          responseModels:
-#            "application/json": HelloWorldResponse
-#          # responseHeaders:
-#          #   -
-#          #     name: link
-#          #     description: describes other actions that can be taken
-#          #     type: string
-#    events:
-#      - http:
-#          path: v1/hello
-#          method: get
-#          cors: true
+  updateCase:
+    handler: src/cases/updateCase.put
+    events:
+      - http:
+          path: v1/cases/{caseId}
+          method: put
+          cors: true
+          # documentation:
+          #   summary: create a pre-signed url for downloads
+          #   tags:
+          #     - documents
+          #   description: >
+          #     Create a pre-signed url for document downloads from S3.
+          #   methodResponses:
+          #     -
+          #       statusCode: "200"
+          #       responseBody:
+          #         description: "pre-signed policy download url"
+          #       responseModels:
+          #         "application/json": "policyUrl"
 
 
   createCase:
