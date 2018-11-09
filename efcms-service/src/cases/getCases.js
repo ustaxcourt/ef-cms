@@ -24,7 +24,6 @@ exports.get = (event, context, callback) => {
   caseMiddleware
     .getCases(userToken)
     .then(caseRecords => {
-      console.log('caseRecords', caseRecords)
       done(null, caseRecords);
     })
     .catch(done);
