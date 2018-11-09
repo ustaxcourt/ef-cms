@@ -7,9 +7,7 @@ exports.get = key => {
 exports.entityPersistenceLookup = key => {
   switch (key) {
     case 'files':
-      return 'awsPersistence';
-    case 'documents':
-      return 'awsPersistence';
+      return 'awsS3Persistence';
     default:
       throw new Error('unsupported key');
   }
