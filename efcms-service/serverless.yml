@@ -313,6 +313,8 @@ resources:
             AttributeType: S
           - AttributeName: docketNumber
             AttributeType: S
+          - AttributeName: status
+            AttributeType: S
         KeySchema:
           - AttributeName: caseId
             KeyType: HASH
@@ -335,6 +337,17 @@ resources:
           - IndexName: UserIdIndex
             KeySchema:
               - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: caseId
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
+          - IndexName: StatusIndex
+            KeySchema:
+              - AttributeName: status
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
@@ -505,6 +518,31 @@ functions:
                 statusCode: '200'
                 responseBody:
                   description: "array of cases"
+                responseModels:
+                  "application/json": case
+
+  getCase:
+    handler: src/cases/getCase.get
+    events:
+      - http:
+          path: v1/cases/{caseId}
+          method: get
+          request:
+            parameters:
+               paths:
+                 caseId: true
+          cors: true
+          documentation:
+            summary: get a case by caseId
+            tags:
+              - cases
+            description: >
+              Get a case by caseId.
+            methodResponses:
+              -
+                statusCode: '200'
+                responseBody:
+                  description: "a case"
                 responseModels:
                   "application/json": case
 

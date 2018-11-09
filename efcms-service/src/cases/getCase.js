@@ -2,7 +2,7 @@ const { createDone, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const caseMiddleware = require('./middleware/caseMiddleware');
 
 /**
- * GET Cases API Lambda
+ * GET Case API Lambda
  *
  * @param event
  * @param context
@@ -21,19 +21,12 @@ exports.get = (event, context, callback) => {
     return;
   }
 
-  const status = (event["queryStringParameters"] || {})['status'];
+  const caseId = event['pathParameters']['caseId'];
 
-  if (status) {
-    caseMiddleware.getCasesByStatus(status, userToken).
-      then(caseRecords => {
-        done(null, caseRecords);
-      }).
-      catch(done);
-  } else {
-    caseMiddleware.getCases(userToken).
-      then(caseRecords => {
-        done(null, caseRecords);
-      }).
-      catch(done);
-  }
+  caseMiddleware
+    .getCase(userToken, caseId)
+    .then(caseRecord => {
+      done(null, caseRecord);
+    })
+    .catch(done);
 };

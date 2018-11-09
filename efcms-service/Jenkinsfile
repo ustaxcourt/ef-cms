@@ -84,7 +84,7 @@ pipeline {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             dir('efcms-service') {
               sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} --rm sonarqube"
+              sh "docker run -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
             }
           }
         }
