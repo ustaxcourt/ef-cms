@@ -1,6 +1,7 @@
 const uuidv4 = require('uuid/v4');
 const client = require('../../middleware/dynamodbClientService');
 const docketNumberService = require('./docketNumberGenerator');
+const { NotFoundError } = require('../../middleware/errors');
 
 const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-local';
 
@@ -39,7 +40,7 @@ exports.create = async (userId, documents) => {
     TableName: TABLE_NAME,
     Item: {
       caseId: caseId,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
       userId: userId,
       docketNumber: docketNumber,
       documents: documents
@@ -53,22 +54,27 @@ exports.create = async (userId, documents) => {
 
 };
 
-// TODO: Finish Implementing Me
-// exports.getCase = async (userId, caseId) => {
-//   //TODO add expression to limit to user
-//   const params = {
-//     TableName: TABLE_NAME,
-//     KeyConditionExpression: 'userId = :userId and caseId = :caseId',
-//     ExpressionAttributeValues: {
-//       ':userId': userId,
-//       ':caseId': caseId
-//     }
-//   };
-//   return await client.query(params);
-// };
+exports.getCase = async (userId, caseId) => {
+  const params = {
+    TableName: TABLE_NAME,
+    IndexName: "UserIdIndex",
+    KeyConditionExpression: 'userId = :userId and caseId = :caseId',
+    ExpressionAttributeValues: {
+      ':userId': userId,
+      ':caseId': caseId
+    }
+  };
+
+  const caseRecord =  await client.query(params);
+
+  if (caseRecord.length !== 1) {
+    throw new NotFoundError(`Case ${caseId} was not found.`);
+  }
+
+  return caseRecord[0];
+};
 
 exports.getCases = userId => {
-  //TODO add expression to limit to user
   const params = {
     TableName: TABLE_NAME,
     IndexName: "UserIdIndex",
