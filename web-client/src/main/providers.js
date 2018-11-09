@@ -7,7 +7,7 @@ export const api = {
   },
 
   getDocumentPolicy: async baseUrl => {
-    const response = await axios.get(`${baseUrl}/documents/policy`);
+    const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
     return response.data;
   },
 
