@@ -13,7 +13,7 @@ const NUM_REQUIRED_DOCUMENTS = 3; //because 3 is a magic number
  *
  * @param documents
  */
-const validateDocuments = (documents) => {
+const validateDocuments = documents => {
   if (!documents || !documents.constructor === Array || documents.length !== NUM_REQUIRED_DOCUMENTS) {
     throw new Error('Three case initiation documents are required');
   }
@@ -53,18 +53,19 @@ exports.create = async (userId, documents) => {
 
 };
 
-exports.getCase = async (userId, caseId) => {
-  //TODO add expression to limit to user
-  const params = {
-    TableName: TABLE_NAME,
-    KeyConditionExpression: 'userId = :userId and caseId = :caseId',
-    ExpressionAttributeValues: {
-      ':userId': userId,
-      ':caseId': caseId
-    }
-  };
-  return await client.query(params);
-};
+// TODO: Finish Implementing Me
+// exports.getCase = async (userId, caseId) => {
+//   //TODO add expression to limit to user
+//   const params = {
+//     TableName: TABLE_NAME,
+//     KeyConditionExpression: 'userId = :userId and caseId = :caseId',
+//     ExpressionAttributeValues: {
+//       ':userId': userId,
+//       ':caseId': caseId
+//     }
+//   };
+//   return await client.query(params);
+// };
 
 exports.getCases = userId => {
   //TODO add expression to limit to user
