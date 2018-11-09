@@ -3,6 +3,9 @@ import App from 'cerebral';
 import mainModule from './main';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
 import AppComponent from './components/App';
 import { router, route } from './router';
@@ -12,6 +15,7 @@ import { router, route } from './router';
  */
 const app = {
   initialize: (environment, debugTools) => {
+    library.add(faFilePdf);
     mainModule.providers.environment = environment;
     mainModule.providers.router = {
       route,

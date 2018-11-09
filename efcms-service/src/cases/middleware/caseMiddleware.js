@@ -66,7 +66,7 @@ exports.getCase = async (userId, caseId) => {
   return await client.query(params);
 };
 
-exports.getCases = (userId) => {
+exports.getCases = userId => {
   //TODO add expression to limit to user
   const params = {
     TableName: TABLE_NAME,
