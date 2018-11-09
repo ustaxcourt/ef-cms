@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2018-10-25T19:16:39Z",
+    "version" : "2018-11-09T16:55:06Z",
     "title" : "will-ef-cms",
     "contact" : {
       "url" : "https://www.ustaxcourt.gov",
@@ -13,8 +13,7 @@
       "url" : "https://creativecommons.org/share-your-work/public-domain/cc0/"
     }
   },
-  "host" : "fvtnozpme2.execute-api.us-east-1.amazonaws.com",
-  "basePath" : "/will",
+  "host" : "efcms-will.ustc-case-mgmt.flexion.us",
   "tags" : [ {
     "name" : "ef-cms",
     "description" : "EF-CMS"
@@ -24,6 +23,104 @@
   } ],
   "schemes" : [ "https" ],
   "paths" : {
+    "/v1/cases" : {
+      "get" : {
+        "tags" : [ "cases" ],
+        "summary" : "get all cases for a user",
+        "description" : "Get all cases for a user.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "cases" ],
+        "summary" : "create a case",
+        "description" : "Create a case.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cases/{caseId}" : {
+      "get" : {
+        "tags" : [ "cases" ],
+        "summary" : "get a case by caseId",
+        "description" : "Get a case by caseId.\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "caseId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/documents" : {
       "post" : {
         "tags" : [ "documents" ],
@@ -38,12 +135,35 @@
             }
           }
         }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/documents/uploadPolicy" : {
       "get" : {
         "tags" : [ "documents" ],
-        "summary" : "create a pre-signed url",
+        "summary" : "create a pre-signed url for uploads",
         "description" : "Create a pre-signed url for document uploads to S3.\n",
         "produces" : [ "application/json" ],
         "responses" : {
@@ -51,6 +171,68 @@
             "description" : "200 response",
             "schema" : {
               "$ref" : "#/definitions/policyUrl"
+            }
+          }
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{documentId}/downloadPolicy" : {
+      "get" : {
+        "tags" : [ "documents" ],
+        "summary" : "create a pre-signed url for downloads",
+        "description" : "Create a pre-signed url for document downloads from S3.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/policyUrl"
+            }
+          }
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
             }
           }
         }
@@ -154,6 +336,39 @@
         }
       },
       "description" : "a policy url response"
+    },
+    "case" : {
+      "type" : "object",
+      "properties" : {
+        "createdAt" : {
+          "type" : "string",
+          "description" : "date case created"
+        },
+        "documents" : {
+          "type" : "array",
+          "description" : "array of document ids and types associated with the case",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "documentType" : {
+                "type" : "string"
+              },
+              "documentId" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "caseId" : {
+          "type" : "string",
+          "description" : "id of case"
+        },
+        "userId" : {
+          "type" : "string",
+          "description" : "id of user who created the case"
+        }
+      },
+      "description" : "a case response"
     }
   }
 }
