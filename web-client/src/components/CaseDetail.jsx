@@ -16,7 +16,7 @@ export default connect(
         <h1>Docket number: {caseDetail.docketNumber}</h1>
         <p>
           {caseDetail.petitionerName}, Petitioner v. Commissioner of Internal
-          Revenue Service, Respondent
+          Revenue, Respondent
         </p>
         <br />
         <h2>Case activities</h2>

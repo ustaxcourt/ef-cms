@@ -1,4 +1,4 @@
-const s3Service = require('../middleware/S3Service');
+const { getDocumentDownloadUrl } = require('./services/documentBlobDAO');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -10,7 +10,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.get = async event =>
   handle(() =>
-    s3Service.createDownloadPolicy(
-      event.pathParameters.documentId
-    )
+    getDocumentDownloadUrl({
+      documentId: event.pathParameters.documentId,
+    })
   );

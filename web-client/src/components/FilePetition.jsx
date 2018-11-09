@@ -35,7 +35,7 @@ export default connect(
             <div role="listitem" className="usa-form-group">
               <label
                 htmlFor="petition-file"
-                className={petition.petitionFile.file && 'validated'}
+                className={petition.petitionFile && 'validated'}
               >
                 1. Petition file (form #2)
               </label>
@@ -48,7 +48,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -56,7 +56,7 @@ export default connect(
             <div role="listitem" className="usa-form-group">
               <label
                 htmlFor="request-for-place-of-trial"
-                className={petition.requestForPlaceOfTrial.file && 'validated'}
+                className={petition.requestForPlaceOfTrial && 'validated'}
               >
                 2. Request for place of trial (form #5)
               </label>
@@ -69,7 +69,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -78,7 +78,7 @@ export default connect(
               <label
                 htmlFor="statement-of-taxpayer-id"
                 className={
-                  petition.statementOfTaxpayerIdentificationNumber.file &&
+                  petition.statementOfTaxpayerIdentificationNumber &&
                   'validated'
                 }
               >
@@ -96,7 +96,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />

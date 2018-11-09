@@ -1,4 +1,4 @@
-const { get } = require('./environment');
+const { get, entityPersistenceLookup } = require('./environment');
 const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
@@ -23,6 +23,18 @@ describe('environment', () => {
     it('get DOCUMENTS_TABLE', () => {
       const value = get('DOCUMENTS_TABLE')
       expect(value).to.equal('efcms-documents-dev');
+    });
+  });
+
+  describe('entityPersistenceLookup', () => {
+    it('should throw an error with an unexpected key', () => {
+      let error;
+      try {
+        entityPersistenceLookup('lol');
+      } catch (err) {
+        error = err;
+      }
+      expect(error).to.exist;
     });
   });
 });
