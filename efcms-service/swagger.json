@@ -40,7 +40,7 @@
         }
       }
     },
-    "/v1/documents/policy" : {
+    "/v1/documents/uploadPolicy" : {
       "get" : {
         "tags" : [ "documents" ],
         "summary" : "create a pre-signed url",
