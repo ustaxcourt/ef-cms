@@ -48,7 +48,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -69,7 +69,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -96,7 +96,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />

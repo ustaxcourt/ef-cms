@@ -26,12 +26,20 @@ export const filePdfPetition = async ({
   useCases,
   applicationContext,
   get,
+  store,
 }) => {
+  const fileHasUploaded = () => {
+    store.set(
+      state.petition.uploadsFinished,
+      get(state.petition.uploadsFinished) + 1,
+    );
+  };
   await useCases.filePdfPetition(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
     get(state.petition),
     get(state.user),
+    fileHasUploaded,
   );
 };
 
@@ -69,13 +77,13 @@ export const clearLoginForm = ({ store }) => {
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
     petitionFile: {
-      file: undefined,
+      file: null,
     },
     requestForPlaceOfTrial: {
-      file: undefined,
+      file: null,
     },
     statementOfTaxpayerIdentificationNumber: {
-      file: undefined,
+      file: null,
     },
     uploadsFinished: 0,
   });
