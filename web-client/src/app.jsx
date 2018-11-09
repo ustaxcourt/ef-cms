@@ -7,16 +7,16 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
-import AppComponent from './components/App';
 import { router, route } from './router';
+import AppComponent from './components/App';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: (environment, debugTools) => {
+  initialize: (applicationContext, debugTools) => {
     library.add(faFilePdf);
-    mainModule.providers.environment = environment;
+    mainModule.providers.applicationContext = applicationContext;
     mainModule.providers.router = {
       route,
     };

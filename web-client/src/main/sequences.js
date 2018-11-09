@@ -34,63 +34,14 @@ export const gotoCaseDetail = [
 ];
 
 export const updatePetitionValue = [
-  set(state`petition.${props`key`}.file`, props`file`),
+  set(state`petition.${props`key`}`, props`value`),
 ];
 
 export const submitFilePetition = [
-  // TODO: parallelize this
-  set(state`petition.uploadsFinished`, 0),
   actions.setFormSubmitting,
-  actions.getDocumentPolicy,
-  {
-    error: [actions.setAlertError],
-    success: [
-      actions.specifyPetitionFile,
-      actions.getDocumentId,
-      {
-        error: [actions.setAlertError],
-        success: [
-          actions.uploadDocumentToS3,
-          {
-            error: [actions.setAlertError],
-            success: [
-              set(state`petition.uploadsFinished`, 1),
-              actions.specifyRequestForPlaceOfTrial,
-              actions.getDocumentId,
-              {
-                error: [actions.setAlertError],
-                success: [
-                  actions.uploadDocumentToS3,
-                  {
-                    error: [actions.setAlertError],
-                    success: [
-                      set(state`petition.uploadsFinished`, 2),
-                      actions.specifyStatementOfTaxpayerIdentificationNumber,
-                      actions.getDocumentId,
-                      {
-                        error: [actions.setAlertError],
-                        success: [
-                          actions.uploadDocumentToS3,
-                          {
-                            error: [actions.setAlertError],
-                            success: [
-                              set(state`petition.uploadsFinished`, 3),
-                              actions.unsetFormSubmitting,
-                              actions.getPetitionUploadAlertSuccess,
-                              actions.setAlertSuccess,
-                              actions.navigateToDashboard,
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+  actions.filePdfPetition,
+  actions.unsetFormSubmitting,
+  actions.getFilePdfPetitionAlertSuccess,
+  actions.setAlertSuccess,
+  actions.navigateToDashboard,
 ];
