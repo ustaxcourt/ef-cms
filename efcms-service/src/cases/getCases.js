@@ -21,10 +21,19 @@ exports.get = (event, context, callback) => {
     return;
   }
 
-  caseMiddleware
-    .getCases(userToken)
-    .then(caseRecords => {
-      done(null, caseRecords);
-    })
-    .catch(done);
+  const status = (event["queryStringParameters"] || {})['status'];
+
+  if (status) {
+    caseMiddleware.getCasesByStatus(status, userToken).
+      then(caseRecords => {
+        done(null, caseRecords);
+      }).
+      catch(done);
+  } else {
+    caseMiddleware.getCases(userToken).
+      then(caseRecords => {
+        done(null, caseRecords);
+      }).
+      catch(done);
+  }
 };
