@@ -1,12 +1,11 @@
 const uuidv4 = require('uuid/v4');
 const client = require('../../middleware/dynamodbClientService');
-
-const TABLE_NAME = process.env.STAGE ? `efcms-documents-${process.env.STAGE}` : 'efcms-documents-local';
+const environment = require('../../environment');
 
 exports.create = (userId, documentType) => {
   const documentId = uuidv4();
   const params = {
-    TableName: TABLE_NAME,
+    TableName: environment.get('DOCUMENTS_TABLE'),
     Item: {
       documentId: documentId,
       createdAt: new Date(),

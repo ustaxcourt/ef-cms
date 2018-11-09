@@ -10,7 +10,7 @@ describe('swagger GET', function() {
   it('should GET and return a 200 status', function() {
     return lambdaTester(swagger.handler)
       .event({httpMethod: 'GET'})
-      .expectResult(result => {
+      .expectResolve(result => {
         expect(result.statusCode).to.equal('200');
       })
   });
@@ -18,7 +18,7 @@ describe('swagger GET', function() {
   it('should GET and return a html body for swagger', function() {
     return lambdaTester(swagger.handler)
     .event({httpMethod: 'GET'})
-    .expectResult(result => {
+    .expectResolve(result => {
       expect(result.body).to.startsWith('<html>');
     })
   });

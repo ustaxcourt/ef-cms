@@ -68,7 +68,7 @@ custom:
         path: "v1/documents/{documentId}"
         description: "Path used for retrieving document with a documentId."
       -
-        path: "v1/documents/policy"
+        path: "v1/documents/uploadPolicy"
         description: "Path used for retrieving pre-signed policy url."
       -
         path: "v1/cases"
@@ -302,12 +302,16 @@ resources:
         TableName: efcms-documents-${self:custom.stage}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
+
     CasesDynamoDBTable:
       Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           - AttributeName: caseId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: docketNumber
             AttributeType: S
         KeySchema:
           - AttributeName: caseId
@@ -318,6 +322,25 @@ resources:
         TableName: efcms-cases-${self:custom.stage}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
+        GlobalSecondaryIndexes:
+          - IndexName: DocketNumberIndex
+            KeySchema:
+              - AttributeName: docketNumber
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
+          - IndexName: UserIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
 
     #####
     # Begin Stage for API Gateway Logging
@@ -342,11 +365,11 @@ functions:
     handler: src/documents/createPolicyUrl.create
     events:
       - http:
-          path: v1/documents/policy
+          path: v1/documents/uploadPolicy
           method: get
           cors: true
           documentation:
-            summary: create a pre-signed url
+            summary: create a pre-signed url for uploads
             tags:
               - documents
             description: >
@@ -355,7 +378,27 @@ functions:
               -
                 statusCode: "200"
                 responseBody:
-                  description: "pre-signed policy url"
+                  description: "pre-signed policy upload url"
+                responseModels:
+                  "application/json": "policyUrl"
+  downloadPolicyUrl:
+    handler: src/documents/downloadPolicyUrl.get
+    events:
+      - http:
+          path: v1/documents/{documentId}/downloadPolicy
+          method: get
+          cors: true
+          documentation:
+            summary: create a pre-signed url for downloads
+            tags:
+              - documents
+            description: >
+              Create a pre-signed url for document downloads from S3.
+            methodResponses:
+              -
+                statusCode: "200"
+                responseBody:
+                  description: "pre-signed policy download url"
                 responseModels:
                   "application/json": "policyUrl"
 
@@ -427,11 +470,41 @@ functions:
               - cases
             description: >
               Create a case.
+#            parameters:
+#              - name: documents
+#                in: body
+#                required: true
+#                description: test param1
+#                schema:
+#                  type: array
+#                  items:
+#                    $ref: documents
             methodResponses:
               -
                 statusCode: '200'
                 responseBody:
                   description: "case"
+                responseModels:
+                  "application/json": case
+
+  getCases:
+    handler: src/cases/getCases.get
+    events:
+      - http:
+          path: v1/cases
+          method: get
+          cors: true
+          documentation:
+            summary: get all cases for a user
+            tags:
+              - cases
+            description: >
+              Get all cases for a user.
+            methodResponses:
+              -
+                statusCode: '200'
+                responseBody:
+                  description: "array of cases"
                 responseModels:
                   "application/json": case
 

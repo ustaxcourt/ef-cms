@@ -1,6 +1,11 @@
 const AWS = require('aws-sdk');
 const region = process.env.AWS_REGION || 'us-east-1';
 
+/**
+ * PUT for dynamodb aws-sdk client
+ *
+ * @param params
+ */
 exports.put = params => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,
@@ -11,6 +16,22 @@ exports.put = params => {
     .put(params)
     .promise()
     .then(() => params.Item);
+};
+
+/**
+ * GET for aws-sdk dynamodb client
+ * @param params
+ */
+exports.query = params => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+  .query(params)
+  .promise()
+  .then(result => { return result.Items });
 };
 
 /*
