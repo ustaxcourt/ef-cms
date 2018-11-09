@@ -21,8 +21,8 @@ describe('Main cerebral module', () => {
     it('Handles routing', async () => {
       await test.runSequence('gotoStyleGuide');
       assert.equal(test.getState('currentPage'), 'StyleGuide');
-      await test.runSequence('gotoHome');
-      assert.equal(test.getState('currentPage'), 'Home');
+      await test.runSequence('gotoDashboard');
+      assert.equal(test.getState('currentPage'), 'Dashboard');
     });
 
     it('Handles routing to file petition', async () => {

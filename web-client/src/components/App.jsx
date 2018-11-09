@@ -5,13 +5,15 @@ import React from 'react';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
-import Home from './Home';
+import Dashboard from './Dashboard';
 import LogIn from './LogIn';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
+import CaseDetail from './CaseDetail';
 
 const pages = {
-  Home,
+  CaseDetail,
+  Dashboard,
   LogIn,
   FilePetition,
   StyleGuide,
@@ -28,6 +30,9 @@ export default connect(
     const CurrentPage = pages[currentPage];
     return (
       <React.Fragment>
+        <a tabIndex="0" className="usa-skipnav" href="#main-content">
+          Skip to main content
+        </a>
         <UsaBanner />
         <Header />
         <main id="main-content">

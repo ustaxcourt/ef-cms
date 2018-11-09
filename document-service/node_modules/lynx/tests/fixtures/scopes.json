@@ -1,0 +1,5 @@
+[ "scope.bar:1|c"
+, "scope.baz:-1|c"
+, "scope.uno:-1|c\nscope.two:-1|c\nscope.trezentos:-1|c"
+, "scope.boaz:101|c"
+]

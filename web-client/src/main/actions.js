@@ -17,6 +17,12 @@ export const getUser = async ({ useCases, applicationContext, get, path }) => {
   }
 };
 
+export const getCaseDetail = async ({ store }) => {
+  // TODO: retrieve case detail using state.docketNumber
+  const caseDetail = state.cases[0];
+  store.set(state.caseDetail, caseDetail);
+  return;
+};
 export const setUser = async ({ store, props }) => {
   store.set(state.user, props.user);
   return;
@@ -76,19 +82,13 @@ export const clearLoginForm = ({ store }) => {
 
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
-    petitionFile: {
-      file: null,
-    },
-    requestForPlaceOfTrial: {
-      file: null,
-    },
-    statementOfTaxpayerIdentificationNumber: {
-      file: null,
-    },
+    petitionFile: null,
+    requestForPlaceOfTrial: null,
+    statementOfTaxpayerIdentificationNumber: null,
     uploadsFinished: 0,
   });
 };
 
-export const navigateHome = ({ router }) => {
+export const navigateToDashboard = ({ router }) => {
   router.route('/');
 };

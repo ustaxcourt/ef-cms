@@ -15,7 +15,7 @@ export default connect(
         <div className="usa-navbar">
           <div className="usa-logo" id="extended-logo">
             <em className="usa-logo-text">
-              <a href="/" title="Home" aria-label="Home">
+              <a href="/" title="Dashboard" aria-label="Dashboard">
                 United States Tax Court
               </a>
             </em>

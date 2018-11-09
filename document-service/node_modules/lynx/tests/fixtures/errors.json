@@ -1,0 +1,6 @@
+[ "Can't set if its not even an array by now"
+, "Must be either a number or a string"
+, "Must be either a number or a string"
+, "Nothing to send"
+, "Failed sending the buffer"
+]
