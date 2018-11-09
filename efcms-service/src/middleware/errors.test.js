@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
 
-const { NotFoundError, UnauthorizedError } = require('./errors');
+const { NotFoundError, UnauthorizedError, UnprocessableEntityError } = require('./errors');
 
 describe('NotFoundError', () => {
   let error;
@@ -34,5 +34,21 @@ describe('UnauthorizedError', () => {
 
   it('should set the message', () => {
     expect(error.message).to.equal("some error");
+  });
+});
+
+describe('UnprocessableEntitytError', () => {
+  let error;
+
+  beforeEach(() => {
+    error = new UnprocessableEntityError();
+  });
+
+  it('should set a status code of 404', () => {
+    expect(error.statusCode).to.equal(422);
+  });
+
+  it('should set the message', () => {
+    expect(error.message).to.equal("problem in body or url");
   });
 });

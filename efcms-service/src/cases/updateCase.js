@@ -1,10 +1,14 @@
 const { updateCase } = require('./middleware/caseMiddleware');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 
 exports.put = async event =>
-  handle(() =>
-    updateCase({
+
+  handle(() => {
+    const userToken = getAuthHeader(event);
+
+    return updateCase({
       caseId: event.pathParameters.caseId,
-      caseToUpdate: JSON.parse(event.body)
-    })
-  );
+      caseToUpdate: JSON.parse(event.body),
+      userId: userToken
+    });
+  });
