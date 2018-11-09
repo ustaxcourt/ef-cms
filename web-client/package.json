@@ -11,7 +11,8 @@
     "dist": "rm -rf dist; USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
     "test": "jest ./**/**/*.test.js",
-    "test:pa11y": "node pa11y.js"
+    "test:pa11y": "node pa11y.js",
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",
@@ -76,11 +77,10 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-security": "^1.4.0",
     "express": "^4.16.4",
+    "i": "^0.3.6",
     "jest": "^23.6.0",
     "jsdom": "^12.2.0",
-    "mocha": "^5.2.0",
     "nock": "^10.0.2",
-    "nyc": "^13.1.0",
     "pa11y": "^5.1.0",
     "parcel-bundler": "^1.10.3",
     "prettier": "^1.15.1",
@@ -91,7 +91,7 @@
     "riot": "^3.13.1",
     "riot-route": "^3.1.4",
     "sass": "^1.14.3",
-    "stylelint": "^9.7.1",
+    "stylelint": "^9.8.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
     "uswds": "^1.6.9"

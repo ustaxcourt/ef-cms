@@ -51,13 +51,6 @@ if [ ${#NAME_FOR_LENGTH} -ge 30 ]; then
       exit 1
 fi
 
-DNS_NAME=$(egrep -e "^dns_domain " terraform.tfvars | sed -e 's/.*=//' -e 's/"//g' -e 's/ //g' -e 's/#.*//g')
-if [ -z "${DNS_NAME}" ]
-then
-      echo "A dns domain could not be parsed from the terraform.tfvars file, exiting"
-      exit 1
-fi
-
 ENVIRONMENT=$(egrep -e "^environment " terraform.tfvars | sed -e 's/.*=//' -e 's/"//g' -e 's/ //g' -e 's/#.*//g')
 if [ -z "${ENVIRONMENT}" ]
 then
@@ -69,6 +62,12 @@ DEPLOYMENT_NAME=$(egrep -e "^deployment " terraform.tfvars | sed -e 's/.*=//' -e
 if [ -z "${DEPLOYMENT_NAME}" ]
 then
       echo "A deployment name could not be parsed from the terraform.tfvars file, exiting"
+      exit 1
+fi
+
+if [ -z "${EFCMS_DOMAIN}" ]
+then
+      echo "EFCMS_DOMAIN must be set in order for terraform to run, exiting"
       exit 1
 fi
 
@@ -95,7 +94,7 @@ if [ -z ${SKIP_KEYGEN} ]; then
   fi
 fi
 
-BUCKET=${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources
+BUCKET="${EFCMS_DOMAIN}.${DEPLOYMENT_NAME}.${ENVIRONMENT}.provisioning-resources"
 KEY=common.tfstate
 LOCK_TABLE=${DEPLOYMENT_NAME}-${ENVIRONMENT}-terraform-lock
 

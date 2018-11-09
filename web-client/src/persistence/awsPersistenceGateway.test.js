@@ -65,6 +65,7 @@ describe('AWS petition gateway', () => {
         'Username',
         petition,
         dev.getBaseUrl(),
+        () => {},
       );
       done();
     });

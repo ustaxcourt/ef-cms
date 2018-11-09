@@ -7,7 +7,7 @@ pipeline {
   environment {
     SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
     npm_config_cache = "/home/tomcat"
-    HOME = "/home/tomcat" // needed to running 'npm i' on docker without being root
+    HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
     CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
   }
 
@@ -37,10 +37,10 @@ pipeline {
             ]
           }
         }
-        stage('document-service') {
+        stage('efcms-service') {
           when {
             expression {
-              return checkCommit('document-service')
+              return checkCommit('efcms-service')
             }
           }
           steps {
@@ -70,7 +70,7 @@ pipeline {
         script {
           def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'npm i'
               sh 'npm run start:local &'
             }
@@ -89,8 +89,9 @@ pipeline {
         script {
           def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'npm i'
+              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop"
               sh 'npm run start:local &'
               sh '../wait-until.sh http://localhost:3000/v1/swagger'
             }

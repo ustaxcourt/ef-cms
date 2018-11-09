@@ -1,0 +1,10 @@
+{
+    "setup": {
+        "download_url": "http://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz",
+        "install_path": "/bin",
+        "jar": "DynamoDBLocal.jar"
+    },
+    "start": {
+        "port": 8000
+    }
+}
