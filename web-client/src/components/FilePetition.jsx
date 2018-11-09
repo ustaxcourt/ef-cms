@@ -19,12 +19,16 @@ export default connect(
   }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>File a petition</h1>
+        <h1 tabIndex="-1" id="file-h1">
+          File a petition
+        </h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
         <ErrorNotification />
         <form
           id="file-a-petition"
+          role="form"
+          aria-labelledby="#file-h1"
           noValidate
           onSubmit={e => {
             e.preventDefault();

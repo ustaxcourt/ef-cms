@@ -25,11 +25,11 @@ const pages = {
  */
 class App extends React.Component {
   componentDidUpdate() {
-    document.querySelector('#app').focus();
+    this.focusMain();
   }
   focusMain(e) {
-    e.preventDefault();
-    document.querySelector('#main-content').focus();
+    e && e.preventDefault();
+    document.querySelector('#main-content h1').focus();
     return false;
   }
   render() {
@@ -46,7 +46,7 @@ class App extends React.Component {
         </a>
         <UsaBanner />
         <Header />
-        <main tabIndex="-1" id="main-content">
+        <main tabIndex="-1" id="main-content" role="main">
           <CurrentPage />
         </main>
         <Footer />
