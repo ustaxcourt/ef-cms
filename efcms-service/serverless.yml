@@ -313,6 +313,8 @@ resources:
             AttributeType: S
           - AttributeName: docketNumber
             AttributeType: S
+          - AttributeName: status
+            AttributeType: S
         KeySchema:
           - AttributeName: caseId
             KeyType: HASH
@@ -338,6 +340,15 @@ resources:
                 KeyType: HASH
               - AttributeName: caseId
                 KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
+              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
+          - IndexName: StatusIndex
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
             ProvisionedThroughput:

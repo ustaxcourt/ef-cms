@@ -1,7 +1,8 @@
 const uuidv4 = require('uuid/v4');
 const client = require('../../middleware/dynamodbClientService');
 const docketNumberService = require('./docketNumberGenerator');
-const { NotFoundError } = require('../../middleware/errors');
+const { isAuthorized, GET_CASES_BY_STATUS } = require('../../middleware/authorizationClientService');
+const { NotFoundError, UnauthorizedError } = require('../../middleware/errors');
 
 const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-local';
 
@@ -43,7 +44,8 @@ exports.create = async (userId, documents) => {
       createdAt: new Date().toISOString(),
       userId: userId,
       docketNumber: docketNumber,
-      documents: documents
+      documents: documents,
+      status: "new"
     },
     ConditionExpression: 'attribute_not_exists(#caseId)',
     ExpressionAttributeNames: {
@@ -86,6 +88,27 @@ exports.getCases = userId => {
   return client.query(params);
 };
 
+exports.getCasesByStatus = async (status, userId) => {
+  if (!isAuthorized(userId, GET_CASES_BY_STATUS)) {
+    throw new UnauthorizedError('Unauthorized for getCasesByStatus');
+  } else {
+    status = status.toLowerCase(); //homogenize for purity
+
+    const params = {
+      TableName: TABLE_NAME,
+      IndexName: "StatusIndex",
+      KeyConditionExpression: '#status = :status',
+      ExpressionAttributeValues: {
+        ':status': status
+      },
+      ExpressionAttributeNames: {
+        "#status" : "status"
+      }
+    };
+    return client.query(params);
+  }
+
+};
 
 
 
