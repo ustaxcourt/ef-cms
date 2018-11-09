@@ -1,20 +1,10 @@
-const fileStorageService = require('../middleware/S3Service');
-const { createDone } = require('../middleware/apiGatewayHelper');
+const { createUploadPolicy } = require('./services/documentBlobDAO');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * Create Document API Lambda
- *
- * @param event
- * @param context
- * @param callback
+ * Create Upload Policy API Lambda
  */
-
-exports.create = (event, context, callback) => {
-  const done = createDone(callback);
-  fileStorageService
-    .createUploadPolicy()
-    .then(policy => {
-      done(null, policy);
-    })
-    .catch(done);
-};
+exports.create = async () =>
+  handle(() =>
+    createUploadPolicy()
+  )
