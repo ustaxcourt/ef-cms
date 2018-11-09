@@ -1,5 +1,4 @@
 const swagger = require('../../swagger.json');
-
 /**
  * Swagger HTML Page Lambda
  *
@@ -7,17 +6,7 @@ const swagger = require('../../swagger.json');
  * @param context
  * @param callback
  */
-exports.handler = (event, context, callback) => {
-
-  const done = (err, res) => callback(null, {
-    statusCode: err ? '400' : '200',
-    body: err ? JSON.stringify(err.message) : res.result,
-    headers: {
-      'Content-Type': 'text/html',
-      'Access-Control-Allow-Origin': '*'
-    },
-  });
-
+exports.handler = async () => {
   const body = `<html>
       <body>
         <head>
@@ -34,5 +23,12 @@ exports.handler = (event, context, callback) => {
       </body>
     </html>`;
 
-  done(null, { result: body });
+  return {
+    statusCode: '200',
+    body: body,
+    headers: {
+      'Content-Type': 'text/html',
+      'Access-Control-Allow-Origin': '*'
+    },
+  }
 };

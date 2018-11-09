@@ -99,14 +99,14 @@ describe('Main cerebral module', () => {
 
     it('document policy success', async () => {
       mock
-        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .onGet(environment.getBaseUrl() + '/documents/uploadPolicy')
         .reply(200, fakePolicy);
       await test.runSequence('submitFilePetition');
       assert.deepEqual(test.getState('petition.policy'), fakePolicy);
     });
 
     it('document policy error', async () => {
-      mock.onGet(environment.getBaseUrl() + '/documents/policy').reply(403);
+      mock.onGet(environment.getBaseUrl() + '/documents/uploadPolicy').reply(403);
 
       await test.runSequence('submitFilePetition');
       assert.equal(
@@ -131,7 +131,7 @@ describe('Main cerebral module', () => {
       };
 
       mock
-        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .onGet(environment.getBaseUrl() + '/documents/uploadPolicy')
         .reply(200, fakePolicy);
       mock
         .onPost(environment.getBaseUrl() + '/documents')
@@ -173,7 +173,7 @@ describe('Main cerebral module', () => {
       );
 
       mock
-        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .onGet(environment.getBaseUrl() + '/documents/uploadPolicy')
         .reply(200, fakePolicy);
       mock.onPost(environment.getBaseUrl() + '/documents').reply(500);
       mock.onPost(fakePolicy.url).reply(204);
@@ -201,7 +201,7 @@ describe('Main cerebral module', () => {
       );
 
       mock
-        .onGet(environment.getBaseUrl() + '/documents/policy')
+        .onGet(environment.getBaseUrl() + '/documents/uploadPolicy')
         .reply(200, fakePolicy);
       mock
         .onPost(environment.getBaseUrl() + '/documents')

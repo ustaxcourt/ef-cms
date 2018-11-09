@@ -42,6 +42,5 @@ describe('createCaseMiddleware', function() {
   it('should create a case on a POST', async () => {
     const result = await caseMiddleWare.create('user', documents);
     expect(result).to.equal(item);
-
   });
 });
