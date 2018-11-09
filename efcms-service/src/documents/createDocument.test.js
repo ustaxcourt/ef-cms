@@ -37,7 +37,7 @@ describe('Create document', function() {
     it('should create a document on a POST', function() {
       return lambdaTester(createDocument.create)
         .event(documentBody)
-        .expectResult(result => {
+        .expectResolve(result => {
           const data = JSON.parse(result.body);
           expect(data.documentType).to.equal(documentBody.result.documentType);
           expect(data.userId).to.equal(documentBody.result.userId);
@@ -74,7 +74,7 @@ describe('Create document', function() {
     it('should should require userId and documentType', function() {
       return lambdaTester(createDocument.create)
         .event(documentBody)
-        .expectResult(err => {
+        .expectResolve(err => {
           expect(err.body).to.startsWith('"documentType and userId');
         });
     });
@@ -89,8 +89,8 @@ describe('Create document', function() {
     it('should should throw an error if the body is not json', function() {
       return lambdaTester(createDocument.create)
         .event(documentBody)
-        .expectResult(err => {
-          expect(err.body).to.startsWith('"problem parsing event body');
+        .expectResolve(err => {
+          expect(err.body).to.startsWith('"Unexpected token s in JSON at position 0');
         });
     });
   });
