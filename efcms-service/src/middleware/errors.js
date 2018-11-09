@@ -35,11 +35,11 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
 };
 
 /**
- * UnprocessableEntity error
+ * UnprocessableEntityError error
  *
  * @type {module.UnprocessableEntity}
  */
-module.exports.UnprocessableEntity = class UnprocessableEntity extends Error {
+module.exports.UnprocessableEntityError = class UnprocessableEntityError extends Error {
   /**
    * constructor
    *

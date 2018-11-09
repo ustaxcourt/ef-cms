@@ -2,8 +2,8 @@ const { create: getPersistence } = require('../../persistence/entityPersistenceF
 const uuidv4 = require('uuid/v4');
 const client = require('../../middleware/dynamodbClientService');
 const docketNumberService = require('./docketNumberGenerator');
-const { isAuthorized, GET_CASES_BY_STATUS } = require('../../middleware/authorizationClientService');
-const { UnprocessableEntity, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
+const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE } = require('../../middleware/authorizationClientService');
+const { UnprocessableEntityError, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
 
 const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-local';
 
@@ -110,12 +110,16 @@ exports.getCasesByStatus = async (status, userId) => {
   }
 };
 
-exports.updateCase = async ({ caseId, caseToUpdate }) => {
-  if (caseId !== caseToUpdate.caseId) {
-    throw new UnprocessableEntity();
+exports.updateCase = async ({ caseId, caseToUpdate , userId}) => {
+  if (!isAuthorized(userId, UPDATE_CASE)) {
+    throw new UnauthorizedError('Unauthorized for update case');
+  } else {
+    if (caseId !== caseToUpdate.caseId) {
+      throw new UnprocessableEntityError();
+    }
+    return await getPersistence('cases').
+      updateCase({ caseToUpdate });
   }
-  return await getPersistence('cases')
-    .updateCase({ caseToUpdate });
 }
 
 
