@@ -4,15 +4,11 @@
 # to fetch the apigateway ID from aws.  Using that ID, this script is then
 # able to download the swagger.json from the deployed aws apigateway.
 
-# requires python
-# install jq
-# require YQ to be installed
-#   pip install yq
 STAGE=$1
 REGION=$2
-NAME=$(yq -r .service < serverless.yml)
-FULL_NAME="$STAGE-$NAME"
-API_ID=$(aws apigateway get-rest-apis --output=json --region="${REGION}" | jq -r ".items[] | select(.name == \"${FULL_NAME}\") | .id")
+
+API_ID=$(aws apigateway get-rest-apis --query "items[?name=='${STAGE}-ef-cms'].id" --output text)
+
 outputFileName=swagger.json
 
 aws apigateway get-export \

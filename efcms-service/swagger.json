@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2018-11-09T16:55:06Z",
+    "version" : "2018-11-09T22:05:06Z",
     "title" : "will-ef-cms",
     "contact" : {
       "url" : "https://www.ustaxcourt.gov",
@@ -13,7 +13,7 @@
       "url" : "https://creativecommons.org/share-your-work/public-domain/cc0/"
     }
   },
-  "host" : "efcms-will.ustc-case-mgmt.flexion.us",
+  "host" : "efcms-dev.ustc-case-mgmt.flexion.us",
   "tags" : [ {
     "name" : "ef-cms",
     "description" : "EF-CMS"
@@ -93,6 +93,26 @@
             "description" : "200 response",
             "schema" : {
               "$ref" : "#/definitions/case"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "cases" ],
+        "summary" : "update a case",
+        "description" : "Update a case.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          },
+          "422" : {
+            "description" : "422 response",
+            "schema" : {
+              "$ref" : "#/definitions/unprocessableEntityError"
             }
           }
         }
@@ -302,6 +322,16 @@
         }
       },
       "description" : "a document response"
+    },
+    "unprocessableEntityError" : {
+      "type" : "object",
+      "required" : [ "message" ],
+      "properties" : {
+        "message" : {
+          "type" : "string"
+        }
+      },
+      "description" : "a unprocessable entity error (422), due to a problem in the body or the id in the url"
     },
     "fields" : {
       "type" : "object",
