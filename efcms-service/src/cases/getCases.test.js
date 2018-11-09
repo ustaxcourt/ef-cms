@@ -44,10 +44,11 @@ describe('Get cases lambda', function() {
     [
       {
         httpMethod: 'GET',
-        headers: { 'Authorization': 'Bearer userId' }
+        queryStringParameters: {'status': 'new'},
+        headers: { 'Authorization': 'Bearer petitionsclerk' }
       }
     ].forEach(function (documentBody) {
-      it('should create a case on a GET', function () {
+      it('should retrieve cases by status if authorized', function () {
         return lambdaTester(getCases.get).
           event(documentBody).
           expectResult(result => {
@@ -56,43 +57,61 @@ describe('Get cases lambda', function() {
           });
       });
     });
-  });
 
-  describe('error', function() {
-    before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
-        callback(null, {
-          Item: {
-            userId: 'userId',
-            caseId: 'abc',
-            docketNumber: '456789-18',
-            documents: documents,
-            createdAt: '',
-          },
-        });
+    [
+      {
+        httpMethod: 'GET',
+        headers: { 'Authorization': 'Bearer petitionsclerk' }
+      }
+    ].forEach(function (documentBody) {
+      it('should retrieve cases by status if authorized', function () {
+        return lambdaTester(getCases.get).
+          event(documentBody).
+          expectResult(result => {
+            const data = JSON.parse(result.body);
+            expect(data.length).to.equal(1);
+          });
       });
-    });
-
-    after(function () {
-      aws.restore('DynamoDB.DocumentClient');
     });
 
     [
       {
         httpMethod: 'GET',
-        headers: {'Authorization': 'Bearer'}
+        queryStringParameters: {'status': 'new'},
+        headers: { 'Authorization': 'Bearer notapetitionsclerk' }
+      }
+    ].forEach(function (documentBody) {
+      it('should return a 404 and error if unauthorized', function () {
+        return lambdaTester(getCases.get).
+          event(documentBody).
+          expectResult(error => {
+            expect(error.statusCode).to.equal(404);
+            expect(error.body).to.equal('\"Unauthorized for getCasesByStatus\"')
+          });
+      });
+    });
+
+    [
+      {
+        httpMethod: 'GET',
+        queryStringParameters: {'status': 'new'},
+        headers: { 'Authorization': 'Bearer' }
       },
       {
         httpMethod: 'GET',
-      },
-    ].forEach(function(get) {
-      it('should return an error on a GET without a Authorization header', function() {
-        return lambdaTester(getCases.get)
-        .event(get)
-        .expectResult(err => {
-          expect(err.body).to.startsWith('"Error:');
-        });
+        queryStringParameters: {'status': 'new'},
+        headers: { 'Authorization': '' }
+      }
+    ].forEach(function (documentBody) {
+      it('should return a 404 if no user is present', function () {
+        return lambdaTester(getCases.get).
+          event(documentBody).
+          expectResult(error => {
+            expect(error.statusCode).to.equal('400');
+            expect(error.body).to.startWith('\"Error: Authorization')
+          });
       });
     });
-  })
+  });
+
 });
