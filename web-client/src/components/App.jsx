@@ -27,11 +27,21 @@ class App extends React.Component {
   componentDidUpdate() {
     document.querySelector('#app').focus();
   }
+  focusMain(e) {
+    e.preventDefault();
+    document.querySelector('#main-content').focus();
+    return false;
+  }
   render() {
     const CurrentPage = pages[this.props.currentPage];
     return (
       <React.Fragment>
-        <a tabIndex="0" className="usa-skipnav" href="#main-content">
+        <a
+          tabIndex="0"
+          className="usa-skipnav"
+          href="#main-content"
+          onClick={this.focusMain}
+        >
           Skip to main content
         </a>
         <UsaBanner />
