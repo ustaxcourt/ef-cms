@@ -336,6 +336,8 @@ resources:
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
+              - AttributeName: caseId
+                KeyType: RANGE
             Projection:
               ProjectionType: ALL
             ProvisionedThroughput:
@@ -505,6 +507,31 @@ functions:
                 statusCode: '200'
                 responseBody:
                   description: "array of cases"
+                responseModels:
+                  "application/json": case
+
+  getCase:
+    handler: src/cases/getCase.get
+    events:
+      - http:
+          path: v1/cases/{caseId}
+          method: get
+          request:
+            parameters:
+               paths:
+                 caseId: true
+          cors: true
+          documentation:
+            summary: get a case by caseId
+            tags:
+              - cases
+            description: >
+              Get a case by caseId.
+            methodResponses:
+              -
+                statusCode: '200'
+                responseBody:
+                  description: "a case"
                 responseModels:
                   "application/json": case
 
