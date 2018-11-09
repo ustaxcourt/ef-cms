@@ -17,10 +17,10 @@ describe('swagger GET', function() {
 
   it('should GET and return a html body for swagger', function() {
     return lambdaTester(swagger.handler)
-    .event({httpMethod: 'GET'})
-    .expectResolve(result => {
-      expect(result.body).to.startsWith('<html>');
-    })
+      .event({httpMethod: 'GET'})
+      .expectResolve(result => {
+        expect(result.body).to.startsWith('<html>');
+      })
   });
 
 });

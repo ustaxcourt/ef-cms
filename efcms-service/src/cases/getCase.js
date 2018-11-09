@@ -21,7 +21,7 @@ exports.get = (event, context, callback) => {
     return;
   }
 
-  const caseId = event['pathParameters']['caseId'];
+  const caseId = event.pathParameters.caseId;
 
   caseMiddleware
     .getCase(userToken, caseId)
