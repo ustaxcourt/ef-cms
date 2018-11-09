@@ -19,5 +19,5 @@ COPY package.json /home/app/package.json
 RUN npm install
 COPY . /home/app
 
-CMD ./setup-s3-replication.sh $ENV
-CMD node setup-global-tables.js efcms-documents-$ENV $REGIONS
+CMD node setup-global-tables.js efcms-documents-$ENV $REGIONS && \
+    node setup-global-tables.js efcms-cases-$ENV $REGIONS
