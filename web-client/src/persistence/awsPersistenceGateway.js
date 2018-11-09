@@ -25,7 +25,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-  formData.append('file', file, 'file.name');
+  formData.append('file', file, file.name);
   const result = await axios.post(policy.url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -43,6 +43,7 @@ const filePdfPetition = async function filePdfPetition(
   user,
   petition,
   baseUrl,
+  fileHasUploaded,
 ) {
   const documentPolicy = await getDocumentPolicy(baseUrl);
   const petitionFileId = await getDocumentId(baseUrl, user, 'petitionFile');
@@ -59,18 +60,21 @@ const filePdfPetition = async function filePdfPetition(
   await uploadDocumentToS3(
     documentPolicy,
     petitionFileId,
-    petition.petitionFile,
+    petition.petitionFile.file,
   );
+  fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     requestForPlaceOfTrialId,
-    petition.requestForPlaceOfTrial,
+    petition.requestForPlaceOfTrial.file,
   );
+  fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     statementOfTaxpayerIdentificationNumberId,
-    petition.statementOfTaxpayerIdentificationNumber,
+    petition.statementOfTaxpayerIdentificationNumber.file,
   );
+  fileHasUploaded();
 };
 
 const awsPersistenceGateway = {

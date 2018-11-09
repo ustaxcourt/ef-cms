@@ -28,7 +28,7 @@ export const submitLogIn = [
 ];
 
 export const updatePetitionValue = [
-  set(state`petition.${props`key`}.file`, props`file`),
+  set(state`petition.${props`key`}.file`, props`value`),
 ];
 
 export const submitFilePetition = [
