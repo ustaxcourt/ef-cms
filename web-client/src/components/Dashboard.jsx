@@ -9,7 +9,7 @@ export default connect(
   function Dashboard() {
     return (
       <section className="usa-section usa-grid">
-        <h1>Dashboard</h1>
+        <h1 tabIndex="-1">Dashboard</h1>
         <SuccessNotification />
         <h2>Cases</h2>
         <p>
