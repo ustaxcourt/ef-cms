@@ -40,7 +40,10 @@ describe('create case', function() {
 
 
   it('should create a case', async () => {
-    const result = await caseMiddleWare.create('user', documents);
+    const result = await caseMiddleWare.create({
+      userId: 'user',
+      documents
+    });
     expect(result).to.equal(item);
   });
 });
@@ -73,12 +76,17 @@ describe('get cases', function() {
     });
 
     it('should get all cases for a user', async () => {
-      const result = await caseMiddleWare.getCases('user');
+      const result = await caseMiddleWare.getCases({
+        userId: 'user'
+      });
       expect(result[0]).to.equal(item);
     });
 
     it('should get a single case for a user', async () => {
-      const result = await caseMiddleWare.getCase('user', '123456');
+      const result = await caseMiddleWare.getCase({
+        userId: 'user',
+        caseId: '123456'
+      });
       expect(result).to.equal(item);
     });
   });
@@ -97,7 +105,10 @@ describe('get cases', function() {
     it('should throw a not found error if a single non-existent case', async () => {
       let error;
       try {
-        await caseMiddleWare.getCase('user', '123');
+        await caseMiddleWare.getCase({
+          userId: 'user',
+          caseId: '123'
+        });
       } catch (err) {
         error = err;
       }
@@ -134,14 +145,20 @@ describe('get cases by status', function() {
   });
 
   it('should get cases by query string status when user is authorized', async () => {
-    const result = await caseMiddleWare.getCasesByStatus('NEW', 'petitionsclerk');
+    const result = await caseMiddleWare.getCasesByStatus({
+      status: 'NEW',
+      userId: 'petitionsclerk'
+    });
     expect(result[0]).to.equal(item);
   });
 
   it('should return an error if the user is authorized', async () => {
     let error;
     try {
-      await caseMiddleWare.getCasesByStatus('NEW', 'notapetitionsclerk');
+      await caseMiddleWare.getCasesByStatus({
+        status: 'NEW',
+        userId: 'notapetitionsclerk'
+      });
     } catch (err) {
       error = err;
     }

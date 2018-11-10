@@ -9,7 +9,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param callback
  */
 
-exports.create = async event =>
+exports.create = event =>
   handle(() =>
     createDocument(JSON.parse(event.body))
   )

@@ -58,7 +58,7 @@ describe('Create case lambda', function() {
       it('should create a case on a POST', function () {
         return lambdaTester(createCase.create)
           .event(documentBody)
-          .expectResult(result => {
+          .expectResolve(result => {
             const data = JSON.parse(result.body);
             expect(data.userId)
               .to
@@ -112,7 +112,7 @@ describe('Create case lambda', function() {
       it('should return an error on a POST without a Authorization header', function() {
         return lambdaTester(createCase.create)
           .event(post)
-          .expectResult(err => {
+          .expectResolve(err => {
             expect(err.body).to.startsWith('"Error:');
           });
       });
@@ -128,7 +128,7 @@ describe('Create case lambda', function() {
       it('should return an error on a POST without the required case initiation documents', function() {
         return lambdaTester(createCase.create)
           .event(post)
-          .expectResult(err => {
+          .expectResolve(err => {
             expect(err.body).to.startsWith('"Three case initiation');
           });
       });
