@@ -120,7 +120,10 @@ exports.updateCase = async ({ caseId, caseToUpdate , userId}) => {
   }
 
   return await getPersistence('cases')
-    .updateCase({ caseToUpdate });
+    .save({
+      entity: caseToUpdate,
+      type: 'case'
+    });
 }
 
 
