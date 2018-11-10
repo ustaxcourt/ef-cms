@@ -7,7 +7,7 @@ const getS3 = () => new S3({
 });
 
 // TODO: use environment to get regions and endpoints, etc
-exports.getDocumentDownloadUrl = ({ documentId }) =>
+exports.getDownloadUrl = ({ documentId }) =>
   new Promise((resolve, reject) => {
     getS3().getSignedUrl('getObject', {
       Bucket: process.env.DOCUMENTS_BUCKET_NAME,
