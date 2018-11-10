@@ -3,7 +3,7 @@ const uuidv4 = require('uuid/v4');
 
 exports.getDocumentDownloadUrl = async ({ documentId }) => {
   return getPersistence('files')
-    .getDocumentDownloadUrl({ documentId });
+    .getDownloadUrl({ documentId });
 }
 
 exports.createUploadPolicy = async () => {
@@ -18,7 +18,7 @@ exports.createDocument = async ({ userId, documentType }) => {
 
   const document = {
     documentId: uuidv4(),
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     userId: userId,
     documentType: documentType,
   }
