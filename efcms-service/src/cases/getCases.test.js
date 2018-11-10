@@ -49,9 +49,9 @@ describe('Get cases lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should retrieve cases by status if authorized', function () {
-        return lambdaTester(getCases.get).
-          event(documentBody).
-          expectResult(result => {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResult(result => {
             const data = JSON.parse(result.body);
             expect(data.length).to.equal(1);
           });
@@ -65,9 +65,9 @@ describe('Get cases lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should retrieve cases by status if authorized', function () {
-        return lambdaTester(getCases.get).
-          event(documentBody).
-          expectResult(result => {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResult(result => {
             const data = JSON.parse(result.body);
             expect(data.length).to.equal(1);
           });
@@ -82,9 +82,9 @@ describe('Get cases lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should return a 404 and error if unauthorized', function () {
-        return lambdaTester(getCases.get).
-          event(documentBody).
-          expectResult(error => {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResult(error => {
             expect(error.statusCode).to.equal(404);
             expect(error.body).to.equal('\"Unauthorized for getCasesByStatus\"')
           });
@@ -104,9 +104,9 @@ describe('Get cases lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should return a 404 if no user is present', function () {
-        return lambdaTester(getCases.get).
-          event(documentBody).
-          expectResult(error => {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResult(error => {
             expect(error.statusCode).to.equal('400');
             expect(error.body).to.startWith('\"Error: Authorization')
           });

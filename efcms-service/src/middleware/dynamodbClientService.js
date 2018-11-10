@@ -29,9 +29,9 @@ exports.query = params => {
   });
 
   return documentClient
-  .query(params)
-  .promise()
-  .then(result => { return result.Items });
+    .query(params)
+    .promise()
+    .then(result => { return result.Items });
 };
 
 /*

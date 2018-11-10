@@ -36,9 +36,9 @@ describe('Get case lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should return a case on a GET', function () {
-        return lambdaTester(getCase.get).
-          event(documentBody).
-          expectResult(result => {
+        return lambdaTester(getCase.get)
+          .event(documentBody)
+          .expectResult(result => {
             const data = JSON.parse(result.body);
             expect(data).to.equal('Case 123 was not found.');
           });
@@ -69,9 +69,9 @@ describe('Get case lambda', function() {
       }
     ].forEach(function (documentBody) {
       it('should return a case on a GET', function () {
-        return lambdaTester(getCase.get).
-          event(documentBody).
-          expectResult(result => {
+        return lambdaTester(getCase.get)
+          .event(documentBody)
+          .expectResult(result => {
             const data = JSON.parse(result.body);
             expect(data).to.deep.equal(MOCK_CASE);
           });
@@ -91,10 +91,10 @@ describe('Get case lambda', function() {
     ].forEach(function(get) {
       it('should return an error on a GET without a Authorization header', function() {
         return lambdaTester(getCase.get)
-        .event(get)
-        .expectResult(err => {
-          expect(err.body).to.startsWith('"Error:');
-        });
+          .event(get)
+          .expectResult(err => {
+            expect(err.body).to.startsWith('"Error:');
+          });
       });
     });
   })

@@ -21,19 +21,19 @@ exports.get = (event, context, callback) => {
     return;
   }
 
-  const status = (event["queryStringParameters"] || {})['status'];
+  const status = (event.queryStringParameters || {}).status;
 
   if (status) {
-    caseMiddleware.getCasesByStatus(status, userToken).
-      then(caseRecords => {
+    caseMiddleware.getCasesByStatus(status, userToken)
+      .then(caseRecords => {
         done(null, caseRecords);
-      }).
-      catch(done);
+      })
+      .catch(done);
   } else {
-    caseMiddleware.getCases(userToken).
-      then(caseRecords => {
+    caseMiddleware.getCases(userToken)
+      .then(caseRecords => {
         done(null, caseRecords);
-      }).
-      catch(done);
+      })
+      .catch(done);
   }
 };
