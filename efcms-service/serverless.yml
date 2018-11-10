@@ -170,6 +170,18 @@ custom:
               type: string
           required:
             - message
+      -
+        name: "unprocessableEntityError"
+        description: "a unprocessable entity error (422), due to a problem in the body or the id in the url"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+          required:
+            - message
+
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -394,6 +406,7 @@ functions:
                   description: "pre-signed policy upload url"
                 responseModels:
                   "application/json": "policyUrl"
+
   downloadPolicyUrl:
     handler: src/documents/downloadPolicyUrl.get
     events:
@@ -436,38 +449,30 @@ functions:
                 responseModels:
                   "application/json": document
 
-
-#  getDocument:
-#    handler: src/documents/getDocument.handler
-#    documentation:
-#      summary: retrieves a document by document id
-#      tags:
-#        - documents
-#      description: >
-#        Retrieve a document by document id.
-#      # queryParams:
-#      #   -
-#      #     name: firstParam
-#      #     description: The first param that we want, you MUST pass it
-#      #     required: true
-#      #   -
-#      #     name: secondParam
-#      #     description: The second param. This one is optional
-#      methodResponses:
-#        -
-#          statusCode: '200'
-#          responseModels:
-#            "application/json": HelloWorldResponse
-#          # responseHeaders:
-#          #   -
-#          #     name: link
-#          #     description: describes other actions that can be taken
-#          #     type: string
-#    events:
-#      - http:
-#          path: v1/hello
-#          method: get
-#          cors: true
+  updateCase:
+    handler: src/cases/updateCase.put
+    events:
+      - http:
+          path: v1/cases/{caseId}
+          method: put
+          cors: true
+          documentation:
+           summary: update a case
+           tags:
+             - cases
+           description: >
+             Update a case.
+           methodResponses:
+             -
+               statusCode: "200"
+               responseBody:
+                 description: "updated case"
+               responseModels:
+                 "application/json": case
+             -
+               statusCode: "422"
+               responseModels:
+                 "application/json": "unprocessableEntityError"
 
 
   createCase:
@@ -483,15 +488,15 @@ functions:
               - cases
             description: >
               Create a case.
-#            parameters:
-#              - name: documents
-#                in: body
-#                required: true
-#                description: test param1
-#                schema:
-#                  type: array
-#                  items:
-#                    $ref: documents
+            parameters:
+              - name: documents
+                in: body
+                required: true
+                description: document metadata
+                schema:
+                  type: array
+                  items:
+                    $ref: documents
             methodResponses:
               -
                 statusCode: '200'

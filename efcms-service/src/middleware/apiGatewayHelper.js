@@ -24,9 +24,9 @@ exports.handle = async fun => {
   }
 }
 
-exports.sendError = (err, statusCode = '400') => {
+exports.sendError = err => {
   return {
-    statusCode,
+    statusCode: err.statusCode || '400',
     body: JSON.stringify(err.message),
     headers
   }
@@ -43,10 +43,10 @@ exports.sendOk = (response, statusCode = '200') => {
 exports.getAuthHeader = event => {
   let usernameTokenArray;
 
-  if (event['headers'] && event['headers']['Authorization']) {
-    usernameTokenArray = event['headers']['Authorization'].split(" ");
+  if (event.headers && event.headers.Authorization) {
+    usernameTokenArray = event.headers.Authorization.split(" ");
     if (!usernameTokenArray || !usernameTokenArray[1]) {
-       throw new Error('Error: Authorization Bearer token is required'); //temp until actual auth is added
+      throw new Error('Error: Authorization Bearer token is required'); //temp until actual auth is added
     }
 
   } else {
