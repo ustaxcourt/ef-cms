@@ -19,12 +19,16 @@ export default connect(
   }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>File a petition</h1>
+        <h1 tabIndex="-1" id="file-h1">
+          File a petition
+        </h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
         <ErrorNotification />
         <form
           id="file-a-petition"
+          role="form"
+          aria-labelledby="#file-h1"
           noValidate
           onSubmit={e => {
             e.preventDefault();
@@ -108,7 +112,6 @@ export default connect(
             disabled={submitting}
             className={submitting ? 'usa-button-active' : 'usa-button'}
             aria-disabled={submitting ? 'true' : 'false'}
-            aria-live="polite"
           >
             <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}
