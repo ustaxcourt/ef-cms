@@ -4,7 +4,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 /**
  * Create Upload Policy API Lambda
  */
-exports.create = async () =>
+exports.create = () =>
   handle(() =>
     createUploadPolicy()
   )

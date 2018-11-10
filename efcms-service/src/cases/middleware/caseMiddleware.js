@@ -5,6 +5,8 @@ const docketNumberService = require('./docketNumberGenerator');
 const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE } = require('../../middleware/authorizationClientService');
 const { UnprocessableEntityError, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
 
+const casesPersistence = getPersistence('cases');
+
 const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-local';
 
 const NUM_REQUIRED_DOCUMENTS = 3; //because 3 is a magic number
@@ -31,7 +33,7 @@ const validateDocuments = documents => {
  * @param documents
  * @returns {Promise.<void>}
  */
-exports.create = async (userId, documents) => {
+exports.create = async ({ userId, documents }) => {
   validateDocuments(documents);
 
   const caseId = uuidv4();
@@ -57,7 +59,7 @@ exports.create = async (userId, documents) => {
 
 };
 
-exports.getCase = async (userId, caseId) => {
+exports.getCase = async ({ userId, caseId }) => {
   const params = {
     TableName: TABLE_NAME,
     IndexName: "UserIdIndex",
@@ -77,7 +79,7 @@ exports.getCase = async (userId, caseId) => {
   return caseRecord[0];
 };
 
-exports.getCases = userId => {
+exports.getCases = ({ userId }) => {
   const params = {
     TableName: TABLE_NAME,
     IndexName: "UserIdIndex",
@@ -89,7 +91,7 @@ exports.getCases = userId => {
   return client.query(params);
 };
 
-exports.getCasesByStatus = async (status, userId) => {
+exports.getCasesByStatus = async ({ status, userId }) => {
   if (!isAuthorized(userId, GET_CASES_BY_STATUS)) {
     throw new UnauthorizedError('Unauthorized for getCasesByStatus');
   } else {
@@ -110,7 +112,7 @@ exports.getCasesByStatus = async (status, userId) => {
   }
 };
 
-exports.updateCase = async ({ caseId, caseToUpdate , userId}) => {
+exports.updateCase = async ({ caseId, caseToUpdate, userId, persistence = casesPersistence}) => {
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -119,7 +121,7 @@ exports.updateCase = async ({ caseId, caseToUpdate , userId}) => {
     throw new UnprocessableEntityError();
   }
 
-  return await getPersistence('cases')
+  return persistence
     .save({
       entity: caseToUpdate,
       type: 'case'

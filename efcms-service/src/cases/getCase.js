@@ -1,5 +1,6 @@
-const { createDone, getAuthHeader } = require('../middleware/apiGatewayHelper');
+const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const caseMiddleware = require('./middleware/caseMiddleware');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
  * GET Case API Lambda
@@ -9,24 +10,10 @@ const caseMiddleware = require('./middleware/caseMiddleware');
  * @param callback
  */
 
-exports.get = (event, context, callback) => {
-  const done = createDone(callback);
-
-  let userToken;
-
-  try {
-    userToken = getAuthHeader(event);
-  } catch (error) {
-    done(error);
-    return;
-  }
-
-  const caseId = event.pathParameters.caseId;
-
-  caseMiddleware
-    .getCase(userToken, caseId)
-    .then(caseRecord => {
-      done(null, caseRecord);
+exports.get = event =>
+  handle(() =>
+    caseMiddleware.getCase({
+      userId: getAuthHeader(event),
+      caseId: event.pathParameters.caseId
     })
-    .catch(done);
-};
+  );
