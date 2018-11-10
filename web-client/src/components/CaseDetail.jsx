@@ -13,7 +13,7 @@ export default connect(
   function CaseDetail({ caseDetail }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>Docket number: {caseDetail.docketNumber}</h1>
+        <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
           {caseDetail.petitionerName}, Petitioner v. Commissioner of Internal
           Revenue, Respondent
