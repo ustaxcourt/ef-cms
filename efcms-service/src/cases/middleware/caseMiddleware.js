@@ -1,15 +1,11 @@
 const { create: getPersistence } = require('../../persistence/entityPersistenceFactory');
 const uuidv4 = require('uuid/v4');
-const client = require('../../middleware/dynamodbClientService');
 const docketNumberService = require('./docketNumberGenerator');
 const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE } = require('../../middleware/authorizationClientService');
 const { UnprocessableEntityError, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
-
 const casesPersistence = getPersistence('cases');
 
-const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-local';
-
-const NUM_REQUIRED_DOCUMENTS = 3; //because 3 is a magic number
+const NUM_REQUIRED_DOCUMENTS = 3;
 
 /**
  * validateDocuments
@@ -33,86 +29,75 @@ const validateDocuments = documents => {
  * @param documents
  * @returns {Promise.<void>}
  */
-exports.create = async ({ userId, documents }) => {
+exports.create = async ({ userId, documents, persistence = casesPersistence}) => {
   validateDocuments(documents);
-
   const caseId = uuidv4();
-
   const docketNumber = await docketNumberService.createDocketNumber();
+  const caseToCreate = {
+    caseId: caseId,
+    createdAt: new Date().toISOString(),
+    userId: userId,
+    docketNumber: docketNumber,
+    documents: documents,
+    status: "new"
+  }
 
-  const params = {
-    TableName: TABLE_NAME,
-    Item: {
-      caseId: caseId,
-      createdAt: new Date().toISOString(),
-      userId: userId,
-      docketNumber: docketNumber,
-      documents: documents,
-      status: "new"
-    },
-    ConditionExpression: 'attribute_not_exists(#caseId)',
-    ExpressionAttributeNames: {
-      '#caseId': 'caseId',
-    },
-  };
-  return client.put(params);
-
+  return persistence
+    .create({
+      entity: caseToCreate,
+      key: 'caseId',
+      type: 'case'
+    });
 };
 
-exports.getCase = async ({ userId, caseId }) => {
-  const params = {
-    TableName: TABLE_NAME,
-    IndexName: "UserIdIndex",
-    KeyConditionExpression: 'userId = :userId and caseId = :caseId',
-    ExpressionAttributeValues: {
-      ':userId': userId,
-      ':caseId': caseId
-    }
-  };
+exports.getCase = async ({ userId, caseId, persistence = casesPersistence }) => {
+  const caseRecord = await persistence
+    .get({
+      id: caseId,
+      key: 'caseId',
+      type: 'case'
+    });
 
-  const caseRecord =  await client.query(params);
-
-  if (caseRecord.length !== 1) {
+  if (!caseRecord) {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  return caseRecord[0];
+  if (caseRecord.userId !== userId) {
+    throw new UnauthorizedError("something went wrong");
+  }
+
+  return caseRecord;
 };
 
-exports.getCases = ({ userId }) => {
-  const params = {
-    TableName: TABLE_NAME,
-    IndexName: "UserIdIndex",
-    KeyConditionExpression: 'userId = :userId',
-    ExpressionAttributeValues: {
-      ':userId': userId
-    }
-  };
-  return client.query(params);
+exports.getCases = ({ userId, persistence = casesPersistence }) => {
+  return persistence
+    .query({
+      query: {
+        userId,
+      },
+      pivot: 'user',
+      type: 'case'
+    });
 };
 
-exports.getCasesByStatus = async ({ status, userId }) => {
+exports.getCasesByStatus = async ({ status, userId, persistence = casesPersistence }) => {
   if (!isAuthorized(userId, GET_CASES_BY_STATUS)) {
     throw new UnauthorizedError('Unauthorized for getCasesByStatus');
-  } else {
-    status = status.toLowerCase(); //homogenize for purity
-
-    const params = {
-      TableName: TABLE_NAME,
-      IndexName: "StatusIndex",
-      KeyConditionExpression: '#status = :status',
-      ExpressionAttributeValues: {
-        ':status': status
-      },
-      ExpressionAttributeNames: {
-        "#status" : "status"
-      }
-    };
-    return client.query(params);
   }
+
+  status = status.toLowerCase();
+
+  return persistence
+    .query({
+      query: {
+        status,
+      },
+      pivot: 'status',
+      type: 'case',
+    })
 };
 
-exports.updateCase = async ({ caseId, caseToUpdate, userId, persistence = casesPersistence}) => {
+exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersistence}) => {
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }

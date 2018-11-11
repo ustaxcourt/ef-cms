@@ -15,9 +15,8 @@ describe('Get case lambda', function() {
 
   describe ('success - no cases exist in database', function() {
     before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'query', function (params, callback) {
+      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
         callback(null, {
-          Items: []
         });
       });
     });
@@ -48,9 +47,9 @@ describe('Get case lambda', function() {
 
   describe ('success - cases exist in database', function() {
     before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'query', function (params, callback) {
+      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
         callback(null, {
-          Items: [MOCK_CASE]
+          Item: MOCK_CASE
         });
       });
     });
