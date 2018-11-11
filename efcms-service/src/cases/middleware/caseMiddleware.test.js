@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const proxyquire =  require('proxyquire').noCallThru();
+const client = require('../../middleware/dynamodbClientService');
 
 const expect = require('chai').expect;
 const chai = require('chai');
@@ -28,26 +29,29 @@ describe('create case', function() {
     process.env = {};
     process.env.STAGE = 'test';
 
+    sinon.stub(client, 'put').resolves(item);
+
     caseMiddleWare = proxyquire('./caseMiddleware', {
-      '../../middleware/dynamodbClientService' : {
-        put: stub
-      },
       './docketNumberGenerator' : {
         createDocketNumber: docketNumberStub
       }
     });
   });
 
+  after(() => {
+    client.put.restore();
+  });
 
   it('should create a case', async () => {
-    const result = await caseMiddleWare.create('user', documents);
+    const result = await caseMiddleWare.create({
+      userId: 'user',
+      documents
+    });
     expect(result).to.equal(item);
   });
 });
 
 describe('get cases', function() {
-
-  const stub = sinon.stub();
 
   let caseMiddleWare;
   let item;
@@ -63,53 +67,115 @@ describe('get cases', function() {
         createdAt: '2018-11-09T15:25:32.977Z',
       };
 
-      stub.resolves([item]);
+      sinon.stub(client, 'query').resolves([item]);
 
-      caseMiddleWare = proxyquire('./caseMiddleware', {
-        '../../middleware/dynamodbClientService' : {
-          query: stub
-        }
-      });
+      caseMiddleWare = proxyquire('./caseMiddleware', {});
     });
+
+    after(() => {
+      client.query.restore();
+    })
 
     it('should get all cases for a user', async () => {
-      const result = await caseMiddleWare.getCases('user');
+      const result = await caseMiddleWare.getCases({
+        userId: 'user'
+      });
       expect(result[0]).to.equal(item);
     });
+  });
+});
 
-    it('should get a single case for a user', async () => {
-      const result = await caseMiddleWare.getCase('user', '123456');
+
+describe('get case', function() {
+
+  let caseMiddleWare;
+  let item;
+
+  describe('successes', () => {
+    before(function() {
+      item = {
+        caseId: '123456',
+        userId: 'user',
+        docketNumber: '456789-18',
+        documents: [],
+        status: "new",
+        createdAt: '2018-11-09T15:25:32.977Z',
+      };
+
+      sinon.stub(client, 'get').resolves(item);
+
+      caseMiddleWare = proxyquire('./caseMiddleware', {});
+    });
+
+    after(() => {
+      client.get.restore();
+    })
+
+    it('should get a single case', async () => {
+      const result = await caseMiddleWare.getCase({
+        caseId: '123456',
+        userId: 'user',
+      });
       expect(result).to.equal(item);
     });
   });
 
   describe('failures', () => {
-    before(function() {
-      stub.resolves([]);
-
-      caseMiddleWare = proxyquire('./caseMiddleware', {
-        '../../middleware/dynamodbClientService' : {
-          query: stub
-        }
+    describe('case not found', () => {
+      before(function() {
+        sinon.stub(client, 'get').resolves(null);
+        caseMiddleWare = proxyquire('./caseMiddleware', {});
       });
-    });
 
-    it('should throw a not found error if a single non-existent case', async () => {
-      let error;
-      try {
-        await caseMiddleWare.getCase('user', '123');
-      } catch (err) {
-        error = err;
-      }
-      expect(error.message).to.equal('Case 123 was not found.');
+      after(() => {
+        client.get.restore();
+      })
+
+      it('should throw a not found error if a single non-existent case', async () => {
+        let error;
+        try {
+          await caseMiddleWare.getCase({
+            userId: 'user',
+            caseId: '123'
+          });
+        } catch (err) {
+          error = err;
+        }
+        expect(error.message).to.equal('Case 123 was not found.');
+      });
+    })
+
+    describe('case different userid', () => {
+      before(function() {
+        sinon.stub(client, 'get').resolves({
+          ...item,
+          userId: '123',
+        });
+        caseMiddleWare = proxyquire('./caseMiddleware', {});
+      });
+
+      after(() => {
+        client.get.restore();
+      })
+
+      it('should throw an error if user does not have access', async () => {
+        let error;
+        try {
+          await caseMiddleWare.getCase({
+            userId: 'abc',
+            caseId: '123'
+          });
+        } catch (err) {
+          error = err;
+        }
+        expect(error.message).to.equal('something went wrong');
+      });
     });
   });
 
 });
 
 describe('get cases by status', function() {
-
-  const stub = sinon.stub();
 
   let caseMiddleWare;
   let item;
@@ -124,24 +190,30 @@ describe('get cases by status', function() {
       createdAt: '2018-11-09T15:25:32.977Z',
     };
 
-    stub.resolves([item]);
+    sinon.stub(client, 'query').resolves([item]);
 
-    caseMiddleWare = proxyquire('./caseMiddleware', {
-      '../../middleware/dynamodbClientService' : {
-        query: stub
-      }
-    });
+    caseMiddleWare = proxyquire('./caseMiddleware', {});
   });
 
+  after(() => {
+    client.query.restore();
+  })
+
   it('should get cases by query string status when user is authorized', async () => {
-    const result = await caseMiddleWare.getCasesByStatus('NEW', 'petitionsclerk');
+    const result = await caseMiddleWare.getCasesByStatus({
+      status: 'NEW',
+      userId: 'petitionsclerk'
+    });
     expect(result[0]).to.equal(item);
   });
 
   it('should return an error if the user is authorized', async () => {
     let error;
     try {
-      await caseMiddleWare.getCasesByStatus('NEW', 'notapetitionsclerk');
+      await caseMiddleWare.getCasesByStatus({
+        status: 'NEW',
+        userId: 'notapetitionsclerk'
+      });
     } catch (err) {
       error = err;
     }

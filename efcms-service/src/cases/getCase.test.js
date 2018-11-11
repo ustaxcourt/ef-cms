@@ -15,9 +15,8 @@ describe('Get case lambda', function() {
 
   describe ('success - no cases exist in database', function() {
     before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'query', function (params, callback) {
+      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
         callback(null, {
-          Items: []
         });
       });
     });
@@ -38,7 +37,7 @@ describe('Get case lambda', function() {
       it('should return a case on a GET', function () {
         return lambdaTester(getCase.get)
           .event(documentBody)
-          .expectResult(result => {
+          .expectResolve(result => {
             const data = JSON.parse(result.body);
             expect(data).to.equal('Case 123 was not found.');
           });
@@ -48,9 +47,9 @@ describe('Get case lambda', function() {
 
   describe ('success - cases exist in database', function() {
     before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'query', function (params, callback) {
+      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
         callback(null, {
-          Items: [MOCK_CASE]
+          Item: MOCK_CASE
         });
       });
     });
@@ -71,7 +70,7 @@ describe('Get case lambda', function() {
       it('should return a case on a GET', function () {
         return lambdaTester(getCase.get)
           .event(documentBody)
-          .expectResult(result => {
+          .expectResolve(result => {
             const data = JSON.parse(result.body);
             expect(data).to.deep.equal(MOCK_CASE);
           });
@@ -92,7 +91,7 @@ describe('Get case lambda', function() {
       it('should return an error on a GET without a Authorization header', function() {
         return lambdaTester(getCase.get)
           .event(get)
-          .expectResult(err => {
+          .expectResolve(err => {
             expect(err.body).to.startsWith('"Error:');
           });
       });

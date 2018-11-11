@@ -49,7 +49,7 @@ describe('Create policy url', function() {
 
       return lambdaTester(createPolicyUrl.create)
         .event(policyUrlResponse)
-        .expectResult(result => {
+        .expectResolve(result => {
           const data = JSON.parse(result.body);
           expect(data.url).to.equal(MOCK_RESPONSE.url);
         });
@@ -64,7 +64,7 @@ describe('Create policy url', function() {
 
       return lambdaTester(createPolicyUrl.create)
         .event(policyUrlResponse)
-        .expectResult(err => {
+        .expectResolve(err => {
           expect(err.body).to.startsWith('"error');
         });
     });

@@ -8,7 +8,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param context
  * @param callback
  */
-exports.get = async event =>
+exports.get = event =>
   handle(() =>
     getDocumentDownloadUrl({
       documentId: event.pathParameters.documentId,
