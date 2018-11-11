@@ -16,7 +16,7 @@ exports.createUploadPolicy = ({ persistence = filesPersistence } = {}) => {
     .createUploadPolicy();
 };
 
-exports.createDocument = ({ userId, documentType, persistence = documentsPersistence } = {}) => {
+exports.createDocument = ({ userId, documentType, persistence = documentsPersistence }) => {
   if (!userId || !documentType) {
     throw new Error('documentType and userId are required');
   }
