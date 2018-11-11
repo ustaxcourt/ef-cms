@@ -1,5 +1,6 @@
-const { createDone, getAuthHeader } = require('../middleware/apiGatewayHelper');
+const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const caseMiddleware = require('./middleware/caseMiddleware');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
  * Create Case API Lambda
@@ -9,30 +10,10 @@ const caseMiddleware = require('./middleware/caseMiddleware');
  * @param callback
  */
 
-exports.create = (event, context, callback) => {
-  const done = createDone(callback);
-
-  let body;
-  try {
-    body = JSON.parse(event.body);
-  } catch (error) {
-    done(new Error('Error: problem parsing event body: ' + error));
-    return;
-  }
-
-  let userToken;
-
-  try {
-    userToken = getAuthHeader(event);
-  } catch (error) {
-    done(error);
-    return;
-  }
-
-  caseMiddleware
-    .create(userToken, body.documents)
-    .then(caseRecord => {
-      done(null, caseRecord);
+exports.create = event =>
+  handle(() =>
+    caseMiddleware.create({
+      userId: getAuthHeader(event),
+      documents: JSON.parse(event.body).documents
     })
-    .catch(done);
-};
+  );

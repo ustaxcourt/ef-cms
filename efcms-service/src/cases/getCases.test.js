@@ -24,8 +24,8 @@ describe('Get cases lambda', function() {
 
   describe ('success', function() {
     before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'query', function (params, callback) {
-        callback(null, {
+      aws.mock('DynamoDB.DocumentClient', 'query', async function () {
+        return {
           Items: [{
             userId: 'userId',
             caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
@@ -33,7 +33,7 @@ describe('Get cases lambda', function() {
             documents,
             createdAt: '',
           }],
-        });
+        };
       });
     });
 
@@ -51,7 +51,7 @@ describe('Get cases lambda', function() {
       it('should retrieve cases by status if authorized', function () {
         return lambdaTester(getCases.get)
           .event(documentBody)
-          .expectResult(result => {
+          .expectResolve(result => {
             const data = JSON.parse(result.body);
             expect(data.length).to.equal(1);
           });
@@ -67,7 +67,7 @@ describe('Get cases lambda', function() {
       it('should retrieve cases by status if authorized', function () {
         return lambdaTester(getCases.get)
           .event(documentBody)
-          .expectResult(result => {
+          .expectResolve(result => {
             const data = JSON.parse(result.body);
             expect(data.length).to.equal(1);
           });
@@ -84,7 +84,7 @@ describe('Get cases lambda', function() {
       it('should return a 404 and error if unauthorized', function () {
         return lambdaTester(getCases.get)
           .event(documentBody)
-          .expectResult(error => {
+          .expectResolve(error => {
             expect(error.statusCode).to.equal(404);
             expect(error.body).to.equal('\"Unauthorized for getCasesByStatus\"')
           });
@@ -106,7 +106,7 @@ describe('Get cases lambda', function() {
       it('should return a 404 if no user is present', function () {
         return lambdaTester(getCases.get)
           .event(documentBody)
-          .expectResult(error => {
+          .expectResolve(error => {
             expect(error.statusCode).to.equal('400');
             expect(error.body).to.startWith('\"Error: Authorization')
           });
