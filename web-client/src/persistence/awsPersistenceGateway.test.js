@@ -2,7 +2,7 @@ import assert from 'assert';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import dev from '../environments/dev';
+import dev from '../environments/unit';
 import Petition from '../entities/Petition';
 import awsPersistenceGateway from './awsPersistenceGateway';
 

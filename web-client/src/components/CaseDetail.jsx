@@ -48,7 +48,11 @@ export default connect(
                   </span>
                   <a
                     className="pdf-link"
-                    href="https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf"
+                    href={
+                      'http://localhost:3000/v1/documents/' +
+                      item.documentId +
+                      '/downloadPolicy'
+                    }
                   >
                     <FontAwesomeIcon icon="file-pdf" />
                     {item.documentType}
