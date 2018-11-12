@@ -1,22 +1,24 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
-import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { state } from 'cerebral';
+import moment from 'moment';
+import React from 'react';
 
 /**
- * Footer
+ *
  */
 export default connect(
   {
     caseDetail: state.caseDetail,
+    user: state.user,
   },
-  function CaseDetail({ caseDetail }) {
+  function CaseDetail({ caseDetail, user }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
-          {caseDetail.petitionerName}, Petitioner v. Commissioner of Internal
-          Revenue, Respondent
+          {user.name}, Petitioner v. Commissioner of Internal Revenue,
+          Respondent
         </p>
         <br />
         <h2>Case activities</h2>
@@ -29,24 +31,27 @@ export default connect(
             </tr>
           </thead>
           <tbody>
-            {!caseDetail.activities.length && (
+            {!caseDetail.documents.length && (
               <tr>
                 <td colSpan="3">(none)</td>
               </tr>
             )}
-            {caseDetail.activities.map((item, idx) => (
+            {caseDetail.documents.map((item, idx) => (
               <tr key={idx}>
                 <td className="responsive-title">
                   <span className="responsive-label">Activity date</span>
-                  {item.dateSubmitted}
+                  {moment(item.createdAt).format('LLL')}
                 </td>
                 <td>
                   <span className="responsive-label">
                     Filings and proceedings
                   </span>
-                  <a className="pdf-link" href="/">
+                  <a
+                    className="pdf-link"
+                    href="https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf"
+                  >
                     <FontAwesomeIcon icon="file-pdf" />
-                    {item.filingsAndProceedings}
+                    {item.documentType}
                   </a>
                 </td>
                 <td>{item.dateServed}</td>

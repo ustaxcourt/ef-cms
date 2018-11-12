@@ -35,8 +35,8 @@ export const submitLogIn = [
 ];
 
 export const gotoCaseDetail = [
-  set(state`docketNumber`, props`docketNumber`),
   actions.getCaseDetail,
+  actions.setCaseDetail,
   set(state`currentPage`, 'CaseDetail'),
 ];
 

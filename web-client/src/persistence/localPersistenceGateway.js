@@ -46,15 +46,15 @@ const getCases = () => {
   return [fakeCase];
 };
 
-// const getCaseDetail = () => {
-//   return fakeCase;
-// };
+const getCaseDetail = () => {
+  return fakeCase;
+};
 
 const localPersistenceGateway = {
   filePdfPetition,
   getUser,
   getCases,
-  // getCaseDetail,
+  getCaseDetail,
 };
 
 export default localPersistenceGateway;
