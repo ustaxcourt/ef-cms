@@ -51,6 +51,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
+  formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
   const result = await axios.post(policy.url, formData, {
     headers: {
@@ -111,15 +112,15 @@ const filePdfPetition = async function filePdfPetition(
     documents: [
       {
         documentId: petitionFileId,
-        type: 'petitionFile',
+        documentType: 'petitionFile',
       },
       {
         documentId: requestForPlaceOfTrialId,
-        type: 'requestForPlaceOfTrial',
+        documentType: 'requestForPlaceOfTrial',
       },
       {
         documentId: statementOfTaxpayerIdentificationNumberId,
-        type: 'statementOfTaxpayerIdentificationNumber',
+        documentType: 'statementOfTaxpayerIdentificationNumber',
       },
     ],
   });
