@@ -21,8 +21,6 @@ describe('Main cerebral module', () => {
     it('Handles routing', async () => {
       await test.runSequence('gotoStyleGuide');
       assert.equal(test.getState('currentPage'), 'StyleGuide');
-      await test.runSequence('gotoDashboard');
-      assert.equal(test.getState('currentPage'), 'Dashboard');
     });
 
     it('Handles routing to file petition', async () => {
@@ -83,5 +81,23 @@ describe('Main cerebral module', () => {
         message: 'Your case has now been created.',
       });
     });
+
+    it('View cases', async () => {
+      await test.runSequence('gotoDashboard');
+      assert.equal(test.getState('currentPage'), 'Dashboard');
+      assert.equal(
+        test.getState('cases.0.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+    });
+
+    // it('View case detail', async () => {
+    //   await test.runSequence('gotoCaseDetail');
+    //   assert.equal(test.getState('currentPage'), 'CaseDetail');
+    //   assert.equal(
+    //     test.getState('case.documents.0.documentId'),
+    //     'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    //   );
+    // });
   });
 });
