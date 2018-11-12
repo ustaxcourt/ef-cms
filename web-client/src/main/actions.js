@@ -16,14 +16,38 @@ export const getUser = async ({ useCases, applicationContext, get, path }) => {
     });
   }
 };
-
+export const getCaseList = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
+  try {
+    const caseList = await useCases.getCases(
+      applicationContext,
+      get(state.user.name),
+    );
+    return path.success({ caseList });
+  } catch (e) {
+    return path.error({
+      alertError: {
+        title: 'Cases not found',
+        message: 'No cases were retrieved',
+      },
+    });
+  }
+};
+export const setCaseList = ({ store, props }) => {
+  store.set(state.cases, props.caseList);
+  return;
+};
 export const getCaseDetail = async ({ store }) => {
   // TODO: retrieve case detail using state.docketNumber
   const caseDetail = state.cases[0];
   store.set(state.caseDetail, caseDetail);
   return;
 };
-export const setUser = async ({ store, props }) => {
+export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
   return;
 };

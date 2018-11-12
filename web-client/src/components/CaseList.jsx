@@ -28,11 +28,11 @@ export default connect(
               </td>
               <td>
                 <span className="responsive-label">Date filed</span>
-                {item.dateSubmitted}
+                {item.createdAt}
               </td>
               <td>
                 <span className="responsive-label">Petitioner name</span>
-                {item.petitionerName}
+                Taxpayer TBD
               </td>
             </tr>
           ))}

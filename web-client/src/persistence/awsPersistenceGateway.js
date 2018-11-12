@@ -5,6 +5,14 @@ const getDocumentPolicy = async baseUrl => {
   return response.data;
 };
 
+const getCases = async (baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases/`, { headers });
+  return response.data;
+};
+
 const getDocumentId = async (baseUrl, user, type) => {
   const response = await axios.post(`${baseUrl}/documents`, {
     userId: user,
@@ -80,6 +88,7 @@ const filePdfPetition = async function filePdfPetition(
 const awsPersistenceGateway = {
   filePdfPetition,
   getUser,
+  getCases,
 };
 
 export default awsPersistenceGateway;
