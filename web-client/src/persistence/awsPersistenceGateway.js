@@ -13,6 +13,14 @@ const getCases = async (baseUrl, userToken) => {
   return response.data;
 };
 
+const getCaseDetail = async (caseId, baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases/${caseId}`, { headers });
+  return response.data;
+};
+
 const createDocumentMetadata = async (baseUrl, user, type) => {
   const response = await axios.post(`${baseUrl}/documents`, {
     userId: user,
@@ -53,8 +61,8 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
-  return name;
+  if (name !== 'taxpayer') throw new Error('Username is incorrect');
+  return { name };
 };
 
 const filePdfPetition = async function filePdfPetition(
@@ -121,6 +129,7 @@ const awsPersistenceGateway = {
   filePdfPetition,
   getUser,
   getCases,
+  getCaseDetail,
 };
 
 export default awsPersistenceGateway;
