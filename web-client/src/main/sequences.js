@@ -2,7 +2,14 @@ import { set, toggle } from 'cerebral/factories';
 import { state, props } from 'cerebral';
 import * as actions from './actions';
 
-export const gotoDashboard = [set(state`currentPage`, 'Dashboard')];
+export const gotoDashboard = [
+  actions.getCaseList,
+  {
+    error: [actions.setAlertError],
+    success: [actions.setCaseList],
+  },
+  set(state`currentPage`, 'Dashboard'),
+];
 export const gotoLogIn = [
   actions.clearLoginForm,
   set(state`currentPage`, 'LogIn'),
