@@ -65,8 +65,8 @@ const fakeDocumentId = {
 describe('AWS petition gateway', () => {
   describe('Get user', () => {
     it('Success', async () => {
-      const user = awsPersistenceGateway.getUser('Test, Taxpayer');
-      assert.equal(user, 'Test, Taxpayer');
+      const user = awsPersistenceGateway.getUser('taxpayer');
+      assert.equal(user.name, 'taxpayer');
     });
     it('Failure', async () => {
       try {

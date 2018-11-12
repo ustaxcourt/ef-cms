@@ -62,7 +62,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 
 const getUser = name => {
   if (name !== 'taxpayer') throw new Error('Username is incorrect');
-  return { name };
+  return { name: name };
 };
 
 const filePdfPetition = async function filePdfPetition(
