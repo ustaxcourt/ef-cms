@@ -38,8 +38,8 @@ const filePdfPetition = async function filePdfPetition() {
 };
 
 const getUser = name => {
-  if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
-  return name;
+  if (name !== 'taxpayer') throw new Error('Username is incorrect');
+  return { name: name };
 };
 
 const getCases = () => {

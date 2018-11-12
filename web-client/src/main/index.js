@@ -24,7 +24,7 @@ export default {
     petition: {},
     form: {},
     user: {
-      name: 'taxpayer',
+      name: '',
     },
     caseDetail: {},
     cases: [],
