@@ -3,6 +3,7 @@ import * as sequences from './sequences';
 import filePdfPetition from '../useCases/filePdfPetition';
 import getUser from '../useCases/getUser';
 import getCases from '../useCases/getCases';
+import getCaseDetail from '../useCases/getCaseDetail';
 
 /**
  * Main Cerebral module
@@ -13,6 +14,7 @@ export default {
       filePdfPetition,
       getUser,
       getCases,
+      getCaseDetail,
     },
   },
   sequences,
@@ -24,7 +26,7 @@ export default {
     petition: {},
     form: {},
     user: {
-      name: '',
+      name: 'taxpayer',
     },
     caseDetail: {},
     cases: [],
