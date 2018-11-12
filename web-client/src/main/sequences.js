@@ -34,11 +34,11 @@ export const submitLogIn = [
   actions.unsetFormSubmitting,
 ];
 
-export const gotoCaseDetail = [
-  set(state`docketNumber`, props`docketNumber`),
-  actions.getCaseDetail,
-  set(state`currentPage`, 'CaseDetail'),
-];
+// export const gotoCaseDetail = [
+//   set(state`docketNumber`, props`docketNumber`),
+//   actions.getCaseDetail,
+//   set(state`currentPage`, 'CaseDetail'),
+// ];
 
 export const updatePetitionValue = [
   set(state`petition.${props`key`}`, props`value`),
