@@ -1,5 +1,5 @@
 const { getDocumentDownloadUrl } = require('./services/documentBlobDAO');
-const { handle } = require('../middleware/apiGatewayHelper');
+// const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -8,9 +8,9 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param context
  * @param callback
  */
-exports.get = event =>
-  handle(() =>
-    getDocumentDownloadUrl({
-      documentId: event.pathParameters.documentId,
-    })
-  );
+exports.get = async event => {
+  const { url } = await getDocumentDownloadUrl({
+    documentId: event.pathParameters.documentId,
+  });
+  return { status: 302, headers: { Location: url } }
+}

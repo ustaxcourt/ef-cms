@@ -43,17 +43,24 @@ export const setCaseList = ({ store, props }) => {
   return;
 };
 
-// export const getCaseDetail = async ({ store }) => {
-//   // TODO: retrieve case detail using state.docketNumber
-//   const caseDetail = state.cases[0];
-//   store.set(state.caseDetail, caseDetail);
-//   return;
-// };
-//
-// export const setCaseDetail = ({ store, props }) => {
-//   store.set(state.cases, props.caseList);
-//   return;
-// };
+export const getCaseDetail = async ({
+  useCases,
+  applicationContext,
+  get,
+  props,
+}) => {
+  const caseDetail = await useCases.getCaseDetail(
+    applicationContext,
+    props.caseId,
+    get(state.user.name),
+  );
+  return { caseDetail };
+};
+
+export const setCaseDetail = ({ store, props }) => {
+  store.set(state.caseDetail, props.caseDetail);
+  return;
+};
 
 export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
