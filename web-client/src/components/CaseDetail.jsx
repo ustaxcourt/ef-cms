@@ -49,7 +49,7 @@ export default connect(
                   </span>
                   <a
                     className="pdf-link"
-                    href={baseUrl + '/' + item.documentId + '/downloadPolicy'}
+                    href={baseUrl + '/documents/' + item.documentId + '/downloadPolicy'}
                   >
                     <FontAwesomeIcon icon="file-pdf" />
                     {item.documentType}
