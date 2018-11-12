@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state } from 'cerebral';
+import moment from 'moment';
 
 /**
  * Footer
@@ -28,11 +29,11 @@ export default connect(
               </td>
               <td>
                 <span className="responsive-label">Date filed</span>
-                {item.dateSubmitted}
+                {moment(item.createdAt).format('LLL')}
               </td>
               <td>
                 <span className="responsive-label">Petitioner name</span>
-                {item.petitionerName}
+                {item.userId}
               </td>
             </tr>
           ))}

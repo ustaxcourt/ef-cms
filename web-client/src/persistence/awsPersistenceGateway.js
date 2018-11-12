@@ -1,14 +1,40 @@
 import axios from 'axios';
 
 const getDocumentPolicy = async baseUrl => {
-  const response = await axios.get(`${baseUrl}/documents/policy`);
+  const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
   return response.data;
 };
 
-const getDocumentId = async (baseUrl, user, type) => {
+const getCases = async (baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases`, { headers });
+  return response.data;
+};
+
+const getCaseDetail = async (caseId, baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases/${caseId}`, { headers });
+  return response.data;
+};
+
+const createDocumentMetadata = async (baseUrl, user, type) => {
   const response = await axios.post(`${baseUrl}/documents`, {
     userId: user,
     documentType: type,
+  });
+  return response.data;
+};
+
+const createCase = async (baseUrl, userToken, caseToCreate) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.post(`${baseUrl}/cases`, caseToCreate, {
+    headers,
   });
   return response.data;
 };
@@ -35,8 +61,8 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'Test, Taxpayer') throw new Error('Username is incorrect');
-  return name;
+  if (name !== 'taxpayer') throw new Error('Username is incorrect');
+  return { name: name };
 };
 
 const filePdfPetition = async function filePdfPetition(
@@ -46,13 +72,19 @@ const filePdfPetition = async function filePdfPetition(
   fileHasUploaded,
 ) {
   const documentPolicy = await getDocumentPolicy(baseUrl);
-  const petitionFileId = await getDocumentId(baseUrl, user, 'petitionFile');
-  const requestForPlaceOfTrialId = await getDocumentId(
+  const { documentId: petitionFileId } = await createDocumentMetadata(
+    baseUrl,
+    user,
+    'petitionFile',
+  );
+  const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     baseUrl,
     user,
     'requestForPlaceOfTrial',
   );
-  const statementOfTaxpayerIdentificationNumberId = await getDocumentId(
+  const {
+    documentId: statementOfTaxpayerIdentificationNumberId,
+  } = await createDocumentMetadata(
     baseUrl,
     user,
     'statementOfTaxpayerIdentificationNumber',
@@ -75,11 +107,29 @@ const filePdfPetition = async function filePdfPetition(
     petition.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
+  await createCase(baseUrl, user.name, {
+    documents: [
+      {
+        documentId: petitionFileId,
+        type: 'petitionFile',
+      },
+      {
+        documentId: requestForPlaceOfTrialId,
+        type: 'requestForPlaceOfTrial',
+      },
+      {
+        documentId: statementOfTaxpayerIdentificationNumberId,
+        type: 'statementOfTaxpayerIdentificationNumber',
+      },
+    ],
+  });
 };
 
 const awsPersistenceGateway = {
   filePdfPetition,
   getUser,
+  getCases,
+  getCaseDetail,
 };
 
 export default awsPersistenceGateway;
