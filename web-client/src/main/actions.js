@@ -42,6 +42,9 @@ export const setCaseList = ({ store, props }) => {
   store.set(state.cases, props.caseList);
   return;
 };
+export const setBaseUrl = ({ store, applicationContext }) => {
+  store.set(state.baseUrl, applicationContext.getBaseUrl());
+};
 
 export const getCaseDetail = async ({
   useCases,

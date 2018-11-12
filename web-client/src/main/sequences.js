@@ -35,6 +35,7 @@ export const submitLogIn = [
 ];
 
 export const gotoCaseDetail = [
+  actions.setBaseUrl,
   actions.getCaseDetail,
   actions.setCaseDetail,
   set(state`currentPage`, 'CaseDetail'),

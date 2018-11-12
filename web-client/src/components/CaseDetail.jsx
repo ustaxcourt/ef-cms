@@ -9,10 +9,11 @@ import React from 'react';
  */
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     user: state.user,
   },
-  function CaseDetail({ caseDetail, user }) {
+  function CaseDetail({ baseUrl, caseDetail, user }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
@@ -48,11 +49,7 @@ export default connect(
                   </span>
                   <a
                     className="pdf-link"
-                    href={
-                      'http://localhost:3000/v1/documents/' +
-                      item.documentId +
-                      '/downloadPolicy'
-                    }
+                    href={baseUrl + '/' + item.documentId + '/downloadPolicy'}
                   >
                     <FontAwesomeIcon icon="file-pdf" />
                     {item.documentType}
