@@ -21,6 +21,8 @@ export default connect(
               <th>Docket number</th>
               <th>Date filed</th>
               <th>Petitioner name</th>
+              <th>Assigned to</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +42,8 @@ export default connect(
                   <span className="responsive-label">Petitioner name</span>
                   {item.userId}
                 </td>
+                <td />
+                <td />
               </tr>
             ))}
           </tbody>
