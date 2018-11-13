@@ -1,4 +1,4 @@
-import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
+import localPersistenceGateway from '../persistence/localPersistenceGateway';
 
 const API_URL = 'http://localhost:3000/v1';
 
@@ -10,7 +10,7 @@ const dev = {
     return API_URL;
   },
   getPersistenceGateway: () => {
-    return awsPersistenceGateway;
+    return localPersistenceGateway;
   },
 };
 
