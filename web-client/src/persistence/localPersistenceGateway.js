@@ -1,3 +1,5 @@
+import User from '../entities/User';
+
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
   createdAt: '2018-11-12T18:26:20.121Z',
@@ -38,8 +40,8 @@ const createCase = async function createCase() {
 };
 
 const getUser = name => {
-  if (name !== 'taxpayer') throw new Error('Username is incorrect');
-  return { name: name };
+  if (name !== 'taxpayer') return;
+  return new User({ name });
 };
 
 const getCases = () => {

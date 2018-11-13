@@ -1,21 +1,19 @@
 import { state } from 'cerebral';
 
 export const getUser = async ({ useCases, applicationContext, get, path }) => {
-  try {
-    const user = await useCases.getUser(
-      applicationContext.getPersistenceGateway(),
-      get(state.form.name),
-    );
-    return path.success({ user });
-  } catch (e) {
-    return path.error({
-      alertError: {
-        title: 'User not found',
-        message: 'Username or password are incorrect',
-      },
-    });
-  }
+  const user = await useCases.getUser(
+    applicationContext.getPersistenceGateway(),
+    get(state.form.name),
+  );
+  if (user) return path.success({ user });
+  return path.error({
+    alertError: {
+      title: 'User not found',
+      message: 'Username or password are incorrect',
+    },
+  });
 };
+
 export const getCaseList = async ({
   useCases,
   applicationContext,
@@ -32,7 +30,7 @@ export const getCaseList = async ({
     return path.error({
       alertError: {
         title: 'Cases not found',
-        message: 'No cases were retrieved',
+        message: 'There was a problem getting the cases',
       },
     });
   }
@@ -42,6 +40,7 @@ export const setCaseList = ({ store, props }) => {
   store.set(state.cases, props.caseList);
   return;
 };
+
 export const setBaseUrl = ({ store, applicationContext }) => {
   store.set(state.baseUrl, applicationContext.getBaseUrl());
 };
