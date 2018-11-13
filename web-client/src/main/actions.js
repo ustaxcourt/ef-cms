@@ -165,7 +165,6 @@ export const getPetitionsClerkCaseList = async ({
     );
     return path.success({ caseList });
   } catch (e) {
-    console.log(e);
     return path.error({
       alertError: {
         title: 'Cases not found',
