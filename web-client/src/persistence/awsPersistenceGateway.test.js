@@ -3,7 +3,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import dev from '../environments/unit';
-import Case from '../entities/Case';
+import Case from '../../../isomorphic/src/entities/Case';
 import awsPersistenceGateway from './awsPersistenceGateway';
 
 const UPLOAD_POLICY_ROUTE = `${dev.getBaseUrl()}/documents/uploadPolicy`;

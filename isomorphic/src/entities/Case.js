@@ -1,11 +1,11 @@
-function Petition(petition) {
+function Case(petition) {
   this.petitionFile = petition.petitionFile;
   this.requestForPlaceOfTrial = petition.requestForPlaceOfTrial;
   this.statementOfTaxpayerIdentificationNumber =
     petition.statementOfTaxpayerIdentificationNumber;
 }
 
-Petition.prototype.isValid = function isValid() {
+Case.prototype.isValid = function isValid() {
   return (
     !!this.petitionFile &&
     !!this.requestForPlaceOfTrial &&
@@ -13,4 +13,4 @@ Petition.prototype.isValid = function isValid() {
   );
 };
 
-export default Petition;
+module.exports = Case;

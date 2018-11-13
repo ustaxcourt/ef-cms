@@ -1,6 +1,6 @@
-import assert from 'assert';
+const assert = require('assert');
 
-import User from './User';
+const User = require('./User');
 
 describe('Petition entity', () => {
   it('Creates a valid petition', () => {
