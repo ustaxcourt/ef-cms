@@ -4,19 +4,19 @@ const docketNumberService = require('./docketNumberGenerator');
 const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE } = require('../../middleware/authorizationClientService');
 const { UnprocessableEntityError, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
 const casesPersistence = getPersistence('cases');
-
+const Case = require('../../../../isomorphic/src/entities/Case');
 const NUM_REQUIRED_DOCUMENTS = 3;
 
 /**
- * validateDocuments
+ * validateCase
  *
  * checks that all case initiation documents are present
  *
  * @param documents
  */
-const validateDocuments = documents => {
-  if (!documents || !documents.constructor === Array || documents.length !== NUM_REQUIRED_DOCUMENTS) {
-    throw new Error('Three case initiation documents are required');
+const validateCase = caseToValidate => {
+  if (!caseToValidate.isValid()) {
+    throw new Error('The case was invalid');
   }
 };
 
@@ -30,18 +30,17 @@ const validateDocuments = documents => {
  * @returns {Promise.<void>}
  */
 exports.create = async ({ userId, documents, persistence = casesPersistence}) => {
-  validateDocuments(documents);
   const caseId = uuidv4();
   const docketNumber = await docketNumberService.createDocketNumber();
-  const caseToCreate = {
+  const caseToCreate = new Case({
     caseId: caseId,
     createdAt: new Date().toISOString(),
     userId: userId,
     docketNumber: docketNumber,
     documents: documents,
     status: "new"
-  }
-
+  });
+  validateCase(caseToCreate);
   return persistence
     .create({
       entity: caseToCreate,
