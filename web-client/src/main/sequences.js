@@ -48,6 +48,7 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   actions.setFormSubmitting,
+  actions.uploadCasePdfs,
   actions.createCase,
   actions.unsetFormSubmitting,
   actions.getCreateCaseAlertSuccess,

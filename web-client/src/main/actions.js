@@ -69,7 +69,7 @@ export const setUser = ({ store, props }) => {
   return;
 };
 
-export const createCase = async ({
+export const uploadCasePdfs = async ({
   useCases,
   applicationContext,
   get,
@@ -81,12 +81,26 @@ export const createCase = async ({
       get(state.petition.uploadsFinished) + 1,
     );
   };
-  await useCases.createCase(
+  const uploadResults = await useCases.uploadCasePdfs(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
     get(state.petition),
     get(state.user),
     fileHasUploaded,
+  );
+  return { uploadResults };
+};
+
+export const createCase = async ({
+  useCases,
+  applicationContext,
+  get,
+  props,
+}) => {
+  await useCases.createCase(
+    applicationContext,
+    props.uploadResults,
+    get(state.user),
   );
 };
 

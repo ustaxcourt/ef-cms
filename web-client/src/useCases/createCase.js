@@ -1,19 +1,8 @@
-import User from '../../../isomorphic/src/entities/User';
-import CaseInitiator from '../../../isomorphic/src/entities/CaseInitiator';
+// import Case from '../../../isomorphic/src/entities/Case';
 
-export default async (
-  baseUrl,
-  persistenceGateway,
-  rawCaseInitiator,
-  rawUser,
-  fileHasUploaded,
-) => {
-  const caseInitiator = new CaseInitiator(rawCaseInitiator);
-  const user = new User(rawUser);
-  await persistenceGateway.createCase(
-    user,
-    caseInitiator,
-    baseUrl,
-    fileHasUploaded,
-  );
+export default async (applicationContext, uploadResults, user) => {
+  // const caseDetail = new Case(rawCase);
+  await applicationContext
+    .getPersistenceGateway()
+    .createCase(applicationContext, uploadResults, user);
 };
