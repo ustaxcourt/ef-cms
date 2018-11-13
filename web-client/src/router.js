@@ -10,9 +10,9 @@ const router = {
       document.title = `Dashboard ${pageTitleSuffix}`;
       app.getSequence('gotoDashboard')();
     });
-    route('/case-detail/*', docketNumber => {
+    route('/case-detail/*', caseId => {
       document.title = `Case details ${pageTitleSuffix}`;
-      app.getSequence('gotoCaseDetail')({ docketNumber });
+      app.getSequence('gotoCaseDetail')({ caseId });
     });
     route('/log-in', () => {
       document.title = `Log in ${pageTitleSuffix}`;

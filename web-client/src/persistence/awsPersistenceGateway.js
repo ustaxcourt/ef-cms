@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import User from '../entities/User';
+
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
   return response.data;
@@ -29,7 +31,7 @@ const createDocumentMetadata = async (baseUrl, user, type) => {
   return response.data;
 };
 
-const createCase = async (baseUrl, userToken, caseToCreate) => {
+const createCaseRecord = async (baseUrl, userToken, caseToCreate) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
@@ -51,6 +53,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
+  formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
   const result = await axios.post(policy.url, formData, {
     headers: {
@@ -61,11 +64,11 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'taxpayer') throw new Error('Username is incorrect');
-  return { name: name };
+  if (name !== 'taxpayer') return;
+  return new User({ name });
 };
 
-const filePdfPetition = async function filePdfPetition(
+const createCase = async function createCase(
   user,
   petition,
   baseUrl,
@@ -107,26 +110,26 @@ const filePdfPetition = async function filePdfPetition(
     petition.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
-  await createCase(baseUrl, user.name, {
+  await createCaseRecord(baseUrl, user.name, {
     documents: [
       {
         documentId: petitionFileId,
-        type: 'petitionFile',
+        documentType: 'petitionFile',
       },
       {
         documentId: requestForPlaceOfTrialId,
-        type: 'requestForPlaceOfTrial',
+        documentType: 'requestForPlaceOfTrial',
       },
       {
         documentId: statementOfTaxpayerIdentificationNumberId,
-        type: 'statementOfTaxpayerIdentificationNumber',
+        documentType: 'statementOfTaxpayerIdentificationNumber',
       },
     ],
   });
 };
 
 const awsPersistenceGateway = {
-  filePdfPetition,
+  createCase,
   getUser,
   getCases,
   getCaseDetail,

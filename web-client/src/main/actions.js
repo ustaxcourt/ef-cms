@@ -1,21 +1,19 @@
 import { state } from 'cerebral';
 
 export const getUser = async ({ useCases, applicationContext, get, path }) => {
-  try {
-    const user = await useCases.getUser(
-      applicationContext.getPersistenceGateway(),
-      get(state.form.name),
-    );
-    return path.success({ user });
-  } catch (e) {
-    return path.error({
-      alertError: {
-        title: 'User not found',
-        message: 'Username or password are incorrect',
-      },
-    });
-  }
+  const user = await useCases.getUser(
+    applicationContext.getPersistenceGateway(),
+    get(state.form.name),
+  );
+  if (user) return path.success({ user });
+  return path.error({
+    alertError: {
+      title: 'User not found',
+      message: 'Username or password are incorrect',
+    },
+  });
 };
+
 export const getCaseList = async ({
   useCases,
   applicationContext,
@@ -32,7 +30,7 @@ export const getCaseList = async ({
     return path.error({
       alertError: {
         title: 'Cases not found',
-        message: 'No cases were retrieved',
+        message: 'There was a problem getting the cases',
       },
     });
   }
@@ -43,24 +41,35 @@ export const setCaseList = ({ store, props }) => {
   return;
 };
 
-// export const getCaseDetail = async ({ store }) => {
-//   // TODO: retrieve case detail using state.docketNumber
-//   const caseDetail = state.cases[0];
-//   store.set(state.caseDetail, caseDetail);
-//   return;
-// };
-//
-// export const setCaseDetail = ({ store, props }) => {
-//   store.set(state.cases, props.caseList);
-//   return;
-// };
+export const setBaseUrl = ({ store, applicationContext }) => {
+  store.set(state.baseUrl, applicationContext.getBaseUrl());
+};
+
+export const getCaseDetail = async ({
+  useCases,
+  applicationContext,
+  get,
+  props,
+}) => {
+  const caseDetail = await useCases.getCaseDetail(
+    applicationContext,
+    props.caseId,
+    get(state.user.name),
+  );
+  return { caseDetail };
+};
+
+export const setCaseDetail = ({ store, props }) => {
+  store.set(state.caseDetail, props.caseDetail);
+  return;
+};
 
 export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
   return;
 };
 
-export const filePdfPetition = async ({
+export const createCase = async ({
   useCases,
   applicationContext,
   get,
@@ -72,7 +81,7 @@ export const filePdfPetition = async ({
       get(state.petition.uploadsFinished) + 1,
     );
   };
-  await useCases.filePdfPetition(
+  await useCases.createCase(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
     get(state.petition),
@@ -81,7 +90,7 @@ export const filePdfPetition = async ({
   );
 };
 
-export const getFilePdfPetitionAlertSuccess = () => {
+export const getCreateCaseAlertSuccess = () => {
   return {
     alertSuccess: {
       title: 'Your files were uploaded successfully.',
@@ -100,6 +109,10 @@ export const unsetFormSubmitting = ({ store }) => {
 
 export const setAlertError = ({ props, store }) => {
   store.set(state.alertError, props.alertError);
+};
+
+export const clearAlertError = ({ store }) => {
+  store.set(state.alertError, null);
 };
 
 export const setAlertSuccess = ({ props, store }) => {

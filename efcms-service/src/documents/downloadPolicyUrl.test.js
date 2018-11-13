@@ -33,8 +33,8 @@ describe('downloadPolicyUrl', function() {
         }
       })
       .expectResolve(result => {
-        const data = JSON.parse(result.body);
-        expect(data.url).to.equal("http://example.com");
+        expect(result.statusCode).to.equal(302);
+        expect(result.headers.Location).to.equal("http://example.com")
       });
   });
 

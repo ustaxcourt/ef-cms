@@ -2,8 +2,8 @@ import assert from 'assert';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import dev from '../environments/dev';
-import Petition from '../entities/Petition';
+import dev from '../environments/unit';
+import Case from '../entities/Case';
 import awsPersistenceGateway from './awsPersistenceGateway';
 
 const UPLOAD_POLICY_ROUTE = `${dev.getBaseUrl()}/documents/uploadPolicy`;
@@ -110,7 +110,7 @@ describe('AWS petition gateway', () => {
     });
   });
 
-  describe('Create PDF petition', () => {
+  describe('Create case', () => {
     let mock;
 
     beforeEach(() => {
@@ -126,14 +126,14 @@ describe('AWS petition gateway', () => {
       mock.onPost(CASES_BASE_ROUTE).reply(200, fakeCase);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const petition = new Petition({
+      const caseDetail = new Case({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
-      await awsPersistenceGateway.filePdfPetition(
+      await awsPersistenceGateway.createCase(
         'Username',
-        petition,
+        caseDetail,
         dev.getBaseUrl(),
         () => {},
       );
@@ -144,15 +144,15 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(500);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const petition = new Petition({
+      const caseDetail = new Case({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.filePdfPetition(
+        await awsPersistenceGateway.createCase(
           'Username',
-          petition,
+          caseDetail,
           dev.getBaseUrl(),
         );
       } catch (error) {
@@ -164,15 +164,15 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(500);
       mock.onPost(fakePolicy.url).reply(204);
-      const petition = new Petition({
+      const caseDetail = new Case({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.filePdfPetition(
+        await awsPersistenceGateway.createCase(
           'Username',
-          petition,
+          caseDetail,
           dev.getBaseUrl(),
         );
       } catch (error) {
@@ -184,15 +184,15 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(500);
-      const petition = new Petition({
+      const caseDetail = new Case({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.filePdfPetition(
+        await awsPersistenceGateway.createCase(
           'Username',
-          petition,
+          caseDetail,
           dev.getBaseUrl(),
         );
       } catch (error) {

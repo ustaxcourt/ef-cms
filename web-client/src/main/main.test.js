@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import assert from 'assert';
 
 import mainModule from './';
-import applicationContext from '../environments/dev';
+import applicationContext from '../environments/unit';
 
 mainModule.providers.applicationContext = applicationContext;
 mainModule.providers.router = { route: () => {} };
@@ -91,13 +91,13 @@ describe('Main cerebral module', () => {
       );
     });
 
-    // it('View case detail', async () => {
-    //   await test.runSequence('gotoCaseDetail');
-    //   assert.equal(test.getState('currentPage'), 'CaseDetail');
-    //   assert.equal(
-    //     test.getState('case.documents.0.documentId'),
-    //     'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    //   );
-    // });
+    it('View case detail', async () => {
+      await test.runSequence('gotoCaseDetail');
+      assert.equal(test.getState('currentPage'), 'CaseDetail');
+      assert.equal(
+        test.getState('caseDetail.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+    });
   });
 });
