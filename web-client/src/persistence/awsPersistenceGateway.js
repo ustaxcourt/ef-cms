@@ -68,7 +68,7 @@ const getUser = name => {
   return new User({ name });
 };
 
-const createCase = async function createCase(
+const uploadCasePdfs = async function uploadCasePdfs(
   user,
   petition,
   baseUrl,
@@ -110,18 +110,30 @@ const createCase = async function createCase(
     petition.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
-  await createCaseRecord(baseUrl, user.name, {
+  return {
+    petitionFileId,
+    requestForPlaceOfTrialId,
+    statementOfTaxpayerIdentificationNumberId,
+  };
+};
+
+const createCase = async function createCase(
+  applicationContext,
+  uploadResults,
+  user,
+) {
+  await createCaseRecord(applicationContext.getBaseUrl(), user.name, {
     documents: [
       {
-        documentId: petitionFileId,
+        documentId: uploadResults.petitionFileId,
         documentType: 'petitionFile',
       },
       {
-        documentId: requestForPlaceOfTrialId,
+        documentId: uploadResults.requestForPlaceOfTrialId,
         documentType: 'requestForPlaceOfTrial',
       },
       {
-        documentId: statementOfTaxpayerIdentificationNumberId,
+        documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
         documentType: 'statementOfTaxpayerIdentificationNumber',
       },
     ],
@@ -129,6 +141,7 @@ const createCase = async function createCase(
 };
 
 const awsPersistenceGateway = {
+  uploadCasePdfs,
   createCase,
   getUser,
   getCases,
