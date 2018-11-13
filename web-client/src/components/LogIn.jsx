@@ -29,7 +29,6 @@ export default connect(
               id="name"
               type="input"
               name="name"
-              placeholder="Last name, first name"
               value={form.name}
               onChange={e => {
                 updateFormValue({
