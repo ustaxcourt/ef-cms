@@ -24,7 +24,10 @@ exports.createUploadPolicy = () =>
   new Promise((resolve, reject) => {
     getS3().createPresignedPost({
       Bucket: process.env.DOCUMENTS_BUCKET_NAME,
-      Conditions: [['starts-with', '$key', '']],
+      Conditions: [
+        ['starts-with', '$key', ''],
+        ['starts-with', "$Content-Type", '']
+      ],
     }, (err, data) => {
       if (err) return reject(err);
       resolve(data);
