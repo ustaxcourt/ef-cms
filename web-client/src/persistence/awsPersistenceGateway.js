@@ -31,6 +31,20 @@ const createDocumentMetadata = async (baseUrl, user, type) => {
   return response.data;
 };
 
+const updateCase = async (userToken, caseDetails, baseUrl) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.put(
+    `${baseUrl}/cases/${caseDetails.caseId}`,
+    caseDetails,
+    {
+      headers,
+    },
+  );
+  return response.data;
+};
+
 const createCaseRecord = async (baseUrl, userToken, caseToCreate) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
@@ -133,6 +147,7 @@ const awsPersistenceGateway = {
   getUser,
   getCases,
   getCaseDetail,
+  updateCase,
 };
 
 export default awsPersistenceGateway;

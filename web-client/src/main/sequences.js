@@ -54,3 +54,5 @@ export const submitFilePetition = [
   actions.setAlertSuccess,
   actions.navigateToDashboard,
 ];
+
+export const updateCase = [actions.updateCase];
