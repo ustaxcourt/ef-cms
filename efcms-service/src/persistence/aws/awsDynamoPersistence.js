@@ -4,13 +4,13 @@ const client = require('../../middleware/dynamodbClientService');
 const getTable = type => {
   switch (type) {
   case 'document':
-    return environment.get('DOCUMENTS_TABLE')
+    return environment.get('DOCUMENTS_TABLE');
   case 'case':
-    return environment.get('CASES_TABLE')
+    return environment.get('CASES_TABLE');
   default:
     throw new Error('type not found');
   }
-}
+};
 
 exports.create = ({ entity, key, type }) =>
   client.put({
@@ -20,7 +20,7 @@ exports.create = ({ entity, key, type }) =>
     ExpressionAttributeNames: {
       [`#${key}`]: `${key}`,
     },
-  })
+  });
 
 exports.get = ({ id, key, type }) =>
   client.get({
@@ -28,7 +28,7 @@ exports.get = ({ id, key, type }) =>
     Key: {
       [key]: id
     },
-  })
+  });
 
 exports.save = ({ entity, type }) =>
   client.put({
@@ -46,7 +46,7 @@ exports.getIndexName = key => {
   default:
     throw new Error('invalid pivot key');
   }
-}
+};
 
 exports.query = ({ type, query, pivot}) => {
   const values = {};
@@ -66,4 +66,4 @@ exports.query = ({ type, query, pivot}) => {
     ExpressionAttributeValues: values,
     KeyConditionExpression: expression
   });
-}
+};
