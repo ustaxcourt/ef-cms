@@ -3,7 +3,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 import dev from '../environments/unit';
-import Case from '../../../isomorphic/src/entities/Case';
+import CaseInitiator from '../../../isomorphic/src/entities/CaseInitiator';
 import awsPersistenceGateway from './awsPersistenceGateway';
 
 const UPLOAD_POLICY_ROUTE = `${dev.getBaseUrl()}/documents/uploadPolicy`;
@@ -126,14 +126,14 @@ describe('AWS petition gateway', () => {
       mock.onPost(CASES_BASE_ROUTE).reply(200, fakeCase);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       await awsPersistenceGateway.createCase(
         'Username',
-        caseDetail,
+        caseInitiator,
         dev.getBaseUrl(),
         () => {},
       );
@@ -144,7 +144,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(500);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
@@ -152,7 +152,7 @@ describe('AWS petition gateway', () => {
       try {
         await awsPersistenceGateway.createCase(
           'Username',
-          caseDetail,
+          caseInitiator,
           dev.getBaseUrl(),
         );
       } catch (error) {
@@ -164,7 +164,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(500);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
@@ -172,7 +172,7 @@ describe('AWS petition gateway', () => {
       try {
         await awsPersistenceGateway.createCase(
           'Username',
-          caseDetail,
+          caseInitiator,
           dev.getBaseUrl(),
         );
       } catch (error) {
@@ -184,7 +184,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
       mock.onPost(dev.getBaseUrl() + '/documents').reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(500);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
@@ -192,7 +192,7 @@ describe('AWS petition gateway', () => {
       try {
         await awsPersistenceGateway.createCase(
           'Username',
-          caseDetail,
+          caseInitiator,
           dev.getBaseUrl(),
         );
       } catch (error) {
