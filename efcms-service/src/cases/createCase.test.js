@@ -10,15 +10,15 @@ describe('Create case lambda', function() {
   let documents = {
     documents: [
       {
-        documentId: '123456789',
+        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'stin'
       },
       {
-        documentId: '123456780',
+        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'stin'
       },
       {
-        documentId: '123456781',
+        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'stin'
       }
     ]
@@ -129,7 +129,7 @@ describe('Create case lambda', function() {
         return lambdaTester(createCase.create)
           .event(post)
           .expectResolve(err => {
-            expect(err.body).to.startsWith('"Three case initiation');
+            expect(err.body).to.startsWith('"The case was invalid');
           });
       });
     });

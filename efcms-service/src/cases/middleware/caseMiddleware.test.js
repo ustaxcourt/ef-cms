@@ -8,7 +8,20 @@ chai.use(require('chai-string'));
 
 describe('create case', function() {
 
-  const documents = [{ documentId: '123456789', documentType: 'stin' },{ documentId: '123456780', documentType: 'stin' },{ documentId: '123456781', documentType: 'stin' }]
+  const documents = [
+    {
+      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+      documentType: 'stin'
+    },
+    {
+      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+      documentType: 'stin'
+    },
+    {
+      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
+      documentType: 'stin'
+    }
+  ]
   const stub = sinon.stub();
   const docketNumberStub = sinon.stub();
   let caseMiddleWare;
@@ -45,7 +58,11 @@ describe('create case', function() {
   it('should create a case', async () => {
     const result = await caseMiddleWare.create({
       userId: 'user',
-      documents
+      documents,
+      caseId: '691ca306-b30f-429c-b785-17754b8fd019',
+      createdAt: new Date().toISOString(),
+      docketNumber: '00100-18',
+      status: "new",
     });
     expect(result).to.equal(item);
   });
