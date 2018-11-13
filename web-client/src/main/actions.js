@@ -69,6 +69,22 @@ export const setUser = ({ store, props }) => {
   return;
 };
 
+export const toggleDocumentValidation = ({ props, store, get }) => {
+  // TODO: This logic scares me.....  There must be a "best practice" way to update
+  // an immutable object that is in an array. FIX ME
+  const { item } = props;
+  const caseDetail = get(state.caseDetail);
+  const documents = caseDetail.documents.slice();
+  const documentToUpdate = documents.find(
+    d => d.documentId === item.documentId,
+  );
+  documentToUpdate.validated = !documentToUpdate.validated;
+  store.set(state.caseDetail, {
+    ...caseDetail,
+    documents,
+  });
+};
+
 export const updateCase = async ({ useCases, applicationContext, get }) => {
   await useCases.updateCase(
     applicationContext.getBaseUrl(),

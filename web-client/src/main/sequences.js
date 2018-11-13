@@ -52,7 +52,12 @@ export const gotoCaseDetail = [
   actions.setBaseUrl,
   actions.getCaseDetail,
   actions.setCaseDetail,
-  set(state`currentPage`, 'CaseDetail'),
+  actions.getUserRole,
+  // [set(state`currentPage`, 'ValidateCase')],
+  {
+    taxpayer: [set(state`currentPage`, 'CaseDetail')],
+    petitionsclerk: [set(state`currentPage`, 'ValidateCase')],
+  },
 ];
 
 export const updatePetitionValue = [
@@ -67,5 +72,7 @@ export const submitFilePetition = [
   actions.setAlertSuccess,
   actions.navigateToDashboard,
 ];
+
+export const toggleDocumentValidation = [actions.toggleDocumentValidation];
 
 export const updateCase = [actions.updateCase];

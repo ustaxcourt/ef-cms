@@ -19,7 +19,7 @@ const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
-  const response = await axios.get(`${baseUrl}/cases`, { headers });
+  const response = await axios.get(`${baseUrl}/cases?status=new`, { headers });
   return response.data;
 };
 
