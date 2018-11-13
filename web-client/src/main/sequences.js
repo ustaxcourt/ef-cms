@@ -15,6 +15,7 @@ export const gotoLogIn = [
   set(state`currentPage`, 'LogIn'),
 ];
 export const gotoFilePetition = [
+  actions.clearAlertError,
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
 ];
