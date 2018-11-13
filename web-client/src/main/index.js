@@ -5,6 +5,7 @@ import getUser from '../useCases/getUser';
 import getCases from '../useCases/getCases';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
 import getCaseDetail from '../useCases/getCaseDetail';
+import updateCase from '../useCases/updateCase';
 
 /**
  * Main Cerebral module
@@ -17,6 +18,7 @@ export default {
       getCases,
       getPetitionsClerkCaseList,
       getCaseDetail,
+      updateCase,
     },
   },
   sequences,

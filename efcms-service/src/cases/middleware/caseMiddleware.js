@@ -62,7 +62,7 @@ exports.getCase = async ({ userId, caseId, persistence = casesPersistence }) => 
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  if (caseRecord.userId !== userId) {
+  if (userId == 'taxpayer' && caseRecord.userId !== userId) {
     throw new UnauthorizedError("something went wrong");
   }
 
