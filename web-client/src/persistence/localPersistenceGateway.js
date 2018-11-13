@@ -31,11 +31,11 @@ const fakeCase = {
   status: 'new',
 };
 
+const uploadCasePdfs = async function uploadCasePdfs() {
+  return;
+};
+
 const createCase = async function createCase() {
-  // user,
-  // petition,
-  // environment,
-  // TODO: store documents in localStorage
   return;
 };
 
