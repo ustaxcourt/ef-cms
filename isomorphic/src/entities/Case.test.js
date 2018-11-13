@@ -1,7 +1,7 @@
-import assert from 'assert';
-import { JSDOM } from 'jsdom';
+const assert = require('assert');
+const { JSDOM } = require('jsdom');
 
-import Case from './Case';
+const Case = require('./Case');
 
 const jsdom = new JSDOM('');
 global.Blob = jsdom.window.Blob;

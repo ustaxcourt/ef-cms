@@ -1,5 +1,5 @@
-import User from '../entities/User';
-import Case from '../entities/Case';
+import User from '../../../isomorphic/src/entities/User';
+import Case from '../../../isomorphic/src/entities/Case';
 
 export default async (
   baseUrl,

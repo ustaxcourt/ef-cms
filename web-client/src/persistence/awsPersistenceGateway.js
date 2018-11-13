@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import User from '../entities/User';
+import User from '../../../isomorphic/src/entities/User';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
