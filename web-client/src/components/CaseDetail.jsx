@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
@@ -12,8 +12,9 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     user: state.user,
+    updateCase: sequences.updateCase,
   },
-  function CaseDetail({ baseUrl, caseDetail, user }) {
+  function CaseDetail({ baseUrl, caseDetail, user, updateCase }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
@@ -23,6 +24,7 @@ export default connect(
         </p>
         <br />
         <h2>Case activities</h2>
+        <button onClick={() => updateCase()} />
         <table className="responsive-table">
           <thead>
             <tr>
