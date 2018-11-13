@@ -29,7 +29,7 @@ const createDocumentMetadata = async (baseUrl, user, type) => {
   return response.data;
 };
 
-const createCase = async (baseUrl, userToken, caseToCreate) => {
+const createCaseRecord = async (baseUrl, userToken, caseToCreate) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
@@ -66,7 +66,7 @@ const getUser = name => {
   return { name: name };
 };
 
-const filePdfPetition = async function filePdfPetition(
+const createCase = async function createCase(
   user,
   petition,
   baseUrl,
@@ -108,7 +108,7 @@ const filePdfPetition = async function filePdfPetition(
     petition.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
-  await createCase(baseUrl, user.name, {
+  await createCaseRecord(baseUrl, user.name, {
     documents: [
       {
         documentId: petitionFileId,
@@ -127,7 +127,7 @@ const filePdfPetition = async function filePdfPetition(
 };
 
 const awsPersistenceGateway = {
-  filePdfPetition,
+  createCase,
   getUser,
   getCases,
   getCaseDetail,

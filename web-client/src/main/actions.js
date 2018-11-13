@@ -70,7 +70,7 @@ export const setUser = ({ store, props }) => {
   return;
 };
 
-export const filePdfPetition = async ({
+export const createCase = async ({
   useCases,
   applicationContext,
   get,
@@ -82,7 +82,7 @@ export const filePdfPetition = async ({
       get(state.petition.uploadsFinished) + 1,
     );
   };
-  await useCases.filePdfPetition(
+  await useCases.createCase(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
     get(state.petition),
@@ -91,7 +91,7 @@ export const filePdfPetition = async ({
   );
 };
 
-export const getFilePdfPetitionAlertSuccess = () => {
+export const getCreateCaseAlertSuccess = () => {
   return {
     alertSuccess: {
       title: 'Your files were uploaded successfully.',
