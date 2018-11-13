@@ -111,6 +111,10 @@ export const setAlertError = ({ props, store }) => {
   store.set(state.alertError, props.alertError);
 };
 
+export const clearAlertError = ({ store }) => {
+  store.set(state.alertError, null);
+};
+
 export const setAlertSuccess = ({ props, store }) => {
   store.set(state.alertSuccess, props.alertSuccess);
 };
