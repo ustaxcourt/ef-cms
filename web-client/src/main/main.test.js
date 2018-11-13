@@ -34,6 +34,13 @@ describe('Main cerebral module', () => {
       await test.runSequence('toggleUsaBannerDetails');
       assert.equal(test.getState('usaBanner.showDetails'), false);
     });
+
+    it('Toggles payment info content', async () => {
+      await test.runSequence('togglePaymentDetails');
+      assert.equal(test.getState('paymentInfo.showDetails'), true);
+      await test.runSequence('togglePaymentDetails');
+      assert.equal(test.getState('paymentInfo.showDetails'), false);
+    });
   });
 
   describe('sequences', () => {
