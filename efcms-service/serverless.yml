@@ -259,9 +259,11 @@ provider:
        - dynamodb:BatchWriteItem
       Resource:
         - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
-        - { "Fn::Join": [ "/", [
-            { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
-          ]]}
+        - Fn::Join:
+          - "/"
+          -
+            - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
+            - "index/*"
 
 package:
   exclude:
