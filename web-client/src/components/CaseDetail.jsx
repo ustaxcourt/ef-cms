@@ -49,7 +49,14 @@ export default connect(
                   </span>
                   <a
                     className="pdf-link"
-                    href={baseUrl + '/documents/' + item.documentId + '/downloadPolicy'}
+                    href={
+                      baseUrl +
+                      '/documents/' +
+                      item.documentId +
+                      '/downloadPolicy'
+                    }
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
                     <FontAwesomeIcon icon="file-pdf" />
                     {item.documentType}
