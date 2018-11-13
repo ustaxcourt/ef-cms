@@ -12,6 +12,7 @@ exports.getDownloadUrl = ({ documentId }) =>
     getS3().getSignedUrl('getObject', {
       Bucket: process.env.DOCUMENTS_BUCKET_NAME,
       Key: documentId,
+      Expires: 10
     }, (err, data) => {
       if (err) return reject(err);
       resolve({
