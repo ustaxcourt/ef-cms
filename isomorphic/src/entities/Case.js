@@ -9,7 +9,16 @@ const caseSchema = Joi.object().keys({
     .uuid(uuidVersions)
     .optional(),
   userId: Joi.string()
-    .uuid(uuidVersions)
+    // .uuid(uuidVersions)
+    .optional(),
+  createdAt: Joi.date()
+    .iso()
+    .optional(),
+  docketNumber: Joi.string()
+    .regex(/^[0-9]{5}-[0-9]{2}$/)
+    .optional(),
+  status: Joi.string()
+    .regex(/^(new)|(general)$/)
     .optional(),
   documents: Joi.array()
     .length(3)
@@ -25,11 +34,15 @@ const caseSchema = Joi.object().keys({
 });
 
 function Case(rawCase) {
-  this.documents = rawCase.documents;
+  Object.assign(this, rawCase);
 }
 
 Case.prototype.isValid = function isValid() {
   return Joi.validate(this, caseSchema).error === null;
+};
+
+Case.prototype.getValidationError = function getValidationError() {
+  return Joi.validate(this, caseSchema).error;
 };
 
 module.exports = Case;
