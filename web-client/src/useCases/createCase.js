@@ -1,18 +1,18 @@
 import User from '../entities/User';
-import Petition from '../entities/Petition';
+import Case from '../entities/Case';
 
 export default async (
   baseUrl,
   persistenceGateway,
-  rawPetition,
+  rawCase,
   rawUser,
   fileHasUploaded,
 ) => {
-  const petition = new Petition(rawPetition);
+  const caseDetails = new Case(rawCase);
   const user = new User(rawUser);
-  await persistenceGateway.filePdfPetition(
+  await persistenceGateway.createCase(
     user,
-    petition,
+    caseDetails,
     baseUrl,
     fileHasUploaded,
   );

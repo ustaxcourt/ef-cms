@@ -1,6 +1,6 @@
 import * as sequences from './sequences';
 
-import filePdfPetition from '../useCases/filePdfPetition';
+import createCase from '../useCases/createCase';
 import getUser from '../useCases/getUser';
 import getCases from '../useCases/getCases';
 import getCaseDetail from '../useCases/getCaseDetail';
@@ -11,7 +11,7 @@ import getCaseDetail from '../useCases/getCaseDetail';
 export default {
   providers: {
     useCases: {
-      filePdfPetition,
+      createCase,
       getUser,
       getCases,
       getCaseDetail,

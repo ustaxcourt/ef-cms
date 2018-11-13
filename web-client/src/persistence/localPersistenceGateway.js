@@ -29,7 +29,7 @@ const fakeCase = {
   status: 'new',
 };
 
-const filePdfPetition = async function filePdfPetition() {
+const createCase = async function createCase() {
   // user,
   // petition,
   // environment,
@@ -51,7 +51,7 @@ const getCaseDetail = () => {
 };
 
 const localPersistenceGateway = {
-  filePdfPetition,
+  createCase,
   getUser,
   getCases,
   getCaseDetail,
