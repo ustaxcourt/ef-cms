@@ -16,7 +16,7 @@ const NUM_REQUIRED_DOCUMENTS = 3;
  */
 const validateCase = caseToValidate => {
   if (!caseToValidate.isValid()) {
-    throw new Error('The case was invalid', caseToValidate.getValidationError());
+    throw new Error('The case was invalid');
   }
 };
 
