@@ -1,5 +1,5 @@
 const { getDocumentDownloadUrl } = require('./services/documentBlobDAO');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { redirect } = require('../middleware/apiGatewayHelper');
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -9,8 +9,9 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param callback
  */
 exports.get = event =>
-  handle(() =>
+  redirect(() =>
     getDocumentDownloadUrl({
       documentId: event.pathParameters.documentId,
     })
   );
+

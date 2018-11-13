@@ -15,6 +15,7 @@ export const gotoLogIn = [
   set(state`currentPage`, 'LogIn'),
 ];
 export const gotoFilePetition = [
+  actions.clearAlertError,
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
 ];
@@ -35,8 +36,9 @@ export const submitLogIn = [
 ];
 
 export const gotoCaseDetail = [
-  set(state`docketNumber`, props`docketNumber`),
+  actions.setBaseUrl,
   actions.getCaseDetail,
+  actions.setCaseDetail,
   set(state`currentPage`, 'CaseDetail'),
 ];
 
@@ -46,9 +48,9 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   actions.setFormSubmitting,
-  actions.filePdfPetition,
+  actions.createCase,
   actions.unsetFormSubmitting,
-  actions.getFilePdfPetitionAlertSuccess,
+  actions.getCreateCaseAlertSuccess,
   actions.setAlertSuccess,
   actions.navigateToDashboard,
 ];
