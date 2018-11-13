@@ -3,12 +3,25 @@ import { state, props } from 'cerebral';
 import * as actions from './actions';
 
 export const gotoDashboard = [
-  actions.getCaseList,
+  actions.getUserRole,
   {
-    error: [actions.setAlertError],
-    success: [actions.setCaseList],
+    taxpayer: [
+      actions.getCaseList,
+      {
+        error: [actions.setAlertError],
+        success: [actions.setCaseList],
+      },
+      set(state`currentPage`, 'Dashboard'),
+    ],
+    petitionsclerk: [
+      actions.getPetitionsClerkCaseList,
+      {
+        error: [actions.setAlertError],
+        success: [actions.setCaseList],
+      },
+      set(state`currentPage`, 'PetitionsWorkQueue'),
+    ],
   },
-  set(state`currentPage`, 'Dashboard'),
 ];
 export const gotoLogIn = [
   actions.clearLoginForm,

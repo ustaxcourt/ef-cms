@@ -137,3 +137,36 @@ export const clearPetition = ({ store }) => {
 export const navigateToDashboard = ({ router }) => {
   router.route('/');
 };
+
+export const getUserRole = ({ get, path }) => {
+  const user = get(state.user);
+  return path[user.role]();
+};
+
+export const getPetitionsClerkCaseList = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
+  try {
+    const caseList = await useCases.getPetitionsClerkCaseList(
+      applicationContext,
+      get(state.user.name),
+    );
+    return path.success({ caseList });
+  } catch (e) {
+    console.log(e);
+    return path.error({
+      alertError: {
+        title: 'Cases not found',
+        message: 'There was a problem getting the cases',
+      },
+    });
+  }
+};
+
+export const setPetitionsClerkCaseList = ({ store, props }) => {
+  store.set(state.cases, props.caseList);
+  return;
+};

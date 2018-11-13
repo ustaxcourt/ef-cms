@@ -3,6 +3,7 @@ import * as sequences from './sequences';
 import createCase from '../useCases/createCase';
 import getUser from '../useCases/getUser';
 import getCases from '../useCases/getCases';
+import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
 import getCaseDetail from '../useCases/getCaseDetail';
 
 /**
@@ -14,12 +15,13 @@ export default {
       createCase,
       getUser,
       getCases,
+      getPetitionsClerkCaseList,
       getCaseDetail,
     },
   },
   sequences,
   state: {
-    currentPage: 'Dashboard',
+    currentPage: 'Loading',
     usaBanner: {
       showDetails: false,
     },
@@ -27,6 +29,8 @@ export default {
     form: {},
     user: {
       name: '',
+      // name: 'petitionsclerk',
+      // role: 'petitionsclerk',
     },
     caseDetail: {},
     cases: [],
