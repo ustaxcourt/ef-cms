@@ -40,8 +40,10 @@ const createCase = async function createCase() {
 };
 
 const getUser = name => {
-  if (name !== 'taxpayer') return;
-  return new User({ name });
+  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
+  if (name === 'petitionsclerk')
+    return new User({ name, role: 'petitionsclerk' });
+  return;
 };
 
 const getCases = () => {

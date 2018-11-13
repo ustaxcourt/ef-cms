@@ -15,6 +15,14 @@ const getCases = async (baseUrl, userToken) => {
   return response.data;
 };
 
+const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases`, { headers });
+  return response.data;
+};
+
 const getCaseDetail = async (caseId, baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
@@ -64,8 +72,10 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'taxpayer') return;
-  return new User({ name });
+  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
+  if (name === 'petitionsclerk')
+    return new User({ name, role: 'petitionsclerk' });
+  return;
 };
 
 const createCase = async function createCase(
@@ -132,6 +142,7 @@ const awsPersistenceGateway = {
   createCase,
   getUser,
   getCases,
+  getPetitionsClerkCaseList,
   getCaseDetail,
 };
 

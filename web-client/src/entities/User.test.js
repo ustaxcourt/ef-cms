@@ -6,6 +6,7 @@ describe('Petition entity', () => {
   it('Creates a valid petition', () => {
     const user = new User({
       name: 'Bob',
+      role: 'Tester',
     });
     assert.ok(user.isValid());
   });
