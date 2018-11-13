@@ -4,6 +4,8 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
+// TODO: talk to Doug about if we should be using
+// separate validation methods for different use cases, or a single validation method?
 const caseSchema = Joi.object().keys({
   caseId: Joi.string()
     .uuid(uuidVersions)
