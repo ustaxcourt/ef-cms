@@ -69,6 +69,15 @@ export const setUser = ({ store, props }) => {
   return;
 };
 
+export const updateCase = async ({ useCases, applicationContext, get }) => {
+  await useCases.updateCase(
+    applicationContext.getBaseUrl(),
+    applicationContext.getPersistenceGateway(),
+    get(state.caseDetail),
+    get(state.user),
+  );
+};
+
 export const createCase = async ({
   useCases,
   applicationContext,

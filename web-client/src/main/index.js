@@ -4,6 +4,7 @@ import createCase from '../useCases/createCase';
 import getUser from '../useCases/getUser';
 import getCases from '../useCases/getCases';
 import getCaseDetail from '../useCases/getCaseDetail';
+import updateCase from '../useCases/updateCase';
 
 /**
  * Main Cerebral module
@@ -15,6 +16,7 @@ export default {
       getUser,
       getCases,
       getCaseDetail,
+      updateCase,
     },
   },
   sequences,
