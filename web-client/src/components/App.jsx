@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CaseDetail from './CaseDetail';
+import ValidateCase from './ValidateCase';
 import Dashboard from './Dashboard';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
@@ -22,6 +23,7 @@ const pages = {
   LogIn,
   PetitionsWorkQueue,
   StyleGuide,
+  ValidateCase,
 };
 
 /**

@@ -13,31 +13,36 @@ export default connect(
     caseDetail: state.caseDetail,
     user: state.user,
     updateCase: sequences.updateCase,
+    toggleDocumentValidation: sequences.toggleDocumentValidation,
   },
-  function CaseDetail({ baseUrl, caseDetail, user, updateCase }) {
+  function CaseDetail({
+    baseUrl,
+    caseDetail,
+    user,
+    updateCase,
+    toggleDocumentValidation,
+  }) {
     return (
       <section className="usa-section usa-grid">
+        <a href="/">Back to Petitions Section Work Queue</a>
+        <h6>Case status {caseDetail.status}</h6>
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
+        <button onClick={() => updateCase()}>Save updates</button>
         <p>
           {user.name}, Petitioner v. Commissioner of Internal Revenue,
           Respondent
         </p>
         <br />
-        <h2>Case activities</h2>
+        <h2>Case Activity Record</h2>
         <table className="responsive-table">
           <thead>
             <tr>
-              <th>Activity date</th>
+              <th>Date filled</th>
               <th>Filings and proceedings</th>
-              <th>Date served</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {!caseDetail.documents.length && (
-              <tr>
-                <td colSpan="3">(none)</td>
-              </tr>
-            )}
             {caseDetail.documents.map((item, idx) => (
               <tr key={idx}>
                 <td className="responsive-title">
@@ -63,7 +68,16 @@ export default connect(
                     {item.documentType}
                   </a>
                 </td>
-                <td>{item.dateServed}</td>
+                <td>
+                  <input
+                    id={item.documentId}
+                    type="checkbox"
+                    name={'validate-' + item.documentType}
+                    onChange={() => toggleDocumentValidation({ item })}
+                    checked={item.validated}
+                  />
+                  <label htmlFor={item.documentId}>Validate</label>
+                </td>
               </tr>
             ))}
           </tbody>
