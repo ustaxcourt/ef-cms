@@ -38,7 +38,7 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
-    "install:dynamodb": "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop",
+    "install:dynamodb": "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "./node_modules/.bin/sls dynamodb start -p 8000  --migrate true --stage local",
     "start:local": "SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --noTimeout --stage local --region us-east-1 --domain noop",
