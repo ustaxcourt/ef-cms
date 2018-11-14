@@ -51,33 +51,26 @@ custom:
           name: Creative Commons 0
           url: https://creativecommons.org/share-your-work/public-domain/cc0/
       tags:
-        -
-          name: ef-cms
+        - name: ef-cms
           description: EF-CMS
-        -
-          name: documents
+        - name: documents
           description: document service
     summary: 'EF-CMS Documents API'
-    version: "${opt:stage}-${git:sha1}"
+    version: '${opt:stage}-${git:sha1}'
     description: 'EF-CMS Documents API documented with OpenAPI specification'
     resources:
-      -
-        path: "v1/documents"
-        description: "Path used for creating a document."
-      -
-        path: "v1/documents/{documentId}"
-        description: "Path used for retrieving document with a documentId."
-      -
-        path: "v1/documents/uploadPolicy"
-        description: "Path used for retrieving pre-signed policy url."
-      -
-        path: "v1/cases"
-        description: "Path used for creating a case."
+      - path: 'v1/documents'
+        description: 'Path used for creating a document.'
+      - path: 'v1/documents/{documentId}'
+        description: 'Path used for retrieving document with a documentId.'
+      - path: 'v1/documents/uploadPolicy'
+        description: 'Path used for retrieving pre-signed policy url.'
+      - path: 'v1/cases'
+        description: 'Path used for creating a case.'
     models:
-      -
-        name: "case"
-        description: "a case response"
-        contentType: "application/json"
+      - name: 'case'
+        description: 'a case response'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -100,10 +93,9 @@ custom:
             createdAt:
               type: string
               description: date case created
-      -
-        name: "document"
-        description: "a document response"
-        contentType: "application/json"
+      - name: 'document'
+        description: 'a document response'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -119,10 +111,9 @@ custom:
             createdAt:
               type: string
               description: date document created
-      -
-        name: "policyUrl"
-        description: "a policy url response"
-        contentType: "application/json"
+      - name: 'policyUrl'
+        description: 'a policy url response'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -130,11 +121,10 @@ custom:
               type: string
               description: url
             fields:
-              $ref: "{{model: fields}}"
-      -
-        name: "fields"
-        description: "a policy url response"
-        contentType: "application/json"
+              $ref: '{{model: fields}}'
+      - name: 'fields'
+        description: 'a policy url response'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -159,10 +149,9 @@ custom:
             X-Amz-Signature:
               type: string
               description: The signature.
-      -
-        name: "awsError"
-        description: "an aws internal server error, usually with status code 502 (bad gateway)"
-        contentType: "application/json"
+      - name: 'awsError'
+        description: 'an aws internal server error, usually with status code 502 (bad gateway)'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -170,10 +159,9 @@ custom:
               type: string
           required:
             - message
-      -
-        name: "unprocessableEntityError"
-        description: "a unprocessable entity error (422), due to a problem in the body or the id in the url"
-        contentType: "application/json"
+      - name: 'unprocessableEntityError'
+        description: 'a unprocessable entity error (422), due to a problem in the body or the id in the url'
+        contentType: 'application/json'
         schema:
           type: object
           properties:
@@ -181,7 +169,6 @@ custom:
               type: string
           required:
             - message
-
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -224,46 +211,54 @@ provider:
     STAGE: ${self:custom.stage}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "s3:*"
+        - 's3:*'
       Resource:
         Fn::Join:
-          - ""
-          - - "arn:aws:s3:::"
+          - ''
+          - - 'arn:aws:s3:::'
             - Ref: DocumentsBucket
-            - "/*"
-    - Effect: "Allow"
+            - '/*'
+    - Effect: 'Allow'
       Action:
-       - dynamodb:Query
-       - dynamodb:Scan
-       - dynamodb:GetItem
-       - dynamodb:PutItem
-       - dynamodb:UpdateItem
-       - dynamodb:DeleteItem
-       - dynamodb:BatchWriteItem
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
       Resource:
-        - { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }
-        - { "Fn::Join": [ "/", [
-            { "Fn::GetAtt": ["DocumentsDynamoDBTable", "Arn" ] }, "index", "DocketNumberIndex"
-          ]]}
-
-    - Effect: "Allow"
-      Action:
-       - dynamodb:Query
-       - dynamodb:Scan
-       - dynamodb:GetItem
-       - dynamodb:PutItem
-       - dynamodb:UpdateItem
-       - dynamodb:DeleteItem
-       - dynamodb:BatchWriteItem
-      Resource:
-        - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
+        - Fn::GetAtt:
+            - ${opt:documentsTableName}
+            - Arn
         - Fn::Join:
-          - "/"
-          -
-            - { "Fn::GetAtt": ["CasesDynamoDBTable", "Arn" ] }
-            - "index/*"
+            - /
+            - - Fn::GetAtt:
+                  - ${opt:documentsTableName}
+                  - Arn
+              - index/*
+
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
+      Resource:
+        - Fn::GetAtt:
+            - ${opt:casesTableName}
+            - Arn
+        - Fn::Join:
+            - /
+            - - Fn::GetAtt:
+                  - ${opt:casesTableName}
+                  - Arn
+              - index/*
 
 package:
   exclude:
@@ -297,77 +292,6 @@ resources:
               MaxAge: 3000
         VersioningConfiguration:
           Status: Enabled
-    #####
-    # Begin DynamoDB
-    #####
-    DocumentsDynamoDBTable:
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: documentId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: documentId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
-          WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: efcms-documents-${self:custom.stage}
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-
-    CasesDynamoDBTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: caseId
-            AttributeType: S
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: docketNumber
-            AttributeType: S
-          - AttributeName: status
-            AttributeType: S
-        KeySchema:
-          - AttributeName: caseId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
-          WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-        TableName: efcms-cases-${self:custom.stage}
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        GlobalSecondaryIndexes:
-          - IndexName: DocketNumberIndex
-            KeySchema:
-              - AttributeName: docketNumber
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
-              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-          - IndexName: UserIdIndex
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: caseId
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
-              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
-          - IndexName: StatusIndex
-            KeySchema:
-              - AttributeName: status
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: ${self:custom.vars.readCapacityUnits}
-              WriteCapacityUnits: ${self:custom.vars.writeCapacityUnits}
 
     #####
     # Begin Stage for API Gateway Logging
@@ -382,9 +306,9 @@ resources:
         StageName: ${opt:stage}
         MethodSettings:
           - DataTraceEnabled: true
-            HttpMethod: "*"
+            HttpMethod: '*'
             LoggingLevel: INFO
-            ResourcePath: "/*"
+            ResourcePath: '/*'
             MetricsEnabled: true
 
 functions:
@@ -402,12 +326,11 @@ functions:
             description: >
               Create a pre-signed url for document uploads to S3.
             methodResponses:
-              -
-                statusCode: "200"
+              - statusCode: '200'
                 responseBody:
-                  description: "pre-signed policy upload url"
+                  description: 'pre-signed policy upload url'
                 responseModels:
-                  "application/json": "policyUrl"
+                  'application/json': 'policyUrl'
 
   downloadPolicyUrl:
     handler: src/documents/downloadPolicyUrl.get
@@ -423,12 +346,11 @@ functions:
             description: >
               Create a pre-signed url for document downloads from S3.
             methodResponses:
-              -
-                statusCode: "200"
+              - statusCode: '200'
                 responseBody:
-                  description: "pre-signed policy download url"
+                  description: 'pre-signed policy download url'
                 responseModels:
-                  "application/json": "policyUrl"
+                  'application/json': 'policyUrl'
 
   createDocument:
     handler: src/documents/createDocument.create
@@ -444,12 +366,11 @@ functions:
             description: >
               Create a document.
             methodResponses:
-              -
-                statusCode: '200'
+              - statusCode: '200'
                 responseBody:
-                  description: "document meta-data"
+                  description: 'document meta-data'
                 responseModels:
-                  "application/json": document
+                  'application/json': document
 
   updateCase:
     handler: src/cases/updateCase.put
@@ -459,23 +380,20 @@ functions:
           method: put
           cors: true
           documentation:
-           summary: update a case
-           tags:
-             - cases
-           description: >
-             Update a case.
-           methodResponses:
-             -
-               statusCode: "200"
-               responseBody:
-                 description: "updated case"
-               responseModels:
-                 "application/json": case
-             -
-               statusCode: "422"
-               responseModels:
-                 "application/json": "unprocessableEntityError"
-
+            summary: update a case
+            tags:
+              - cases
+            description: >
+              Update a case.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'updated case'
+                responseModels:
+                  'application/json': case
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'
 
   createCase:
     handler: src/cases/createCase.create
@@ -500,12 +418,11 @@ functions:
                   items:
                     $ref: documents
             methodResponses:
-              -
-                statusCode: '200'
+              - statusCode: '200'
                 responseBody:
-                  description: "case"
+                  description: 'case'
                 responseModels:
-                  "application/json": case
+                  'application/json': case
 
   getCases:
     handler: src/cases/getCases.get
@@ -521,12 +438,11 @@ functions:
             description: >
               Get all cases for a user.
             methodResponses:
-              -
-                statusCode: '200'
+              - statusCode: '200'
                 responseBody:
-                  description: "array of cases"
+                  description: 'array of cases'
                 responseModels:
-                  "application/json": case
+                  'application/json': case
 
   getCase:
     handler: src/cases/getCase.get
@@ -536,8 +452,8 @@ functions:
           method: get
           request:
             parameters:
-               paths:
-                 caseId: true
+              paths:
+                caseId: true
           cors: true
           documentation:
             summary: get a case by caseId
@@ -546,12 +462,11 @@ functions:
             description: >
               Get a case by caseId.
             methodResponses:
-              -
-                statusCode: '200'
+              - statusCode: '200'
                 responseBody:
-                  description: "a case"
+                  description: 'a case'
                 responseModels:
-                  "application/json": case
+                  'application/json': case
 
   swagger:
     handler: src/swagger/swagger.handler
