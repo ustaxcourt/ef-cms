@@ -5,6 +5,7 @@ describe('File a petition ', function() {
     cy.get('input#name').type('taxpayer');
     cy.get('input[type="submit"]').click();
     cy.url().should('not.include', 'log-in');
+    cy.get('.usa-alert-error').should('not.exist');
     cy.get('a.usa-button').click();
   });
 
@@ -51,10 +52,9 @@ describe('File a petition ', function() {
 
   it('submits forms and shows a success message', () => {
     cy.get('form#file-a-petition button[type="submit"]').click();
-    //TODO why is this failing? works in app
-    // cy.get('.usa-alert-success', { timeout: 10000 }).should(
-    //   'contain',
-    //   'uploaded successfully',
-    // );
+    cy.get('.usa-alert-success', { timeout: 10000 }).should(
+      'contain',
+      'uploaded successfully',
+    );
   });
 });
