@@ -201,6 +201,7 @@ describe('AWS petition gateway', () => {
           'Username',
           caseDetail,
           dev.getBaseUrl(),
+          () => {},
         );
       } catch (error) {
         done();
@@ -219,17 +220,39 @@ describe('AWS petition gateway', () => {
       mock.restore();
     });
 
-    xit('Updates a case successfully', async done => {
-      mock.onPut(`${dev.getBaseUrl()}/cases/fakeCaseId`).reply(200);
-      const caseDetail = new Case({
+    it('Updates a case successfully', async done => {
+      mock.onPut(CASE_ROUTE).reply(200);
+      const caseDetail = {
         caseId: 'fakeCaseId',
-      });
+      };
       await awsPersistenceGateway.updateCase(
         'Username',
         caseDetail,
         dev.getBaseUrl(),
       );
       done();
+    });
+  });
+
+  describe('View case', () => {
+    let mock;
+
+    beforeEach(() => {
+      mock = new MockAdapter(axios);
+    });
+
+    afterEach(() => {
+      mock.restore();
+    });
+
+    it('View a case successfully', async () => {
+      mock.onGet(CASE_ROUTE).reply(200, fakeCase);
+      const results = await awsPersistenceGateway.getCaseDetail(
+        'fakeCaseId',
+        dev.getBaseUrl(),
+        'Username',
+      );
+      assert.deepEqual(results, fakeCase);
     });
   });
 });
