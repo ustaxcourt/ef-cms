@@ -102,19 +102,19 @@ const createCase = async function createCase(
   const { documentId: petitionFileId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'petitionFile',
+    'Petition file',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'requestForPlaceOfTrial',
+    'Request for place of trial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
     baseUrl,
     user,
-    'statementOfTaxpayerIdentificationNumber',
+    'Statement of Taxpayer Identification number',
   );
   await uploadDocumentToS3(
     documentPolicy,
@@ -138,15 +138,15 @@ const createCase = async function createCase(
     documents: [
       {
         documentId: petitionFileId,
-        documentType: 'petitionFile',
+        documentType: 'Petition file',
       },
       {
         documentId: requestForPlaceOfTrialId,
-        documentType: 'requestForPlaceOfTrial',
+        documentType: 'Request for place of trial',
       },
       {
         documentId: statementOfTaxpayerIdentificationNumberId,
-        documentType: 'statementOfTaxpayerIdentificationNumber',
+        documentType: 'Statement of Taxpayer Identification number',
       },
     ],
   });
