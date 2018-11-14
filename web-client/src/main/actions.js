@@ -186,5 +186,4 @@ export const getPetitionsClerkCaseList = async ({
 
 export const setPetitionsClerkCaseList = ({ store, props }) => {
   store.set(state.cases, props.caseList);
-  return;
 };
