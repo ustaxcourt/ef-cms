@@ -23,6 +23,8 @@ export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
+export const togglePaymentDetails = [toggle(state`paymentInfo.showDetails`)];
+
 export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
 
 export const submitLogIn = [
