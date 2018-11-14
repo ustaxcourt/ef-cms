@@ -3,18 +3,20 @@ const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-depe
 const tableName = process.argv[2];
 const regions = process.argv[3].split(',');
 const dynamodb = new AWS.DynamoDB({
-  region: regions[0]
+  region: regions[0],
 });
 
 async function processGlobalTables() {
   console.log('ProcessingGlobalTables: Start', tableName);
   try {
-    const gt = await dynamodb.describeGlobalTable({
-      GlobalTableName: tableName
-    }).promise();
+    const gt = await dynamodb
+      .describeGlobalTable({
+        GlobalTableName: tableName,
+      })
+      .promise();
     console.log('Found Global Table:', JSON.stringify(gt, null, 2));
     const unprocessedRegions = getUnprocessedRegions(gt);
-    unprocessedRegions.length && await updateGlobalTable(unprocessedRegions);
+    unprocessedRegions.length && (await updateGlobalTable(unprocessedRegions));
   } catch (err) {
     if (err.code !== 'GlobalTableNotFoundException') {
       console.error('ProcessGlobalTables: Error:', err);
@@ -29,7 +31,9 @@ function getUnprocessedRegions(gt) {
   if (!gt.GlobalTableDescription.ReplicationGroup.length) {
     return regions;
   }
-  const processedRegions = gt.GlobalTableDescription.ReplicationGroup.map(region => region.RegionName);
+  const processedRegions = gt.GlobalTableDescription.ReplicationGroup.map(
+    region => region.RegionName,
+  );
   return regions.filter(region => !processedRegions.includes(region));
 }
 
@@ -38,9 +42,9 @@ async function updateGlobalTable(unprocessedRegions) {
     GlobalTableName: tableName,
     ReplicaUpdates: unprocessedRegions.map(region => ({
       Create: {
-        RegionName: region
-      }
-    }))
+        RegionName: region,
+      },
+    })),
   };
   console.log('updateGlobalTable', params);
   await dynamodb.updateGlobalTable(params).promise();
@@ -50,7 +54,7 @@ async function createGlobalTable() {
   const params = {
     GlobalTableName: tableName,
     ReplicationGroup: regions.map(region => ({
-      RegionName: region
+      RegionName: region,
     })),
   };
   console.log('createGlobalTable', params);
@@ -64,4 +68,4 @@ async function createGlobalTable() {
     console.log(err);
     process.exit(1);
   }
-})()
+})();
