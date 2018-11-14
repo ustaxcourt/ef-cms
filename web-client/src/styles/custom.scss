@@ -50,6 +50,11 @@ input:focus::placeholder {
   margin-right: 1rem;
 }
 
+#paygov-link-container {
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
 @media only screen and (max-width: $small-screen) {
   .responsive-table {
     thead {

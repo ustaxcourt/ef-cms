@@ -27,6 +27,9 @@ export default {
     usaBanner: {
       showDetails: false,
     },
+    paymentInfo: {
+      showDetails: false,
+    },
     petition: {},
     form: {},
     user: {
