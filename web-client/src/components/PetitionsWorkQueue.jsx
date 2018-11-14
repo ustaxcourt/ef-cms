@@ -11,7 +11,7 @@ export default connect(
   function Dashboard({ caseList }) {
     return (
       <section className="usa-section usa-grid">
-        <h1 tabIndex="-1">Petitions Secton Work Queue</h1>
+        <h1 tabIndex="-1">Petitions Section Work Queue</h1>
         <SuccessNotification />
         <ErrorNotification />
         <h2>Cases</h2>

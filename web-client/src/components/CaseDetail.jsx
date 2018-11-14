@@ -14,14 +14,12 @@ export default connect(
     user: state.user,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
-    updateCase: sequences.updateCase,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
     user,
     showDetails,
-    updateCase,
     togglePaymentDetails,
   }) {
     return (
