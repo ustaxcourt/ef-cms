@@ -92,7 +92,6 @@ export default connect(
                   <a href="/">Secondary priority link</a>
                 </li> */}
                 {user.name && <li>Hello, {user.name}</li>}
-                {!user.name && <a href="/log-in">Log in</a>}
               </ul>
             </div>
           </div>
