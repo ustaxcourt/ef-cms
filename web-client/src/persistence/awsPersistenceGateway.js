@@ -154,10 +154,10 @@ const createCase = async function createCase(
 
 const awsPersistenceGateway = {
   createCase,
-  getUser,
+  getCaseDetail,
   getCases,
   getPetitionsClerkCaseList,
-  getCaseDetail,
+  getUser,
   updateCase,
 };
 
