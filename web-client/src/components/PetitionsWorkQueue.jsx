@@ -26,6 +26,11 @@ export default connect(
             </tr>
           </thead>
           <tbody>
+            {!caseList.length && (
+              <tr>
+                <td colSpan="5">(none)</td>
+              </tr>
+            )}
             {caseList.map(item => (
               <tr key={item.docketNumber}>
                 <td className="responsive-title">
