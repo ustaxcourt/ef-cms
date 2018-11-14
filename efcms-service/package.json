@@ -62,7 +62,8 @@
       "**/*[tT]est.js",
       "./**/node_modules",
       "**/coverage",
-      "setup-global-tables.js"
+      "setup-global-tables.js",
+      "create-dynamo-tables.js"
     ],
     "reporter": [
       "text",
