@@ -70,7 +70,7 @@ export default connect(
                   </p>
                 </div>
                 <div className="usa-width-one-half">
-                  <h4>Can’t afford to pay the fee?</h4>
+                  <h4>Canʼt afford to pay the fee?</h4>
                   <p>
                     You may be eligible for a filing fee waiver. File an
                     application to request a waiver.
