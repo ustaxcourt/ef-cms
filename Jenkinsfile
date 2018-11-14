@@ -91,7 +91,7 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('efcms-service') {
               sh 'npm i'
-              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop"
+              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop"
               sh 'npm run start:local &'
               sh '../wait-until.sh http://localhost:3000/v1/swagger'
             }
