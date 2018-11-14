@@ -168,7 +168,7 @@ describe('get case', function() {
         } catch (err) {
           error = err;
         }
-        expect(error.message).to.equal('something went wrong');
+        expect(error.message).to.equal('Unauthorized for getCase');
       });
     });
   });

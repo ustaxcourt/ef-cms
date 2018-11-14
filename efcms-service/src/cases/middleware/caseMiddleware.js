@@ -1,7 +1,7 @@
 const { create: getPersistence } = require('../../persistence/entityPersistenceFactory');
 const uuidv4 = require('uuid/v4');
 const docketNumberService = require('./docketNumberGenerator');
-const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE } = require('../../middleware/authorizationClientService');
+const { isAuthorized, GET_CASES_BY_STATUS, UPDATE_CASE, GET_CASE } = require('../../middleware/authorizationClientService');
 const { UnprocessableEntityError, NotFoundError, UnauthorizedError } = require('../../middleware/errors');
 const casesPersistence = getPersistence('cases');
 
@@ -63,9 +63,10 @@ exports.getCase = async ({ userId, caseId, persistence = casesPersistence }) => 
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  if (userId == 'taxpayer' && caseRecord.userId !== userId) {
-    throw new UnauthorizedError("something went wrong");
+  if (!isAuthorized(userId, GET_CASE, caseRecord.userId)) {
+    throw new UnauthorizedError('Unauthorized for getCase');
   }
+
 
   return caseRecord;
 };
@@ -119,6 +120,3 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
       type: 'case'
     });
 }
-
-
-

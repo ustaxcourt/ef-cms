@@ -125,6 +125,7 @@ export default connect(
                   </span>
                   <a
                     className="pdf-link"
+                    aria-label="View PDF"
                     href={
                       baseUrl +
                       '/documents/' +
