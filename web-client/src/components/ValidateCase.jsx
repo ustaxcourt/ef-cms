@@ -11,7 +11,6 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
-    user: state.user,
     updateCase: sequences.updateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
     updatePreviewUrl: sequences.updatePreviewUrl,
@@ -19,7 +18,6 @@ export default connect(
   function CaseDetail({
     baseUrl,
     caseDetail,
-    user,
     updateCase,
     toggleDocumentValidation,
     updatePreviewUrl,
@@ -45,7 +43,7 @@ export default connect(
           </div>
 
           <p>
-            {user.name}, Petitioner v. Commissioner of Internal Revenue,
+            {caseDetail.userId}, Petitioner v. Commissioner of Internal Revenue,
             Respondent
           </p>
           <br />

@@ -32,10 +32,10 @@ const fakeCase = {
 };
 
 const createCase = async function createCase() {
-  // user,
-  // petition,
-  // environment,
-  // TODO: store documents in localStorage
+  return;
+};
+
+const updateCase = async function updateCase() {
   return;
 };
 
@@ -50,15 +50,21 @@ const getCases = () => {
   return [fakeCase];
 };
 
+const getPetitionsClerkCaseList = () => {
+  return [fakeCase];
+};
+
 const getCaseDetail = () => {
   return fakeCase;
 };
 
 const localPersistenceGateway = {
   createCase,
-  getUser,
-  getCases,
   getCaseDetail,
+  getCases,
+  getPetitionsClerkCaseList,
+  getUser,
+  updateCase,
 };
 
 export default localPersistenceGateway;

@@ -8,6 +8,7 @@ import awsPersistenceGateway from './awsPersistenceGateway';
 
 const UPLOAD_POLICY_ROUTE = `${dev.getBaseUrl()}/documents/uploadPolicy`;
 const CASES_BASE_ROUTE = `${dev.getBaseUrl()}/cases`;
+const CASE_ROUTE = `${dev.getBaseUrl()}/cases/fakeCaseId`;
 
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
@@ -64,9 +65,15 @@ const fakeDocumentId = {
 
 describe('AWS petition gateway', () => {
   describe('Get user', () => {
-    it('Success', async () => {
+    it('Success taxpayer', async () => {
       const user = awsPersistenceGateway.getUser('taxpayer');
       assert.equal(user.name, 'taxpayer');
+      assert.equal(user.role, 'taxpayer');
+    });
+    it('Success petitionsclerk', async () => {
+      const user = awsPersistenceGateway.getUser('petitionsclerk');
+      assert.equal(user.name, 'petitionsclerk');
+      assert.equal(user.role, 'petitionsclerk');
     });
     it('Failure', async () => {
       try {
@@ -198,6 +205,31 @@ describe('AWS petition gateway', () => {
       } catch (error) {
         done();
       }
+    });
+  });
+
+  describe('Update case', () => {
+    let mock;
+
+    beforeEach(() => {
+      mock = new MockAdapter(axios);
+    });
+
+    afterEach(() => {
+      mock.restore();
+    });
+
+    xit('Updates a case successfully', async done => {
+      mock.onPut(`${dev.getBaseUrl()}/cases/fakeCaseId`).reply(200);
+      const caseDetail = new Case({
+        caseId: 'fakeCaseId',
+      });
+      await awsPersistenceGateway.updateCase(
+        'Username',
+        caseDetail,
+        dev.getBaseUrl(),
+      );
+      done();
     });
   });
 });
