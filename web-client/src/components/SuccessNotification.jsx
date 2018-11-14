@@ -12,7 +12,6 @@ export default connect(
         {alertSuccess && (
           <div
             className="usa-alert usa-alert-success"
-            aria-label="success"
             aria-live="polite"
             role="alert"
           >
