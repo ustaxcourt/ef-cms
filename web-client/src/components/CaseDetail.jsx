@@ -57,6 +57,7 @@ export default connect(
                     <a
                       className="usa-button"
                       href="https://pay.gov/public/form/start/60485840"
+                      aria-label="pay.gov us tax court filing fees"
                     >
                       Pay now
                     </a>
@@ -69,13 +70,16 @@ export default connect(
                   </p>
                 </div>
                 <div className="usa-width-one-half">
-                  <h4>Can&rsquo;t afford to pay the fee?</h4>
+                  <h4>Can’t afford to pay the fee?</h4>
                   <p>
                     You may be eligible for a filing fee waiver. File an
                     application to request a waiver.
                   </p>
                   <p>
-                    <a href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf">
+                    <a
+                      href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                      aria-label="View download application pdf"
+                    >
                       Download application
                     </a>
                   </p>
