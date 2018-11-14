@@ -36,7 +36,11 @@ export default connect(
               <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
             </div>
             <div className="usa-width-one-third">
-              <button className="float-right" onClick={() => updateCase()}>
+              <button
+                className="float-right"
+                id="update-case"
+                onClick={() => updateCase()}
+              >
                 Save updates
               </button>
             </div>
