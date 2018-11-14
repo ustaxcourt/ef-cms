@@ -66,6 +66,10 @@ export const updatePetitionValue = [
   set(state`petition.${props`key`}`, props`value`),
 ];
 
+export const updatePreviewUrl = [
+  set(state`caseDetail.previewUrl`, props`value`),
+];
+
 export const submitFilePetition = [
   actions.setFormSubmitting,
   actions.createCase,
