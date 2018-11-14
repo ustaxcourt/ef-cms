@@ -74,7 +74,7 @@ export default connect(
                     type="checkbox"
                     name={'validate-' + item.documentType}
                     onChange={() => toggleDocumentValidation({ item })}
-                    checked={item.validated}
+                    checked={!!item.validated}
                   />
                   <label htmlFor={item.documentId}>Validate</label>
                 </td>

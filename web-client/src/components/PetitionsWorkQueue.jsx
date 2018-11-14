@@ -47,8 +47,8 @@ export default connect(
                   <span className="responsive-label">Petitioner name</span>
                   {item.userId}
                 </td>
-                <td />
-                <td />
+                <td>Unassigned</td>
+                <td>New petition ready for review</td>
               </tr>
             ))}
           </tbody>
