@@ -38,18 +38,19 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
-    "install:dynamodb": "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop",
+    "install:dynamodb": "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --documentsTableName efcms-documents-local --casesTableName efcms-cases-local",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "./node_modules/.bin/sls dynamodb start -p 8000  --migrate true --stage local",
-    "start:local": "SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --noTimeout --stage local --region us-east-1 --domain noop",
-    "start": "npm run start:local",
+    "start:local": "SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --noTimeout --stage local --region us-east-1 --domain noop  --documentsTableName efcms-documents-local --casesTableName efcms-cases-local --accountId noop",
+    "start": " $(sleep 5; npm run create-tables) & npm run start:local",
     "watch": "nodemon -e yml --exec sls offline start",
     "lint": "eslint ./src/**/*.js",
     "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
     "test": "nyc -a mocha --exit './src/**/*.test.js'",
     "test:watch": "nyc -a mocha --watch './src/**/*.test.js'",
     "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage",
-    "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin"
+    "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
+    "create-tables": "node create-dynamo-tables.js"
   },
   "nyc": {
     "check-coverage": true,
@@ -61,7 +62,8 @@
       "**/*[tT]est.js",
       "./**/node_modules",
       "**/coverage",
-      "setup-global-tables.js"
+      "setup-global-tables.js",
+      "create-dynamo-tables.js"
     ],
     "reporter": [
       "text",
