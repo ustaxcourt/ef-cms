@@ -65,8 +65,11 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
+            def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
             sh 'docker build -t test -f Dockerfile.test .'
-            sh 'docker run --rm -e COVERAGE_USER=`id -u $USER`:`id -g $USER` -v `pwd`/coverage:/home/app/coverage test'
+            sh "docker run --name ${CONTAINER_NAME} test"
+            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
+            sh "docker rm ${CONTAINER_NAME}"
           }
         }
       }
