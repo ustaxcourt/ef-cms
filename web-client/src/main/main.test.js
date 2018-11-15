@@ -4,6 +4,7 @@ import assert from 'assert';
 
 import mainModule from './';
 import applicationContext from '../environments/mock';
+import sinon from 'sinon';
 
 mainModule.providers.applicationContext = applicationContext;
 mainModule.providers.router = { route: () => {} };
@@ -83,6 +84,8 @@ describe('Main cerebral module', () => {
     });
 
     it('File PDF petition', async () => {
+      const localPersistenceGateway = applicationContext.getPersistenceGateway();
+      sinon.spy(localPersistenceGateway, 'createCase');
       await test.runSequence('gotoFilePetition');
       await test.runSequence('updatePetitionValue', {
         key: 'petitionFile',
@@ -100,6 +103,13 @@ describe('Main cerebral module', () => {
       assert.deepEqual(test.getState('alertSuccess'), {
         title: 'Your files were uploaded successfully.',
         message: 'Your case has now been created.',
+      });
+      assert.ok(localPersistenceGateway.createCase.calledOnce);
+      const caseDetails = localPersistenceGateway.createCase.getCall(0).args[1];
+      assert.deepEqual(caseDetails, {
+        petitionFileId: 'a',
+        requestForPlaceOfTrialId: 'b',
+        statementOfTaxpayerIdentificationNumberId: 'c',
       });
     });
 
