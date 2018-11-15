@@ -6,4 +6,7 @@ module.exports = {
     ...awsDynamoPersistence,
   },
   docketNumberGenerator,
+  environment: {
+    stage: process.env.STAGE,
+  },
 };
