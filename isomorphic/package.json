@@ -66,6 +66,10 @@
     "regenerator-runtime": "^0.12.1",
     "stylelint": "^9.8.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
-    "stylelint-config-standard": "^18.2.0"
+    "stylelint-config-standard": "^18.2.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.356.0"
   }
 }
