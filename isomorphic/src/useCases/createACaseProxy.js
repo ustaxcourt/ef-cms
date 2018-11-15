@@ -1,11 +1,22 @@
 const axios = require('axios');
 
-module.exports = async (baseUrl, caseToCreate, user) => {
+module.exports = async ({
+  userId,
+  documents,
+  persistence: applicationContext,
+}) => {
+  const baseUrl = applicationContext.getBaseUrl();
   const headers = {
-    Authorization: `Bearer ${user.name}`,
+    Authorization: `Bearer ${userId}`,
   };
-  const response = await axios.post(`${baseUrl}/cases`, caseToCreate, {
-    headers,
-  });
+  const response = await axios.post(
+    `${baseUrl}/cases`,
+    {
+      documents,
+    },
+    {
+      headers,
+    },
+  );
   return response.data;
 };

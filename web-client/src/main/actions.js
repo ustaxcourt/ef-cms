@@ -93,27 +93,25 @@ export const uploadCasePdfs = async ({
 
 export const createCase = ({ useCases, applicationContext, get, props }) => {
   const { uploadResults } = props;
-  const caseToCreate = {
-    documents: [
-      {
-        documentId: uploadResults.petitionFileId,
-        documentType: 'petitionFile',
-      },
-      {
-        documentId: uploadResults.requestForPlaceOfTrialId,
-        documentType: 'requestForPlaceOfTrial',
-      },
-      {
-        documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
-        documentType: 'statementOfTaxpayerIdentificationNumber',
-      },
-    ],
-  };
-  return useCases.createACaseProxy(
-    applicationContext.getBaseUrl(),
-    caseToCreate,
-    get(state.user),
-  );
+  const documents = [
+    {
+      documentId: uploadResults.petitionFileId,
+      documentType: 'petitionFile',
+    },
+    {
+      documentId: uploadResults.requestForPlaceOfTrialId,
+      documentType: 'requestForPlaceOfTrial',
+    },
+    {
+      documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
+      documentType: 'statementOfTaxpayerIdentificationNumber',
+    },
+  ];
+  return useCases.createACaseProxy({
+    userId: get(state.user).name,
+    documents,
+    persistence: applicationContext,
+  });
 };
 
 export const getCreateCaseAlertSuccess = () => {
