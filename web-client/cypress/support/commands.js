@@ -44,13 +44,12 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
 });
 
 Cypress.Commands.add('routeTo', route => {
-  // TODO: make something a bit more robust. break the selector, break your tests.
-  return route;
-  // cy.get('a')
-  //   .then($btn => {
-  //     return $btn.first().attr('href', route);
-  //   })
-  //   .click();
+  // hitchhike on skipnav element as route trigger
+  cy.get('.usa-skipnav')
+    .then($navLink => {
+      return $navLink.first().attr('href', route);
+    })
+    .click({ force: true });
 });
 
 Cypress.Commands.add('login', (username, route) => {
