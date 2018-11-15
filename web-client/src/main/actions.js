@@ -109,10 +109,15 @@ export const uploadCasePdfs = async ({
   return { uploadResults };
 };
 
-export const createCase = async ({ useCases, applicationContext, get }) => {
+export const createCase = async ({
+  useCases,
+  applicationContext,
+  get,
+  props,
+}) => {
   await useCases.createCase(
     applicationContext,
-    get(state.petition),
+    props.uploadResults,
     get(state.user),
   );
 };
