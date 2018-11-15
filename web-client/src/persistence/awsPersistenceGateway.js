@@ -94,45 +94,47 @@ const getUser = name => {
 };
 
 const uploadCasePdfs = async function uploadCasePdfs(
+  applicationContext,
+  caseInitiator,
   user,
-  petition,
-  baseUrl,
   fileHasUploaded,
 ) {
-  const documentPolicy = await getDocumentPolicy(baseUrl);
+  const documentPolicy = await getDocumentPolicy(
+    applicationContext.getBaseUrl(),
+  );
   const { documentId: petitionFileId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
     'petitionFile',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
     'requestForPlaceOfTrial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
     'statementOfTaxpayerIdentificationNumber',
   );
   await uploadDocumentToS3(
     documentPolicy,
     petitionFileId,
-    petition.petitionFile,
+    caseInitiator.petitionFile,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     requestForPlaceOfTrialId,
-    petition.requestForPlaceOfTrial,
+    caseInitiator.requestForPlaceOfTrial,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     statementOfTaxpayerIdentificationNumberId,
-    petition.statementOfTaxpayerIdentificationNumber,
+    caseInitiator.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
   return {
