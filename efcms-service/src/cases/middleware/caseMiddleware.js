@@ -39,7 +39,8 @@ exports.create = async ({ userId, documents, persistence = casesPersistence}) =>
     userId: userId,
     docketNumber: docketNumber,
     documents: documents,
-    status: "new"
+    status: "new",
+    validated: false
   }
 
   return persistence
@@ -107,12 +108,15 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
     throw new UnprocessableEntityError();
   }
 
+  const allDocumentsValidated = caseToUpdate.documents.every(
+    document => document.validated === true
+  )
+  if (allDocumentsValidated) {
+    caseToUpdate.status = 'general';
+  }
   return persistence
     .save({
       entity: caseToUpdate,
       type: 'case'
     });
 }
-
-
-
