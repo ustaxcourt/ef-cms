@@ -1,5 +1,5 @@
 const awsDynamoPersistence = require('../../isomorphic/src/persistence/awsDynamoPersistence');
-const docketNumberGenerator = require('./cases/middleware/docketNumberGenerator');
+const docketNumberGenerator = require('../../isomorphic/src/persistence/docketNumberGenerator');
 
 module.exports = {
   persistence: {
@@ -7,6 +7,6 @@ module.exports = {
   },
   docketNumberGenerator,
   environment: {
-    stage: process.env.STAGE,
+    stage: process.env.STAGE || 'local',
   },
 };

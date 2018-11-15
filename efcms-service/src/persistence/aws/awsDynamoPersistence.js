@@ -3,30 +3,20 @@ const client = require('../../middleware/dynamodbClientService');
 
 const getTable = type => {
   switch (type) {
-  case 'document':
-    return environment.get('DOCUMENTS_TABLE');
-  case 'case':
-    return environment.get('CASES_TABLE');
-  default:
-    throw new Error('type not found');
+    case 'document':
+      return environment.get('DOCUMENTS_TABLE');
+    case 'case':
+      return environment.get('CASES_TABLE');
+    default:
+      throw new Error('type not found');
   }
 };
-
-exports.create = ({ entity, key, type }) =>
-  client.put({
-    TableName: getTable(type),
-    Item: entity,
-    ConditionExpression: `attribute_not_exists(#${key})`,
-    ExpressionAttributeNames: {
-      [`#${key}`]: `${key}`,
-    },
-  });
 
 exports.get = ({ id, key, type }) =>
   client.get({
     TableName: getTable(type),
     Key: {
-      [key]: id
+      [key]: id,
     },
   });
 
@@ -39,31 +29,33 @@ exports.save = ({ entity, type }) =>
 exports.getIndexName = key => {
   if (!key) return null;
   switch (key) {
-  case 'user':
-    return 'UserIdIndex';
-  case 'status':
-    return 'StatusIndex';
-  default:
-    throw new Error('invalid pivot key');
+    case 'user':
+      return 'UserIdIndex';
+    case 'status':
+      return 'StatusIndex';
+    default:
+      throw new Error('invalid pivot key');
   }
 };
 
-exports.query = ({ type, query, pivot}) => {
+exports.query = ({ type, query, pivot }) => {
   const values = {};
   const names = {};
   Object.keys(query).forEach(key => {
     values[`:${key}`] = query[key];
     names[`#${key}`] = key;
   });
-  const expression = Object.keys(values).map(key => {
-    return `${key.replace(':', '#')} = ${key}`;
-  }).join(' and ');
+  const expression = Object.keys(values)
+    .map(key => {
+      return `${key.replace(':', '#')} = ${key}`;
+    })
+    .join(' and ');
 
   return client.query({
     TableName: getTable(type),
     IndexName: exports.getIndexName(pivot),
     ExpressionAttributeNames: names,
     ExpressionAttributeValues: values,
-    KeyConditionExpression: expression
+    KeyConditionExpression: expression,
   });
 };

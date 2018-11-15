@@ -28,3 +28,23 @@ exports.create = ({ entity, applicationContext }) => {
     },
   });
 };
+
+// TODO: Hard coded to update the docketNumberCounter, but should
+// be refactored to update any type of atomic counter in dynamo
+// if we can pass in table / key
+exports.incrementCounter = applicationContext => {
+  return client.updateConsistent({
+    TableName: `efcms-cases-${applicationContext.environment.stage}`,
+    Key: {
+      caseId: 'docketNumberCounter',
+    },
+    UpdateExpression: 'ADD #a :x',
+    ExpressionAttributeNames: {
+      '#a': 'id',
+    },
+    ExpressionAttributeValues: {
+      ':x': 1,
+    },
+    ReturnValues: 'UPDATED_NEW',
+  });
+};

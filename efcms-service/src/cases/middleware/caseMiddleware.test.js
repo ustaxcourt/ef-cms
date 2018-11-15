@@ -1,75 +1,12 @@
 const sinon = require('sinon');
-const proxyquire =  require('proxyquire').noCallThru();
+const proxyquire = require('proxyquire').noCallThru();
 const client = require('../../middleware/dynamodbClientService');
 
 const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
 
-describe('create case', function() {
-
-  const documents = [
-    {
-      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
-      documentType: 'stin'
-    },
-    {
-      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
-      documentType: 'stin'
-    },
-    {
-      documentId: '691ca306-b30f-429c-b785-17754b8fd019',
-      documentType: 'stin'
-    }
-  ]
-  const stub = sinon.stub();
-  const docketNumberStub = sinon.stub();
-  let caseMiddleWare;
-  let item;
-
-  before(function() {
-    item = {
-      caseId: '123456',
-      userId: 'userId',
-      docketNumber: '456789-18',
-      documents: [],
-      createdAt: '2018-11-09T15:25:32.977Z',
-    };
-
-    stub.resolves(item);
-    docketNumberStub.resolves('00123-18');
-
-    process.env = {};
-    process.env.STAGE = 'test';
-
-    sinon.stub(client, 'put').resolves(item);
-
-    caseMiddleWare = proxyquire('./caseMiddleware', {
-      './docketNumberGenerator' : {
-        createDocketNumber: docketNumberStub
-      }
-    });
-  });
-
-  after(() => {
-    client.put.restore();
-  });
-
-  it('should create a case', async () => {
-    const result = await caseMiddleWare.create({
-      userId: 'user',
-      documents,
-      caseId: '691ca306-b30f-429c-b785-17754b8fd019',
-      createdAt: new Date().toISOString(),
-      docketNumber: '00100-18',
-      status: "new",
-    });
-    expect(result).to.equal(item);
-  });
-});
-
 describe('get cases', function() {
-
   let caseMiddleWare;
   let item;
 
@@ -80,7 +17,7 @@ describe('get cases', function() {
         userId: 'user',
         docketNumber: '456789-18',
         documents: [],
-        status: "new",
+        status: 'new',
         createdAt: '2018-11-09T15:25:32.977Z',
       };
 
@@ -91,20 +28,18 @@ describe('get cases', function() {
 
     after(() => {
       client.query.restore();
-    })
+    });
 
     it('should get all cases for a user', async () => {
       const result = await caseMiddleWare.getCases({
-        userId: 'user'
+        userId: 'user',
       });
       expect(result[0]).to.equal(item);
     });
   });
 });
 
-
 describe('get case', function() {
-
   let caseMiddleWare;
   let item;
 
@@ -115,7 +50,7 @@ describe('get case', function() {
         userId: 'user',
         docketNumber: '456789-18',
         documents: [],
-        status: "new",
+        status: 'new',
         createdAt: '2018-11-09T15:25:32.977Z',
       };
 
@@ -126,7 +61,7 @@ describe('get case', function() {
 
     after(() => {
       client.get.restore();
-    })
+    });
 
     it('should get a single case', async () => {
       const result = await caseMiddleWare.getCase({
@@ -146,21 +81,21 @@ describe('get case', function() {
 
       after(() => {
         client.get.restore();
-      })
+      });
 
       it('should throw a not found error if a single non-existent case', async () => {
         let error;
         try {
           await caseMiddleWare.getCase({
             userId: 'user',
-            caseId: '123'
+            caseId: '123',
           });
         } catch (err) {
           error = err;
         }
         expect(error.message).to.equal('Case 123 was not found.');
       });
-    })
+    });
 
     describe('case different userid', () => {
       before(function() {
@@ -173,14 +108,14 @@ describe('get case', function() {
 
       after(() => {
         client.get.restore();
-      })
+      });
 
       it('should throw an error if user does not have access', async () => {
         let error;
         try {
           await caseMiddleWare.getCase({
             userId: 'abc',
-            caseId: '123'
+            caseId: '123',
           });
         } catch (err) {
           error = err;
@@ -189,11 +124,9 @@ describe('get case', function() {
       });
     });
   });
-
 });
 
 describe('get cases by status', function() {
-
   let caseMiddleWare;
   let item;
 
@@ -203,7 +136,7 @@ describe('get cases by status', function() {
       userId: 'user',
       docketNumber: '456789-18',
       documents: [],
-      status: "new",
+      status: 'new',
       createdAt: '2018-11-09T15:25:32.977Z',
     };
 
@@ -214,12 +147,12 @@ describe('get cases by status', function() {
 
   after(() => {
     client.query.restore();
-  })
+  });
 
   it('should get cases by query string status when user is authorized', async () => {
     const result = await caseMiddleWare.getCasesByStatus({
       status: 'NEW',
-      userId: 'petitionsclerk'
+      userId: 'petitionsclerk',
     });
     expect(result[0]).to.equal(item);
   });
@@ -229,12 +162,11 @@ describe('get cases by status', function() {
     try {
       await caseMiddleWare.getCasesByStatus({
         status: 'NEW',
-        userId: 'notapetitionsclerk'
+        userId: 'notapetitionsclerk',
       });
     } catch (err) {
       error = err;
     }
     expect(error.message).to.equal('Unauthorized for getCasesByStatus');
   });
-
 });
