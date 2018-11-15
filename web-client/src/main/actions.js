@@ -87,6 +87,7 @@ export const updateCase = async ({ useCases, applicationContext, get }) => {
   );
 };
 
+// TODO: rename to upload to case initation PDFs (or something)
 export const uploadCasePdfs = async ({
   useCases,
   applicationContext,

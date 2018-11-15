@@ -1,11 +1,11 @@
-function Petition(petition) {
+function CaseInitiator(petition) {
   this.petitionFile = petition.petitionFile;
   this.requestForPlaceOfTrial = petition.requestForPlaceOfTrial;
   this.statementOfTaxpayerIdentificationNumber =
     petition.statementOfTaxpayerIdentificationNumber;
 }
 
-Petition.prototype.isValid = function isValid() {
+CaseInitiator.prototype.isValid = function isValid() {
   return (
     !!this.petitionFile &&
     !!this.requestForPlaceOfTrial &&
@@ -13,4 +13,4 @@ Petition.prototype.isValid = function isValid() {
   );
 };
 
-export default Petition;
+export default CaseInitiator;

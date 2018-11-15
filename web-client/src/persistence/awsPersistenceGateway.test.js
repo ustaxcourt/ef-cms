@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import applicationContext from '../environments/mock';
 import awsPersistenceGateway from './awsPersistenceGateway';
-import Case from '../entities/Case';
+import CaseInitiator from '../entities/CaseInitiator';
 
 const UPLOAD_POLICY_ROUTE = `${applicationContext.getBaseUrl()}/documents/uploadPolicy`;
 const CASES_BASE_ROUTE = `${applicationContext.getBaseUrl()}/cases`;
@@ -84,7 +84,7 @@ describe('AWS petition gateway', () => {
     });
   });
 
-  describe('Get cases', () => {
+  describe('Get cases for taxpayer', () => {
     let mock;
 
     beforeEach(() => {
@@ -120,7 +120,43 @@ describe('AWS petition gateway', () => {
     });
   });
 
-  describe('Create case', () => {
+  describe('Get cases for petitions clerk', () => {
+    let mock;
+
+    beforeEach(() => {
+      mock = new MockAdapter(axios);
+    });
+
+    afterEach(() => {
+      mock.restore();
+    });
+
+    it('Success', async () => {
+      mock.onGet(`${CASES_BASE_ROUTE}?status=new`).reply(200, fakeCases);
+
+      const cases = await awsPersistenceGateway.getPetitionsClerkCaseList(
+        applicationContext.getBaseUrl(),
+        'petitionsClerk',
+      );
+      assert.deepEqual(cases, fakeCases);
+    });
+
+    it('Failure', async () => {
+      mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
+      let error;
+      try {
+        await awsPersistenceGateway.getCases(
+          applicationContext.getBaseUrl(),
+          'Bad actor',
+        );
+      } catch (e) {
+        error = e.message;
+      }
+      assert.equal(error, 'Request failed with status code 403');
+    });
+  });
+
+  describe('Initiate case', () => {
     let mock;
 
     beforeEach(() => {
@@ -133,20 +169,19 @@ describe('AWS petition gateway', () => {
 
     it('Uploads all 3 PDFs successfully', async done => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
-      mock.onPost(CASES_BASE_ROUTE).reply(200, fakeCase);
       mock
         .onPost(applicationContext.getBaseUrl() + '/documents')
         .reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
-      await awsPersistenceGateway.createCase(
+      await awsPersistenceGateway.uploadCasePdfs(
         applicationContext,
-        caseDetail,
-        'Username',
+        caseInitiator,
+        'taxpayer',
         () => {},
       );
       done();
@@ -158,16 +193,17 @@ describe('AWS petition gateway', () => {
         .onPost(applicationContext.getBaseUrl() + '/documents')
         .reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.createCase(
-          'Username',
-          caseDetail,
-          applicationContext.getBaseUrl(),
+        await awsPersistenceGateway.uploadCasePdfs(
+          applicationContext,
+          caseInitiator,
+          'taxpayer',
+          () => {},
         );
       } catch (error) {
         done();
@@ -178,16 +214,17 @@ describe('AWS petition gateway', () => {
       mock.onGet(UPLOAD_POLICY_ROUTE).reply(200, fakePolicy);
       mock.onPost(applicationContext.getBaseUrl() + '/documents').reply(500);
       mock.onPost(fakePolicy.url).reply(204);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.createCase(
-          'Username',
-          caseDetail,
-          applicationContext.getBaseUrl(),
+        await awsPersistenceGateway.uploadCasePdfs(
+          applicationContext,
+          caseInitiator,
+          'taxpayer',
+          () => {},
         );
       } catch (error) {
         done();
@@ -200,21 +237,47 @@ describe('AWS petition gateway', () => {
         .onPost(applicationContext.getBaseUrl() + '/documents')
         .reply(200, fakeDocumentId);
       mock.onPost(fakePolicy.url).reply(500);
-      const caseDetail = new Case({
+      const caseInitiator = new CaseInitiator({
         petitionFile: new Blob(['blob']),
         requestForPlaceOfTrial: new Blob(['blob']),
         statementOfTaxpayerIdentificationNumber: new Blob(['blob']),
       });
       try {
-        await awsPersistenceGateway.createCase(
-          'Username',
-          caseDetail,
-          applicationContext.getBaseUrl(),
+        await awsPersistenceGateway.uploadCasePdfs(
+          applicationContext,
+          caseInitiator,
+          'taxpayer',
           () => {},
         );
       } catch (error) {
         done();
       }
+    });
+  });
+
+  describe('Create case', () => {
+    let mock;
+
+    beforeEach(() => {
+      mock = new MockAdapter(axios);
+    });
+
+    afterEach(() => {
+      mock.restore();
+    });
+
+    it('creates a case successfully', async done => {
+      mock.onPost(CASES_BASE_ROUTE).reply(200);
+      const uploadResults = {
+        userId: 'fakeUserId',
+        documents: [],
+      };
+      await awsPersistenceGateway.createCase(
+        applicationContext,
+        uploadResults,
+        'taxpayer',
+      );
+      done();
     });
   });
 

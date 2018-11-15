@@ -35,9 +35,9 @@ export default {
     petition: {},
     form: {},
     user: {
-      // name: '',
-      name: 'taxpayer',
-      role: 'taxpayer',
+      name: '',
+      // name: 'taxpayer',
+      // role: 'taxpayer',
     },
     caseDetail: {},
     cases: [],
