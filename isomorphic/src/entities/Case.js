@@ -48,13 +48,13 @@ Case.prototype.isValid = function isValid() {
   return Joi.validate(this, caseSchema).error === null;
 };
 
-Case.prototype.getValidationError = function getValidationError() {
-  return Joi.validate(this, caseSchema).error;
-};
+// Case.prototype.getValidationError = function getValidationError() {
+//   return Joi.validate(this, caseSchema).error;
+// };
 
 Case.prototype.validate = function validate() {
   if (!this.isValid()) {
-    throw new Error('invalid case' + this.getValidationError());
+    throw new Error('The case was invalid');
   }
 };
 

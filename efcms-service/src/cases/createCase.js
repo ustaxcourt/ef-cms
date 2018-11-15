@@ -1,16 +1,17 @@
 const createACase = require('../../../isomorphic/src/useCases/createACase');
 
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
-const { createDocketNumber } = require('./middleware/docketNumberGenerator');
 
 const {
-  persistence: { create: create },
-  environment: { stage: stage },
+  persistence: { create, incrementCounter },
+  environment: { stage },
+  docketNumberGenerator: { createDocketNumber },
 } = require('../applicationContext');
 
 const applicationContext = {
   persistence: {
     create,
+    incrementCounter,
   },
   docketNumberGenerator: {
     createDocketNumber,
