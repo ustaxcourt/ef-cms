@@ -49,7 +49,7 @@ function run_development() {
     popd
 
     echo "running serverless deploy --stage ${SLS_STAGE} --region ${REGION} --domain ${EFCMS_DOMAIN}"
-    ./run-serverless.sh "${SLS_STAGE}" "${REGION}"
+    ./run-serverless.sh "${SLS_STAGE}" "${REGION}" "${ACCOUNT_ID}"
 }
 
 function configure_custom_logging() {
