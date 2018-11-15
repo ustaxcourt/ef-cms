@@ -55,7 +55,6 @@ export const gotoCaseDetail = [
   actions.getCaseDetail,
   actions.setCaseDetail,
   actions.getUserRole,
-  // [set(state`currentPage`, 'ValidateCase')],
   {
     taxpayer: [set(state`currentPage`, 'CaseDetail')],
     petitionsclerk: [set(state`currentPage`, 'ValidateCase')],

@@ -120,6 +120,3 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
       type: 'case'
     });
 }
-
-
-
