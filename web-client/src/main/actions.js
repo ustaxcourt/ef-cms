@@ -91,15 +91,27 @@ export const uploadCasePdfs = async ({
   return { uploadResults };
 };
 
-export const createCase = async ({
-  useCases,
-  applicationContext,
-  get,
-  props,
-}) => {
-  await useCases.createCase(
-    applicationContext,
-    props.uploadResults,
+export const createCase = ({ useCases, applicationContext, get, props }) => {
+  const { uploadResults } = props;
+  const caseToCreate = {
+    documents: [
+      {
+        documentId: uploadResults.petitionFileId,
+        documentType: 'petitionFile',
+      },
+      {
+        documentId: uploadResults.requestForPlaceOfTrialId,
+        documentType: 'requestForPlaceOfTrial',
+      },
+      {
+        documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
+        documentType: 'statementOfTaxpayerIdentificationNumber',
+      },
+    ],
+  };
+  return useCases.createACaseProxy(
+    applicationContext.getBaseUrl(),
+    caseToCreate,
     get(state.user),
   );
 };
