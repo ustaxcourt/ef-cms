@@ -19,12 +19,16 @@ export default connect(
   }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>File a petition</h1>
+        <h1 tabIndex="-1" id="file-h1">
+          File a petition
+        </h1>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
         <ErrorNotification />
         <form
           id="file-a-petition"
+          role="form"
+          aria-labelledby="#file-h1"
           noValidate
           onSubmit={e => {
             e.preventDefault();
@@ -35,7 +39,7 @@ export default connect(
             <div role="listitem" className="usa-form-group">
               <label
                 htmlFor="petition-file"
-                className={petition.petitionFile.file && 'validated'}
+                className={petition.petitionFile && 'validated'}
               >
                 1. Petition file (form #2)
               </label>
@@ -48,7 +52,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -56,7 +60,7 @@ export default connect(
             <div role="listitem" className="usa-form-group">
               <label
                 htmlFor="request-for-place-of-trial"
-                className={petition.requestForPlaceOfTrial.file && 'validated'}
+                className={petition.requestForPlaceOfTrial && 'validated'}
               >
                 2. Request for place of trial (form #5)
               </label>
@@ -69,7 +73,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -78,7 +82,7 @@ export default connect(
               <label
                 htmlFor="statement-of-taxpayer-id"
                 className={
-                  petition.statementOfTaxpayerIdentificationNumber.file &&
+                  petition.statementOfTaxpayerIdentificationNumber &&
                   'validated'
                 }
               >
@@ -96,7 +100,7 @@ export default connect(
                 onChange={e => {
                   updatePetitionValue({
                     key: e.target.name,
-                    file: e.target.files[0],
+                    value: e.target.files[0],
                   });
                 }}
               />
@@ -108,7 +112,6 @@ export default connect(
             disabled={submitting}
             className={submitting ? 'usa-button-active' : 'usa-button'}
             aria-disabled={submitting ? 'true' : 'false'}
-            aria-live="polite"
           >
             <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}

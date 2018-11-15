@@ -1,0 +1,255 @@
+regions = ['us-east-1', 'us-west-1']
+
+branchMap = [
+  develop: 'dev',
+  staging: 'stg',
+  master: 'prod',
+]
+
+pipeline {
+  agent any
+
+  environment {
+    SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
+    npm_config_cache = "/home/tomcat"
+    HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
+    CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+  }
+
+  options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
+
+  stages {
+    stage('Merge') {
+      steps {
+        script {
+          if (env.branch_name != 'develop' && env.branch_name != 'staging' && env.branch_name != 'master' && env.target_sha1) {
+            // todo: there is probably a better way to have Jenkins do this for us automatically
+            sh 'git config user.name "EF-CMS Jenkins"'
+            sh 'git config user.email "noop@example.com"'
+            sh "git merge origin/${env.target_sha1}"
+          }
+        }
+      }
+    }
+    stage('ShellCheck') {
+      steps {
+        script {
+          dir('efcms-service') {
+            sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
+            sh 'docker run --rm shellcheck'
+          }
+        }
+      }
+    }
+    // stage('Audit') {
+    //   steps {
+    //     script {
+    //       dir('efcms-service') {
+    //         sh 'docker build -t audit -f Dockerfile.audit .'
+    //         sh 'docker run --rm audit'
+    //       }
+    //     }
+    //   }
+    // }
+    stage('Lint') {
+      steps {
+        script {
+          dir('efcms-service') {
+            sh 'docker build -t lint -f Dockerfile.lint .'
+            sh 'docker run --rm lint'
+          }
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        script {
+          dir('efcms-service') {
+            def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
+            sh 'docker build -t test -f Dockerfile.test .'
+            sh "docker run --name ${CONTAINER_NAME} test"
+            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
+            sh "docker rm ${CONTAINER_NAME}"
+          }
+        }
+      }
+      post {
+        success {
+          dir('efcms-service') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            dir('efcms-service') {
+              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
+              sh "docker run -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
+            }
+          }
+        }
+      }
+    }
+    stage('Terraform') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          def tasks = createTerraformTasks getTarget(env.branch_name)
+          parallel tasks
+        }
+      }
+    }
+    stage('Serverless') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          def tasks = createServerlessTasks getTarget(env.branch_name)
+          parallel tasks
+        }
+      }
+    }
+    stage('Setup Active-Active Route53 Regional Record') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh 'docker build -t route53 -f Dockerfile.route53 .'
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
+          }
+        }
+      }
+    }
+    stage('Setup S3 Replication Pre Prod') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh 'docker build -t s3replication -f Dockerfile.s3replication .'
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm s3replication"
+          }
+        }
+      }
+    }
+    stage('Setup Global Tables') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
+            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
+          }
+        }
+      }
+    }
+    stage('Smoke Tests') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          def tasks = createSmokeTestTasks getTarget(env.branch_name)
+          parallel tasks
+        }
+      }
+    }
+  }
+  post {
+    always {
+      deleteDir()
+    }
+  }
+}
+
+def createTerraformTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    tasks["${slsStage}"] = {
+      node() {
+        stage("terraform ${slsStage}") {
+          checkout scm
+          sh 'docker build -t terraform -f efcms-service/Dockerfile.terraform .'
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
+        }
+      }
+    }
+  }
+  return tasks
+}
+
+def createSmokeTestTasks(targets) {
+  def tasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    deploy.regions.each { region ->
+      tasks["${slsStage} - ${region}"] = {
+        node() {
+          stage("smoketest ${slsStage} - ${region}") {
+            checkout scm
+            dir('efcms-service') {
+              sh 'docker build -t smoketest -f Dockerfile.smoketest .'
+              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
+            }
+          }
+        }
+      }
+    }
+  }
+  return tasks
+}
+
+def createServerlessTasks(targets) {
+  def deployTasks = [:]
+  targets.each { deploy ->
+    def slsStage = deploy.env
+    deploy.regions.each { region ->
+      deployTasks["${slsStage} - ${region}"] = {
+        node() {
+          stage("serverless ${slsStage} - ${region}") {
+            checkout scm
+            dir('efcms-service') {
+              sh 'docker build -t serverless -f Dockerfile.serverless .'
+              sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+            }
+          }
+        }
+      }
+    }
+  }
+  return deployTasks
+}
+
+def shouldDeploy(branchName) {
+  ['develop', 'staging', 'master'].contains(branchName) == true
+}
+
+def getTarget(branchName) {
+  [
+    [env: branchMap[branchName], regions: regions]
+  ]
+}

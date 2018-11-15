@@ -13,7 +13,7 @@ export default connect(
   function LogIn({ form, updateFormValue, submitLogIn }) {
     return (
       <section className="usa-section usa-grid">
-        <h1>Log in</h1>
+        <h1 tabIndex="-1">Log in</h1>
         <ErrorNotification />
         <form
           id="log-in"
@@ -29,7 +29,6 @@ export default connect(
               id="name"
               type="input"
               name="name"
-              placeholder="Last name, first name"
               value={form.name}
               onChange={e => {
                 updateFormValue({
