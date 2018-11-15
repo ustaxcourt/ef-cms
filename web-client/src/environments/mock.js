@@ -1,17 +1,17 @@
-import localPersistenceGateway from '../persistence/localPersistenceGateway';
+import persistenceGateway from '../persistence/localPersistenceGateway';
 
 const API_URL = 'http://localhost:3000/v1';
 
 /**
  * Context for the dev environment
  */
-const dev = {
+const mock = {
   getBaseUrl: () => {
     return API_URL;
   },
   getPersistenceGateway: () => {
-    return localPersistenceGateway;
+    return persistenceGateway;
   },
 };
 
-export default dev;
+export default mock;

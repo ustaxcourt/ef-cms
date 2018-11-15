@@ -92,7 +92,7 @@ const getUser = name => {
   return;
 };
 
-const createCase = async function createCase(
+const uploadCasePdfs = async function uploadCasePdfs(
   user,
   petition,
   baseUrl,
@@ -102,19 +102,19 @@ const createCase = async function createCase(
   const { documentId: petitionFileId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'Petition file',
+    'petitionFile',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'Request for place of trial',
+    'requestForPlaceOfTrial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
     baseUrl,
     user,
-    'Statement of Taxpayer Identification number',
+    'statementOfTaxpayerIdentificationNumber',
   );
   await uploadDocumentToS3(
     documentPolicy,
@@ -134,19 +134,31 @@ const createCase = async function createCase(
     petition.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
-  await createCaseRecord(baseUrl, user.name, {
+  return {
+    petitionFileId,
+    requestForPlaceOfTrialId,
+    statementOfTaxpayerIdentificationNumberId,
+  };
+};
+
+const createCase = async function createCase(
+  applicationContext,
+  uploadResults,
+  user,
+) {
+  await createCaseRecord(applicationContext.getBaseUrl(), user.name, {
     documents: [
       {
-        documentId: petitionFileId,
+        documentId: uploadResults.petitionFileId,
         documentType: 'Petition file',
       },
       {
-        documentId: requestForPlaceOfTrialId,
+        documentId: uploadResults.requestForPlaceOfTrialId,
         documentType: 'Request for place of trial',
       },
       {
-        documentId: statementOfTaxpayerIdentificationNumberId,
-        documentType: 'Statement of Taxpayer Identification number',
+        documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
+        documentType: 'Statement of taxpayer identification number',
       },
     ],
   });
@@ -159,6 +171,7 @@ const awsPersistenceGateway = {
   getPetitionsClerkCaseList,
   getUser,
   updateCase,
+  uploadCasePdfs,
 };
 
 export default awsPersistenceGateway;
