@@ -23,7 +23,7 @@ export const getCaseList = async ({
   try {
     const caseList = await useCases.getCases(
       applicationContext,
-      get(state.user.name),
+      get(state.user.userId),
     );
     return path.success({ caseList });
   } catch (e) {
@@ -54,7 +54,7 @@ export const getCaseDetail = async ({
   const caseDetail = await useCases.getCaseDetail(
     applicationContext,
     props.caseId,
-    get(state.user.name),
+    get(state.user.userId),
   );
   return { caseDetail };
 };
@@ -179,7 +179,7 @@ export const getPetitionsClerkCaseList = async ({
   try {
     const caseList = await useCases.getPetitionsClerkCaseList(
       applicationContext,
-      get(state.user.name),
+      get(state.user.userId),
     );
     return path.success({ caseList });
   } catch (e) {

@@ -48,8 +48,8 @@ Case.prototype.getValidationError = function getValidationError() {
 };
 
 Case.documentTypes = {
-  petitionFile: 'Petition file',
-  requestForPlaceOfTrial: 'Request for place of trial',
+  petitionFile: 'Petition',
+  requestForPlaceOfTrial: 'Request for Place of Trial',
   statementOfTaxpayerIdentificationNumber:
     'Statement of Taxpayer Identification Number',
 };

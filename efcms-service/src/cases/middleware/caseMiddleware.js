@@ -29,7 +29,7 @@ const validateDocuments = documents => {
  * @param documents
  * @returns {Promise.<void>}
  */
-exports.create = async ({ userId, documents, persistence = casesPersistence}) => {
+exports.create = async ({ userId, documents, user, persistence = casesPersistence}) => {
   validateDocuments(documents);
   const caseId = uuidv4();
   const docketNumber = await docketNumberService.createDocketNumber();
@@ -39,6 +39,7 @@ exports.create = async ({ userId, documents, persistence = casesPersistence}) =>
     userId: userId,
     docketNumber: docketNumber,
     documents: documents,
+    user: user,
     status: "new",
     validated: false
   }

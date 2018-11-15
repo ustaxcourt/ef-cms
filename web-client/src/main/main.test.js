@@ -53,7 +53,7 @@ describe('Main cerebral module', () => {
       });
       assert.equal(test.getState('form.name'), 'petitionsclerk');
       await test.runSequence('submitLogIn');
-      assert.equal(test.getState('user.name'), 'petitionsclerk');
+      assert.equal(test.getState('user.userId'), 'petitionsclerk');
       assert.equal(test.getState('user.role'), 'petitionsclerk');
     });
 
@@ -66,7 +66,7 @@ describe('Main cerebral module', () => {
       });
       assert.equal(test.getState('form.name'), 'taxpayer');
       await test.runSequence('submitLogIn');
-      assert.equal(test.getState('user.name'), 'taxpayer');
+      assert.equal(test.getState('user.userId'), 'taxpayer');
       assert.equal(test.getState('user.role'), 'taxpayer');
     });
 
