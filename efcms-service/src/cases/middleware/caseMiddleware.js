@@ -21,13 +21,14 @@ const validateDocuments = documents => {
 };
 
 /**
- * create
  *
  * creates a case
- *
+
  * @param userId
  * @param documents
- * @returns {Promise.<void>}
+ * @param user
+ * @param persistence
+ * @returns {Promise.<*>}
  */
 exports.create = async ({ userId, documents, user, persistence = casesPersistence}) => {
   validateDocuments(documents);
@@ -42,7 +43,7 @@ exports.create = async ({ userId, documents, user, persistence = casesPersistenc
     user: user,
     status: "new",
     validated: false
-  }
+  };
 
   return persistence
     .create({
@@ -111,7 +112,7 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
 
   const allDocumentsValidated = caseToUpdate.documents.every(
     document => document.validated === true
-  )
+  );
   if (allDocumentsValidated) {
     caseToUpdate.status = 'general';
   }
@@ -120,4 +121,4 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
       entity: caseToUpdate,
       type: 'case'
     });
-}
+};
