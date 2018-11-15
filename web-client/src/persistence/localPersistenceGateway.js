@@ -35,6 +35,10 @@ const createCase = async function createCase() {
   return;
 };
 
+const uploadCasePdfs = async function uploadCasePdfs() {
+  return;
+};
+
 const updateCase = async function updateCase() {
   return;
 };
@@ -65,6 +69,7 @@ const localPersistenceGateway = {
   getPetitionsClerkCaseList,
   getUser,
   updateCase,
+  uploadCasePdfs,
 };
 
 export default localPersistenceGateway;

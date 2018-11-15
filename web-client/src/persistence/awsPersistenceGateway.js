@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import User from '../entities/User';
+import Case from '../entities/Case';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
@@ -92,61 +93,76 @@ const getUser = name => {
   return;
 };
 
-const createCase = async function createCase(
+const uploadCasePdfs = async function uploadCasePdfs(
+  applicationContext,
+  caseInitiator,
   user,
-  petition,
-  baseUrl,
   fileHasUploaded,
 ) {
-  const documentPolicy = await getDocumentPolicy(baseUrl);
+  const documentPolicy = await getDocumentPolicy(
+    applicationContext.getBaseUrl(),
+  );
   const { documentId: petitionFileId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Petition file',
+    'petitionFile',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Request for place of trial',
+    'requestForPlaceOfTrial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Statement of Taxpayer Identification number',
+    'statementOfTaxpayerIdentificationNumber',
   );
   await uploadDocumentToS3(
     documentPolicy,
     petitionFileId,
-    petition.petitionFile,
+    caseInitiator.petitionFile,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     requestForPlaceOfTrialId,
-    petition.requestForPlaceOfTrial,
+    caseInitiator.requestForPlaceOfTrial,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     statementOfTaxpayerIdentificationNumberId,
-    petition.statementOfTaxpayerIdentificationNumber,
+    caseInitiator.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
-  await createCaseRecord(baseUrl, user.name, {
+  return {
+    petitionFileId,
+    requestForPlaceOfTrialId,
+    statementOfTaxpayerIdentificationNumberId,
+  };
+};
+
+const createCase = async function createCase(
+  applicationContext,
+  uploadResults,
+  user,
+) {
+  await createCaseRecord(applicationContext.getBaseUrl(), user.name, {
     documents: [
       {
-        documentId: petitionFileId,
-        documentType: 'Petition file',
+        documentId: uploadResults.petitionFileId,
+        documentType: Case.documentTypes.petitionFile,
       },
       {
-        documentId: requestForPlaceOfTrialId,
-        documentType: 'Request for place of trial',
+        documentId: uploadResults.requestForPlaceOfTrialId,
+        documentType: Case.documentTypes.requestForPlaceOfTrial,
       },
       {
-        documentId: statementOfTaxpayerIdentificationNumberId,
-        documentType: 'Statement of Taxpayer Identification number',
+        documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
+        documentType:
+          Case.documentTypes.statementOfTaxpayerIdentificationNumber,
       },
     ],
   });
@@ -159,6 +175,7 @@ const awsPersistenceGateway = {
   getPetitionsClerkCaseList,
   getUser,
   updateCase,
+  uploadCasePdfs,
 };
 
 export default awsPersistenceGateway;
