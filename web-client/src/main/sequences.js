@@ -3,12 +3,25 @@ import { state, props } from 'cerebral';
 import * as actions from './actions';
 
 export const gotoDashboard = [
-  actions.getCaseList,
+  actions.getUserRole,
   {
-    error: [actions.setAlertError],
-    success: [actions.setCaseList],
+    taxpayer: [
+      actions.getCaseList,
+      {
+        error: [actions.setAlertError],
+        success: [actions.setCaseList],
+      },
+      set(state`currentPage`, 'Dashboard'),
+    ],
+    petitionsclerk: [
+      actions.getPetitionsClerkCaseList,
+      {
+        error: [actions.setAlertError],
+        success: [actions.setCaseList],
+      },
+      set(state`currentPage`, 'PetitionsWorkQueue'),
+    ],
   },
-  set(state`currentPage`, 'Dashboard'),
 ];
 export const gotoLogIn = [
   actions.clearLoginForm,
@@ -22,6 +35,8 @@ export const gotoFilePetition = [
 export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
+
+export const togglePaymentDetails = [toggle(state`paymentInfo.showDetails`)];
 
 export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
 
@@ -39,11 +54,19 @@ export const gotoCaseDetail = [
   actions.setBaseUrl,
   actions.getCaseDetail,
   actions.setCaseDetail,
-  set(state`currentPage`, 'CaseDetail'),
+  actions.getUserRole,
+  {
+    taxpayer: [set(state`currentPage`, 'CaseDetail')],
+    petitionsclerk: [set(state`currentPage`, 'ValidateCase')],
+  },
 ];
 
 export const updatePetitionValue = [
   set(state`petition.${props`key`}`, props`value`),
+];
+
+export const updatePreviewUrl = [
+  set(state`caseDetail.previewUrl`, props`value`),
 ];
 
 export const submitFilePetition = [
@@ -55,3 +78,7 @@ export const submitFilePetition = [
   actions.setAlertSuccess,
   actions.navigateToDashboard,
 ];
+
+export const toggleDocumentValidation = [actions.toggleDocumentValidation];
+
+export const updateCase = [actions.updateCase];

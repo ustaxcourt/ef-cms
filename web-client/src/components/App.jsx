@@ -3,21 +3,27 @@ import { state } from 'cerebral';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import CaseDetail from './CaseDetail';
+import ValidateCase from './ValidateCase';
+import Dashboard from './Dashboard';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
-import Dashboard from './Dashboard';
+import Loading from './Loading';
 import LogIn from './LogIn';
+import PetitionsWorkQueue from './PetitionsWorkQueue';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
-import CaseDetail from './CaseDetail';
 
 const pages = {
   CaseDetail,
   Dashboard,
-  LogIn,
   FilePetition,
+  Loading,
+  LogIn,
+  PetitionsWorkQueue,
   StyleGuide,
+  ValidateCase,
 };
 
 /**

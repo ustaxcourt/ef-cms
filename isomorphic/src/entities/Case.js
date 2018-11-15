@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const joi = require('joi');
 const uuidv4 = require('uuid/v4');
 
 const uuidVersions = {
@@ -7,30 +7,37 @@ const uuidVersions = {
 
 // TODO: talk to Doug about if we should be using
 // separate validation methods for different use cases, or a single validation method?
-const caseSchema = Joi.object().keys({
-  caseId: Joi.string()
+const caseSchema = joi.object().keys({
+  caseId: joi
+    .string()
     .uuid(uuidVersions)
     .optional(),
-  userId: Joi.string()
+  userId: joi
+    .string()
     // .uuid(uuidVersions)
     .optional(),
-  createdAt: Joi.date()
+  createdAt: joi
+    .date()
     .iso()
     .optional(),
-  docketNumber: Joi.string()
+  docketNumber: joi
+    .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
-  status: Joi.string()
+  status: joi
+    .string()
     .regex(/^(new)|(general)$/)
     .optional(),
-  documents: Joi.array()
+  documents: joi
+    .array()
     .length(3)
     .items(
-      Joi.object({
-        documentId: Joi.string()
+      joi.object({
+        documentId: joi
+          .string()
           .uuid(uuidVersions)
           .required(),
-        documentType: Joi.string().required(),
+        documentType: joi.string().required(),
       }),
     )
     .required(),
@@ -45,11 +52,11 @@ function Case(rawCase) {
 }
 
 Case.prototype.isValid = function isValid() {
-  return Joi.validate(this, caseSchema).error === null;
+  return joi.validate(this, caseSchema).error === null;
 };
 
 // Case.prototype.getValidationError = function getValidationError() {
-//   return Joi.validate(this, caseSchema).error;
+//   return joi.validate(this, caseSchema).error;
 // };
 
 Case.prototype.validate = function validate() {

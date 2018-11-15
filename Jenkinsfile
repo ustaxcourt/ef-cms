@@ -23,6 +23,20 @@ pipeline {
     }
     stage('components') {
       parallel {
+        stage('shared') {
+          when {
+            expression {
+              return checkCommit('isomorphic')
+            }
+          }
+          steps {
+            build job: 'ef-cms-shared', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
         stage('web-client') {
           when {
             expression {
@@ -91,8 +105,8 @@ pipeline {
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
             dir('efcms-service') {
               sh 'npm i'
-              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop"
-              sh 'npm run start:local &'
+              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --casesTableName efcms-cases-local --documentsTableName efcms-documents-local"
+              sh 'npm start &'
               sh '../wait-until.sh http://localhost:3000/v1/swagger'
             }
             dir('web-client') {

@@ -34,9 +34,29 @@ describe('Main cerebral module', () => {
       await test.runSequence('toggleUsaBannerDetails');
       assert.equal(test.getState('usaBanner.showDetails'), false);
     });
+
+    it('Toggles payment info content', async () => {
+      await test.runSequence('togglePaymentDetails');
+      assert.equal(test.getState('paymentInfo.showDetails'), true);
+      await test.runSequence('togglePaymentDetails');
+      assert.equal(test.getState('paymentInfo.showDetails'), false);
+    });
   });
 
   describe('sequences', () => {
+    it('log in success', async () => {
+      await test.runSequence('gotoLogIn');
+      assert.equal(test.getState('currentPage'), 'LogIn');
+      await test.runSequence('updateFormValue', {
+        key: 'name',
+        value: 'petitionsclerk',
+      });
+      assert.equal(test.getState('form.name'), 'petitionsclerk');
+      await test.runSequence('submitLogIn');
+      assert.equal(test.getState('user.name'), 'petitionsclerk');
+      assert.equal(test.getState('user.role'), 'petitionsclerk');
+    });
+
     it('log in success', async () => {
       await test.runSequence('gotoLogIn');
       assert.equal(test.getState('currentPage'), 'LogIn');
@@ -47,6 +67,7 @@ describe('Main cerebral module', () => {
       assert.equal(test.getState('form.name'), 'taxpayer');
       await test.runSequence('submitLogIn');
       assert.equal(test.getState('user.name'), 'taxpayer');
+      assert.equal(test.getState('user.role'), 'taxpayer');
     });
 
     it('log in failure', async () => {
@@ -98,6 +119,27 @@ describe('Main cerebral module', () => {
         test.getState('caseDetail.documents.0.documentId'),
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       );
+    });
+
+    it('View petitions section work queue', async () => {
+      test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
+      await test.runSequence('gotoDashboard');
+      assert.equal(test.getState('currentPage'), 'PetitionsWorkQueue');
+      assert.equal(
+        test.getState('caseDetail.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+    });
+
+    it('Update case', async () => {
+      test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
+      await test.runSequence('gotoCaseDetail');
+      assert.equal(test.getState('currentPage'), 'ValidateCase');
+      assert.equal(
+        test.getState('caseDetail.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+      await test.runSequence('updateCase');
     });
   });
 });
