@@ -47,4 +47,11 @@ Case.prototype.getValidationError = function getValidationError() {
   return Joi.validate(this, caseSchema).error;
 };
 
+Case.documentTypes = {
+  petitionFile: 'Petition file',
+  requestForPlaceOfTrial: 'Request for place of trial',
+  statementOfTaxpayerIdentificationNumber:
+    'Statement of Taxpayer Identification Number',
+};
+
 module.exports = Case;

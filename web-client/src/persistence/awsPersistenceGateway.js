@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import User from '../entities/User';
+import Case from '../entities/Case';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
@@ -150,15 +151,16 @@ const createCase = async function createCase(
     documents: [
       {
         documentId: uploadResults.petitionFileId,
-        documentType: 'Petition file',
+        documentType: Case.documentTypes.petitionFile,
       },
       {
         documentId: uploadResults.requestForPlaceOfTrialId,
-        documentType: 'Request for place of trial',
+        documentType: Case.documentTypes.requestForPlaceOfTrial,
       },
       {
         documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
-        documentType: 'Statement of taxpayer identification number',
+        documentType:
+          Case.documentTypes.statementOfTaxpayerIdentificationNumber,
       },
     ],
   });
