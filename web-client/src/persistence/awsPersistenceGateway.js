@@ -12,8 +12,18 @@ const getCases = async (baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
-  const response = await axios.get(`${baseUrl}/cases`, { headers });
-  return response.data;
+  return await axios.get(`${baseUrl}/cases`, { headers }).then(response => {
+    if (!(response.data && Array.isArray(response.data))) {
+    } else {
+      //TODO remove this once backend can sort
+      response.data.sort(function(a, b) {
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      });
+    }
+    return response.data;
+  });
 };
 
 const getPetitionsClerkCaseList = async (baseUrl, userToken) => {

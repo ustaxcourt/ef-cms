@@ -12,7 +12,7 @@ const CASE_ROUTE = `${applicationContext.getBaseUrl()}/cases/fakeCaseId`;
 
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
-  createdAt: '2018-11-12T18:26:20.121Z',
+  createdAt: '2018-11-14T18:26:20.121Z',
   userId: 'taxpayer',
   docketNumber: '00107-18',
   documents: [
@@ -41,7 +41,11 @@ const fakeCase = {
   status: 'new',
 };
 
-const fakeCases = [fakeCase];
+let olderFakeCase = { ...fakeCase };
+olderFakeCase.createdAt = '2018-11-12T18:26:20.121Z';
+olderFakeCase.caseId = 'f41d33b2-3127-4256-a63b-a6ea7181645a';
+
+const fakeCases = [fakeCase, olderFakeCase];
 
 const fakePolicy = {
   url: 'https://s3.us-east-1.amazonaws.com/fakeBucket',
@@ -103,6 +107,18 @@ describe('AWS petition gateway', () => {
         'taxpayer',
       );
       assert.deepEqual(cases, fakeCases);
+      assert.equal(fakeCases[1].caseId, fakeCase.caseId);
+    });
+
+    it('Success', async () => {
+      mock.onGet(CASES_BASE_ROUTE).reply(200, fakeCases);
+
+      const cases = await awsPersistenceGateway.getCases(
+        applicationContext.getBaseUrl(),
+        'taxpayer',
+      );
+      assert.deepEqual(cases, fakeCases);
+      assert.equal(fakeCases[1].caseId, fakeCase.caseId);
     });
 
     it('Failure', async () => {
