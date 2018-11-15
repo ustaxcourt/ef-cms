@@ -1,99 +1,128 @@
 import { state } from 'cerebral';
 
-export const getUser = async ({ api, path, get }) => {
+export const getUser = async ({ useCases, applicationContext, get, path }) => {
+  const user = await useCases.getUser(
+    applicationContext.getPersistenceGateway(),
+    get(state.form.name),
+  );
+  if (user) return path.success({ user });
+  return path.error({
+    alertError: {
+      title: 'User not found',
+      message: 'Username or password are incorrect',
+    },
+  });
+};
+
+export const getCaseList = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
   try {
-    const user = api.getUser(get(state.form.name));
-    return path.success({ user });
+    const caseList = await useCases.getCases(
+      applicationContext,
+      get(state.user.name),
+    );
+    return path.success({ caseList });
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'User not found',
-        message: 'Username or password are incorrect',
+        title: 'Cases not found',
+        message: 'There was a problem getting the cases',
       },
     });
   }
 };
 
-export const setUser = async ({ store, props }) => {
-  store.set(state.user, props.user);
+export const setCaseList = ({ store, props }) => {
+  store.set(state.cases, props.caseList);
   return;
 };
 
-export const specifyPetitionFile = async () => {
-  return { documentType: 'petitionFile' };
+export const setBaseUrl = ({ store, applicationContext }) => {
+  store.set(state.baseUrl, applicationContext.getBaseUrl());
 };
 
-export const specifyRequestForPlaceOfTrial = async () => {
-  return { documentType: 'requestForPlaceOfTrial' };
-};
-
-export const specifyStatementOfTaxpayerIdentificationNumber = async () => {
-  return { documentType: 'statementOfTaxpayerIdentificationNumber' };
-};
-
-export const getDocumentPolicy = async ({ api, environment, store, path }) => {
-  try {
-    const response = await api.getDocumentPolicy(environment.getBaseUrl());
-    store.set(state.petition.policy, response);
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Document policy retrieval failed',
-      },
-    });
-  }
-};
-
-export const getDocumentId = async ({
-  api,
-  environment,
-  store,
-  path,
+export const getCaseDetail = async ({
+  useCases,
+  applicationContext,
   get,
   props,
 }) => {
-  try {
-    const response = await api.getDocumentId(
-      environment.getBaseUrl(),
-      get(state.user),
-      get(props.documentType),
-    );
+  const caseDetail = await useCases.getCaseDetail(
+    applicationContext,
+    props.caseId,
+    get(state.user.name),
+  );
+  return { caseDetail };
+};
+
+export const setCaseDetail = ({ store, props }) => {
+  store.set(state.caseDetail, props.caseDetail);
+  return;
+};
+
+export const setUser = ({ store, props }) => {
+  store.set(state.user, props.user);
+};
+
+export const toggleDocumentValidation = ({ props, store, get }) => {
+  const { item } = props;
+  const indexToReplace = get(state.caseDetail.documents).findIndex(
+    d => d.documentId === item.documentId,
+  );
+  store.merge(state.caseDetail.documents[indexToReplace], {
+    validated: !item.validated,
+  });
+};
+
+export const updateCase = async ({ useCases, applicationContext, get }) => {
+  await useCases.updateCase(
+    applicationContext.getBaseUrl(),
+    applicationContext.getPersistenceGateway(),
+    get(state.caseDetail),
+    get(state.user),
+  );
+};
+
+// TODO: rename to upload to case initation PDFs (or something)
+export const uploadCasePdfs = async ({
+  useCases,
+  applicationContext,
+  get,
+  store,
+}) => {
+  const fileHasUploaded = () => {
     store.set(
-      state.petition[get(props.documentType)].documentId,
-      response.documentId,
+      state.petition.uploadsFinished,
+      get(state.petition.uploadsFinished) + 1,
     );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Fetching document ID failed',
-      },
-    });
-  }
+  };
+  const uploadResults = await useCases.uploadCasePdfs(
+    applicationContext,
+    get(state.petition),
+    get(state.user),
+    fileHasUploaded,
+  );
+  return { uploadResults };
 };
 
-export const uploadDocumentToS3 = async ({ api, get, path, props }) => {
-  try {
-    await api.uploadDocumentToS3(
-      get(state.petition.policy),
-      get(state.petition[get(props.documentType)].documentId),
-      get(state.petition[get(props.documentType)].file),
-    );
-    return path.success();
-  } catch (error) {
-    return path.error({
-      alertError: {
-        title: 'There was a problem',
-        message: 'Uploading document failed',
-      },
-    });
-  }
+export const createCase = async ({
+  useCases,
+  applicationContext,
+  get,
+  props,
+}) => {
+  await useCases.createCase(
+    applicationContext,
+    props.uploadResults,
+    get(state.user),
+  );
 };
 
-export const getPetitionUploadAlertSuccess = () => {
+export const getCreateCaseAlertSuccess = () => {
   return {
     alertSuccess: {
       title: 'Your files were uploaded successfully.',
@@ -114,17 +143,13 @@ export const setAlertError = ({ props, store }) => {
   store.set(state.alertError, props.alertError);
 };
 
+export const clearAlertError = ({ store }) => {
+  store.set(state.alertError, null);
+};
+
 export const setAlertSuccess = ({ props, store }) => {
   store.set(state.alertSuccess, props.alertSuccess);
 };
-
-// export const clearAlertError = ({ store }) => {
-//   store.set(state.alertError, {});
-// };
-
-// export const clearAlertSuccess = ({ store }) => {
-//   store.set(state.alertSuccess, {});
-// };
 
 export const clearLoginForm = ({ store }) => {
   store.set(state.form, {
@@ -134,22 +159,44 @@ export const clearLoginForm = ({ store }) => {
 
 export const clearPetition = ({ store }) => {
   store.set(state.petition, {
-    petitionFile: {
-      file: undefined,
-      documentId: undefined,
-    },
-    requestForPlaceOfTrial: {
-      file: undefined,
-      documentId: undefined,
-    },
-    statementOfTaxpayerIdentificationNumber: {
-      file: undefined,
-      documentId: undefined,
-    },
+    petitionFile: null,
+    requestForPlaceOfTrial: null,
+    statementOfTaxpayerIdentificationNumber: null,
     uploadsFinished: 0,
   });
 };
 
-export const navigateHome = ({ router }) => {
+export const navigateToDashboard = ({ router }) => {
   router.route('/');
+};
+
+export const getUserRole = ({ get, path }) => {
+  const user = get(state.user);
+  return path[user.role]();
+};
+
+export const getPetitionsClerkCaseList = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
+  try {
+    const caseList = await useCases.getPetitionsClerkCaseList(
+      applicationContext,
+      get(state.user.name),
+    );
+    return path.success({ caseList });
+  } catch (e) {
+    return path.error({
+      alertError: {
+        title: 'Cases not found',
+        message: 'There was a problem getting the cases',
+      },
+    });
+  }
+};
+
+export const setPetitionsClerkCaseList = ({ store, props }) => {
+  store.set(state.cases, props.caseList);
 };
