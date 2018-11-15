@@ -8,4 +8,7 @@ COPY package.json /home/app/package.json
 RUN cd /home/app; npm install
 COPY . /home/app
 
-CMD npm test
+RUN node --version
+RUN npm --version
+
+CMD npm run lint

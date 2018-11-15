@@ -39,12 +39,22 @@ const createCase = async function createCase() {
   return;
 };
 
+const updateCase = async function updateCase() {
+  return;
+};
+
 const getUser = name => {
-  if (name !== 'taxpayer') return;
-  return new User({ name });
+  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
+  if (name === 'petitionsclerk')
+    return new User({ name, role: 'petitionsclerk' });
+  return;
 };
 
 const getCases = () => {
+  return [fakeCase];
+};
+
+const getPetitionsClerkCaseList = () => {
   return [fakeCase];
 };
 
@@ -54,9 +64,11 @@ const getCaseDetail = () => {
 
 const localPersistenceGateway = {
   createCase,
-  getUser,
-  getCases,
   getCaseDetail,
+  getCases,
+  getPetitionsClerkCaseList,
+  getUser,
+  updateCase,
 };
 
 export default localPersistenceGateway;

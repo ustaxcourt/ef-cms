@@ -43,6 +43,27 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
   });
 });
 
+Cypress.Commands.add('routeTo', route => {
+  // TODO: make something a bit more robust. break the selector, break your tests.
+  return route;
+  // cy.get('a')
+  //   .then($btn => {
+  //     return $btn.first().attr('href', route);
+  //   })
+  //   .click();
+});
+
+Cypress.Commands.add('login', (username, route) => {
+  cy.visit('/log-in');
+  cy.get('input#name').type(username);
+  cy.get('input[type="submit"]').click();
+  cy.url().should('not.include', 'log-in');
+  cy.get('.usa-alert-error').should('not.exist');
+  if (route) {
+    cy.routeTo(route);
+  }
+});
+
 function b64toBlob(b64Data, contentType, sliceSize) {
   contentType = contentType || '';
   sliceSize = sliceSize || 512;
