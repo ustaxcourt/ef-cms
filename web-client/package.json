@@ -95,7 +95,7 @@
     "regenerator-runtime": "^0.12.1",
     "riot": "^3.13.1",
     "riot-route": "^3.1.4",
-    "sass": "^1.14.3",
+    "sass": "^1.15.0",
     "stylelint": "^9.8.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
