@@ -13,7 +13,6 @@ export default connect(
     caseDetail: state.caseDetail,
     updateCase: sequences.updateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
-    updatePreviewUrl: sequences.updatePreviewUrl,
   },
   function CaseDetail({
     baseUrl,
@@ -71,21 +70,21 @@ export default connect(
                     <span className="responsive-label">
                       Filings and proceedings
                     </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updatePreviewUrl({
-                          value:
-                            baseUrl +
-                            '/documents/' +
-                            item.documentId +
-                            '/downloadPolicy',
-                        })
+                    <a
+                      className="pdf-link"
+                      aria-label="View PDF"
+                      href={
+                        baseUrl +
+                        '/documents/' +
+                        item.documentId +
+                        '/downloadPolicy'
                       }
+                      rel="noopener noreferrer"
+                      target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {item.documentType}
-                    </button>
+                    </a>
                   </td>
                   <td>
                     <input
@@ -101,7 +100,6 @@ export default connect(
               ))}
             </tbody>
           </table>
-          <iframe src={caseDetail.previewUrl} />
         </section>
       </React.Fragment>
     );

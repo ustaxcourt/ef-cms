@@ -36,7 +36,11 @@ const createCase = async function createCase() {
 };
 
 const uploadCasePdfs = async function uploadCasePdfs() {
-  return;
+  return {
+    petitionFileId: 'a',
+    requestForPlaceOfTrialId: 'b',
+    statementOfTaxpayerIdentificationNumberId: 'c',
+  };
 };
 
 const updateCase = async function updateCase() {
