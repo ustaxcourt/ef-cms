@@ -8,13 +8,9 @@ exports.isAuthorized = (user, action, owner) => {
     return true;
   }
 
-  if (user === 'petitionsclerk'
+  return (user === 'petitionsclerk'
     && (action === exports.GET_CASES_BY_STATUS
-    || action === exports.UPDATE_CASE
-    || action === exports.GET_CASE
-    )) {
-    return true;
-  } else {
-    return false;
-  }
-}
+      || action === exports.UPDATE_CASE
+      || action === exports.GET_CASE
+    ))
+};
