@@ -33,9 +33,9 @@ export default {
     petition: {},
     form: {},
     user: {
-      // name: '',
-      name: 'petitionsclerk',
-      role: 'petitionsclerk',
+      name: '',
+      // name: 'petitionsclerk',
+      // role: 'petitionsclerk',
     },
     caseDetail: {},
     cases: [],
