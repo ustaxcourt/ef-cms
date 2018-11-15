@@ -1,6 +1,8 @@
 const client = require('./dynamodbClientService');
 
-const TABLE_NAME = process.env.STAGE ? `efcms-cases-${process.env.STAGE}` : 'efcms-cases-dev';
+const TABLE_NAME = process.env.STAGE
+  ? `efcms-cases-${process.env.STAGE}`
+  : 'efcms-cases-dev';
 
 /**
  * createDocketNumber
@@ -14,22 +16,25 @@ exports.createDocketNumber = async () => {
   const params = {
     TableName: TABLE_NAME,
     Key: {
-      caseId: 'docketNumberCounter'
+      caseId: 'docketNumberCounter',
     },
     UpdateExpression: 'ADD #a :x',
     ExpressionAttributeNames: {
-      '#a' : "id"
+      '#a': 'id',
     },
     ExpressionAttributeValues: {
-      ':x' : 1
+      ':x': 1,
     },
-    ReturnValues: "UPDATED_NEW"
+    ReturnValues: 'UPDATED_NEW',
   };
 
   const id = await client.updateConsistent(params);
 
   const plus100 = id + 100;
-  const last2YearDigits = new Date().getFullYear().toString().substr(-2);
+  const last2YearDigits = new Date()
+    .getFullYear()
+    .toString()
+    .substr(-2);
   const pad = `00000${plus100}`.substr(-5);
 
   return `${pad}-${last2YearDigits}`;
