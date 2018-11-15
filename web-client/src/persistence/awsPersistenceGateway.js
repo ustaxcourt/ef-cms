@@ -15,6 +15,14 @@ const getCases = async (baseUrl, userToken) => {
   return response.data;
 };
 
+const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.get(`${baseUrl}/cases?status=new`, { headers });
+  return response.data;
+};
+
 const getCaseDetail = async (caseId, baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
@@ -28,6 +36,20 @@ const createDocumentMetadata = async (baseUrl, user, type) => {
     userId: user,
     documentType: type,
   });
+  return response.data;
+};
+
+const updateCase = async (userToken, caseDetails, baseUrl) => {
+  const headers = {
+    Authorization: `Bearer ${userToken}`,
+  };
+  const response = await axios.put(
+    `${baseUrl}/cases/${caseDetails.caseId}`,
+    caseDetails,
+    {
+      headers,
+    },
+  );
   return response.data;
 };
 
@@ -64,8 +86,10 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
 };
 
 const getUser = name => {
-  if (name !== 'taxpayer') return;
-  return new User({ name });
+  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
+  if (name === 'petitionsclerk')
+    return new User({ name, role: 'petitionsclerk' });
+  return;
 };
 
 const createCase = async function createCase(
@@ -78,19 +102,19 @@ const createCase = async function createCase(
   const { documentId: petitionFileId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'petitionFile',
+    'Petition file',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     baseUrl,
     user,
-    'requestForPlaceOfTrial',
+    'Request for place of trial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
     baseUrl,
     user,
-    'statementOfTaxpayerIdentificationNumber',
+    'Statement of Taxpayer Identification number',
   );
   await uploadDocumentToS3(
     documentPolicy,
@@ -114,15 +138,15 @@ const createCase = async function createCase(
     documents: [
       {
         documentId: petitionFileId,
-        documentType: 'petitionFile',
+        documentType: 'Petition file',
       },
       {
         documentId: requestForPlaceOfTrialId,
-        documentType: 'requestForPlaceOfTrial',
+        documentType: 'Request for place of trial',
       },
       {
         documentId: statementOfTaxpayerIdentificationNumberId,
-        documentType: 'statementOfTaxpayerIdentificationNumber',
+        documentType: 'Statement of Taxpayer Identification number',
       },
     ],
   });
@@ -130,9 +154,11 @@ const createCase = async function createCase(
 
 const awsPersistenceGateway = {
   createCase,
-  getUser,
-  getCases,
   getCaseDetail,
+  getCases,
+  getPetitionsClerkCaseList,
+  getUser,
+  updateCase,
 };
 
 export default awsPersistenceGateway;

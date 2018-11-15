@@ -66,7 +66,25 @@ export const setCaseDetail = ({ store, props }) => {
 
 export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
-  return;
+};
+
+export const toggleDocumentValidation = ({ props, store, get }) => {
+  const { item } = props;
+  const indexToReplace = get(state.caseDetail.documents).findIndex(
+    d => d.documentId === item.documentId,
+  );
+  store.merge(state.caseDetail.documents[indexToReplace], {
+    validated: !item.validated,
+  });
+};
+
+export const updateCase = async ({ useCases, applicationContext, get }) => {
+  await useCases.updateCase(
+    applicationContext.getBaseUrl(),
+    applicationContext.getPersistenceGateway(),
+    get(state.caseDetail),
+    get(state.user),
+  );
 };
 
 export const createCase = async ({
@@ -136,4 +154,35 @@ export const clearPetition = ({ store }) => {
 
 export const navigateToDashboard = ({ router }) => {
   router.route('/');
+};
+
+export const getUserRole = ({ get, path }) => {
+  const user = get(state.user);
+  return path[user.role]();
+};
+
+export const getPetitionsClerkCaseList = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
+  try {
+    const caseList = await useCases.getPetitionsClerkCaseList(
+      applicationContext,
+      get(state.user.name),
+    );
+    return path.success({ caseList });
+  } catch (e) {
+    return path.error({
+      alertError: {
+        title: 'Cases not found',
+        message: 'There was a problem getting the cases',
+      },
+    });
+  }
+};
+
+export const setPetitionsClerkCaseList = ({ store, props }) => {
+  store.set(state.cases, props.caseList);
 };

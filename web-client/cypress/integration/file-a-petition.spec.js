@@ -1,12 +1,14 @@
 describe('File a petition ', function() {
+  let rowCount;
   before(() => {
     // TODO: get logged in with a token and go directly to /file-a-petition
-    cy.visit('/log-in');
-    cy.get('input#name').type('taxpayer');
-    cy.get('input[type="submit"]').click();
-    cy.url().should('not.include', 'log-in');
-    cy.get('.usa-alert-error').should('not.exist');
-    cy.get('a.usa-button').click();
+    cy.login('taxpayer', '/file-a-petition');
+    cy.get('table')
+      .find('tr')
+      .then($trs => {
+        rowCount = $trs.length;
+      });
+    cy.get('.usa-button').click();
   });
 
   it('has three file inputs', () => {
@@ -56,5 +58,10 @@ describe('File a petition ', function() {
       'contain',
       'uploaded successfully',
     );
+  });
+  it('has gained another record', () => {
+    cy.get('table')
+      .find('tr')
+      .should('have.length', rowCount + 1);
   });
 });
