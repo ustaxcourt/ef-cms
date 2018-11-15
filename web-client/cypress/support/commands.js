@@ -50,6 +50,7 @@ Cypress.Commands.add('routeTo', route => {
       return $navLink.first().attr('href', route);
     })
     .click({ force: true });
+  cy.url().should('include', route);
 });
 
 Cypress.Commands.add('login', (username, route) => {

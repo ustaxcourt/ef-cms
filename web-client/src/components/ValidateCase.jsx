@@ -24,7 +24,9 @@ export default connect(
     return (
       <React.Fragment>
         <div className="usa-grid">
-          <a href="/">Back to Petitions Section Work Queue</a>
+          <a href="/" id="queue-nav">
+            Back to Petitions Section Work Queue
+          </a>
         </div>
         <section className="usa-section usa-grid">
           <p>
