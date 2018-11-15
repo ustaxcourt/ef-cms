@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import assert from 'assert';
 
 import mainModule from './';
-import applicationContext from '../environments/mock';
+import applicationContext from '../applicationContexts/mock';
 
 mainModule.providers.applicationContext = applicationContext;
 mainModule.providers.router = { route: () => {} };

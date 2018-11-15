@@ -2,7 +2,7 @@ import '@babel/polyfill';
 import Devtools from 'cerebral/devtools';
 
 import app from './app';
-import dev from './environments/dev';
+import applicationContext from './applicationContexts/dev';
 import Case from './entities/Case';
 import User from './entities/User';
 
@@ -19,4 +19,4 @@ if (process.env.USTC_DEBUG) {
   };
 }
 
-app.initialize(dev, debugTools);
+app.initialize(applicationContext, debugTools);

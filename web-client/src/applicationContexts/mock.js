@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:3000/v1';
 /**
  * Context for the dev environment
  */
-const mock = {
+const applicationContext = {
   getBaseUrl: () => {
     return API_URL;
   },
@@ -14,4 +14,4 @@ const mock = {
   },
 };
 
-export default mock;
+export default applicationContext;
