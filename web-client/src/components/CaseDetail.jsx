@@ -37,6 +37,7 @@ export default connect(
               className="usa-accordion-button"
               aria-expanded={showDetails}
               aria-controls="paymentInfo"
+              id="actions-button"
               onClick={() => togglePaymentDetails()}
             >
               <span>
@@ -99,7 +100,7 @@ export default connect(
           </li>
         </ul>
         <h2>Case activities</h2>
-        <table className="responsive-table">
+        <table className="responsive-table" id="case-activities">
           <thead>
             <tr>
               <th>Activity date</th>
