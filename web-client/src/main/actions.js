@@ -110,7 +110,7 @@ export const createCase = ({ useCases, applicationContext, get, props }) => {
   return useCases.createACaseProxy({
     userId: get(state.user).name,
     documents,
-    persistence: applicationContext,
+    applicationContext,
   });
 };
 
