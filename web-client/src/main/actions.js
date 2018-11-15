@@ -87,7 +87,8 @@ export const updateCase = async ({ useCases, applicationContext, get }) => {
   );
 };
 
-export const createCase = async ({
+// TODO: rename to upload to case initation PDFs (or something)
+export const uploadCasePdfs = async ({
   useCases,
   applicationContext,
   get,
@@ -99,12 +100,20 @@ export const createCase = async ({
       get(state.petition.uploadsFinished) + 1,
     );
   };
-  await useCases.createCase(
-    applicationContext.getBaseUrl(),
-    applicationContext.getPersistenceGateway(),
+  const uploadResults = await useCases.uploadCasePdfs(
+    applicationContext,
     get(state.petition),
     get(state.user),
     fileHasUploaded,
+  );
+  return { uploadResults };
+};
+
+export const createCase = async ({ useCases, applicationContext, get }) => {
+  await useCases.createCase(
+    applicationContext,
+    get(state.petition),
+    get(state.user),
   );
 };
 

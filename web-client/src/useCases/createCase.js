@@ -1,19 +1,10 @@
 import User from '../entities/User';
 import Case from '../entities/Case';
 
-export default async (
-  baseUrl,
-  persistenceGateway,
-  rawCase,
-  rawUser,
-  fileHasUploaded,
-) => {
+export default async (applicationContext, rawCase, rawUser) => {
   const caseDetails = new Case(rawCase);
   const user = new User(rawUser);
-  await persistenceGateway.createCase(
-    user,
-    caseDetails,
-    baseUrl,
-    fileHasUploaded,
-  );
+  await applicationContext
+    .getPersistenceGateway()
+    .createCase(applicationContext, caseDetails, user);
 };

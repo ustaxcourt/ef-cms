@@ -71,6 +71,7 @@ export const updatePreviewUrl = [
 
 export const submitFilePetition = [
   actions.setFormSubmitting,
+  actions.uploadCasePdfs,
   actions.createCase,
   actions.unsetFormSubmitting,
   actions.getCreateCaseAlertSuccess,
