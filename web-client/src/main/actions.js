@@ -101,8 +101,7 @@ export const uploadCasePdfs = async ({
     );
   };
   const uploadResults = await useCases.uploadCasePdfs(
-    applicationContext.getBaseUrl(),
-    applicationContext.getPersistenceGateway(),
+    applicationContext,
     get(state.petition),
     get(state.user),
     fileHasUploaded,
