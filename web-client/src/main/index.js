@@ -2,12 +2,13 @@ import * as sequences from './sequences';
 
 import uploadCasePdfs from '../useCases/uploadCasePdfs';
 import createCase from '../useCases/createCase';
-import getUser from '../useCases/getUser';
+import getCaseDetail from '../useCases/getCaseDetail';
 import getCases from '../useCases/getCases';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
 import getCaseDetail from '../useCases/getCaseDetail';
 import createACaseProxy from '../../../isomorphic/src/useCases/createACaseProxy';
 import updateCase from '../useCases/updateCase';
+import uploadCasePdfs from '../useCases/uploadCasePdfs.js';
 
 /**
  * Main Cerebral module
@@ -17,12 +18,13 @@ export default {
     useCases: {
       uploadCasePdfs,
       createCase,
-      getUser,
+      getCaseDetail,
       getCases,
       getPetitionsClerkCaseList,
       getCaseDetail,
       createACaseProxy,
       updateCase,
+      uploadCasePdfs,
     },
   },
   sequences,
@@ -38,8 +40,8 @@ export default {
     form: {},
     user: {
       name: '',
-      // name: 'petitionsclerk',
-      // role: 'petitionsclerk',
+      // name: 'taxpayer',
+      // role: 'taxpayer',
     },
     caseDetail: {},
     cases: [],

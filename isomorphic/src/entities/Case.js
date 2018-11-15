@@ -65,4 +65,11 @@ Case.prototype.validate = function validate() {
   }
 };
 
+Case.documentTypes = {
+  petitionFile: 'Petition file',
+  requestForPlaceOfTrial: 'Request for place of trial',
+  statementOfTaxpayerIdentificationNumber:
+    'Statement of Taxpayer Identification Number',
+};
+
 module.exports = Case;
