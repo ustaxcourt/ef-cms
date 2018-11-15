@@ -1,4 +1,4 @@
-describe('Front page', function() {
+describe('Dashboard', function() {
   before(() => {
     cy.visit('/');
   });
