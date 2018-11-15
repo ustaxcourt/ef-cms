@@ -1,7 +1,17 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createACase = require('../../../isomorphic/src/useCases/createACase');
 const { handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const {
+  create,
+} = require('../../../isomorphic/src/persistence/awsDynamoPersistence');
+const docketNumberGenerator = require('./middleware/docketNumberGenerator');
+
+const applicationContext = {
+  persistence: {
+    create,
+  },
+  docketNumberGenerator,
+};
 
 /**
  * Create Case API Lambda
