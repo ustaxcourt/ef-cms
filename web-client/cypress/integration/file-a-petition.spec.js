@@ -12,7 +12,6 @@ describe('File a petition ', function() {
   });
 
   it('has three file inputs', () => {
-    console.log('There are ', rowCount);
     cy.get('form#file-a-petition')
       .find('input[type="file"]')
       .should('have.length', 3);

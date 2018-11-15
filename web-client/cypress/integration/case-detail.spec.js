@@ -2,6 +2,22 @@ describe('Dashboard', function() {
   describe('Petitioner view', () => {
     before(() => {
       cy.login('taxpayer');
+      cy.get('.usa-button').click();
+
+      cy.upload_file('w3-dummy.pdf', 'form#file-a-petition #petition-file');
+      cy.upload_file(
+        'w3-dummy.pdf',
+        'form#file-a-petition #request-for-place-of-trial',
+      );
+      cy.upload_file(
+        'w3-dummy.pdf',
+        'form#file-a-petition #statement-of-taxpayer-id',
+      );
+      cy.get('form#file-a-petition button[type="submit"]').click();
+      cy.get('.usa-alert-success', { timeout: 10000 }).should(
+        'contain',
+        'uploaded successfully',
+      );
       cy.get('table a')
         .first()
         .click();
