@@ -1,8 +1,9 @@
 // import Case from '../../../isomorphic/src/entities/Case';
 
-export default async (applicationContext, uploadResults, user) => {
-  // const caseDetail = new Case(rawCase);
+export default async (applicationContext, rawCase, rawUser) => {
+  const caseDetails = new Case(rawCase);
+  const user = new User(rawUser);
   await applicationContext
     .getPersistenceGateway()
-    .createCase(applicationContext, uploadResults, user);
+    .createCase(applicationContext, caseDetails, user);
 };

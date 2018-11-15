@@ -87,6 +87,7 @@ export const updateCase = async ({ useCases, applicationContext, get }) => {
   );
 };
 
+// TODO: rename to upload to case initation PDFs (or something)
 export const uploadCasePdfs = async ({
   useCases,
   applicationContext,
@@ -100,8 +101,7 @@ export const uploadCasePdfs = async ({
     );
   };
   const uploadResults = await useCases.uploadCasePdfs(
-    applicationContext.getBaseUrl(),
-    applicationContext.getPersistenceGateway(),
+    applicationContext,
     get(state.petition),
     get(state.user),
     fileHasUploaded,
@@ -109,27 +109,12 @@ export const uploadCasePdfs = async ({
   return { uploadResults };
 };
 
-export const createCase = ({ useCases, applicationContext, get, props }) => {
-  const { uploadResults } = props;
-  const documents = [
-    {
-      documentId: uploadResults.petitionFileId,
-      documentType: 'petitionFile',
-    },
-    {
-      documentId: uploadResults.requestForPlaceOfTrialId,
-      documentType: 'requestForPlaceOfTrial',
-    },
-    {
-      documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
-      documentType: 'statementOfTaxpayerIdentificationNumber',
-    },
-  ];
-  return useCases.createACaseProxy({
-    userId: get(state.user).name,
-    documents,
+export const createCase = async ({ useCases, applicationContext, get }) => {
+  await useCases.createCase(
     applicationContext,
-  });
+    get(state.petition),
+    get(state.user),
+  );
 };
 
 export const getCreateCaseAlertSuccess = () => {

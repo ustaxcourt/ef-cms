@@ -93,45 +93,47 @@ const getUser = name => {
 };
 
 const uploadCasePdfs = async function uploadCasePdfs(
+  applicationContext,
+  caseInitiator,
   user,
-  petition,
-  baseUrl,
   fileHasUploaded,
 ) {
-  const documentPolicy = await getDocumentPolicy(baseUrl);
+  const documentPolicy = await getDocumentPolicy(
+    applicationContext.getBaseUrl(),
+  );
   const { documentId: petitionFileId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Petition file',
+    'petitionFile',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Request for place of trial',
+    'requestForPlaceOfTrial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
-    baseUrl,
+    applicationContext.getBaseUrl(),
     user,
-    'Statement of Taxpayer Identification number',
+    'statementOfTaxpayerIdentificationNumber',
   );
   await uploadDocumentToS3(
     documentPolicy,
     petitionFileId,
-    petition.petitionFile,
+    caseInitiator.petitionFile,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     requestForPlaceOfTrialId,
-    petition.requestForPlaceOfTrial,
+    caseInitiator.requestForPlaceOfTrial,
   );
   fileHasUploaded();
   await uploadDocumentToS3(
     documentPolicy,
     statementOfTaxpayerIdentificationNumberId,
-    petition.statementOfTaxpayerIdentificationNumber,
+    caseInitiator.statementOfTaxpayerIdentificationNumber,
   );
   fileHasUploaded();
   return {
@@ -150,15 +152,16 @@ const createCase = async function createCase(
     documents: [
       {
         documentId: uploadResults.petitionFileId,
-        documentType: 'Petition file',
+        documentType: Case.documentTypes.petitionFile,
       },
       {
         documentId: uploadResults.requestForPlaceOfTrialId,
-        documentType: 'Request for place of trial',
+        documentType: Case.documentTypes.requestForPlaceOfTrial,
       },
       {
         documentId: uploadResults.statementOfTaxpayerIdentificationNumberId,
-        documentType: 'Statement of Taxpayer Identification number',
+        documentType:
+          Case.documentTypes.statementOfTaxpayerIdentificationNumber,
       },
     ],
   });
@@ -172,6 +175,7 @@ const awsPersistenceGateway = {
   getPetitionsClerkCaseList,
   getUser,
   updateCase,
+  uploadCasePdfs,
 };
 
 export default awsPersistenceGateway;
