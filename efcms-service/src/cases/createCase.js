@@ -14,6 +14,7 @@ exports.create = event =>
   handle(() =>
     caseMiddleware.create({
       userId: getAuthHeader(event),
-      documents: JSON.parse(event.body).documents
+      documents: JSON.parse(event.body).documents,
+      user: JSON.parse(event.body).user
     })
   );
