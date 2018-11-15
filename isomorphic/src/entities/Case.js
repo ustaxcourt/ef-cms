@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const uuidv4 = require('uuid/v4');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -36,7 +37,11 @@ const caseSchema = Joi.object().keys({
 });
 
 function Case(rawCase) {
-  Object.assign(this, rawCase);
+  Object.assign(this, rawCase, {
+    caseId: uuidv4(),
+    createdAt: new Date().toISOString(),
+    status: 'new',
+  });
 }
 
 Case.prototype.isValid = function isValid() {
@@ -45,6 +50,12 @@ Case.prototype.isValid = function isValid() {
 
 Case.prototype.getValidationError = function getValidationError() {
   return Joi.validate(this, caseSchema).error;
+};
+
+Case.prototype.validate = function validate() {
+  if (!this.isValid()) {
+    throw new Error('invalid case' + this.getValidationError());
+  }
 };
 
 module.exports = Case;

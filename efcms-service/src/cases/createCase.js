@@ -1,6 +1,7 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createACase = require('../../../isomorphic/src/useCases/createACase');
 const { handle } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
 
 /**
  * Create Case API Lambda
@@ -15,5 +16,6 @@ exports.create = event =>
     createACase({
       userId: getAuthHeader(event),
       documents: JSON.parse(event.body).documents,
+      applicationContext,
     }),
   );
