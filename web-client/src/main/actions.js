@@ -66,7 +66,6 @@ export const setCaseDetail = ({ store, props }) => {
 
 export const setUser = ({ store, props }) => {
   store.set(state.user, props.user);
-  return;
 };
 
 export const toggleDocumentValidation = ({ props, store, get }) => {
@@ -186,5 +185,4 @@ export const getPetitionsClerkCaseList = async ({
 
 export const setPetitionsClerkCaseList = ({ store, props }) => {
   store.set(state.cases, props.caseList);
-  return;
 };

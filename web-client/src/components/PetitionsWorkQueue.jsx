@@ -11,11 +11,11 @@ export default connect(
   function Dashboard({ caseList }) {
     return (
       <section className="usa-section usa-grid">
-        <h1 tabIndex="-1">Petitions Section Work Queue</h1>
+        <h1 tabIndex="-1">Petitions section work queue</h1>
         <SuccessNotification />
         <ErrorNotification />
         <h2>Cases</h2>
-        <table className="responsive-table">
+        <table className="responsive-table" id="workQueue">
           <thead>
             <tr>
               <th>Docket number</th>
