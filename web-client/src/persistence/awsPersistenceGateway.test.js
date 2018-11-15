@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 import applicationContext from '../environments/mock';
 import awsPersistenceGateway from './awsPersistenceGateway';
-import CaseInitiator from '../entities/CaseInitiator';
+import CaseInitiator from '../../../isomorphic/src/entities/CaseInitiator';
 
 const UPLOAD_POLICY_ROUTE = `${applicationContext.getBaseUrl()}/documents/uploadPolicy`;
 const CASES_BASE_ROUTE = `${applicationContext.getBaseUrl()}/cases`;

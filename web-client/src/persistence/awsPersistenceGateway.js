@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import Case from '../../../isomorphic/src/entities/Case';
 import User from '../../../isomorphic/src/entities/User';
 
 const getDocumentPolicy = async baseUrl => {
@@ -168,7 +169,6 @@ const createCase = async function createCase(
 };
 
 const awsPersistenceGateway = {
-  uploadCasePdfs,
   createCase,
   getCaseDetail,
   getCases,
