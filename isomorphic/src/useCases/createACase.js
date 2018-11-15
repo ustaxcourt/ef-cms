@@ -8,5 +8,8 @@ module.exports = async ({ userId, documents, applicationContext }) => {
     documents: documents,
   });
   caseToCreate.validate();
-  return applicationContext.persistence.create(caseToCreate);
+  return applicationContext.persistence.create({
+    entity: caseToCreate,
+    applicationContext,
+  });
 };

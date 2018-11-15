@@ -1,25 +1,24 @@
-const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createACase = require('../../../isomorphic/src/useCases/createACase');
-const { handle } = require('../middleware/apiGatewayHelper');
+
+const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
+const { createDocketNumber } = require('./middleware/docketNumberGenerator');
+
 const {
-  create,
-} = require('../../../isomorphic/src/persistence/awsDynamoPersistence');
-const docketNumberGenerator = require('./middleware/docketNumberGenerator');
+  persistence: { create: create },
+  environment: { stage: stage },
+} = require('../applicationContext');
 
 const applicationContext = {
   persistence: {
     create,
   },
-  docketNumberGenerator,
+  docketNumberGenerator: {
+    createDocketNumber,
+  },
+  environment: {
+    stage,
+  },
 };
-
-/**
- * Create Case API Lambda
- *
- * @param event
- * @param context
- * @param callback
- */
 
 exports.create = event =>
   handle(() =>
