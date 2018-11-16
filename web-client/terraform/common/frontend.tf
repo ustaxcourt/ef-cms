@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "allow_public" {
 }
 
 module "ui-certificate" {
-  source = "../terraform-aws-acm-certificate-0.1.1"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
 
   domain_name            = "ui-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
@@ -42,7 +42,6 @@ module "ui-certificate" {
   description            = "Certificate for ui-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
 }
-
 
 resource "aws_cloudfront_distribution" "distribution" {
   origin {
@@ -60,10 +59,10 @@ resource "aws_cloudfront_distribution" "distribution" {
   custom_error_response = [
     {
       error_caching_min_ttl = 0
-      error_code = 404
-      response_code = 200
-      response_page_path = "/index.html"
-    }
+      error_code            = 404
+      response_code         = 200
+      response_page_path    = "/index.html"
+    },
   ]
 
   enabled             = true
@@ -81,6 +80,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     forwarded_values {
       query_string = false
+
       cookies {
         forward = "none"
       }
