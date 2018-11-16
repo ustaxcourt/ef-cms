@@ -106,6 +106,7 @@ describe('Main cerebral module', () => {
       });
       assert.ok(localPersistenceGateway.createCase.calledOnce);
       const caseDetails = localPersistenceGateway.createCase.getCall(0).args[1];
+      // assert.equal(caseDetails.petitionFileId, 'a');
       assert.deepEqual(caseDetails, {
         petitionFileId: 'a',
         requestForPlaceOfTrialId: 'b',
