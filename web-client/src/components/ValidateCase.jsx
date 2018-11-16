@@ -4,6 +4,10 @@ import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
+import SuccessNotification from './SuccessNotification';
+import ErrorNotification from './ErrorNotification';
+
+
 /**
  *
  */
@@ -19,14 +23,16 @@ export default connect(
     caseDetail,
     updateCase,
     toggleDocumentValidation,
-    updatePreviewUrl,
   }) {
     return (
       <React.Fragment>
+
         <div className="usa-grid">
           <a href="/">Back to Petitions Section Work Queue</a>
         </div>
         <section className="usa-section usa-grid">
+          <SuccessNotification />
+          <ErrorNotification />
           <p>
             Case status <span className="usa-label">{caseDetail.status}</span>
           </p>

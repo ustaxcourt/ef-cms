@@ -141,7 +141,7 @@ describe('Main cerebral module', () => {
       );
     });
 
-    it('Update case', async () => {
+    it('Update case - goto case detail', async () => {
       test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
       await test.runSequence('gotoCaseDetail');
       assert.equal(test.getState('currentPage'), 'ValidateCase');
@@ -150,6 +150,26 @@ describe('Main cerebral module', () => {
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       );
       await test.runSequence('updateCase');
+    });
+
+    it('Update case - set document as validated', async () => {
+      test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
+      await test.runSequence('gotoCaseDetail');
+      assert.equal(test.getState('currentPage'), 'ValidateCase');
+      assert.equal(
+        test.getState('caseDetail.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+      test.setState('caseDetail.documents.0.validated', false);
+      test.setState('caseDetail.documents.1.validated', true);
+      test.setState('caseDetail.documents.2.validated', true);
+      await test.runSequence('updateCase');
+      assert.equal(test.getState('alertError.title'), 'Validate all documents');
+      test.setState('caseDetail.documents.0.validated', true);
+      test.setState('caseDetail.documents.1.validated', true);
+      test.setState('caseDetail.documents.2.validated', true);
+      await test.runSequence('updateCase');
+      assert.equal(test.getState('alertSuccess.title'), 'Petition validated');
     });
   });
 });
