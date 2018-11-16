@@ -106,19 +106,8 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'taxpayer',
       );
-      assert.deepEqual(cases[1], fakeCase);
-      assert.equal(fakeCases[1].caseId, fakeCase.caseId);
-    });
-
-    it('Success', async () => {
-      mock.onGet(CASES_BASE_ROUTE).reply(200, fakeCases);
-
-      const cases = await awsPersistenceGateway.getCases(
-        applicationContext.getBaseUrl(),
-        'taxpayer',
-      );
       assert.deepEqual(cases, fakeCases);
-      assert.equal(cases[1].caseId, fakeCase.caseId);
+      assert.equal(cases[0].caseId, fakeCase.caseId);
     });
 
     it('Failure', async () => {

@@ -16,9 +16,9 @@ const getCases = async (baseUrl, userToken) => {
     if (!(response.data && Array.isArray(response.data))) {
       return response.data;
     } else {
-      //TODO remove this once backend can sort
+      // TODO: remove this once backend can sort
       response.data.sort(function(a, b) {
-        return new Date(a.createdAt) - new Date(b.createdAt);
+        return new Date(b.createdAt) - new Date(a.createdAt);
       });
     }
     return response.data;
@@ -35,7 +35,7 @@ const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
       if (!(response.data && Array.isArray(response.data))) {
         return response.data;
       } else {
-        //TODO remove this once backend can sort
+        // TODO: remove this once backend can sort
         response.data.sort(function(a, b) {
           return new Date(a.createdAt) - new Date(b.createdAt);
         });
