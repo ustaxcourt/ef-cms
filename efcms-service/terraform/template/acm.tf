@@ -1,5 +1,5 @@
 module "efcms-api-certificate" {
-  source = "../terraform-aws-acm-certificate-0.1.1"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.1"
 
   domain_name            = "efcms-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
@@ -12,7 +12,7 @@ module "efcms-api-certificate" {
 }
 
 module "efcms-api-certificate-us-west-1" {
-  source = "../terraform-aws-acm-certificate-0.1.1"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.1"
 
   domain_name            = "efcms-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
@@ -22,6 +22,7 @@ module "efcms-api-certificate-us-west-1" {
   environment            = "${var.environment}"
   description            = "Certificate for efcms-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
+
   providers {
     aws = "aws.us-west-1"
   }
