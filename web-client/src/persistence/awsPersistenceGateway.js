@@ -37,7 +37,7 @@ const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
       } else {
         //TODO remove this once backend can sort
         response.data.sort(function(a, b) {
-          return new Date(b.createdAt) - new Date(a.createdAt);
+          return new Date(a.createdAt) - new Date(b.createdAt);
         });
       }
       return response.data;
