@@ -23,7 +23,7 @@ export const getCaseList = async ({
   try {
     const caseList = await useCases.getCases(
       applicationContext,
-      get(state.user.name),
+      get(state.user.userId),
     );
     return path.success({ caseList });
   } catch (e) {
@@ -54,7 +54,7 @@ export const getCaseDetail = async ({
   const caseDetail = await useCases.getCaseDetail(
     applicationContext,
     props.caseId,
-    get(state.user.name),
+    get(state.user.userId),
   );
   return { caseDetail };
 };
@@ -78,13 +78,44 @@ export const toggleDocumentValidation = ({ props, store, get }) => {
   });
 };
 
-export const updateCase = async ({ useCases, applicationContext, get }) => {
+export const updateCase = async ({
+  useCases,
+  applicationContext,
+  get,
+  path,
+}) => {
   await useCases.updateCase(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
     get(state.caseDetail),
     get(state.user),
   );
+  //if all documents validated
+  let validated = true;
+  get(state.caseDetail).documents.forEach(document => {
+    if (!document.validated) {
+      validated = false;
+    }
+  });
+
+  if (validated) {
+    return path.success({
+      alertSuccess: {
+        title: 'Petition validated',
+        message:
+          'Case ' +
+          get(state.caseDetail).docketNumber +
+          ' status set to General Docket',
+      },
+    });
+  } else {
+    return path.error({
+      alertError: {
+        title: 'Validate all documents',
+        message: 'Please validate all documents.',
+      },
+    });
+  }
 };
 
 // TODO: rename to upload to case initation PDFs (or something)
@@ -143,8 +174,9 @@ export const setAlertError = ({ props, store }) => {
   store.set(state.alertError, props.alertError);
 };
 
-export const clearAlertError = ({ store }) => {
+export const clearAlerts = ({ store }) => {
   store.set(state.alertError, null);
+  store.set(state.alertSuccess, null);
 };
 
 export const setAlertSuccess = ({ props, store }) => {
@@ -184,7 +216,7 @@ export const getPetitionsClerkCaseList = async ({
   try {
     const caseList = await useCases.getPetitionsClerkCaseList(
       applicationContext,
-      get(state.user.name),
+      get(state.user.userId),
     );
     return path.success({ caseList });
   } catch (e) {

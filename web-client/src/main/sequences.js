@@ -24,11 +24,12 @@ export const gotoDashboard = [
   },
 ];
 export const gotoLogIn = [
+  actions.clearAlerts,
   actions.clearLoginForm,
   set(state`currentPage`, 'LogIn'),
 ];
 export const gotoFilePetition = [
-  actions.clearAlertError,
+  actions.clearAlerts,
   actions.clearPetition,
   set(state`currentPage`, 'FilePetition'),
 ];
@@ -52,6 +53,7 @@ export const submitLogIn = [
 
 export const gotoCaseDetail = [
   actions.setBaseUrl,
+  actions.clearAlerts,
   actions.getCaseDetail,
   actions.setCaseDetail,
   actions.getUserRole,
@@ -77,4 +79,11 @@ export const submitFilePetition = [
 
 export const toggleDocumentValidation = [actions.toggleDocumentValidation];
 
-export const updateCase = [actions.updateCase];
+export const updateCase = [
+  actions.clearAlerts,
+  actions.updateCase,
+  {
+    error: [actions.setAlertError],
+    success: [actions.setAlertSuccess, actions.navigateToDashboard],
+  },
+];

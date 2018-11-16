@@ -45,7 +45,8 @@ describe('create case', function() {
   it('should create a case', async () => {
     const result = await caseMiddleWare.create({
       userId: 'user',
-      documents
+      documents,
+      user: { userId: 'user', role: 'taxpayer'}
     });
     expect(result).to.equal(item);
   });

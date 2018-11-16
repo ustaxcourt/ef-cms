@@ -26,7 +26,7 @@ export default connect(
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
-          {user.name}, Petitioner v. Commissioner of Internal Revenue,
+          {user.firstName} {user.lastName}, Petitioner v. Commissioner of Internal Revenue,
           Respondent
         </p>
         <br />
