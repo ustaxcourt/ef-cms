@@ -76,11 +76,9 @@ export const toggleDocumentValidation = ({ props, store, get }) => {
   store.merge(state.caseDetail.documents[indexToReplace], {
     validated: !item.validated,
   });
-  console.log('Validated?', !item.validated);
 };
 
 export const updateCase = async ({ useCases, applicationContext, get }) => {
-  console.log('updateCase!');
   await useCases.updateCase(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),
