@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "allow_public" {
 }
 
 module "ui-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate"
+  source = "../terraform-aws-acm-certificate-0.1.1"
 
   domain_name            = "ui-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
