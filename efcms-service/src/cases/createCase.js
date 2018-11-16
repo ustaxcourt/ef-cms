@@ -1,6 +1,6 @@
 const createACase = require('../../../isomorphic/src/useCases/createACase');
 
-const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 const {
   persistence: { create, incrementCounter },
@@ -24,8 +24,8 @@ const applicationContext = {
 exports.create = event =>
   handle(() =>
     createACase({
-      userId: getAuthHeader(event),
+      userId: JSON.parse(event.body).user,
       documents: JSON.parse(event.body).documents,
       applicationContext,
-    }),
+    })
   );

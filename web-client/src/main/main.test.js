@@ -4,6 +4,7 @@ import assert from 'assert';
 
 import mainModule from './';
 import applicationContext from '../applicationContexts/mock';
+import sinon from 'sinon';
 
 mainModule.providers.applicationContext = applicationContext;
 mainModule.providers.router = { route: () => {} };
@@ -53,7 +54,7 @@ describe('Main cerebral module', () => {
       });
       assert.equal(test.getState('form.name'), 'petitionsclerk');
       await test.runSequence('submitLogIn');
-      assert.equal(test.getState('user.name'), 'petitionsclerk');
+      assert.equal(test.getState('user.userId'), 'petitionsclerk');
       assert.equal(test.getState('user.role'), 'petitionsclerk');
     });
 
@@ -66,7 +67,7 @@ describe('Main cerebral module', () => {
       });
       assert.equal(test.getState('form.name'), 'taxpayer');
       await test.runSequence('submitLogIn');
-      assert.equal(test.getState('user.name'), 'taxpayer');
+      assert.equal(test.getState('user.userId'), 'taxpayer');
       assert.equal(test.getState('user.role'), 'taxpayer');
     });
 
@@ -83,6 +84,8 @@ describe('Main cerebral module', () => {
     });
 
     it('File PDF petition', async () => {
+      const localPersistenceGateway = applicationContext.getPersistenceGateway();
+      sinon.spy(localPersistenceGateway, 'createCase');
       await test.runSequence('gotoFilePetition');
       await test.runSequence('updatePetitionValue', {
         key: 'petitionFile',
@@ -100,6 +103,13 @@ describe('Main cerebral module', () => {
       assert.deepEqual(test.getState('alertSuccess'), {
         title: 'Your files were uploaded successfully.',
         message: 'Your case has now been created.',
+      });
+      assert.ok(localPersistenceGateway.createCase.calledOnce);
+      const caseDetails = localPersistenceGateway.createCase.getCall(0).args[1];
+      assert.deepEqual(caseDetails, {
+        petitionFileId: 'a',
+        requestForPlaceOfTrialId: 'b',
+        statementOfTaxpayerIdentificationNumberId: 'c',
       });
     });
 
@@ -131,7 +141,7 @@ describe('Main cerebral module', () => {
       );
     });
 
-    it('Update case', async () => {
+    it('Update case - goto case detail', async () => {
       test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
       await test.runSequence('gotoCaseDetail');
       assert.equal(test.getState('currentPage'), 'ValidateCase');
@@ -140,6 +150,26 @@ describe('Main cerebral module', () => {
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       );
       await test.runSequence('updateCase');
+    });
+
+    it('Update case - set document as validated', async () => {
+      test.setState('user', { name: 'petitionsclerk', role: 'petitionsclerk' });
+      await test.runSequence('gotoCaseDetail');
+      assert.equal(test.getState('currentPage'), 'ValidateCase');
+      assert.equal(
+        test.getState('caseDetail.documents.0.documentId'),
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+      test.setState('caseDetail.documents.0.validated', false);
+      test.setState('caseDetail.documents.1.validated', true);
+      test.setState('caseDetail.documents.2.validated', true);
+      await test.runSequence('updateCase');
+      assert.equal(test.getState('alertError.title'), 'Validate all documents');
+      test.setState('caseDetail.documents.0.validated', true);
+      test.setState('caseDetail.documents.1.validated', true);
+      test.setState('caseDetail.documents.2.validated', true);
+      await test.runSequence('updateCase');
+      assert.equal(test.getState('alertSuccess.title'), 'Petition validated');
     });
   });
 });
