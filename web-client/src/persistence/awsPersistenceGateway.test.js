@@ -71,12 +71,12 @@ describe('AWS petition gateway', () => {
   describe('Get user', () => {
     it('Success taxpayer', async () => {
       const user = awsPersistenceGateway.getUser('taxpayer');
-      assert.equal(user.name, 'taxpayer');
+      assert.equal(user.userId, 'taxpayer');
       assert.equal(user.role, 'taxpayer');
     });
     it('Success petitionsclerk', async () => {
       const user = awsPersistenceGateway.getUser('petitionsclerk');
-      assert.equal(user.name, 'petitionsclerk');
+      assert.equal(user.userId, 'petitionsclerk');
       assert.equal(user.role, 'petitionsclerk');
     });
     it('Failure', async () => {
@@ -106,7 +106,7 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'taxpayer',
       );
-      assert.deepEqual(cases, fakeCases);
+      assert.deepEqual(cases[1], fakeCase);
       assert.equal(fakeCases[1].caseId, fakeCase.caseId);
     });
 
@@ -118,7 +118,7 @@ describe('AWS petition gateway', () => {
         'taxpayer',
       );
       assert.deepEqual(cases, fakeCases);
-      assert.equal(fakeCases[1].caseId, fakeCase.caseId);
+      assert.equal(cases[1].caseId, fakeCase.caseId);
     });
 
     it('Failure', async () => {
@@ -154,7 +154,7 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'petitionsClerk',
       );
-      assert.deepEqual(cases, fakeCases);
+      assert.deepEqual(cases[1], fakeCase);
     });
 
     it('Failure', async () => {

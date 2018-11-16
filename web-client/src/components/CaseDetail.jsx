@@ -26,8 +26,8 @@ export default connect(
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
-          {user.name}, Petitioner v. Commissioner of Internal Revenue,
-          Respondent
+          {user.firstName} {user.lastName}, Petitioner v. Commissioner of
+          Internal Revenue, Respondent
         </p>
         <br />
         <h2>Required actions</h2>
@@ -37,6 +37,7 @@ export default connect(
               className="usa-accordion-button"
               aria-expanded={showDetails}
               aria-controls="paymentInfo"
+              id="actions-button"
               onClick={() => togglePaymentDetails()}
             >
               <span>
@@ -58,6 +59,8 @@ export default connect(
                       className="usa-button"
                       href="https://pay.gov/public/form/start/60485840"
                       aria-label="pay.gov us tax court filing fees"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Pay now
                     </a>
@@ -79,6 +82,8 @@ export default connect(
                     <a
                       href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                       aria-label="View download application pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Download application
                     </a>
@@ -99,7 +104,7 @@ export default connect(
           </li>
         </ul>
         <h2>Case activities</h2>
-        <table className="responsive-table">
+        <table className="responsive-table" id="case-activities">
           <thead>
             <tr>
               <th>Activity date</th>
