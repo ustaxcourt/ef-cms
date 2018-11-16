@@ -46,8 +46,8 @@ export default connect(
           </div>
 
           <p>
-            {caseDetail.userId}, Petitioner v. Commissioner of Internal Revenue,
-            Respondent
+            {caseDetail.user.firstName} {caseDetail.user.lastName}, Petitioner
+            v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
           <h2>Case Activity Record</h2>
