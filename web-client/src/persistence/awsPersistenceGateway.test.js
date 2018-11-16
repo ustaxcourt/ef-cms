@@ -154,7 +154,7 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'petitionsClerk',
       );
-      assert.deepEqual(cases[0], fakeCase);
+      assert.deepEqual(cases[1], fakeCase);
     });
 
     it('Failure', async () => {
