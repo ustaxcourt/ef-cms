@@ -12,7 +12,7 @@ export default connect(
   },
   function CaseList({ caseList }) {
     return (
-      <table className="responsive-table">
+      <table className="responsive-table" id="case-list">
         <thead>
           <tr>
             <th>Docket number</th>
