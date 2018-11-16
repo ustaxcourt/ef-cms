@@ -36,17 +36,34 @@ const createCase = async function createCase() {
 };
 
 const uploadCasePdfs = async function uploadCasePdfs() {
-  return;
+  return {
+    petitionFileId: 'a',
+    requestForPlaceOfTrialId: 'b',
+    statementOfTaxpayerIdentificationNumberId: 'c',
+  };
 };
 
 const updateCase = async function updateCase() {
   return;
 };
 
-const getUser = name => {
-  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
-  if (name === 'petitionsclerk')
-    return new User({ name, role: 'petitionsclerk' });
+const getUser = userId => {
+  if (userId === 'taxpayer') {
+    return new User({
+      userId: userId,
+      role: 'taxpayer',
+      firstName: 'Test',
+      lastName: 'Taxpayer',
+    });
+  }
+  if (userId === 'petitionsclerk') {
+    return new User({
+      userId: userId,
+      role: 'petitionsclerk',
+      firstName: 'Petitions',
+      lastName: 'Clerk',
+    });
+  }
   return;
 };
 

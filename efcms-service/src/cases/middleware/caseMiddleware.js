@@ -21,15 +21,16 @@ const validateDocuments = documents => {
 };
 
 /**
- * create
  *
  * creates a case
- *
+
  * @param userId
  * @param documents
- * @returns {Promise.<void>}
+ * @param user
+ * @param persistence
+ * @returns {Promise.<*>}
  */
-exports.create = async ({ userId, documents, persistence = casesPersistence}) => {
+exports.create = async ({ userId, documents, user, persistence = casesPersistence}) => {
   validateDocuments(documents);
   const caseId = uuidv4();
   const docketNumber = await docketNumberService.createDocketNumber();
@@ -39,9 +40,10 @@ exports.create = async ({ userId, documents, persistence = casesPersistence}) =>
     userId: userId,
     docketNumber: docketNumber,
     documents: documents,
+    user: user,
     status: "new",
     validated: false
-  }
+  };
 
   return persistence
     .create({
@@ -110,7 +112,7 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
 
   const allDocumentsValidated = caseToUpdate.documents.every(
     document => document.validated === true
-  )
+  );
   if (allDocumentsValidated) {
     caseToUpdate.status = 'general';
   }
@@ -119,4 +121,4 @@ exports.updateCase = ({ caseId, caseToUpdate, userId, persistence = casesPersist
       entity: caseToUpdate,
       type: 'case'
     });
-}
+};

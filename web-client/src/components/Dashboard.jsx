@@ -15,7 +15,11 @@ export default connect(
         <ErrorNotification />
         <h2>Cases</h2>
         <p>
-          <a className="usa-button" href="/file-a-petition">
+          <a
+            className="usa-button"
+            href="/file-a-petition"
+            id="init-file-petition"
+          >
             Start a case
           </a>
         </p>
