@@ -170,7 +170,7 @@ resource "aws_elb" "jenkins_elb" {
 }
 
 module "jenkins-certificate" {
-  source = "../../terraform-aws-acm-certificate"
+  source = "../../terraform-aws-acm-certificate-0.1.1"
 
   domain_name            = "jenkins-${var.environment}-${var.deployment}.${var.dns_domain}"
   hosted_zone_name       = "${data.aws_route53_zone.aws_route53_zone.name}"
