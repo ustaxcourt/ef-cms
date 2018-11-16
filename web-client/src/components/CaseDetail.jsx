@@ -26,8 +26,8 @@ export default connect(
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
-          {user.firstName} {user.lastName}, Petitioner v. Commissioner of Internal Revenue,
-          Respondent
+          {user.firstName} {user.lastName}, Petitioner v. Commissioner of
+          Internal Revenue, Respondent
         </p>
         <br />
         <h2>Required actions</h2>
@@ -58,6 +58,8 @@ export default connect(
                       className="usa-button"
                       href="https://pay.gov/public/form/start/60485840"
                       aria-label="pay.gov us tax court filing fees"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Pay now
                     </a>
@@ -68,6 +70,30 @@ export default connect(
                       online.
                     </i>
                   </p>
+
+                  <h4>Canʼt afford to pay the fee?</h4>
+                  <p>
+                    You may be eligible for a filing fee waiver. File an
+                    application to request a waiver.
+                  </p>
+                  <p>
+                    <a
+                      href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                      aria-label="View download application pdf"
+                    >
+                      Download application
+                    </a>
+                  </p>
+                  <h4>Mail in payment</h4>
+                  <p>Make checks/money order payable to:</p>
+                  <address>
+                    Clerk, United States Tax Court
+                    <br />
+                    400 2nd St NW
+                    <br />
+                    Washington, DC 20217
+                    <br />
+                  </address>
                 </div>
                 <div className="usa-width-one-half">
                   <h4>Canʼt afford to pay the fee?</h4>
