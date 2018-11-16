@@ -1,5 +1,5 @@
 module "documents-api-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
 
   domain_name            = "documents-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
@@ -12,7 +12,7 @@ module "documents-api-certificate" {
 }
 
 module "documents-api-certificate-us-west-1" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
 
   domain_name            = "documents-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
