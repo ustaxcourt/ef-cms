@@ -91,7 +91,11 @@ export default connect(
                 <li>
                   <a href="/">Secondary priority link</a>
                 </li> */}
-                {user.name && <li>Hello, {user.name}</li>}
+                {user.userId && (
+                  <li>
+                    Hello, {user.firstName} {user.lastName}
+                  </li>
+                )}
               </ul>
             </div>
           </div>
