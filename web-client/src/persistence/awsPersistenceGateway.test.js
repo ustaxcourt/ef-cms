@@ -106,8 +106,8 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'taxpayer',
       );
-      assert.deepEqual(cases[0], fakeCase);
-      assert.equal(fakeCases[0].caseId, fakeCase.caseId);
+      assert.deepEqual(cases[1], fakeCase);
+      assert.equal(fakeCases[1].caseId, fakeCase.caseId);
     });
 
     it('Success', async () => {
@@ -118,7 +118,7 @@ describe('AWS petition gateway', () => {
         'taxpayer',
       );
       assert.deepEqual(cases, fakeCases);
-      assert.equal(cases[0].caseId, fakeCase.caseId);
+      assert.equal(cases[1].caseId, fakeCase.caseId);
     });
 
     it('Failure', async () => {
