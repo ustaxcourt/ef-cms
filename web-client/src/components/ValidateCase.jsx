@@ -4,6 +4,10 @@ import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
+import SuccessNotification from './SuccessNotification';
+import ErrorNotification from './ErrorNotification';
+
+
 /**
  *
  */
@@ -13,21 +17,24 @@ export default connect(
     caseDetail: state.caseDetail,
     updateCase: sequences.updateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
-    updatePreviewUrl: sequences.updatePreviewUrl,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
     updateCase,
     toggleDocumentValidation,
-    updatePreviewUrl,
   }) {
     return (
       <React.Fragment>
+
         <div className="usa-grid">
-          <a href="/">Back to Petitions Section Work Queue</a>
+          <a href="/" id="queue-nav">
+            Back to Petitions Section Work Queue
+          </a>
         </div>
         <section className="usa-section usa-grid">
+          <SuccessNotification />
+          <ErrorNotification />
           <p>
             Case status <span className="usa-label">{caseDetail.status}</span>
           </p>
@@ -47,8 +54,8 @@ export default connect(
           </div>
 
           <p>
-            {caseDetail.userId}, Petitioner v. Commissioner of Internal Revenue,
-            Respondent
+            {caseDetail.user.firstName} {caseDetail.user.lastName}, Petitioner
+            v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
           <h2>Case Activity Record</h2>
@@ -71,21 +78,21 @@ export default connect(
                     <span className="responsive-label">
                       Filings and proceedings
                     </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updatePreviewUrl({
-                          value:
-                            baseUrl +
-                            '/documents/' +
-                            item.documentId +
-                            '/downloadPolicy',
-                        })
+                    <a
+                      className="pdf-link"
+                      aria-label="View PDF"
+                      href={
+                        baseUrl +
+                        '/documents/' +
+                        item.documentId +
+                        '/downloadPolicy'
                       }
+                      rel="noopener noreferrer"
+                      target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {item.documentType}
-                    </button>
+                    </a>
                   </td>
                   <td>
                     <input
@@ -101,7 +108,6 @@ export default connect(
               ))}
             </tbody>
           </table>
-          <iframe src={caseDetail.previewUrl} />
         </section>
       </React.Fragment>
     );

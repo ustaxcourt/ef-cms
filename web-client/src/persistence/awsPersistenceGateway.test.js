@@ -12,7 +12,7 @@ const CASE_ROUTE = `${applicationContext.getBaseUrl()}/cases/fakeCaseId`;
 
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
-  createdAt: '2018-11-12T18:26:20.121Z',
+  createdAt: '2018-11-14T18:26:20.121Z',
   userId: 'taxpayer',
   docketNumber: '00107-18',
   documents: [
@@ -41,7 +41,11 @@ const fakeCase = {
   status: 'new',
 };
 
-const fakeCases = [fakeCase];
+let olderFakeCase = { ...fakeCase };
+olderFakeCase.createdAt = '2018-11-12T18:26:20.121Z';
+olderFakeCase.caseId = 'f41d33b2-3127-4256-a63b-a6ea7181645a';
+
+const fakeCases = [fakeCase, olderFakeCase];
 
 const fakePolicy = {
   url: 'https://s3.us-east-1.amazonaws.com/fakeBucket',
@@ -67,12 +71,12 @@ describe('AWS petition gateway', () => {
   describe('Get user', () => {
     it('Success taxpayer', async () => {
       const user = awsPersistenceGateway.getUser('taxpayer');
-      assert.equal(user.name, 'taxpayer');
+      assert.equal(user.userId, 'taxpayer');
       assert.equal(user.role, 'taxpayer');
     });
     it('Success petitionsclerk', async () => {
       const user = awsPersistenceGateway.getUser('petitionsclerk');
-      assert.equal(user.name, 'petitionsclerk');
+      assert.equal(user.userId, 'petitionsclerk');
       assert.equal(user.role, 'petitionsclerk');
     });
     it('Failure', async () => {
@@ -103,6 +107,7 @@ describe('AWS petition gateway', () => {
         'taxpayer',
       );
       assert.deepEqual(cases, fakeCases);
+      assert.equal(cases[0].caseId, fakeCase.caseId);
     });
 
     it('Failure', async () => {
@@ -138,7 +143,7 @@ describe('AWS petition gateway', () => {
         applicationContext.getBaseUrl(),
         'petitionsClerk',
       );
-      assert.deepEqual(cases, fakeCases);
+      assert.deepEqual(cases[1], fakeCase);
     });
 
     it('Failure', async () => {

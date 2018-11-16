@@ -12,16 +12,36 @@ const getCases = async (baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
-  const response = await axios.get(`${baseUrl}/cases`, { headers });
-  return response.data;
+  return await axios.get(`${baseUrl}/cases`, { headers }).then(response => {
+    if (!(response.data && Array.isArray(response.data))) {
+      return response.data;
+    } else {
+      // TODO: remove this once backend can sort
+      response.data.sort(function(a, b) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+    return response.data;
+  });
 };
 
 const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
   const headers = {
     Authorization: `Bearer ${userToken}`,
   };
-  const response = await axios.get(`${baseUrl}/cases?status=new`, { headers });
-  return response.data;
+  return await axios
+    .get(`${baseUrl}/cases?status=new`, { headers })
+    .then(response => {
+      if (!(response.data && Array.isArray(response.data))) {
+        return response.data;
+      } else {
+        // TODO: remove this once backend can sort
+        response.data.sort(function(a, b) {
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        });
+      }
+      return response.data;
+    });
 };
 
 const getCaseDetail = async (caseId, baseUrl, userToken) => {
@@ -86,10 +106,22 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   return result;
 };
 
-const getUser = name => {
-  if (name === 'taxpayer') return new User({ name, role: 'taxpayer' });
-  if (name === 'petitionsclerk')
-    return new User({ name, role: 'petitionsclerk' });
+const getUser = userId => {
+  if (userId === 'taxpayer') {
+    return new User({
+      userId: userId,
+      role: 'taxpayer',
+      firstName: 'Test',
+      lastName: 'Taxpayer',
+    });
+  } else if (userId === 'petitionsclerk') {
+    return new User({
+      userId: userId,
+      role: 'petitionsclerk',
+      firstName: 'Petitions',
+      lastName: 'Clerk',
+    });
+  }
   return;
 };
 
@@ -149,7 +181,8 @@ const createCase = async function createCase(
   uploadResults,
   user,
 ) {
-  await createCaseRecord(applicationContext.getBaseUrl(), user.name, {
+  await createCaseRecord(applicationContext.getBaseUrl(), user.userId, {
+    user: user,
     documents: [
       {
         documentId: uploadResults.petitionFileId,
