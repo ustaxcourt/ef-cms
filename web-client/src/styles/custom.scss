@@ -37,3 +37,63 @@ input:focus::placeholder {
   background-color: $color-primary-darkest;
   transition: all 2s;
 }
+
+.fa-file-pdf {
+  margin-right: 1rem;
+}
+
+#paygov-link-container {
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
+iframe {
+  width: 100%;
+  height: 60rem;
+  border: none;
+}
+
+.float-right {
+  float: right;
+}
+
+.responsive-table {
+  width: 100%;
+
+  label {
+    margin: 1rem 0 !important;
+  }
+
+  .responsive-label {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $small-screen) {
+  .responsive-table {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+    }
+
+    td {
+      display: block;
+      border: none;
+    }
+
+    .responsive-title {
+      border-bottom: 1px solid $color-gray-light;
+      background: $color-gray-lightest;
+      font-weight: $font-bold;
+    }
+
+    .responsive-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: $font-bold;
+    }
+  }
+}

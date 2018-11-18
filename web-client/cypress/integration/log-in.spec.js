@@ -19,9 +19,9 @@ describe('Log in page', function() {
   it('logs in successfully', () => {
     cy.get('form#log-in #name')
       .clear()
-      .type('Test, Taxpayer');
+      .type('taxpayer');
     cy.get('form#log-in input[type="submit"]').click();
     cy.url().should('not.include', 'log-in');
-    cy.get('header').should('contain', 'Hello, Test, Taxpayer');
+    cy.get('header').should('contain', 'Hello, Test');
   });
 });
