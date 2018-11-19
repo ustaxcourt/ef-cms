@@ -63,3 +63,12 @@ exports.incrementCounter = applicationContext => {
     ReturnValues: 'UPDATED_NEW',
   });
 };
+
+exports.saveCase = ({ caseToSave, applicationContext }) =>
+  client.put({
+    TableName: getTable(
+      { entityType: 'case' },
+      applicationContext.environment.stage,
+    ),
+    Item: caseToSave,
+  });
