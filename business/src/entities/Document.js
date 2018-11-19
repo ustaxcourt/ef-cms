@@ -1,27 +1,28 @@
 const joi = require('joi');
 const uuidv4 = require('uuid/v4');
-const documentTypes = require('./Case').documentTypes;
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
 
+const documentTypes = ['Petition', 'Request for Place of Trial',  'Statement of Taxpayer Identification Number'];
+
 const documentSchema = joi.object().keys({
-  documentId: joi
-    .string()
-    .uuid(uuidVersions)
-    .optional(),
-  userId: joi
-    .string()
-    // .uuid(uuidVersions)
-    .optional(),
-  createdAt: joi
-    .date()
-    .iso()
-    .optional(),
   documentType: joi
     .string()
     .valid(documentTypes)
+    .required(),
+  documentId: joi
+    .string()
+    .uuid(uuidVersions)
+    .required(),
+  userId: joi
+    .string()
+    // .uuid(uuidVersions)
+    .required(),
+  createdAt: joi
+    .date()
+    .iso()
     .optional(),
 });
 
