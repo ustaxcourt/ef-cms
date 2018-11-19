@@ -1,5 +1,5 @@
-const awsDynamoPersistence = require('../../isomorphic/src/persistence/awsDynamoPersistence');
-const docketNumberGenerator = require('../../isomorphic/src/persistence/docketNumberGenerator');
+const awsDynamoPersistence = require('../../business/src/persistence/awsDynamoPersistence');
+const docketNumberGenerator = require('../../business/src/persistence/docketNumberGenerator');
 
 module.exports = {
   persistence: {

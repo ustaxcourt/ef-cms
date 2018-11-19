@@ -1,4 +1,4 @@
-import User from '../../../isomorphic/src/entities/User';
+import User from '../../../business/src/entities/User';
 
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',

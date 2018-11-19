@@ -137,7 +137,6 @@ export const uploadCasePdfs = async ({
     get(state.user),
     fileHasUploaded,
   );
-  console.log('uploadResults', uploadResults);
   return { uploadResults };
 };
 
