@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import Case from '../../../isomorphic/src/entities/Case';
-import User from '../../../isomorphic/src/entities/User';
+import Case from '../../../business/src/entities/Case';
+import User from '../../../business/src/entities/User';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);

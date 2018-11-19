@@ -1,6 +1,6 @@
 import * as sequences from './sequences';
 
-import createACaseProxy from '../../../isomorphic/src/useCases/createACaseProxy';
+import createACaseProxy from '../../../business/src/useCases/createACaseProxy';
 import createCase from '../useCases/createCase';
 import getCaseDetail from '../useCases/getCaseDetail';
 import getCases from '../useCases/getCases';

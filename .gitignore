@@ -2,5 +2,5 @@
 .terraform/
 web-client/cypress/screenshots
 web-client/node_modules
-isomorphic/coverage
-isomorphic/node_modules
+business/coverage
+business/node_modules

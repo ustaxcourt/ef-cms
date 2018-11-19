@@ -106,12 +106,9 @@ describe('Main cerebral module', () => {
       });
       assert.ok(localPersistenceGateway.createCase.calledOnce);
       const caseDetails = localPersistenceGateway.createCase.getCall(0).args[1];
-      // assert.equal(caseDetails.petitionFileId, 'a');
-      assert.deepEqual(caseDetails, {
-        petitionFileId: 'a',
-        requestForPlaceOfTrialId: 'b',
-        statementOfTaxpayerIdentificationNumberId: 'c',
-      });
+      assert.equal(caseDetails.petitionFileId, 'a');
+      assert.equal(caseDetails.requestForPlaceOfTrialId, 'b');
+      assert.equal(caseDetails.statementOfTaxpayerIdentificationNumberId, 'c');
     });
 
     it('View cases', async () => {

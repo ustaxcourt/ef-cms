@@ -1,4 +1,4 @@
-import User from '../../../isomorphic/src/entities/User';
+import User from '../../../business/src/entities/User';
 
 export default async (baseUrl, persistenceGateway, rawCase, rawUser) => {
   const user = new User(rawUser);

@@ -1,4 +1,4 @@
-const createACase = require('../../../isomorphic/src/useCases/createACase');
+const createACase = require('../../../business/src/useCases/createACase');
 
 const { handle } = require('../middleware/apiGatewayHelper');
 
