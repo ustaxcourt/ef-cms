@@ -1,10 +1,7 @@
 import { state } from 'cerebral';
 
-export const getUser = async ({ useCases, applicationContext, get, path }) => {
-  const user = await useCases.getUser(
-    applicationContext.getPersistenceGateway(),
-    get(state.form.name),
-  );
+export const getUser = async ({ useCases, get, path }) => {
+  const user = await useCases.getUser(get(state.form.name));
   if (user) return path.success({ user });
   return path.error({
     alertError: {
