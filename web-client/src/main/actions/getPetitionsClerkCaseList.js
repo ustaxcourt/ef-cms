@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path, useCases }) => {
+export default async ({ applicationContext, get, path }) => {
+  const useCases = applicationContext.getUseCases();
   try {
     const caseList = await useCases.getPetitionsClerkCaseList(
       applicationContext,

@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
-export default async ({ useCases, applicationContext, get, path }) => {
+export default async ({ applicationContext, get, path }) => {
+  const useCases = applicationContext.getUseCases();
   await useCases.updateCase(
     applicationContext.getBaseUrl(),
     applicationContext.getPersistenceGateway(),

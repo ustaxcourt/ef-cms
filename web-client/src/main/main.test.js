@@ -3,10 +3,11 @@ import { JSDOM } from 'jsdom';
 import assert from 'assert';
 
 import mainModule from './';
-import applicationContext from '../applicationContexts/mock';
+import applicationContext from '../applicationContexts/dev';
 import sinon from 'sinon';
 
 mainModule.providers.applicationContext = applicationContext;
+mainModule.providers.useCases = applicationContext.useCases;
 mainModule.providers.router = { route: () => {} };
 
 const jsdom = new JSDOM('');
