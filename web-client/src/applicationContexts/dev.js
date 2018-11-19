@@ -1,21 +1,21 @@
 import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
 
 import createCase from '../../../business/src/useCases/createCaseProxy';
-import getCaseDetail from '../useCases/getCaseDetail';
-import getCases from '../useCases/getCases';
-import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
+import getCase from '../../../business/src/useCases/getCase';
+import getCases from '../../../business/src/useCases/getCases';
 import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../useCases/updateCase';
-import uploadCasePdfs from '../useCases/uploadCasePdfs';
+import updateCase from '../../../business/src/useCases/updateCase';
 
-const API_URL = 'https://efcms-dev.ustc-case-mgmt.flexion.us/v1';
+import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
+
+import uploadCasePdfs from '../useCases/uploadCasePdfs';
 
 /**
  * Context for the dev environment
  */
 const applicationContext = {
   getBaseUrl: () => {
-    return API_URL;
+    return 'https://efcms-dev.ustc-case-mgmt.flexion.us/v1';
   },
   getPersistenceGateway: () => {
     return awsPersistenceGateway;
@@ -23,7 +23,7 @@ const applicationContext = {
   getUseCases: () => {
     return {
       createCase,
-      getCaseDetail,
+      getCase,
       getCases,
       getPetitionsClerkCaseList,
       getUser,
