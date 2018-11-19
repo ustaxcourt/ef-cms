@@ -27,9 +27,9 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          dir('isomorphic') {
-            sh 'docker build -t isomorphic-audit -f Dockerfile.audit .'
-            sh 'docker run --rm isomorphic-audit'
+          dir('business') {
+            sh 'docker build -t shared-audit -f Dockerfile.audit .'
+            sh 'docker run --rm shared-audit'
           }
         }
       }
@@ -37,9 +37,9 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          dir('isomorphic') {
-            sh 'docker build -t isomorphic-lint -f Dockerfile.lint .'
-            sh 'docker run --rm isomorphic-lint'
+          dir('business') {
+            sh 'docker build -t shared-lint -f Dockerfile.lint .'
+            sh 'docker run --rm shared-lint'
           }
         }
       }
@@ -47,10 +47,10 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          dir('isomorphic') {
-            def CONTAINER_NAME = "isomorphic-test-${BUILD_NUMBER}"
-            sh 'docker build -t isomorphic-test -f Dockerfile.test .'
-            sh "docker run --name ${CONTAINER_NAME} isomorphic-test"
+          dir('business') {
+            def CONTAINER_NAME = "shared-test-${BUILD_NUMBER}"
+            sh 'docker build -t shared-test -f Dockerfile.test .'
+            sh "docker run --name ${CONTAINER_NAME} shared-test"
             sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
             sh "docker rm ${CONTAINER_NAME}"
           }
@@ -58,21 +58,21 @@ pipeline {
       }
       post {
         success {
-          dir('isomorphic') {
+          dir('business') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
       }
     }
     // TODO:
-    // - create a new sonarqube token for the isomorphic job
+    // - create a new sonarqube token for the shared job
     // - add that token to jenkins, uncomment this
     // - fix any code needed to be fixed in this commented out code
     // stage('SonarQube') {
     //   steps {
     //     script {
     //       withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-    //         dir('isomorphic') {
+    //         dir('business') {
     //           sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
     //           sh "docker run -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
     //         }
