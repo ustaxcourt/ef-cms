@@ -199,9 +199,6 @@ pipeline {
 def deployTo(env) {
   def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
-    dir('management/management') {
-      sh './deploy-init.sh'
-    }
     dir('web-client') {
       def domain="${EFCMS_DOMAIN}"
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
