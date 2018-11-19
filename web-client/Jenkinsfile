@@ -98,10 +98,14 @@ pipeline {
             string(credentialsId: 'UI_SONAR_TOKEN', variable: 'SONAR_TOKEN')
           ]) {
             def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
+<<<<<<< HEAD
             runner.inside("-e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
               dir('management/management') {
                 sh './deploy-init.sh'
               }
+=======
+            runner.inside("-e SONAR_KEY=${UI_SONAR_KEY} -e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+>>>>>>> 44eb7345... making the sonarqube project key configurable
               dir('web-client') {
                 sh './verify-sonarqube-passed.sh'
               }
