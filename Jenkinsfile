@@ -37,10 +37,10 @@ pipeline {
             ]
           }
         }
-        stage('document-service') {
+        stage('efcms-service') {
           when {
             expression {
-              return checkCommit('document-service')
+              return checkCommit('efcms-service')
             }
           }
           steps {
@@ -70,7 +70,7 @@ pipeline {
         script {
           def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'npm i'
               sh 'npm run start:local &'
             }
@@ -89,9 +89,10 @@ pipeline {
         script {
           def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('document-service') {
+            dir('efcms-service') {
               sh 'npm i'
-              sh 'npm run start:local &'
+              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --casesTableName efcms-cases-local --documentsTableName efcms-documents-local"
+              sh 'npm start &'
               sh '../wait-until.sh http://localhost:3000/v1/swagger'
             }
             dir('web-client') {
