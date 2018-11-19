@@ -4,9 +4,9 @@ RUN apk add git
 
 WORKDIR /home/app
 
-COPY efcms-service/package.json /home/app/package.json
+COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service; npm install
-COPY business/package.json /home/app/package.json
+COPY business/package.json /home/app/business/package.json
 RUN cd /home/app/business; npm install
 
 COPY . /home/app
