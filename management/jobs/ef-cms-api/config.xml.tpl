@@ -64,7 +64,7 @@
       <submoduleCfg class="list"/>
       <extensions/>
     </scm>
-    <scriptPath>efcms-service/Jenkinsfile</scriptPath>
+    <scriptPath>document-service/Jenkinsfile</scriptPath>
     <lightweight>false</lightweight>
   </definition>
   <triggers/>

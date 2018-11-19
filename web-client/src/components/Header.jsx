@@ -15,7 +15,9 @@ export default connect(
         <div className="usa-navbar">
           <div className="usa-logo" id="extended-logo">
             <em className="usa-logo-text">
-              <a href="/">United States Tax Court</a>
+              <a href="/" title="Home" aria-label="Home">
+                United States Tax Court
+              </a>
             </em>
           </div>
           <button className="usa-menu-btn">Menu</button>
@@ -91,11 +93,7 @@ export default connect(
                 <li>
                   <a href="/">Secondary priority link</a>
                 </li> */}
-                {user.userId && (
-                  <li>
-                    Hello, {user.firstName} {user.lastName}
-                  </li>
-                )}
+                {user && <li>Hello, {user}</li>}
               </ul>
             </div>
           </div>

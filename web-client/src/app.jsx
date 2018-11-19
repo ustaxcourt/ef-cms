@@ -3,20 +3,16 @@ import App from 'cerebral';
 import mainModule from './main';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faFilePdf, faFlag } from '@fortawesome/free-solid-svg-icons';
 
-import { router, route } from './router';
 import AppComponent from './components/App';
+import { router, route } from './router';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: (applicationContext, debugTools) => {
-    library.add(faFilePdf);
-    library.add(faFlag);
-    mainModule.providers.applicationContext = applicationContext;
+  initialize: (environment, debugTools) => {
+    mainModule.providers.environment = environment;
     mainModule.providers.router = {
       route,
     };

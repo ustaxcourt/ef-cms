@@ -1,37 +1,30 @@
 module.exports = {
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended',
-    'prettier/react',
-    'prettier/standard',
-  ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
+  extends: ['prettier', 'eslint:recommended', 'plugin:react/recommended'],
+  plugins: ['prettier', 'jsx-a11y', 'cypress'],
   rules: {
-    'prettier/prettier': 'error',
-      'arrow-parens': ['error', 'as-needed'],
-      'no-underscore-dangle': ['error', { allowAfterThis: true }],
-      'jsx-a11y/anchor-is-valid': [
-        'error',
-        {
-          components: ['Link'],
-          specialLink: ['to'],
+    'arrow-parens': ['error', 'as-needed'],
+    'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'jsx-a11y/anchor-is-valid': [
+      'error',
+      {
+        components: ['Link'],
+        specialLink: ['to'],
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      2,
+      {
+        components: ['Label'],
+        required: {
+          every: ['id'],
         },
-      ],
-      'jsx-a11y/label-has-for': [
-        2,
-        {
-          components: ['Label'],
-          required: {
-            every: ['id'],
-          },
-          allowChildren: false,
-        },
-      ],
+        allowChildren: false,
+      },
+    ],
   },
   settings: {
     react: {
-      version: '16.6.3',
+      version: '16.6.0',
     },
   },
   env: {
@@ -44,9 +37,5 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 8,
     sourceType: 'module',
-    jsx: true,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
   },
 };

@@ -8,5 +8,5 @@ do
   then
     break
   fi
-  sleep 2
+  sleep 1
 done
