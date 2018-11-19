@@ -1,6 +1,6 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const { getACase } = require('../../../business/src/useCases/getACase');
+const { getCase } = require('../../../business/src/useCases/getCase');
 
 const {
   persistence: { get },
@@ -18,7 +18,7 @@ const applicationContext = {
 
 exports.get = event =>
   handle(() =>
-    getACase({
+    getCase({
       userId: getAuthHeader(event),
       caseId: event.pathParameters.caseId,
       applicationContext,
