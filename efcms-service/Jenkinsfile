@@ -61,26 +61,26 @@ pipeline {
         }
       }
     }
-    stage('Test') {
-      steps {
-        script {
-          def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
-          sh 'docker build -t test -f efcms-service/Dockerfile.test .'
-          sh "docker run --name ${CONTAINER_NAME} test"
-          dir('efcms-service') {
-            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
-            sh "docker rm ${CONTAINER_NAME}"
-          }
-        }
-      }
-      post {
-        success {
-          dir('efcms-service') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-          }
-        }
-      }
-    }
+//    stage('Test') {
+//      steps {
+//        script {
+//          def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
+//          sh 'docker build -t test -f efcms-service/Dockerfile.test .'
+//          sh "docker run --name ${CONTAINER_NAME} test"
+//          dir('efcms-service') {
+//            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
+//            sh "docker rm ${CONTAINER_NAME}"
+//          }
+//        }
+//      }
+//      post {
+//        success {
+//          dir('efcms-service') {
+//            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+//          }
+//        }
+//      }
+//    }
     stage('SonarQube') {
       steps {
         script {
