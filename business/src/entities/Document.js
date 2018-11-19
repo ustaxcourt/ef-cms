@@ -5,7 +5,11 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const documentTypes = ['Petition', 'Request for Place of Trial',  'Statement of Taxpayer Identification Number'];
+const documentTypes = [
+  'Petition',
+  'Request for Place of Trial',
+  'Statement of Taxpayer Identification Number',
+];
 
 const documentSchema = joi.object().keys({
   documentType: joi

@@ -5,7 +5,7 @@ module.exports = async ({ document: rawDocument, applicationContext }) => {
     userId: rawDocument.userId,
     documentType: rawDocument.documentType,
   });
-  // documentToCreate.validate();
+  documentToCreate.validate();
   return applicationContext.persistence.create({
     entity: documentToCreate,
     applicationContext,
