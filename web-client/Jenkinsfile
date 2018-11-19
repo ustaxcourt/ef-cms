@@ -27,7 +27,7 @@ pipeline {
     stage('Setup') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f Dockerfile.test .'
+          def runner = docker.build 'lint', '-f web-client/Dockerfile.test .'
           dir('web-client') {
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm i'
@@ -39,7 +39,7 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          def runner = docker.build 'shellcheck', '-f Dockerfile.shellcheck .'
+          def runner = docker.build 'shellcheck', '-f web-client/Dockerfile.shellcheck .'
           dir('web-client') {
             runner.inside() {
               sh './run-shellcheck.sh'
@@ -51,7 +51,7 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f Dockerfile.test .'
+          def runner = docker.build 'lint', '-f web-client/Dockerfile.test .'
           dir('web-client') {
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm audit'
@@ -63,7 +63,7 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f Dockerfile.test .'
+          def runner = docker.build 'lint', '-f web-client/Dockerfile.test .'
           dir('web-client') {
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm run lint'
@@ -75,7 +75,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          def runner = docker.build 'lint', '-f Dockerfile.test .'
+          def runner = docker.build 'lint', '-f web-client/Dockerfile.test .'
           dir('web-client') {
             runner.inside('-v /home/tomcat:/home/tomcat') {
               sh 'npm run test'
