@@ -2,7 +2,7 @@ import assert from 'assert';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import applicationContext from '../applicationContexts/mock';
+import applicationContext from '../applicationContexts/dev';
 import awsPersistenceGateway from './awsPersistenceGateway';
 import CaseInitiator from '../../../business/src/entities/CaseInitiator';
 
