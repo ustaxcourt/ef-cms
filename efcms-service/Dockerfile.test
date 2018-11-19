@@ -10,7 +10,7 @@ COPY business/package.json /home/app/business/package.json
 RUN cd /home/app/business; npm install
 
 COPY . /home/app
-
+RUN ls business/src/useCases
 WORKDIR /home/app/efcms-service
 
 CMD npm test

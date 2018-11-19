@@ -1,4 +1,4 @@
-const createDocument = require('../../../business/src/useCases/createDocument');
+const createDocument = require('../../../business/src/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
