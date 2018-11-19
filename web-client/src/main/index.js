@@ -4,7 +4,7 @@ import createACaseProxy from '../../../business/src/useCases/createACaseProxy';
 import createCase from '../useCases/createCase';
 import getCaseDetail from '../useCases/getCaseDetail';
 import getCases from '../useCases/getCases';
-import getUser from '../useCases/getUser';
+import getUser from '../../../business/src/useCases/getUser';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
 import updateCase from '../useCases/updateCase';
 import uploadCasePdfs from '../useCases/uploadCasePdfs';

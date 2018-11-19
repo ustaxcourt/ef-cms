@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import Case from '../../../business/src/entities/Case';
-import User from '../../../business/src/entities/User';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
@@ -106,25 +105,6 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   return result;
 };
 
-const getUser = userId => {
-  if (userId === 'taxpayer') {
-    return new User({
-      userId: userId,
-      role: 'taxpayer',
-      firstName: 'Test',
-      lastName: 'Taxpayer',
-    });
-  } else if (userId === 'petitionsclerk') {
-    return new User({
-      userId: userId,
-      role: 'petitionsclerk',
-      firstName: 'Petitions',
-      lastName: 'Clerk',
-    });
-  }
-  return;
-};
-
 const uploadCasePdfs = async function uploadCasePdfs(
   applicationContext,
   caseInitiator,
@@ -206,7 +186,6 @@ const awsPersistenceGateway = {
   getCaseDetail,
   getCases,
   getPetitionsClerkCaseList,
-  getUser,
   updateCase,
   uploadCasePdfs,
 };
