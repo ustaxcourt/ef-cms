@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, props, useCases }) => {
+export default async ({ applicationContext, get, props }) => {
+  const useCases = applicationContext.getUseCases();
   const caseDetail = await useCases.getCaseDetail(
     applicationContext,
     props.caseId,

@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
-export default async ({ useCases, applicationContext, get, props }) => {
+export default async ({ applicationContext, get, props }) => {
+  const useCases = applicationContext.getUseCases();
   await useCases.createCase({
     applicationContext,
     documents: props.uploadResults,

@@ -1,11 +1,10 @@
 import { state } from 'cerebral';
 
-export default async ({ useCases, applicationContext, get, path }) => {
+export default async ({ applicationContext, get, path }) => {
+  const useCases = applicationContext.getUseCases();
+  const userId = get(state.user.userId);
   try {
-    const caseList = await useCases.getCases(
-      applicationContext,
-      get(state.user.userId),
-    );
+    const caseList = await useCases.getCases(applicationContext, userId);
     return path.success({ caseList });
   } catch (e) {
     return path.error({
