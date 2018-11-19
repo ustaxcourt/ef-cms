@@ -47,7 +47,10 @@ describe('Create case lambda', function() {
     [
       {
         httpMethod: 'POST',
-        body: JSON.stringify(documents),
+        body: JSON.stringify({
+          user: 'userId',
+          documents: documents.documents,
+        }),
         headers: { Authorization: 'Bearer userId' },
       },
     ].forEach(function(documentBody) {

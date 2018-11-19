@@ -12,13 +12,13 @@ const getTable = type => {
   }
 };
 
-exports.get = ({ id, key, type }) =>
-  client.get({
-    TableName: getTable(type),
-    Key: {
-      [key]: id,
-    },
-  });
+// exports.get = ({ id, key, type }) =>
+//   client.get({
+//     TableName: getTable(type),
+//     Key: {
+//       [key]: id,
+//     },
+//   });
 
 exports.save = ({ entity, type }) =>
   client.put({

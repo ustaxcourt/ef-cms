@@ -1,19 +1,26 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
-const caseMiddleware = require('./middleware/caseMiddleware');
 const { handle } = require('../middleware/apiGatewayHelper');
+const { getACase } = require('../../../business/src/useCases/getACase');
 
-/**
- * GET Case API Lambda
- *
- * @param event
- * @param context
- * @param callback
- */
+const {
+  persistence: { get },
+  environment: { stage },
+} = require('../applicationContext');
+
+const applicationContext = {
+  persistence: {
+    get,
+  },
+  environment: {
+    stage,
+  },
+};
 
 exports.get = event =>
   handle(() =>
-    caseMiddleware.getCase({
+    getACase({
       userId: getAuthHeader(event),
-      caseId: event.pathParameters.caseId
-    })
+      caseId: event.pathParameters.caseId,
+      applicationContext,
+    }),
   );
