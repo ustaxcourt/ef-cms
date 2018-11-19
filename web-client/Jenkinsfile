@@ -72,44 +72,41 @@ pipeline {
         }
       }
     }
-//    stage('Test') {
-//      steps {
-//        script {
-//          def runner = docker.build 'lint', '-f web-client/Dockerfile.test .'
-//          dir('web-client') {
-//            runner.inside('-v /home/tomcat:/home/tomcat') {
-//              sh 'npm run test'
-//            }
-//          }
-//        }
-//      }
-//      post {
-//        success {
-//          dir('web-client') {
-//            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
-//          }
-//        }
-//      }
-//    }
-//    stage('SonarQube') {
-//      steps {
-//        script {
-//          withCredentials([
-//            string(credentialsId: 'UI_SONAR_TOKEN', variable: 'SONAR_TOKEN')
-//          ]) {
-//            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
-//            runner.inside("-e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-//              dir('management/management') {
-//                sh './deploy-init.sh'
-//             }
-//              dir('web-client') {
-//                sh './verify-sonarqube-passed.sh'/
-//              }
-//            }
-//          }
-//        }
-//      }
-//    }
+    stage('Test') {
+      steps {
+        script {
+          dir('web-client') {
+            def runner = docker.build 'lint', '-f Dockerfile.test .'
+            runner.inside('-v /home/tomcat:/home/tomcat') {
+              sh 'npm run test'
+            }
+          }
+        }
+      }
+      post {
+        success {
+          dir('web-client') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([
+            string(credentialsId: 'UI_SONAR_TOKEN', variable: 'SONAR_TOKEN')
+          ]) {
+            def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
+            runner.inside("-e SONAR_KEY=${UI_SONAR_KEY} -e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
+              dir('web-client') {
+                sh './verify-sonarqube-passed.sh'
+              }
+            }
+          }
+        }
+      }
+    }
     stage('Terraform - Dev') {
       when {
         expression {
@@ -202,9 +199,6 @@ pipeline {
 def deployTo(env) {
   def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
-    dir('management/management') {
-      sh './deploy-init.sh'
-    }
     dir('web-client') {
       def domain="${EFCMS_DOMAIN}"
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
