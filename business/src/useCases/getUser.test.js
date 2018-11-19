@@ -1,3 +1,5 @@
+const assert = require('assert');
+
 const getUser = require('./getUser');
 
 describe('Get user', () => {
