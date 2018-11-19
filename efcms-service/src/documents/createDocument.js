@@ -1,4 +1,4 @@
-const { createDocument } = require('./services/documentBlobDAO');
+const createDocument = require('../../../business/src/useCases/createDocument');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -9,7 +9,24 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param callback
  */
 
+const {
+  persistence: { create },
+  environment: { stage }
+} = require('../applicationContext');
+
+const applicationContext = {
+  persistence: {
+    create
+  },
+  environment: {
+    stage,
+  },
+};
+
 exports.create = event =>
   handle(() =>
-    createDocument(JSON.parse(event.body))
-  )
+    createDocument({
+      document: JSON.parse(event.body),
+      applicationContext,
+    }),
+  );
