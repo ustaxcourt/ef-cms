@@ -1,6 +1,6 @@
 import * as sequences from './sequences';
 
-import createACase from '../../../business/src/useCases/createACaseProxy';
+import createCase from '../../../business/src/useCases/createCaseProxy';
 import getCaseDetail from '../useCases/getCaseDetail';
 import getCases from '../useCases/getCases';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
@@ -14,7 +14,7 @@ import uploadCasePdfs from '../useCases/uploadCasePdfs';
 export default {
   providers: {
     useCases: {
-      createACase,
+      createCase,
       getCaseDetail,
       getCases,
       getPetitionsClerkCaseList,

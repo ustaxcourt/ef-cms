@@ -26,7 +26,7 @@ pipeline {
         stage('shared') {
           when {
             expression {
-              return checkCommit('isomorphic')
+              return checkCommit('business')
             }
           }
           steps {

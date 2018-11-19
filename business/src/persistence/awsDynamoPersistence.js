@@ -1,9 +1,12 @@
 const client = require('./dynamodbClientService');
 const Case = require('../entities/Case');
+const Document = require('../entities/Document');
 
 const getTable = (entity, stage) => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return `efcms-cases-${stage}`;
+  } else if (entity instanceof Document || entity.entityType === 'document') {
+    return `efcms-documents-${stage}`;
   } else {
     throw new Error('entity type not found');
   }
@@ -12,6 +15,8 @@ const getTable = (entity, stage) => {
 const getKey = entity => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return 'caseId';
+  } else if (entity instanceof Document || entity.entityType === 'document') {
+    return 'documentId';
   } else {
     throw new Error('entity type not found');
   }
