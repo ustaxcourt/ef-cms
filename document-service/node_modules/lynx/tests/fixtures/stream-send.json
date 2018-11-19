@@ -1,0 +1,10 @@
+[ "foo.bar:1|c"
+, "foo.baz:-1|c"
+, "uno:-1|c\n two:-1|c\n trezentos:-1|c"
+, "boaz:101|c"
+, "foo.bar.time:500|ms\n set1.bar:567|s \n foo.gauge.2:15|g"
+, "boaz:1"
+, "01"
+, "|c\n set"
+, "1.bar:567|s \n foo.gauge.2:15|g"
+]
