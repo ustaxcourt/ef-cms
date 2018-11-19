@@ -28,3 +28,15 @@ exports.updateConsistent = params => {
     .promise()
     .then(data => data.Attributes.id);
 };
+
+exports.get = params => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .get(params)
+    .promise()
+    .then(res => res.Item);
+};

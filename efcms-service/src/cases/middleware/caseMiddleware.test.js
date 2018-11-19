@@ -39,7 +39,7 @@ describe('get cases', function() {
   });
 });
 
-describe('get case', function() {
+describe.skip('get case', function() {
   let caseMiddleWare;
   let item;
 
