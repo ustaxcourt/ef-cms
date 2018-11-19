@@ -1,11 +1,10 @@
 import * as sequences from './sequences';
 
-import createACaseProxy from '../../../business/src/useCases/createACaseProxy';
-import createCase from '../useCases/createCase';
+import createACase from '../../../business/src/useCases/createACaseProxy';
 import getCaseDetail from '../useCases/getCaseDetail';
 import getCases from '../useCases/getCases';
-import getUser from '../../../business/src/useCases/getUser';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
+import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../useCases/updateCase';
 import uploadCasePdfs from '../useCases/uploadCasePdfs';
 
@@ -15,8 +14,7 @@ import uploadCasePdfs from '../useCases/uploadCasePdfs';
 export default {
   providers: {
     useCases: {
-      createACaseProxy,
-      createCase,
+      createACase,
       getCaseDetail,
       getCases,
       getPetitionsClerkCaseList,
