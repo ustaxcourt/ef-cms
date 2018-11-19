@@ -4,7 +4,7 @@ const {
 } = require('../authorization/authorizationClientService');
 const { NotFoundError, UnauthorizedError } = require('../errors/errors');
 
-exports.getACase = async ({ userId, caseId, applicationContext }) => {
+exports.getCase = async ({ userId, caseId, applicationContext }) => {
   const caseRecord = await applicationContext.persistence.get({
     entity: { caseId, entityType: 'case' },
     applicationContext,

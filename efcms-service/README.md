@@ -16,7 +16,7 @@ Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
 Some manual steps are necessary prior but only need to be done once for execution logging.
 
-Go through this [document](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
+Go through this [rawDocument](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
 
 In general, you need to:
 

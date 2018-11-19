@@ -1,5 +1,5 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
-const createACase = require('../../../business/src/useCases/createACase');
+const createCase = require('../../../business/src/useCases/createCase');
 
 const { handle } = require('../middleware/apiGatewayHelper');
 
@@ -24,7 +24,7 @@ const applicationContext = {
 
 exports.create = event =>
   handle(() =>
-    createACase({
+    createCase({
       userId: getAuthHeader(event),
       documents: JSON.parse(event.body).documents,
       applicationContext,
