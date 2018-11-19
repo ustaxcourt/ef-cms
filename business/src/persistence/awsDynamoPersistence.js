@@ -2,7 +2,7 @@ const client = require('./dynamodbClientService');
 const Case = require('../entities/Case');
 
 const getTable = (entity, stage) => {
-  if (entity instanceof Case) {
+  if (entity instanceof Case || entity.entityType === 'case') {
     return `efcms-cases-${stage}`;
   } else {
     throw new Error('entity type not found');
@@ -10,7 +10,7 @@ const getTable = (entity, stage) => {
 };
 
 const getKey = entity => {
-  if (entity instanceof Case) {
+  if (entity instanceof Case || entity.entityType === 'case') {
     return 'caseId';
   } else {
     throw new Error('entity type not found');
@@ -25,6 +25,16 @@ exports.create = ({ entity, applicationContext }) => {
     ConditionExpression: `attribute_not_exists(#${key})`,
     ExpressionAttributeNames: {
       [`#${key}`]: `${key}`,
+    },
+  });
+};
+
+exports.get = ({ entity, applicationContext }) => {
+  const key = getKey(entity);
+  return client.get({
+    TableName: getTable(entity, applicationContext.environment.stage),
+    Key: {
+      [key]: entity[key],
     },
   });
 };

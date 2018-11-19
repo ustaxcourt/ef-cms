@@ -15,27 +15,27 @@ const {
 
 const casesPersistence = getPersistence('cases');
 
-exports.getCase = async ({
-  userId,
-  caseId,
-  persistence = casesPersistence,
-}) => {
-  const caseRecord = await persistence.get({
-    id: caseId,
-    key: 'caseId',
-    type: 'case',
-  });
+// exports.getCase = async ({
+//   userId,
+//   caseId,
+//   persistence = casesPersistence,
+// }) => {
+//   const caseRecord = await persistence.get({
+//     id: caseId,
+//     key: 'caseId',
+//     type: 'case',
+//   });
 
-  if (!caseRecord) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
-  }
+//   if (!caseRecord) {
+//     throw new NotFoundError(`Case ${caseId} was not found.`);
+//   }
 
-  if (!isAuthorized(userId, GET_CASE, caseRecord.userId)) {
-    throw new UnauthorizedError('Unauthorized for getCase');
-  }
+//   if (!isAuthorized(userId, GET_CASE, caseRecord.userId)) {
+//     throw new UnauthorizedError('Unauthorized for getCase');
+//   }
 
-  return caseRecord;
-};
+//   return caseRecord;
+// };
 
 exports.getCases = ({ userId, persistence = casesPersistence }) => {
   return persistence.query({
