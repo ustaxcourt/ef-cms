@@ -4,21 +4,25 @@
 
 ##### Setup
 
+- `cd web-client`
 - `npm i`
 
 ##### Running
 
+- `cd web-client`
 - `npm start`
 
 ### API (Terminal B)
 
 ##### Setup
 
+- `cd efcms-service`
 - `npm i`
 - `npm run install:dynamodb`
 
 ##### Running
 
+- `cd efcms-service`
 - `npm start`
 
 # CI/CD Setup
