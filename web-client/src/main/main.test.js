@@ -3,10 +3,11 @@ import { JSDOM } from 'jsdom';
 import assert from 'assert';
 
 import mainModule from './';
-import applicationContext from '../environments/mock';
+import applicationContext from '../applicationContexts/dev';
 import sinon from 'sinon';
 
 mainModule.providers.applicationContext = applicationContext;
+mainModule.providers.useCases = applicationContext.useCases;
 mainModule.providers.router = { route: () => {} };
 
 const jsdom = new JSDOM('');
@@ -106,11 +107,9 @@ describe('Main cerebral module', () => {
       });
       assert.ok(localPersistenceGateway.createCase.calledOnce);
       const caseDetails = localPersistenceGateway.createCase.getCall(0).args[1];
-      assert.deepEqual(caseDetails, {
-        petitionFileId: 'a',
-        requestForPlaceOfTrialId: 'b',
-        statementOfTaxpayerIdentificationNumberId: 'c',
-      });
+      assert.equal(caseDetails.petitionFileId, 'a');
+      assert.equal(caseDetails.requestForPlaceOfTrialId, 'b');
+      assert.equal(caseDetails.statementOfTaxpayerIdentificationNumberId, 'c');
     });
 
     it('View cases', async () => {

@@ -1,9 +1,9 @@
 import '@babel/polyfill';
 
 import app from './app';
-import prod from './environments/prod';
+import applicationContext from './applicationContexts/prod';
 
 /**
  * Initializes the app with prod environment context
  */
-app.initialize(prod);
+app.initialize(applicationContext);

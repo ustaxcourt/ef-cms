@@ -2,9 +2,9 @@ import assert from 'assert';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import applicationContext from '../environments/mock';
+import applicationContext from '../applicationContexts/dev';
 import awsPersistenceGateway from './awsPersistenceGateway';
-import CaseInitiator from '../entities/CaseInitiator';
+import CaseInitiator from '../../../business/src/entities/CaseInitiator';
 
 const UPLOAD_POLICY_ROUTE = `${applicationContext.getBaseUrl()}/documents/uploadPolicy`;
 const CASES_BASE_ROUTE = `${applicationContext.getBaseUrl()}/cases`;
@@ -68,26 +68,6 @@ const fakeDocumentId = {
 };
 
 describe('AWS petition gateway', () => {
-  describe('Get user', () => {
-    it('Success taxpayer', async () => {
-      const user = awsPersistenceGateway.getUser('taxpayer');
-      assert.equal(user.userId, 'taxpayer');
-      assert.equal(user.role, 'taxpayer');
-    });
-    it('Success petitionsclerk', async () => {
-      const user = awsPersistenceGateway.getUser('petitionsclerk');
-      assert.equal(user.userId, 'petitionsclerk');
-      assert.equal(user.role, 'petitionsclerk');
-    });
-    it('Failure', async () => {
-      try {
-        awsPersistenceGateway.getUser('Bad actor');
-      } catch (e) {
-        assert.equal(e.message, 'Username is incorrect');
-      }
-    });
-  });
-
   describe('Get cases for taxpayer', () => {
     let mock;
 
@@ -102,7 +82,7 @@ describe('AWS petition gateway', () => {
     it('Success', async () => {
       mock.onGet(CASES_BASE_ROUTE).reply(200, fakeCases);
 
-      const cases = await awsPersistenceGateway.getCases(
+      const cases = await awsPersistenceGateway.getCasesByUser(
         applicationContext.getBaseUrl(),
         'taxpayer',
       );
@@ -114,7 +94,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
       let error;
       try {
-        await awsPersistenceGateway.getCases(
+        await awsPersistenceGateway.getCasesByUser(
           applicationContext.getBaseUrl(),
           'Bad actor',
         );
@@ -150,7 +130,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
       let error;
       try {
-        await awsPersistenceGateway.getCases(
+        await awsPersistenceGateway.getCasesByUser(
           applicationContext.getBaseUrl(),
           'Bad actor',
         );

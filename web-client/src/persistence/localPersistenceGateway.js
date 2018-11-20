@@ -1,5 +1,3 @@
-import User from '../entities/User';
-
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
   createdAt: '2018-11-12T18:26:20.121Z',
@@ -31,10 +29,6 @@ const fakeCase = {
   status: 'new',
 };
 
-const createCase = async function createCase() {
-  return;
-};
-
 const uploadCasePdfs = async function uploadCasePdfs() {
   return {
     petitionFileId: 'a',
@@ -43,27 +37,11 @@ const uploadCasePdfs = async function uploadCasePdfs() {
   };
 };
 
-const updateCase = async function updateCase() {
+const createCase = async function createCase() {
   return;
 };
 
-const getUser = userId => {
-  if (userId === 'taxpayer') {
-    return new User({
-      userId: userId,
-      role: 'taxpayer',
-      firstName: 'Test',
-      lastName: 'Taxpayer',
-    });
-  }
-  if (userId === 'petitionsclerk') {
-    return new User({
-      userId: userId,
-      role: 'petitionsclerk',
-      firstName: 'Petitions',
-      lastName: 'Clerk',
-    });
-  }
+const updateCase = async function updateCase() {
   return;
 };
 
@@ -84,7 +62,6 @@ const localPersistenceGateway = {
   getCaseDetail,
   getCases,
   getPetitionsClerkCaseList,
-  getUser,
   updateCase,
   uploadCasePdfs,
 };

@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-import User from '../entities/User';
-import Case from '../entities/Case';
+import Case from '../../../business/src/entities/Case';
 
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
@@ -53,10 +52,18 @@ const getCaseDetail = async (caseId, baseUrl, userToken) => {
 };
 
 const createDocumentMetadata = async (baseUrl, user, type) => {
-  const response = await axios.post(`${baseUrl}/documents`, {
-    userId: user,
-    documentType: type,
-  });
+  const headers = {
+    Authorization: `Bearer ${user}`,
+  };
+  const response = await axios.post(
+    `${baseUrl}/documents`,
+    {
+      documentType: type,
+    },
+    {
+      headers,
+    },
+  );
   return response.data;
 };
 
@@ -106,25 +113,6 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   return result;
 };
 
-const getUser = userId => {
-  if (userId === 'taxpayer') {
-    return new User({
-      userId: userId,
-      role: 'taxpayer',
-      firstName: 'Test',
-      lastName: 'Taxpayer',
-    });
-  } else if (userId === 'petitionsclerk') {
-    return new User({
-      userId: userId,
-      role: 'petitionsclerk',
-      firstName: 'Petitions',
-      lastName: 'Clerk',
-    });
-  }
-  return;
-};
-
 const uploadCasePdfs = async function uploadCasePdfs(
   applicationContext,
   caseInitiator,
@@ -136,20 +124,20 @@ const uploadCasePdfs = async function uploadCasePdfs(
   );
   const { documentId: petitionFileId } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'petitionFile',
+    user.userId,
+    'Petition',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'requestForPlaceOfTrial',
+    user.userId,
+    'Request for Place of Trial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'statementOfTaxpayerIdentificationNumber',
+    user.userId,
+    'Statement of Taxpayer Identification Number',
   );
   await uploadDocumentToS3(
     documentPolicy,
@@ -206,7 +194,6 @@ const awsPersistenceGateway = {
   getCaseDetail,
   getCases,
   getPetitionsClerkCaseList,
-  getUser,
   updateCase,
   uploadCasePdfs,
 };

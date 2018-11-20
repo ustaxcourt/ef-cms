@@ -1,7 +1,8 @@
-const aws = require('aws-sdk-mock');
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const getCase = require('./getCase');
+const client = require('../../../business/src/persistence/dynamodbClientService');
+const sinon = require('sinon');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
@@ -13,28 +14,25 @@ describe('Get case lambda', function() {
     createdAt: '',
   };
 
-  describe ('success - no cases exist in database', function() {
-    before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
-        callback(null, {
-        });
-      });
+  describe('success - no cases exist in database', function() {
+    beforeEach(function() {
+      sinon.stub(client, 'get').resolves(null);
     });
 
-    after(function () {
-      aws.restore('DynamoDB.DocumentClient');
+    afterEach(function() {
+      client.get.restore();
     });
 
     [
       {
         httpMethod: 'GET',
         pathParameters: {
-          caseId: '123'
+          caseId: '123',
         },
-        headers: { 'Authorization': 'Bearer userId' }
-      }
-    ].forEach(function (documentBody) {
-      it('should return a case on a GET', function () {
+        headers: { Authorization: 'Bearer petitionsclerk' },
+      },
+    ].forEach(function(documentBody) {
+      it('should return a case on a GET', function() {
         return lambdaTester(getCase.get)
           .event(documentBody)
           .expectResolve(result => {
@@ -45,29 +43,25 @@ describe('Get case lambda', function() {
     });
   });
 
-  describe ('success - cases exist in database', function() {
-    before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'get', function (params, callback) {
-        callback(null, {
-          Item: MOCK_CASE
-        });
-      });
+  describe('success - cases exist in database', function() {
+    before(function() {
+      sinon.stub(client, 'get').resolves(MOCK_CASE);
     });
 
-    after(function () {
-      aws.restore('DynamoDB.DocumentClient');
+    after(function() {
+      client.get.restore();
     });
 
     [
       {
         httpMethod: 'GET',
         pathParameters: {
-          caseId: '123'
+          caseId: '123',
         },
-        headers: { 'Authorization': 'Bearer userId' }
-      }
-    ].forEach(function (documentBody) {
-      it('should return a case on a GET', function () {
+        headers: { Authorization: 'Bearer userId' },
+      },
+    ].forEach(function(documentBody) {
+      it('should return a case on a GET', function() {
         return lambdaTester(getCase.get)
           .event(documentBody)
           .expectResolve(result => {
@@ -82,7 +76,7 @@ describe('Get case lambda', function() {
     [
       {
         httpMethod: 'GET',
-        headers: {'Authorization': 'Bearer'}
+        headers: { Authorization: 'Bearer' },
       },
       {
         httpMethod: 'GET',
@@ -96,5 +90,5 @@ describe('Get case lambda', function() {
           });
       });
     });
-  })
+  });
 });
