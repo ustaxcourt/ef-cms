@@ -68,7 +68,7 @@ export const submitLogIn = [
   getUser,
   {
     error: [setAlertError],
-    success: [setUser, navigateToDashboard],
+    success: [setUser, clearAlerts, navigateToDashboard],
   },
   unsetFormSubmitting,
 ];
