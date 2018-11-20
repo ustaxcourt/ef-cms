@@ -3,7 +3,8 @@
   "description": "US Tax Court Document Service API",
   "version": "0.1.0",
   "dependencies": {
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "ef-cms-shared": "file:../business"
   },
   "devDependencies": {
     "artillery": "^1.6.0-25",
