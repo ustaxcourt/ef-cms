@@ -40,3 +40,21 @@ exports.get = params => {
     .promise()
     .then(res => res.Item);
 };
+
+/**
+ * GET for aws-sdk dynamodb client
+ * @param params
+ */
+exports.query = params => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .query(params)
+    .promise()
+    .then(result => {
+      return result.Items;
+    });
+};

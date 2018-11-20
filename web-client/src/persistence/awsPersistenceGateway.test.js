@@ -82,7 +82,7 @@ describe('AWS petition gateway', () => {
     it('Success', async () => {
       mock.onGet(CASES_BASE_ROUTE).reply(200, fakeCases);
 
-      const cases = await awsPersistenceGateway.getCases(
+      const cases = await awsPersistenceGateway.getCasesByUser(
         applicationContext.getBaseUrl(),
         'taxpayer',
       );
@@ -94,7 +94,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
       let error;
       try {
-        await awsPersistenceGateway.getCases(
+        await awsPersistenceGateway.getCasesByUser(
           applicationContext.getBaseUrl(),
           'Bad actor',
         );
@@ -130,7 +130,7 @@ describe('AWS petition gateway', () => {
       mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
       let error;
       try {
-        await awsPersistenceGateway.getCases(
+        await awsPersistenceGateway.getCasesByUser(
           applicationContext.getBaseUrl(),
           'Bad actor',
         );

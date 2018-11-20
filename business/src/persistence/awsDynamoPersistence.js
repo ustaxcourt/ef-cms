@@ -72,3 +72,35 @@ exports.saveCase = ({ caseToSave, applicationContext }) =>
     ),
     Item: caseToSave,
   });
+
+exports.getCasesByUser = ({ userId, applicationContext }) =>
+  client.query({
+    TableName: getTable(
+      { entityType: 'case' },
+      applicationContext.environment.stage,
+    ),
+    IndexName: 'UserIdIndex',
+    ExpressionAttributeNames: {
+      '#userId': 'userId',
+    },
+    ExpressionAttributeValues: {
+      ':userId': userId,
+    },
+    KeyConditionExpression: '#userId = :userId',
+  });
+
+exports.getCasesByStatus = ({ status, applicationContext }) =>
+  client.query({
+    TableName: getTable(
+      { entityType: 'case' },
+      applicationContext.environment.stage,
+    ),
+    IndexName: 'StatusIndex',
+    ExpressionAttributeNames: {
+      '#status': 'status',
+    },
+    ExpressionAttributeValues: {
+      ':status': status,
+    },
+    KeyConditionExpression: '#status = :status',
+  });
