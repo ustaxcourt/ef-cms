@@ -1,10 +1,16 @@
 # Prerequisites
 
-`npm install -g serverless`
+- Install JDK 8
 
-Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
+- `npm install -g serverless`
 
-`npm i`
+- Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
+
+- `npm i`
+
+- `npm run install:dynamodb`
+
+- `cd ../business && npm i`
 
 # Contributing
 
@@ -65,10 +71,8 @@ Update the name of the service in the deploy-sandbox.sh script to match your ser
 - see https://medium.com/a-man-with-no-server/running-aws-lambda-and-api-gateway-locally-serverless-offline-3c64b3e54772
   for background. NOTE: Docker is required.
 
-1. `npm run install:lambda` install docker for lambda to run locally with serverless-local
-2. `npm run install:dynamodb` install a local dynamodb (optional)
-3. `npm run start:dynamodb` run the dynamodb on port 8000 (optional)
-4. `npm run start:local` in another terminal run the serverless-local on 3000
+1. `npm run install:dynamodb` install a local dynamodb (optional)
+2. `npm start` in another terminal run the serverless-local on 3000
 
 ## Load and Smoke Testing with Artillery
 

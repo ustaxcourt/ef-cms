@@ -1,3 +1,5 @@
+const { getAuthHeader } = require('../middleware/apiGatewayHelper');
+
 const createDocumentMetadata = require('../../../business/src/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
 
@@ -26,7 +28,10 @@ const applicationContext = {
 exports.create = event =>
   handle(() =>
     createDocumentMetadata({
-      document: JSON.parse(event.body),
+      document: {
+        ...JSON.parse(event.body),
+        userId: getAuthHeader(event),
+      },
       applicationContext,
     }),
   );

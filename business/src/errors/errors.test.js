@@ -3,13 +3,17 @@ const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
 
-const { NotFoundError, UnauthorizedError, UnprocessableEntityError } = require('./errors');
+const {
+  NotFoundError,
+  UnauthorizedError,
+  UnprocessableEntityError,
+} = require('./errors');
 
 describe('NotFoundError', () => {
   let error;
 
   beforeEach(() => {
-    error = new NotFoundError("some error");
+    error = new NotFoundError('some error');
   });
 
   it('should set a status code of 404', () => {
@@ -17,7 +21,7 @@ describe('NotFoundError', () => {
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal("some error");
+    expect(error.message).to.equal('some error');
   });
 });
 
@@ -25,7 +29,7 @@ describe('UnauthorizedError', () => {
   let error;
 
   beforeEach(() => {
-    error = new UnauthorizedError("some error");
+    error = new UnauthorizedError('some error');
   });
 
   it('should set a status code of 404', () => {
@@ -33,7 +37,7 @@ describe('UnauthorizedError', () => {
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal("some error");
+    expect(error.message).to.equal('some error');
   });
 });
 
@@ -49,6 +53,6 @@ describe('UnprocessableEntitytError', () => {
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal("problem in body or url");
+    expect(error.message).to.equal('problem in body or url');
   });
 });

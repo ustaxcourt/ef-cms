@@ -1,5 +1,7 @@
 const { handle } = require('../middleware/apiGatewayHelper');
-
+const {
+  createUploadPolicy: uploadPolicyUseCase,
+} = require('../../../business/src/useCases/createPolicyUrl');
 /**
  * Create Document API Lambda
  *
@@ -29,7 +31,7 @@ const applicationContext = {
  */
 exports.create = () =>
   handle(() =>
-    createUploadPolicy({
+    uploadPolicyUseCase({
       applicationContext,
     }),
   );

@@ -10,7 +10,6 @@ const {
 
 exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
   const caseToUpdate = new Case(caseJson);
-  console.log(caseJson);
   caseToUpdate.validate();
 
   if (!isAuthorized(userId, UPDATE_CASE)) {
