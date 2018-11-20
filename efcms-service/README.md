@@ -1,10 +1,16 @@
 # Prerequisites
 
-`npm install -g serverless`
+- must have JDK 8 installed
 
-Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
+- install node dependences: `npm i`
 
-`npm i`
+- install dynamodb local: `npm run install:dynamodb`
+
+### Optional prerequisites if deploying a sandbox
+
+- `npm install -g serverless`
+
+- Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
 # Contributing
 
