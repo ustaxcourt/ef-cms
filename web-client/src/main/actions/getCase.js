@@ -2,10 +2,10 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, props }) => {
   const useCases = applicationContext.getUseCases();
-  const caseDetail = await useCases.getCaseDetail(
+  const caseDetail = await useCases.getCase({
     applicationContext,
-    props.caseId,
-    get(state.user.userId),
-  );
+    caseId: props.caseId,
+    userToken: get(state.user.token),
+  });
   return { caseDetail };
 };

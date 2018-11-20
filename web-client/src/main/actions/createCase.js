@@ -24,6 +24,6 @@ export default async ({
           Case.documentTypes.statementOfTaxpayerIdentificationNumber,
       },
     ],
-    user: get(state.user),
+    userId: get(state.user.userId),
   });
 };

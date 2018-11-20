@@ -2,12 +2,11 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, path }) => {
   const useCases = applicationContext.getUseCases();
-  await useCases.updateCase(
-    applicationContext.getBaseUrl(),
-    applicationContext.getPersistenceGateway(),
-    get(state.caseDetail),
-    get(state.user),
-  );
+  await useCases.updateCase({
+    applicationContext,
+    caseDetails: get(state.caseDetail),
+    userToken: get(state.user.token),
+  });
   //if all documents validated
   let validated = true;
   get(state.caseDetail).documents.forEach(document => {

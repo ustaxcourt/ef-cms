@@ -3,10 +3,11 @@ import { state } from 'cerebral';
 export default async ({ applicationContext, get, path }) => {
   const useCases = applicationContext.getUseCases();
   try {
-    const caseList = await useCases.getPetitionsClerkCaseList(
+    const caseList = await useCases.getCasesByStatus({
       applicationContext,
-      get(state.user.userId),
-    );
+      userToken: get(state.user.token),
+      status: 'new',
+    });
     return path.success({ caseList });
   } catch (e) {
     return path.error({
