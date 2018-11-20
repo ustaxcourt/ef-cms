@@ -1,5 +1,5 @@
-import User from '../entities/User';
-import CaseInitiator from '../entities/CaseInitiator';
+import User from '../../../business/src/entities/User';
+import CaseInitiator from '../../../business/src/entities/CaseInitiator';
 
 export default async (
   applicationContext,
