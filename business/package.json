@@ -1,7 +1,7 @@
 {
-  "name": "ef-cms-web-client",
+  "name": "ef-cms-shared",
   "version": "1.0.0",
-  "description": "Electronic Filing / Case Management System Isomorphic Components",
+  "description": "Electronic Filing / Case Management System Shared Components",
   "scripts": {
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
     "test": "jest ./src/**/*.test.js"
@@ -26,34 +26,16 @@
       }
     }
   },
-  "postcss": {
-    "modules": false,
-    "plugins": {
-      "autoprefixer": {
-        "browsers": [
-          ">2%",
-          "last 4 versions",
-          "Firefox ESR",
-          "not ie < 11"
-        ],
-        "flexbox": "no-2009"
-      }
-    }
-  },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.1.6",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.0.0",
     "axios": "^0.18.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
-    "babel-plugin-cerebral": "^1.0.1",
-    "babel-plugin-istanbul": "^5.1.0",
-    "babel-preset-env": "^1.7.0",
+    "joi": "^14.1.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.358.0",
+    "chai": "^4.2.0",
+    "chai-string": "^1.5.0",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-cypress": "^2.1.2",
@@ -62,19 +44,11 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-security": "^1.4.0",
     "jest": "^23.6.0",
-    "joi": "^14.1.0",
     "prettier": "^1.15.2",
-    "regenerator-runtime": "^0.12.1",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.1.1",
     "stylelint": "^9.8.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
-    "uuid": "^3.3.2"
-  },
-  "devDependencies": {
-    "aws-sdk": "^2.358.0",
-    "chai": "^4.2.0",
-    "chai-string": "^1.5.0",
-    "proxyquire": "^2.1.0",
-    "sinon": "^7.1.1"
   }
 }
