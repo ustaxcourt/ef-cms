@@ -116,20 +116,20 @@ const uploadCasePdfs = async function uploadCasePdfs(
   );
   const { documentId: petitionFileId } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'petitionFile',
+    user.userId,
+    'Petition',
   );
   const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'requestForPlaceOfTrial',
+    user.userId,
+    'Request for Place of Trial',
   );
   const {
     documentId: statementOfTaxpayerIdentificationNumberId,
   } = await createDocumentMetadata(
     applicationContext.getBaseUrl(),
-    user,
-    'statementOfTaxpayerIdentificationNumber',
+    user.userId,
+    'Statement of Taxpayer Identification Number',
   );
   await uploadDocumentToS3(
     documentPolicy,

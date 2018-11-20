@@ -5,7 +5,7 @@ import getCase from '../../../business/src/useCases/getCase';
 import getCases from '../../../business/src/useCases/getCases';
 import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../../../business/src/useCases/updateCase';
-
+import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
 import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
 
 import uploadCasePdfs from '../useCases/uploadCasePdfs';
@@ -15,7 +15,7 @@ import uploadCasePdfs from '../useCases/uploadCasePdfs';
  */
 const applicationContext = {
   getBaseUrl: () => {
-    return 'https://efcms-dev.ustc-case-mgmt.flexion.us/v1';
+    return 'http://localhost:3000/v1';
   },
   getPersistenceGateway: () => {
     return awsPersistenceGateway;
@@ -25,6 +25,7 @@ const applicationContext = {
       createCase,
       getCase,
       getCases,
+      getCasesByUser,
       getPetitionsClerkCaseList,
       getUser,
       updateCase,

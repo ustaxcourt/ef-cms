@@ -1,4 +1,4 @@
-const createDocument = require('../../../business/src/useCases/createDocumentMetadata');
+const createDocumentMetadata = require('../../../business/src/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -11,12 +11,12 @@ const { handle } = require('../middleware/apiGatewayHelper');
 
 const {
   persistence: { create },
-  environment: { stage }
+  environment: { stage },
 } = require('../applicationContext');
 
 const applicationContext = {
   persistence: {
-    create
+    create,
   },
   environment: {
     stage,
@@ -25,7 +25,7 @@ const applicationContext = {
 
 exports.create = event =>
   handle(() =>
-    createDocument({
+    createDocumentMetadata({
       document: JSON.parse(event.body),
       applicationContext,
     }),
