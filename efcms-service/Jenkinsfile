@@ -68,7 +68,7 @@ pipeline {
           sh 'docker build -t test -f efcms-service/Dockerfile.test .'
           sh "docker run --name ${CONTAINER_NAME} test"
           dir('efcms-service') {
-            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
+            sh "docker cp ${CONTAINER_NAME}:/home/app/efcms-service/coverage coverage"
             sh "docker rm ${CONTAINER_NAME}"
           }
         }
