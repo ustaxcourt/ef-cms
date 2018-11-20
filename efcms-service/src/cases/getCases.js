@@ -1,5 +1,11 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
+const {
+  getCasesByStatus: byStatus,
+} = require('../../../business/src/useCases/getCasesByStatus');
+const {
+  getCasesByUser: byUser,
+} = require('../../../business/src/useCases/getCasesByUser');
 
 const {
   persistence: { getCasesByUser, getCasesByStatus },
@@ -9,6 +15,7 @@ const {
 const applicationContext = {
   persistence: {
     getCasesByUser,
+    getCasesByStatus,
   },
   environment: {
     stage,
@@ -28,6 +35,6 @@ exports.get = event =>
     const status = (event.queryStringParameters || {}).status;
     const userId = getAuthHeader(event);
     return status
-      ? getCasesByStatus({ status, userId, applicationContext })
-      : getCasesByUser({ userId, applicationContext });
+      ? byStatus({ status, userId, applicationContext })
+      : byUser({ userId, applicationContext });
   });

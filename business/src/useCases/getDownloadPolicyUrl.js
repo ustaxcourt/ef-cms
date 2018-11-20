@@ -1,8 +1,8 @@
-exports.getDocumentDownloadUrl = ({ documentId, applicationContext } = {}) => {
+exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   if (!documentId) {
     throw new Error('documentId is required');
   }
-  return applicationContext.persistence.getDocumentDownloadUrl({
+  return applicationContext.persistence.getDownloadPolicyUrl({
     documentId,
     applicationContext,
   });

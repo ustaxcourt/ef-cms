@@ -1,13 +1,16 @@
 const { redirect } = require('../middleware/apiGatewayHelper');
+const {
+  getDownloadPolicyUrl: downloadPolicyUseCase,
+} = require('../../../business/src/useCases/getDownloadPolicyUrl');
 
 const {
-  persistence: { getDocumentDownloadUrl },
+  persistence: { getDownloadPolicyUrl },
   environment: { region, documentsBucketName, s3Endpoint },
 } = require('../applicationContext');
 
 const applicationContext = {
   persistence: {
-    getDocumentDownloadUrl,
+    getDownloadPolicyUrl,
   },
   environment: {
     region,
@@ -25,7 +28,7 @@ const applicationContext = {
  */
 exports.get = event =>
   redirect(() =>
-    getDocumentDownloadUrl({
+    downloadPolicyUseCase({
       documentId: event.pathParameters.documentId,
       applicationContext,
     }),

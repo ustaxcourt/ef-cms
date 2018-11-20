@@ -16,14 +16,12 @@ describe('Get case lambda', function() {
   };
 
   describe('success - no cases exist in database', function() {
-    before(function() {
-      aws.mock('DynamoDB.DocumentClient', 'get', function(params, callback) {
-        callback(null, {});
-      });
+    beforeEach(function() {
+      sinon.stub(client, 'get').resolves(null);
     });
 
-    after(function() {
-      aws.restore('DynamoDB.DocumentClient');
+    afterEach(function() {
+      client.get.restore();
     });
 
     [
@@ -32,7 +30,7 @@ describe('Get case lambda', function() {
         pathParameters: {
           caseId: '123',
         },
-        headers: { Authorization: 'Bearer userId' },
+        headers: { Authorization: 'Bearer petitionsclerk' },
       },
     ].forEach(function(documentBody) {
       it('should return a case on a GET', function() {
