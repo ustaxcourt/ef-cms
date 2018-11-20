@@ -6,19 +6,20 @@ import clearLoginForm from './actions/clearLoginForm';
 import clearPetition from './actions/clearPetition';
 import createCase from './actions/createCase';
 import getCase from './actions/getCase';
-import getCaseList from './actions/getCaseList';
+import getCasesByUser from './actions/getCasesByUser';
+import getCasesNew from './actions/getCasesNew';
 import getCreateCaseAlertSuccess from './actions/getCreateCaseAlertSuccess';
-import getPetitionsClerkCaseList from './actions/getPetitionsClerkCaseList';
 import getUser from './actions/getUser';
 import getUserRole from './actions/getUserRole';
 import navigateToDashboard from './actions/navigateToDashboard';
 import setAlertError from './actions/setAlertError';
 import setAlertSuccess from './actions/setAlertSuccess';
 import setBaseUrl from './actions/setBaseUrl';
-import setCaseDetail from './actions/setCaseDetail';
-import setCaseList from './actions/setCaseList';
+import setCase from './actions/setCase';
+import setCases from './actions/setCases';
 import setFormSubmitting from './actions/setFormSubmitting';
 import setUser from './actions/setUser';
+import toggleDocumentValidationAction from './actions/toggleDocumentValidation';
 import unsetFormSubmitting from './actions/unsetFormSubmitting';
 import updateCaseAction from './actions/updateCase';
 import uploadCasePdfs from './actions/uploadCasePdfs';
@@ -27,18 +28,18 @@ export const gotoDashboard = [
   getUserRole,
   {
     taxpayer: [
-      getCaseList,
+      getCasesByUser,
       {
         error: [setAlertError],
-        success: [setCaseList],
+        success: [setCases],
       },
       set(state`currentPage`, 'Dashboard'),
     ],
     petitionsclerk: [
-      getPetitionsClerkCaseList,
+      getCasesNew,
       {
         error: [setAlertError],
-        success: [setCaseList],
+        success: [setCases],
       },
       set(state`currentPage`, 'PetitionsWorkQueue'),
     ],
@@ -76,7 +77,7 @@ export const gotoCaseDetail = [
   setBaseUrl,
   clearAlerts,
   getCase,
-  setCaseDetail,
+  setCase,
   getUserRole,
   {
     taxpayer: [set(state`currentPage`, 'CaseDetail')],
@@ -98,7 +99,7 @@ export const submitFilePetition = [
   navigateToDashboard,
 ];
 
-export const toggleDocumentValidation = [toggleDocumentValidation];
+export const toggleDocumentValidation = [toggleDocumentValidationAction];
 
 export const updateCase = [
   clearAlerts,
