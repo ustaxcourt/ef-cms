@@ -1,11 +1,15 @@
 const axios = require('axios');
 
-module.exports = async ({ applicationContext, userId, documentType }) => {
+module.exports = async ({ applicationContext, userToken, documentType }) => {
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/documents`,
     {
-      userId,
       documentType,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
     },
   );
   return response.data;

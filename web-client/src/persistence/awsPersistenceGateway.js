@@ -52,10 +52,18 @@ const getCaseDetail = async (caseId, baseUrl, userToken) => {
 };
 
 const createDocumentMetadata = async (baseUrl, user, type) => {
-  const response = await axios.post(`${baseUrl}/documents`, {
-    userId: user,
-    documentType: type,
-  });
+  const headers = {
+    Authorization: `Bearer ${user}`,
+  };
+  const response = await axios.post(
+    `${baseUrl}/documents`,
+    {
+      documentType: type,
+    },
+    {
+      headers,
+    },
+  );
   return response.data;
 };
 
