@@ -1,12 +1,11 @@
 import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
 
 import createCase from '../../../business/src/useCases/createCaseProxy';
-import getCase from '../../../business/src/useCases/getCase';
-import getCases from '../../../business/src/useCases/getCases';
-import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../../../business/src/useCases/updateCase';
+import getCase from '../../../business/src/useCases/getCaseProxy';
+import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
 import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
+import getUser from '../../../business/src/useCases/getUser';
+import updateCase from '../../../business/src/useCases/updateCaseProxy';
 
 import uploadCasePdfs from '../useCases/uploadCasePdfs';
 
@@ -24,9 +23,8 @@ const applicationContext = {
     return {
       createCase,
       getCase,
-      getCases,
       getCasesByUser,
-      getPetitionsClerkCaseList,
+      getCasesByStatus,
       getUser,
       updateCase,
       uploadCasePdfs,
