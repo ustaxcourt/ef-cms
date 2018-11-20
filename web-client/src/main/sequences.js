@@ -5,7 +5,7 @@ import clearAlerts from './actions/clearAlerts';
 import clearLoginForm from './actions/clearLoginForm';
 import clearPetition from './actions/clearPetition';
 import createCase from './actions/createCase';
-import getCaseDetail from './actions/getCaseDetail';
+import getCase from './actions/getCase';
 import getCaseList from './actions/getCaseList';
 import getCreateCaseAlertSuccess from './actions/getCreateCaseAlertSuccess';
 import getPetitionsClerkCaseList from './actions/getPetitionsClerkCaseList';
@@ -75,7 +75,7 @@ export const submitLogIn = [
 export const gotoCaseDetail = [
   setBaseUrl,
   clearAlerts,
-  getCaseDetail,
+  getCase,
   setCaseDetail,
   getUserRole,
   {
