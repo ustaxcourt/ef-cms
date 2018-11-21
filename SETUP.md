@@ -61,6 +61,8 @@ This section outlines the steps necessary for creating the necessary resources n
        - id: API_SONAR_TOKEN
      - a secret text type
        - id: UI_SONAR_TOKEN
+     - a secret text type
+       - id: SHARED_SONAR_TOKEN
    - setup the sonar organization property inside jenkins
      - goto: Jenkins -> Manage Jenkins -> Configure System -> Global properties -> Environment variables
      - setup
@@ -75,6 +77,9 @@ This section outlines the steps necessary for creating the necessary resources n
      - setup
        - API_SONAR_KEY
        - your_sonar_project_key // e.g. ef-cms-api-key
+     - setup
+       - SHARED_SONAR_KEY
+       - your_sonar_project_key // e.g. ef-cms-shared-key
    - setup the jobs via the setup-jobs.sh script
      - this script takes 3 arguments in this order
        - your_repo_url // example: https://github.com/flexion/ef-cms.git

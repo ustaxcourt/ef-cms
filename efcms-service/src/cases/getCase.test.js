@@ -1,4 +1,3 @@
-const aws = require('aws-sdk-mock');
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const getCase = require('./getCase');
