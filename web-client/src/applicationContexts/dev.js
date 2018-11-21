@@ -1,4 +1,4 @@
-import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
+import awsS3Persistence from '../../../business/src/persistence/awsS3Persistence';
 
 import createCase from '../../../business/src/useCases/createCaseProxy';
 import getCase from '../../../business/src/useCases/getCaseProxy';
@@ -6,8 +6,11 @@ import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusPro
 import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
 import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../../../business/src/useCases/updateCaseProxy';
+import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
+import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
+import uploadToS3 from '../../../business/src/useCases/uploadToS3';
 
-import uploadCasePdfs from '../useCases/uploadCasePdfs';
+// import uploadCasePdfs from '../useCases/uploadCasePdfs';
 
 /**
  * Context for the dev environment
@@ -17,7 +20,7 @@ const applicationContext = {
     return 'http://localhost:3000/v1';
   },
   getPersistenceGateway: () => {
-    return awsPersistenceGateway;
+    return awsS3Persistence;
   },
   getUseCases: () => {
     return {
@@ -27,7 +30,9 @@ const applicationContext = {
       getCasesByStatus,
       getUser,
       updateCase,
-      uploadCasePdfs,
+      getDocumentPolicy,
+      createDocumentMetadata,
+      uploadToS3,
     };
   },
 };
