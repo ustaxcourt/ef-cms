@@ -1,13 +1,13 @@
 import awsS3Persistence from '../../../business/src/persistence/awsS3Persistence';
 
 import createCase from '../../../business/src/useCases/createCaseProxy';
+import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
 import getCase from '../../../business/src/useCases/getCaseProxy';
 import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
 import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
+import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
 import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
-import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
 import uploadToS3 from '../../../business/src/useCases/uploadToS3';
 
 // import uploadCasePdfs from '../useCases/uploadCasePdfs';
@@ -25,13 +25,13 @@ const applicationContext = {
   getUseCases: () => {
     return {
       createCase,
+      createDocumentMetadata,
       getCase,
-      getCasesByUser,
       getCasesByStatus,
+      getCasesByUser,
+      getDocumentPolicy,
       getUser,
       updateCase,
-      getDocumentPolicy,
-      createDocumentMetadata,
       uploadToS3,
     };
   },
