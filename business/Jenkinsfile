@@ -64,22 +64,18 @@ pipeline {
         }
       }
     }
-    // TODO:
-    // - create a new sonarqube token for the shared job
-    // - add that token to jenkins, uncomment this
-    // - fix any code needed to be fixed in this commented out code
-    // stage('SonarQube') {
-    //   steps {
-    //     script {
-    //       withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-    //         dir('business') {
-    //           sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-    //           sh "docker run -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    stage('SonarQube') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'SHARED_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+            dir('business') {
+              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
+              sh "docker run -e SONAR_KEY=${API_SONAR_KEY} -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
+            }
+          }
+        }
+      }
+    }
   }
   post {
     always {
