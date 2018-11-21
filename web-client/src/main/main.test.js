@@ -7,7 +7,6 @@ import applicationContext from '../applicationContexts/dev';
 import sinon from 'sinon';
 
 mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.useCases = applicationContext.useCases;
 mainModule.providers.router = { route: () => {} };
 
 const jsdom = new JSDOM('');
@@ -15,6 +14,7 @@ global.window = jsdom.window;
 global.FormData = jsdom.window.FormData;
 
 global.Blob = jsdom.window.Blob;
+global.File = jsdom.window.File;
 
 const test = CerebralTest(mainModule);
 
@@ -90,15 +90,15 @@ describe('Main cerebral module', () => {
       await test.runSequence('gotoFilePetition');
       await test.runSequence('updatePetitionValue', {
         key: 'petitionFile',
-        file: 'contents',
+        file: new File([1, 2, 3, 4], 'test.pdf'),
       });
       await test.runSequence('updatePetitionValue', {
         key: 'requestForPlaceOfTrial',
-        file: 'contents',
+        file: new File([1, 2, 3, 4], 'test.pdf'),
       });
       await test.runSequence('updatePetitionValue', {
         key: 'statementOfTaxpayerIdentificationNumber',
-        file: 'contents',
+        file: new File([1, 2, 3, 4], 'test.pdf'),
       });
       await test.runSequence('submitFilePetition');
       assert.deepEqual(test.getState('alertSuccess'), {

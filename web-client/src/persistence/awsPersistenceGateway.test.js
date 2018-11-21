@@ -1,4 +1,3 @@
-import assert from 'assert';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
@@ -8,7 +7,6 @@ import CaseInitiator from '../../../business/src/entities/CaseInitiator';
 
 const UPLOAD_POLICY_ROUTE = `${applicationContext.getBaseUrl()}/documents/uploadPolicy`;
 const CASES_BASE_ROUTE = `${applicationContext.getBaseUrl()}/cases`;
-const CASE_ROUTE = `${applicationContext.getBaseUrl()}/cases/fakeCaseId`;
 
 const fakeCase = {
   caseId: 'f41d33b2-3127-4256-a63b-a6ea7181645b',
@@ -45,8 +43,6 @@ let olderFakeCase = { ...fakeCase };
 olderFakeCase.createdAt = '2018-11-12T18:26:20.121Z';
 olderFakeCase.caseId = 'f41d33b2-3127-4256-a63b-a6ea7181645a';
 
-const fakeCases = [fakeCase, olderFakeCase];
-
 const fakePolicy = {
   url: 'https://s3.us-east-1.amazonaws.com/fakeBucket',
   fields: {
@@ -68,79 +64,6 @@ const fakeDocumentId = {
 };
 
 describe('AWS petition gateway', () => {
-  describe('Get cases for taxpayer', () => {
-    let mock;
-
-    beforeEach(() => {
-      mock = new MockAdapter(axios);
-    });
-
-    afterEach(() => {
-      mock.restore();
-    });
-
-    it('Success', async () => {
-      mock.onGet(CASES_BASE_ROUTE).reply(200, fakeCases);
-
-      const cases = await awsPersistenceGateway.getCasesByUser(
-        applicationContext.getBaseUrl(),
-        'taxpayer',
-      );
-      assert.deepEqual(cases, fakeCases);
-      assert.equal(cases[0].caseId, fakeCase.caseId);
-    });
-
-    it('Failure', async () => {
-      mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
-      let error;
-      try {
-        await awsPersistenceGateway.getCasesByUser(
-          applicationContext.getBaseUrl(),
-          'Bad actor',
-        );
-      } catch (e) {
-        error = e.message;
-      }
-      assert.equal(error, 'Request failed with status code 403');
-    });
-  });
-
-  describe('Get cases for petitions clerk', () => {
-    let mock;
-
-    beforeEach(() => {
-      mock = new MockAdapter(axios);
-    });
-
-    afterEach(() => {
-      mock.restore();
-    });
-
-    it('Success', async () => {
-      mock.onGet(`${CASES_BASE_ROUTE}?status=new`).reply(200, fakeCases);
-
-      const cases = await awsPersistenceGateway.getPetitionsClerkCaseList(
-        applicationContext.getBaseUrl(),
-        'petitionsClerk',
-      );
-      assert.deepEqual(cases[1], fakeCase);
-    });
-
-    it('Failure', async () => {
-      mock.onGet(CASES_BASE_ROUTE).reply(403, 'failure');
-      let error;
-      try {
-        await awsPersistenceGateway.getCasesByUser(
-          applicationContext.getBaseUrl(),
-          'Bad actor',
-        );
-      } catch (e) {
-        error = e.message;
-      }
-      assert.equal(error, 'Request failed with status code 403');
-    });
-  });
-
   describe('Initiate case', () => {
     let mock;
 
@@ -263,53 +186,6 @@ describe('AWS petition gateway', () => {
         'taxpayer',
       );
       done();
-    });
-  });
-
-  describe('Update case', () => {
-    let mock;
-
-    beforeEach(() => {
-      mock = new MockAdapter(axios);
-    });
-
-    afterEach(() => {
-      mock.restore();
-    });
-
-    it('Updates a case successfully', async done => {
-      mock.onPut(CASE_ROUTE).reply(200);
-      const caseDetail = {
-        caseId: 'fakeCaseId',
-      };
-      await awsPersistenceGateway.updateCase(
-        'Username',
-        caseDetail,
-        applicationContext.getBaseUrl(),
-      );
-      done();
-    });
-  });
-
-  describe('View case', () => {
-    let mock;
-
-    beforeEach(() => {
-      mock = new MockAdapter(axios);
-    });
-
-    afterEach(() => {
-      mock.restore();
-    });
-
-    it('View a case successfully', async () => {
-      mock.onGet(CASE_ROUTE).reply(200, fakeCase);
-      const results = await awsPersistenceGateway.getCaseDetail(
-        'fakeCaseId',
-        applicationContext.getBaseUrl(),
-        'Username',
-      );
-      assert.deepEqual(results, fakeCase);
     });
   });
 });
