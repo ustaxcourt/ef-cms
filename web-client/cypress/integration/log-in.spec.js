@@ -4,6 +4,7 @@ describe('Log in page', function() {
   });
 
   it('finds all the elements', () => {
+    cy.get('header nav').should('not.contain', 'Hello,');
     cy.get('form#log-in').should('exist');
     cy.get('form#log-in #name').should('exist');
     cy.get('form#log-in input[type="submit"]').should('exist');
