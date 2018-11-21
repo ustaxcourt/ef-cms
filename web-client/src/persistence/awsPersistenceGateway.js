@@ -7,50 +7,6 @@ const getDocumentPolicy = async baseUrl => {
   return response.data;
 };
 
-const getCases = async (baseUrl, userToken) => {
-  const headers = {
-    Authorization: `Bearer ${userToken}`,
-  };
-  return await axios.get(`${baseUrl}/cases`, { headers }).then(response => {
-    if (!(response.data && Array.isArray(response.data))) {
-      return response.data;
-    } else {
-      // TODO: remove this once backend can sort
-      response.data.sort(function(a, b) {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-    }
-    return response.data;
-  });
-};
-
-const getPetitionsClerkCaseList = async (baseUrl, userToken) => {
-  const headers = {
-    Authorization: `Bearer ${userToken}`,
-  };
-  return await axios
-    .get(`${baseUrl}/cases?status=new`, { headers })
-    .then(response => {
-      if (!(response.data && Array.isArray(response.data))) {
-        return response.data;
-      } else {
-        // TODO: remove this once backend can sort
-        response.data.sort(function(a, b) {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        });
-      }
-      return response.data;
-    });
-};
-
-const getCaseDetail = async (caseId, baseUrl, userToken) => {
-  const headers = {
-    Authorization: `Bearer ${userToken}`,
-  };
-  const response = await axios.get(`${baseUrl}/cases/${caseId}`, { headers });
-  return response.data;
-};
-
 const createDocumentMetadata = async (baseUrl, user, type) => {
   const headers = {
     Authorization: `Bearer ${user}`,
@@ -60,20 +16,6 @@ const createDocumentMetadata = async (baseUrl, user, type) => {
     {
       documentType: type,
     },
-    {
-      headers,
-    },
-  );
-  return response.data;
-};
-
-const updateCase = async (userToken, caseDetails, baseUrl) => {
-  const headers = {
-    Authorization: `Bearer ${userToken}`,
-  };
-  const response = await axios.put(
-    `${baseUrl}/cases/${caseDetails.caseId}`,
-    caseDetails,
     {
       headers,
     },
@@ -99,7 +41,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   formData.append('X-Amz-Date', policy.fields['X-Amz-Date']);
   formData.append(
     'X-Amz-Security-Token',
-    policy.fields['X-Amz-Security-Token'],
+    policy.fields['X-Amz-Security-Token'] || '',
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
@@ -107,7 +49,8 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   formData.append('file', file, file.name || 'fileName');
   const result = await axios.post(policy.url, formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
+      'content-type': `multipart/form-data; boundary=${formData._boundary}`,
     },
   });
   return result;
@@ -191,10 +134,6 @@ const createCase = async function createCase(
 
 const awsPersistenceGateway = {
   createCase,
-  getCaseDetail,
-  getCases,
-  getPetitionsClerkCaseList,
-  updateCase,
   uploadCasePdfs,
 };
 
