@@ -49,6 +49,7 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   formData.append('file', file, file.name || 'fileName');
   const result = await axios.post(policy.url, formData, {
     headers: {
+      /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
       'content-type': `multipart/form-data; boundary=${formData._boundary}`,
     },
   });
