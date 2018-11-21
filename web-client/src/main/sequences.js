@@ -22,7 +22,6 @@ import setUser from './actions/setUser';
 import toggleDocumentValidationAction from './actions/toggleDocumentValidation';
 import unsetFormSubmitting from './actions/unsetFormSubmitting';
 import updateCaseAction from './actions/updateCase';
-import uploadCasePdfs from './actions/uploadCasePdfs';
 
 export const gotoDashboard = [
   getUserRole,
@@ -91,7 +90,6 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   setFormSubmitting,
-  uploadCasePdfs,
   createCase,
   unsetFormSubmitting,
   getCreateCaseAlertSuccess,
