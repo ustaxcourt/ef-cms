@@ -2,11 +2,6 @@ import axios from 'axios';
 
 import Case from '../../../business/src/entities/Case';
 
-axios.interceptors.request.use(request => {
-  console.log('--------------- Starting Request', request);
-  return request;
-});
-
 const getDocumentPolicy = async baseUrl => {
   const response = await axios.get(`${baseUrl}/documents/uploadPolicy`);
   return response.data;
@@ -38,28 +33,6 @@ const createCaseRecord = async (baseUrl, userToken, caseToCreate) => {
   return response.data;
 };
 
-// const uploadDocumentToS3 = async (policy, documentId, file) => {
-//   let formData = new FormData();
-//   formData.append('key', documentId);
-//   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
-//   formData.append('X-Amz-Credential', policy.fields['X-Amz-Credential']);
-//   formData.append('X-Amz-Date', policy.fields['X-Amz-Date']);
-//   formData.append(
-//     'X-Amz-Security-Token',
-//     policy.fields['X-Amz-Security-Token'],
-//   );
-//   formData.append('Policy', policy.fields.Policy);
-//   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
-//   formData.append('Content-Type', 'application/pdf');
-//   formData.append('file', file, file.name || 'fileName');
-//   const result = await axios.post(policy.url, formData, {
-//     headers: {
-//       'Content-Type': 'multipart/form-data',
-//     },
-//   });
-//   return result;
-// };
-
 const uploadDocumentToS3 = async (policy, documentId, file) => {
   let formData = new FormData();
   formData.append('key', documentId);
@@ -68,29 +41,18 @@ const uploadDocumentToS3 = async (policy, documentId, file) => {
   formData.append('X-Amz-Date', policy.fields['X-Amz-Date']);
   formData.append(
     'X-Amz-Security-Token',
-    policy.fields['X-Amz-Security-Token'],
+    policy.fields['X-Amz-Security-Token'] || '',
   );
   formData.append('Policy', policy.fields.Policy);
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('Content-Type', 'application/pdf');
-  formData.append('file', file, file.name);
-  try {
-    const result = await axios.post(policy.url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return result;
-  } catch (e) {
-    console.log(
-      '****************',
-      policy.url,
-      documentId,
-      file.name,
-      e.response.data,
-    );
-    return;
-  }
+  formData.append('file', file, file.name || 'fileName');
+  const result = await axios.post(policy.url, formData, {
+    headers: {
+      'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+    },
+  });
+  return result;
 };
 
 const uploadCasePdfs = async function uploadCasePdfs(
