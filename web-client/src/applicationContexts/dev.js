@@ -10,8 +10,6 @@ import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../../../business/src/useCases/updateCaseProxy';
 import uploadToS3 from '../../../business/src/useCases/uploadToS3';
 
-// import uploadCasePdfs from '../useCases/uploadCasePdfs';
-
 /**
  * Context for the dev environment
  */
