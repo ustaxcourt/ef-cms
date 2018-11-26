@@ -52,10 +52,8 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t lint -f Dockerfile.lint .'
-            sh 'docker run --rm lint'
-          }
+          sh 'docker build -t lint -f efcms-service/Dockerfile.lint .'
+          sh 'docker run --rm lint'
         }
       }
     }
@@ -125,10 +123,8 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
-          }
+          sh 'docker build -t route53 -f efcms-service/Dockerfile.route53 .'
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
         }
       }
     }
