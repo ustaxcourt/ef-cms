@@ -79,11 +79,11 @@ describe('Get cases lambda', function() {
         headers: { Authorization: 'Bearer notapetitionsclerk' },
       },
     ].forEach(function(documentBody) {
-      it('should return a 404 and error if unauthorized', function() {
+      it('should return a 403 and error if unauthorized', function() {
         return lambdaTester(getCases.get)
           .event(documentBody)
           .expectResolve(error => {
-            expect(error.statusCode).to.equal(404);
+            expect(error.statusCode).to.equal(403);
             expect(error.body).to.equal('"Unauthorized for getCasesByStatus"');
           });
       });
@@ -101,11 +101,11 @@ describe('Get cases lambda', function() {
         headers: { Authorization: '' },
       },
     ].forEach(function(documentBody) {
-      it('should return a 404 if no user is present', function() {
+      it('should return a 403 if no user is present', function() {
         return lambdaTester(getCases.get)
           .event(documentBody)
           .expectResolve(error => {
-            expect(error.statusCode).to.equal('400');
+            expect(error.statusCode).to.equal(403);
             expect(error.body).to.startWith('"Error: Authorization');
           });
       });
