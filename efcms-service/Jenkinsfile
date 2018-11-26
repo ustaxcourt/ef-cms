@@ -182,7 +182,7 @@ def createTerraformTasks(targets) {
         stage("terraform ${slsStage}") {
           checkout scm
           sh "docker build -t efcms-build -f Dockerfile.build ."
-          sh "docker run -e ENV=${slsStage} -e EFCMS_DOMAIN=$EFCMS_DOMAIN --rm efcms-build /bin/sh -c 'cd efcms-service/terraform/main && ../bin/deploy-app.sh $ENV'"
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} --rm efcms-build /bin/sh -c 'cd efcms-service/terraform/main && ../bin/deploy-app.sh ${slsStage}'"
         }
       }
     }
