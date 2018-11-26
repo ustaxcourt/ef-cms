@@ -63,6 +63,6 @@ function configure_custom_logging() {
 }
 
 check_env_vars_exist
-# prepare_serverless
+prepare_serverless
 run_development
 configure_custom_logging
