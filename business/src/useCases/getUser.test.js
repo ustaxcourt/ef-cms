@@ -13,6 +13,11 @@ describe('Get user', () => {
     assert.equal(user.userId, 'petitionsclerk');
     assert.equal(user.role, 'petitionsclerk');
   });
+  it('Success intakeclerk', async () => {
+    const user = getUser('intakeclerk');
+    assert.equal(user.userId, 'intakeclerk');
+    assert.equal(user.role, 'intakeclerk');
+  });
   it('Failure', async () => {
     try {
       getUser('Bad actor');
