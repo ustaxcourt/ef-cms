@@ -42,6 +42,7 @@ export const gotoDashboard = [
       },
       set(state`currentPage`, 'PetitionsWorkQueue'),
     ],
+    intakeclerk: [set(state`currentPage`, 'IntakeClerkDashboard')],
   },
 ];
 export const gotoLogIn = [
