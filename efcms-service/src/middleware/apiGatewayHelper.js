@@ -1,3 +1,5 @@
+const { UnauthorizedError } = require('../../../business/src/errors/errors');
+
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -51,10 +53,12 @@ exports.getAuthHeader = event => {
   if (authorizationHeader) {
     usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {
-      throw new Error('Error: Authorization Bearer token is required'); //temp until actual auth is added
+      throw new UnauthorizedError(
+        'Error: Authorization Bearer token is required',
+      ); //temp until actual auth is added
     }
   } else {
-    throw new Error('Error: Authorization is required'); //temp until actual auth is added
+    throw new UnauthorizedError('Error: Authorization is required'); //temp until actual auth is added
   }
 
   return usernameTokenArray[1];
