@@ -14,13 +14,13 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
-    updateCase: sequences.updateCase,
+    submitUpdateCase: sequences.submitUpdateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
-    updateCase,
+    submitUpdateCase,
     toggleDocumentValidation,
   }) {
     return (
@@ -44,7 +44,7 @@ export default connect(
               <button
                 className="float-right"
                 id="update-case"
-                onClick={() => updateCase()}
+                onClick={() => submitUpdateCase()}
               >
                 Save updates
               </button>
