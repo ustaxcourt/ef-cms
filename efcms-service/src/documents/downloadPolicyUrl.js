@@ -1,7 +1,7 @@
 const { redirect } = require('../middleware/apiGatewayHelper');
 const {
   getDownloadPolicyUrl: downloadPolicyUseCase,
-} = require('../../../business/src/useCases/getDownloadPolicyUrl');
+} = require('ef-cms-shared/src/useCases/getDownloadPolicyUrl');
 
 const {
   persistence: { getDownloadPolicyUrl },

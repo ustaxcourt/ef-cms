@@ -44,20 +44,16 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t audit -f Dockerfile.audit .'
-            sh 'docker run --rm audit'
-          }
+          sh 'docker build -t audit -f efcms-service/Dockerfile.audit .'
+          sh 'docker run --rm audit'
         }
       }
     }
     stage('Lint') {
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t lint -f Dockerfile.lint .'
-            sh 'docker run --rm lint'
-          }
+          sh 'docker build -t lint -f efcms-service/Dockerfile.lint .'
+          sh 'docker run --rm lint'
         }
       }
     }
@@ -127,10 +123,8 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
-          }
+          sh 'docker build -t route53 -f efcms-service/Dockerfile.route53 .'
+          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
         }
       }
     }
@@ -157,10 +151,8 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
-          }
+          sh 'docker build -t globaltables -f efcms-service/Dockerfile.globaltables .'
+          sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
         }
       }
     }
@@ -211,10 +203,8 @@ def createSmokeTestTasks(targets) {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
-            dir('efcms-service') {
-              sh 'docker build -t smoketest -f Dockerfile.smoketest .'
+              sh 'docker build -t smoketest -f efcms-service/Dockerfile.smoketest .'
               sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
-            }
           }
         }
       }
@@ -232,10 +222,8 @@ def createServerlessTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            dir('efcms-service') {
-              sh 'docker build -t serverless -f Dockerfile.serverless .'
-              sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
-            }
+            sh 'docker build -t serverless -f efcms-service/Dockerfile.serverless .'
+            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
           }
         }
       }

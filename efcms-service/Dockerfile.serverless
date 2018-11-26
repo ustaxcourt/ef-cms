@@ -12,11 +12,15 @@ RUN apk --no-cache update && \
     pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
     rm -rf /var/cache/apk/*
 
-WORKDIR /home/app
-COPY package.json /home/app/package.json
-WORKDIR /home/app
-RUN npm install
+
+COPY business/package.json /home/app/business/package.json
+RUN cd /home/app/business; npm install --production
+
+COPY efcms-service/package.json /home/app/efcms-service/package.json
+RUN cd /home/app/efcms-service; npm install
+
 COPY . /home/app
+WORKDIR /home/app/efcms-service
 
 # because serverless does not work unless you are in a git repo....
 RUN git config --global user.email "blank@example.com"
