@@ -35,8 +35,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
-            sh 'docker run --rm shellcheck'
+            sh "npm run docker:shellcheck"
           }
         }
       }
@@ -44,28 +43,26 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          sh 'docker build -t audit -f efcms-service/Dockerfile.audit .'
-          sh 'docker run --rm audit'
+          dir('efcms-service') {
+            sh "npm run docker:audit"
+          }
         }
       }
     }
     stage('Lint') {
       steps {
         script {
-          sh 'docker build -t lint -f efcms-service/Dockerfile.lint .'
-          sh 'docker run --rm lint'
+          dir('efcms-service') {
+            sh "npm run docker:lint"
+          }
         }
       }
     }
     stage('Test') {
       steps {
         script {
-          def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
-          sh 'docker build -t test -f efcms-service/Dockerfile.test .'
-          sh "docker run --name ${CONTAINER_NAME} test"
           dir('efcms-service') {
-            sh "docker cp ${CONTAINER_NAME}:/home/app/efcms-service/coverage coverage"
-            sh "docker rm ${CONTAINER_NAME}"
+            sh "CONTAINER_NAME=api-test-${BUILD_NUMBER} npm run docker:test"
           }
         }
       }
@@ -185,8 +182,9 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
-          sh 'docker build -t terraform -f efcms-service/Dockerfile.terraform .'
-          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
+          dir('efcms-service') {
+            sh "ENV=${slsStage} npm run docker:terraform"
+          }
         }
       }
     }
