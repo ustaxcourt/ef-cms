@@ -232,7 +232,7 @@ def createServerlessTasks(targets) {
         node() {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
-            sh 'docker build -t serverless -f Dockerfile.serverless .'
+            sh 'docker build -t serverless -f efcms-service/Dockerfile.serverless .'
             sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
           }
         }
