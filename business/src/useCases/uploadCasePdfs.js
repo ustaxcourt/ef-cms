@@ -2,6 +2,7 @@ const axios = require('axios');
 
 const Case = require('../entities/Case');
 
+// TODO: move to persistence gateway
 const getDocumentPolicy = async ({ applicationContext }) => {
   const response = await axios.get(
     `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
@@ -70,6 +71,11 @@ module.exports = async ({ applicationContext, caseInitiator, user }) => {
     documentId: statementOfTaxpayerIdentificationNumberId,
     file: caseInitiator.statementOfTaxpayerIdentificationNumber,
   });
+
+  // TODO: this is the only public function
+  // await applicationContext
+  //   .getPersistenceGateway()
+  //   .uploadPdfsForNewCase({ applicationContext, caseInitiator, user });
 
   return {
     petitionFileId,
