@@ -50,11 +50,27 @@ export default connect(
               </button>
             </div>
           </div>
-          <p>
-            TODO: ADD NAME BACK v. Commissioner of Internal Revenue, Respondent
+          <p className="subsection">
+            {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
-          <h2>Case Activity Record</h2>
+          <div className="subsection">
+            <h2>Case Information</h2>
+            <label htmlFor="paygov">Petition Fee</label>
+            <input id="paygov" type="radio" />
+            <fieldset className="usa-fieldset-inputs usa-sans">
+              <legend className="usa-sr-only">Petition Fee</legend>
+              <ul className="usa-unstyled-list">
+                <li>
+                  <input id="paygov" type="radio" name="historical-figures-2" />
+                  <label htmlFor="paygov">Paid by pay.gov</label>
+                  <label htmlFor="paygovid">Payment ID</label>
+                  <input id="paygovid" type="text" name="paygovid" />
+                </li>
+              </ul>
+            </fieldset>
+          </div>
+          <h2>Docket Record</h2>
           <table className="responsive-table">
             <thead>
               <tr>
