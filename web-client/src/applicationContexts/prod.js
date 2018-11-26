@@ -1,12 +1,14 @@
 import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
 
-import createACase from '../../../business/src/useCases/createACaseProxy';
-import getCaseDetail from '../useCases/getCaseDetail';
-import getCases from '../useCases/getCases';
-import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
+import createCase from '../../../business/src/useCases/createCaseProxy';
+import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
+import getCase from '../../../business/src/useCases/getCaseProxy';
+import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
+import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
+import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
 import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../useCases/updateCase';
-import uploadCasePdfs from '../useCases/uploadCasePdfs';
+import updateCase from '../../../business/src/useCases/updateCaseProxy';
+import uploadToS3 from '../../../business/src/useCases/uploadToS3';
 
 const API_URL = process.env.API_URL || 'http://localhost:8080';
 
@@ -21,13 +23,15 @@ const applicationContext = {
     return awsPersistenceGateway;
   },
   useCases: {
-    createACase,
-    getCaseDetail,
-    getCases,
-    getPetitionsClerkCaseList,
+    createCase,
+    createDocumentMetadata,
+    getCase,
+    getCasesByStatus,
+    getCasesByUser,
+    getDocumentPolicy,
     getUser,
     updateCase,
-    uploadCasePdfs,
+    uploadToS3,
   },
 };
 
