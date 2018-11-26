@@ -1,36 +1,57 @@
 import { set, toggle } from 'cerebral/factories';
 import { state, props } from 'cerebral';
-import * as actions from './actions';
+
+import clearAlerts from './actions/clearAlerts';
+import clearLoginForm from './actions/clearLoginForm';
+import clearPetition from './actions/clearPetition';
+import createCase from './actions/createCase';
+import getCase from './actions/getCase';
+import getCasesByUser from './actions/getCasesByUser';
+import getCasesNew from './actions/getCasesNew';
+import getCreateCaseAlertSuccess from './actions/getCreateCaseAlertSuccess';
+import getUser from './actions/getUser';
+import getUserRole from './actions/getUserRole';
+import navigateToDashboard from './actions/navigateToDashboard';
+import setAlertError from './actions/setAlertError';
+import setAlertSuccess from './actions/setAlertSuccess';
+import setBaseUrl from './actions/setBaseUrl';
+import setCase from './actions/setCase';
+import setCases from './actions/setCases';
+import setFormSubmitting from './actions/setFormSubmitting';
+import setUser from './actions/setUser';
+import toggleDocumentValidationAction from './actions/toggleDocumentValidation';
+import unsetFormSubmitting from './actions/unsetFormSubmitting';
+import updateCaseAction from './actions/updateCase';
 
 export const gotoDashboard = [
-  actions.getUserRole,
+  getUserRole,
   {
     taxpayer: [
-      actions.getCaseList,
+      getCasesByUser,
       {
-        error: [actions.setAlertError],
-        success: [actions.setCaseList],
+        error: [setAlertError],
+        success: [setCases],
       },
       set(state`currentPage`, 'Dashboard'),
     ],
     petitionsclerk: [
-      actions.getPetitionsClerkCaseList,
+      getCasesNew,
       {
-        error: [actions.setAlertError],
-        success: [actions.setCaseList],
+        error: [setAlertError],
+        success: [setCases],
       },
       set(state`currentPage`, 'PetitionsWorkQueue'),
     ],
   },
 ];
 export const gotoLogIn = [
-  actions.clearAlerts,
-  actions.clearLoginForm,
+  clearAlerts,
+  clearLoginForm,
   set(state`currentPage`, 'LogIn'),
 ];
 export const gotoFilePetition = [
-  actions.clearAlerts,
-  actions.clearPetition,
+  clearAlerts,
+  clearPetition,
   set(state`currentPage`, 'FilePetition'),
 ];
 export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
@@ -42,25 +63,21 @@ export const togglePaymentDetails = [toggle(state`paymentInfo.showDetails`)];
 export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
 
 export const submitLogIn = [
-  actions.setFormSubmitting,
-  actions.getUser,
+  setFormSubmitting,
+  getUser,
   {
-    error: [actions.setAlertError],
-    success: [
-      actions.setUser,
-      actions.clearAlerts,
-      actions.navigateToDashboard,
-    ],
+    error: [setAlertError],
+    success: [setUser, clearAlerts, navigateToDashboard],
   },
-  actions.unsetFormSubmitting,
+  unsetFormSubmitting,
 ];
 
 export const gotoCaseDetail = [
-  actions.setBaseUrl,
-  actions.clearAlerts,
-  actions.getCaseDetail,
-  actions.setCaseDetail,
-  actions.getUserRole,
+  setBaseUrl,
+  clearAlerts,
+  getCase,
+  setCase,
+  getUserRole,
   {
     taxpayer: [set(state`currentPage`, 'CaseDetail')],
     petitionsclerk: [set(state`currentPage`, 'ValidateCase')],
@@ -72,22 +89,21 @@ export const updatePetitionValue = [
 ];
 
 export const submitFilePetition = [
-  actions.setFormSubmitting,
-  actions.uploadCasePdfs,
-  actions.createCase,
-  actions.unsetFormSubmitting,
-  actions.getCreateCaseAlertSuccess,
-  actions.setAlertSuccess,
-  actions.navigateToDashboard,
+  setFormSubmitting,
+  createCase,
+  unsetFormSubmitting,
+  getCreateCaseAlertSuccess,
+  setAlertSuccess,
+  navigateToDashboard,
 ];
 
-export const toggleDocumentValidation = [actions.toggleDocumentValidation];
+export const toggleDocumentValidation = [toggleDocumentValidationAction];
 
 export const updateCase = [
-  actions.clearAlerts,
-  actions.updateCase,
+  clearAlerts,
+  updateCaseAction,
   {
-    error: [actions.setAlertError],
-    success: [actions.setAlertSuccess, actions.navigateToDashboard],
+    error: [setAlertError],
+    success: [setAlertSuccess, navigateToDashboard],
   },
 ];
