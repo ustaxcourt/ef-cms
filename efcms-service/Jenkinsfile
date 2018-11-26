@@ -44,10 +44,8 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t audit -f Dockerfile.audit .'
-            sh 'docker run --rm audit'
-          }
+          sh 'docker build -t audit -f Dockerfile.audit .'
+          sh 'docker run --rm audit'
         }
       }
     }
