@@ -151,10 +151,8 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
-            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
-          }
+          sh 'docker build -t globaltables -f efcms-service/Dockerfile.globaltables .'
+          sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
         }
       }
     }
@@ -205,10 +203,8 @@ def createSmokeTestTasks(targets) {
         node() {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
-            dir('efcms-service') {
-              sh 'docker build -t smoketest -f Dockerfile.smoketest .'
+              sh 'docker build -t smoketest -f efcms-service/Dockerfile.smoketest .'
               sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
-            }
           }
         }
       }
