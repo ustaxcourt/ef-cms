@@ -1,68 +1,61 @@
-const aws = require('aws-sdk-mock');
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
+const client = require('../../../business/src/persistence/dynamodbClientService');
+const sinon = require('sinon');
 const updateCase = require('./updateCase');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
 describe('Update case function', function() {
-
-  let documents =  [
+  let documents = [
     {
-      documentId: '123456789',
-      documentType: 'stin'
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
     },
     {
-      documentId: '123456780',
-      documentType: 'stin'
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
     },
     {
-      documentId: '123456781',
-      documentType: 'stin'
-    }
+      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
+    },
   ];
 
   const item = {
-    caseId: '123',
-    userId: 'userId',
-    docketNumber: '456789-18',
+    caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+    userId: 'taxpayer',
+    docketNumber: '00101-18',
     documents: documents,
-    createdAt: ''
+    createdAt: new Date().toISOString(),
   };
 
-  describe ('success', function() {
-    before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'put', function (params, callback) {
-        callback(null, { Item: item });
-      });
+  describe('success', function() {
+    before(function() {
+      sinon.stub(client, 'put').resolves(item);
     });
 
-    after(function () {
-      aws.restore('DynamoDB.DocumentClient');
+    after(function() {
+      client.put.restore();
     });
-
 
     [
       {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: '123'
+          caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
         },
-        headers: { 'Authorization': 'Bearer petitionsclerk' }
-      }
-    ].forEach(function (documentBody) {
-      it('should update a case', function () {
+        headers: { Authorization: 'Bearer petitionsclerk' },
+      },
+    ].forEach(function(documentBody) {
+      it('should update a case', function() {
         return lambdaTester(updateCase.put)
           .event(documentBody)
           .expectResolve(result => {
             const data = JSON.parse(result.body);
-            expect(data.userId)
-              .to
-              .equal('userId');
-            expect(data.documents.length)
-              .to
-              .equal(3);
+            expect(data.userId).to.equal('taxpayer');
+            expect(data.documents.length).to.equal(3);
             expect(data.caseId).not.to.be.null;
           });
       });
@@ -70,15 +63,12 @@ describe('Update case function', function() {
   });
 
   describe('error', function() {
-    before(function () {
-      aws.mock('DynamoDB.DocumentClient', 'put', function (params, callback) {
-        callback(null, { Item: item });
-      });
-
+    before(function() {
+      sinon.stub(client, 'put').resolves(item);
     });
 
-    after(function () {
-      aws.restore('DynamoDB.DocumentClient');
+    after(function() {
+      client.put.restore();
     });
 
     [
@@ -86,13 +76,13 @@ describe('Update case function', function() {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: '123'
+          caseId: '123',
         },
-        headers: {'Authorization': 'Bearer'}
+        headers: { Authorization: 'Bearer' },
       },
       {
-        httpMethod: 'PUT'
-      }
+        httpMethod: 'PUT',
+      },
     ].forEach(function(put) {
       it('should return an error on a PUT without a Authorization header', function() {
         return lambdaTester(updateCase.put)
@@ -108,10 +98,10 @@ describe('Update case function', function() {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: '123'
+          caseId: '123',
         },
-        headers: {'Authorization': 'Bearer invalidUser'}
-      }
+        headers: { Authorization: 'Bearer invalidUser' },
+      },
     ].forEach(function(put) {
       it('should return an error on a PUT when the user in the header does not have authorization', function() {
         return lambdaTester(updateCase.put)
@@ -127,10 +117,10 @@ describe('Update case function', function() {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: 'BBBB'
+          caseId: 'BBBB',
         },
-        headers: {'Authorization': 'Bearer petitionsclerk'}
-      }
+        headers: { Authorization: 'Bearer petitionsclerk' },
+      },
     ].forEach(function(put) {
       it('should return an error on a PUT when the item caseId does not match the path caseId', function() {
         return lambdaTester(updateCase.put)
@@ -140,5 +130,5 @@ describe('Update case function', function() {
           });
       });
     });
-  })
+  });
 });

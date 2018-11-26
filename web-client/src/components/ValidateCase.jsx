@@ -7,7 +7,6 @@ import React from 'react';
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
-
 /**
  *
  */
@@ -26,7 +25,6 @@ export default connect(
   }) {
     return (
       <React.Fragment>
-
         <div className="usa-grid">
           <a href="/" id="queue-nav">
             Back to Petitions Section Work Queue
@@ -52,10 +50,8 @@ export default connect(
               </button>
             </div>
           </div>
-
           <p>
-            {caseDetail.user.firstName} {caseDetail.user.lastName}, Petitioner
-            v. Commissioner of Internal Revenue, Respondent
+            TODO: ADD NAME BACK v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
           <h2>Case Activity Record</h2>

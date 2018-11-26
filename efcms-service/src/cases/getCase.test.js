@@ -1,7 +1,8 @@
-const aws = require('aws-sdk-mock');
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const getCase = require('./getCase');
+const client = require('../../../business/src/persistence/dynamodbClientService');
+const sinon = require('sinon');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
@@ -14,14 +15,12 @@ describe('Get case lambda', function() {
   };
 
   describe('success - no cases exist in database', function() {
-    before(function() {
-      aws.mock('DynamoDB.DocumentClient', 'get', function(params, callback) {
-        callback(null, {});
-      });
+    beforeEach(function() {
+      sinon.stub(client, 'get').resolves(null);
     });
 
-    after(function() {
-      aws.restore('DynamoDB.DocumentClient');
+    afterEach(function() {
+      client.get.restore();
     });
 
     [
@@ -46,15 +45,11 @@ describe('Get case lambda', function() {
 
   describe('success - cases exist in database', function() {
     before(function() {
-      aws.mock('DynamoDB.DocumentClient', 'get', function(params, callback) {
-        callback(null, {
-          Item: MOCK_CASE,
-        });
-      });
+      sinon.stub(client, 'get').resolves(MOCK_CASE);
     });
 
     after(function() {
-      aws.restore('DynamoDB.DocumentClient');
+      client.get.restore();
     });
 
     [
