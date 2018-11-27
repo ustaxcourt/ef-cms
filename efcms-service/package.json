@@ -1,6 +1,6 @@
 {
   "name": "efcms-service",
-  "description": "US Tax Court Document Service API ",
+  "description": "US Tax Court Document Service API",
   "version": "0.1.0",
   "dependencies": {
     "uuid": "^3.3.2",
