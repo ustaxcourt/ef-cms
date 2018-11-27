@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
 DOMAIN="${EFCMS_DOMAIN}"
