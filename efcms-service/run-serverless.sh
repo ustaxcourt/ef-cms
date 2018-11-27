@@ -5,6 +5,7 @@ region=$2
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account")
 ACCOUNT_ID="${ACCOUNT_ID%\"}"
 ACCOUNT_ID="${ACCOUNT_ID#\"}"
+export NODE_PRESERVE_SYMLINKS=1
 cd src && find . -type f -exec chmod -R ugo+r {} ";"
 cd ..
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"

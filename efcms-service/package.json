@@ -3,7 +3,8 @@
   "description": "US Tax Court Document Service API",
   "version": "0.1.0",
   "dependencies": {
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "ef-cms-shared": "file:../business"
   },
   "devDependencies": {
     "artillery": "^1.6.0-25",
@@ -51,7 +52,18 @@
     "test:watch": "nyc -a mocha --watch './src/**/*.test.js'",
     "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
-    "create-tables": "node create-dynamo-tables.js"
+    "create-tables": "node create-dynamo-tables.js",
+    "docker:shellcheck": "./docker-shellcheck.sh",
+    "docker:audit": "./docker-audit.sh",
+    "docker:lint": "./docker-lint.sh",
+    "docker:test": "./docker-test.sh",
+    "docker:sonarqube": "./docker-sonarqube.sh",
+    "docker:terraform": "./docker-terraform.sh",
+    "docker:serverless": "./docker-serverless.sh",
+    "docker:smoketests": "./docker-smoketests.sh",
+    "docker:s3replication": "./docker-s3replication.sh",
+    "docker:route53": "./docker-route53.sh",
+    "docker:globaltables": "./docker-globaltables.sh"
   },
   "nyc": {
     "check-coverage": true,

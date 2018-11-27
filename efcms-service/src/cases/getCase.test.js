@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const getCase = require('./getCase');
-const client = require('../../../business/src/persistence/dynamodbClientService');
+const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const chai = require('chai');
 chai.use(require('chai-string'));
@@ -29,10 +29,10 @@ describe('Get case lambda', function() {
         pathParameters: {
           caseId: '123',
         },
-        headers: { Authorization: 'Bearer petitionsclerk' },
+        headers: { Authorization: 'Bearer userId' },
       },
     ].forEach(function(documentBody) {
-      it('should return a case on a GET', function() {
+      it('should return a `case not found` error', function() {
         return lambdaTester(getCase.get)
           .event(documentBody)
           .expectResolve(result => {

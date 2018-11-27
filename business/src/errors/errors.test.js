@@ -32,8 +32,8 @@ describe('UnauthorizedError', () => {
     error = new UnauthorizedError('some error');
   });
 
-  it('should set a status code of 404', () => {
-    expect(error.statusCode).to.equal(404);
+  it('should set a status code of 403', () => {
+    expect(error.statusCode).to.equal(403);
   });
 
   it('should set the message', () => {
@@ -41,14 +41,14 @@ describe('UnauthorizedError', () => {
   });
 });
 
-describe('UnprocessableEntitytError', () => {
+describe('UnprocessableEntityError', () => {
   let error;
 
   beforeEach(() => {
     error = new UnprocessableEntityError();
   });
 
-  it('should set a status code of 404', () => {
+  it('should set a status code of 422', () => {
     expect(error.statusCode).to.equal(422);
   });
 

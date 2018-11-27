@@ -45,6 +45,7 @@ export default connect(
                 className="float-right"
                 id="update-case"
                 onClick={() => updateCase()}
+                tabIndex="1000"
               >
                 Save updates
               </button>
