@@ -31,6 +31,15 @@ pipeline {
         }
       }
     }
+    stage('Init') {
+      steps {
+        script {
+          dir('efcms-service') {
+            sh "./docker-init.sh"
+          }
+        }
+      }
+    }
     stage('ShellCheck') {
       steps {
         script {
