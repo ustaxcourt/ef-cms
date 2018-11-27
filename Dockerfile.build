@@ -35,9 +35,11 @@ RUN git config --global user.email "blank@example.com" && \
     git commit -m 'rev'
 
 COPY business/package.json /home/app/business/package.json
+COPY business/package-lock.json /home/app/business/package-lock.json
 RUN cd /home/app/business && npm ci --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
+COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
 RUN cd /home/app/efcms-service && npm ci
 
 COPY . /home/app
