@@ -2,7 +2,7 @@ service: ef-cms
 plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
-  - serverless-plugin-split-stacks
+#  - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation
@@ -54,15 +54,15 @@ custom:
         - name: ef-cms
           description: EF-CMS
         - name: documents
-          description: document service
+          description: rawDocument service
     summary: 'EF-CMS Documents API'
     version: '${opt:stage}-${git:sha1}'
     description: 'EF-CMS Documents API documented with OpenAPI specification'
     resources:
       - path: 'v1/documents'
-        description: 'Path used for creating a document.'
+        description: 'Path used for creating a rawDocument.'
       - path: 'v1/documents/{documentId}'
-        description: 'Path used for retrieving document with a documentId.'
+        description: 'Path used for retrieving rawDocument with a documentId.'
       - path: 'v1/documents/uploadPolicy'
         description: 'Path used for retrieving pre-signed policy url.'
       - path: 'v1/cases'
@@ -89,28 +89,28 @@ custom:
                     type: string
                   documentType:
                     type: string
-              description: array of document ids and types associated with the case
+              description: array of rawDocument ids and types associated with the case
             createdAt:
               type: string
               description: date case created
-      - name: 'document'
-        description: 'a document response'
+      - name: 'rawDocument'
+        description: 'a rawDocument response'
         contentType: 'application/json'
         schema:
           type: object
           properties:
             documentId:
               type: string
-              description: id of document
+              description: id of rawDocument
             userId:
               type: string
-              description: id of user who created the document
+              description: id of user who created the rawDocument
             documentType:
               type: string
-              description: type of this document
+              description: type of this rawDocument
             createdAt:
               type: string
-              description: date document created
+              description: date rawDocument created
       - name: 'policyUrl'
         description: 'a policy url response'
         contentType: 'application/json'
@@ -179,9 +179,6 @@ custom:
     stage: ${self:provider.stage}
     createRoute53Record: false
     enabled: true
-  splitStacks:
-    perFunction: true
-    perType: false
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   vars: ${file(./config/${self:custom.stage}.yml)}
@@ -299,7 +296,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for document uploads to S3.
+              Create a pre-signed url for rawDocument uploads to S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -319,7 +316,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for document downloads from S3.
+              Create a pre-signed url for rawDocument downloads from S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -335,17 +332,17 @@ functions:
           method: post
           cors: true
           documentation:
-            summary: create a document
+            summary: create a rawDocument
             tags:
               - documents
             description: >
-              Create a document.
+              Create a rawDocument.
             methodResponses:
               - statusCode: '200'
                 responseBody:
-                  description: 'document meta-data'
+                  description: 'rawDocument meta-data'
                 responseModels:
-                  'application/json': document
+                  'application/json': rawDocument
 
   updateCase:
     handler: src/cases/updateCase.put
@@ -387,7 +384,7 @@ functions:
               - name: documents
                 in: body
                 required: true
-                description: document metadata
+                description: rawDocument metadata
                 schema:
                   type: array
                   items:

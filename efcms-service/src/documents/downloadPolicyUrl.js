@@ -1,5 +1,23 @@
-const { getDocumentDownloadUrl } = require('./services/documentBlobDAO');
 const { redirect } = require('../middleware/apiGatewayHelper');
+const {
+  getDownloadPolicyUrl: downloadPolicyUseCase,
+} = require('ef-cms-shared/src/useCases/getDownloadPolicyUrl');
+
+const {
+  persistence: { getDownloadPolicyUrl },
+  environment: { region, documentsBucketName, s3Endpoint },
+} = require('../applicationContext');
+
+const applicationContext = {
+  persistence: {
+    getDownloadPolicyUrl,
+  },
+  environment: {
+    region,
+    s3Endpoint,
+    documentsBucketName,
+  },
+};
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -10,8 +28,8 @@ const { redirect } = require('../middleware/apiGatewayHelper');
  */
 exports.get = event =>
   redirect(() =>
-    getDocumentDownloadUrl({
+    downloadPolicyUseCase({
       documentId: event.pathParameters.documentId,
-    })
+      applicationContext,
+    }),
   );
-
