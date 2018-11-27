@@ -130,7 +130,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} ./docker-route53.sh"
+            sh "./docker-route53.sh ${branchMap[env.branch_name]}"
           }
         }
       }
@@ -144,7 +144,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} ./docker-s3replication.sh"
+            sh "./docker-s3replication.sh ${branchMap[env.branch_name]}"
           }
         }
       }
@@ -158,7 +158,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} REGIONS=${regions.join(',')} ./docker-globaltables.sh"
+            sh "./docker-globaltables.sh ${branchMap[env.branch_name]} ${regions.join(',')}"
           }
         }
       }
