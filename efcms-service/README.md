@@ -12,6 +12,12 @@
 
 - Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
 
+### Optional prerequisites if deploying a sandbox
+
+- `npm install -g serverless`
+
+- Install [terraform](https://www.terraform.io/intro/getting-started/install.html)
+
 # Contributing
 
 1. `npm start`
