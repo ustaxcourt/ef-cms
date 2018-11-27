@@ -7,7 +7,6 @@ import React from 'react';
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
-
 /**
  *
  */
@@ -26,7 +25,6 @@ export default connect(
   }) {
     return (
       <React.Fragment>
-
         <div className="usa-grid">
           <a href="/" id="queue-nav">
             Back to Petitions Section Work Queue
@@ -47,6 +45,7 @@ export default connect(
                 className="float-right"
                 id="update-case"
                 onClick={() => updateCase()}
+                tabIndex="1000"
               >
                 Save updates
               </button>
