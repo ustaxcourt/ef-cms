@@ -14,5 +14,6 @@ export default [
   {
     taxpayer: [setCurrentPage('CaseDetail')],
     petitionsclerk: [setCurrentPage('ValidateCase')],
+    intakeclerk: [setCurrentPage('ValidateCase')],
   },
 ];
