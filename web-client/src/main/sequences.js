@@ -17,6 +17,7 @@ import setAlertSuccess from './actions/setAlertSuccess';
 import setBaseUrl from './actions/setBaseUrl';
 import setCase from './actions/setCase';
 import setCases from './actions/setCases';
+import setCurrentPage from './actions/setCurrentPage';
 import setFormSubmitting from './actions/setFormSubmitting';
 import setUser from './actions/setUser';
 import toggleDocumentValidationAction from './actions/toggleDocumentValidation';
@@ -32,7 +33,7 @@ export const gotoDashboard = [
         error: [setAlertError],
         success: [setCases],
       },
-      set(state`currentPage`, 'Dashboard'),
+      setCurrentPage('Dashboard'),
     ],
     petitionsclerk: [
       getCasesNew,
@@ -40,22 +41,21 @@ export const gotoDashboard = [
         error: [setAlertError],
         success: [setCases],
       },
-      set(state`currentPage`, 'PetitionsWorkQueue'),
+      setCurrentPage('PetitionsWorkQueue'),
     ],
-    intakeclerk: [set(state`currentPage`, 'IntakeClerkDashboard')],
+    intakeclerk: [setCurrentPage('IntakeClerkDashboard')],
   },
 ];
-export const gotoLogIn = [
-  clearAlerts,
-  clearLoginForm,
-  set(state`currentPage`, 'LogIn'),
-];
+
+export const gotoLogIn = [clearAlerts, clearLoginForm, setCurrentPage('LogIn')];
+
 export const gotoFilePetition = [
   clearAlerts,
   clearPetition,
-  set(state`currentPage`, 'FilePetition'),
+  setCurrentPage('FilePetition'),
 ];
-export const gotoStyleGuide = [set(state`currentPage`, 'StyleGuide')];
+
+export const gotoStyleGuide = [setCurrentPage('StyleGuide')];
 
 export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 
@@ -80,8 +80,8 @@ export const gotoCaseDetail = [
   setCase,
   getUserRole,
   {
-    taxpayer: [set(state`currentPage`, 'CaseDetail')],
-    petitionsclerk: [set(state`currentPage`, 'ValidateCase')],
+    taxpayer: [setCurrentPage('CaseDetail')],
+    petitionsclerk: [setCurrentPage('ValidateCase')],
   },
 ];
 
@@ -91,6 +91,7 @@ export const updatePetitionValue = [
 
 export const submitFilePetition = [
   setFormSubmitting,
+  clearAlerts,
   createCase,
   unsetFormSubmitting,
   getCreateCaseAlertSuccess,
@@ -100,7 +101,7 @@ export const submitFilePetition = [
 
 export const toggleDocumentValidation = [toggleDocumentValidationAction];
 
-export const updateCase = [
+export const submitUpdateCase = [
   clearAlerts,
   updateCaseAction,
   {

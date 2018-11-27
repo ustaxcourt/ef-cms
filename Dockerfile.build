@@ -24,11 +24,23 @@ RUN cp terraform /usr/local/bin/
 
 WORKDIR /home/app
 
+# Since the .git file is ignored in the .dockerignore file,
+# we init a git repo here so that serverless can get a new hash
+# to deploy with... serverless is coupled to git
+RUN git config --global user.email "blank@example.com" && \
+    git config --global user.name "local" && \
+    git init && \
+    touch tmp.txt && \
+    git add tmp.txt && \
+    git commit -m 'rev'
+
 COPY business/package.json /home/app/business/package.json
-RUN cd /home/app/business && npm install
+COPY business/package-lock.json /home/app/business/package-lock.json
+RUN cd /home/app/business && npm ci --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
-RUN cd /home/app/efcms-service && npm install
+COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
+RUN cd /home/app/efcms-service && npm ci
 
 COPY . /home/app
 
