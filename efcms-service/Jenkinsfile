@@ -9,12 +9,12 @@ branchMap = [
 pipeline {
   agent any
 
-  environment {
-    SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
-    npm_config_cache = "/home/tomcat"
-    HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
-    CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
-  }
+  // environment {
+  //   // SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
+  //   npm_config_cache = "/home/tomcat"
+  //   // HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
+  //   // CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
+  // }
 
   options { buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) }
 
@@ -31,12 +31,20 @@ pipeline {
         }
       }
     }
+    stage('Init') {
+      steps {
+        script {
+          dir('efcms-service') {
+            sh "./docker-init.sh"
+          }
+        }
+      }
+    }
     stage('ShellCheck') {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t shellcheck -f Dockerfile.shellcheck .'
-            sh 'docker run --rm shellcheck'
+            sh "./docker-shellcheck.sh"
           }
         }
       }
@@ -45,8 +53,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t audit -f Dockerfile.audit .'
-            sh 'docker run --rm audit'
+            sh "./docker-audit.sh"
           }
         }
       }
@@ -55,8 +62,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t lint -f Dockerfile.lint .'
-            sh 'docker run --rm lint'
+            sh "./docker-lint.sh"
           }
         }
       }
@@ -64,12 +70,9 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
-          sh 'docker build -t test -f efcms-service/Dockerfile.test .'
-          sh "docker run --name ${CONTAINER_NAME} test"
           dir('efcms-service') {
-            sh "docker cp ${CONTAINER_NAME}:/home/app/efcms-service/coverage coverage"
-            sh "docker rm ${CONTAINER_NAME}"
+            def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
+            sh "CONTAINER_NAME=$CONTAINER_NAME ./docker-test.sh"
           }
         }
       }
@@ -86,8 +89,7 @@ pipeline {
         script {
           withCredentials([string(credentialsId: 'API_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             dir('efcms-service') {
-              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_KEY=${API_SONAR_KEY} -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
+              sh "SONAR_KEY=${API_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SONAR_TOKEN} ./docker-sonarqube.sh"
             }
           }
         }
@@ -128,8 +130,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t route53 -f Dockerfile.route53 .'
-            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm route53"
+            sh "ENV=${branchMap[env.branch_name]} ./docker-route53.sh"
           }
         }
       }
@@ -143,8 +144,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t s3replication -f Dockerfile.s3replication .'
-            sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${branchMap[env.branch_name]} --rm s3replication"
+            sh "ENV=${branchMap[env.branch_name]} ./docker-s3replication.sh"
           }
         }
       }
@@ -158,8 +158,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh 'docker build -t globaltables -f Dockerfile.globaltables .'
-            sh "docker run -e ENV=${branchMap[env.branch_name]} -e REGIONS=${regions.join(',')} --rm globaltables"
+            sh "ENV=${branchMap[env.branch_name]} REGIONS=${regions.join(',')} ./docker-globaltables.sh"
           }
         }
       }
@@ -193,8 +192,9 @@ def createTerraformTasks(targets) {
       node() {
         stage("terraform ${slsStage}") {
           checkout scm
-          sh 'docker build -t terraform -f efcms-service/Dockerfile.terraform .'
-          sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e ENV=${slsStage} --rm terraform"
+          dir('efcms-service') {
+            sh "./docker-terraform ${slsStage}"
+          }
         }
       }
     }
@@ -212,8 +212,7 @@ def createSmokeTestTasks(targets) {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
             dir('efcms-service') {
-              sh 'docker build -t smoketest -f Dockerfile.smoketest .'
-              sh "docker run -e STAGE=${slsStage} -e REGION=${region} --rm smoketest"
+              sh "./docker-smoketests ${slsStage} ${region}"
             }
           }
         }
@@ -233,8 +232,7 @@ def createServerlessTasks(targets) {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
             dir('efcms-service') {
-              sh 'docker build -t serverless -f Dockerfile.serverless .'
-              sh "docker run -e EFCMS_DOMAIN=${EFCMS_DOMAIN} -e STAGE=${slsStage} -e REGION=${region} --rm serverless"
+              sh "./docker-serverless ${slsStage} ${region}"
             }
           }
         }

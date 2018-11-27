@@ -20,7 +20,7 @@ describe('Authorization client service', () => {
     expect(isAuthorized('petitionsclerk', GET_CASE)).to.be.true;
   });
 
-  it('should set the message', () => {
+  it('should return false when a user doesnt have a petitionsclerk role', () => {
     expect(isAuthorized('notapetitionsclerk', GET_CASES_BY_STATUS)).to.be.false;
   });
 });
