@@ -66,6 +66,15 @@ Case.prototype.validate = function validate() {
   }
 };
 
+Case.isValidUUID = caseId =>
+  caseId &&
+  /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
+    caseId,
+  );
+
+Case.isValidDocketNumber = docketNumber =>
+  docketNumber && /\d{5}-\d{2}/.test(docketNumber);
+
 Case.documentTypes = {
   petitionFile: 'Petition',
   requestForPlaceOfTrial: 'Request for Place of Trial',
