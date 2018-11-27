@@ -1,6 +1,6 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const { getCase } = require('../../../business/src/useCases/getCase');
+const { getCase } = require('ef-cms-shared/src/useCases/getCase');
 
 const {
   persistence: { get },

@@ -1,10 +1,13 @@
+########
+# Shellcheck Section
+FROM koalaman/shellcheck-alpine as shellcheck
+
 FROM node:8-alpine
+COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
 
 RUN apk add git
+RUN apk add bash
 
-WORKDIR /home/app
-
-# Versions: https://pypi.python.org/pypi/awscli#downloads
 ENV AWS_CLI_VERSION 1.16.31
 
 RUN apk --no-cache update && \
@@ -19,14 +22,14 @@ RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/t
 
 RUN cp terraform /usr/local/bin/
 
+WORKDIR /home/app
+
 COPY business/package.json /home/app/business/package.json
-RUN cd /home/app/business; npm install
+RUN cd /home/app/business && npm install
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
-RUN cd /home/app/efcms-service; npm install
+RUN cd /home/app/efcms-service && npm install
 
 COPY . /home/app
 
-WORKDIR /home/app/efcms-service/terraform/main
-
-CMD ../bin/deploy-app.sh $ENV
+CMD echo "please overwrite this command"
