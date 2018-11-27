@@ -1,44 +1,8 @@
-<<<<<<< HEAD
-# Running this project locally
-
-### UI (Terminal A)
-
-##### Setup
-
-- `npm i`
-
-##### Running
-
-- `npm start`
-
-### API (Terminal B)
-
-##### Setup
-
-- `npm i`
-- `npm run install:dynamodb`
-
-##### Running
-
-- `npm start`
-
-# CI/CD Setup
-
-Please look at the [SETUP.md](SETUP.md)
-
-=======
->>>>>>> develop
 # Electronic Filing / Case Management System
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
-<<<<<<< HEAD
-## Contributing
-
-See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
-=======
 ## Running this project locally
->>>>>>> develop
 
 The EF-CMS is comprised of two components: the API and the UI. Each must be run in order to function.
 
