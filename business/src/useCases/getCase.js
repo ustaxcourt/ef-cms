@@ -15,13 +15,16 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     });
   } else if (Case.isValidDocketNumber(caseId)) {
     //docketNumber
-    caseRecord = await applicationContext.persistence.getCaseByDocketNumber({
+    const result = await applicationContext.persistence.getCaseByDocketNumber({
       docketNumber: caseId,
       applicationContext,
     });
+    if (result && result.length) {
+      caseRecord = result[0];
+    }
   }
 
-  if (!caseRecord || (Array.isArray(caseRecord) && !caseRecord.length)) {
+  if (!caseRecord) {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
