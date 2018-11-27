@@ -7,8 +7,6 @@ variable "environment" {
   type = "string"
 }
 
-// dns_domain is determined from the "management" terraform's dns_domain
-// see the deploy-app.sh script
 variable "dns_domain" {
   type = "string"
 }
