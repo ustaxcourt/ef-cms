@@ -12,6 +12,7 @@ import getCreateCaseAlertSuccess from './actions/getCreateCaseAlertSuccess';
 import getUser from './actions/getUser';
 import getUserRole from './actions/getUserRole';
 import navigateToDashboard from './actions/navigateToDashboard';
+import navigateToCaseDetail from './actions/navigateToCaseDetail';
 import setAlertError from './actions/setAlertError';
 import setAlertSuccess from './actions/setAlertSuccess';
 import setBaseUrl from './actions/setBaseUrl';
@@ -62,6 +63,12 @@ export const toggleUsaBannerDetails = [toggle(state`usaBanner.showDetails`)];
 export const togglePaymentDetails = [toggle(state`paymentInfo.showDetails`)];
 
 export const updateFormValue = [set(state`form.${props`key`}`, props`value`)];
+
+export const updateSearchTerm = [set(state`searchTerm`, props`searchTerm`)];
+export const submitSearch = [
+  set(props`caseId`, state`searchTerm`),
+  navigateToCaseDetail,
+];
 
 export const submitLogIn = [
   setFormSubmitting,

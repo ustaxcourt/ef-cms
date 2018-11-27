@@ -16,6 +16,7 @@ export default {
     },
     petition: {},
     form: {},
+    searchTerm: '',
     user: {
       userId: '',
       // userId: 'petitionsclerk',

@@ -9,7 +9,7 @@ exports.isAuthorized = (user, action, owner) => {
   }
 
   return (
-    user === 'petitionsclerk' &&
+    (user === 'petitionsclerk' || user === 'intakeclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
       action === exports.GET_CASE)

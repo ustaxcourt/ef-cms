@@ -11,8 +11,8 @@ module.exports = async ({ userId, documents, applicationContext }) => {
   });
   caseToCreate.validate();
   // TODO: function should be named "createCase", case should be raw
-  return applicationContext.persistence.create({
-    entity: caseToCreate,
+  return applicationContext.persistence.createCase({
+    caseRecord: caseToCreate,
     applicationContext,
   });
 };

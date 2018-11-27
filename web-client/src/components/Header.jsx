@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import SearchBox from './SearchBox';
 
 // import close from '../../node_modules/uswds/dist/img/close.svg';
 
@@ -15,7 +16,9 @@ export default connect(
         <div className="usa-navbar">
           <div className="usa-logo" id="extended-logo">
             <em className="usa-logo-text">
-              <a href="/">United States Tax Court</a>
+              <a href={user.userId ? '/' : '/log-in'}>
+                United States Tax Court
+              </a>
             </em>
           </div>
           <button className="usa-menu-btn">Menu</button>
@@ -82,24 +85,16 @@ export default connect(
               </li>
             </ul> */}
             <div className="usa-nav-secondary">
-              <ul className="usa-unstyled-list usa-nav-secondary-links">
-                <li role="search">
-                  <form className="usa-search">
-                    <label className="usa-sr-only" htmlFor="search-field">
-                      Search medium
-                    </label>
-                    <input id="search-field" type="search" name="search" />
-                    <button type="submit">
-                      <span className="usa-search-submit-text">Search</span>
-                    </button>
-                  </form>
-                </li>
-                {user.userId && (
+              {user.userId && (
+                <ul className="usa-unstyled-list usa-nav-secondary-links">
+                  <li role="search">
+                    <SearchBox />
+                  </li>
                   <li>
                     Hello, {user.firstName} {user.lastName}
                   </li>
-                )}
-              </ul>
+                </ul>
+              )}
             </div>
           </div>
         </nav>

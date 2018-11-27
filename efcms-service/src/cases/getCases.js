@@ -6,21 +6,7 @@ const {
 const {
   getCasesByUser: byUser,
 } = require('ef-cms-shared/src/useCases/getCasesByUser');
-
-const {
-  persistence: { getCasesByUser, getCasesByStatus },
-  environment: { stage },
-} = require('../applicationContext');
-
-const applicationContext = {
-  persistence: {
-    getCasesByUser,
-    getCasesByStatus,
-  },
-  environment: {
-    stage,
-  },
-};
+const applicationContext = require('../applicationContext');
 
 /**
  * GET Cases API Lambda
