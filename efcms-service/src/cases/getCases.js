@@ -2,10 +2,10 @@ const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 const {
   getCasesByStatus: byStatus,
-} = require('../../../business/src/useCases/getCasesByStatus');
+} = require('ef-cms-shared/src/useCases/getCasesByStatus');
 const {
   getCasesByUser: byUser,
-} = require('../../../business/src/useCases/getCasesByUser');
+} = require('ef-cms-shared/src/useCases/getCasesByUser');
 
 const {
   persistence: { getCasesByUser, getCasesByStatus },
