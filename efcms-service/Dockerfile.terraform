@@ -19,8 +19,12 @@ RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/t
 
 RUN cp terraform /usr/local/bin/
 
+COPY business/package.json /home/app/business/package.json
+RUN cd /home/app/business; npm install
+
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service; npm install
+
 COPY . /home/app
 
 WORKDIR /home/app/efcms-service/terraform/main
