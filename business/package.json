@@ -30,10 +30,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "joi": "^14.1.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "aws-sdk": "^2.362.0"
   },
   "devDependencies": {
-    "aws-sdk": "^2.362.0",
     "chai": "^4.2.0",
     "chai-string": "^1.5.0",
     "eslint": "^5.9.0",
