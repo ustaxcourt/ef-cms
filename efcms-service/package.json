@@ -53,12 +53,17 @@
     "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "create-tables": "node create-dynamo-tables.js",
-    "docker:shellcheck": "docker build -t efcms-build -f ../Dockerfile.build .. && docker run --rm efcms-build /bin/sh -c 'cd efcms-service && ./run-shellcheck.sh'",
-    "docker:audit": "docker build -t efcms-build -f ../Dockerfile.build .. && docker run --rm efcms-build /bin/sh -c 'cd efcms-service && npm audit'",
-    "docker:lint": "docker build -t efcms-build -f ../Dockerfile.build .. && docker run --rm efcms-build /bin/sh -c 'cd efcms-service && npm run lint'",
-    "docker:test": "docker build -t efcms-build -f ../Dockerfile.build .. && docker run --name $CONTAINER_NAME efcms-build /bin/sh -c 'cd efcms-service && npm run test' && docker cp $CONTAINER_NAME:/home/app/efcms-service/coverage coverage && docker rm $CONTAINER_NAME",
-    "docker:sonarqube": "docker build -t api-sonarqube -f Dockerfile.sonarqube . && docker run -e SONAR_KEY=$API_SONAR_KEY -e branch_name=$branch_name -e SONAR_ORG=$SONAR_ORG -e SONAR_TOKEN=$SONAR_TOKEN -v `pwd`/coverage:/home/app/coverage --rm api-sonarqube",
-    "docker:terraform": "docker build -t efcms-build -f ../Dockerfile.build .. && docker run -e ENV=$ENV -e EFCMS_DOMAIN=$EFCMS_DOMAIN --rm efcms-build /bin/sh -c 'cd efcms-service/terraform/main && ../bin/deploy-app.sh $ENV'"
+    "docker:shellcheck": "./docker-shellcheck.sh",
+    "docker:audit": "./docker-audit.sh",
+    "docker:lint": "./docker-lint.sh",
+    "docker:test": "./docker-test.sh",
+    "docker:sonarqube": "./docker-sonarqube.sh",
+    "docker:terraform": "./docker-terraform.sh",
+    "docker:serverless": "./docker-serverless.sh",
+    "docker:smoketests": "./docker-smoketests.sh",
+    "docker:s3replication": "./docker-s3replication.sh",
+    "docker:route53": "./docker-route53.sh",
+    "docker:globaltables": "./docker-globaltables.sh"
   },
   "nyc": {
     "check-coverage": true,
