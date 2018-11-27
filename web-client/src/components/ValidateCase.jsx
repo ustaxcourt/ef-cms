@@ -56,13 +56,11 @@ export default connect(
           <br />
           <div className="subsection">
             <h2>Case Information</h2>
-            <label htmlFor="paygov">Petition Fee</label>
-            <input id="paygov" type="radio" />
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend className="usa-sr-only">Petition Fee</legend>
               <ul className="usa-unstyled-list">
                 <li>
-                  <input id="paygov" type="radio" name="historical-figures-2" />
+                  <input id="paygov" type="radio" name="paymentType" />
                   <label htmlFor="paygov">Paid by pay.gov</label>
                   <label htmlFor="paygovid">Payment ID</label>
                   <input id="paygovid" type="text" name="paygovid" />
