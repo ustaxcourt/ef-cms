@@ -98,6 +98,21 @@ pipeline {
         }
       }
     }
+    stage('Cerebral Tests') {
+      steps {
+        script {
+          stage('Test') {
+            steps {
+              script {
+                dir('web-client') {
+                  sh "./docker-cerebral.sh"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     stage('cypress') {
       steps {
         script {

@@ -1,5 +1,3 @@
-########
-# Shellcheck Section
 FROM koalaman/shellcheck-alpine as shellcheck
 
 FROM node:8-alpine
@@ -11,7 +9,7 @@ RUN apk add bash
 ENV AWS_CLI_VERSION 1.16.31
 
 RUN apk --no-cache update && \
-    apk --no-cache add openjdk8-jre python py-pip py-setuptools ca-certificates groff less && \
+    apk --no-cache add python py-pip py-setuptools ca-certificates groff less && \
     apk --no-cache add bash git openssh && \
     pip install --upgrade pip && \
     pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
@@ -38,9 +36,9 @@ COPY business/package.json /home/app/business/package.json
 COPY business/package-lock.json /home/app/business/package-lock.json
 RUN cd /home/app/business && npm ci --only=production
 
-COPY efcms-service/package.json /home/app/efcms-service/package.json
-COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
-RUN cd /home/app/efcms-service && npm ci
+COPY web-client/package.json /home/app/web-client/package.json
+COPY web-client/package-lock.json /home/app/web-client/package-lock.json
+RUN cd /home/app/web-client && npm ci
 
 COPY . /home/app
 
