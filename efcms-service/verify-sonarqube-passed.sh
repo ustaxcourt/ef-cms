@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 FULL_URL="https://sonarcloud.io"
 branch_name=$branch_name
