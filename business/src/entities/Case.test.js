@@ -72,4 +72,27 @@ describe('Case entity', () => {
       assert.ok(error !== null);
     });
   });
+
+  describe('isValidUUID', () => {
+    it('returns true if a valid uuid', () => {
+      assert.ok(Case.isValidUUID('c54ba5a9-b37b-479d-9201-067ec6e335bb'));
+    });
+
+    it('returns false if a invalid uuid', () => {
+      assert.equal(
+        Case.isValidUUID('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
+        false,
+      );
+    });
+  });
+
+  describe('isValidDocketNumber', () => {
+    it('returns true if a valid docketNumber', () => {
+      assert.ok(Case.isValidDocketNumber('00000-00'));
+    });
+
+    it('returns false if a invalid docketnumber', () => {
+      assert.equal(Case.isValidDocketNumber('00'), false);
+    });
+  });
 });
