@@ -83,14 +83,17 @@ export default connect(
             </ul> */}
             <div className="usa-nav-secondary">
               <ul className="usa-unstyled-list usa-nav-secondary-links">
-                {/* <li className="js-search-button-container">
-                  <button className="usa-header-search-button js-search-button">
-                    Search
-                  </button>
+                <li role="search">
+                  <form className="usa-search">
+                    <label className="usa-sr-only" htmlFor="search-field">
+                      Search medium
+                    </label>
+                    <input id="search-field" type="search" name="search" />
+                    <button type="submit">
+                      <span className="usa-search-submit-text">Search</span>
+                    </button>
+                  </form>
                 </li>
-                <li>
-                  <a href="/">Secondary priority link</a>
-                </li> */}
                 {user.userId && (
                   <li>
                     Hello, {user.firstName} {user.lastName}

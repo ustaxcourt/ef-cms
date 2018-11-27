@@ -1,4 +1,4 @@
-const { UnauthorizedError } = require('./errors');
+const { UnauthorizedError } = require('../../../business/src/errors/errors');
 
 const headers = {
   'Content-Type': 'application/json',
@@ -24,6 +24,7 @@ exports.handle = async fun => {
     const response = await fun();
     return exports.sendOk(response);
   } catch (err) {
+    console.error('err', err);
     return exports.sendError(err);
   }
 };

@@ -23,6 +23,20 @@ pipeline {
     }
     stage('components') {
       parallel {
+        stage('shared') {
+          when {
+            expression {
+              return checkCommit('business')
+            }
+          }
+          steps {
+            build job: 'ef-cms-shared', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
         stage('web-client') {
           when {
             expression {

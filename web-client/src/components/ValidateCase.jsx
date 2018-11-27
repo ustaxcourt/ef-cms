@@ -51,10 +51,8 @@ export default connect(
               </button>
             </div>
           </div>
-
           <p>
-            {caseDetail.user.firstName} {caseDetail.user.lastName}, Petitioner
-            v. Commissioner of Internal Revenue, Respondent
+            TODO: ADD NAME BACK v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
           <h2>Case Activity Record</h2>

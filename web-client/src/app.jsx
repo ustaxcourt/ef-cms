@@ -1,10 +1,10 @@
 import { Container } from '@cerebral/react';
+import { faFilePdf, faFlag } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
 import mainModule from './main';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faFilePdf, faFlag } from '@fortawesome/free-solid-svg-icons';
 
 import { router, route } from './router';
 import AppComponent from './components/App';

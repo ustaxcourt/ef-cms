@@ -12,6 +12,8 @@ efcms-service/.nyc_output
 efcms-service/.serverless
 efcms-service/coverage
 efcms-service/terraform/main/.terraform
+business/node_modules
+business/coverage
 management/management/.terraform
 web-client
 .git
