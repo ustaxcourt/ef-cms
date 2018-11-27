@@ -98,10 +98,7 @@ pipeline {
             string(credentialsId: 'UI_SONAR_TOKEN', variable: 'SONAR_TOKEN')
           ]) {
             def runner = docker.build 'sonar', '-f web-client/Dockerfile.sonar .'
-            runner.inside("-e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
-              dir('management/management') {
-                sh './deploy-init.sh'
-              }
+            runner.inside("-e SONAR_KEY=${UI_SONAR_KEY} -e SONAR_ORG=${SONAR_ORG} -e GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' -e AWS_DEFAULT_REGION=us-east-1 -v /etc/passwd:/etc/passwd") {
               dir('web-client') {
                 sh './verify-sonarqube-passed.sh'
               }
@@ -202,13 +199,10 @@ pipeline {
 def deployTo(env) {
   def runner = docker.build 'deploy', '-f web-client/Dockerfile.deploy .'
   runner.inside('-e AWS_DEFAULT_REGION=us-east-1 -v /home/tomcat:/home/tomcat') {
-    dir('management/management') {
-      sh './deploy-init.sh'
-    }
     dir('web-client') {
-      def domain=sh(returnStdout: true, script: "cd ../management/management && terraform output dns_domain")
+      def domain="${EFCMS_DOMAIN}"
       def restApiId=sh(returnStdout: true, script: "aws apigateway get-rest-apis --query \"items[?name=='${env}-ef-cms'].id\" --output text").trim()
-      sh "API_URL=https://documents-${env}.${domain}/v1 npm run dist"
+      sh "API_URL=https://efcms-${env}.${domain}/v1 npm run dist"
       def bucket = sh(returnStdout: true, script: "cd terraform/main && terraform output bucket").trim()
       s3Upload(
         bucket: "${bucket}",
