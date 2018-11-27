@@ -4,7 +4,7 @@ import setAlertError from '../actions/setAlertError';
 import setAlertSuccess from '../actions/setAlertSuccess';
 import updateCaseAction from '../actions/updateCase';
 
-export const submitUpdateCase = [
+export default [
   clearAlerts,
   updateCaseAction,
   {

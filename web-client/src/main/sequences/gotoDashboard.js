@@ -5,7 +5,7 @@ import setAlertError from '../actions/setAlertError';
 import setCases from '../actions/setCases';
 import setCurrentPage from '../actions/setCurrentPage';
 
-export const gotoDashboard = [
+export default [
   getUserRole,
   {
     taxpayer: [

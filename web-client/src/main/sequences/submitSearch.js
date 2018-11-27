@@ -3,7 +3,4 @@ import { state, props } from 'cerebral';
 
 import navigateToCaseDetail from '../actions/navigateToCaseDetail';
 
-export const submitSearch = [
-  set(props`caseId`, state`searchTerm`),
-  navigateToCaseDetail,
-];
+export default [set(props`caseId`, state`searchTerm`), navigateToCaseDetail];

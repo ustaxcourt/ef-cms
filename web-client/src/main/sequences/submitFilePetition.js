@@ -6,7 +6,7 @@ import setAlertSuccess from '../actions/setAlertSuccess';
 import setFormSubmitting from '../actions/setFormSubmitting';
 import unsetFormSubmitting from '../actions/unsetFormSubmitting';
 
-export const submitFilePetition = [
+export default [
   setFormSubmitting,
   clearAlerts,
   createCase,

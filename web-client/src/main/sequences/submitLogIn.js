@@ -6,7 +6,7 @@ import setFormSubmitting from '../actions/setFormSubmitting';
 import setUser from '../actions/setUser';
 import unsetFormSubmitting from '../actions/unsetFormSubmitting';
 
-export const submitLogIn = [
+export default [
   setFormSubmitting,
   getUser,
   {

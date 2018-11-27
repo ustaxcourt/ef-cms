@@ -5,7 +5,7 @@ import setBaseUrl from '../actions/setBaseUrl';
 import setCase from '../actions/setCase';
 import setCurrentPage from '../actions/setCurrentPage';
 
-export const gotoCaseDetail = [
+export default [
   setBaseUrl,
   clearAlerts,
   getCase,
