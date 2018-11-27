@@ -58,7 +58,7 @@ export default connect(
                     <a
                       className="usa-button"
                       href="https://pay.gov/public/form/start/60485840"
-                      aria-label="pay.gov us tax court filing fees"
+                      aria-label="pay.gov u.s. tax court filing fees"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
