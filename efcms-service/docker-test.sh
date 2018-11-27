@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 docker build -t efcms-build -f ../Dockerfile.build ..
 docker run --name "${CONTAINER_NAME}" efcms-build /bin/sh -c 'cd efcms-service && npm run test'
 CODE="$?"

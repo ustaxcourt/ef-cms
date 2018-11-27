@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 STAGE=$1
 REGION=$2
 docker build -t efcms-build -f ../Dockerfile.build ..

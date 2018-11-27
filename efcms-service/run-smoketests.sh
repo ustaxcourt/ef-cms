@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 slsStage=$1
 region=$2
 restApiId=$(aws apigateway get-rest-apis --region="${region}" --query "items[?name=='${slsStage}-ef-cms'].id" --output text)
