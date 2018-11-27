@@ -1,7 +1,7 @@
 {
   "name": "ef-cms-shared",
   "version": "1.0.0",
-  "description": "Electronic Filing / Case Management System Shared Components",
+  "description": "Electronic Filing / Case Management System Shared Components ",
   "scripts": {
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
     "test": "jest ./src/**/*.test.js"
