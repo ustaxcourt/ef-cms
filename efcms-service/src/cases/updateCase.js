@@ -1,4 +1,4 @@
-const { updateCase } = require('../../../business/src/useCases/updateCase');
+const { updateCase } = require('ef-cms-shared/src/useCases/updateCase');
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 
 const {

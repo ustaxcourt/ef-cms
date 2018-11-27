@@ -1,14 +1,14 @@
-import awsPersistenceGateway from '../persistence/awsPersistenceGateway';
+import awsPersistenceGateway from '../../../business/src/persistence/awsPersistenceGateway';
 
 import createCase from '../../../business/src/useCases/createCaseProxy';
-import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadataProxy';
+import createDocumentMetadata from '../../../business/src/useCases/createDocumentMetadata';
 import getCase from '../../../business/src/useCases/getCaseProxy';
 import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
 import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getDocumentPolicy from '../../../business/src/useCases/getDocumentPolicyProxy';
+import getDocumentPolicy from '../../../business/src/useCases/getDownloadPolicyUrl';
 import getUser from '../../../business/src/useCases/getUser';
 import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import uploadToS3 from '../../../business/src/useCases/uploadToS3';
+import uploadToS3 from '../../../business/src/useCases/uploadCasePdfs';
 
 const API_URL = process.env.API_URL || 'http://localhost:8080';
 
