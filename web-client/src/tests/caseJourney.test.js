@@ -87,6 +87,21 @@ describe('Petitions clerk', () => {
     });
   });
 
+  describe('Search box', () => {
+    it('takes us to case details', async () => {
+      test.setState('user', {
+        firstName: 'Petitions',
+        lastName: 'Clerk',
+        role: 'petitionsclerk',
+        token: 'petitionsclerk',
+        userId: 'petitionsclerk',
+      });
+      test.setState('searchTerm', '00101-18');
+      await test.runSequence('submitSearch');
+      assert.equal(test.getState('currentPage'), 'CaseDetail');
+    });
+  });
+
   describe('Case Detail', () => {
     it('View case', async () => {
       await test.runSequence('gotoCaseDetail', { caseId });

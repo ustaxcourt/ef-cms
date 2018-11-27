@@ -46,11 +46,14 @@ describe('Get case', () => {
   it('success case by docket number', async () => {
     applicationContext = {
       persistence: {
-        getCaseByDocketNumber: () =>
-          Promise.resolve({
-            docketNumber: '00000-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
+        getCaseByDocketNumber: () => {
+          return Promise.resolve([
+            {
+              docketNumber: '00000-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            },
+          ]);
+        },
       },
       environment: { stage: 'local' },
     };
@@ -74,7 +77,11 @@ describe('Get case', () => {
       environment: { stage: 'local' },
     };
     try {
-      await getCase({ userId: 'petitionsclerk', caseId: '00-11111', applicationContext });
+      await getCase({
+        userId: 'petitionsclerk',
+        caseId: '00-11111',
+        applicationContext,
+      });
     } catch (error) {
       assert.equal(error.message, 'Case 00-11111 was not found.');
     }
@@ -84,15 +91,21 @@ describe('Get case', () => {
     applicationContext = {
       persistence: {
         getCaseByDocketNumber: () =>
-          Promise.resolve({
-            docketNumber: '00000-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
+          Promise.resolve([
+            {
+              docketNumber: '00000-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            },
+          ]),
       },
       environment: { stage: 'local' },
     };
     try {
-      await getCase({ userId: 'someone', caseId: '00000-00', applicationContext });
+      await getCase({
+        userId: 'someone',
+        caseId: '00000-00',
+        applicationContext,
+      });
     } catch (error) {
       assert.equal(error.message, 'Unauthorized');
     }
