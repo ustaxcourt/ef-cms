@@ -1,3 +1,3 @@
-export default ({ router }) => {
-  router.route('/');
+export default async ({ router }) => {
+  await router.route('/');
 };
