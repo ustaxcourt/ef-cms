@@ -1,4 +1,4 @@
-FROM koalaman/shellcheck-alpine as shellcheck
+FROM koalaman/shellcheck as shellcheck
 
 FROM cypress/base:8
 COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
