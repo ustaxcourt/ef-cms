@@ -24,6 +24,7 @@ const caseSchema = joi.object().keys({
     .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
+  payGovId: joi.string().optional(),
   status: joi
     .string()
     .regex(/^(new)|(general)$/)
