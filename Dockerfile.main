@@ -1,8 +1,8 @@
-FROM node:8-alpine
+FROM cypress/base:8
 
-RUN apk add git
-RUN apk add bash
-RUN apk add openjdk8-jre
+RUN apt-get -y install git
+RUN apt-get -y install curl
+RUN apt-get -y install default-jre
 
 RUN npm install cypress
 
@@ -29,16 +29,13 @@ RUN git config --global user.email "blank@example.com" && \
     git commit -m 'rev'
 
 COPY business/package.json /home/app/business/package.json
-COPY business/package-lock.json /home/app/business/package-lock.json
-RUN cd /home/app/business && npm ci --only=production
+RUN cd /home/app/business && npm i --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
-COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
 RUN cd /home/app/efcms-service && npm i
 
 COPY web-client/package.json /home/app/web-client/package.json
-COPY web-client/package-lock.json /home/app/web-client/package-lock.json
-RUN cd /home/app/web-client && npm ci
+RUN cd /home/app/web-client && npm i
 
 COPY . /home/app
 
