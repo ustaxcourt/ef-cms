@@ -71,15 +71,6 @@ pipeline {
         }
       }
     }
-    stage('pa11y') {
-      steps {
-        script {
-          dir('web-client') {
-            sh "./docker-pa11y.sh"
-          }
-        }
-      }
-    }
     stage('Terraform - Dev') {
       when {
         expression {
