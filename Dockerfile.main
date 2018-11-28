@@ -33,6 +33,7 @@ RUN cd /home/app/business && npm i --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service && npm i
+RUN cd /home/app/efcms-service && npm run install:dynamodb
 
 COPY web-client/package.json /home/app/web-client/package.json
 RUN cd /home/app/web-client && npm i
