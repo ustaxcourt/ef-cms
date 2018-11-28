@@ -2,7 +2,6 @@ service: ef-cms
 plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
-#  - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation

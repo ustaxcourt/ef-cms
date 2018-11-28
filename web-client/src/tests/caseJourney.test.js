@@ -5,16 +5,21 @@ import assert from 'assert';
 import mainModule from '../main';
 import applicationContext from '../applicationContexts/dev';
 
-global.FormData = FormData;
-
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = { route: () => {} };
-
-const test = CerebralTest(mainModule);
-
+let test;
 let caseId;
+global.FormData = FormData;
+mainModule.providers.applicationContext = applicationContext;
+mainModule.providers.router = {
+  route: async url => {
+    if (url === `/case-detail/${caseId}`) {
+      await test.runSequence('gotoCaseDetail', { caseId });
+    }
+  },
+};
 
-describe('Tax payer', () => {
+test = CerebralTest(mainModule);
+
+describe('Tax payer', async () => {
   test.setState('user', {
     firstName: 'Test',
     lastName: 'Taxpayer',
@@ -87,8 +92,26 @@ describe('Petitions clerk', () => {
     });
   });
 
+  describe('Search box', async () => {
+    it('takes us to case details', async done => {
+      test.setState('user', {
+        firstName: 'Petitions',
+        lastName: 'Clerk',
+        role: 'petitionsclerk',
+        token: 'petitionsclerk',
+        userId: 'petitionsclerk',
+      });
+      test.setState('caseDetail', {});
+      await test.runSequence('updateSearchTerm', { searchTerm: caseId });
+      await test.runSequence('submitSearch');
+      assert.equal(test.getState('caseDetail.caseId'), caseId);
+      done();
+    });
+  });
+
   describe('Case Detail', () => {
     it('View case', async () => {
+      test.setState('caseDetail', {});
       await test.runSequence('gotoCaseDetail', { caseId });
       assert.equal(test.getState('currentPage'), 'ValidateCase');
       assert.ok(test.getState('caseDetail'));

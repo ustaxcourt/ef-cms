@@ -6,8 +6,8 @@ module.exports = ({ document: rawDocument, applicationContext }) => {
     documentType: rawDocument.documentType,
   });
   documentToCreate.validate();
-  return applicationContext.persistence.create({
-    entity: documentToCreate,
+  return applicationContext.persistence.createDocumentMetadata({
+    documentToCreate: documentToCreate,
     applicationContext,
   });
 };

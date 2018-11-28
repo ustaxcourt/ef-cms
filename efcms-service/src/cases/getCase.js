@@ -1,21 +1,14 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 const { getCase } = require('ef-cms-shared/src/useCases/getCase');
+const applicationContext = require('../applicationContext');
 
-const {
-  persistence: { get },
-  environment: { stage },
-} = require('../applicationContext');
-
-const applicationContext = {
-  persistence: {
-    get,
-  },
-  environment: {
-    stage,
-  },
-};
-
+/**
+ * getCase
+ *
+ * @param event
+ * @returns {Promise<*|undefined>}
+ */
 exports.get = event =>
   handle(() =>
     getCase({
