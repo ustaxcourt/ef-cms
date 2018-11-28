@@ -41,6 +41,8 @@ RUN git config --global user.email "blank@example.com" && \
     git add tmp.txt && \
     git commit -m 'rev'
 
+RUN npm install cypress
+
 COPY business/package.json /home/app/business/package.json
 RUN cd /home/app/business && npm i --only=production
 
