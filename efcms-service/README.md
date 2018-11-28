@@ -6,22 +6,34 @@
 - install Node dependencies: `npm i`
 - install DynamoDB local: `npm run install:dynamodb`
 
-### Optional prerequisites, if deploying a sandbox
+## Optional prerequisites, if setting up a local sandbox
 
 - `npm install -g serverless`
 - [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
 
-## Starting the service
+## Usage
+
+### Starting Serverless-Offline
 
 `npm start`
 
-## API Gateway Execution and Access Request Logging Note
+This will host a local service at http://localhost:3000.
 
-### Execution Logging
+### Running Unit Test Coverage on a Watcher
 
-Some manual steps are necessary prior but only need to be done once for execution logging.
+`npm run test:coverage:watch`
 
-Go through this [document](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
+### Running the Full Build
+
+`npm run build`
+
+This is what Jenkins will run.
+
+## API Gateway Execution and Access Request Execution Logging
+
+Some manual steps are necessary, but only need to be done once for execution logging.
+
+Go through [AWS’s “Set Up CloudWatch API Logging in API Gateway”](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
 
 In general, you need to:
 
@@ -32,7 +44,7 @@ In general, you need to:
 
 Cloudwatch log is `API-Gateway-Execution-Logs\_<rest-api-id>/<stage>`.
 
-# Usage
+## Usage
 
 See the `Jenkinsfile`.
 
@@ -41,21 +53,6 @@ In general:
 $cd stageDir && terraform init && terraform apply
 $serverless deploy --stage myStageName
 ```
-# Contribution
-
-### Starting Serverless Offline
-
-`npm start`
-
-This will host a local service at http://localhost:3000.
-
-### Running Unit Test Coverage on a Watcher
-
-`npm run test:coverage:watch`
-
-### Running the Full Build (What Jenkins will Run)
-
-`npm run build`
 
 ## Sandbox Deploys to AWS
 
