@@ -10,6 +10,7 @@ import submitUpdateCase from './sequences/submitUpdateCase';
 import toggleDocumentValidation from './sequences/toggleDocumentValidation';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
 import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
+import updateCaseValue from './sequences/updateCaseValue';
 import updateFormValue from './sequences/updateFormValue';
 import updatePetitionValue from './sequences/updatePetitionValue';
 import updateSearchTerm from './sequences/updateSearchTerm';
@@ -37,6 +38,7 @@ export default {
     toggleDocumentValidation,
     togglePaymentDetails,
     toggleUsaBannerDetails,
+    updateCaseValue,
     updateFormValue,
     updatePetitionValue,
     updateSearchTerm,
