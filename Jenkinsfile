@@ -82,40 +82,14 @@ pipeline {
     stage('pa11y') {
       steps {
         script {
-          def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('business') {
-              sh 'rm -f package-lock.json'
-              sh 'npm i --production'
-            }
-            dir('efcms-service') {
-              sh 'rm -f package-lock.json'
-              sh 'npm i'
-              sh 'npm run start:local &'
-            }
-            dir('web-client') {
-              sh 'rm -f package-lock.json'
-              sh 'npm i'
-              sh 'npm run dev &'
-              sh '../wait-until.sh http://localhost:1234'
-              sh 'npm run test:pa11y'
-            }
-          }
+          sh "./docker-pa11y.sh"
         }
       }
     }
     stage('Cerebral Tests') {
       steps {
         script {
-          stage('Test') {
-            steps {
-              script {
-                dir('web-client') {
-                  sh "./docker-cerebral.sh"
-                }
-              }
-            }
-          }
+          sh "./docker-cerebral.sh"
         }
       }
     }
