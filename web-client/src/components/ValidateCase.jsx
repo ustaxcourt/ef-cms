@@ -11,16 +11,20 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
+    form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
     updateCaseValue: sequences.updateCaseValue,
+    updateFormValue: sequences.updateFormValue,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
+    form,
     submitUpdateCase,
     toggleDocumentValidation,
     updateCaseValue,
+    updateFormValue,
   }) {
     return (
       <React.Fragment>
@@ -59,6 +63,12 @@ export default connect(
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend className="usa-sr-only">Petition Fee</legend>
+              {caseDetail.payGovId && !form.paymentType && (
+                <React.Fragment>
+                  <p>Paid by pay.gov</p>
+                  <p>{caseDetail.payGovId}</p>
+                </React.Fragment>
+              )}
               <ul className="usa-unstyled-list">
                 <li>
                   <input
@@ -67,14 +77,14 @@ export default connect(
                     name="paymentType"
                     value="payGov"
                     onChange={e => {
-                      updateCaseValue({
+                      updateFormValue({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
                   />
                   <label htmlFor="paygov">Paid by pay.gov</label>
-                  {caseDetail.paymentType == 'payGov' && (
+                  {form.paymentType == 'payGov' && (
                     <React.Fragment>
                       <label htmlFor="paygovid">Payment ID</label>
                       <input
