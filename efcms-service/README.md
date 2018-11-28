@@ -73,7 +73,7 @@ See “[Running AWS Lambda and API Gateway locally: serverless-offline](https://
 
 ## Load and Smoke Testing with Artillery
 
-To get the REST API ID of the stage to test against auth to AWS, then run:
+To get the REST API ID of the stage to test against auth to AWS, run:
 
 `aws apigateway get-rest-apis --region=${region} --query "items[?name=='${stage}-ef-cms'].id"`
 
