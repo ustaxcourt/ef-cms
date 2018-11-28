@@ -1,7 +1,8 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 
-const createDocumentMetadata = require('ef-cms-shared/src/useCases/createDocumentMetadata');
+const createDocumentMetadataUC = require('ef-cms-shared/src/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
 
 /**
  * Create Document API Lambda
@@ -10,24 +11,9 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param context
  * @param callback
  */
-
-const {
-  persistence: { create },
-  environment: { stage },
-} = require('../applicationContext');
-
-const applicationContext = {
-  persistence: {
-    create,
-  },
-  environment: {
-    stage,
-  },
-};
-
 exports.create = event =>
   handle(() =>
-    createDocumentMetadata({
+    createDocumentMetadataUC({
       document: {
         ...JSON.parse(event.body),
         userId: getAuthHeader(event),

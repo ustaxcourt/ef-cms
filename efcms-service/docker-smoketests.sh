@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 slsStage=$1
 region=$2
 docker build -t efcms-build -f ../Dockerfile.build ..

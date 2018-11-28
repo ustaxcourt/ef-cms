@@ -1,30 +1,17 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
-const createCase = require('ef-cms-shared/src/useCases/createCase');
-
+const createCaseUC = require('ef-cms-shared/src/useCases/createCase');
 const { handle } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
 
-const {
-  persistence: { create, incrementCounter },
-  environment: { stage },
-  docketNumberGenerator: { createDocketNumber },
-} = require('../applicationContext');
-
-const applicationContext = {
-  persistence: {
-    create,
-    incrementCounter,
-  },
-  docketNumberGenerator: {
-    createDocketNumber,
-  },
-  environment: {
-    stage,
-  },
-};
-
+/**
+ * createCase
+ *
+ * @param event
+ * @returns {Promise<*|undefined>}
+ */
 exports.create = event =>
   handle(() =>
-    createCase({
+    createCaseUC({
       userId: getAuthHeader(event),
       documents: JSON.parse(event.body).documents,
       applicationContext,

@@ -22,6 +22,14 @@ const getKey = entity => {
   }
 };
 
+exports.createCase = ({ caseRecord, applicationContext }) => {
+  return this.create({ entity: caseRecord, applicationContext });
+};
+
+exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
+  return this.create({ entity: documentToCreate, applicationContext });
+};
+
 exports.create = ({ entity, applicationContext }) => {
   const key = getKey(entity);
   return client.put({
@@ -34,6 +42,16 @@ exports.create = ({ entity, applicationContext }) => {
   });
 };
 
+exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
+  const entity = {
+    caseId,
+    entityType: 'case',
+  };
+
+  return this.get({ entity, applicationContext });
+
+};
+
 exports.get = ({ entity, applicationContext }) => {
   const key = getKey(entity);
   return client.get({
@@ -41,6 +59,23 @@ exports.get = ({ entity, applicationContext }) => {
     Key: {
       [key]: entity[key],
     },
+  });
+};
+
+exports.getCaseByDocketNumber = ({ docketNumber, applicationContext }) => {
+  return client.query({
+    TableName: getTable(
+      { entityType: 'case' },
+      applicationContext.environment.stage,
+    ),
+    IndexName: 'DocketNumberIndex',
+    ExpressionAttributeNames: {
+      '#docketNumber': 'docketNumber',
+    },
+    ExpressionAttributeValues: {
+      ':docketNumber': docketNumber,
+    },
+    KeyConditionExpression: '#docketNumber = :docketNumber',
   });
 };
 

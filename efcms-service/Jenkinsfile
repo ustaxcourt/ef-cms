@@ -130,7 +130,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} ./docker-route53.sh"
+            sh "./docker-route53.sh ${branchMap[env.branch_name]}"
           }
         }
       }
@@ -144,7 +144,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} ./docker-s3replication.sh"
+            sh "./docker-s3replication.sh ${branchMap[env.branch_name]}"
           }
         }
       }
@@ -158,7 +158,7 @@ pipeline {
       steps {
         script {
           dir('efcms-service') {
-            sh "ENV=${branchMap[env.branch_name]} REGIONS=${regions.join(',')} ./docker-globaltables.sh"
+            sh "./docker-globaltables.sh ${branchMap[env.branch_name]} ${regions.join(',')}"
           }
         }
       }
@@ -193,7 +193,7 @@ def createTerraformTasks(targets) {
         stage("terraform ${slsStage}") {
           checkout scm
           dir('efcms-service') {
-            sh "./docker-terraform ${slsStage}"
+            sh "./docker-terraform.sh ${slsStage}"
           }
         }
       }
@@ -212,7 +212,7 @@ def createSmokeTestTasks(targets) {
           stage("smoketest ${slsStage} - ${region}") {
             checkout scm
             dir('efcms-service') {
-              sh "./docker-smoketests ${slsStage} ${region}"
+              sh "./docker-smoketests.sh ${slsStage} ${region}"
             }
           }
         }
@@ -232,7 +232,7 @@ def createServerlessTasks(targets) {
           stage("serverless ${slsStage} - ${region}") {
             checkout scm
             dir('efcms-service') {
-              sh "./docker-serverless ${slsStage} ${region}"
+              sh "./docker-serverless.sh ${slsStage} ${region}"
             }
           }
         }
