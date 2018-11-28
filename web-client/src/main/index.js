@@ -13,6 +13,11 @@ import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
 import updateFormValue from './sequences/updateFormValue';
 import updatePetitionValue from './sequences/updatePetitionValue';
 import updateSearchTerm from './sequences/updateSearchTerm';
+import {
+  formattedCaseDetail,
+  formattedCases,
+  formattedSearchParams,
+} from './computeds/formattedCaseDetail';
 
 /**
  * Main Cerebral module
@@ -57,5 +62,8 @@ export default {
     },
     caseDetail: {},
     cases: [],
+    formattedCaseDetail,
+    formattedCases,
+    formattedSearchParams,
   },
 };

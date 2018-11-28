@@ -10,7 +10,7 @@ import React from 'react';
 export default connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
+    caseDetail: state.formattedCaseDetail,
     user: state.user,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
