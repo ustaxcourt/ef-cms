@@ -20,8 +20,9 @@ ENV AWS_CLI_VERSION 1.16.31
 
 RUN apt-get install -yq openssh-client python python-pip python-setuptools ca-certificates groff less
 RUN apt-get install -yq unzip wget
-RUN pip install --upgrade pip
-RUN pip --no-cache-dir install awscli==${AWS_CLI_VERSION}
+# RUN pip install --upgrade pip
+RUN apt-get install -y awscli
+# RUN pip install awscli==${AWS_CLI_VERSION}
 
 RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && \
     unzip -o terraform_0.11.8_linux_amd64.zip terraform
