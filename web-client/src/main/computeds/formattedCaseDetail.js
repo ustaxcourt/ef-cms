@@ -1,5 +1,4 @@
 import _ from 'lodash';
-
 import { state } from 'cerebral';
 
 const formatCase = caseRecord => {
@@ -14,9 +13,4 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseRecord = get(state.caseDetail);
   return formatCase(caseRecord);
-};
-export const formattedSearchParams = get => {
-  let searchTerm = get(state.searchTerm);
-  searchTerm = _.padStart(searchTerm, 8, '0');
-  return searchTerm;
 };

@@ -14,10 +14,10 @@ import updateCaseValue from './sequences/updateCaseValue';
 import updateFormValue from './sequences/updateFormValue';
 import updatePetitionValue from './sequences/updatePetitionValue';
 import updateSearchTerm from './sequences/updateSearchTerm';
+import { formattedSearchParams } from './computeds/formattedSearchParams';
 import {
   formattedCaseDetail,
   formattedCases,
-  formattedSearchParams,
 } from './computeds/formattedCaseDetail';
 
 /**
