@@ -1,7 +1,4 @@
-FROM koalaman/shellcheck as shellcheck
-
 FROM cypress/base:8
-COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
 
 RUN apt-get update
 
@@ -42,6 +39,8 @@ RUN git config --global user.email "blank@example.com" && \
     git commit -m 'rev'
 
 RUN npm install cypress
+
+RUN apt-get install -y shellcheck
 
 COPY business/package.json /home/app/business/package.json
 RUN cd /home/app/business && npm i --only=production
