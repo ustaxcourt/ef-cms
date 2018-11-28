@@ -95,23 +95,7 @@ pipeline {
     }
     stage('cypress') {
       steps {
-        script {
-          def runner = docker.build 'cypress', '-f Dockerfile.cypress .'
-          runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
-            dir('efcms-service') {
-              sh 'npm i'
-              sh "./node_modules/.bin/sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --casesTableName efcms-cases-local --documentsTableName efcms-documents-local"
-              sh 'npm start &'
-              sh '../wait-until.sh http://localhost:3000/v1/swagger'
-            }
-            dir('web-client') {
-              sh 'npm i'
-              sh 'npm run dev &'
-              sh '../wait-until.sh http://localhost:1234'
-              sh 'npm run cypress'
-            }
-          }
-        }
+        sh "./docker-cypress.sh"
       }
     }
   }
