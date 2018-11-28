@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- must have [JDK 8 installed](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [install JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - install Node dependencies: `npm i`
 - install DynamoDB local: `npm run install:dynamodb`
 
