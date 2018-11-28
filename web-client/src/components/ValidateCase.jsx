@@ -7,21 +7,20 @@ import React from 'react';
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
-/**
- *
- */
 export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     submitUpdateCase: sequences.submitUpdateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
+    updateCaseValue: sequences.updateCaseValue,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
     submitUpdateCase,
     toggleDocumentValidation,
+    updateCaseValue,
   }) {
     return (
       <React.Fragment>
@@ -36,6 +35,7 @@ export default connect(
           <p>
             Case status <span className="usa-label">{caseDetail.status}</span>
           </p>
+          <p>{JSON.stringify(caseDetail)}</p>
           <div className="usa-grid-full">
             <div className="usa-width-two-thirds">
               <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
@@ -61,10 +61,36 @@ export default connect(
               <legend className="usa-sr-only">Petition Fee</legend>
               <ul className="usa-unstyled-list">
                 <li>
-                  <input id="paygov" type="radio" name="paymentType" />
+                  <input
+                    id="paygov"
+                    type="radio"
+                    name="paymentType"
+                    value="payGov"
+                    onChange={e => {
+                      updateCaseValue({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
                   <label htmlFor="paygov">Paid by pay.gov</label>
-                  <label htmlFor="paygovid">Payment ID</label>
-                  <input id="paygovid" type="text" name="paygovid" />
+                  {caseDetail.paymentType == 'payGov' && (
+                    <React.Fragment>
+                      <label htmlFor="paygovid">Payment ID</label>
+                      <input
+                        id="paygovid"
+                        type="text"
+                        name="payGovId"
+                        value={caseDetail.payGovId}
+                        onChange={e => {
+                          updateCaseValue({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </React.Fragment>
+                  )}
                 </li>
               </ul>
             </fieldset>
