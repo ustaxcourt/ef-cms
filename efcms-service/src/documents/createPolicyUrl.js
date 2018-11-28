@@ -2,7 +2,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 const {
   createUploadPolicy: uploadPolicyUseCase,
-} = require('ef-cms-shared/src/useCases/createPolicyUrl');
+} = require('ef-cms-shared/src/persistence/createPolicyUrl');
 /**
  * Create Document API Lambda
  *
