@@ -38,7 +38,7 @@ RUN git config --global user.email "blank@example.com" && \
     git add tmp.txt && \
     git commit -m 'rev'
 
-RUN npm install cypress
+RUN CI=true npm install cypress
 
 RUN apt-get install -y shellcheck
 
