@@ -84,8 +84,11 @@ pipeline {
         script {
           def runner = docker.build 'pa11y', '-f Dockerfile.pa11y .'
           runner.inside('-v /home/tomcat:/home/tomcat -v /etc/passwd:/etc/passwd') {
+            dir('business') {
+              sh 'npm i --production'
+            }
             dir('efcms-service') {
-              sh 'npm i'
+              sh 'npm i --production'
               sh 'npm run start:local &'
             }
             dir('web-client') {
