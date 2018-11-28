@@ -24,12 +24,29 @@ pipeline {
         }
       }
     }
+    stage('Init') {
+      steps {
+        script {
+          dir('business') {
+            sh "./docker-init.sh"
+          }
+        }
+      }
+    }
+    stage('ShellCheck') {
+      steps {
+        script {
+          dir('business') {
+            sh "./docker-shellcheck.sh"
+          }
+        }
+      }
+    }
     stage('Audit') {
       steps {
         script {
           dir('business') {
-            sh 'docker build -t shared-audit -f Dockerfile.audit .'
-            sh 'docker run --rm shared-audit'
+            sh "./docker-audit.sh"
           }
         }
       }
@@ -38,8 +55,7 @@ pipeline {
       steps {
         script {
           dir('business') {
-            sh 'docker build -t shared-lint -f Dockerfile.lint .'
-            sh 'docker run --rm shared-lint'
+            sh "./docker-lint.sh"
           }
         }
       }
@@ -48,11 +64,8 @@ pipeline {
       steps {
         script {
           dir('business') {
-            def CONTAINER_NAME = "shared-test-${BUILD_NUMBER}"
-            sh 'docker build -t shared-test -f Dockerfile.test .'
-            sh "docker run --name ${CONTAINER_NAME} shared-test"
-            sh "docker cp ${CONTAINER_NAME}:/home/app/coverage coverage"
-            sh "docker rm ${CONTAINER_NAME}"
+            def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
+            sh "CONTAINER_NAME=$CONTAINER_NAME ./docker-test.sh"
           }
         }
       }
@@ -69,8 +82,7 @@ pipeline {
         script {
           withCredentials([string(credentialsId: 'SHARED_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             dir('business') {
-              sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_KEY=${SHARED_SONAR_KEY} -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
+              sh "SONAR_KEY=${SHARED_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SONAR_TOKEN} ./docker-sonarqube.sh"
             }
           }
         }
