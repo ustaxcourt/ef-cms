@@ -30,7 +30,7 @@
   "dependencies": {
     "aws-sdk": "^2.362.0",
     "axios": "^0.18.0",
-    "joi": "^14.1.0",
+    "joi": "^14.3.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
