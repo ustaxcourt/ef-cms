@@ -1,4 +1,4 @@
-const joi = require('joi');
+const joi = require('joi-browser');
 const uuidv4 = require('uuid/v4');
 
 const uuidVersions = {
