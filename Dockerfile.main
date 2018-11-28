@@ -4,7 +4,7 @@ RUN apt-get -y install git
 RUN apt-get -y install curl
 RUN apt-get -y install default-jre
 
-RUN npm install cypress
+RUN CI=true npm install cypress
 
 # cypress deps... not sure if they are needed
 # RUN apk --no-cache update
