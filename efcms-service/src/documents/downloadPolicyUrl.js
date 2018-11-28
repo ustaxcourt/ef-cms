@@ -3,7 +3,7 @@ const applicationContext = require('../applicationContext');
 
 const {
   getDownloadPolicyUrl: downloadPolicyUseCase,
-} = require('ef-cms-shared/src/useCases/getDownloadPolicyUrl');
+} = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 /**
  * GET Pre-signed Policy URL API Lambda
