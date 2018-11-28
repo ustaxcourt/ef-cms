@@ -39,7 +39,6 @@ export default connect(
           <p>
             Case status <span className="usa-label">{caseDetail.status}</span>
           </p>
-          <p>{JSON.stringify(caseDetail)}</p>
           <div className="usa-grid-full">
             <div className="usa-width-two-thirds">
               <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
