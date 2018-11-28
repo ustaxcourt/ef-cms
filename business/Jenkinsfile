@@ -70,7 +70,7 @@ pipeline {
           withCredentials([string(credentialsId: 'SHARED_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
             dir('business') {
               sh 'docker build -t sonarqube -f Dockerfile.sonarqube .'
-              sh "docker run -e SONAR_KEY=${API_SONAR_KEY} -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
+              sh "docker run -e SONAR_KEY=${SHARED_SONAR_KEY} -e branch_name=${branch_name} -e SONAR_ORG=${SONAR_ORG} -e SONAR_TOKEN=${SONAR_TOKEN} -v `pwd`/coverage:/home/app/coverage --rm sonarqube"
             }
           }
         }
