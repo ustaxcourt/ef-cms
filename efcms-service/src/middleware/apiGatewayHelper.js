@@ -1,4 +1,4 @@
-const { UnauthorizedError, NotFoundError } = require('../../../business/src/errors/errors');
+const { UnauthorizedError, NotFoundError } = require('ef-cms-shared/src/errors/errors');
 
 const headers = {
   'Content-Type': 'application/json',
