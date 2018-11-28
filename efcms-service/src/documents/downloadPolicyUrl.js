@@ -1,23 +1,9 @@
 const { redirect } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
+
 const {
   getDownloadPolicyUrl: downloadPolicyUseCase,
-} = require('ef-cms-shared/src/useCases/getDownloadPolicyUrl');
-
-const {
-  persistence: { getDownloadPolicyUrl },
-  environment: { region, documentsBucketName, s3Endpoint },
-} = require('../applicationContext');
-
-const applicationContext = {
-  persistence: {
-    getDownloadPolicyUrl,
-  },
-  environment: {
-    region,
-    s3Endpoint,
-    documentsBucketName,
-  },
-};
+} = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 /**
  * GET Pre-signed Policy URL API Lambda

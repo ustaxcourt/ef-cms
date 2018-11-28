@@ -9,7 +9,7 @@ chai.use(require('chai-string'));
 describe('Get case lambda', function() {
   const MOCK_CASE = {
     userId: 'userId',
-    caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '456789-18',
     createdAt: '',
   };
@@ -27,7 +27,7 @@ describe('Get case lambda', function() {
       {
         httpMethod: 'GET',
         pathParameters: {
-          caseId: '123',
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
         headers: { Authorization: 'Bearer userId' },
       },
@@ -37,7 +37,7 @@ describe('Get case lambda', function() {
           .event(documentBody)
           .expectResolve(result => {
             const data = JSON.parse(result.body);
-            expect(data).to.equal('Case 123 was not found.');
+            expect(data).to.equal('Case c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.');
           });
       });
     });
@@ -56,7 +56,7 @@ describe('Get case lambda', function() {
       {
         httpMethod: 'GET',
         pathParameters: {
-          caseId: '123',
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
         headers: { Authorization: 'Bearer userId' },
       },
@@ -87,6 +87,7 @@ describe('Get case lambda', function() {
           .event(get)
           .expectResolve(err => {
             expect(err.body).to.startsWith('"Error:');
+            expect(err.statusCode).to.equal(403);
           });
       });
     });

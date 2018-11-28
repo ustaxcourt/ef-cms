@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -e
 # This script parses the serverless.yml file to determine the name
 # of the apigateway resource that was deployed, and then uses that
 # to fetch the apigateway ID from aws.  Using that ID, this script is then
