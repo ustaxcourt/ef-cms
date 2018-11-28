@@ -1,6 +1,6 @@
 FROM koalaman/shellcheck-alpine as shellcheck
 
-FROM node:8
+FROM cypress/base:8
 COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
 
 RUN apt-get update
