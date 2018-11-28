@@ -9,6 +9,10 @@ plugins:
   - serverless-offline
   - serverless-plugin-git-variables
 custom:
+
+  serverless-offline:
+    host: 0.0.0.0
+    
   s3:
     host: 0.0.0.0
     port: 9000

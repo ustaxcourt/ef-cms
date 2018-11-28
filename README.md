@@ -1,3 +1,19 @@
+# Running / Verifing the Project via Docker
+
+Assuming you have Docker installed, The following command will spin up a docker container with the UI, API, local S3, local Dynamo, etc all running inside it:
+
+`./docker-run.sh`
+
+You can access the UI at  http://localhost:1234
+You can access the API at http://localhost:3000
+You can access the dynamodb shell at http://localhost:8000/shell
+You can access the dynamodb-admin ui at http://localhost:8001
+You can access s3 local at http://localhost:9000
+
+In order to kill that docker container, you will need to run the following command in separate terminal:
+
+`./kill-docker-run.sh`
+
 # Electronic Filing / Case Management System
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
