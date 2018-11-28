@@ -1,19 +1,23 @@
 FROM koalaman/shellcheck-alpine as shellcheck
 
-FROM node:8-alpine
+FROM node:8
 COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
 
-RUN apk add git
-RUN apk add bash
+RUN apt-get install -yq git bash
+
+RUN apt-get update && \
+    apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
+    libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
+    libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 \
+    libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
+    ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 
 ENV AWS_CLI_VERSION 1.16.31
 
-RUN apk --no-cache update && \
-    apk --no-cache add python py-pip py-setuptools ca-certificates groff less && \
-    apk --no-cache add bash git openssh && \
-    pip install --upgrade pip && \
-    pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
-    rm -rf /var/cache/apk/*
+RUN apt-get install -yq openssh-client python python-pip python-setuptools ca-certificates groff less
+RUN apt-get install -yq unzip wget
+RUN pip install --upgrade pip
+RUN pip --no-cache-dir install awscli==${AWS_CLI_VERSION}
 
 RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && \
     unzip -o terraform_0.11.8_linux_amd64.zip terraform
