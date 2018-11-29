@@ -47,7 +47,6 @@ export default connect(
               <button
                 className="float-right"
                 id="update-case"
-                tabIndex="1000"
                 onClick={() => submitUpdateCase()}
               >
                 Save updates
@@ -163,6 +162,13 @@ export default connect(
               )}
             </tbody>
           </table>
+          <button
+            className="float-right"
+            id="update-case"
+            onClick={() => submitUpdateCase()}
+          >
+            Save updates
+          </button>
         </section>
       </React.Fragment>
     );
