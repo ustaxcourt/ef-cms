@@ -38,7 +38,13 @@ exports.get = params => {
   return documentClient
     .get(params)
     .promise()
-    .then(res => res.Item);
+    .then(res => {
+      // dynamodb always adds these fields for purposes of global tables
+      delete res.Item['aws:rep:deleting'];
+      delete res.Item['aws:rep:updateRegion'];
+      delete res.Item['aws:rep:updateTime'];
+      return res.Item;
+    });
 };
 
 /**
