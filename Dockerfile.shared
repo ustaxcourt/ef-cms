@@ -1,0 +1,16 @@
+FROM node:8
+
+RUN apt-get update
+
+RUN apt-get install -yq git bash shellcheck
+
+WORKDIR /home/app
+
+RUN apt-get install -y shellcheck
+
+COPY business/package.json /home/app/business/package.json
+RUN cd /home/app/business && npm i
+
+COPY . /home/app
+
+CMD echo "please overwrite this command"

@@ -1,20 +1,30 @@
-import { CerebralTest } from 'cerebral/test';
+import { CerebralTest, runCompute } from 'cerebral/test';
 import FormData from 'form-data';
 import assert from 'assert';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from '../main/computeds/formattedCaseDetail';
 
+import { formattedSearchParams } from '../main/computeds/formattedSearchParams';
 import mainModule from '../main';
 import applicationContext from '../applicationContexts/dev';
 
-global.FormData = FormData;
-
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = { route: () => {} };
-
-const test = CerebralTest(mainModule);
-
+let test;
 let caseId;
+global.FormData = FormData;
+mainModule.providers.applicationContext = applicationContext;
+mainModule.providers.router = {
+  route: async url => {
+    if (url === `/case-detail/${caseId}`) {
+      await test.runSequence('gotoCaseDetail', { caseId });
+    }
+  },
+};
 
-describe('Tax payer', () => {
+test = CerebralTest(mainModule);
+
+describe('Tax payer', async () => {
   test.setState('user', {
     firstName: 'Test',
     lastName: 'Taxpayer',
@@ -71,6 +81,33 @@ describe('Tax payer', () => {
   });
 });
 
+describe('formatted case details computed', () => {
+  it('formats the docket number', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: { caseDetail: { docketNumber: '00101-18' } },
+    });
+
+    assert.equal(result.docketNumber, '101-18');
+  });
+
+  it('formats the docket number in a list of cases', () => {
+    const result = runCompute(formattedCases, {
+      state: { cases: [{ docketNumber: '00101-18' }] },
+    });
+    assert.equal(result[0].docketNumber, '101-18');
+  });
+});
+
+describe('formatted search parameters computed', () => {
+  it('formats a docket number search param', () => {
+    const result = runCompute(formattedSearchParams, {
+      state: { searchTerm: '101-18' },
+    });
+
+    assert.equal(result, '00101-18');
+  });
+});
+
 describe('Petitions clerk', () => {
   describe('Dashboard', () => {
     it('View cases', async () => {
@@ -87,8 +124,26 @@ describe('Petitions clerk', () => {
     });
   });
 
+  describe('Search box', async () => {
+    it('takes us to case details', async done => {
+      test.setState('user', {
+        firstName: 'Petitions',
+        lastName: 'Clerk',
+        role: 'petitionsclerk',
+        token: 'petitionsclerk',
+        userId: 'petitionsclerk',
+      });
+      test.setState('caseDetail', {});
+      await test.runSequence('updateSearchTerm', { searchTerm: caseId });
+      await test.runSequence('submitSearch');
+      assert.equal(test.getState('caseDetail.caseId'), caseId);
+      done();
+    });
+  });
+
   describe('Case Detail', () => {
     it('View case', async () => {
+      test.setState('caseDetail', {});
       await test.runSequence('gotoCaseDetail', { caseId });
       assert.equal(test.getState('currentPage'), 'ValidateCase');
       assert.ok(test.getState('caseDetail'));
