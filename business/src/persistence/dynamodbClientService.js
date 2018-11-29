@@ -6,6 +6,15 @@ const region = process.env.AWS_REGION || 'us-east-1';
  *
  * @param params
  */
+
+const removeAWSGlobalFields = (item) => {
+  // dynamodb always adds these fields for purposes of global tables
+  delete item['aws:rep:deleting'];
+  delete item['aws:rep:updateRegion'];
+  delete item['aws:rep:updateTime'];
+  return item;
+};
+
 exports.put = params => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,
@@ -39,11 +48,7 @@ exports.get = params => {
     .get(params)
     .promise()
     .then(res => {
-      // dynamodb always adds these fields for purposes of global tables
-      delete res.Item['aws:rep:deleting'];
-      delete res.Item['aws:rep:updateRegion'];
-      delete res.Item['aws:rep:updateTime'];
-      return res.Item;
+      return removeAWSGlobalFields(res.Item);
     });
 };
 
@@ -61,6 +66,7 @@ exports.query = params => {
     .query(params)
     .promise()
     .then(result => {
+      result.Items.forEach(item => removeAWSGlobalFields(item));
       return result.Items;
     });
 };
