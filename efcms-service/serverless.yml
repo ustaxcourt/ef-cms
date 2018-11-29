@@ -7,7 +7,6 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
-  # - serverless-plugin-git-variables
 custom:
 
   serverless-offline:
@@ -59,7 +58,7 @@ custom:
         - name: documents
           description: rawDocument service
     summary: 'EF-CMS Documents API'
-    # version: '${opt:stage}-${git:sha1}'
+    version: '1'
     description: 'EF-CMS Documents API documented with OpenAPI specification'
     resources:
       - path: 'v1/documents'
