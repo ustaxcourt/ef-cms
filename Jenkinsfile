@@ -19,6 +19,13 @@ pipeline {
         }
       }
     }
+    stage('Init') {
+      steps {
+        script {
+          sh "./docker-init.sh"
+        }
+      }
+    }
     // stage('Components') {
     //   parallel {
     //     stage('Shared') {
