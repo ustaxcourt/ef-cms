@@ -90,7 +90,7 @@ export default connect(
                           id="paygovid"
                           type="text"
                           name="payGovId"
-                          value={caseDetail.payGovId}
+                          value={caseDetail.payGovId || ''}
                           onChange={e => {
                             updateCaseValue({
                               key: e.target.name,
@@ -155,7 +155,7 @@ export default connect(
               ))}
               {caseDetail.payGovId && !form.paymentType && (
                 <tr>
-                  <td>{moment(Date()).format('LLL')}</td>
+                  <td>{moment(new Date()).format('LLL')}</td>
                   <td>Filing fee paid</td>
                   <td />
                 </tr>
