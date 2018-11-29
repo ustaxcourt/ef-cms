@@ -12,7 +12,8 @@
     "lint": "eslint ./src; stylelint ./src/**/*.scss;",
     "test": "jest ./**/tests/*.test.js",
     "test:pa11y": "node pa11y.js",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "docker:init": "./docker-init.sh"
   },
   "repository": {
     "type": "git",
