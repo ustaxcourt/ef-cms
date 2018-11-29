@@ -47,7 +47,6 @@ export default connect(
               <button
                 className="float-right"
                 id="update-case"
-                tabIndex="1000"
                 onClick={() => submitUpdateCase()}
               >
                 Save updates
@@ -61,7 +60,7 @@ export default connect(
           <div className="subsection">
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend className="usa-sr-only">Petition Fee</legend>
+              <legend>Petition Fee</legend>
               {caseDetail.payGovId && !form.paymentType && (
                 <React.Fragment>
                   <p>Paid by pay.gov</p>
@@ -110,7 +109,7 @@ export default connect(
           <table className="responsive-table">
             <thead>
               <tr>
-                <th>Date filled</th>
+                <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Action</th>
               </tr>
@@ -154,8 +153,22 @@ export default connect(
                   </td>
                 </tr>
               ))}
+              {caseDetail.payGovId && !form.paymentType && (
+                <tr>
+                  <td>{moment(Date()).format('LLL')}</td>
+                  <td>Filing fee paid</td>
+                  <td />
+                </tr>
+              )}
             </tbody>
           </table>
+          <button
+            className="float-right"
+            id="update-case"
+            onClick={() => submitUpdateCase()}
+          >
+            Save updates
+          </button>
         </section>
       </React.Fragment>
     );
