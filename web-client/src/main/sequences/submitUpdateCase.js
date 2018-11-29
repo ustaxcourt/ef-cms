@@ -2,6 +2,7 @@ import clearAlerts from '../actions/clearAlerts';
 import clearForm from '../actions/clearForm';
 import setAlertError from '../actions/setAlertError';
 import setAlertSuccess from '../actions/setAlertSuccess';
+import setCase from '../actions/setCase';
 import updateCaseAction from '../actions/updateCase';
 
 export default [
@@ -10,6 +11,6 @@ export default [
   updateCaseAction,
   {
     error: [setAlertError],
-    success: [setAlertSuccess, clearForm],
+    success: [setCase, setAlertSuccess, clearForm],
   },
 ];
