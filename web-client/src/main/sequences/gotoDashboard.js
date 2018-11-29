@@ -1,3 +1,4 @@
+import clearAlerts from '../actions/clearAlerts';
 import getCasesByUser from '../actions/getCasesByUser';
 import getCasesNew from '../actions/getCasesNew';
 import getUserRole from '../actions/getUserRole';
@@ -17,6 +18,7 @@ export default [
       setCurrentPage('Dashboard'),
     ],
     petitionsclerk: [
+      clearAlerts,
       getCasesNew,
       {
         error: [setAlertError],
@@ -24,6 +26,6 @@ export default [
       },
       setCurrentPage('PetitionsWorkQueue'),
     ],
-    intakeclerk: [setCurrentPage('IntakeClerkDashboard')],
+    intakeclerk: [clearAlerts, setCurrentPage('IntakeClerkDashboard')],
   },
 ];
