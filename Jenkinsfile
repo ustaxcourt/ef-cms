@@ -67,25 +67,22 @@ pipeline {
     // }
     stage('Tests') {
       parallel {
-        node() {
-          stage('Pa11y') {
-            steps {
-              sh "./docker-pa11y.sh"
-            }
+        stage('Pa11y') {
+          agent any
+          steps {
+            sh "./docker-pa11y.sh"
           }
         }
-        node() {
-          stage('Cerebral Tests') {
-            steps {
-              sh "./docker-cerebral.sh"
-            }
+        stage('Cerebral Tests') {
+          agent any
+          steps {
+            sh "./docker-cerebral.sh"
           }
         }
-        node() {
-          stage('Cypress') {
-            steps {
-              sh "./docker-cypress.sh"
-            }
+        stage('Cypress') {
+          agent any
+          steps {
+            sh "./docker-cypress.sh"
           }
         }
       }
