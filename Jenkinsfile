@@ -67,22 +67,22 @@ pipeline {
     // }
     stage('Tests') {
       parallel {
-        node {
-          stage('Pa11y') {
+        stage('Pa11y') {
+          node {
             setup()
             merge()
             sh "./docker-pa11y.sh"
           }
         }
-        node {
-          stage('Cerebral Tests') {
+        stage('Cerebral Tests') {
+          node {
             setup()
             merge()
             sh "./docker-cerebral.sh"
           }
         }
-        node {
-          stage('Cypress') {
+        stage('Cypress') {
+          node {
             setup()
             merge()
             sh "./docker-cypress.sh"
