@@ -30,7 +30,7 @@ export default connect(
       <React.Fragment>
         <div className="usa-grid">
           <a href="/" id="queue-nav">
-            Back to Petitions Section Work Queue
+            Back to dashboard
           </a>
         </div>
         <section className="usa-section usa-grid">
