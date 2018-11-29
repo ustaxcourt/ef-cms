@@ -12,90 +12,82 @@ pipeline {
   }
 
   stages {
-    stage('setup') {
+    stage('Setup') {
       steps {
         script {
-          def scmVars = checkout scm
-          env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-          env.GIT_COMMIT = scmVars.GIT_COMMIT
+          setup()
         }
       }
     }
-    stage('components') {
+    // stage('Components') {
+    //   parallel {
+    //     stage('Shared') {
+    //       when {
+    //         expression {
+    //           return checkCommit('business')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-shared', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //     stage('Web-Client') {
+    //       when {
+    //         expression {
+    //           return checkCommit('web-client')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-ui', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //     stage('Efcms-Service') {
+    //       when {
+    //         expression {
+    //           return checkCommit('efcms-service')
+    //         }
+    //       }
+    //       steps {
+    //         build job: 'ef-cms-api', parameters: [
+    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+    //         ]
+    //       }
+    //     }
+    //   }
+    // }
+    stage('Tests') {
       parallel {
-        stage('shared') {
-          when {
-            expression {
-              return checkCommit('business')
-            }
-          }
-          steps {
-            build job: 'ef-cms-shared', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
+        node {
+          stage('Pa11y') {
+            setup()
+            merge()
+            sh "./docker-pa11y.sh"
           }
         }
-        stage('web-client') {
-          when {
-            expression {
-              return checkCommit('web-client')
-            }
-          }
-          steps {
-            build job: 'ef-cms-ui', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
+        node {
+          stage('Cerebral Tests') {
+            setup()
+            merge()
+            sh "./docker-cerebral.sh"
           }
         }
-        stage('efcms-service') {
-          when {
-            expression {
-              return checkCommit('efcms-service')
-            }
-          }
-          steps {
-            build job: 'ef-cms-api', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
+        node {
+          stage('Cypress') {
+            setup()
+            merge()
+            sh "./docker-cypress.sh"
           }
         }
-      }
-    }
-    stage('Merge') {
-      steps {
-        script {
-          if (env.BRANCH_NAME != 'develop' && env.BRANCH_NAME != 'staging' && env.BRANCH_NAME != 'master' && env.CHANGE_TARGET) {
-            // todo: there is probably a better way to have Jenkins do this for us automatically
-            sh 'git config user.name "EF-CMS Jenkins"'
-            sh 'git config user.email "noop@example.com"'
-            sh "git merge origin/${env.CHANGE_TARGET}"
-          }
-        }
-      }
-    }
-    stage('pa11y') {
-      steps {
-        script {
-          sh "./docker-pa11y.sh"
-        }
-      }
-    }
-    stage('Cerebral Tests') {
-      steps {
-        script {
-          sh "./docker-cerebral.sh"
-        }
-      }
-    }
-    stage('cypress') {
-      steps {
-        sh "./docker-cypress.sh"
       }
     }
   }
@@ -112,5 +104,19 @@ def checkCommit(folder) {
     return !matches
   } else if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'staging' || env.BRANCH_NAME == 'master') {
     return true
+  }
+}
+
+def setup() {
+  def scmVars = checkout scm
+  env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
+  env.GIT_COMMIT = scmVars.GIT_COMMIT
+}
+
+def merge() {
+  if (env.BRANCH_NAME != 'develop' && env.BRANCH_NAME != 'staging' && env.BRANCH_NAME != 'master' && env.CHANGE_TARGET) {
+    sh 'git config user.name "EF-CMS Jenkins"'
+    sh 'git config user.email "noop@example.com"'
+    sh "git merge origin/${env.CHANGE_TARGET}"
   }
 }
