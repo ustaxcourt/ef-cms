@@ -2,8 +2,9 @@ import _ from 'lodash';
 import { state } from 'cerebral';
 
 const formatCase = caseRecord => {
-  caseRecord.docketNumber = _.trimStart(caseRecord.docketNumber, '0');
-  return caseRecord;
+  const formatted = Object.assign({}, caseRecord);
+  formatted.docketNumber = _.trimStart(formatted.docketNumber, '0');
+  return formatted;
 };
 
 export const formattedCases = get => {

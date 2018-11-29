@@ -10,7 +10,7 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
+    caseDetail: state.formattedCaseDetail,
     form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
