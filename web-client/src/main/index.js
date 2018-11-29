@@ -10,9 +10,15 @@ import submitUpdateCase from './sequences/submitUpdateCase';
 import toggleDocumentValidation from './sequences/toggleDocumentValidation';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
 import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
+import updateCaseValue from './sequences/updateCaseValue';
 import updateFormValue from './sequences/updateFormValue';
 import updatePetitionValue from './sequences/updatePetitionValue';
 import updateSearchTerm from './sequences/updateSearchTerm';
+import { formattedSearchParams } from './computeds/formattedSearchParams';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from './computeds/formattedCaseDetail';
 
 /**
  * Main Cerebral module
@@ -32,6 +38,7 @@ export default {
     toggleDocumentValidation,
     togglePaymentDetails,
     toggleUsaBannerDetails,
+    updateCaseValue,
     updateFormValue,
     updatePetitionValue,
     updateSearchTerm,
@@ -57,5 +64,8 @@ export default {
     },
     caseDetail: {},
     cases: [],
+    formattedCaseDetail,
+    formattedCases,
+    formattedSearchParams,
   },
 };
