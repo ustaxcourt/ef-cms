@@ -21,7 +21,7 @@ export default async ({ applicationContext, get, path }) => {
         title: 'Petition validated',
         message:
           'Case ' +
-          get(state.caseDetail).docketNumber +
+          get(state.formattedCaseDetail).docketNumber +
           ' status set to General Docket',
       },
     });
