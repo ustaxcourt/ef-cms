@@ -10,10 +10,10 @@ plugins:
 custom:
 
   serverless-offline:
-    host: 0.0.0.0
+    host: localhost
     
   s3:
-    host: 0.0.0.0
+    host: localhost
     port: 9000
     directory: /tmp
     cors: cors-policy.xml
