@@ -61,7 +61,7 @@ export default connect(
           <div className="subsection">
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend className="usa-sr-only">Petition Fee</legend>
+              <legend>Petition Fee</legend>
               {caseDetail.payGovId && !form.paymentType && (
                 <React.Fragment>
                   <p>Paid by pay.gov</p>
@@ -110,7 +110,7 @@ export default connect(
           <table className="responsive-table">
             <thead>
               <tr>
-                <th>Date filled</th>
+                <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Action</th>
               </tr>
