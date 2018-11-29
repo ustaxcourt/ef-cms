@@ -1,10 +1,17 @@
 import { state } from 'cerebral';
 import Case from '../../../../business/src/entities/Case';
 
-export default async ({ applicationContext, get }) => {
+export default async ({ applicationContext, get, store }) => {
   const user = get(state.user);
   const caseInitiator = get(state.petition);
   const useCases = applicationContext.getUseCases();
+
+  const fileHasUploaded = () => {
+    store.set(
+      state.petition.uploadsFinished,
+      get(state.petition.uploadsFinished) + 1,
+    );
+  };
 
   const {
     petitionFileId,
@@ -14,6 +21,7 @@ export default async ({ applicationContext, get }) => {
     applicationContext,
     caseInitiator,
     user,
+    fileHasUploaded,
   });
 
   await useCases.createCase({
