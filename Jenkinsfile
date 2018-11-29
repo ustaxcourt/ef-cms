@@ -5,7 +5,7 @@ pipeline {
   agent any
 
   options {
-    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) 
+    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3'))
     disableConcurrentBuilds()
   }
 
@@ -54,20 +54,20 @@ pipeline {
             ]
           }
         }
-        stage('Efcms-Service') {
-          when {
-            expression {
-              return checkCommit('efcms-service')
-            }
-          }
-          steps {
-            build job: 'ef-cms-api', parameters: [
-              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-            ]
-          }
+      }
+    }
+    stage('Efcms-Service') {
+      when {
+        expression {
+          return checkCommit('efcms-service')
         }
+      }
+      steps {
+        build job: 'ef-cms-api', parameters: [
+          [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+          [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+          [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+        ]
       }
     }
     stage('Tests') {
