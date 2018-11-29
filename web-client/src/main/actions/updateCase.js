@@ -12,7 +12,9 @@ export default async ({ applicationContext, get, path }) => {
     alertSuccess: {
       title: 'Success',
       message:
-        'Case ' + get(state.caseDetail).docketNumber + ' has been updated.',
+        'Case ' +
+        get(state.formattedCaseDetail).docketNumber +
+        ' has been updated.',
     },
   });
 };
