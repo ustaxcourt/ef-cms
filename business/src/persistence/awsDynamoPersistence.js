@@ -49,7 +49,6 @@ exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
   };
 
   return this.get({ entity, applicationContext });
-
 };
 
 exports.get = ({ entity, applicationContext }) => {

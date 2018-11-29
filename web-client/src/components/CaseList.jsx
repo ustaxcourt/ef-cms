@@ -8,7 +8,7 @@ import moment from 'moment';
  */
 export default connect(
   {
-    caseList: state.cases,
+    caseList: state.formattedCases,
   },
   function CaseList({ caseList }) {
     return (

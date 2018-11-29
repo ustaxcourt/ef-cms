@@ -7,10 +7,12 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
-  - serverless-plugin-git-variables
 custom:
+  serverless-offline:
+    host: localhost
+
   s3:
-    host: 0.0.0.0
+    host: localhost
     port: 9000
     directory: ./storage/s3
     cors: cors-policy.xml
@@ -22,10 +24,10 @@ custom:
     seed:
       test:
         sources:
-          - table: ${self:resources.Resources.LocalDynamoDbTableDocuments.Properties.TableName}
+          - table: ${opt:documentsTableName}
             sources:
               - ./storage/fixtures/documents.json
-          - table: ${self:resources.Resources.LocalDynamoDbTableCases.Properties.TableName}
+          - table: ${opt:casesTableName}
             sources:
               - ./storage/fixtures/cases.json
 
@@ -57,7 +59,7 @@ custom:
         - name: documents
           description: rawDocument service
     summary: 'EF-CMS Documents API'
-    version: '${opt:stage}-${git:sha1}'
+    version: '1'
     description: 'EF-CMS Documents API documented with OpenAPI specification'
     resources:
       - path: 'v1/documents'
@@ -246,72 +248,6 @@ package:
 
 resources:
   Resources:
-    LocalDynamoDbTableDocuments:
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:
-        TableName: efcms-documents-local
-        KeySchema:
-          - AttributeName: documentId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: documentId
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
-    LocalDynamoDbTableCases:
-      Type: AWS::DynamoDB::Table
-      DeletionPolicy: Retain
-      Properties:
-        TableName: efcms-cases-local
-        KeySchema:
-          - AttributeName: caseId
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: caseId
-            AttributeType: S
-          - AttributeName: docketNumber
-            AttributeType: S
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: status
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: DocketNumberIndex
-            KeySchema:
-              - AttributeName: docketNumber
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-          - IndexName: StatusIndex
-            KeySchema:
-              - AttributeName: status
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-          - IndexName: UserIdIndex
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: caseId
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
     #####
     # Begin S3
     #####

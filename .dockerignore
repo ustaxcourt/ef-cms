@@ -15,5 +15,4 @@ efcms-service/terraform/main/.terraform
 business/node_modules
 business/coverage
 management/management/.terraform
-web-client
 .git
