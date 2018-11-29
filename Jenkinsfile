@@ -4,13 +4,6 @@ pipeline {
 
   agent any
 
-  // environment {
-  //   SPAWN_WRAP_SHIM_ROOT = "/home/tomcat"
-  //   // npm_config_cache = "/home/tomcat"
-  //   // HOME = "/home/tomcat" // needed to run 'npm i' on docker without being root
-  //   // CYPRESS_CACHE_FOLDER = "/home/tomcat/cypress_cache" // needed to be able to run cypress without being root
-  // }
-
   stages {
     stage('Setup') {
       steps {
@@ -26,52 +19,52 @@ pipeline {
         }
       }
     }
-    // stage('Components') {
-    //   parallel {
-    //     stage('Shared') {
-    //       when {
-    //         expression {
-    //           return checkCommit('business')
-    //         }
-    //       }
-    //       steps {
-    //         build job: 'ef-cms-shared', parameters: [
-    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-    //         ]
-    //       }
-    //     }
-    //     stage('Web-Client') {
-    //       when {
-    //         expression {
-    //           return checkCommit('web-client')
-    //         }
-    //       }
-    //       steps {
-    //         build job: 'ef-cms-ui', parameters: [
-    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-    //         ]
-    //       }
-    //     }
-    //     stage('Efcms-Service') {
-    //       when {
-    //         expression {
-    //           return checkCommit('efcms-service')
-    //         }
-    //       }
-    //       steps {
-    //         build job: 'ef-cms-api', parameters: [
-    //           [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
-    //           [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
-    //           [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
-    //         ]
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Components') {
+      parallel {
+        stage('Shared') {
+          when {
+            expression {
+              return checkCommit('business')
+            }
+          }
+          steps {
+            build job: 'ef-cms-shared', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+        stage('Web-Client') {
+          when {
+            expression {
+              return checkCommit('web-client')
+            }
+          }
+          steps {
+            build job: 'ef-cms-ui', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+        stage('Efcms-Service') {
+          when {
+            expression {
+              return checkCommit('efcms-service')
+            }
+          }
+          steps {
+            build job: 'ef-cms-api', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+      }
+    }
     stage('Tests') {
       parallel {
         stage('Pa11y') {
