@@ -34,6 +34,7 @@ describe('Petitions clerk view', () => {
     it('validates a document and removes it from queue', () => {
       cy.get('table label').click({ multiple: true });
       cy.get('#update-case').click();
+      cy.get('#queue-nav').click();
       cy.url()
         .should('not.contain', 'case-detail')
         .then(() => {
