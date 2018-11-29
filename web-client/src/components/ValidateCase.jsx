@@ -154,6 +154,13 @@ export default connect(
                   </td>
                 </tr>
               ))}
+              {caseDetail.payGovId && !form.paymentType && (
+                <tr>
+                  <td>{moment(Date()).format('LLL')}</td>
+                  <td>Filing fee paid</td>
+                  <td />
+                </tr>
+              )}
             </tbody>
           </table>
         </section>
