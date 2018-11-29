@@ -75,7 +75,7 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
+          dir('web-client') {
             sh "./docker-terraform.sh dev"
           }
         }
@@ -99,7 +99,7 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
+          dir('web-client') {
             sh "./docker-terraform.sh stg"
           }
         }
@@ -123,7 +123,7 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
+          dir('web-client') {
             sh "./docker-terraform.sh prod"
           }
         }
