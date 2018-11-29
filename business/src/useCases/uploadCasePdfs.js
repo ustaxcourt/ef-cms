@@ -29,7 +29,12 @@ const createDocumentMetadata = async ({
   return response.data;
 };
 
-module.exports = async ({ applicationContext, caseInitiator, user }) => {
+module.exports = async ({
+  applicationContext,
+  caseInitiator,
+  user,
+  fileHasUploaded,
+}) => {
   const policy = await getDocumentPolicy({ applicationContext });
 
   const { documentId: petitionFileId } = await createDocumentMetadata({
@@ -59,23 +64,21 @@ module.exports = async ({ applicationContext, caseInitiator, user }) => {
     documentId: petitionFileId,
     file: caseInitiator.petitionFile,
   });
+  fileHasUploaded();
 
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
     documentId: requestForPlaceOfTrialId,
     file: caseInitiator.requestForPlaceOfTrial,
   });
+  fileHasUploaded();
 
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
     documentId: statementOfTaxpayerIdentificationNumberId,
     file: caseInitiator.statementOfTaxpayerIdentificationNumber,
   });
-
-  // TODO: this is the only public function
-  // await applicationContext
-  //   .getPersistenceGateway()
-  //   .uploadPdfsForNewCase({ applicationContext, caseInitiator, user });
+  fileHasUploaded();
 
   return {
     petitionFileId,
