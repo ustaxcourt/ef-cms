@@ -79,9 +79,6 @@ pipeline {
         }
         stage('Cypress') {
           steps {
-            echo "${env.CHANGE_TARGET}"
-            echo "${env.BRANCH_NAME}"
-            sh "ls"
             sh "./docker-cypress.sh"
           }
         }
