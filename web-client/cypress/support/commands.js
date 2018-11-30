@@ -53,12 +53,28 @@ Cypress.Commands.add('routeTo', route => {
   cy.url().should('include', route);
 });
 
+Cypress.Commands.add('showsErrorMessage', (shows = true) => {
+  if (shows) {
+    cy.get('.usa-alert-error').should('exist');
+  } else {
+    cy.get('.usa-alert-error').should('not.exist');
+  }
+});
+
+Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
+  if (shows) {
+    cy.get('.usa-alert-success').should('exist');
+  } else {
+    cy.get('.usa-alert-success').should('not.exist');
+  }
+});
+
 Cypress.Commands.add('login', (username, route) => {
   cy.visit('/log-in');
   cy.get('input#name').type(username);
   cy.get('input[type="submit"]').click();
   cy.url().should('not.include', 'log-in');
-  cy.get('.usa-alert-error').should('not.exist');
+  cy.showsErrorMessage(false);
   if (route) {
     cy.routeTo(route);
   }
