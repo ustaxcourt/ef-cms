@@ -31,16 +31,10 @@ describe('Petitions clerk view', () => {
       cy.get('table .fa-file-pdf').should('exist');
       cy.get('table input[type="checkbox"]').should('exist');
     });
-    it('validates a document and removes it from queue', () => {
+    it('validates a document and indicates success', () => {
       cy.get('table label').click({ multiple: true });
       cy.get('#update-case').click();
-      cy.get('#queue-nav').click();
-      cy.url()
-        .should('not.contain', 'case-detail')
-        .then(() => {
-          const currentCount = Cypress.$('#workQueue a').length;
-          expect(currentCount).to.equal(rowCount - 1);
-        });
+      cy.showsSuccessMessage(true);
     });
   });
 });
