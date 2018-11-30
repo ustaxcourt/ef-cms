@@ -1,5 +1,4 @@
 describe('Petitions clerk view', () => {
-  let rowCount;
   before(() => {
     cy.login('petitionsclerk');
   });
@@ -17,9 +16,6 @@ describe('Petitions clerk view', () => {
   });
   describe('petition validation', () => {
     it('opens case detail', () => {
-      cy.get('main')
-        .find('#workQueue a')
-        .then($links => (rowCount = $links.length));
       cy.get('main')
         .find('#workQueue a')
         .first()
