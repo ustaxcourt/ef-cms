@@ -107,6 +107,11 @@ exports.saveCase = ({ caseToSave, applicationContext }) =>
     Item: caseToSave,
   });
 
+exports.sendToIRS = ({ caseToSend }) => {
+  return caseToSend;
+  // noop on irs for now
+};
+
 exports.getCasesByUser = ({ userId, applicationContext }) =>
   client.query({
     TableName: getTable(

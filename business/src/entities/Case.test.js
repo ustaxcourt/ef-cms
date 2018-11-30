@@ -7,14 +7,29 @@ const A_VALID_CASE = {
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'a',
+      createdAt: '2018-11-21T20:49:28.192Z',
+      userId: 'taxpayer',
+      validated: true,
+      reviewDate: '2018-11-21T20:49:28.192Z',
+      reviewUser: 'petitionsclerk',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'b',
+      createdAt: '2018-11-21T20:49:28.192Z',
+      userId: 'taxpayer',
+      validated: true,
+      reviewDate: '2018-11-21T20:49:28.192Z',
+      reviewUser: 'petitionsclerk',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'c',
+      createdAt: '2018-11-21T20:49:28.192Z',
+      userId: 'taxpayer',
+      validated: true,
+      reviewDate: '2018-11-21T20:49:28.192Z',
+      reviewUser: 'petitionsclerk',
     },
   ],
 };
@@ -73,14 +88,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isValidUUID', () => {
+  describe('isValidCaseId', () => {
     it('returns true if a valid uuid', () => {
-      assert.ok(Case.isValidUUID('c54ba5a9-b37b-479d-9201-067ec6e335bb'));
+      assert.ok(Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'));
     });
 
     it('returns false if a invalid uuid', () => {
       assert.equal(
-        Case.isValidUUID('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
+        Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
         false,
       );
     });
@@ -93,6 +108,21 @@ describe('Case entity', () => {
 
     it('returns false if a invalid docketnumber', () => {
       assert.equal(Case.isValidDocketNumber('00'), false);
+    });
+  });
+
+  describe('getRawValues', () => {
+    it('returns a case without sendToIRS', () => {
+      const caseRecord = new Case(A_VALID_CASE);
+      caseRecord.sendToIRS = true;
+      assert.equal(caseRecord.getRawValues().isSendToIRS, undefined);
+    });
+  });
+
+  describe('isPetitionPackageReviewed', () => {
+    it('return true is all documents are validated', () => {
+      const caseRecord = new Case(A_VALID_CASE);
+      assert.ok(caseRecord.isPetitionPackageReviewed());
     });
   });
 });

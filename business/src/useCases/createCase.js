@@ -1,5 +1,12 @@
 const Case = require('../entities/Case');
-
+/**
+ * createCase
+ *
+ * @param userId
+ * @param documents
+ * @param applicationContext
+ * @returns {Promise<*|{caseId}>}
+ */
 module.exports = async ({ userId, documents, applicationContext }) => {
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     applicationContext,

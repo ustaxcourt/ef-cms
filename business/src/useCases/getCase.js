@@ -8,7 +8,7 @@ const Case = require('../entities/Case');
 exports.getCase = async ({ userId, caseId, applicationContext }) => {
   let caseRecord;
 
-  if (Case.isValidUUID(caseId)) {
+  if (Case.isValidCaseId(caseId)) {
     caseRecord = await applicationContext.persistence.getCaseByCaseId({
       caseId,
       applicationContext,

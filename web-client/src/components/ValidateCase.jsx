@@ -13,6 +13,7 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
+    submitSendToIRS: sequences.submitToIRS,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
     updateCaseValue: sequences.updateCaseValue,
     updateFormValue: sequences.updateFormValue,
@@ -22,6 +23,7 @@ export default connect(
     caseDetail,
     form,
     submitUpdateCase,
+    submitSendToIRS,
     toggleDocumentValidation,
     updateCaseValue,
     updateFormValue,
@@ -109,8 +111,10 @@ export default connect(
           <table className="responsive-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Filings and proceedings</th>
+                <th>Date filed</th>
+                <th>Title</th>
+                <th>Filed by</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -119,12 +123,10 @@ export default connect(
                 <tr key={idx}>
                   <td className="responsive-title">
                     <span className="responsive-label">Activity date</span>
-                    {moment(item.createdAt).format('LLL')}
+                    {moment(item.createdAt).format('l')}
                   </td>
                   <td>
-                    <span className="responsive-label">
-                      Filings and proceedings
-                    </span>
+                    <span className="responsive-label">Title</span>
                     <a
                       className="pdf-link"
                       aria-label="View PDF"
@@ -142,33 +144,62 @@ export default connect(
                     </a>
                   </td>
                   <td>
-                    <input
-                      id={item.documentId}
-                      type="checkbox"
-                      name={'validate-' + item.documentType}
-                      onChange={() => toggleDocumentValidation({ item })}
-                      checked={!!item.validated}
-                    />
-                    <label htmlFor={item.documentId}>Validate</label>
+                    <span className="responsive-label">Filed by</span>
+                    Petitioner
+                  </td>
+                  <td>
+                    <span className="responsive-label">Status</span>
+                    {item.reviewDate && (
+                      <span>
+                        R served on {moment(item.reviewDate).format('L')}
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    {!item.reviewDate && (
+                      <span>
+                        <input
+                          id={item.documentId}
+                          type="checkbox"
+                          name={'validate-' + item.documentType}
+                          onChange={() => toggleDocumentValidation({ item })}
+                          checked={!!item.validated}
+                        />
+                        <label htmlFor={item.documentId}>Validate</label>
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}
               {caseDetail.payGovId && !form.paymentType && (
                 <tr>
-                  <td>{moment(caseDetail.payGovDate).format('LLL')}</td>
+                  <td>{moment(caseDetail.payGovDate).format('l')}</td>
                   <td>Filing fee paid</td>
+                  <td />
+                  <td />
                   <td />
                 </tr>
               )}
             </tbody>
           </table>
-          <button
-            className="float-right"
-            id="update-case"
-            onClick={() => submitUpdateCase()}
+          <div
+            className={
+              caseDetail.status == 'General Docket'
+                ? 'usa-grid-full hidden'
+                : 'usa-grid-full'
+            }
           >
-            Save updates
-          </button>
+            <div className="usa-width-full">
+              <button
+                className="float-right"
+                id="send-to-irs"
+                tabIndex="999"
+                onClick={() => submitSendToIRS()}
+              >
+                Send to IRS
+              </button>
+            </div>
+          </div>
         </section>
       </React.Fragment>
     );

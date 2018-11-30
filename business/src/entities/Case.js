@@ -5,8 +5,6 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-// TODO: talk to Doug about if we should be using
-// separate validation methods for different use cases, or a single validation method?
 const caseSchema = joi.object().keys({
   caseId: joi
     .string()
@@ -23,6 +21,11 @@ const caseSchema = joi.object().keys({
   docketNumber: joi
     .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
+    .optional(),
+  isSendToIRS: joi.boolean().optional(),
+  irsSendDate: joi
+    .date()
+    .iso()
     .optional(),
   payGovId: joi.string().optional(),
   payGovDate: joi
@@ -48,10 +51,20 @@ const caseSchema = joi.object().keys({
           .optional(),
         documentType: joi.string().required(),
         validated: joi.boolean().optional(),
-        createdAt: joi
+        reviewDate: joi
           .date()
           .iso()
           .optional(),
+        reviewUser: joi.string().optional(),
+        status: joi.string().optional(),
+        servedDate: joi
+          .date()
+          .iso()
+          .optional(),
+        createdAt: joi
+        .date()
+        .iso()
+        .optional(),
       }),
     )
     .required(),
@@ -88,7 +101,12 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
   return this.documents.every(document => document.validated === true);
 };
 
-Case.isValidUUID = caseId =>
+Case.prototype.getRawValues = function getRawValues() {
+  const { isSendToIRS, ...rawObject } = this; // eslint-disable-line no-unused-vars
+  return rawObject;
+};
+
+Case.isValidCaseId = caseId =>
   caseId &&
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,
