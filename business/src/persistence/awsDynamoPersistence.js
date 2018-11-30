@@ -2,6 +2,12 @@ const client = require('./dynamodbClientService');
 const Case = require('../entities/Case');
 const Document = require('../entities/Document');
 
+/**
+ * getTable
+ * @param entity
+ * @param stage
+ * @returns {string}
+ */
 const getTable = (entity, stage) => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return `efcms-cases-${stage}`;
@@ -12,6 +18,12 @@ const getTable = (entity, stage) => {
   }
 };
 
+/**
+ * getKey
+ *
+ * @param entity
+ * @returns {string}
+ */
 const getKey = entity => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return 'caseId';
@@ -22,14 +34,31 @@ const getKey = entity => {
   }
 };
 
+/**
+ * createCase
+ * @param caseRecord
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.createCase = ({ caseRecord, applicationContext }) => {
   return this.create({ entity: caseRecord, applicationContext });
 };
 
+/**
+ * createDocumentMetadata
+ * @param documentToCreate
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
   return this.create({ entity: documentToCreate, applicationContext });
 };
-
+/**
+ * create
+ * @param entity
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.create = ({ entity, applicationContext }) => {
   const key = getKey(entity);
   return client.put({
@@ -41,7 +70,12 @@ exports.create = ({ entity, applicationContext }) => {
     },
   });
 };
-
+/**
+ * getCaseByCaseId
+ * @param caseId
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
   const entity = {
     caseId,
@@ -50,7 +84,13 @@ exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
 
   return this.get({ entity, applicationContext });
 };
-
+/**
+ * get
+ * @param entity
+ * @param applicationContext
+ * @returns {*}
+ */
+//TODO should not be exported
 exports.get = ({ entity, applicationContext }) => {
   const key = getKey(entity);
   return client.get({
@@ -60,7 +100,12 @@ exports.get = ({ entity, applicationContext }) => {
     },
   });
 };
-
+/**
+ * getCaseByDocketNumber
+ * @param docketNumber
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.getCaseByDocketNumber = ({ docketNumber, applicationContext }) => {
   return client.query({
     TableName: getTable(
@@ -78,6 +123,11 @@ exports.getCaseByDocketNumber = ({ docketNumber, applicationContext }) => {
   });
 };
 
+/**
+ * incrementCounter
+ * @param applicationContext
+ * @returns {*}
+ */
 // TODO: Hard coded to update the docketNumberCounter, but should
 // be refactored to update any type of atomic counter in dynamo
 // if we can pass in table / key
@@ -98,6 +148,12 @@ exports.incrementCounter = applicationContext => {
   });
 };
 
+/**
+ * saveCase
+ * @param caseToSave
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.saveCase = ({ caseToSave, applicationContext }) =>
   client.put({
     TableName: getTable(
@@ -106,7 +162,12 @@ exports.saveCase = ({ caseToSave, applicationContext }) =>
     ),
     Item: caseToSave,
   });
-
+/**
+ * getCasesByUser
+ * @param userId
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.getCasesByUser = ({ userId, applicationContext }) =>
   client.query({
     TableName: getTable(
@@ -122,7 +183,12 @@ exports.getCasesByUser = ({ userId, applicationContext }) =>
     },
     KeyConditionExpression: '#userId = :userId',
   });
-
+/**
+ * getCasesByStatus
+ * @param status
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.getCasesByStatus = ({ status, applicationContext }) =>
   client.query({
     TableName: getTable(
