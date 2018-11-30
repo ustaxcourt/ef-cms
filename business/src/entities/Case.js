@@ -25,6 +25,10 @@ const caseSchema = joi.object().keys({
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
   payGovId: joi.string().optional(),
+  payGovDate: joi
+    .date()
+    .iso()
+    .optional(),
   status: joi
     .string()
     .regex(/^(new)|(general)$/)
@@ -46,11 +50,16 @@ const caseSchema = joi.object().keys({
 });
 
 function Case(rawCase) {
-  Object.assign(this, rawCase, {
-    caseId: uuidv4(),
-    createdAt: new Date().toISOString(),
-    status: 'new',
-  });
+  Object.assign(
+    this,
+    rawCase,
+    {
+      caseId: uuidv4(),
+      createdAt: new Date().toISOString(),
+      status: 'new',
+    },
+    rawCase.payGovId ? { payGovDate: new Date().toISOString() } : null ,
+  );
 }
 
 Case.prototype.isValid = function isValid() {
@@ -65,6 +74,10 @@ Case.prototype.validate = function validate() {
   if (!this.isValid()) {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
+};
+
+Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
+  return this.documents.every(document => document.validated === true);
 };
 
 Case.isValidUUID = caseId =>
