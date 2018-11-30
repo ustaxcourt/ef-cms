@@ -55,52 +55,50 @@ module.exports = async ({
 }) => {
   const policy = await getDocumentPolicy({ applicationContext });
 
-  const { documentId: petitionFileId } = await createDocumentMetadata({
+  const petitionDocument = await createDocumentMetadata({
     applicationContext,
     userToken: user.token,
     documentType: Case.documentTypes.petitionFile,
   });
 
-  const { documentId: requestForPlaceOfTrialId } = await createDocumentMetadata(
+  const requestForPlaceOfTrialDocument = await createDocumentMetadata({
+    applicationContext,
+    userToken: user.token,
+    documentType: Case.documentTypes.requestForPlaceOfTrial,
+  });
+
+  const statementOfTaxpayerIdentificationNumberDocument = await createDocumentMetadata(
     {
       applicationContext,
       userToken: user.token,
-      documentType: Case.documentTypes.requestForPlaceOfTrial,
+      documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
     },
   );
 
-  const {
-    documentId: statementOfTaxpayerIdentificationNumberId,
-  } = await createDocumentMetadata({
-    applicationContext,
-    userToken: user.token,
-    documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
-  });
-
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
-    documentId: petitionFileId,
+    documentId: petitionDocument.documentId,
     file: caseInitiator.petitionFile,
   });
   fileHasUploaded();
 
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
-    documentId: requestForPlaceOfTrialId,
+    documentId: requestForPlaceOfTrialDocument.documentId,
     file: caseInitiator.requestForPlaceOfTrial,
   });
   fileHasUploaded();
 
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
-    documentId: statementOfTaxpayerIdentificationNumberId,
+    documentId: statementOfTaxpayerIdentificationNumberDocument.documentId,
     file: caseInitiator.statementOfTaxpayerIdentificationNumber,
   });
   fileHasUploaded();
 
   return {
-    petitionFileId,
-    requestForPlaceOfTrialId,
-    statementOfTaxpayerIdentificationNumberId,
+    petitionDocument,
+    requestForPlaceOfTrialDocument,
+    statementOfTaxpayerIdentificationNumberDocument,
   };
 };

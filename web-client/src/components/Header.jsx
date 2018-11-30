@@ -1,16 +1,22 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 import React from 'react';
 import SearchBox from './SearchBox';
 
-// import close from '../../node_modules/uswds/dist/img/close.svg';
+
+import close from '../../node_modules/uswds/dist/img/close.svg';
 
 /**
  * Header
  */
 export default connect(
-  { user: state.user },
-  function Header({ user }) {
+  {
+    user: state.user,
+    mobileMenu: state.mobileMenu,
+    toggleMobileMenu: sequences.toggleMobileMenu
+  },
+
+  function Header({ user, mobileMenu, toggleMobileMenu }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
@@ -21,14 +27,22 @@ export default connect(
               </a>
             </em>
           </div>
-          <button className="usa-menu-btn">Menu</button>
+          <button className="usa-menu-btn" onClick={() => toggleMobileMenu()}>
+            Menu
+          </button>
         </div>
 
-        <nav role="navigation" className="usa-nav">
+        <nav
+          role="navigation"
+          className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
+        >
           <div className="usa-nav-inner">
-            {/* <button className="usa-nav-close">
+            <button
+              className="usa-nav-close"
+              onClick={() => toggleMobileMenu()}
+            >
               <img src={close} alt="close" />
-            </button> */}
+            </button>
             {/* <ul className="usa-nav-primary usa-accordion">
               <li>
                 <button
@@ -87,7 +101,7 @@ export default connect(
             <div className="usa-nav-secondary">
               {user.userId && (
                 <ul className="usa-unstyled-list usa-nav-secondary-links">
-                  <li role="search">
+                  <li role="search" className="usa-search">
                     <SearchBox />
                   </li>
                   <li>

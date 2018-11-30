@@ -26,6 +26,10 @@ const caseSchema = joi.object().keys({
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
   payGovId: joi.string().optional(),
+  payGovDate: joi
+    .date()
+    .iso()
+    .optional(),
   status: joi
     .string()
     .regex(/^(new)|(general)$/)
@@ -39,8 +43,16 @@ const caseSchema = joi.object().keys({
           .string()
           .uuid(uuidVersions)
           .required(),
+        userId: joi
+          .string()
+          // .uuid(uuidVersions)
+          .optional(),
         documentType: joi.string().required(),
         validated: joi.boolean().optional(),
+        createdAt: joi
+          .date()
+          .iso()
+          .optional(),
       }),
     )
     .required(),
@@ -52,11 +64,16 @@ const caseSchema = joi.object().keys({
  * @constructor
  */
 function Case(rawCase) {
-  Object.assign(this, rawCase, {
-    caseId: uuidv4(),
-    createdAt: new Date().toISOString(),
-    status: 'new',
-  });
+  Object.assign(
+    this,
+    rawCase,
+    {
+      caseId: uuidv4(),
+      createdAt: new Date().toISOString(),
+      status: 'new',
+    },
+    (rawCase.payGovId && !rawCase.payGovDate) ? { payGovDate: new Date().toISOString() } : null ,
+  );
 }
 
 /**
@@ -80,6 +97,13 @@ Case.prototype.validate = function validate() {
   if (!this.isValid()) {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
+};
+/**
+ * isPetitionPackageReviewed
+ * @returns boolean
+ */
+Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
+  return this.documents.every(document => document.validated === true);
 };
 /**
  * isValidUUID

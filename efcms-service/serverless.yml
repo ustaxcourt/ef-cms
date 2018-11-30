@@ -8,27 +8,28 @@ plugins:
   - serverless-plugin-aws-alerts
   - serverless-offline
 custom:
-
   serverless-offline:
     host: localhost
-    
+
   s3:
     host: localhost
     port: 9000
-    directory: /tmp
+    directory: ./storage/s3
     cors: cors-policy.xml
   dynamodb:
     start:
       inMemory: true
       migrate: true
       port: 8000
-      seed: false
-    # seed:
-    #   test:
-    #     sources:
-    #     - table: ${self:provider.environment.DOCUMENTS_DYNAMODB_TABLE}
-    #       sources:
-    #         - ./spec/fixtures/stuff.json
+    seed:
+      test:
+        sources:
+          - table: ${opt:documentsTableName}
+            sources:
+              - ./storage/fixtures/documents.json
+          - table: ${opt:casesTableName}
+            sources:
+              - ./storage/fixtures/cases.json
 
   alerts:
     stages:

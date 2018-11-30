@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import Case from '../../../../business/src/entities/Case';
 
 export default async ({ applicationContext, get, store }) => {
   const user = get(state.user);
@@ -14,9 +13,9 @@ export default async ({ applicationContext, get, store }) => {
   };
 
   const {
-    petitionFileId,
-    requestForPlaceOfTrialId,
-    statementOfTaxpayerIdentificationNumberId,
+    petitionDocument,
+    requestForPlaceOfTrialDocument,
+    statementOfTaxpayerIdentificationNumberDocument,
   } = await useCases.uploadCasePdfs({
     applicationContext,
     caseInitiator,
@@ -27,19 +26,9 @@ export default async ({ applicationContext, get, store }) => {
   await useCases.createCase({
     applicationContext,
     documents: [
-      {
-        documentId: petitionFileId,
-        documentType: Case.documentTypes.petitionFile,
-      },
-      {
-        documentId: requestForPlaceOfTrialId,
-        documentType: Case.documentTypes.requestForPlaceOfTrial,
-      },
-      {
-        documentId: statementOfTaxpayerIdentificationNumberId,
-        documentType:
-          Case.documentTypes.statementOfTaxpayerIdentificationNumber,
-      },
+      petitionDocument,
+      requestForPlaceOfTrialDocument,
+      statementOfTaxpayerIdentificationNumberDocument,
     ],
     userId: user.userId,
   });

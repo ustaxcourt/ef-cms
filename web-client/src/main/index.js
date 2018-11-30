@@ -9,6 +9,7 @@ import submitSearch from './sequences/submitSearch';
 import submitUpdateCase from './sequences/submitUpdateCase';
 import toggleDocumentValidation from './sequences/toggleDocumentValidation';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
+import toggleMobileMenu from './sequences/toggleMobileMenu';
 import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
 import updateCaseValue from './sequences/updateCaseValue';
 import updateFormValue from './sequences/updateFormValue';
@@ -37,6 +38,7 @@ export default {
     submitUpdateCase,
     toggleDocumentValidation,
     togglePaymentDetails,
+    toggleMobileMenu,
     toggleUsaBannerDetails,
     updateCaseValue,
     updateFormValue,
@@ -47,6 +49,9 @@ export default {
     currentPage: 'Loading',
     usaBanner: {
       showDetails: false,
+    },
+    mobileMenu: {
+      isVisible: false,
     },
     paymentInfo: {
       showDetails: false,
