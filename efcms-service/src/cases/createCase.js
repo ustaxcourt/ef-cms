@@ -1,20 +1,19 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
-const caseMiddleware = require('./middleware/caseMiddleware');
+const createCaseUC = require('ef-cms-shared/src/useCases/createCase');
 const { handle } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
 
 /**
- * Create Case API Lambda
+ * createCase
  *
  * @param event
- * @param context
- * @param callback
+ * @returns {Promise<*|undefined>}
  */
-
 exports.create = event =>
   handle(() =>
-    caseMiddleware.create({
+    createCaseUC({
       userId: getAuthHeader(event),
       documents: JSON.parse(event.body).documents,
-      user: JSON.parse(event.body).user
-    })
+      applicationContext,
+    }),
   );

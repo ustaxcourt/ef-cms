@@ -26,9 +26,13 @@ function check_env_vars_exist() {
 
 function prepare_serverless() {
     echo "Preparing to run Serverless."
-
+    export NODE_PRESERVE_SYMLINKS=1
     rm -rf ./node_modules/
     npm install
+    pushd ../business
+    rm -rf ./node_modules/
+    npm install --production
+    popd
 }
 
 function run_development() {
@@ -63,6 +67,6 @@ function configure_custom_logging() {
 }
 
 check_env_vars_exist
-# prepare_serverless
+prepare_serverless
 run_development
 configure_custom_logging

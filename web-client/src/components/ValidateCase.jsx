@@ -7,29 +7,30 @@ import React from 'react';
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
-
-/**
- *
- */
 export default connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
-    updateCase: sequences.updateCase,
+    caseDetail: state.formattedCaseDetail,
+    form: state.form,
+    submitUpdateCase: sequences.submitUpdateCase,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
+    updateCaseValue: sequences.updateCaseValue,
+    updateFormValue: sequences.updateFormValue,
   },
   function CaseDetail({
     baseUrl,
     caseDetail,
-    updateCase,
+    form,
+    submitUpdateCase,
     toggleDocumentValidation,
+    updateCaseValue,
+    updateFormValue,
   }) {
     return (
       <React.Fragment>
-
         <div className="usa-grid">
           <a href="/" id="queue-nav">
-            Back to Petitions Section Work Queue
+            Back to dashboard
           </a>
         </div>
         <section className="usa-section usa-grid">
@@ -46,23 +47,69 @@ export default connect(
               <button
                 className="float-right"
                 id="update-case"
-                onClick={() => updateCase()}
+                onClick={() => submitUpdateCase()}
               >
                 Save updates
               </button>
             </div>
           </div>
-
-          <p>
-            {caseDetail.user.firstName} {caseDetail.user.lastName}, Petitioner
-            v. Commissioner of Internal Revenue, Respondent
+          <p className="subsection">
+            {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
           <br />
-          <h2>Case Activity Record</h2>
+          <div className="subsection">
+            <h2>Case Information</h2>
+            <fieldset className="usa-fieldset-inputs usa-sans">
+              <legend>Petition Fee</legend>
+              {caseDetail.payGovId && !form.paymentType && (
+                <React.Fragment>
+                  <p>Paid by pay.gov</p>
+                  <p>{caseDetail.payGovId}</p>
+                </React.Fragment>
+              )}
+              {!(caseDetail.payGovId && !form.paymentType) && (
+                <ul className="usa-unstyled-list">
+                  <li>
+                    <input
+                      id="paygov"
+                      type="radio"
+                      name="paymentType"
+                      value="payGov"
+                      onChange={e => {
+                        updateFormValue({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                    <label htmlFor="paygov">Paid by pay.gov</label>
+                    {form.paymentType == 'payGov' && (
+                      <React.Fragment>
+                        <label htmlFor="paygovid">Payment ID</label>
+                        <input
+                          id="paygovid"
+                          type="text"
+                          name="payGovId"
+                          value={caseDetail.payGovId || ''}
+                          onChange={e => {
+                            updateCaseValue({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                      </React.Fragment>
+                    )}
+                  </li>
+                </ul>
+              )}
+            </fieldset>
+          </div>
+          <h2>Docket Record</h2>
           <table className="responsive-table">
             <thead>
               <tr>
-                <th>Date filled</th>
+                <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Action</th>
               </tr>
@@ -106,8 +153,22 @@ export default connect(
                   </td>
                 </tr>
               ))}
+              {caseDetail.payGovId && !form.paymentType && (
+                <tr>
+                  <td>{moment(caseDetail.payGovDate).format('LLL')}</td>
+                  <td>Filing fee paid</td>
+                  <td />
+                </tr>
+              )}
             </tbody>
           </table>
+          <button
+            className="float-right"
+            id="update-case"
+            onClick={() => submitUpdateCase()}
+          >
+            Save updates
+          </button>
         </section>
       </React.Fragment>
     );
