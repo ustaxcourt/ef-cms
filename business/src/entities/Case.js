@@ -42,8 +42,16 @@ const caseSchema = joi.object().keys({
           .string()
           .uuid(uuidVersions)
           .required(),
+        userId: joi
+          .string()
+          // .uuid(uuidVersions)
+          .optional(),
         documentType: joi.string().required(),
         validated: joi.boolean().optional(),
+        createdAt: joi
+          .date()
+          .iso()
+          .optional(),
       }),
     )
     .required(),

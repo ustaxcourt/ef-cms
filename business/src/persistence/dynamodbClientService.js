@@ -7,7 +7,7 @@ const region = process.env.AWS_REGION || 'us-east-1';
  * @param params
  */
 
-const removeAWSGlobalFields = (item) => {
+const removeAWSGlobalFields = item => {
   // dynamodb always adds these fields for purposes of global tables
   delete item['aws:rep:deleting'];
   delete item['aws:rep:updateregion'];
