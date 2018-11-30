@@ -2,6 +2,11 @@ const axios = require('axios');
 
 const Case = require('../entities/Case');
 
+/**
+ * getDocumentPolicy
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 // TODO: move to persistence gateway
 const getDocumentPolicy = async ({ applicationContext }) => {
   const response = await axios.get(
@@ -9,7 +14,13 @@ const getDocumentPolicy = async ({ applicationContext }) => {
   );
   return response.data;
 };
-
+/**
+ * createDocumentMetadata
+ * @param applicationContext
+ * @param userToken
+ * @param documentType
+ * @returns {Promise<*>}
+ */
 const createDocumentMetadata = async ({
   applicationContext,
   userToken,
@@ -28,7 +39,14 @@ const createDocumentMetadata = async ({
   );
   return response.data;
 };
-
+/**
+ * uploadCasePdfs
+ * @param applicationContext
+ * @param caseInitiator
+ * @param user
+ * @param fileHasUploaded
+ * @returns {Promise<{petitionFileId, requestForPlaceOfTrialId, statementOfTaxpayerIdentificationNumberId}>}
+ */
 module.exports = async ({
   applicationContext,
   caseInitiator,

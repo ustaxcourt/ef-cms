@@ -1,5 +1,11 @@
 const axios = require('axios');
 
+/**
+ * getCasesProxy
+ * @param applicationContext
+ * @param userToken
+ * @returns {Promise<*>}
+ */
 module.exports = async ({ applicationContext, userToken }) => {
   return await axios
     .get(`${applicationContext.getBaseUrl()}/cases`, {

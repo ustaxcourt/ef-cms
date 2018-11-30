@@ -8,6 +8,15 @@ const {
   UnauthorizedError,
 } = require('../errors/errors');
 
+/**
+ * updateCase
+ *
+ * @param caseId
+ * @param caseJson
+ * @param userId
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
   const caseToUpdate = new Case(caseJson);
   caseToUpdate.validate();

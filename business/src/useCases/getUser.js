@@ -1,5 +1,9 @@
 const User = require('../entities/User');
-
+/**
+ * getUser
+ * @param userId
+ * @returns {User}
+ */
 module.exports = userId => {
   if (userId === 'taxpayer') {
     return new User({
