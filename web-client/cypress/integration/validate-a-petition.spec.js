@@ -1,5 +1,4 @@
 describe('Petitions clerk view', () => {
-  let rowCount;
   before(() => {
     cy.login('petitionsclerk');
   });
@@ -19,9 +18,6 @@ describe('Petitions clerk view', () => {
     it('opens case detail', () => {
       cy.get('main')
         .find('#workQueue a')
-        .then($links => (rowCount = $links.length));
-      cy.get('main')
-        .find('#workQueue a')
         .first()
         .click();
       cy.url().should('include', 'case-detail');
@@ -31,16 +27,10 @@ describe('Petitions clerk view', () => {
       cy.get('table .fa-file-pdf').should('exist');
       cy.get('table input[type="checkbox"]').should('exist');
     });
-    it('validates a document and removes it from queue', () => {
+    it('validates a document and indicates success', () => {
       cy.get('table label').click({ multiple: true });
       cy.get('#update-case').click();
-      cy.get('#queue-nav').click();
-      cy.url()
-        .should('not.contain', 'case-detail')
-        .then(() => {
-          const currentCount = Cypress.$('#workQueue a').length;
-          expect(currentCount).to.equal(rowCount - 1);
-        });
+      cy.showsSuccessMessage(true);
     });
   });
 });
