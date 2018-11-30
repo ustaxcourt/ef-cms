@@ -155,7 +155,7 @@ export default connect(
               ))}
               {caseDetail.payGovId && !form.paymentType && (
                 <tr>
-                  <td>{moment(new Date()).format('LLL')}</td>
+                  <td>{moment(caseDetail.payGovDate).format('LLL')}</td>
                   <td>Filing fee paid</td>
                   <td />
                 </tr>
