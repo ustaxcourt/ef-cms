@@ -37,6 +37,7 @@
     "aws-sdk": "^2.367.0",
     "axios": "^0.18.0",
     "joi-browser": "^13.4.0",
+    "moment": "^2.22.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

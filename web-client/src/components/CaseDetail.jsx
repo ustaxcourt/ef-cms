@@ -30,7 +30,7 @@ export default connect(
           Internal Revenue, Respondent
         </p>
         <br />
-        <h2>Required actions</h2>
+        {!caseDetail.payGovId && <h2>Required actions</h2>}
         {!caseDetail.payGovId && (
           <ul className="usa-accordion">
             <li>
@@ -105,31 +105,26 @@ export default connect(
             </li>
           </ul>
         )}
-        <h2>Case activities</h2>
-        <table className="responsive-table" id="case-activities">
+        <h2>Docket Record</h2>
+        <table className="responsive-table">
           <thead>
             <tr>
-              <th>Activity date</th>
-              <th>Filings and proceedings</th>
-              <th>Date served</th>
+              <th>Date filed</th>
+              <th>Title</th>
+              <th>Filed by</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {!caseDetail.documents.length && (
-              <tr>
-                <td colSpan="3">(none)</td>
-              </tr>
-            )}
             {caseDetail.documents.map((item, idx) => (
               <tr key={idx}>
                 <td className="responsive-title">
                   <span className="responsive-label">Activity date</span>
-                  {moment(item.createdAt).format('LLL')}
+                  {moment(item.createdAt).format('l')}
                 </td>
                 <td>
-                  <span className="responsive-label">
-                    Filings and proceedings
-                  </span>
+                  <span className="responsive-label">Title</span>
                   <a
                     className="pdf-link"
                     aria-label="View PDF"
@@ -146,13 +141,27 @@ export default connect(
                     {item.documentType}
                   </a>
                 </td>
-                <td>{item.dateServed}</td>
+                <td>
+                  <span className="responsive-label">Filed by</span>
+                  Petitioner
+                </td>
+                <td>
+                  <span className="responsive-label">Status</span>
+                  {item.reviewDate && (
+                    <span>
+                      R served on {moment(item.reviewDate).format('L')}
+                    </span>
+                  )}
+                </td>
+                <td />
               </tr>
             ))}
             {caseDetail.payGovId && (
               <tr>
-                <td>{moment(caseDetail.payGovDate).format('LLL')}</td>
+                <td>{moment(caseDetail.payGovDate).format('l')}</td>
                 <td>Filing fee paid</td>
+                <td />
+                <td />
                 <td />
               </tr>
             )}

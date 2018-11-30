@@ -5,6 +5,7 @@ import getCase from '../../../business/src/useCases/getCaseProxy';
 import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
 import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
 import getUser from '../../../business/src/useCases/getUser';
+import sendToIRS from '../../../business/src/useCases/sendToIRSProxy';
 import updateCase from '../../../business/src/useCases/updateCaseProxy';
 import uploadCasePdfs from '../../../business/src/useCases/uploadCasePdfs';
 
@@ -25,6 +26,7 @@ const applicationContext = {
       getCasesByStatus,
       getCasesByUser,
       getUser,
+      sendToIRS,
       updateCase,
       uploadCasePdfs,
     };

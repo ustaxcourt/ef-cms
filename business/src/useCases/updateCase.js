@@ -7,10 +7,33 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../errors/errors');
+const { sendToIRS } = require('./sendToIRS');
 
-exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
+const setDocumentDetails = (userId, documents) => {
+  if (documents && userId) {
+    documents.forEach(document => {
+      if (document.validated && !document.reviewDate) {
+        document.reviewDate = new Date().toISOString();
+        document.reviewUser = userId;
+      }
+    });
+  }
+
+  return documents;
+};
+
+exports.updateCase = async ({
+  caseId,
+  caseJson,
+  userId,
+  applicationContext,
+}) => {
+  if (caseJson.documents) {
+    caseJson.documents = setDocumentDetails(userId, caseJson.documents);
+  }
   const caseToUpdate = new Case(caseJson);
   caseToUpdate.validate();
+  //TODO validation errors have to be caught and turned into real errors?
 
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
@@ -26,8 +49,16 @@ exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
   if (caseToUpdate.payGovDate) {
     caseJson.payGovDate = caseToUpdate.payGovDate;
   }
+
+  if (caseToUpdate.isSendToIRS) {
+    caseJson = await sendToIRS({
+      caseRecord: caseToUpdate,
+      userId: userId,
+      applicationContext,
+    });
+  }
   return applicationContext.persistence.saveCase({
-    caseToSave: caseJson,
+    caseToSave: { ...caseToUpdate },
     applicationContext,
   });
 };
