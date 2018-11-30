@@ -58,7 +58,7 @@ function Case(rawCase) {
       createdAt: new Date().toISOString(),
       status: 'new',
     },
-    rawCase.payGovId ? { payGovDate: new Date().toISOString() } : null ,
+    (rawCase.payGovId && !rawCase.payGovDate) ? { payGovDate: new Date().toISOString() } : null ,
   );
 }
 
