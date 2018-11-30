@@ -10,7 +10,7 @@ variable "ssh_cidrs" {
 
 variable "jenkins_instance_type" {
   type        = "string"
-  default     = "t3.large"
+  default     = "c5.xlarge"
 }
 
 variable "environment" {

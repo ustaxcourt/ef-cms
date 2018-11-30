@@ -1,3 +1,5 @@
+const { UnauthorizedError, NotFoundError } = require('ef-cms-shared/src/errors/errors');
+
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -22,7 +24,17 @@ exports.handle = async fun => {
     const response = await fun();
     return exports.sendOk(response);
   } catch (err) {
-    return exports.sendError(err);
+    console.error('err', err);
+    if (err instanceof NotFoundError) {
+      err.statusCode = 404;
+      return exports.sendError(err);
+    } else if (err instanceof UnauthorizedError) {
+      err.statusCode = 403;
+      return exports.sendError(err);
+    } else {
+      return exports.sendError(err);
+    }
+
   }
 };
 
@@ -50,10 +62,12 @@ exports.getAuthHeader = event => {
   if (authorizationHeader) {
     usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {
-      throw new Error('Error: Authorization Bearer token is required'); //temp until actual auth is added
+      throw new UnauthorizedError(
+        'Error: Authorization Bearer token is required',
+      ); //temp until actual auth is added
     }
   } else {
-    throw new Error('Error: Authorization is required'); //temp until actual auth is added
+    throw new UnauthorizedError('Error: Authorization is required'); //temp until actual auth is added
   }
 
   return usernameTokenArray[1];

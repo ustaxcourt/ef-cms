@@ -7,7 +7,7 @@ import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 
 export default connect(
-  { caseList: state.cases },
+  { caseList: state.formattedCases },
   function Dashboard({ caseList }) {
     return (
       <section className="usa-section usa-grid">
