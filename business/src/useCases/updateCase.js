@@ -20,11 +20,11 @@ exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
     throw new UnprocessableEntityError();
   }
 
-  const allDocumentsValidated = caseJson.documents.every(
-    document => document.validated === true,
-  );
-  if (allDocumentsValidated) {
+  if (caseToUpdate.isPetitionPackageReviewed()) {
     caseJson.status = 'general';
+  }
+  if (caseToUpdate.payGovDate) {
+    caseJson.payGovDate = caseToUpdate.payGovDate;
   }
   return applicationContext.persistence.saveCase({
     caseToSave: caseJson,
