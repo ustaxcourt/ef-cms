@@ -1,5 +1,8 @@
-const { createDocument } = require('./services/documentBlobDAO');
+const { getAuthHeader } = require('../middleware/apiGatewayHelper');
+
+const createDocumentMetadataUC = require('ef-cms-shared/src/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
+const applicationContext = require('../applicationContext');
 
 /**
  * Create Document API Lambda
@@ -8,8 +11,13 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @param context
  * @param callback
  */
-
 exports.create = event =>
   handle(() =>
-    createDocument(JSON.parse(event.body))
-  )
+    createDocumentMetadataUC({
+      document: {
+        ...JSON.parse(event.body),
+        userId: getAuthHeader(event),
+      },
+      applicationContext,
+    }),
+  );

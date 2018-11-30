@@ -1,10 +1,21 @@
-const { createUploadPolicy } = require('./services/documentBlobDAO');
 const { handle } = require('../middleware/apiGatewayHelper');
-
+const applicationContext = require('../applicationContext');
+const {
+  createUploadPolicy: uploadPolicyUseCase,
+} = require('ef-cms-shared/src/persistence/createPolicyUrl');
+/**
+ * Create Document API Lambda
+ *
+ * @param event
+ * @param context
+ * @param callback
+ */
 /**
  * Create Upload Policy API Lambda
  */
 exports.create = () =>
   handle(() =>
-    createUploadPolicy()
-  )
+    uploadPolicyUseCase({
+      applicationContext,
+    }),
+  );

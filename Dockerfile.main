@@ -1,0 +1,42 @@
+FROM cypress/base:8
+
+RUN apt-get -y install git
+RUN apt-get -y install curl
+RUN apt-get -y install default-jre
+
+RUN CI=true npm install cypress
+
+# cypress deps... not sure if they are needed
+# RUN apk --no-cache update
+# RUN apk --no-cache add libgtk2.0-0
+# RUN apk --no-cache add libnotify-dev
+# RUN apk --no-cache add libgconf-2-4
+# RUN apk --no-cache add libnss3
+# RUN apk --no-cache add libxss1
+# RUN apk --no-cache add libasound2
+# RUN apk --no-cache add xvfb
+
+WORKDIR /home/app
+
+# Since the .git file is ignored in the .dockerignore file,
+# we init a git repo here so that serverless can get a new hash
+# to deploy with... serverless is coupled to git
+RUN git config --global user.email "blank@example.com" && \
+    git config --global user.name "local" && \
+    git init && \
+    touch tmp.txt && \
+    git add tmp.txt && \
+    git commit -m 'rev'
+
+COPY business/package.json /home/app/business/package.json
+RUN cd /home/app/business && npm i --only=production
+
+COPY efcms-service/package.json /home/app/efcms-service/package.json
+RUN cd /home/app/efcms-service && npm i
+
+COPY web-client/package.json /home/app/web-client/package.json
+RUN cd /home/app/web-client && npm i
+
+COPY . /home/app
+
+CMD echo "please overwrite this command"
