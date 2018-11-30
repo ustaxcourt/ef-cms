@@ -30,6 +30,11 @@ const documentSchema = joi.object().keys({
     .optional(),
 });
 
+/**
+ * constructor
+ * @param rawDocument
+ * @constructor
+ */
 function Document(rawDocument) {
   Object.assign(this, rawDocument, {
     documentId: uuidv4(),
@@ -37,14 +42,23 @@ function Document(rawDocument) {
   });
 }
 
+/**
+ * isValid
+ * @returns {boolean}
+ */
 Document.prototype.isValid = function isValid() {
   return joi.validate(this, documentSchema).error === null;
 };
-
+/**
+ * getValidationError
+ * @returns {*}
+ */
 Document.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, documentSchema).error;
 };
-
+/**
+ * validate
+ */
 Document.prototype.validate = function validate() {
   if (!this.isValid()) {
     throw new Error('The document was invalid ' + this.getValidationError());

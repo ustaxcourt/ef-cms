@@ -3,10 +3,9 @@ const region = process.env.AWS_REGION || 'us-east-1';
 
 /**
  * PUT for dynamodb aws-sdk client
- *
- * @param params
+ * @param item
+ * @returns {*}
  */
-
 const removeAWSGlobalFields = (item) => {
   // dynamodb always adds these fields for purposes of global tables
   delete item['aws:rep:deleting'];
@@ -14,7 +13,11 @@ const removeAWSGlobalFields = (item) => {
   delete item['aws:rep:updatetime'];
   return item;
 };
-
+/**
+ * put
+ * @param params
+ * @returns {*}
+ */
 exports.put = params => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,
@@ -26,7 +29,11 @@ exports.put = params => {
     .promise()
     .then(() => params.Item);
 };
-
+/**
+ * updateConsistent
+ * @param params
+ * @returns {*}
+ */
 exports.updateConsistent = params => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.MASTER_REGION || 'us-east-1',
@@ -37,7 +44,11 @@ exports.updateConsistent = params => {
     .promise()
     .then(data => data.Attributes.id);
 };
-
+/**
+ * get
+ * @param params
+ * @returns {*}
+ */
 exports.get = params => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,

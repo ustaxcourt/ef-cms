@@ -1,3 +1,8 @@
+/**
+ * constructor
+ * @param rawCaseInitiator
+ * @constructor
+ */
 function CaseInitiator(rawCaseInitiator) {
   this.petitionFile = rawCaseInitiator.petitionFile;
   this.requestForPlaceOfTrial = rawCaseInitiator.requestForPlaceOfTrial;
@@ -5,6 +10,10 @@ function CaseInitiator(rawCaseInitiator) {
     rawCaseInitiator.statementOfTaxpayerIdentificationNumber;
 }
 
+/**
+ * isValid
+ * @returns {boolean}
+ */
 CaseInitiator.prototype.isValid = function isValid() {
   return (
     !!this.petitionFile &&

@@ -5,8 +5,9 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-// TODO: talk to Doug about if we should be using
-// separate validation methods for different use cases, or a single validation method?
+/**
+ * schema definition
+ */
 const caseSchema = joi.object().keys({
   caseId: joi
     .string()
@@ -45,6 +46,11 @@ const caseSchema = joi.object().keys({
     .required(),
 });
 
+/**
+ * Case
+ * @param rawCase
+ * @constructor
+ */
 function Case(rawCase) {
   Object.assign(this, rawCase, {
     caseId: uuidv4(),
@@ -53,29 +59,49 @@ function Case(rawCase) {
   });
 }
 
+/**
+ * isValid
+ * @returns {boolean}
+ */
 Case.prototype.isValid = function isValid() {
   return joi.validate(this, caseSchema).error === null;
 };
-
+/**
+ * getValidationError
+ * @returns {*}
+ */
 Case.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, caseSchema).error;
 };
-
+/**
+ * validate
+ */
 Case.prototype.validate = function validate() {
   if (!this.isValid()) {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
 };
-
+/**
+ * isValidUUID
+ * @param caseId
+ * @returns {*|boolean}
+ */
 Case.isValidUUID = caseId =>
   caseId &&
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,
   );
-
+/**
+ * isValidDocketNumber
+ * @param docketNumber
+ * @returns {*|boolean}
+ */
 Case.isValidDocketNumber = docketNumber =>
   docketNumber && /\d{5}-\d{2}/.test(docketNumber);
-
+/**
+ * documentTypes
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string}}
+ */
 Case.documentTypes = {
   petitionFile: 'Petition',
   requestForPlaceOfTrial: 'Request for Place of Trial',
