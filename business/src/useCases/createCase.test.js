@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createCase = require('./createCase');
+const { createCase } = require('./createCase');
 
 describe('Create case', () => {
   let applicationContext;
