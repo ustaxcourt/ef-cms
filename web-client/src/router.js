@@ -14,9 +14,14 @@ const router = {
       document.title = `Case details ${pageTitleSuffix}`;
       app.getSequence('gotoCaseDetail')({ caseId });
     });
-    route('/log-in', () => {
-      document.title = `Log in ${pageTitleSuffix}`;
-      app.getSequence('gotoLogIn')();
+    route('/log-in...', () => {
+      const token = route.query().token;
+      if (token) {
+        app.getSequence('loginWithToken')({ token });
+      } else {
+        document.title = `Log in ${pageTitleSuffix}`;
+        app.getSequence('gotoLogIn')();
+      }
     });
     route('/file-a-petition', () => {
       document.title = `File a petition ${pageTitleSuffix}`;
