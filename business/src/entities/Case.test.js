@@ -41,6 +41,30 @@ describe('Case entity', () => {
       assert.ok(myCase.isValid());
     });
 
+    it('Creates a valid case from an already existing case json', () => {
+      const previouslyCreatedCase = {
+        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
+        createdAt: '2018-11-21T20:58:28.192Z',
+        status: 'new',
+        documents: A_VALID_CASE.documents,
+      };
+      const myCase = new Case(previouslyCreatedCase);
+      assert.ok(myCase.isValid());
+    });
+
+    it('adds a paygov date to an already existing case json', () => {
+      const previouslyCreatedCase = {
+        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
+        createdAt: '2018-11-21T20:58:28.192Z',
+        status: 'new',
+        documents: A_VALID_CASE.documents,
+        payGovId: '1234',
+      };
+      const myCase = new Case(previouslyCreatedCase);
+      assert.ok(myCase.isValid());
+      assert.ok(myCase.payGovDate);
+    });
+
     it('Creates an invalid case', () => {
       const myCase = new Case({
         documents: [
@@ -111,18 +135,51 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getRawValues', () => {
-    it('returns a case without sendToIRS', () => {
-      const caseRecord = new Case(A_VALID_CASE);
-      caseRecord.sendToIRS = true;
-      assert.equal(caseRecord.getRawValues().isSendToIRS, undefined);
-    });
-  });
-
   describe('isPetitionPackageReviewed', () => {
     it('return true is all documents are validated', () => {
       const caseRecord = new Case(A_VALID_CASE);
       assert.ok(caseRecord.isPetitionPackageReviewed());
+    });
+  });
+
+  describe('markAsSentToIRS', () => {
+    it('sets irsSendDate', () => {
+      const caseRecord = new Case(A_VALID_CASE);
+      caseRecord.markAsSentToIRS();
+      assert.ok(caseRecord.irsSendDate);
+    });
+  });
+
+  describe('markAsPaidByPayGov', () => {
+    it('sets pay gov fields', () => {
+      const caseRecord = new Case(A_VALID_CASE);
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      assert.ok(caseRecord.payGovDate);
+    });
+  });
+
+  describe('validateWithError', () => {
+    it('passes back an error passed in if invalid', () => {
+      let error = null;
+      const caseRecord = new Case({});
+      try {
+        caseRecord.validateWithError(new Error('Imarealerror'));
+      } catch (e) {
+        error = e;
+      }
+      assert.ok(error);
+      assert.equal(error.message, 'Imarealerror');
+    });
+
+    it('doesnt passes back an error passed in if valid', () => {
+      let error = null;
+      const caseRecord = new Case(A_VALID_CASE);
+      try {
+        caseRecord.validateWithError(new Error('Imarealerror'));
+      } catch (e) {
+        error = e;
+      }
+      assert.ok(!error);
     });
   });
 });

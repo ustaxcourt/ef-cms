@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 exports.sendPetitionToIRS = async ({ applicationContext, caseDetails, userToken }) => {
-  console.log('we are here');
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/cases/${
       caseDetails.caseId

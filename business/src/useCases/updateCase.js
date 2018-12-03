@@ -7,7 +7,6 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../errors/errors');
-const { sendToIRS } = require('./sendPetitionToIRS');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {
@@ -15,6 +14,7 @@ const setDocumentDetails = (userId, documents) => {
       if (document.validated && !document.reviewDate) {
         document.reviewDate = new Date().toISOString();
         document.reviewUser = userId;
+        document.status = 'reviewed';
       }
     });
   }
@@ -52,20 +52,8 @@ exports.updateCase = async ({
     throw new UnprocessableEntityError();
   }
 
-  if (caseToUpdate.isPetitionPackageReviewed()) {
-    caseJson.status = 'general';
-  }
-  if (caseToUpdate.payGovDate) {
-    caseJson.payGovDate = caseToUpdate.payGovDate;
-  }
+  caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate);
 
-  if (caseToUpdate.isSendToIRS) {
-    caseJson = await sendToIRS({
-      caseRecord: caseToUpdate,
-      userId: userId,
-      applicationContext,
-    });
-  }
   return applicationContext.persistence.saveCase({
     caseToSave: { ...caseToUpdate },
     applicationContext,
