@@ -1,7 +1,8 @@
+.DS_Store
 .scannerwork/
 .terraform/
-web-client/cypress/screenshots
-web-client/node_modules
 business/coverage
 business/node_modules
-.DS_Store
+web-client/cypress/screenshots
+web-client/node_modules
+web-client/reports
