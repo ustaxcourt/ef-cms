@@ -106,7 +106,7 @@ export default connect(
           </ul>
         )}
         <h2>Docket Record</h2>
-        <table className="responsive-table">
+        <table className="responsive-table" id="docket-record">
           <thead>
             <tr>
               <th>Date filed</th>
