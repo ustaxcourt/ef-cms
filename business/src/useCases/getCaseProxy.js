@@ -8,7 +8,7 @@ const axios = require('axios');
  * @param userToken
  * @returns {Promise<*>}
  */
-module.exports = async ({ applicationContext, caseId, userToken }) => {
+exports.getCase = async ({ applicationContext, caseId, userToken }) => {
   const response = await axios.get(
     `${applicationContext.getBaseUrl()}/cases/${caseId}`,
     {

@@ -5,7 +5,7 @@ const Document = require('../entities/Document');
  * @param applicationContext
  * @returns {*|{documentId}}
  */
-module.exports = ({ document: rawDocument, applicationContext }) => {
+exports.createDocumentMetadata = ({ document: rawDocument, applicationContext }) => {
   const documentToCreate = new Document({
     userId: rawDocument.userId,
     documentType: rawDocument.documentType,

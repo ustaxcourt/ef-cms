@@ -2,7 +2,7 @@ import clearAlerts from '../actions/clearAlerts';
 import setAlertError from '../actions/setAlertError';
 import setAlertSuccess from '../actions/setAlertSuccess';
 import setCase from '../actions/setCase';
-import sendToIRSAction from '../actions/sendToIRS';
+import sendToIRSAction from '../actions/sendPetitionToIRS';
 
 export default [
   clearAlerts,

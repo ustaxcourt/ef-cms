@@ -51,3 +51,21 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
     this.statusCode = 422;
   }
 };
+
+/**
+ * InvalidEntityError error
+ *
+ * @type {module.InvalidEntityError}
+ */
+module.exports.InvalidEntityError = class InvalidEntityError extends Error {
+  /**
+   * constructor
+   *
+   * @param message
+   */
+  constructor(message = 'entity is invalid or invalid for operation') {
+    super(message);
+
+    this.statusCode = 422;
+  }
+};
