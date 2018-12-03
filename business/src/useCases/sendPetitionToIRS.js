@@ -1,5 +1,5 @@
 const Case = require('../entities/Case');
-const getCaseUC = require('./getCase');
+const { getCase } = require('./getCase');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -11,13 +11,14 @@ const {
   InvalidEntityError,
 } = require('../errors/errors');
 
-exports.sendIRSPetitionPackage = async ({ caseId, userId, applicationContext }) => {
-  if (!isAuthorized(userId, UPDATE_CASE)) { //sendtoirs and update are same permission
+exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
+  if (!isAuthorized(userId, UPDATE_CASE)) { 
     throw new UnauthorizedError('Unauthorized for send to IRS');
   }
 
-  //get the case and detail
-  const caseRecord = await getCaseUC({
+  const invalidEntityError = new InvalidEntityError("Invalid for send to IRS");
+
+  const caseRecord = await getCase({
     userId,
     caseId,
     applicationContext,
@@ -29,21 +30,23 @@ exports.sendIRSPetitionPackage = async ({ caseId, userId, applicationContext }) 
   }
 
   caseEntity = new Case(caseRecord);
-  if (!caseEntity.isValid()) {
-    throw new InvalidEntityError("Invalid for send to IRS");
-  }
-  //call function to actually send to IRS here then set the date and status
-  caseRecord.irsSendDate = new Date();
-  caseRecord.status = "general";
-  caseRecord.documents.every(document => (document.status = "served"));
+  caseEntity.validateWithError(invalidEntityError);
 
-
-  return applicationContext.persistence.sendToIRS({
+  await applicationContext.persistence.sendToIRS({
     caseToSend: { ...caseEntity },
     applicationContext,
   });
 
-  //update status on case
-  //return updated case
+  caseEntity.markAsSentToIrs();
+  caseEntity.validateWithError(invalidEntityError);
 
+  const rawCaseAfterSave = await applicationContext.persistence.saveCase({
+    caseToSave: { ...caseEntity },
+    applicationContext,
+  });
+
+  const caseAfterSave = new Case(rawCaseAfterSave);
+  caseAfterSave.validateWithError(invalidEntityError);
+
+  return rawCaseAfterSave;
 };

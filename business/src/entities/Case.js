@@ -25,7 +25,6 @@ const caseSchema = joi.object().keys({
     .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
-  isSendToIRS: joi.boolean().optional(),
   irsSendDate: joi
     .date()
     .iso()
@@ -105,6 +104,7 @@ Case.prototype.isValid = function isValid() {
 Case.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, caseSchema).error;
 };
+
 /**
  * validate
  */
@@ -113,6 +113,18 @@ Case.prototype.validate = function validate() {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
 };
+
+/**
+ * validateWithError
+ * will throw the error provided if the case entity is invalid
+ */
+Case.prototype.validateWithError = function validate(error) {
+  console.log(this.getValidationError());
+  if (!this.isValid()) {
+    throw error
+  }
+};
+
 /**
  * isPetitionPackageReviewed
  * @returns boolean
@@ -120,6 +132,15 @@ Case.prototype.validate = function validate() {
 Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
   return this.documents.every(document => document.validated === true);
 };
+
+/**
+ * markAsSentToIrs
+ */
+Case.prototype.markAsSentToIrs = function() {
+  this.irsSendDate = new Date();
+  this.status = "general";
+  this.documents.every(document => (document.status = "served"));
+}
 
 /**
  * isValidCaseId

@@ -1,4 +1,4 @@
-const { sendIRSPetitionPackage } = require('../../../business/src/useCases/sendPetitionToIRS');
+const { sendPetitionToIRS } = require('../../../business/src/useCases/sendPetitionToIRS');
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 
@@ -11,7 +11,7 @@ const applicationContext = require('../applicationContext');
 exports.post = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    return sendIRSPetitionPackage({
+    return sendPetitionToIRS({
       caseId: event.pathParameters.caseId,
       userId,
       applicationContext,
