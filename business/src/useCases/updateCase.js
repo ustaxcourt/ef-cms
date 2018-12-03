@@ -7,7 +7,7 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../errors/errors');
-const { sendToIRS } = require('./sendToIRS');
+const { sendToIRS } = require('./sendPetitionToIRS');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {

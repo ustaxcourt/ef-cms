@@ -121,11 +121,6 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
   return this.documents.every(document => document.validated === true);
 };
 
-Case.prototype.getRawValues = function getRawValues() {
-  const { isSendToIRS, ...rawObject } = this; // eslint-disable-line no-unused-vars
-  return rawObject;
-};
-
 /**
  * isValidCaseId
  * @param caseId

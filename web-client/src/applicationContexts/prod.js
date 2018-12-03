@@ -1,13 +1,13 @@
 import awsPersistenceGateway from '../../../business/src/persistence/awsPersistenceGateway';
 
-import createCase from '../../../business/src/useCases/createCaseProxy';
-import getCase from '../../../business/src/useCases/getCaseProxy';
-import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
-import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getUser from '../../../business/src/useCases/getUser';
-import sendToIRS from '../../../business/src/useCases/sendToIRSProxy';
-import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import uploadCasePdfs from '../../../business/src/useCases/uploadCasePdfs';
+import { createCase } from '../../../business/src/useCases/createCaseProxy';
+import { getCase } from '../../../business/src/useCases/getCaseProxy';
+import { getCasesByStatus } from '../../../business/src/useCases/getCasesByStatusProxy';
+import { getCasesByUser } from '../../../business/src/useCases/getCasesByUserProxy';
+import { getUser } from '../../../business/src/useCases/getUser';
+import { sendPetitionToIRS } from '../../../business/src/useCases/sendPetitionToIRSProxy';
+import { updateCase } from '../../../business/src/useCases/updateCaseProxy';
+import { uploadCasePdfs } from '../../../business/src/useCases/uploadCasePdfs';
 
 /**
  * Context for the prod environment
@@ -26,7 +26,7 @@ const applicationContext = {
       getCasesByStatus,
       getCasesByUser,
       getUser,
-      sendToIRS,
+      sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
     };

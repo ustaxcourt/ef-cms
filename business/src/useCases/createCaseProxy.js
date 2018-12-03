@@ -8,7 +8,7 @@ const axios = require('axios');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-module.exports = async ({ userId, documents, applicationContext }) => {
+exports.createCase = async ({ userId, documents, applicationContext }) => {
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
