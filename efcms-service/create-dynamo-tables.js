@@ -5,9 +5,22 @@ const dynamo = new AWS.DynamoDB({
   endpoint: 'http://localhost:8000',
 });
 
-const createDocumentsTable = () => {
+const deleteTable = async tableName => {
+  try {
+    return await dynamo
+      .deleteTable({
+        TableName: tableName,
+      })
+      .promise();
+  } catch (error) {
+    // ResourceNotFoundException
+    return Promise.resolve();
+  }
+};
+const createDocumentsTable = async () => {
+  await deleteTable('efcms-documents-local');
   console.log('Creating Documents Table');
-  dynamo
+  return dynamo
     .createTable({
       TableName: 'efcms-documents-local',
       KeySchema: [
@@ -30,8 +43,9 @@ const createDocumentsTable = () => {
     .promise();
 };
 
-const createCasesTable = () => {
+const createCasesTable = async () => {
   console.log('Creating Cases Table');
+  await deleteTable('efcms-cases-local');
   return dynamo
     .createTable({
       TableName: 'efcms-cases-local',
