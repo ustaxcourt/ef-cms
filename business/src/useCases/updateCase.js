@@ -22,6 +22,15 @@ const setDocumentDetails = (userId, documents) => {
   return documents;
 };
 
+/**
+ * updateCase
+ *
+ * @param caseId
+ * @param caseJson
+ * @param userId
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.updateCase = async ({
   caseId,
   caseJson,

@@ -1,6 +1,12 @@
 const { S3 } = require('aws-sdk');
 const axios = require('axios');
 
+/**
+ * getS3
+ * @param region
+ * @param s3Endpoint
+ * @returns {S3}
+ */
 const getS3 = ({ region, s3Endpoint }) => {
   return new S3({
     region,
@@ -9,6 +15,12 @@ const getS3 = ({ region, s3Endpoint }) => {
   });
 };
 
+/**
+ * getDownloadPolicyUrl
+ * @param documentId
+ * @param applicationContext
+ * @returns {Promise<any>}
+ */
 exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   return new Promise((resolve, reject) => {
     getS3(applicationContext.environment).getSignedUrl(
@@ -30,6 +42,11 @@ exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   });
 };
 
+/**
+ * createUploadPolicy
+ * @param applicationContext
+ * @returns {Promise<any>}
+ */
 exports.createUploadPolicy = ({ applicationContext }) =>
   new Promise((resolve, reject) => {
     getS3(applicationContext.environment).createPresignedPost(
@@ -46,7 +63,13 @@ exports.createUploadPolicy = ({ applicationContext }) =>
       },
     );
   });
-
+/**
+ * uploadPdf
+ * @param policy
+ * @param documentId
+ * @param file
+ * @returns {Promise<*>}
+ */
 exports.uploadPdf = async ({ policy, documentId, file }) => {
   const formData = new FormData();
   formData.append('key', documentId);
