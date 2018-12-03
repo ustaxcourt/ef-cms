@@ -5,6 +5,14 @@ const {
 const { NotFoundError, UnauthorizedError } = require('../errors/errors');
 const Case = require('../entities/Case');
 
+/**
+ * getCase
+ *
+ * @param userId
+ * @param caseId
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 exports.getCase = async ({ userId, caseId, applicationContext }) => {
   let caseRecord;
 

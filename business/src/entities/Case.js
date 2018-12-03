@@ -5,6 +5,9 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
+/**
+ * schema definition
+ */
 const caseSchema = joi.object().keys({
   caseId: joi
     .string()
@@ -70,6 +73,11 @@ const caseSchema = joi.object().keys({
     .required(),
 });
 
+/**
+ * Case
+ * @param rawCase
+ * @constructor
+ */
 function Case(rawCase) {
   Object.assign(
     this,
@@ -83,20 +91,32 @@ function Case(rawCase) {
   );
 }
 
+/**
+ * isValid
+ * @returns {boolean}
+ */
 Case.prototype.isValid = function isValid() {
   return joi.validate(this, caseSchema).error === null;
 };
-
+/**
+ * getValidationError
+ * @returns {*}
+ */
 Case.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, caseSchema).error;
 };
-
+/**
+ * validate
+ */
 Case.prototype.validate = function validate() {
   if (!this.isValid()) {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
 };
-
+/**
+ * isPetitionPackageReviewed
+ * @returns boolean
+ */
 Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
   return this.documents.every(document => document.validated === true);
 };
@@ -106,15 +126,27 @@ Case.prototype.getRawValues = function getRawValues() {
   return rawObject;
 };
 
+/**
+ * isValidCaseId
+ * @param caseId
+ * @returns {*|boolean}
+ */
 Case.isValidCaseId = caseId =>
   caseId &&
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,
   );
-
+/**
+ * isValidDocketNumber
+ * @param docketNumber
+ * @returns {*|boolean}
+ */
 Case.isValidDocketNumber = docketNumber =>
   docketNumber && /\d{5}-\d{2}/.test(docketNumber);
-
+/**
+ * documentTypes
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string}}
+ */
 Case.documentTypes = {
   petitionFile: 'Petition',
   requestForPlaceOfTrial: 'Request for Place of Trial',
