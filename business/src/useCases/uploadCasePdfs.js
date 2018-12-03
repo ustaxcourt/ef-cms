@@ -47,7 +47,7 @@ const createDocumentMetadata = async ({
  * @param fileHasUploaded
  * @returns {Promise<{petitionFileId, requestForPlaceOfTrialId, statementOfTaxpayerIdentificationNumberId}>}
  */
-module.exports = async ({
+exports.uploadCasePdfs = async ({
   applicationContext,
   caseInitiator,
   user,

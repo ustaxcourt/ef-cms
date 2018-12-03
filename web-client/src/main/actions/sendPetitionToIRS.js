@@ -5,7 +5,7 @@ export default async ({ applicationContext, get, path }) => {
   const useCases = applicationContext.getUseCases();
 
   try {
-    const updatedCase = await useCases.sendToIRS({
+    const updatedCase = await useCases.sendPetitionToIRS({
       applicationContext,
       caseDetails: get(state.caseDetail),
       userToken: get(state.user.token),

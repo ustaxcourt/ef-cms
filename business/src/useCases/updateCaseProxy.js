@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-module.exports = async ({ applicationContext, caseDetails, userToken }) => {
+exports.updateCase = async ({ applicationContext, caseDetails, userToken }) => {
   const response = await axios.put(
     `${applicationContext.getBaseUrl()}/cases/${caseDetails.caseId}`,
     caseDetails,

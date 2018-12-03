@@ -192,8 +192,14 @@ export default connect(
             <div className="usa-width-full">
               <button
                 className="float-right"
+                id="update-case"
+                onClick={() => submitUpdateCase()}
+              >
+                Save updates
+              </button>
+              <button
+                className="float-right"
                 id="send-to-irs"
-                tabIndex="999"
                 onClick={() => submitSendToIRS()}
               >
                 Send to IRS
