@@ -64,9 +64,9 @@ const caseSchema = joi.object().keys({
           .iso()
           .optional(),
         createdAt: joi
-        .date()
-        .iso()
-        .optional(),
+          .date()
+          .iso()
+          .optional(),
       }),
     )
     .required(),
@@ -82,11 +82,15 @@ function Case(rawCase) {
     this,
     rawCase,
     {
-      caseId: uuidv4(),
-      createdAt: new Date().toISOString(),
-      status: 'new',
+      caseId: rawCase.caseId ? rawCase.caseId : uuidv4(),
+      createdAt: rawCase.createdAt
+        ? rawCase.createdAt
+        : new Date().toISOString(),
+      status: rawCase.status ? rawCase.status : 'new',
     },
-    (rawCase.payGovId && !rawCase.payGovDate) ? { payGovDate: new Date().toISOString() } : null ,
+    rawCase.payGovId && !rawCase.payGovDate
+      ? { payGovDate: new Date().toISOString() }
+      : null,
   );
 }
 
@@ -119,9 +123,8 @@ Case.prototype.validate = function validate() {
  * will throw the error provided if the case entity is invalid
  */
 Case.prototype.validateWithError = function validate(error) {
-  console.log(this.getValidationError());
   if (!this.isValid()) {
-    throw error
+    throw error;
   }
 };
 
@@ -136,10 +139,14 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
 /**
  * markAsSentToIrs
  */
-Case.prototype.markAsSentToIrs = function() {
-  this.irsSendDate = new Date();
-  this.status = "general";
-  this.documents.every(document => (document.status = "served"));
+Case.prototype.markAsSentToIRS = function() {
+  this.irsSendDate = new Date().toISOString();
+  this.status = 'general';
+  this.documents.every(document => (document.status = 'served'));
+};
+
+Case.prototype.markAsPaidByPayGov = function(payGovDate) {
+  this.payGovDate = payGovDate;
 }
 
 /**

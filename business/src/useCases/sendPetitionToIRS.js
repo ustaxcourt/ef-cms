@@ -12,11 +12,11 @@ const {
 } = require('../errors/errors');
 
 exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
-  if (!isAuthorized(userId, UPDATE_CASE)) { 
+  if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for send to IRS');
   }
 
-  const invalidEntityError = new InvalidEntityError("Invalid for send to IRS");
+  const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
 
   const caseRecord = await getCase({
     userId,
@@ -26,7 +26,7 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
 
   let caseEntity;
   if (!caseRecord) {
-    throw new UnprocessableEntityError("Case not found.");
+    throw new UnprocessableEntityError('Case not found.');
   }
 
   caseEntity = new Case(caseRecord);
@@ -37,7 +37,7 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
     applicationContext,
   });
 
-  caseEntity.markAsSentToIrs();
+  caseEntity.markAsSentToIRS();
   caseEntity.validateWithError(invalidEntityError);
 
   const rawCaseAfterSave = await applicationContext.persistence.saveCase({
