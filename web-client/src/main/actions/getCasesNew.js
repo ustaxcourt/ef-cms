@@ -6,7 +6,7 @@ export default async ({ applicationContext, get, path }) => {
   try {
     let caseList = await useCases.getCasesByStatus({
       applicationContext,
-      userToken: get(state.user.token),
+      userId: get(state.user.token),
       status: 'new',
     });
     caseList = _.orderBy(caseList, 'createdAt', 'asc');

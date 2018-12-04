@@ -3,12 +3,12 @@ const axios = require('axios');
 /**
  * createCaseProxy
  *
- * @param userId
+ * @param userToken
  * @param documents
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = async ({ userId, documents, applicationContext }) => {
+exports.createCase = async ({ userToken, documents, applicationContext }) => {
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
@@ -16,7 +16,7 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
     },
     {
       headers: {
-        Authorization: `Bearer ${userId}`,
+        Authorization: `Bearer ${userToken}`,
       },
     },
   );
