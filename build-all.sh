@@ -39,6 +39,6 @@ CONTAINER_NAME=efcmstest ./docker-test.sh
 popd
 
 # integration tests
-#./docker-pa11y.sh
-#./docker-cerebral.sh
-#./docker-cypress.sh
+./docker-pa11y.sh
+./docker-cerebral.sh
+./docker-cypress.sh
