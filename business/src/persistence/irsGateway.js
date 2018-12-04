@@ -1,3 +1,4 @@
-exports.sendToIRS = async ({ caseToSend }) => {
-  return caseToSend;
+exports.sendToIRS = async () => {
+  // noop
+  return new Date().toISOString();
 };
