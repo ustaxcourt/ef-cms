@@ -140,8 +140,8 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
 /**
  * markAsSentToIrs
  */
-Case.prototype.markAsSentToIRS = function() {
-  this.irsSendDate = new Date().toISOString();
+Case.prototype.markAsSentToIRS = function(sendDate) {
+  this.irsSendDate = sendDate;
   this.status = 'general';
   this.documents.every(document => (document.status = 'served'));
 };
