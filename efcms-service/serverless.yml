@@ -16,6 +16,7 @@ custom:
     port: 9000
     directory: ./storage/s3
     cors: cors-policy.xml
+
   dynamodb:
     start:
       inMemory: true
