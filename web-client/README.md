@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System Web Client
 
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=<badge_key>)](https://www.browserstack.com/automate/public-build/<badge_key>)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=aDQ5QWF4aFQ2VDNnbTZ4R040bXMwS1k2S210Y004VkZJekJ6RmhzSnVDWT0tLXQrSzBlUkNuVHA5djcrL3hhTHJTYXc9PQ==--721b2917ac49fea2bffcf89e6a10986fa8ef814b)](https://www.browserstack.com/automate/public-build/aDQ5QWF4aFQ2VDNnbTZ4R040bXMwS1k2S210Y004VkZJekJ6RmhzSnVDWT0tLXQrSzBlUkNuVHA5djcrL3hhTHJTYXc9PQ==--721b2917ac49fea2bffcf89e6a10986fa8ef814b)
 
 - Install [Node.js 8.X](https://nodejs.org/en/)
 
@@ -26,12 +26,8 @@
 
   `npm run dist`
 
-- Run local Nightwatch smoke tests
-
-  `npm run selenium`
+- Run Nightwatch smoke tests on BrowserStack (needs account env variables set)
 
   `npm run nightwatch`
-
-- Run Nightwatch smoke tests on BrowserStack (coming soon)
 
 ![BrowserStack Logo](https://i.imgur.com/bBj3nNm.png)

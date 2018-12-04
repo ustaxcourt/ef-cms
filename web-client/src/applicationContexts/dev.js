@@ -13,7 +13,7 @@ import uploadCasePdfs from '../../../business/src/useCases/uploadCasePdfs';
  */
 const applicationContext = {
   getBaseUrl: () => {
-    return 'http://localhost:3000/v1';
+    return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getPersistenceGateway: () => {
     return persistenceGateway;

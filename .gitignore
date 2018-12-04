@@ -6,3 +6,4 @@ business/node_modules
 web-client/cypress/screenshots
 web-client/node_modules
 web-client/reports
+web-client/tests_output/
