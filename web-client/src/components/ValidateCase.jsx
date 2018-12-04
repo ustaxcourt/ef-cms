@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import moment from 'moment';
 import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
@@ -11,6 +10,7 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
+    orig: state.caseDetail,
     form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     submitSendToIRS: sequences.submitToIRS,
@@ -21,6 +21,7 @@ export default connect(
   function CaseDetail({
     baseUrl,
     caseDetail,
+    orig,
     form,
     submitUpdateCase,
     submitSendToIRS,
@@ -45,6 +46,7 @@ export default connect(
             <div className="usa-width-two-thirds">
               <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
             </div>
+            <p>{JSON.stringify(orig)}</p>
             <div className="usa-width-one-third">
               <button
                 className="float-right"
@@ -123,7 +125,7 @@ export default connect(
                 <tr key={idx}>
                   <td className="responsive-title">
                     <span className="responsive-label">Activity date</span>
-                    {moment(item.createdAt).format('l')}
+                    {item.createdAtFormatted}
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
@@ -150,9 +152,7 @@ export default connect(
                   <td>
                     <span className="responsive-label">Status</span>
                     {caseDetail.irsSendDate && (
-                      <span>
-                        R served on {moment(caseDetail.irsDate).format('L')}
-                      </span>
+                      <span>R served on {caseDetail.irsDateFormatted}</span>
                     )}
                     {!caseDetail.irsSendDate && <span>{item.status}</span>}
                   </td>
@@ -174,7 +174,7 @@ export default connect(
               ))}
               {caseDetail.payGovId && !form.paymentType && (
                 <tr>
-                  <td>{moment(caseDetail.payGovDate).format('l')}</td>
+                  <td>{caseDetail.payGovDateFormatted}</td>
                   <td>Filing fee paid</td>
                   <td />
                   <td />
