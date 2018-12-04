@@ -27,7 +27,7 @@ export default connect(
             <label htmlFor="name">Name</label>
             <input
               id="name"
-              type="input"
+              type="text"
               name="name"
               value={form.name}
               onChange={e => {

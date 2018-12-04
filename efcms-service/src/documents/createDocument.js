@@ -13,7 +13,7 @@ const applicationContext = require('../applicationContext');
  */
 exports.create = event =>
   handle(() =>
-    createDocumentMetadataUC({
+    createDocumentMetadata({
       document: {
         ...JSON.parse(event.body),
         userId: getAuthHeader(event),
