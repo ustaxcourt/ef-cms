@@ -10,7 +10,6 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    orig: state.caseDetail,
     form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     submitSendToIRS: sequences.submitToIRS,
@@ -21,7 +20,6 @@ export default connect(
   function CaseDetail({
     baseUrl,
     caseDetail,
-    orig,
     form,
     submitUpdateCase,
     submitSendToIRS,
@@ -46,7 +44,6 @@ export default connect(
             <div className="usa-width-two-thirds">
               <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
             </div>
-            <p>{JSON.stringify(orig)}</p>
             <div className="usa-width-one-third">
               <button
                 className="float-right"
