@@ -8,8 +8,8 @@ WORKDIR /home/app
 
 RUN apt-get install -y shellcheck
 
-COPY business/package.json /home/app/business/package.json
-RUN cd /home/app/business && npm i
+COPY shared/package.json /home/app/shared/package.json
+RUN cd /home/app/shared && npm i
 
 COPY . /home/app
 

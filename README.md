@@ -1,3 +1,11 @@
+# Building Everything
+If you'd like to run the same checks that run in Jenkins (except Sonarqube at the moment...) locally using docker containers, run the following:
+
+`./build-all.sh`
+
+This will run the lint, shellcheck, audit, build, test, cypress, cerebral tests, pa11y, etc over all the components.
+
+
 # Running / Verifing the Project via Docker
 
 Assuming you have Docker installed, The following command will spin up a docker container with the UI, API, local S3, local Dynamo, etc all running inside it:

@@ -28,8 +28,8 @@ RUN git config --global user.email "blank@example.com" && \
     git add tmp.txt && \
     git commit -m 'rev'
 
-COPY business/package.json /home/app/business/package.json
-RUN cd /home/app/business && npm i --only=production
+COPY shared/package.json /home/app/shared/package.json
+RUN cd /home/app/shared && npm i --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service && npm i
