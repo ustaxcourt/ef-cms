@@ -2,9 +2,13 @@ const Case = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
-} = require('../authorization/authorizationClientService');
+} = require('../../authorization/authorizationClientService');
 
-const { UnauthorizedError, InvalidEntityError } = require('../errors/errors');
+const {
+  UnauthorizedError,
+  InvalidEntityError,
+} = require('../../errors/errors');
+
 /**
  * sendPetitionToIRS
  *

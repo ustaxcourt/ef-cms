@@ -1,6 +1,6 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
-const { createCase } = require('ef-cms-shared/src/useCases/createCase');
 const { handle } = require('../middleware/apiGatewayHelper');
+const { createCase } = require('ef-cms-shared/src/business/useCases/createCase');
 const applicationContext = require('../applicationContext');
 
 /**
