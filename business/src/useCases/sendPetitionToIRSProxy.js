@@ -1,14 +1,12 @@
 const axios = require('axios');
 
-exports.sendPetitionToIRS = async ({ applicationContext, caseDetails, userToken }) => {
+exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
   const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/cases/${
-      caseDetails.caseId
-    }/irsPetitionPackage`,
+    `${applicationContext.getBaseUrl()}/cases/${caseId}/irsPetitionPackage`,
     null, //don't send a body
     {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${userId}`,
       },
     },
   );
