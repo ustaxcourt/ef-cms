@@ -70,7 +70,8 @@ describe('InvalidEntityError', () => {
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('entity is invalid or invalid for operation');
+    expect(error.message).to.equal(
+      'entity is invalid or invalid for operation',
+    );
   });
 });
-

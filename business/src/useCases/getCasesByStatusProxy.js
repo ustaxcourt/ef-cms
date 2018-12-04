@@ -1,6 +1,10 @@
 const axios = require('axios');
 
-exports.getCasesByStatus = async ({ applicationContext, userToken, status }) => {
+exports.getCasesByStatus = async ({
+  applicationContext,
+  userToken,
+  status,
+}) => {
   return await axios
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {

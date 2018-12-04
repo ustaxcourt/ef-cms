@@ -148,7 +148,7 @@ Case.prototype.markAsSentToIRS = function() {
 
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
-}
+};
 
 /**
  * isValidCaseId
