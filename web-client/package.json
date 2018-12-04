@@ -14,8 +14,7 @@
     "test:pa11y": "node pa11y.js",
     "start": "npm run dev",
     "docker:init": "./docker-init.sh",
-    "nightwatch": "nightwatch",
-    "selenium": "webdriver-manager update; webdriver-manager start"
+    "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge"
   },
   "repository": {
     "type": "git",
