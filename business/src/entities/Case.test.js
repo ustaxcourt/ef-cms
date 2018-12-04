@@ -168,7 +168,7 @@ describe('Case entity', () => {
         error = e;
       }
       assert.ok(error);
-      assert.equal(error.message, 'Imarealerror');
+      expect(error.message).toContain('Imarealerror');
     });
 
     it('doesnt passes back an error passed in if valid', () => {

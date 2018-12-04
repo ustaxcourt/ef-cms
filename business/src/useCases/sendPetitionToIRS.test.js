@@ -50,7 +50,7 @@ describe('Send petition to IRS', () => {
     } catch (err) {
       error = err;
     }
-    assert.equal(error.message, 'Unauthorized for send to IRS');
+    expect(error.message).toContain('Unauthorized for send to IRS');
   });
 
   it('throws invalid entity error if user is invalid', async () => {
@@ -64,7 +64,7 @@ describe('Send petition to IRS', () => {
     } catch (err) {
       error = err;
     }
-    assert.equal(error.message, 'Invalid for send to IRS');
+    expect(error.message).toContain('Invalid for send to IRS');
   });
 
   it('calls the irs gateway', async () => {
