@@ -19,7 +19,7 @@ export default async ({ applicationContext, get, store }) => {
   } = await useCases.uploadCasePdfs({
     applicationContext,
     caseInitiator,
-    user,
+    userId: user.userId,
     fileHasUploaded,
   });
 

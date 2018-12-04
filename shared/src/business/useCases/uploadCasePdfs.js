@@ -17,15 +17,16 @@ const getDocumentPolicy = async ({ applicationContext }) => {
 /**
  * createDocumentMetadata
  * @param applicationContext
- * @param userToken
+ * @param userId
  * @param documentType
  * @returns {Promise<*>}
  */
 const createDocumentMetadata = async ({
   applicationContext,
-  userToken,
+  userId,
   documentType,
 }) => {
+  const userToken = userId; // TODO fix with jwt
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/documents`,
     {
@@ -47,30 +48,30 @@ const createDocumentMetadata = async ({
  * @param fileHasUploaded
  * @returns {Promise<{petitionFileId, requestForPlaceOfTrialId, statementOfTaxpayerIdentificationNumberId}>}
  */
-module.exports = async ({
+exports.uploadCasePdfs = async ({
   applicationContext,
   caseInitiator,
-  user,
+  userId,
   fileHasUploaded,
 }) => {
   const policy = await getDocumentPolicy({ applicationContext });
 
   const petitionDocument = await createDocumentMetadata({
     applicationContext,
-    userToken: user.token,
+    userId: userId,
     documentType: Case.documentTypes.petitionFile,
   });
 
   const requestForPlaceOfTrialDocument = await createDocumentMetadata({
     applicationContext,
-    userToken: user.token,
+    userId: userId,
     documentType: Case.documentTypes.requestForPlaceOfTrial,
   });
 
   const statementOfTaxpayerIdentificationNumberDocument = await createDocumentMetadata(
     {
       applicationContext,
-      userToken: user.token,
+      userId: userId,
       documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
     },
   );

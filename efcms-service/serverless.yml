@@ -371,6 +371,7 @@ functions:
                 responseModels:
                   'application/json': 'unprocessableEntityError'
 
+
   createCase:
     handler: src/cases/createCase.create
     events:
@@ -443,6 +444,29 @@ functions:
                   description: 'a case'
                 responseModels:
                   'application/json': case
+
+  sendToIRS:
+    handler: src/cases/sendPetitionToIRS.post
+    events:
+      - http:
+          path: v1/cases/{caseId}/irsPetitionPackage
+          method: post
+          cors: true
+          documentation:
+            summary: send a case package to the respondent
+            tags:
+              - cases
+            description: >
+              Send a packaged case to the respondent.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'updated case including send date'
+                responseModels:
+                  'application/json': case
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'
 
   swagger:
     handler: src/swagger/swagger.handler

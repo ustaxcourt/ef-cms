@@ -8,7 +8,8 @@ const axios = require('axios');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-module.exports = async ({ userId, documents, applicationContext }) => {
+exports.createCase = async ({ userId, documents, applicationContext }) => {
+  const userToken = userId; // TODO temp until jwt
   const response = await axios.post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
@@ -16,7 +17,7 @@ module.exports = async ({ userId, documents, applicationContext }) => {
     },
     {
       headers: {
-        Authorization: `Bearer ${userId}`,
+        Authorization: `Bearer ${userToken}`,
       },
     },
   );

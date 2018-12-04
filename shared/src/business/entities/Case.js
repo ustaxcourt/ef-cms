@@ -25,6 +25,10 @@ const caseSchema = joi.object().keys({
     .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
+  irsSendDate: joi
+    .date()
+    .iso()
+    .optional(),
   payGovId: joi.string().optional(),
   payGovDate: joi
     .date()
@@ -49,6 +53,16 @@ const caseSchema = joi.object().keys({
           .optional(),
         documentType: joi.string().required(),
         validated: joi.boolean().optional(),
+        reviewDate: joi
+          .date()
+          .iso()
+          .optional(),
+        reviewUser: joi.string().optional(),
+        status: joi.string().optional(),
+        servedDate: joi
+          .date()
+          .iso()
+          .optional(),
         createdAt: joi
           .date()
           .iso()
@@ -68,9 +82,11 @@ function Case(rawCase) {
     this,
     rawCase,
     {
-      caseId: uuidv4(),
-      createdAt: new Date().toISOString(),
-      status: 'new',
+      caseId: rawCase.caseId ? rawCase.caseId : uuidv4(),
+      createdAt: rawCase.createdAt
+        ? rawCase.createdAt
+        : new Date().toISOString(),
+      status: rawCase.status ? rawCase.status : 'new',
     },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }
@@ -92,6 +108,7 @@ Case.prototype.isValid = function isValid() {
 Case.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, caseSchema).error;
 };
+
 /**
  * validate
  */
@@ -100,6 +117,18 @@ Case.prototype.validate = function validate() {
     throw new Error('The case was invalid ' + this.getValidationError());
   }
 };
+
+/**
+ * validateWithError
+ * will throw the error provided if the case entity is invalid
+ */
+Case.prototype.validateWithError = function validate(error) {
+  if (!this.isValid()) {
+    error.message = `${error.message} ${this.getValidationError()}`;
+    throw error;
+  }
+};
+
 /**
  * isPetitionPackageReviewed
  * @returns boolean
@@ -107,12 +136,26 @@ Case.prototype.validate = function validate() {
 Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
   return this.documents.every(document => document.validated === true);
 };
+
 /**
- * isValidUUID
+ * markAsSentToIrs
+ */
+Case.prototype.markAsSentToIRS = function(sendDate) {
+  this.irsSendDate = sendDate;
+  this.status = 'general';
+  this.documents.every(document => (document.status = 'served'));
+};
+
+Case.prototype.markAsPaidByPayGov = function(payGovDate) {
+  this.payGovDate = payGovDate;
+};
+
+/**
+ * isValidCaseId
  * @param caseId
  * @returns {*|boolean}
  */
-Case.isValidUUID = caseId =>
+Case.isValidCaseId = caseId =>
   caseId &&
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,

@@ -11,7 +11,7 @@ const applicationContext = require('../applicationContext');
  */
 exports.create = event =>
   handle(() =>
-    createCaseUC({
+    createCase({
       userId: getAuthHeader(event),
       documents: JSON.parse(event.body).documents,
       applicationContext,

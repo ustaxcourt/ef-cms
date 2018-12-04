@@ -8,6 +8,20 @@ const {
   UnauthorizedError,
 } = require('../../errors/errors');
 
+const setDocumentDetails = (userId, documents) => {
+  if (documents && userId) {
+    documents.forEach(document => {
+      if (document.validated && !document.reviewDate) {
+        document.reviewDate = new Date().toISOString();
+        document.reviewUser = userId;
+        document.status = 'reviewed';
+      }
+    });
+  }
+
+  return documents;
+};
+
 /**
  * updateCase
  *
@@ -17,9 +31,18 @@ const {
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
+exports.updateCase = async ({
+  caseId,
+  caseJson,
+  userId,
+  applicationContext,
+}) => {
+  if (caseJson.documents) {
+    caseJson.documents = setDocumentDetails(userId, caseJson.documents);
+  }
   const caseToUpdate = new Case(caseJson);
   caseToUpdate.validate();
+  //TODO validation errors have to be caught and turned into real errors?
 
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
@@ -29,14 +52,10 @@ exports.updateCase = ({ caseId, caseJson, userId, applicationContext }) => {
     throw new UnprocessableEntityError();
   }
 
-  if (caseToUpdate.isPetitionPackageReviewed()) {
-    caseJson.status = 'general';
-  }
-  if (caseToUpdate.payGovDate) {
-    caseJson.payGovDate = caseToUpdate.payGovDate;
-  }
+  caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate);
+
   return applicationContext.persistence.saveCase({
-    caseToSave: caseJson,
+    caseToSave: { ...caseToUpdate },
     applicationContext,
   });
 };

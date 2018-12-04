@@ -23,7 +23,7 @@ describe('Update case function', function() {
   ];
 
   const item = {
-    caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+    caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     userId: 'taxpayer',
     docketNumber: '00101-18',
     documents: documents,
@@ -44,7 +44,7 @@ describe('Update case function', function() {
         httpMethod: 'PUT',
         body: JSON.stringify(item),
         pathParameters: {
-          caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         headers: { Authorization: 'Bearer petitionsclerk' },
       },

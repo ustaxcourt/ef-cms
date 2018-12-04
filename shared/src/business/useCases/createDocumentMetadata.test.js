@@ -1,5 +1,5 @@
 const assert = require('assert');
-const createDocumentMetadata = require('./createDocumentMetadata');
+const { createDocumentMetadata } = require('./createDocumentMetadata');
 
 describe('Create case', () => {
   let applicationContext;
