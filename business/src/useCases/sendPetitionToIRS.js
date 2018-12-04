@@ -4,12 +4,15 @@ const {
   UPDATE_CASE,
 } = require('../authorization/authorizationClientService');
 
-const {
-  UnprocessableEntityError,
-  UnauthorizedError,
-  InvalidEntityError,
-} = require('../errors/errors');
-
+const { UnauthorizedError, InvalidEntityError } = require('../errors/errors');
+/**
+ * sendPetitionToIRS
+ *
+ * @param caseId
+ * @param userId
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for send to IRS');

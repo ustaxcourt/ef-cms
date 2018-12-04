@@ -75,7 +75,7 @@ describe('Send petition to IRS', () => {
     // const stub = sinon.stub().resolves(date);
     applicationContext = {
       persistence: {
-        getCaseByCaseId: () => Promise.resolve()
+        getCaseByCaseId: () => Promise.resolve(),
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
@@ -126,7 +126,6 @@ describe('Send petition to IRS', () => {
   it('handles error from the irs gateway', async () => {
     caseRecord.documents = documents;
     let savedCaseRecord = Object.assign(caseRecord);
-    const date = '2018-12-04T18:27:13.370Z';
     const stub = sinon.stub().throws(new Error('blech'));
     applicationContext = {
       persistence: {
