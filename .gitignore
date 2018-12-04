@@ -2,6 +2,6 @@
 .terraform/
 web-client/cypress/screenshots
 web-client/node_modules
-business/coverage
-business/node_modules
+shared/coverage
+shared/node_modules
 .DS_Store
