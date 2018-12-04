@@ -1,20 +1,20 @@
 import { state } from 'cerebral';
 import moment from 'moment';
 
-export default async ({ applicationContext, get, path }) => {
+export default async ({ applicationContext, get, path, props }) => {
   const useCases = applicationContext.getUseCases();
 
   try {
-    const updatedCase = await useCases.sendPetitionToIRS({
+    const irsSendDate = await useCases.sendPetitionToIRS({
       caseId: get(state.caseDetail).caseId,
       userId: get(state.user.token),
       applicationContext,
     });
+    props.caseId = get(state.caseDetail).caseId;
     return path.success({
-      caseDetail: updatedCase,
       alertSuccess: {
         title: 'Successfully served to IRS',
-        message: moment(updatedCase.irsSendDate).format('LLL'),
+        message: moment(irsSendDate).format('LLL'),
       },
     });
   } catch (error) {

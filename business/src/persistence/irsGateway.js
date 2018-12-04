@@ -1,4 +1,3 @@
-
 exports.sendToIRS = async ({ caseToSend }) => {
-    return caseToSend;
-}
+  return caseToSend;
+};

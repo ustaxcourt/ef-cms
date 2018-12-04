@@ -81,11 +81,11 @@ describe('Send petition to IRS', () => {
         sendToIRS: () => Promise.resolve(),
       },
     };
-    const sentCase = await sendPetitionToIRS({
+    const irsSendDate = await sendPetitionToIRS({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       userId: 'petitionsclerk',
       applicationContext,
     });
-    assert.ok(sentCase.irsSendDate);
+    assert.ok(irsSendDate);
   });
 });

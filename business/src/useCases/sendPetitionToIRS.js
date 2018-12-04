@@ -43,13 +43,10 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
   caseEntity.markAsSentToIRS();
   caseEntity.validateWithError(invalidEntityError);
 
-  const rawCaseAfterSave = await applicationContext.persistence.saveCase({
+  await applicationContext.persistence.saveCase({
     caseToSave: { ...caseEntity },
     applicationContext,
   });
 
-  const caseAfterSave = new Case(rawCaseAfterSave);
-  caseAfterSave.validateWithError(invalidEntityError);
-
-  return rawCaseAfterSave;
+  return caseEntity.irsSendDate;
 };
