@@ -1,6 +1,7 @@
 const assert = require('assert');
 
 const { sendPetitionToIRS } = require('./sendPetitionToIRS');
+const { getCase } = require('./getCase');
 
 describe('Send petition to IRS', () => {
   let applicationContext;
@@ -37,6 +38,7 @@ describe('Send petition to IRS', () => {
     irsGateway: {
       sendToIRS: () => Promise.resolve(),
     },
+    getUseCases: () => ({ getCase }),
   };
 
   it('throws unauthorized error if user is unauthorized', async () => {
@@ -80,6 +82,7 @@ describe('Send petition to IRS', () => {
       irsGateway: {
         sendToIRS: () => Promise.resolve(),
       },
+      getUseCases: () => ({ getCase }),
     };
     const irsSendDate = await sendPetitionToIRS({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -1,5 +1,4 @@
 const Case = require('../entities/Case');
-const { getCase } = require('./getCase');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -16,7 +15,7 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized for send to IRS');
   }
 
-  const caseRecord = await getCase({
+  const caseRecord = await applicationContext.getUseCases().getCase({
     userId,
     caseId,
     applicationContext,
