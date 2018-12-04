@@ -124,6 +124,7 @@ Case.prototype.validate = function validate() {
  */
 Case.prototype.validateWithError = function validate(error) {
   if (!this.isValid()) {
+    error.message = `${error.message} ${this.getValidationError()}`;
     throw error;
   }
 };

@@ -1,7 +1,7 @@
 const awsDynamoPersistence = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
 const awsS3Persistence = require('ef-cms-shared/src/persistence/awsS3Persistence');
-const irsGateway = require('ef-cms-shared/src/persistence/irsPersistenceGateway');
+const irsGateway = require('../../business/src/persistence/irsGateway');
 
 module.exports = {
   persistence: {
