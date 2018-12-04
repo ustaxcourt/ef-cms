@@ -13,7 +13,8 @@
     "test": "jest ./**/tests/*.test.js",
     "test:pa11y": "node pa11y.js",
     "start": "npm run dev",
-    "docker:init": "./docker-init.sh"
+    "docker:init": "./docker-init.sh",
+    "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge"
   },
   "repository": {
     "type": "git",
@@ -87,7 +88,8 @@
     "jsdom": "^12.2.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "nock": "^10.0.3",
+    "nightwatch": "^1.0.14",
+    "nock": "^10.0.2",
     "pa11y": "^5.1.0",
     "parcel-bundler": "^1.10.3",
     "prettier": "^1.15.3",
@@ -103,6 +105,7 @@
     "stylelint": "^9.9.0",
     "stylelint-config-idiomatic-order": "^5.0.0",
     "stylelint-config-standard": "^18.2.0",
-    "uswds": "^1.6.9"
+    "uswds": "^1.6.9",
+    "webdriver-manager": "^12.1.0"
   }
 }
