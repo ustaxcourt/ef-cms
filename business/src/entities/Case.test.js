@@ -145,7 +145,7 @@ describe('Case entity', () => {
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
       const caseRecord = new Case(A_VALID_CASE);
-      caseRecord.markAsSentToIRS();
+      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
     });
   });
