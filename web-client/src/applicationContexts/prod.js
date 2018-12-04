@@ -1,12 +1,12 @@
-import awsPersistenceGateway from '../../../business/src/persistence/awsPersistenceGateway';
+import awsPersistenceGateway from '../../../shared/src/persistence/awsPersistenceGateway';
 
-import createCase from '../../../business/src/useCases/createCaseProxy';
-import getCase from '../../../business/src/useCases/getCaseProxy';
-import getCasesByStatus from '../../../business/src/useCases/getCasesByStatusProxy';
-import getCasesByUser from '../../../business/src/useCases/getCasesByUserProxy';
-import getUser from '../../../business/src/useCases/getUser';
-import updateCase from '../../../business/src/useCases/updateCaseProxy';
-import uploadCasePdfs from '../../../business/src/useCases/uploadCasePdfs';
+import createCase from '../../../shared/src/useCases/createCaseProxy';
+import getCase from '../../../shared/src/useCases/getCaseProxy';
+import getCasesByStatus from '../../../shared/src/useCases/getCasesByStatusProxy';
+import getCasesByUser from '../../../shared/src/useCases/getCasesByUserProxy';
+import getUser from '../../../shared/src/useCases/getUser';
+import updateCase from '../../../shared/src/useCases/updateCaseProxy';
+import uploadCasePdfs from '../../../shared/src/useCases/uploadCasePdfs';
 
 /**
  * Context for the prod environment

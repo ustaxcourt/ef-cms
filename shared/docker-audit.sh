@@ -1,3 +1,3 @@
 #!/bin/bash -e
 docker build -t shared-build -f ../Dockerfile.shared ..
-docker run --rm shared-build /bin/sh -c 'cd business && npm audit'
+docker run --rm shared-build /bin/sh -c 'cd shared && npm audit'
