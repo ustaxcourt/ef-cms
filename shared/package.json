@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Electronic Filing / Case Management System Shared Components ",
   "scripts": {
-    "lint": "eslint ./src; stylelint ./src/**/*.scss;",
+    "lint": "eslint ./src && stylelint ./src/**/*.scss;",
     "test": "jest ./src/**/*.test.js",
     "docker:init": "./docker-init.sh",
     "docker:lint": "./docker-lint.sh",
