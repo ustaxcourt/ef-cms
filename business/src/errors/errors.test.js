@@ -7,6 +7,7 @@ const {
   NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
+  InvalidEntityError,
 } = require('./errors');
 
 describe('NotFoundError', () => {
@@ -54,5 +55,23 @@ describe('UnprocessableEntityError', () => {
 
   it('should set the message', () => {
     expect(error.message).to.equal('problem in body or url');
+  });
+});
+
+describe('InvalidEntityError', () => {
+  let error;
+
+  beforeEach(() => {
+    error = new InvalidEntityError();
+  });
+
+  it('should set a status code of 422', () => {
+    expect(error.statusCode).to.equal(422);
+  });
+
+  it('should set the message', () => {
+    expect(error.message).to.equal(
+      'entity is invalid or invalid for operation',
+    );
   });
 });

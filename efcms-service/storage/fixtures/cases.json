@@ -11,15 +11,21 @@
     "documents": [
       {
         "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b"
+        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d"
+        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20"
+        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       }
     ],
     "status": "general"
@@ -32,15 +38,21 @@
     "documents": [
       {
         "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b"
+        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d"
+        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20"
+        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       }
     ],
     "status": "new"
@@ -53,15 +65,21 @@
     "documents": [
       {
         "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b"
+        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d"
+        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20"
+        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer"
       }
     ],
     "status": "new"

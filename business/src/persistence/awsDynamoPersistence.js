@@ -154,14 +154,16 @@ exports.incrementCounter = applicationContext => {
  * @param applicationContext
  * @returns {*}
  */
-exports.saveCase = ({ caseToSave, applicationContext }) =>
-  client.put({
+exports.saveCase = ({ caseToSave, applicationContext }) => {
+  return client.put({
     TableName: getTable(
       { entityType: 'case' },
       applicationContext.environment.stage,
     ),
     Item: caseToSave,
   });
+};
+
 /**
  * getCasesByUser
  * @param userId

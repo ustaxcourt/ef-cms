@@ -1,6 +1,14 @@
 const axios = require('axios');
-
-module.exports = async ({ applicationContext, userToken, status }) => {
+/**
+ * getCasesByStatus
+ *
+ * @param applicationContext
+ * @param userId
+ * @param status
+ * @returns {Promise<*>}
+ */
+exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
+  const userToken = userId; //TODO refactor for jwt
   return await axios
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {
@@ -14,7 +22,6 @@ module.exports = async ({ applicationContext, userToken, status }) => {
       if (!(response.data && Array.isArray(response.data))) {
         return response.data;
       } else {
-        // TODO: remove this once backend can sort
         response.data.sort(function(a, b) {
           return new Date(a.createdAt) - new Date(b.createdAt);
         });
