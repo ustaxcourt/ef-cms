@@ -15,7 +15,7 @@ pushd shared
 ./docker-shellcheck.sh
 ./docker-audit.sh
 ./docker-lint.sh
-CONTAINER_NAME=abc ./docker-test.sh
+CONTAINER_NAME=shared-test ./docker-test.sh
 #SONAR_KEY=${SHARED_SONAR_KEY} branch_name=local SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SHARED_SONAR_TOKEN} ./docker-sonarqube.sh
 popd
 
@@ -34,7 +34,7 @@ pushd efcms-service
 ./docker-shellcheck.sh
 ./docker-audit.sh
 ./docker-lint.sh
-CONTAINER_NAME=abc ./docker-test.sh
+CONTAINER_NAME=efcmstest ./docker-test.sh
 #SONAR_KEY=${API_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${API_SONAR_TOKEN} ./docker-sonarqube.sh
 popd
 

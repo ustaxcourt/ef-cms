@@ -2,11 +2,11 @@ const Case = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
-} = require('../authorization/authorizationClientService');
+} = require('../../authorization/authorizationClientService');
 const {
   UnprocessableEntityError,
   UnauthorizedError,
-} = require('../errors/errors');
+} = require('../../errors/errors');
 
 /**
  * updateCase

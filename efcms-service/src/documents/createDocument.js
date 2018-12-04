@@ -1,6 +1,6 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 
-const createDocumentMetadataUC = require('ef-cms-shared/src/useCases/createDocumentMetadata');
+const createDocumentMetadataUC = require('ef-cms-shared/src/business/useCases/createDocumentMetadata');
 const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 

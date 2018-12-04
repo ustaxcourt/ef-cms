@@ -3,8 +3,8 @@ import Devtools from 'cerebral/devtools';
 
 import app from './app';
 import applicationContext from './applicationContexts/dev';
-import Case from '../../shared/src/entities/Case';
-import User from '../../shared/src/entities/User';
+import Case from '../../shared/src/business/entities/Case';
+import User from '../../shared/src/business/entities/User';
 
 /**
  * Initializes the app with dev environment context
