@@ -21,17 +21,13 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
     applicationContext,
   });
 
-  let caseEntity;
-  if (!caseRecord) {
-    throw new UnprocessableEntityError('Case not found.');
-  }
-
-  caseEntity = new Case(caseRecord);
+  const caseEntity = new Case(caseRecord);
   const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
   caseEntity.validateWithError(invalidEntityError);
 
+  let sendDate;
   try {
-    await applicationContext.irsGateway.sendToIRS({
+    sendDate = await applicationContext.irsGateway.sendToIRS({
       caseToSend: { ...caseEntity },
       applicationContext,
     });
@@ -39,7 +35,7 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
     throw new Error(`error sending ${caseId} to IRS: ${error.message}`);
   }
 
-  caseEntity.markAsSentToIRS();
+  caseEntity.markAsSentToIRS(sendDate);
   caseEntity.validateWithError(invalidEntityError);
 
   await applicationContext.persistence.saveCase({
