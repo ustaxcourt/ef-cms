@@ -1,10 +1,13 @@
 const axios = require('axios');
-
-exports.getCasesByStatus = async ({
-  applicationContext,
-  userId,
-  status,
-}) => {
+/**
+ * getCasesByStatus
+ *
+ * @param applicationContext
+ * @param userId
+ * @param status
+ * @returns {Promise<*>}
+ */
+exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
   const userToken = userId; //TODO refactor for jwt
   return await axios
     .get(`${applicationContext.getBaseUrl()}/cases`, {
