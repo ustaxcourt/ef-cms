@@ -1,8 +1,12 @@
 FROM cypress/base:8
 
+WORKDIR /home/app
+
+RUN echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
+
 RUN apt-get update
 
-RUN apt-get install -y default-jre
+RUN apt-get install -y -t jessie-backports openjdk-8-jdk
 
 RUN apt-get install -yq git bash
 
@@ -20,13 +24,28 @@ RUN apt-get install -yq unzip wget
 # RUN pip install --upgrade pip
 RUN apt-get install -y awscli
 # RUN pip install awscli==${AWS_CLI_VERSION}
+#RUN pip install setuptools
+#RUN pip install pylint
+
+RUN apt-get install -y jq
 
 RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && \
     unzip -o terraform_0.11.8_linux_amd64.zip terraform
 
 RUN cp terraform /usr/local/bin/
 
-WORKDIR /home/app
+RUN curl --insecure -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip'
+RUN mkdir sonar_scanner
+RUN unzip -d sonar_scanner sonar-scanner-cli-3.2.0.1227-linux.zip
+RUN mv sonar_scanner/* sonar_home
+RUN rm -rf sonar_scanner sonar-scanner-cli-3.2.0.1227-linux.zip
+
+ENV SONAR_RUNNER_HOME=/home/app/sonar_home
+ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
+
+RUN sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' sonar_home/bin/sonar-scanner
+
+RUN java -version
 
 RUN CI=true npm install cypress
 
