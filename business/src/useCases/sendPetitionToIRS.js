@@ -16,8 +16,6 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized for send to IRS');
   }
 
-  const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
-
   const caseRecord = await getCase({
     userId,
     caseId,
@@ -30,12 +28,17 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
   }
 
   caseEntity = new Case(caseRecord);
+  const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
   caseEntity.validateWithError(invalidEntityError);
 
-  await applicationContext.persistence.sendToIRS({
-    caseToSend: { ...caseEntity },
-    applicationContext,
-  });
+  try {
+    await applicationContext.irsGateway.sendToIRS({
+      caseToSend: { ...caseEntity },
+      applicationContext,
+    });
+  } catch (error) {
+    throw new Error(`error sending ${caseId} to IRS: ${error.message}`);
+  }
 
   caseEntity.markAsSentToIRS();
   caseEntity.validateWithError(invalidEntityError);
