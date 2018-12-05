@@ -22,6 +22,11 @@ resource "aws_dynamodb_table" "cases-east" {
   }
 
   attribute {
+    name = "irsAttorneyId"
+    type = "S"
+  }
+
+  attribute {
     name = "userId"
     type = "S"
   }
@@ -54,6 +59,14 @@ resource "aws_dynamodb_table" "cases-east" {
     name            = "UserIdIndex"
     hash_key        = "userId"
     range_key       = "caseId"
+    write_capacity  = 1
+    read_capacity   = 1
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "IRSAttorneyIndex"
+    hash_key        = "irsAttorneyId"
     write_capacity  = 1
     read_capacity   = 1
     projection_type = "ALL"
@@ -89,6 +102,11 @@ resource "aws_dynamodb_table" "cases-west" {
   }
 
   attribute {
+    name = "irsAttorneyId"
+    type = "S"
+  }
+
+  attribute {
     name = "userId"
     type = "S"
   }
@@ -121,6 +139,14 @@ resource "aws_dynamodb_table" "cases-west" {
     name            = "UserIdIndex"
     hash_key        = "userId"
     range_key       = "caseId"
+    write_capacity  = 1
+    read_capacity   = 1
+    projection_type = "ALL"
+  }
+
+  global_secondary_index {
+    name            = "IRSAttorneyIndex"
+    hash_key        = "irsAttorneyId"
     write_capacity  = 1
     read_capacity   = 1
     projection_type = "ALL"
