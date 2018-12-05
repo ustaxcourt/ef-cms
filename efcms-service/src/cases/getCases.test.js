@@ -27,7 +27,7 @@ describe('Get cases lambda', function() {
       sinon.stub(client, 'query').resolves([
         {
           userId: 'userId',
-          caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859A',
           docketNumber: '456789-18',
           documents,
           createdAt: '',

@@ -1,3 +1,0 @@
-FROM koalaman/shellcheck-alpine
-
-RUN apk add bash

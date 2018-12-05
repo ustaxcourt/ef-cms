@@ -108,9 +108,8 @@ describe('File a petition', function() {
       cy.get('#actions-button').click();
       cy.get('#paymentInfo').should('be.visible');
     });
-    it('shows activities table and data', () => {
-      cy.get('table#case-activities').should('exist');
-      cy.get('table#case-activities tbody tr').should('exist');
+    it('shows docket record table and data', () => {
+      cy.get('table#docket-record tbody tr').should('exist');
     });
   });
 });

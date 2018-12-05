@@ -7,6 +7,7 @@ import loginWithToken from './sequences/loginWithToken';
 import submitFilePetition from './sequences/submitFilePetition';
 import submitLogIn from './sequences/submitLogIn';
 import submitSearch from './sequences/submitSearch';
+import submitToIRS from './sequences/submitToIRS';
 import submitUpdateCase from './sequences/submitUpdateCase';
 import toggleDocumentValidation from './sequences/toggleDocumentValidation';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
@@ -37,6 +38,7 @@ export default {
     submitFilePetition,
     submitLogIn,
     submitSearch,
+    submitToIRS,
     submitUpdateCase,
     toggleDocumentValidation,
     togglePaymentDetails,
@@ -63,6 +65,11 @@ export default {
     searchTerm: '',
     user: {
       userId: '',
+      // userId: 'taxpayer',
+      // firstName: 'taxpayer',
+      // lastName: 'taxpayer',
+      // token: 'taxpayer',
+      // role: 'taxpayer',
       // userId: 'petitionsclerk',
       // firstName: 'petitionsclerk',
       // lastName: 'petitionsclerk',

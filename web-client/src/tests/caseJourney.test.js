@@ -158,6 +158,7 @@ describe('Petitions clerk', () => {
         item: test.getState('caseDetail').documents[2],
       });
       await test.runSequence('submitUpdateCase');
+      await test.runSequence('submitToIRS');
     });
   });
 });
