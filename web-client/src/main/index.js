@@ -3,6 +3,7 @@ import gotoDashboard from './sequences/gotoDashboard';
 import gotoFilePetition from './sequences/gotoFilePetition';
 import gotoLogIn from './sequences/gotoLogIn';
 import gotoStyleGuide from './sequences/gotoStyleGuide';
+import loginWithToken from './sequences/loginWithToken';
 import submitFilePetition from './sequences/submitFilePetition';
 import submitLogIn from './sequences/submitLogIn';
 import submitSearch from './sequences/submitSearch';
@@ -33,6 +34,7 @@ export default {
     gotoFilePetition,
     gotoLogIn,
     gotoStyleGuide,
+    loginWithToken,
     submitFilePetition,
     submitLogIn,
     submitSearch,
