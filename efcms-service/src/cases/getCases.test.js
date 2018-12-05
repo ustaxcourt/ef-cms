@@ -65,7 +65,7 @@ describe('Get cases lambda', function() {
 
     [
       {
-        httpMethod: 'GET',
+        httpMethod: 'GET', 
         headers: { Authorization: 'Bearer petitionsclerk' },
       },
     ].forEach(function(documentBody) {
@@ -114,6 +114,22 @@ describe('Get cases lambda', function() {
           .expectResolve(error => {
             expect(error.statusCode).to.equal(403);
             expect(error.body).to.startWith('"Error: Authorization');
+          });
+      });
+    });
+
+    [
+      {
+        httpMethod: 'GET',
+        headers: { Authorization: 'Bearer irsattorney' },
+      },
+    ].forEach(function(documentBody) {
+      it('should return a the cases for the irsattorney', function() {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResolve(result => {
+            const data = JSON.parse(result.body);
+            expect(data.length).to.equal(1);
           });
       });
     });

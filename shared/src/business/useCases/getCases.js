@@ -4,9 +4,8 @@ const { UnauthorizedError } = require('../../errors/errors');
 exports.getCases = async ({ userId, status, applicationContext }) => {
   let user;
   try {
-    user = new User({userId});
-  }
-  catch (err) {
+    user = new User({ userId });
+  } catch (err) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -30,5 +29,3 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
       return;
   }
 };
-
-
