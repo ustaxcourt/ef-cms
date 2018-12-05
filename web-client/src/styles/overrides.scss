@@ -35,7 +35,7 @@ p {
 }
 
 .usa-nav-secondary-links li:not(:last-child)::after {
+  padding-left: 0.5rem;
   color: transparent;
   content: '';
-  padding-left: 0.5rem;
 }
