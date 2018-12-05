@@ -1,10 +1,17 @@
 const User = require('../entities/User');
+const { UnauthorizedError } = require('../../errors/errors');
 
 exports.getCases = async ({ userId, status, applicationContext }) => {
-  const user = new User({userId});
+  let user;
+  try {
+    user = new User({userId});
+  }
+  catch (err) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   switch (user.role) {
-    case 'petitioner':
+    case 'taxpayer':
       return await applicationContext
         .getUseCases()
         .getCasesByUser({ userId, applicationContext });
@@ -13,7 +20,9 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
         irsAttorneyId: user.barNumber,
         applicationContext,
       });
-    case 'internal':
+    case 'petitionsclerk':
+    case 'intakeclerk':
+      if (!status) status = 'new';
       return await applicationContext
         .getUseCases()
         .getCasesByStatus({ status, userId, applicationContext });

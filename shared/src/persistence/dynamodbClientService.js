@@ -14,6 +14,8 @@ const removeAWSGlobalFields = item => {
   delete item['aws:rep:updatetime'];
   return item;
 };
+
+const removeInternalKeys = 
 /**
  * put
  * @param params
@@ -28,7 +30,7 @@ exports.put = params => {
   return documentClient
     .put(params)
     .promise()
-    .then(() => params.Item);
+    .then(() => params.Item)
 };
 /**
  * updateConsistent
@@ -62,7 +64,10 @@ exports.get = params => {
     .then(res => {
       if (!res.Item) throw new Error(`get failed on ${JSON.stringify(params)}`);
       return removeAWSGlobalFields(res.Item);
-    });
+    })
+    .catch(err => {
+      throw new Error(`get failed on ${JSON.stringify(params)}`);
+    })
 };
 
 /**
@@ -116,7 +121,7 @@ exports.batchGet = ({ tableName, keys }) => {
 /**
  * batchWrite
  */
- exports.batchWrite = ({ tableName, items }) => {
+exports.batchWrite = ({ tableName, items }) => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,
     endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
@@ -136,6 +141,20 @@ exports.batchGet = ({ tableName, keys }) => {
           }
         }))
       }
+    })
+    .promise();
+}
+
+exports.delete = ({ tableName, key }) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .delete({
+      TableName: tableName,
+      Key: key
     })
     .promise();
  }

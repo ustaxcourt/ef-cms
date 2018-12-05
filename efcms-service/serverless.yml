@@ -28,9 +28,6 @@ custom:
           - table: ${opt:documentsTableName}
             sources:
               - ./storage/fixtures/documents.json
-          - table: ${opt:casesTableName}
-            sources:
-              - ./storage/fixtures/cases.json
           - table: ${opt:efcmsTableName}
             sources:
               - ./storage/fixtures/efcms.json
@@ -234,8 +231,6 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
       Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}/index/*
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}

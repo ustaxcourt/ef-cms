@@ -4,11 +4,8 @@
  * @constructor
  */
 function User(user) {
-  if (!user.userId) {
-    this.userId = 'taxpayer'; //TODO throw error?
-  } else {
-    Object.assign(this, user);
-  }
+  Object.assign(this, user);
+
   //petitioner
   if (this.userId === 'taxpayer') {
     if (!this.firstName) {
@@ -18,14 +15,14 @@ function User(user) {
       this.lastName = 'Taxpayer';
     }
     if (!this.role) {
-      this.role = 'petitioner';
+      this.role = 'taxpayer';
     }
     if (!this.token) {
       this.token = 'taxpayer';
     }
   }
   //petitionsclerk
-  if (this.userId === 'petitionsclerk') {
+  else if (this.userId === 'petitionsclerk') {
     if (!this.firstName) {
       this.firstName = 'Test';
     }
@@ -33,14 +30,14 @@ function User(user) {
       this.lastName = 'Petitionsclerk';
     }
     if (!this.role) {
-      this.role = 'internal';
+      this.role = 'petitionsclerk';
     }
     if (!this.token) {
       this.token = 'petitionsclerk';
     }
   }
 
-  if (this.userId === 'intakeclerk') {
+  else if (this.userId === 'intakeclerk') {
     if (!this.firstName) {
       this.firstName = 'Test';
     }
@@ -48,7 +45,7 @@ function User(user) {
       this.lastName = 'Intakeclerk';
     }
     if (!this.role) {
-      this.role = 'internal';
+      this.role = 'intakeclerk';
     }
     if (!this.token) {
       this.token = 'intakeclerk';
@@ -58,7 +55,7 @@ function User(user) {
     }
   }
 
-  if (this.userId === 'irsattorney') {
+  else if (this.userId === 'irsattorney') {
     if (!this.firstName) {
       this.firstName = 'IRS';
     }
@@ -77,6 +74,8 @@ function User(user) {
     if (!this.userId) {
       this.userId = 'irsattorney';
     }
+  } else {
+    throw new Error('invalid user');
   }
 }
 

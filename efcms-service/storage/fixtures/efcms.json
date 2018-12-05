@@ -4,8 +4,24 @@
         "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
     },
     {
+        "pk": "00101-18|case",
+        "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
+        "pk": "00102-18|case",
+        "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
         "pk": "00103-18|case",
         "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
+        "pk": "general|case-status",
+        "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
+        "pk": "new|case-status",
+        "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
     },
     {
         "pk": "new|case-status",
@@ -13,9 +29,80 @@
     },
     {
         "pk": "taxpayer|case",
+        "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
+        "pk": "taxpayer|case",
+        "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
+    },
+    {
+        "pk": "taxpayer|case",
         "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
     },
     {
+        "pk": "docketNumberCounter",
+        "sk": "docketNumberCounter",
+        "id": 3
+    },
+    {
+        "pk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+        "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+        "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "taxpayer",
+        "docketNumber": "00101-18",
+        "documents": [
+          {
+            "documentType": "Petition",
+            "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          },
+          {
+            "documentType": "Request for Place of Trial",
+            "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          },
+          {
+            "documentType": "Statement of Taxpayer Identification Number",
+            "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          }
+        ],
+        "status": "general"
+      },
+      {
+        "pk": "2a6fb0fb-5f93-479a-9235-7eba43005800",
+        "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800",
+        "caseId": "2a6fb0fb-5f93-479a-9235-7eba43005800",
+        "createdAt": "2018-11-21T20:51:28.192Z",
+        "userId": "taxpayer",
+        "docketNumber": "00102-18",
+        "documents": [
+          {
+            "documentType": "Petition",
+            "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          },
+          {
+            "documentType": "Request for Place of Trial",
+            "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          },
+          {
+            "documentType": "Statement of Taxpayer Identification Number",
+            "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+            "createdAt": "2018-11-21T20:49:28.192Z",
+            "userId": "taxpayer"
+          }
+        ],
+        "status": "new"
+      },
+      {
         "pk": "3a6fb0fb-5f93-479a-9235-7eba43005800",
         "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800",
         "caseId": "3a6fb0fb-5f93-479a-9235-7eba43005800",
@@ -43,5 +130,5 @@
           }
         ],
         "status": "new"
-    }
+      }
 ]
