@@ -60,6 +60,7 @@ exports.get = params => {
     .get(params)
     .promise()
     .then(res => {
+      if (!res.Item) throw new Error(`get failed on ${JSON.stringify(params)}`);
       return removeAWSGlobalFields(res.Item);
     });
 };
@@ -110,3 +111,31 @@ exports.batchGet = ({ tableName, keys }) => {
       return items;
     });
 };
+
+
+/**
+ * batchWrite
+ */
+ exports.batchWrite = ({ tableName, items }) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .batchWrite({
+      RequestItems: {
+        [tableName]: items.map(item => ({
+          PutRequest: {
+            Item: item,
+            ConditionExpression: `attribute_not_exists(#pk) and attribute_not_exists(#sk)`,
+            ExpressionAttributeNames: {
+              "#pk" : item.pk,
+              "#sk" : item.sk
+            }            
+          }
+        }))
+      }
+    })
+    .promise();
+ }

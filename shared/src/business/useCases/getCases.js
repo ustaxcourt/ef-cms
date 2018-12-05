@@ -13,15 +13,13 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
         irsAttorneyId: user.barNumber,
         applicationContext,
       });
-      break;
     case 'internal':
-      if (status) {
-        return await applicationContext
-          .getUseCases()
-          .getCasesByStatus({ status, userId, applicationContext });
-      }
-      break;
+      return await applicationContext
+        .getUseCases()
+        .getCasesByStatus({ status, userId, applicationContext });
     default:
       return;
   }
 };
+
+
