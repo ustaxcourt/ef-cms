@@ -87,18 +87,25 @@ exports.query = params => {
  * BATCH GET for aws-sdk dynamodb client
  * @param params
  */
-exports.batchGet = params => {
+exports.batchGet = ({ tableName, keys }) => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: region,
     endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   });
 
+  // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
   return documentClient
-    .batchGet(params)
+    .batchGet({
+      RequestItems: {
+        [tableName]: {
+          Keys: keys
+        }
+      }
+    })
     .promise()
     .then(result => {
       // TODO: REFACTOR THIS
-      const items = result.Responses[`efcms-cases-local`];
+      const items = result.Responses[tableName];
       items.forEach(item => removeAWSGlobalFields(item));
       return items;
     });

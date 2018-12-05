@@ -207,15 +207,11 @@ exports.getCasesByIRSAttorney = async ({ irsAttorneyId, applicationContext }) =>
   const activeCaseIds = activeCaseMapping.map(metadata => metadata.sk);
 
   const activeCases = await client.batchGet({
-    RequestItems: {
-      [`efcms-cases-${applicationContext.environment.stage}`]: {
-        Keys: activeCaseIds.map(activeCaseId => ({
-          caseId: activeCaseId,
-        }))
-      }
-    }
+    tableName: `efcms-cases-${applicationContext.environment.stage}`,
+    keys: activeCaseIds.map(activeCaseId => ({
+      caseId: activeCaseId,
+    }))
   })
-  console.log('we are here', activeCases);
   return activeCases;
 }
   
