@@ -1,7 +1,7 @@
 const User = require('../entities/User');
 
 exports.getCases = async ({ userId, status, applicationContext }) => {
-  const user = new User(userId);
+  const user = new User({userId});
 
   switch (user.role) {
     case 'petitioner':
@@ -10,7 +10,7 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
         .getCasesByUser({ userId, applicationContext });
     case 'irsattorney':
       return await applicationContext.getUseCases().getCasesByIRSAttorney({
-        userId,
+        irsAttorneyId: user.barNumber,
         applicationContext,
       });
       break;

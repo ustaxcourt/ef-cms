@@ -31,6 +31,9 @@ custom:
           - table: ${opt:casesTableName}
             sources:
               - ./storage/fixtures/cases.json
+          - table: ${opt:efcmsTableName}
+            sources:
+              - ./storage/fixtures/efcms.json
 
   alerts:
     stages:
@@ -233,6 +236,8 @@ provider:
       Resource:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}/index/*
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}/index/*
 

@@ -82,3 +82,24 @@ exports.query = params => {
       return result.Items;
     });
 };
+
+/**
+ * BATCH GET for aws-sdk dynamodb client
+ * @param params
+ */
+exports.batchGet = params => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .batchGet(params)
+    .promise()
+    .then(result => {
+      // TODO: REFACTOR THIS
+      const items = result.Responses[`efcms-cases-local`];
+      items.forEach(item => removeAWSGlobalFields(item));
+      return items;
+    });
+};

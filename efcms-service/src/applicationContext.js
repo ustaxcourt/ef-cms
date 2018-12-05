@@ -11,6 +11,7 @@ const { getUser } = require('ef-cms-shared/src/business/useCases/getUser');
 const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS');
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs');
+const { getCasesByIRSAttorney } = require('ef-cms-shared/src/business/useCases/getCasesByIRSAttorney');
 
 module.exports = {
   persistence: {
@@ -36,6 +37,7 @@ module.exports = {
       sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
+      getCasesByIRSAttorney,
     };
   },
 };
