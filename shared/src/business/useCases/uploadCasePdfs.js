@@ -1,33 +1,5 @@
-const axios = require('axios');
-
 const Case = require('../entities/Case');
 
-/**
- * createDocumentMetadata
- * @param applicationContext
- * @param userId
- * @param documentType
- * @returns {Promise<*>}
- */
-const createDocumentMetadata = async ({
-  applicationContext,
-  userId,
-  documentType,
-}) => {
-  const userToken = userId; // TODO fix with jwt
-  const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/documents`,
-    {
-      documentType,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    },
-  );
-  return response.data;
-};
 /**
  * uploadCasePdfs
  * @param applicationContext
@@ -46,25 +18,29 @@ exports.uploadCasePdfs = async ({
     .getPersistenceGateway()
     .getDocumentUploadPolicy({ applicationContext });
 
-  const petitionDocument = await createDocumentMetadata({
-    applicationContext,
-    userId: userId,
-    documentType: Case.documentTypes.petitionFile,
-  });
+  const petitionDocument = await applicationContext
+    .getPersistenceGateway()
+    .createDocumentMetadataRequest({
+      applicationContext,
+      userId: userId,
+      documentType: Case.documentTypes.petitionFile,
+    });
 
-  const requestForPlaceOfTrialDocument = await createDocumentMetadata({
-    applicationContext,
-    userId: userId,
-    documentType: Case.documentTypes.requestForPlaceOfTrial,
-  });
+  const requestForPlaceOfTrialDocument = await applicationContext
+    .getPersistenceGateway()
+    .createDocumentMetadataRequest({
+      applicationContext,
+      userId: userId,
+      documentType: Case.documentTypes.requestForPlaceOfTrial,
+    });
 
-  const statementOfTaxpayerIdentificationNumberDocument = await createDocumentMetadata(
-    {
+  const statementOfTaxpayerIdentificationNumberDocument = await applicationContext
+    .getPersistenceGateway()
+    .createDocumentMetadataRequest({
       applicationContext,
       userId: userId,
       documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
-    },
-  );
+    });
 
   await applicationContext.getPersistenceGateway().uploadPdf({
     policy,
