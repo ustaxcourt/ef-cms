@@ -7,6 +7,10 @@
   background-size: contain;
 }
 
+h1[tabIndex='-1']:focus {
+  outline: none;
+}
+
 label.validated::after {
   display: inline-block;
   width: 1.8rem;
