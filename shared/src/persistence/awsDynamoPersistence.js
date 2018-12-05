@@ -192,21 +192,33 @@ exports.getCasesByUser = ({ userId, applicationContext }) =>
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByIRSAttorney = ({ irsAttorneyId, applicationContext }) =>
-  client.query({
-    TableName: getTable(
-      { entityType: 'case' },
-      applicationContext.environment.stage,
-    ),
-    IndexName: 'IRSAttorneyIdIndex',
+exports.getCasesByIRSAttorney = async ({ irsAttorneyId, applicationContext }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+  const activeCaseMapping = await client.query({
+    TableName: TABLE,
     ExpressionAttributeNames: {
-      '#irsAttorneyId': 'irsAttorneyId',
+      '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':irsAttorneyId': irsAttorneyId,
+      ':pk': `${irsAttorneyId}|activeCase`,
     },
-    KeyConditionExpression: '#irsAttorneyId = :irsAttorneyId',
+    KeyConditionExpression: '#pk = :pk',
   });
+  const activeCaseIds = activeCaseMapping.map(metadata => metadata.sk);
+
+  const activeCases = await client.batchGet({
+    RequestItems: {
+      [`efcms-cases-${applicationContext.environment.stage}`]: {
+        Keys: activeCaseIds.map(activeCaseId => ({
+          caseId: activeCaseId,
+        }))
+      }
+    }
+  })
+  console.log('we are here', activeCases);
+  return activeCases;
+}
+  
 /**
  * getCasesByStatus
  * @param status
