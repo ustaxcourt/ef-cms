@@ -23,7 +23,7 @@ pipeline {
     stage('Init') {
       steps {
         script {
-          dir('business') {
+          dir('shared') {
             sh "./docker-init.sh"
           }
         }
@@ -32,7 +32,7 @@ pipeline {
     stage('ShellCheck') {
       steps {
         script {
-          dir('business') {
+          dir('shared') {
             sh "./docker-shellcheck.sh"
           }
         }
@@ -41,7 +41,7 @@ pipeline {
     stage('Audit') {
       steps {
         script {
-          dir('business') {
+          dir('shared') {
             sh "./docker-audit.sh"
           }
         }
@@ -50,7 +50,7 @@ pipeline {
     stage('Lint') {
       steps {
         script {
-          dir('business') {
+          dir('shared') {
             sh "./docker-lint.sh"
           }
         }
@@ -59,7 +59,7 @@ pipeline {
     stage('Test') {
       steps {
         script {
-          dir('business') {
+          dir('shared') {
             def CONTAINER_NAME = "api-test-${BUILD_NUMBER}"
             sh "CONTAINER_NAME=$CONTAINER_NAME ./docker-test.sh"
           }
@@ -67,7 +67,7 @@ pipeline {
       }
       post {
         success {
-          dir('business') {
+          dir('shared') {
             publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
@@ -77,7 +77,7 @@ pipeline {
       steps {
         script {
           withCredentials([string(credentialsId: 'SHARED_SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            dir('business') {
+            dir('shared') {
               sh "SONAR_KEY=${SHARED_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SONAR_TOKEN} ./docker-sonarqube.sh"
             }
           }

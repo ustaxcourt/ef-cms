@@ -1,4 +1,4 @@
-const { sendPetitionToIRS } = require('ef-cms-shared/src/useCases/sendPetitionToIRS');
+const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS');
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 
