@@ -1,6 +1,6 @@
 const client = require('./dynamodbClientService');
-const Case = require('../entities/Case');
-const Document = require('../entities/Document');
+const Case = require('../business/entities/Case');
+const Document = require('../business/entities/Document');
 
 /**
  * getTable
