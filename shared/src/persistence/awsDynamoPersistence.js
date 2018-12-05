@@ -2,12 +2,6 @@ const client = require('./dynamodbClientService');
 const Case = require('../business/entities/Case');
 const Document = require('../business/entities/Document');
 
-/**
- * getTable
- * @param entity
- * @param stage
- * @returns {string}
- */
 const getTable = (entity, stage) => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return `efcms-cases-${stage}`;
@@ -16,14 +10,8 @@ const getTable = (entity, stage) => {
   } else {
     throw new Error('entity type not found');
   }
-};
+}
 
-/**
- * getKey
- *
- * @param entity
- * @returns {string}
- */
 const getKey = entity => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return 'caseId';
@@ -32,6 +20,56 @@ const getKey = entity => {
   } else {
     throw new Error('entity type not found');
   }
+}
+
+const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
+  const mapping = await client.query({
+    TableName: TABLE,
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `${key}|${type}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+  });
+
+  const ids = mapping.map(metadata => metadata.sk);
+
+  return await client.batchGet({
+    tableName: TABLE,
+    keys: ids.map(id => ({
+      pk: id,
+      sk: id,
+    }))
+  });
+};
+
+const getRecordViaMapping = async ({ applicationContext, key, type }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
+  const [mapping] = await client.query({
+    TableName: TABLE,
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `${key}|${type}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+  });
+
+  if (!mapping) return null;
+
+  return await client.get({
+    tableName: TABLE,
+    Key: {
+      pk: key,
+      sk: key,
+    },
+  });
 };
 
 /**
@@ -40,8 +78,30 @@ const getKey = entity => {
  * @param applicationContext
  * @returns {*}
  */
-exports.createCase = ({ caseRecord, applicationContext }) => {
-  return this.create({ entity: caseRecord, applicationContext });
+exports.createCase = async ({ caseRecord, applicationContext }) => {
+  const result = await client.batchWrite({
+    tableName: `efcms-${applicationContext.environment.stage}`,
+    items: [
+      {
+        pk: caseRecord.caseId,
+        sk: caseRecord.caseId,
+        ...caseRecord
+      },
+      {
+        pk: `${caseRecord.docketNumber}|case`,
+        sk: caseRecord.caseId,
+      },
+      {
+        pk: "new|case-status",
+        sk: caseRecord.caseId,
+      },
+      {
+        pk: `${caseRecord.userId}|case`,
+        sk: caseRecord.caseId,
+      }
+    ]
+  });
+  return caseRecord;
 };
 
 /**
@@ -53,6 +113,7 @@ exports.createCase = ({ caseRecord, applicationContext }) => {
 exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
   return this.create({ entity: documentToCreate, applicationContext });
 };
+
 /**
  * create
  * @param entity
@@ -70,6 +131,7 @@ exports.create = ({ entity, applicationContext }) => {
     },
   });
 };
+
 /**
  * getCaseByCaseId
  * @param caseId
@@ -77,49 +139,27 @@ exports.create = ({ entity, applicationContext }) => {
  * @returns {*}
  */
 exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
-  const entity = {
-    caseId,
-    entityType: 'case',
-  };
-
-  return this.get({ entity, applicationContext });
-};
-/**
- * get
- * @param entity
- * @param applicationContext
- * @returns {*}
- */
-//TODO should not be exported
-exports.get = ({ entity, applicationContext }) => {
-  const key = getKey(entity);
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
   return client.get({
-    TableName: getTable(entity, applicationContext.environment.stage),
+    TableName: TABLE,
     Key: {
-      [key]: entity[key],
+      pk: caseId,
+      sk: caseId,
     },
   });
 };
+
 /**
  * getCaseByDocketNumber
  * @param docketNumber
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseByDocketNumber = ({ docketNumber, applicationContext }) => {
-  return client.query({
-    TableName: getTable(
-      { entityType: 'case' },
-      applicationContext.environment.stage,
-    ),
-    IndexName: 'DocketNumberIndex',
-    ExpressionAttributeNames: {
-      '#docketNumber': 'docketNumber',
-    },
-    ExpressionAttributeValues: {
-      ':docketNumber': docketNumber,
-    },
-    KeyConditionExpression: '#docketNumber = :docketNumber',
+exports.getCaseByDocketNumber = async ({ docketNumber, applicationContext }) => {
+  return getRecordViaMapping({
+    applicationContext,
+    key: docketNumber,
+    type: 'case',
   });
 };
 
@@ -132,10 +172,13 @@ exports.getCaseByDocketNumber = ({ docketNumber, applicationContext }) => {
 // be refactored to update any type of atomic counter in dynamo
 // if we can pass in table / key
 exports.incrementCounter = applicationContext => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
   return client.updateConsistent({
-    TableName: `efcms-cases-${applicationContext.environment.stage}`,
+    TableName: TABLE,
     Key: {
-      caseId: 'docketNumberCounter',
+      pk: 'docketNumberCounter',
+      sk: 'docketNumberCounter', // TODO: set sk by the year, i.e. 2018
     },
     UpdateExpression: 'ADD #a :x',
     ExpressionAttributeNames: {
@@ -155,11 +198,10 @@ exports.incrementCounter = applicationContext => {
  * @returns {*}
  */
 exports.saveCase = ({ caseToSave, applicationContext }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
   return client.put({
-    TableName: getTable(
-      { entityType: 'case' },
-      applicationContext.environment.stage,
-    ),
+    TableName: TABLE,
     Item: caseToSave,
   });
 };
@@ -170,21 +212,13 @@ exports.saveCase = ({ caseToSave, applicationContext }) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByUser = ({ userId, applicationContext }) =>
-  client.query({
-    TableName: getTable(
-      { entityType: 'case' },
-      applicationContext.environment.stage,
-    ),
-    IndexName: 'UserIdIndex',
-    ExpressionAttributeNames: {
-      '#userId': 'userId',
-    },
-    ExpressionAttributeValues: {
-      ':userId': userId,
-    },
-    KeyConditionExpression: '#userId = :userId',
+exports.getCasesByUser = ({ userId, applicationContext }) => {
+  return getRecordsViaMapping({
+    applicationContext,
+    key: userId,
+    type: 'case',
   });
+}
 
 /**
  * getCasesByIRSAttorney
@@ -193,26 +227,11 @@ exports.getCasesByUser = ({ userId, applicationContext }) =>
  * @returns {*}
  */
 exports.getCasesByIRSAttorney = async ({ irsAttorneyId, applicationContext }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-  const activeCaseMapping = await client.query({
-    TableName: TABLE,
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `${irsAttorneyId}|activeCase`,
-    },
-    KeyConditionExpression: '#pk = :pk',
+  return getRecordsViaMapping({
+    applicationContext,
+    key: irsAttorneyId,
+    type: 'activeCase',
   });
-  const activeCaseIds = activeCaseMapping.map(metadata => metadata.sk);
-
-  const activeCases = await client.batchGet({
-    tableName: `efcms-cases-${applicationContext.environment.stage}`,
-    keys: activeCaseIds.map(activeCaseId => ({
-      caseId: activeCaseId,
-    }))
-  })
-  return activeCases;
 }
   
 /**
@@ -221,18 +240,10 @@ exports.getCasesByIRSAttorney = async ({ irsAttorneyId, applicationContext }) =>
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByStatus = ({ status, applicationContext }) =>
-  client.query({
-    TableName: getTable(
-      { entityType: 'case' },
-      applicationContext.environment.stage,
-    ),
-    IndexName: 'StatusIndex',
-    ExpressionAttributeNames: {
-      '#status': 'status',
-    },
-    ExpressionAttributeValues: {
-      ':status': status,
-    },
-    KeyConditionExpression: '#status = :status',
+exports.getCasesByStatus = async ({ status, applicationContext }) => {
+  return getRecordsViaMapping({
+    applicationContext,
+    key: status,
+    type: 'case-status',
   });
+}
