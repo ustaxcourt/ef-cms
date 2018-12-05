@@ -1,17 +1,41 @@
 import _ from 'lodash';
 import { state } from 'cerebral';
+import moment from 'moment';
 
-const formatCase = caseRecord => {
-  const formatted = Object.assign({}, caseRecord);
-  formatted.docketNumber = _.trimStart(formatted.docketNumber, '0');
-  return formatted;
+const formatDocument = result => {
+  result.createdAtFormatted = moment(result.createdAt).format('l');
+  result.showValidationInput = !result.reviewDate;
+};
+
+const formatCase = (caseDetail, form) => {
+  const result = _.cloneDeep(caseDetail);
+
+  if (result.documents) result.documents.map(formatDocument);
+
+  result.docketNumber = _.trimStart(result.docketNumber, '0');
+  result.irsDateFormatted = moment(result.irsDate).format('L');
+  result.payGovDateFormatted = moment(result.payGovDate).format('L');
+
+  result.showDocumentStatus = !result.irsSendDate;
+  result.showIrsServedDate = !!result.irsSendDate;
+  result.showPayGovIdInput = form.paymentType == 'payGov';
+  result.showPaymentOptions = !(caseDetail.payGovId && !form.paymentType);
+  result.showPaymentRecord = result.payGovId && !form.paymentType;
+  result.showValidationInput = !result.irsSendDate;
+  result.datePetitionSentToIrsMessage = `R served on ${
+    result.irsDateFormatted
+  }`;
+
+  return result;
 };
 
 export const formattedCases = get => {
   const cases = get(state.cases);
   return cases.map(formatCase);
 };
+
 export const formattedCaseDetail = get => {
-  const caseRecord = get(state.caseDetail);
-  return formatCase(caseRecord);
+  const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
+  return formatCase(caseDetail, form);
 };
