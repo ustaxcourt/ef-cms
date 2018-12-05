@@ -1,12 +1,12 @@
 import awsPersistenceGateway from '../../../shared/src/persistence/awsPersistenceGateway';
 
-import { createCase } from '../../../shared/src/business/useCases/createCaseProxy';
-import { getCase } from '../../../shared/src/business/useCases/getCaseProxy';
-import { getCasesByStatus } from '../../../shared/src/business/useCases/getCasesByStatusProxy';
-import { getCasesByUser } from '../../../shared/src/business/useCases/getCasesByUserProxy';
+import { createCase } from '../../../shared/src/proxies/createCaseProxy';
+import { getCase } from '../../../shared/src/proxies/getCaseProxy';
+import { getCasesByStatus } from '../../../shared/src/proxies/getCasesByStatusProxy';
+import { getCasesByUser } from '../../../shared/src/proxies/getCasesByUserProxy';
 import { getUser } from '../../../shared/src/business/useCases/getUser';
-import { sendPetitionToIRS } from '../../../shared/src/business/useCases/sendPetitionToIRSProxy';
-import { updateCase } from '../../../shared/src/business/useCases/updateCaseProxy';
+import { sendPetitionToIRS } from '../../../shared/src/proxies/sendPetitionToIRSProxy';
+import { updateCase } from '../../../shared/src/proxies/updateCaseProxy';
 import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs';
 
 /**
