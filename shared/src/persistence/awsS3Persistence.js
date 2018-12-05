@@ -63,6 +63,19 @@ exports.createUploadPolicy = ({ applicationContext }) =>
       },
     );
   });
+
+/**
+ * getDocumentPolicy
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
+exports.getDocumentUploadPolicy = async ({ applicationContext }) => {
+  const response = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
+  );
+  return response.data;
+};
+
 /**
  * uploadPdf
  * @param policy
