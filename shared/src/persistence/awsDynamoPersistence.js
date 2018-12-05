@@ -185,6 +185,28 @@ exports.getCasesByUser = ({ userId, applicationContext }) =>
     },
     KeyConditionExpression: '#userId = :userId',
   });
+
+/**
+ * getCasesByIRSAttorney
+ * @param userId
+ * @param applicationContext
+ * @returns {*}
+ */
+exports.getCasesByIRSAttorney = ({ irsAttorneyId, applicationContext }) =>
+  client.query({
+    TableName: getTable(
+      { entityType: 'case' },
+      applicationContext.environment.stage,
+    ),
+    IndexName: 'IRSAttorneyIdIndex',
+    ExpressionAttributeNames: {
+      '#irsAttorneyId': 'irsAttorneyId',
+    },
+    ExpressionAttributeValues: {
+      ':irsAttorneyId': irsAttorneyId,
+    },
+    KeyConditionExpression: '#irsAttorneyId = :irsAttorneyId',
+  });
 /**
  * getCasesByStatus
  * @param status

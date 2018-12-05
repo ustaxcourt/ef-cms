@@ -4,6 +4,7 @@ const awsS3Persistence = require('ef-cms-shared/src/persistence/awsS3Persistence
 const irsGateway = require('ef-cms-shared/src/persistence/irsGateway');
 const { createCase } = require('ef-cms-shared/src/business/useCases/createCase');
 const { getCase } = require('ef-cms-shared/src/business/useCases/getCase');
+const { getCases } = require('ef-cms-shared/src/business/useCases/getCases');
 const { getCasesByStatus } = require('ef-cms-shared/src/business/useCases/getCasesByStatus');
 const { getCasesByUser } = require('ef-cms-shared/src/business/useCases/getCasesByUser');
 const { getUser } = require('ef-cms-shared/src/business/useCases/getUser');
@@ -28,6 +29,7 @@ module.exports = {
     return {
       createCase,
       getCase,
+      getCases,
       getCasesByStatus,
       getCasesByUser,
       getUser,
