@@ -118,11 +118,11 @@ export default connect(
               </tr>
             </thead>
             <tbody>
-              {caseDetail.documents.map((item, idx) => (
+              {caseDetail.documents.map((document, idx) => (
                 <tr key={idx}>
                   <td className="responsive-title">
                     <span className="responsive-label">Activity date</span>
-                    {item.createdAtFormatted}
+                    {document.createdAtFormatted}
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
@@ -132,14 +132,14 @@ export default connect(
                       href={
                         baseUrl +
                         '/documents/' +
-                        item.documentId +
+                        document.documentId +
                         '/downloadPolicy'
                       }
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
-                      {item.documentType}
+                      {document.documentType}
                     </a>
                   </td>
                   <td>
@@ -151,19 +151,21 @@ export default connect(
                     {caseDetail.irsSendDate && (
                       <span>R served on {caseDetail.irsDateFormatted}</span>
                     )}
-                    {!caseDetail.irsSendDate && <span>{item.status}</span>}
+                    {!caseDetail.irsSendDate && <span>{document.status}</span>}
                   </td>
                   <td>
-                    {!item.reviewDate && (
+                    {!document.reviewDate && (
                       <span>
                         <input
-                          id={item.documentId}
+                          id={document.documentId}
                           type="checkbox"
-                          name={'validate-' + item.documentType}
-                          onChange={() => toggleDocumentValidation({ item })}
-                          checked={!!item.validated}
+                          name={'validate-' + document.documentType}
+                          onChange={() =>
+                            toggleDocumentValidation({ document })
+                          }
+                          checked={!!document.validated}
                         />
-                        <label htmlFor={item.documentId}>Validate</label>
+                        <label htmlFor={document.documentId}>Validate</label>
                       </span>
                     )}
                   </td>
