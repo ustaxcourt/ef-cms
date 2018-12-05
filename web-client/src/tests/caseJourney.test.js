@@ -116,14 +116,14 @@ describe('Petitions clerk', () => {
       assert.equal(test.getState('currentPage'), 'ValidateCase');
       assert.ok(test.getState('caseDetail'));
       await test.runSequence('toggleDocumentValidation', {
-        item: test.getState('caseDetail').documents[0],
+        document: test.getState('caseDetail').documents[0],
       });
       await test.runSequence('submitUpdateCase');
       await test.runSequence('toggleDocumentValidation', {
-        item: test.getState('caseDetail').documents[1],
+        document: test.getState('caseDetail').documents[1],
       });
       await test.runSequence('toggleDocumentValidation', {
-        item: test.getState('caseDetail').documents[2],
+        document: test.getState('caseDetail').documents[2],
       });
       await test.runSequence('submitUpdateCase');
       await test.runSequence('submitToIRS');

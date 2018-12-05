@@ -62,13 +62,13 @@ export default connect(
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Petition Fee</legend>
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <React.Fragment>
                   <p>Paid by pay.gov</p>
                   <p>{caseDetail.payGovId}</p>
                 </React.Fragment>
               )}
-              {!(caseDetail.payGovId && !form.paymentType) && (
+              {caseDetail.showPaymentOptions && (
                 <ul className="usa-unstyled-list">
                   <li>
                     <input
@@ -84,7 +84,7 @@ export default connect(
                       }}
                     />
                     <label htmlFor="paygov">Paid by pay.gov</label>
-                    {form.paymentType == 'payGov' && (
+                    {caseDetail.showPayGovIdInput && (
                       <React.Fragment>
                         <label htmlFor="paygovid">Payment ID</label>
                         <input
@@ -148,13 +148,15 @@ export default connect(
                   </td>
                   <td>
                     <span className="responsive-label">Status</span>
-                    {caseDetail.irsSendDate && (
+                    {caseDetail.showIrsServedDate && (
                       <span>R served on {caseDetail.irsDateFormatted}</span>
                     )}
-                    {!caseDetail.irsSendDate && <span>{document.status}</span>}
+                    {caseDetail.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
                   </td>
                   <td>
-                    {!document.reviewDate && (
+                    {document.showValidationInput && (
                       <span>
                         <input
                           id={document.documentId}
@@ -171,7 +173,7 @@ export default connect(
                   </td>
                 </tr>
               ))}
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <tr>
                   <td>{caseDetail.payGovDateFormatted}</td>
                   <td>Filing fee paid</td>

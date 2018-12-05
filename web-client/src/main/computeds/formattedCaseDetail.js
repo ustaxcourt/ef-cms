@@ -2,16 +2,27 @@ import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
-const formatCase = caseRecord => {
-  const result = _.cloneDeep(caseRecord);
+const formatDocument = result => {
+  result.createdAtFormatted = moment(result.createdAt).format('l');
+  result.showValidationInput = !result.reviewDate;
+};
+
+const formatCase = (caseDetail, form) => {
+  const result = _.cloneDeep(caseDetail);
+
+  if (result.documents) result.documents.map(formatDocument);
+
   result.docketNumber = _.trimStart(result.docketNumber, '0');
-  if (result.documents) {
-    result.documents.map(document => {
-      document.createdAtFormatted = moment(document.createdAt).format('l');
-    });
-  }
   result.irsDateFormatted = moment(result.irsDate).format('L');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
+
+  result.showDocumentStatus = !result.irsSendDate;
+  result.showIrsServedDate = !!result.irsSendDate;
+  result.showPayGovIdInput = form.paymentType == 'payGov';
+  result.showPaymentOptions = !(caseDetail.payGovId && !form.paymentType);
+  result.showPaymentRecord = result.payGovId && !form.paymentType;
+  result.showValidationInput = !result.irsSendDate;
+
   return result;
 };
 
@@ -21,6 +32,7 @@ export const formattedCases = get => {
 };
 
 export const formattedCaseDetail = get => {
-  const caseRecord = get(state.caseDetail);
-  return formatCase(caseRecord);
+  const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
+  return formatCase(caseDetail, form);
 };
