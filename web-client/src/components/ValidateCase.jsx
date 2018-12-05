@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import moment from 'moment';
 import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
@@ -63,13 +62,13 @@ export default connect(
             <h2>Case Information</h2>
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Petition Fee</legend>
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <React.Fragment>
                   <p>Paid by pay.gov</p>
                   <p>{caseDetail.payGovId}</p>
                 </React.Fragment>
               )}
-              {!(caseDetail.payGovId && !form.paymentType) && (
+              {caseDetail.showPaymentOptions && (
                 <ul className="usa-unstyled-list">
                   <li>
                     <input
@@ -85,7 +84,7 @@ export default connect(
                       }}
                     />
                     <label htmlFor="paygov">Paid by pay.gov</label>
-                    {form.paymentType == 'payGov' && (
+                    {caseDetail.showPayGovIdInput && (
                       <React.Fragment>
                         <label htmlFor="paygovid">Payment ID</label>
                         <input
@@ -119,11 +118,11 @@ export default connect(
               </tr>
             </thead>
             <tbody>
-              {caseDetail.documents.map((item, idx) => (
+              {caseDetail.documents.map((document, idx) => (
                 <tr key={idx}>
                   <td className="responsive-title">
                     <span className="responsive-label">Activity date</span>
-                    {moment(item.createdAt).format('l')}
+                    {document.createdAtFormatted}
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
@@ -133,14 +132,14 @@ export default connect(
                       href={
                         baseUrl +
                         '/documents/' +
-                        item.documentId +
+                        document.documentId +
                         '/downloadPolicy'
                       }
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
-                      {item.documentType}
+                      {document.documentType}
                     </a>
                   </td>
                   <td>
@@ -149,32 +148,34 @@ export default connect(
                   </td>
                   <td>
                     <span className="responsive-label">Status</span>
-                    {caseDetail.irsSendDate && (
-                      <span>
-                        R served on {moment(caseDetail.irsDate).format('L')}
-                      </span>
+                    {caseDetail.showIrsServedDate && (
+                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
-                    {!caseDetail.irsSendDate && <span>{item.status}</span>}
+                    {caseDetail.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
                   </td>
                   <td>
-                    {!item.reviewDate && (
+                    {document.showValidationInput && (
                       <span>
                         <input
-                          id={item.documentId}
+                          id={document.documentId}
                           type="checkbox"
-                          name={'validate-' + item.documentType}
-                          onChange={() => toggleDocumentValidation({ item })}
-                          checked={!!item.validated}
+                          name={'validate-' + document.documentType}
+                          onChange={() =>
+                            toggleDocumentValidation({ document })
+                          }
+                          checked={!!document.validated}
                         />
-                        <label htmlFor={item.documentId}>Validate</label>
+                        <label htmlFor={document.documentId}>Validate</label>
                       </span>
                     )}
                   </td>
                 </tr>
               ))}
-              {caseDetail.payGovId && !form.paymentType && (
+              {caseDetail.showPaymentRecord && (
                 <tr>
-                  <td>{moment(caseDetail.payGovDate).format('l')}</td>
+                  <td>{caseDetail.payGovDateFormatted}</td>
                   <td>Filing fee paid</td>
                   <td />
                   <td />
