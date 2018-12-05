@@ -83,6 +83,10 @@ resource "aws_dynamodb_table" "efcms-east" {
     Name        = "efcms-${var.environment}"
     Environment = "${var.environment}"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_dynamodb_table" "efcms-west" {
@@ -115,5 +119,9 @@ resource "aws_dynamodb_table" "efcms-west" {
   tags {
     Name        = "efcms-${var.environment}"
     Environment = "${var.environment}"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }

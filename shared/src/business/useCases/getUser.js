@@ -8,6 +8,6 @@ exports.getUser = userId => {
   try {
     return new User({ userId });
   } catch (err) {
-    return null; 
+    return null;
   }
 };

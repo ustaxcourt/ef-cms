@@ -2,15 +2,15 @@ const client = require('./dynamodbClientService');
 const Case = require('../business/entities/Case');
 const Document = require('../business/entities/Document');
 
-const stripInternalKeys = (items) => {
-  const strip = (item) => {
+const stripInternalKeys = items => {
+  const strip = item => {
     delete item.sk;
     delete item.pk;
-  }
+  };
   if (!items) {
     return null;
   } else if (items.length) {
-    items.forEach(strip)
+    items.forEach(strip);
   } else {
     strip(items);
   }
@@ -25,7 +25,7 @@ const getTable = (entity, stage) => {
   } else {
     throw new Error('entity type not found');
   }
-}
+};
 
 const getKey = entity => {
   if (entity instanceof Case || entity.entityType === 'case') {
@@ -35,7 +35,7 @@ const getKey = entity => {
   } else {
     throw new Error('entity type not found');
   }
-}
+};
 
 const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
@@ -58,7 +58,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
     keys: ids.map(id => ({
       pk: id,
       sk: id,
-    }))
+    })),
   });
 
   return stripInternalKeys(results);
@@ -100,27 +100,27 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
  * @returns {*}
  */
 exports.createCase = async ({ caseRecord, applicationContext }) => {
-  const result = await client.batchWrite({
+  await client.batchWrite({
     tableName: `efcms-${applicationContext.environment.stage}`,
     items: [
       {
         pk: caseRecord.caseId,
         sk: caseRecord.caseId,
-        ...caseRecord
+        ...caseRecord,
       },
       {
         pk: `${caseRecord.docketNumber}|case`,
         sk: caseRecord.caseId,
       },
       {
-        pk: "new|case-status",
+        pk: 'new|case-status',
         sk: caseRecord.caseId,
       },
       {
         pk: `${caseRecord.userId}|case`,
         sk: caseRecord.caseId,
-      }
-    ]
+      },
+    ],
   });
   return caseRecord;
 };
@@ -177,7 +177,10 @@ exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseByDocketNumber = async ({ docketNumber, applicationContext }) => {
+exports.getCaseByDocketNumber = async ({
+  docketNumber,
+  applicationContext,
+}) => {
   return getRecordViaMapping({
     applicationContext,
     key: docketNumber,
@@ -226,7 +229,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     Key: {
       pk: caseToSave.caseId,
       sk: caseToSave.caseId,
-    }
+    },
   });
 
   const currentStatus = currentCaseState.status;
@@ -237,7 +240,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
       key: {
         pk: `${currentStatus}|case-status`,
         sk: caseToSave.caseId,
-      }
+      },
     });
 
     await client.put({
@@ -245,7 +248,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
       Item: {
         pk: `${caseToSave.status}|case-status`,
         sk: caseToSave.caseId,
-      } 
+      },
     });
   }
 
@@ -255,7 +258,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
       pk: caseToSave.caseId,
       sk: caseToSave.caseId,
       ...caseToSave,
-    }
+    },
   });
   return stripInternalKeys(results);
 };
@@ -272,7 +275,7 @@ exports.getCasesByUser = ({ userId, applicationContext }) => {
     key: userId,
     type: 'case',
   });
-}
+};
 
 /**
  * getCasesByIRSAttorney
@@ -280,14 +283,17 @@ exports.getCasesByUser = ({ userId, applicationContext }) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByIRSAttorney = async ({ irsAttorneyId, applicationContext }) => {
+exports.getCasesByIRSAttorney = async ({
+  irsAttorneyId,
+  applicationContext,
+}) => {
   return getRecordsViaMapping({
     applicationContext,
     key: irsAttorneyId,
     type: 'activeCase',
   });
-}
-  
+};
+
 /**
  * getCasesByStatus
  * @param status
@@ -300,4 +306,4 @@ exports.getCasesByStatus = async ({ status, applicationContext }) => {
     key: status,
     type: 'case-status',
   });
-}
+};

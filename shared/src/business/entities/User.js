@@ -35,9 +35,7 @@ function User(user) {
     if (!this.token) {
       this.token = 'petitionsclerk';
     }
-  }
-
-  else if (this.userId === 'intakeclerk') {
+  } else if (this.userId === 'intakeclerk') {
     if (!this.firstName) {
       this.firstName = 'Test';
     }
@@ -53,9 +51,7 @@ function User(user) {
     if (!this.userId) {
       this.userId = 'intakeclerk';
     }
-  }
-
-  else if (this.userId === 'irsattorney') {
+  } else if (this.userId === 'irsattorney') {
     if (!this.firstName) {
       this.firstName = 'IRS';
     }

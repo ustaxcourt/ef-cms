@@ -55,7 +55,7 @@ describe('User entity', () => {
   it('Creates an invalid user', () => {
     let error = null;
     try {
-      const user = new User({
+      new User({
         userId: '',
       });
     } catch (err) {

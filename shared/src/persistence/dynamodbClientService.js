@@ -15,7 +15,6 @@ const removeAWSGlobalFields = item => {
   return item;
 };
 
-const removeInternalKeys = 
 /**
  * put
  * @param params
@@ -30,7 +29,7 @@ exports.put = params => {
   return documentClient
     .put(params)
     .promise()
-    .then(() => params.Item)
+    .then(() => params.Item);
 };
 /**
  * updateConsistent
@@ -65,9 +64,9 @@ exports.get = params => {
       if (!res.Item) throw new Error(`get failed on ${JSON.stringify(params)}`);
       return removeAWSGlobalFields(res.Item);
     })
-    .catch(err => {
+    .catch(() => {
       throw new Error(`get failed on ${JSON.stringify(params)}`);
-    })
+    });
 };
 
 /**
@@ -104,9 +103,9 @@ exports.batchGet = ({ tableName, keys }) => {
     .batchGet({
       RequestItems: {
         [tableName]: {
-          Keys: keys
-        }
-      }
+          Keys: keys,
+        },
+      },
     })
     .promise()
     .then(result => {
@@ -116,7 +115,6 @@ exports.batchGet = ({ tableName, keys }) => {
       return items;
     });
 };
-
 
 /**
  * batchWrite
@@ -135,15 +133,15 @@ exports.batchWrite = ({ tableName, items }) => {
             Item: item,
             ConditionExpression: `attribute_not_exists(#pk) and attribute_not_exists(#sk)`,
             ExpressionAttributeNames: {
-              "#pk" : item.pk,
-              "#sk" : item.sk
-            }            
-          }
-        }))
-      }
+              '#pk': item.pk,
+              '#sk': item.sk,
+            },
+          },
+        })),
+      },
     })
     .promise();
-}
+};
 
 exports.delete = ({ tableName, key }) => {
   const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -154,7 +152,7 @@ exports.delete = ({ tableName, key }) => {
   return documentClient
     .delete({
       TableName: tableName,
-      Key: key
+      Key: key,
     })
     .promise();
- }
+};
