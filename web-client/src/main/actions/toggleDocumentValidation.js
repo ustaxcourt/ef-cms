@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 export default ({ props, store, get }) => {
-  const { item } = props;
+  const { document } = props;
   const indexToReplace = get(state.caseDetail.documents).findIndex(
-    d => d.documentId === item.documentId,
+    d => d.documentId === document.documentId,
   );
   store.merge(state.caseDetail.documents[indexToReplace], {
-    validated: !item.validated,
+    validated: !document.validated,
   });
 };
