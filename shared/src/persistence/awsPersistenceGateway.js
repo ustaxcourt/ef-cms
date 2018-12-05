@@ -1,9 +1,14 @@
 /**
  * awsPersistenceGateway
  */
-const { getDocumentUploadPolicy, uploadPdf } = require('./awsS3Persistence');
+const {
+  createDocumentMetadataRequest,
+  getDocumentUploadPolicy,
+  uploadPdf,
+} = require('./awsS3Persistence');
 
 module.exports = {
+  createDocumentMetadataRequest,
   getDocumentUploadPolicy,
   uploadPdf,
 };

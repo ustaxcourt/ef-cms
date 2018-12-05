@@ -43,6 +43,33 @@ exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
 };
 
 /**
+ * createDocumentMetadataRequest
+ * @param applicationContext
+ * @param userId
+ * @param documentType
+ * @returns {Promise<*>}
+ */
+exports.createDocumentMetadataRequest = async ({
+  applicationContext,
+  userId,
+  documentType,
+}) => {
+  const userToken = userId; // TODO fix with jwt
+  const response = await axios.post(
+    `${applicationContext.getBaseUrl()}/documents`,
+    {
+      documentType,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+/**
  * createUploadPolicy
  * @param applicationContext
  * @returns {Promise<any>}
