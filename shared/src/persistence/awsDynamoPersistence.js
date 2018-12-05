@@ -2,6 +2,21 @@ const client = require('./dynamodbClientService');
 const Case = require('../business/entities/Case');
 const Document = require('../business/entities/Document');
 
+const stripInternalKeys = (items) => {
+  const strip = (item) => {
+    delete item.sk;
+    delete item.pk;
+  }
+  if (!items) {
+    return null;
+  } else if (items.length) {
+    items.forEach(strip)
+  } else {
+    strip(items);
+  }
+  return items;
+};
+
 const getTable = (entity, stage) => {
   if (entity instanceof Case || entity.entityType === 'case') {
     return `efcms-cases-${stage}`;
@@ -38,13 +53,15 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
 
   const ids = mapping.map(metadata => metadata.sk);
 
-  return await client.batchGet({
+  const results = await client.batchGet({
     tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
       sk: id,
     }))
   });
+
+  return stripInternalKeys(results);
 };
 
 const getRecordViaMapping = async ({ applicationContext, key, type }) => {
@@ -63,13 +80,17 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
 
   if (!mapping) return null;
 
-  return await client.get({
-    tableName: TABLE,
+  const sk = mapping.sk;
+
+  const results = await client.get({
+    TableName: TABLE,
     Key: {
-      pk: key,
-      sk: key,
+      pk: sk,
+      sk: sk,
     },
   });
+
+  return stripInternalKeys(results);
 };
 
 /**
@@ -138,15 +159,16 @@ exports.create = ({ entity, applicationContext }) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
+exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
-  return client.get({
+  const results = await client.get({
     TableName: TABLE,
     Key: {
       pk: caseId,
       sk: caseId,
     },
   });
+  return stripInternalKeys(results);
 };
 
 /**
@@ -197,13 +219,45 @@ exports.incrementCounter = applicationContext => {
  * @param applicationContext
  * @returns {*}
  */
-exports.saveCase = ({ caseToSave, applicationContext }) => {
+exports.saveCase = async ({ caseToSave, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
-
-  return client.put({
+  const currentCaseState = await client.get({
     TableName: TABLE,
-    Item: caseToSave,
+    Key: {
+      pk: caseToSave.caseId,
+      sk: caseToSave.caseId,
+    }
   });
+
+  const currentStatus = currentCaseState.status;
+
+  if (currentStatus !== caseToSave.status) {
+    await client.delete({
+      tableName: TABLE,
+      key: {
+        pk: `${currentStatus}|case-status`,
+        sk: caseToSave.caseId,
+      }
+    });
+
+    await client.put({
+      TableName: TABLE,
+      Item: {
+        pk: `${caseToSave.status}|case-status`,
+        sk: caseToSave.caseId,
+      } 
+    });
+  }
+
+  const results = await client.put({
+    TableName: TABLE,
+    Item: {
+      pk: caseToSave.caseId,
+      sk: caseToSave.caseId,
+      ...caseToSave,
+    }
+  });
+  return stripInternalKeys(results);
 };
 
 /**
