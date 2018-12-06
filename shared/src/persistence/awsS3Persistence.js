@@ -22,26 +22,26 @@ const getS3 = ({ region, s3Endpoint }) => {
  * @param applicationContext
  * @returns {Promise<any>}
  */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
-  return new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).getSignedUrl(
-      'getObject',
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
-        Expires: 120,
-      },
-      (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve({
-          url: data,
-        });
-      },
-    );
-  });
-};
+// exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
+//   return new Promise((resolve, reject) => {
+//     getS3(applicationContext.environment).getSignedUrl(
+//       'getObject',
+//       {
+//         Bucket: applicationContext.environment.documentsBucketName,
+//         Key: documentId,
+//         Expires: 120,
+//       },
+//       (err, data) => {
+//         if (err) {
+//           return reject(err);
+//         }
+//         resolve({
+//           url: data,
+//         });
+//       },
+//     );
+//   });
+// };
 
 /**
  * createUploadPolicy
