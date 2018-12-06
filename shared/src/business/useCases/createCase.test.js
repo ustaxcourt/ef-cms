@@ -28,7 +28,7 @@ describe('Create case', () => {
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
-        createDocketNumber: () => Promise.resolve('00000-00'),
+        createDocketNumber: () => Promise.resolve('00101-00'),
       },
     };
     const caseRecord = await createCase({
@@ -46,7 +46,7 @@ describe('Create case', () => {
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
-        createDocketNumber: () => Promise.resolve('00000-00'),
+        createDocketNumber: () => Promise.resolve('00101-00'),
       },
     };
     try {

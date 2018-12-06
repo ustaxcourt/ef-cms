@@ -1,10 +1,13 @@
+# Electronic Filing / Case Management System
+
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+
 # Building Everything
 If you'd like to run the same checks that run in Jenkins (except Sonarqube at the moment...) locally using docker containers, run the following:
 
 `./build-all.sh`
 
 This will run the lint, shellcheck, audit, build, test, cypress, cerebral tests, pa11y, etc over all the components.
-
 
 # Running / Verifing the Project via Docker
 
@@ -22,38 +25,27 @@ In order to kill that docker container, you will need to run the following comma
 
 `./kill-docker-run.sh`
 
-# Electronic Filing / Case Management System
-
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
-
-## Running this project locally
+## Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Each must be run in order to function.
 
-### UI (Terminal A)
+#### Prerequisites
+- node v8.10.0
+- npm 6.4.1
 
 #### Setup
 
-- `cd web-client`
-- `npm i`
+Both the web-client and efcms-service share code that exists in the business directory; therefore, before you can run either, you need to run an npm install inside the business directory.
 
-#### Running
+- `cd business && npm i`
+- `cd ../web-client && npm i`
+- `cd ../efcms-service && npm i`
 
-- `cd web-client`
-- `npm start`
+#### Terminal A
+- `cd web-client && npm start`
 
-### API (Terminal B)
-
-#### Setup
-
-- `cd efcms-service`
-- `npm i`
-- `npm run install:dynamodb`
-
-#### Running
-
-- `cd efcms-service`
-- `npm start`
+#### Terminal B
+- `cd efcms-service && npm start`
 
 ## CI/CD Setup
 
