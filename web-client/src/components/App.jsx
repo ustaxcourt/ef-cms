@@ -54,7 +54,7 @@ class App extends React.Component {
         </a>
         <UsaBanner />
         <Header />
-        <main tabIndex="-1" id="main-content" role="main">
+        <main id="main-content" role="main">
           <CurrentPage />
         </main>
         <Footer />
