@@ -1,5 +1,6 @@
 const { S3 } = require('aws-sdk');
 const axios = require('axios');
+const uuidv4 = require('uuid/v4');
 
 /**
  * getS3
@@ -63,14 +64,27 @@ exports.createUploadPolicy = ({ applicationContext }) =>
       },
     );
   });
+
+/**
+ * getDocumentPolicy
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
+const getDocumentUploadPolicy = async ({ applicationContext }) => {
+  const response = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
+  );
+  return response.data;
+};
+
 /**
  * uploadPdf
  * @param policy
- * @param documentId
  * @param file
  * @returns {Promise<*>}
  */
-exports.uploadPdf = async ({ policy, documentId, file }) => {
+const uploadPdf = async ({ policy, file }) => {
+  const documentId = uuidv4();
   const formData = new FormData();
   formData.append('key', documentId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
@@ -84,11 +98,43 @@ exports.uploadPdf = async ({ policy, documentId, file }) => {
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
-  const result = await axios.post(policy.url, formData, {
+  await axios.post(policy.url, formData, {
     headers: {
       /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
       'content-type': `multipart/form-data; boundary=${formData._boundary}`,
     },
   });
-  return result;
+  return documentId;
+};
+
+exports.uploadPdfsForNewCase = async ({
+  applicationContext,
+  caseInitiator,
+  fileHasUploaded,
+}) => {
+  const policy = await getDocumentUploadPolicy({ applicationContext });
+
+  const petitionDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.petitionFile,
+  });
+  fileHasUploaded();
+
+  const requestForPlaceOfTrialDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.requestForPlaceOfTrial,
+  });
+  fileHasUploaded();
+
+  const statementOfTaxpayerIdentificationNumberDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+  });
+  fileHasUploaded();
+
+  return {
+    petitionDocumentId,
+    requestForPlaceOfTrialDocumentId,
+    statementOfTaxpayerIdentificationNumberDocumentId,
+  };
 };
