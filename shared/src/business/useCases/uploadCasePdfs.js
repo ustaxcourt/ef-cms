@@ -1,45 +1,6 @@
-const axios = require('axios');
-
 const Case = require('../entities/Case');
+const Document = require('../entities/Document');
 
-/**
- * getDocumentPolicy
- * @param applicationContext
- * @returns {Promise<*>}
- */
-// TODO: move to persistence gateway
-const getDocumentPolicy = async ({ applicationContext }) => {
-  const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
-  );
-  return response.data;
-};
-/**
- * createDocumentMetadata
- * @param applicationContext
- * @param userId
- * @param documentType
- * @returns {Promise<*>}
- */
-const createDocumentMetadata = async ({
-  applicationContext,
-  userId,
-  documentType,
-}) => {
-  const userToken = userId; // TODO fix with jwt
-  const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/documents`,
-    {
-      documentType,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    },
-  );
-  return response.data;
-};
 /**
  * uploadCasePdfs
  * @param applicationContext
@@ -54,48 +15,51 @@ exports.uploadCasePdfs = async ({
   userId,
   fileHasUploaded,
 }) => {
-  const policy = await getDocumentPolicy({ applicationContext });
+  const policy = await applicationContext
+    .getPersistenceGateway()
+    .getUploadPolicy({ applicationContext });
 
-  const petitionDocument = await createDocumentMetadata({
-    applicationContext,
+  const petitionDocumentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadPdf({
+      policy,
+      file: caseInitiator.petitionFile,
+    });
+  fileHasUploaded();
+
+  const petitionDocument = new Document({
+    documentType: Case.documentTypes.answer,
     userId: userId,
-    documentType: Case.documentTypes.petitionFile,
+    documentId: petitionDocumentId,
   });
 
-  const requestForPlaceOfTrialDocument = await createDocumentMetadata({
-    applicationContext,
-    userId: userId,
+  const requestForPlaceOfTrialDocumentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadPdf({
+      policy,
+      file: caseInitiator.requestForPlaceOfTrial,
+    });
+  fileHasUploaded();
+
+  const requestForPlaceOfTrialDocument = new Document({
     documentType: Case.documentTypes.requestForPlaceOfTrial,
+    userId: userId,
+    documentId: requestForPlaceOfTrialDocumentId,
   });
 
-  const statementOfTaxpayerIdentificationNumberDocument = await createDocumentMetadata(
-    {
-      applicationContext,
-      userId: userId,
-      documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
-    },
-  );
-
-  await applicationContext.getPersistenceGateway().uploadPdf({
-    policy,
-    documentId: petitionDocument.documentId,
-    file: caseInitiator.petitionFile,
-  });
+  const statementOfTaxpayerIdentificationNumberDocumentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadPdf({
+      policy,
+      file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+    });
   fileHasUploaded();
 
-  await applicationContext.getPersistenceGateway().uploadPdf({
-    policy,
-    documentId: requestForPlaceOfTrialDocument.documentId,
-    file: caseInitiator.requestForPlaceOfTrial,
+  const statementOfTaxpayerIdentificationNumberDocument = new Document({
+    documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
+    userId: userId,
+    documentId: statementOfTaxpayerIdentificationNumberDocumentId,
   });
-  fileHasUploaded();
-
-  await applicationContext.getPersistenceGateway().uploadPdf({
-    policy,
-    documentId: statementOfTaxpayerIdentificationNumberDocument.documentId,
-    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
-  });
-  fileHasUploaded();
 
   return {
     petitionDocument,

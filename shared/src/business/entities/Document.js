@@ -37,7 +37,6 @@ const documentSchema = joi.object().keys({
  */
 function Document(rawDocument) {
   Object.assign(this, rawDocument, {
-    documentId: uuidv4(),
     createdAt: new Date().toISOString(),
   });
 }

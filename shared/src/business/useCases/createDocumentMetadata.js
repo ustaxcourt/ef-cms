@@ -14,7 +14,7 @@ exports.createDocumentMetadata = ({
     documentType: rawDocument.documentType,
   });
   documentToCreate.validate();
-  return applicationContext.persistence.createDocumentMetadata({
+  return applicationContext.getPersistenceGateway().createDocumentMetadata({
     documentToCreate: documentToCreate,
     applicationContext,
   });

@@ -7,7 +7,7 @@
  * @returns {Promise.<string>}
  */
 exports.createDocketNumber = async applicationContext => {
-  const id = await applicationContext.persistence.incrementCounter(
+  const id = await  applicationContext.getPersistenceGateway().incrementCounter(
     applicationContext,
   );
   const plus100 = id + 100;

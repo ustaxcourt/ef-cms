@@ -278,12 +278,12 @@ exports.getCasesByUser = ({ userId, applicationContext }) => {
 };
 
 /**
- * getCasesByIRSAttorney
+ * getCasesForRespondent
  * @param userId
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByIRSAttorney = async ({
+exports.getCasesForRespondent = async ({
   irsAttorneyId,
   applicationContext,
 }) => {

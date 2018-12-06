@@ -7,8 +7,10 @@ const { createDocketNumber } = require('./docketNumberGenerator');
 describe('Create docket number', function() {
   it('should create a docketNumber', async () => {
     const result = await createDocketNumber({
-      persistence: {
-        incrementCounter: () => Promise.resolve(123),
+      getPersistenceGateway: () => {
+        return {
+          incrementCounter: () => Promise.resolve(123),
+        };
       },
       environment: {
         stage: 'local',

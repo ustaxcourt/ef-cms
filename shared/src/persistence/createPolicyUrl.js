@@ -3,7 +3,7 @@
  * @param applicationContext
  */
 exports.createUploadPolicy = ({ applicationContext }) => {
-  return applicationContext.persistence.createUploadPolicy({
+  return  applicationContext.getPersistenceGateway().createUploadPolicy({
     applicationContext,
   });
 };

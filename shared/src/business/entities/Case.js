@@ -177,6 +177,7 @@ Case.documentTypes = {
   requestForPlaceOfTrial: 'Request for Place of Trial',
   statementOfTaxpayerIdentificationNumber:
     'Statement of Taxpayer Identification Number',
+  answer: 'Answer',
 };
 
 module.exports = Case;
