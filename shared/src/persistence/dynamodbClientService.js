@@ -37,6 +37,7 @@ exports.put = params => {
  * @returns {*}
  */
 exports.updateConsistent = params => {
+  // TODO: refactor: this method is not generic enough; it expects all updates to return back an object with a 'id' property..
   const documentClient = new AWS.DynamoDB.DocumentClient({
     region: process.env.MASTER_REGION || 'us-east-1',
     endpoint: process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
@@ -61,7 +62,6 @@ exports.get = params => {
     .get(params)
     .promise()
     .then(res => {
-      if (!res.Item) throw new Error(`get failed on ${JSON.stringify(params)}`);
       return removeAWSGlobalFields(res.Item);
     })
     .catch(() => {
