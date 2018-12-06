@@ -31,11 +31,13 @@ describe('Create case lambda', function() {
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         createdAt: '',
       });
+      sinon.stub(client, 'batchWrite').resolves([]);
       sinon.stub(client, 'updateConsistent').resolves(1);
     });
 
     afterEach(function() {
       client.put.restore();
+      client.batchWrite.restore();
       client.updateConsistent.restore();
     });
 

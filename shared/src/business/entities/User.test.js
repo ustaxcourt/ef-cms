@@ -2,20 +2,65 @@ const assert = require('assert');
 
 const User = require('./User');
 
-describe('Petition entity', () => {
-  it('Creates a valid petition', () => {
+describe('User entity', () => {
+  it('Creates a valid taxpayer user', () => {
     const user = new User({
-      userId: 'userId',
+      userId: 'taxpayer',
       role: 'Tester',
       firstName: 'firstName',
       lastName: 'lastName',
     });
     assert.ok(user.isValid());
   });
-  it('Creates an invalid petition', () => {
+
+  it('Creates a valid petitionsclerk user', () => {
     const user = new User({
-      userId: '',
+      userId: 'petitionsclerk',
+      role: 'Tester',
+      firstName: 'firstName',
+      lastName: 'lastName',
     });
-    assert.ok(!user.isValid());
+    assert.ok(user.isValid());
+  });
+
+  it('Creates a valid irsattorney user', () => {
+    const user = new User({
+      firstName: 'firstName',
+      lastName: 'bob',
+      role: 'Tester',
+      barNumber: 'gg',
+      token: 'abc',
+      userId: 'irsattorney',
+    });
+    assert.ok(user.isValid());
+  });
+
+  it('Creates a valid irsattorney user', () => {
+    const user = new User({
+      userId: 'irsattorney',
+    });
+    assert.ok(user.isValid());
+  });
+
+  it('Creates a valid irsattorney user', () => {
+    const user = new User({
+      userId: 'intakeclerk',
+      role: 'Tester',
+      firstName: 'firstName',
+      lastName: 'lastName',
+    });
+    assert.ok(user.isValid());
+  });
+
+  it('Creates an invalid user', () => {
+    let error = null;
+    try {
+      new User({
+        userId: '',
+      });
+    } catch (err) {
+      error = err;
+    }
+    assert.ok(error);
   });
 });
