@@ -33,13 +33,14 @@ describe('Send petition to IRS function', function() {
   describe('success', function() {
     before(function() {
       sinon.stub(client, 'put').resolves(item);
+      sinon.stub(client, 'delete').resolves(item);
       sinon.stub(client, 'get').resolves(item);
     });
 
     after(function() {
       client.put.restore();
       client.get.restore();
-
+      client.delete.restore();
     });
 
     [
