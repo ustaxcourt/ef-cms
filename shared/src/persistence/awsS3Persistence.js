@@ -1,5 +1,7 @@
 const { S3 } = require('aws-sdk');
 const axios = require('axios');
+const uuidv4 = require('uuid/v4');
+
 
 /**
  * getS3
@@ -66,11 +68,11 @@ exports.createUploadPolicy = ({ applicationContext }) =>
 /**
  * uploadPdf
  * @param policy
- * @param documentId
  * @param file
  * @returns {Promise<*>}
  */
-exports.uploadPdf = async ({ policy, documentId, file }) => {
+exports.uploadPdf = async ({ policy, file }) => {
+  const documentId = uuidv4();
   const formData = new FormData();
   formData.append('key', documentId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
@@ -84,11 +86,11 @@ exports.uploadPdf = async ({ policy, documentId, file }) => {
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
-  const result = await axios.post(policy.url, formData, {
+  await axios.post(policy.url, formData, {
     headers: {
       /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
       'content-type': `multipart/form-data; boundary=${formData._boundary}`,
     },
   });
-  return result;
+  return documentId;
 };

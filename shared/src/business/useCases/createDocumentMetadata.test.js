@@ -12,11 +12,13 @@ describe('Create case', () => {
 
   it('Success', async () => {
     applicationContext = {
-      persistence: {
-        createDocumentMetadata: () =>
-          Promise.resolve({
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
+      getPersistenceGateway: () => {
+        return {
+          createDocumentMetadata: () =>
+            Promise.resolve({
+              documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
       },
       environment: { stage: 'local' },
     };
@@ -29,8 +31,10 @@ describe('Create case', () => {
 
   it('failure with null metadata', async () => {
     applicationContext = {
-      persistence: {
-        createDocumentMetadata: () => Promise.reject(new Error('problem')),
+      getPersistenceGateway: () => {
+        return {
+          createDocumentMetadata: () => Promise.reject(new Error('problem')),
+        };
       },
       environment: { stage: 'local' },
     };

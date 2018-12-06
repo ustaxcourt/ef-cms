@@ -7,7 +7,7 @@ exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   if (!documentId) {
     throw new Error('documentId is required');
   }
-  return applicationContext.persistence.getDownloadPolicyUrl({
+  return  applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     documentId,
     applicationContext,
   });

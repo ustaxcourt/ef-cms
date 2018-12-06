@@ -1,7 +1,7 @@
 const awsDynamoPersistence = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
 const awsS3Persistence = require('ef-cms-shared/src/persistence/awsS3Persistence');
-const irsGateway = require('ef-cms-shared/src/persistence/irsGateway');
+const irsGateway = require('../../shared/src/external/irsGateway');
 const { createCase } = require('ef-cms-shared/src/business/useCases/createCase');
 const { getCase } = require('ef-cms-shared/src/business/useCases/getCase');
 const { getCases } = require('ef-cms-shared/src/business/useCases/getCases');
@@ -11,12 +11,14 @@ const { getUser } = require('ef-cms-shared/src/business/useCases/getUser');
 const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS');
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs');
-const { getCasesByIRSAttorney } = require('ef-cms-shared/src/business/useCases/getCasesByIRSAttorney');
+const { getCasesForRespondent } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent');
 
 module.exports = {
-  persistence: {
-    ...awsDynamoPersistence,
-    ...awsS3Persistence
+  getPersistenceGateway: () => {
+    return {
+      ...awsDynamoPersistence,
+      ...awsS3Persistence
+    }
   },
   docketNumberGenerator,
   irsGateway,
@@ -37,7 +39,7 @@ module.exports = {
       sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
-      getCasesByIRSAttorney,
+      getCasesForRespondent,
     };
   },
 };

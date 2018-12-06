@@ -17,12 +17,12 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {
-    caseRecord = await applicationContext.persistence.getCaseByCaseId({
+    caseRecord = await  applicationContext.getPersistenceGateway().getCaseByCaseId({
       caseId,
       applicationContext,
     });
   } else if (Case.isValidDocketNumber(caseId)) {
-    return applicationContext.persistence.getCaseByDocketNumber({
+    return  applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       docketNumber: caseId,
       applicationContext,
     });
