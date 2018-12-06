@@ -9,7 +9,7 @@
 exports.createDocketNumber = async applicationContext => {
   const id = await  applicationContext.getPersistenceGateway().incrementCounter(
     applicationContext,
-  );
+  });
   const plus100 = id + 100;
   const last2YearDigits = new Date()
     .getFullYear()

@@ -13,9 +13,9 @@ export default async ({ applicationContext, get, store }) => {
   };
 
   const {
-    petitionDocument,
-    requestForPlaceOfTrialDocument,
-    statementOfTaxpayerIdentificationNumberDocument,
+    petitionDocumentId,
+    requestForPlaceOfTrialDocumentId,
+    statementOfTaxpayerIdentificationNumberDocumentId,
   } = await useCases.uploadCasePdfs({
     applicationContext,
     caseInitiator,
@@ -26,9 +26,15 @@ export default async ({ applicationContext, get, store }) => {
   await useCases.createCase({
     applicationContext,
     documents: [
-      petitionDocument,
-      requestForPlaceOfTrialDocument,
-      statementOfTaxpayerIdentificationNumberDocument,
+      { documentType: 'Petition', documentId: petitionDocumentId },
+      {
+        documentType: 'Request for Place of Trial',
+        documentId: requestForPlaceOfTrialDocumentId,
+      },
+      {
+        documentType: 'Statement of Taxpayer Identification Number',
+        documentId: statementOfTaxpayerIdentificationNumberDocumentId,
+      },
     ],
     userId: user.userId,
   });

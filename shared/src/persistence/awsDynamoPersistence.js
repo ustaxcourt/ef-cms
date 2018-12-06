@@ -1,6 +1,4 @@
 const client = require('./dynamodbClientService');
-const Case = require('../business/entities/Case');
-const Document = require('../business/entities/Document');
 
 const stripInternalKeys = items => {
   const strip = item => {
@@ -15,26 +13,6 @@ const stripInternalKeys = items => {
     strip(items);
   }
   return items;
-};
-
-const getTable = (entity, stage) => {
-  if (entity instanceof Case || entity.entityType === 'case') {
-    return `efcms-cases-${stage}`;
-  } else if (entity instanceof Document || entity.entityType === 'document') {
-    return `efcms-documents-${stage}`;
-  } else {
-    throw new Error('entity type not found');
-  }
-};
-
-const getKey = entity => {
-  if (entity instanceof Case || entity.entityType === 'case') {
-    return 'caseId';
-  } else if (entity instanceof Document || entity.entityType === 'document') {
-    return 'documentId';
-  } else {
-    throw new Error('entity type not found');
-  }
 };
 
 const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
@@ -132,19 +110,10 @@ exports.createCase = async ({ caseRecord, applicationContext }) => {
  * @returns {*}
  */
 exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
-  return this.create({ entity: documentToCreate, applicationContext });
-};
-
-/**
- * create
- * @param entity
- * @param applicationContext
- * @returns {*}
- */
-exports.create = ({ entity, applicationContext }) => {
-  const key = getKey(entity);
+  const entity = documentToCreate;
+  const key = 'documentId';
   return client.put({
-    TableName: getTable(entity, applicationContext.environment.stage),
+    TableName: `efcms-documents-${applicationContext.environment.stage}`,
     Item: entity,
     ConditionExpression: `attribute_not_exists(#${key})`,
     ExpressionAttributeNames: {
@@ -196,7 +165,7 @@ exports.getCaseByDocketNumber = async ({
 // TODO: Hard coded to update the docketNumberCounter, but should
 // be refactored to update any type of atomic counter in dynamo
 // if we can pass in table / key
-exports.incrementCounter = applicationContext => {
+exports.incrementCounter = ({ applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   return client.updateConsistent({
