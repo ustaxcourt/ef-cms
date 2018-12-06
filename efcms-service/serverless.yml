@@ -290,7 +290,7 @@ resources:
 
 functions:
   createPolicyUrl:
-    handler: src/documents/createPolicyUrl.create
+    handler: src/documents/getUploadPolicy.create
     events:
       - http:
           path: v1/documents/uploadPolicy

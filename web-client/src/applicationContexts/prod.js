@@ -1,4 +1,13 @@
-import awsPersistenceGateway from '../../../shared/src/persistence/awsPersistenceGateway';
+const {
+  uploadPdf,
+  uploadPdfsForNewCase
+} = require('../../../shared/src/persistence/awsS3Persistence');
+const {
+  getDownloadPolicyUrl,
+} = require('../../../shared/src/proxies/getDownloadPolicyUrlProxy');
+const {
+  getUploadPolicy,
+} = require('../../../shared/src/proxies/getUploadPolicyProxy');
 
 import { createCase } from '../../../shared/src/proxies/createCaseProxy';
 import { getCase } from '../../../shared/src/proxies/getCaseProxy';
@@ -17,7 +26,12 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:8080';
   },
   getPersistenceGateway: () => {
-    return awsPersistenceGateway;
+    return {
+      uploadPdf,
+      getDownloadPolicyUrl,
+      getUploadPolicy,
+      uploadPdfsForNewCase
+    };
   },
   getUseCases: () => {
     return {
