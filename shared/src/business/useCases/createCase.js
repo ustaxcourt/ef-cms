@@ -1,4 +1,5 @@
 const Case = require('../entities/Case');
+
 /**
  * createCase
  *

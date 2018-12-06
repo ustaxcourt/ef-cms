@@ -1,6 +1,8 @@
 const { S3 } = require('aws-sdk');
 const axios = require('axios');
 
+const Document = require('../business/entities/Document');
+
 /**
  * getS3
  * @param region
@@ -43,33 +45,6 @@ exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
 };
 
 /**
- * createDocumentMetadataRequest
- * @param applicationContext
- * @param userId
- * @param documentType
- * @returns {Promise<*>}
- */
-exports.createDocumentMetadataRequest = async ({
-  applicationContext,
-  userId,
-  documentType,
-}) => {
-  const userToken = userId; // TODO fix with jwt
-  const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/documents`,
-    {
-      documentType,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    },
-  );
-  return response.data;
-};
-
-/**
  * createUploadPolicy
  * @param applicationContext
  * @returns {Promise<any>}
@@ -96,7 +71,7 @@ exports.createUploadPolicy = ({ applicationContext }) =>
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentUploadPolicy = async ({ applicationContext }) => {
+const getDocumentUploadPolicy = async ({ applicationContext }) => {
   const response = await axios.get(
     `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
   );
@@ -110,7 +85,7 @@ exports.getDocumentUploadPolicy = async ({ applicationContext }) => {
  * @param file
  * @returns {Promise<*>}
  */
-exports.uploadPdf = async ({ policy, documentId, file }) => {
+const uploadPdf = async ({ policy, documentId, file }) => {
   const formData = new FormData();
   formData.append('key', documentId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
@@ -131,4 +106,43 @@ exports.uploadPdf = async ({ policy, documentId, file }) => {
     },
   });
   return result;
+};
+
+exports.uploadPdfsForNewCase = async ({
+  applicationContext,
+  caseInitiator,
+  fileHasUploaded,
+}) => {
+  const petitionDocumentId = Document.generateUuid();
+  const requestForPlaceOfTrialDocumentId = Document.generateUuid();
+  const statementOfTaxpayerIdentificationNumberDocumentId = Document.generateUuid();
+
+  const policy = await getDocumentUploadPolicy({ applicationContext });
+
+  await uploadPdf({
+    policy,
+    documentId: petitionDocumentId,
+    file: caseInitiator.petitionFile,
+  });
+  fileHasUploaded();
+
+  await uploadPdf({
+    policy,
+    documentId: requestForPlaceOfTrialDocumentId,
+    file: caseInitiator.requestForPlaceOfTrial,
+  });
+  fileHasUploaded();
+
+  await uploadPdf({
+    policy,
+    documentId: statementOfTaxpayerIdentificationNumberDocumentId,
+    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+  });
+  fileHasUploaded();
+
+  return {
+    petitionDocumentId,
+    requestForPlaceOfTrialDocumentId,
+    statementOfTaxpayerIdentificationNumberDocumentId,
+  };
 };
