@@ -166,8 +166,14 @@ Case.isValidCaseId = caseId =>
  * @param docketNumber
  * @returns {*|boolean}
  */
-Case.isValidDocketNumber = docketNumber =>
-  docketNumber && /\d{5}-\d{2}/.test(docketNumber);
+Case.isValidDocketNumber = docketNumber => {
+  return (
+    docketNumber &&
+    /^\d{5}-\d{2}$/.test(docketNumber) &&
+    parseInt(docketNumber.split('-')[0]) > 100
+  );
+};
+
 /**
  * documentTypes
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string}}

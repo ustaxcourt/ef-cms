@@ -16,12 +16,18 @@ The end result of this is not a dev, staging, or production website, but is inst
 ## Prerequisites
 
 - [Install Terraform](https://www.terraform.io/downloads.html) locally. Terraform will build AWS infrastructure automatically.
-- [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/). - [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) locally. - In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a user or role with administrator privileges (e.g. attach the `AdministratorAccess` policy). - [Configure the AWS CLI account](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html) on your local machine to use the role or user you just created in IAM.
+- [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
+- [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) locally.
+- In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a user or role with administrator privileges (e.g. attach the `AdministratorAccess` policy).
+- [Configure the AWS CLI account](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html) on your local machine to use the role or user you just created in IAM.
 - Clone this GitHub repository locally.
 - [Create a new GitHub account](https://github.com/join), with read-level access to the repository, which Jenkins will use to interact with GitHub. (GitHub describes these as “bot accounts” or “machine accounts,” and they are the exception to GitHub’s rule that accounts are intended for humans.)
-- [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build. - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
+- [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
+- [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - [Create a token](https://sonarcloud.io/account/security) that Jenkins can use to interact with SonarCloud. (This will be referred to as `SONAR_TOKEN` when setting up Jenkins.)
-  - There are two sub-projects to the EF-CMS — the front-end (the UI) and the back-end (the API). Each is handled separately by Jenkins and SonarCloud. - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.) - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
+  - There are two sub-projects to the EF-CMS — the front-end (the UI) and the back-end (the API). Each is handled separately by Jenkins and SonarCloud.
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
 
 ## Setup Steps
 
