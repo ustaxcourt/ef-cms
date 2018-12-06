@@ -53,6 +53,7 @@ exports.createCase = ({ caseRecord, applicationContext }) => {
 exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
   return this.create({ entity: documentToCreate, applicationContext });
 };
+
 /**
  * create
  * @param entity
@@ -70,6 +71,7 @@ exports.create = ({ entity, applicationContext }) => {
     },
   });
 };
+
 /**
  * getCaseByCaseId
  * @param caseId
@@ -84,6 +86,7 @@ exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
 
   return this.get({ entity, applicationContext });
 };
+
 /**
  * get
  * @param entity
@@ -100,6 +103,7 @@ exports.get = ({ entity, applicationContext }) => {
     },
   });
 };
+
 /**
  * getCaseByDocketNumber
  * @param docketNumber
@@ -185,6 +189,7 @@ exports.getCasesByUser = ({ userId, applicationContext }) =>
     },
     KeyConditionExpression: '#userId = :userId',
   });
+
 /**
  * getCasesByStatus
  * @param status
