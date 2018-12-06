@@ -1,7 +1,5 @@
 const { S3 } = require('aws-sdk');
 const axios = require('axios');
-const uuidv4 = require('uuid/v4');
-
 
 /**
  * getS3
@@ -23,26 +21,26 @@ const getS3 = ({ region, s3Endpoint }) => {
  * @param applicationContext
  * @returns {Promise<any>}
  */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
-  return new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).getSignedUrl(
-      'getObject',
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
-        Expires: 120,
-      },
-      (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve({
-          url: data,
-        });
-      },
-    );
-  });
-};
+// exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
+//   return new Promise((resolve, reject) => {
+//     getS3(applicationContext.environment).getSignedUrl(
+//       'getObject',
+//       {
+//         Bucket: applicationContext.environment.documentsBucketName,
+//         Key: documentId,
+//         Expires: 120,
+//       },
+//       (err, data) => {
+//         if (err) {
+//           return reject(err);
+//         }
+//         resolve({
+//           url: data,
+//         });
+//       },
+//     );
+//   });
+// };
 
 /**
  * createUploadPolicy
@@ -65,13 +63,26 @@ exports.createUploadPolicy = ({ applicationContext }) =>
       },
     );
   });
+
+/**
+ * getDocumentPolicy
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
+const getDocumentUploadPolicy = async ({ applicationContext }) => {
+  const response = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
+  );
+  return response.data;
+};
+
 /**
  * uploadPdf
  * @param policy
  * @param file
  * @returns {Promise<*>}
  */
-exports.uploadPdf = async ({ policy, file }) => {
+const uploadPdf = async ({ policy, file }) => {
   const documentId = uuidv4();
   const formData = new FormData();
   formData.append('key', documentId);
@@ -93,4 +104,36 @@ exports.uploadPdf = async ({ policy, file }) => {
     },
   });
   return documentId;
+};
+
+exports.uploadPdfsForNewCase = async ({
+  applicationContext,
+  caseInitiator,
+  fileHasUploaded,
+}) => {
+  const policy = await getDocumentUploadPolicy({ applicationContext });
+
+  const petitionDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.petitionFile,
+  });
+  fileHasUploaded();
+
+  const requestForPlaceOfTrialDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.requestForPlaceOfTrial,
+  });
+  fileHasUploaded();
+
+  const statementOfTaxpayerIdentificationNumberDocumentId = await uploadPdf({
+    policy,
+    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+  });
+  fileHasUploaded();
+
+  return {
+    petitionDocumentId,
+    requestForPlaceOfTrialDocumentId,
+    statementOfTaxpayerIdentificationNumberDocumentId,
+  };
 };

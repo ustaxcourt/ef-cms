@@ -1,5 +1,4 @@
-const Case = require('../entities/Case');
-const Document = require('../entities/Document');
+const CaseInitiator = require('../entities/CaseInitiator');
 
 /**
  * uploadCasePdfs
@@ -12,58 +11,18 @@ const Document = require('../entities/Document');
 exports.uploadCasePdfs = async ({
   applicationContext,
   caseInitiator,
-  userId,
   fileHasUploaded,
 }) => {
-  const policy = await applicationContext
-    .getPersistenceGateway()
-    .getUploadPolicy({ applicationContext });
+  caseInitiator = new CaseInitiator(caseInitiator);
+  caseInitiator = caseInitiator.exportObject();
 
-  const petitionDocumentId = await applicationContext
+  const documentIDs = await applicationContext
     .getPersistenceGateway()
-    .uploadPdf({
-      policy,
-      file: caseInitiator.petitionFile,
+    .uploadPdfsForNewCase({
+      applicationContext,
+      caseInitiator,
+      fileHasUploaded,
     });
-  fileHasUploaded();
 
-  const petitionDocument = new Document({
-    documentType: Case.documentTypes.answer,
-    userId: userId,
-    documentId: petitionDocumentId,
-  });
-
-  const requestForPlaceOfTrialDocumentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadPdf({
-      policy,
-      file: caseInitiator.requestForPlaceOfTrial,
-    });
-  fileHasUploaded();
-
-  const requestForPlaceOfTrialDocument = new Document({
-    documentType: Case.documentTypes.requestForPlaceOfTrial,
-    userId: userId,
-    documentId: requestForPlaceOfTrialDocumentId,
-  });
-
-  const statementOfTaxpayerIdentificationNumberDocumentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadPdf({
-      policy,
-      file: caseInitiator.statementOfTaxpayerIdentificationNumber,
-    });
-  fileHasUploaded();
-
-  const statementOfTaxpayerIdentificationNumberDocument = new Document({
-    documentType: Case.documentTypes.statementOfTaxpayerIdentificationNumber,
-    userId: userId,
-    documentId: statementOfTaxpayerIdentificationNumberDocumentId,
-  });
-
-  return {
-    petitionDocument,
-    requestForPlaceOfTrialDocument,
-    statementOfTaxpayerIdentificationNumberDocument,
-  };
+  return documentIDs;
 };

@@ -11,7 +11,7 @@
     "dist": "rm -rf dist; USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src && stylelint ./src/**/*.scss",
     "test": "jest ./**/tests/*.test.js",
-    "test:pa11y": "node pa11y.js",
+    "test:pa11y": "pa11y-ci --config pa11y-ci.config.json",
     "start": "npm run dev",
     "docker:init": "./docker-init.sh",
     "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge"
@@ -90,7 +90,7 @@
     "moment": "^2.22.2",
     "nightwatch": "^1.0.14",
     "nock": "^10.0.2",
-    "pa11y": "^5.1.0",
+    "pa11y-ci": "^2.1.1",
     "parcel-bundler": "^1.10.3",
     "prettier": "^1.15.3",
     "prop-types": "^15.6.2",

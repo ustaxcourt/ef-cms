@@ -1,8 +1,8 @@
-const { redirect } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 
 const {
-  getDownloadPolicyUrl: downloadPolicyUseCase,
+  getDownloadPolicyUrl
 } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 /**
@@ -13,8 +13,8 @@ const {
  * @param callback
  */
 exports.get = event =>
-  redirect(() =>
-    downloadPolicyUseCase({
+  handle(() =>
+    getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,
     }),

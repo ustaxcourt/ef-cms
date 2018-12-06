@@ -19,8 +19,11 @@ const router = {
       app.getSequence('gotoLogIn')();
     });
     route('/log-in...', () => {
-      const token = route.query().token;
-      app.getSequence('loginWithToken')({ token });
+      // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/00101-18
+      const query = route.query();
+      const token = query.token;
+      const path = query.path || '/';
+      app.getSequence('loginWithToken')({ token, path });
     });
     route('/file-a-petition', () => {
       document.title = `File a petition ${pageTitleSuffix}`;
