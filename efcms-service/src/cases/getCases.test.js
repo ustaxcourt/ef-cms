@@ -26,6 +26,12 @@ describe('Get cases lambda', function() {
     before(function() {
       sinon.stub(client, 'query').resolves([
         {
+          pk: '123',
+          sk: 'abc',
+        }
+      ]);
+      sinon.stub(client, 'batchGet').resolves([
+        {
           userId: 'userId',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859A',
           docketNumber: '456789-18',
@@ -37,6 +43,7 @@ describe('Get cases lambda', function() {
 
     after(function() {
       client.query.restore();
+      client.batchGet.restore();
     });
 
     [
@@ -46,7 +53,7 @@ describe('Get cases lambda', function() {
         headers: { Authorization: 'Bearer petitionsclerk' },
       },
     ].forEach(function(documentBody) {
-      it('should retrieve cases by status if authorized', function() {
+      it('should retrieve cases by new status if authorized', function() {
         return lambdaTester(getCases.get)
           .event(documentBody)
           .expectResolve(result => {
@@ -58,11 +65,11 @@ describe('Get cases lambda', function() {
 
     [
       {
-        httpMethod: 'GET',
+        httpMethod: 'GET', 
         headers: { Authorization: 'Bearer petitionsclerk' },
       },
     ].forEach(function(documentBody) {
-      it('should retrieve cases by status if authorized', function() {
+      it('should retrieve ALL cases if authorized', function() {
         return lambdaTester(getCases.get)
           .event(documentBody)
           .expectResolve(result => {
@@ -84,7 +91,7 @@ describe('Get cases lambda', function() {
           .event(documentBody)
           .expectResolve(error => {
             expect(error.statusCode).to.equal(403);
-            expect(error.body).to.equal('"Unauthorized for getCasesByStatus"');
+            expect(error.body).to.equal('"Unauthorized"');
           });
       });
     });
@@ -107,6 +114,22 @@ describe('Get cases lambda', function() {
           .expectResolve(error => {
             expect(error.statusCode).to.equal(403);
             expect(error.body).to.startWith('"Error: Authorization');
+          });
+      });
+    });
+
+    [
+      {
+        httpMethod: 'GET',
+        headers: { Authorization: 'Bearer irsattorney' },
+      },
+    ].forEach(function(documentBody) {
+      it('should return a the cases for the irsattorney', function() {
+        return lambdaTester(getCases.get)
+          .event(documentBody)
+          .expectResolve(result => {
+            const data = JSON.parse(result.body);
+            expect(data.length).to.equal(1);
           });
       });
     });
