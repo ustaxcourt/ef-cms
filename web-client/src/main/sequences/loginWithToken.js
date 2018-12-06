@@ -1,6 +1,6 @@
 import updateLoginValue from '../sequences/updateLoginValue';
 import submitLogin from '../sequences/submitLogIn';
-import gotoDashboard from '../sequences/gotoDashboard';
+import setPath from '../actions/setPath';
 
 /**
  * Combine several sequences; set login value, and
@@ -8,4 +8,4 @@ import gotoDashboard from '../sequences/gotoDashboard';
  * and navigating to dashboard
  *
  */
-export default [...updateLoginValue, ...submitLogin, ...gotoDashboard];
+export default [setPath, ...updateLoginValue, ...submitLogin];
