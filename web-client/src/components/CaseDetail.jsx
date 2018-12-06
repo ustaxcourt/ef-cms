@@ -24,6 +24,12 @@ export default connect(
   }) {
     return (
       <section className="usa-section usa-grid">
+        <p>
+          <a href="/">
+            <FontAwesomeIcon icon="caret-left" /> Back to dashboard
+          </a>
+        </p>
+
         <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
         <p>
           {user.firstName} {user.lastName}, Petitioner v. Commissioner of
@@ -148,7 +154,9 @@ export default connect(
                 <td>
                   <span className="responsive-label">Status</span>
                   {caseDetail.irsSendDate && (
-                    <span>R served on {moment(caseDetail.irsDate).format('L')}</span>
+                    <span>
+                      R served on {moment(caseDetail.irsDate).format('L')}
+                    </span>
                   )}
                   {!caseDetail.irsSendDate && <span>{item.status}</span>}
                 </td>

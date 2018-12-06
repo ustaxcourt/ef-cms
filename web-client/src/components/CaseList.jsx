@@ -16,7 +16,6 @@ export default connect(
         <thead>
           <tr>
             <th>Docket number</th>
-            <th>Status</th>
             <th>Date filed</th>
             <th>Petitioner name</th>
           </tr>
@@ -27,10 +26,6 @@ export default connect(
               <td className="responsive-title">
                 <span className="responsive-label">Docket number</span>
                 <a href={'/case-detail/' + item.caseId}>{item.docketNumber}</a>
-              </td>
-              <td className="responsive-title">
-                <span className="responsive-label">Status</span>
-                {item.status}
               </td>
               <td>
                 <span className="responsive-label">Date filed</span>
