@@ -1,6 +1,4 @@
 const client = require('./dynamodbClientService');
-const Case = require('../business/entities/Case');
-const Document = require('../business/entities/Document');
 
 const stripInternalKeys = items => {
   const strip = item => {
