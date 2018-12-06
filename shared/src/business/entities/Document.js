@@ -67,8 +67,4 @@ Document.prototype.validate = function validate() {
   }
 };
 
-Document.generateUuid = () => {
-  return uuidv4();
-};
-
 module.exports = Document;
