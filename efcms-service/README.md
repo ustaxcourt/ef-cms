@@ -20,7 +20,14 @@
 
 # Contributing
 
-1. `npm start`
+- `npm start`
+
+# Running Tests
+
+You can run the tests over the efcms-service via the following command:
+
+- `npm test`
+
 
 ## API Gateway Execution and Access Request Logging Note
 

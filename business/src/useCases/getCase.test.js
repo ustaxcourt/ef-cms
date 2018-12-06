@@ -49,7 +49,7 @@ describe('Get case', () => {
         getCaseByDocketNumber: () => {
           return Promise.resolve([
             {
-              docketNumber: '00000-00',
+              docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             },
           ]);
@@ -59,7 +59,7 @@ describe('Get case', () => {
     };
     const caseRecord = await getCase({
       userId: 'petitionsclerk',
-      caseId: '00000-00',
+      caseId: '00101-00',
       applicationContext,
     });
     assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
@@ -70,7 +70,7 @@ describe('Get case', () => {
       persistence: {
         getCaseByDocketNumber: () =>
           Promise.resolve({
-            docketNumber: '00000-00',
+            docketNumber: '00101-00',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
       },
@@ -93,7 +93,7 @@ describe('Get case', () => {
         getCaseByDocketNumber: () =>
           Promise.resolve([
             {
-              docketNumber: '00000-00',
+              docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             },
           ]),
@@ -103,7 +103,7 @@ describe('Get case', () => {
     try {
       await getCase({
         userId: 'someone',
-        caseId: '00000-00',
+        caseId: '00101-00',
         applicationContext,
       });
     } catch (error) {
