@@ -22,14 +22,10 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
       applicationContext,
     });
   } else if (Case.isValidDocketNumber(caseId)) {
-    //docketNumber
-    const result = await applicationContext.persistence.getCaseByDocketNumber({
+    return applicationContext.persistence.getCaseByDocketNumber({
       docketNumber: caseId,
       applicationContext,
     });
-    if (result && result.length) {
-      caseRecord = result[0];
-    }
   }
 
   if (!caseRecord) {
