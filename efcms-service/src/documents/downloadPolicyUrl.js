@@ -1,4 +1,4 @@
-const { handle } = require('../middleware/apiGatewayHelper');
+const { redirect } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 
 const {
@@ -13,7 +13,7 @@ const {
  * @param callback
  */
 exports.get = event =>
-  handle(() =>
+  redirect(() =>
     getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,
