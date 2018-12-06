@@ -14,6 +14,7 @@ const removeAWSGlobalFields = item => {
   delete item['aws:rep:updatetime'];
   return item;
 };
+
 /**
  * put
  * @param params
@@ -60,7 +61,11 @@ exports.get = params => {
     .get(params)
     .promise()
     .then(res => {
+      if (!res.Item) throw new Error(`get failed on ${JSON.stringify(params)}`);
       return removeAWSGlobalFields(res.Item);
+    })
+    .catch(() => {
+      throw new Error(`get failed on ${JSON.stringify(params)}`);
     });
 };
 
@@ -81,4 +86,73 @@ exports.query = params => {
       result.Items.forEach(item => removeAWSGlobalFields(item));
       return result.Items;
     });
+};
+
+/**
+ * BATCH GET for aws-sdk dynamodb client
+ * @param params
+ */
+exports.batchGet = ({ tableName, keys }) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
+  return documentClient
+    .batchGet({
+      RequestItems: {
+        [tableName]: {
+          Keys: keys,
+        },
+      },
+    })
+    .promise()
+    .then(result => {
+      // TODO: REFACTOR THIS
+      const items = result.Responses[tableName];
+      items.forEach(item => removeAWSGlobalFields(item));
+      return items;
+    });
+};
+
+/**
+ * batchWrite
+ */
+exports.batchWrite = ({ tableName, items }) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .batchWrite({
+      RequestItems: {
+        [tableName]: items.map(item => ({
+          PutRequest: {
+            Item: item,
+            ConditionExpression: `attribute_not_exists(#pk) and attribute_not_exists(#sk)`,
+            ExpressionAttributeNames: {
+              '#pk': item.pk,
+              '#sk': item.sk,
+            },
+          },
+        })),
+      },
+    })
+    .promise();
+};
+
+exports.delete = ({ tableName, key }) => {
+  const documentClient = new AWS.DynamoDB.DocumentClient({
+    region: region,
+    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  });
+
+  return documentClient
+    .delete({
+      TableName: tableName,
+      Key: key,
+    })
+    .promise();
 };

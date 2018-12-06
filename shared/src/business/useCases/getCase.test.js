@@ -47,12 +47,10 @@ describe('Get case', () => {
     applicationContext = {
       persistence: {
         getCaseByDocketNumber: () => {
-          return Promise.resolve([
-            {
-              docketNumber: '00000-00',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            },
-          ]);
+          return Promise.resolve({
+            docketNumber: '00000-00',
+            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          });
         },
       },
       environment: { stage: 'local' },
