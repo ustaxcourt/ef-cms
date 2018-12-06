@@ -1,8 +1,8 @@
 const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 const {
-  createUploadPolicy: uploadPolicyUseCase,
-} = require('ef-cms-shared/src/persistence/createPolicyUrl');
+  getUploadPolicy
+} = require('../../../shared/src/persistence/getUploadPolicy');
 /**
  * Create Document API Lambda
  *
@@ -15,7 +15,7 @@ const {
  */
 exports.create = () =>
   handle(() =>
-    uploadPolicyUseCase({
+    getUploadPolicy({
       applicationContext,
     }),
   );

@@ -1,80 +1,5 @@
-const { S3 } = require('aws-sdk');
 const axios = require('axios');
-
-/**
- * getS3
- * @param region
- * @param s3Endpoint
- * @returns {S3}
- */
-const getS3 = ({ region, s3Endpoint }) => {
-  return new S3({
-    region,
-    s3ForcePathStyle: true,
-    endpoint: s3Endpoint,
-  });
-};
-
-/**
- * getDownloadPolicyUrl
- * @param documentId
- * @param applicationContext
- * @returns {Promise<any>}
- */
-// exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
-//   return new Promise((resolve, reject) => {
-//     getS3(applicationContext.environment).getSignedUrl(
-//       'getObject',
-//       {
-//         Bucket: applicationContext.environment.documentsBucketName,
-//         Key: documentId,
-//         Expires: 120,
-//       },
-//       (err, data) => {
-//         if (err) {
-//           return reject(err);
-//         }
-//         resolve({
-//           url: data,
-//         });
-//       },
-//     );
-//   });
-// };
-
-/**
- * createUploadPolicy
- * @param applicationContext
- * @returns {Promise<any>}
- */
-exports.createUploadPolicy = ({ applicationContext }) =>
-  new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).createPresignedPost(
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Conditions: [
-          ['starts-with', '$key', ''],
-          ['starts-with', '$Content-Type', ''],
-        ],
-      },
-      (err, data) => {
-        if (err) return reject(err);
-        resolve(data);
-      },
-    );
-  });
-
-/**
- * getDocumentPolicy
- * @param applicationContext
- * @returns {Promise<*>}
- */
-const getDocumentUploadPolicy = async ({ applicationContext }) => {
-  const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
-  );
-  return response.data;
-};
+const uuidv4 = require('uuid/v4');
 
 /**
  * uploadPdf
@@ -111,7 +36,9 @@ exports.uploadPdfsForNewCase = async ({
   caseInitiator,
   fileHasUploaded,
 }) => {
-  const policy = await getDocumentUploadPolicy({ applicationContext });
+  const policy = await applicationContext
+    .getPersistenceGateway()
+    .getUploadPolicy({ applicationContext });
 
   const petitionDocumentId = await uploadPdf({
     policy,

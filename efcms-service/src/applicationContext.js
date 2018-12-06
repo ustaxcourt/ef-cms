@@ -12,12 +12,16 @@ const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendP
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs');
 const { getCasesForRespondent } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent');
+const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPolicy');
+const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 module.exports = {
   getPersistenceGateway: () => {
     return {
       ...awsDynamoPersistence,
-      ...awsS3Persistence
+      ...awsS3Persistence,
+      ...getUploadPolicy,
+      ...getDownloadPolicyUrl,
     }
   },
   docketNumberGenerator,
