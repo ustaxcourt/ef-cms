@@ -21,7 +21,7 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
   });
   caseToCreate.validate();
 
-  return  applicationContext.getPersistenceGateway().createCase({
+  return applicationContext.getPersistenceGateway().createCase({
     caseRecord: { ...caseToCreate },
     applicationContext,
   });

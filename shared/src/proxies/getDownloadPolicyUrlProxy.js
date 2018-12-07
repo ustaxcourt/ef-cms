@@ -6,7 +6,7 @@ const axios = require('axios');
  */
 exports.getDownloadPolicyUrl = async ({ documentId, applicationContext }) => {
   const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyURL`,
+    `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
   );
   return response.data;
 };

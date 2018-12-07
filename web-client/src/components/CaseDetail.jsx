@@ -14,13 +14,14 @@ export default connect(
     user: state.user,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
+    viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
-    baseUrl,
     caseDetail,
     user,
     showDetails,
     togglePaymentDetails,
+    viewDocument,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -128,14 +129,11 @@ export default connect(
                   <a
                     className="pdf-link"
                     aria-label="View PDF"
-                    href={
-                      baseUrl +
-                      '/documents/' +
-                      item.documentId +
-                      '/downloadPolicy'
+                    onClick={() =>
+                      viewDocument({
+                        documentId: item.documentId,
+                      })
                     }
-                    rel="noopener noreferrer"
-                    target="_blank"
                   >
                     <FontAwesomeIcon icon="file-pdf" />
                     {item.documentType}
@@ -148,7 +146,9 @@ export default connect(
                 <td>
                   <span className="responsive-label">Status</span>
                   {caseDetail.irsSendDate && (
-                    <span>R served on {moment(caseDetail.irsDate).format('L')}</span>
+                    <span>
+                      R served on {moment(caseDetail.irsDate).format('L')}
+                    </span>
                   )}
                   {!caseDetail.irsSendDate && <span>{item.status}</span>}
                 </td>

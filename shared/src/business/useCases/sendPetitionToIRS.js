@@ -45,7 +45,7 @@ exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
   caseEntity.markAsSentToIRS(sendDate);
   caseEntity.validateWithError(invalidEntityError);
 
-  await  applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().saveCase({
     caseToSave: { ...caseEntity },
     applicationContext,
   });

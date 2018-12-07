@@ -1,9 +1,5 @@
-const { redirect } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
-
-const {
-  getDownloadPolicyUrl
-} = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -13,8 +9,8 @@ const {
  * @param callback
  */
 exports.get = event =>
-  redirect(() =>
-    getDownloadPolicyUrl({
+  handle(() =>
+    applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,
     }),

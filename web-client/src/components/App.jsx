@@ -11,6 +11,7 @@ import Header from './Header';
 import IntakeClerkDashboard from './IntakeClerkDashboard';
 import Loading from './Loading';
 import LogIn from './LogIn';
+import FileDocument from './FileDocument';
 import PetitionsWorkQueue from './PetitionsWorkQueue';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
@@ -23,6 +24,7 @@ const pages = {
   IntakeClerkDashboard,
   Loading,
   LogIn,
+  FileDocument,
   PetitionsWorkQueue,
   StyleGuide,
   ValidateCase,

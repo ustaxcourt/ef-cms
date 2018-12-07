@@ -1,6 +1,6 @@
-const { UnprocessableEntityError } = require('../../errors/errors');
+const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
-exports.fileResponse = async ({
+exports.fileAnswer = async ({
   userId,
   caseToUpdate,
   answerDocument,
@@ -16,7 +16,7 @@ exports.fileResponse = async ({
   //get upload policy
   const policy = await applicationContext
     .getPersistenceGateway()
-    .getDocumentPolicy({ applicationContext });
+    .getUploadPolicy({ applicationContext });
 
   //upload to S3 return uuid
   const answerDocumentId = await applicationContext

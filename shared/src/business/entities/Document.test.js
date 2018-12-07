@@ -11,6 +11,7 @@ describe('Document entity', () => {
   describe('isValid', () => {
     it('Creates a valid document', () => {
       const myDoc = new Document(A_VALID_DOCUMENT);
+      myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       assert.ok(myDoc.isValid());
     });
 
@@ -33,7 +34,9 @@ describe('Document entity', () => {
     it('should do nothing if valid', () => {
       let error = null;
       try {
-        new Document(A_VALID_DOCUMENT).validate();
+        const document = new Document(A_VALID_DOCUMENT);
+        document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+        document.validate();
       } catch (err) {
         error = err;
       }
