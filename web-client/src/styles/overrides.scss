@@ -33,3 +33,9 @@ h6,
 p {
   margin-top: 0;
 }
+
+.usa-nav-secondary-links li:not(:last-child)::after {
+  padding-left: 0.5rem;
+  color: transparent;
+  content: '';
+}
