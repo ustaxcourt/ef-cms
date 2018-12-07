@@ -12,8 +12,8 @@ export default [
   setCase,
   getUserRole,
   {
-    taxpayer: [setCurrentPage('CaseDetail')],
-    petitionsclerk: [setCurrentPage('ValidateCase')],
-    intakeclerk: [setCurrentPage('ValidateCase')],
+    taxpayer: [setCurrentPage('CaseDetailPetitioner')],
+    petitionsclerk: [setCurrentPage('CaseDetailInternal')],
+    intakeclerk: [setCurrentPage('CaseDetailInternal')],
   },
 ];

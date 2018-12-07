@@ -70,7 +70,7 @@ describe('Tax payer', async () => {
   describe('Case Detail', () => {
     it('View case', async () => {
       await test.runSequence('gotoCaseDetail', { caseId });
-      assert.equal(test.getState('currentPage'), 'CaseDetail');
+      assert.equal(test.getState('currentPage'), 'CaseDetailPetitioner');
       assert.ok(test.getState('caseDetail'));
     });
   });
@@ -113,7 +113,7 @@ describe('Petitions clerk', () => {
     it('View case', async () => {
       test.setState('caseDetail', {});
       await test.runSequence('gotoCaseDetail', { caseId });
-      assert.equal(test.getState('currentPage'), 'ValidateCase');
+      assert.equal(test.getState('currentPage'), 'CaseDetailInternal');
       assert.ok(test.getState('caseDetail'));
       await test.runSequence('toggleDocumentValidation', {
         document: test.getState('caseDetail').documents[0],
