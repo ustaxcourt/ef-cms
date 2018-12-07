@@ -30,9 +30,11 @@ describe('Send petition to IRS', () => {
   };
 
   applicationContext = {
-    persistence: {
-      getCaseByCaseId: () => Promise.resolve(caseRecord),
-      saveCase: () => Promise.resolve(caseRecord),
+    getPersistenceGateway: () => {
+      return {
+        getCaseByCaseId: () => Promise.resolve(caseRecord),
+        saveCase: () => Promise.resolve(caseRecord),
+      };
     },
     environment: { stage: 'local' },
     irsGateway: {
@@ -74,8 +76,10 @@ describe('Send petition to IRS', () => {
     // const date = '2018-12-04T18:27:13.370Z';
     // const stub = sinon.stub().resolves(date);
     applicationContext = {
-      persistence: {
-        getCaseByCaseId: () => Promise.resolve(),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(),
+        };
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
@@ -102,9 +106,11 @@ describe('Send petition to IRS', () => {
     const date = '2018-12-04T18:27:13.370Z';
     const stub = sinon.stub().resolves(date);
     applicationContext = {
-      persistence: {
-        getCaseByCaseId: () => Promise.resolve(caseRecord),
-        saveCase: () => Promise.resolve(savedCaseRecord),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(caseRecord),
+          saveCase: () => Promise.resolve(savedCaseRecord),
+        };
       },
       environment: { stage: 'local' },
       irsGateway: {
@@ -128,9 +134,11 @@ describe('Send petition to IRS', () => {
     let savedCaseRecord = Object.assign(caseRecord);
     const stub = sinon.stub().throws(new Error('blech'));
     applicationContext = {
-      persistence: {
-        getCaseByCaseId: () => Promise.resolve(caseRecord),
-        saveCase: () => Promise.resolve(savedCaseRecord),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(caseRecord),
+          saveCase: () => Promise.resolve(savedCaseRecord),
+        };
       },
       environment: { stage: 'local' },
       irsGateway: {

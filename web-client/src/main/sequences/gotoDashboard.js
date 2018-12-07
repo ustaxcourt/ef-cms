@@ -27,5 +27,6 @@ export default [
       setCurrentPage('PetitionsWorkQueue'),
     ],
     intakeclerk: [clearAlerts, setCurrentPage('IntakeClerkDashboard')],
+    respondent: [clearAlerts, setCurrentPage('Dashboard')],
   },
 ];

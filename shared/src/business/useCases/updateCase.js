@@ -42,7 +42,6 @@ exports.updateCase = async ({
   }
   const caseToUpdate = new Case(caseJson);
   caseToUpdate.validate();
-  //TODO validation errors have to be caught and turned into real errors?
 
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
@@ -54,7 +53,7 @@ exports.updateCase = async ({
 
   caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate);
 
-  return applicationContext.persistence.saveCase({
+  return applicationContext.getPersistenceGateway().saveCase({
     caseToSave: { ...caseToUpdate },
     applicationContext,
   });

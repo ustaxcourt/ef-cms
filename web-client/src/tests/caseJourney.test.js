@@ -40,7 +40,6 @@ describe('Tax payer', async () => {
         key: 'petitionFile',
         value: fakeFile,
       });
-
       await test.runSequence('updatePetitionValue', {
         key: 'requestForPlaceOfTrial',
         value: fakeFile,

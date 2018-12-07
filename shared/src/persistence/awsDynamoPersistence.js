@@ -247,18 +247,18 @@ exports.getCasesByUser = ({ userId, applicationContext }) => {
 };
 
 /**
- * getCasesByIRSAttorney
+ * getCasesForRespondent
  * @param userId
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesByIRSAttorney = async ({
-  irsAttorneyId,
+exports.getCasesForRespondent = async ({
+  respondentId,
   applicationContext,
 }) => {
   return getRecordsViaMapping({
     applicationContext,
-    key: irsAttorneyId,
+    key: respondentId,
     type: 'activeCase',
   });
 };

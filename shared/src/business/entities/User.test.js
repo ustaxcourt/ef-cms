@@ -23,26 +23,26 @@ describe('User entity', () => {
     assert.ok(user.isValid());
   });
 
-  it('Creates a valid irsattorney user', () => {
+  it('Creates a valid respondent user', () => {
     const user = new User({
       firstName: 'firstName',
       lastName: 'bob',
       role: 'Tester',
       barNumber: 'gg',
       token: 'abc',
-      userId: 'irsattorney',
+      userId: 'respondent',
     });
     assert.ok(user.isValid());
   });
 
-  it('Creates a valid irsattorney user', () => {
+  it('Creates a valid respondent user', () => {
     const user = new User({
-      userId: 'irsattorney',
+      userId: 'respondent',
     });
     assert.ok(user.isValid());
   });
 
-  it('Creates a valid irsattorney user', () => {
+  it('Creates a valid respondent user', () => {
     const user = new User({
       userId: 'intakeclerk',
       role: 'Tester',

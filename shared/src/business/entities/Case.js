@@ -25,7 +25,7 @@ const caseSchema = joi.object().keys({
     .string()
     .regex(/^[0-9]{5}-[0-9]{2}$/)
     .optional(),
-  irsAttorneyId: joi.string().optional(),
+  respondentId: joi.string().optional(),
   irsSendDate: joi
     .date()
     .iso()
@@ -41,7 +41,7 @@ const caseSchema = joi.object().keys({
     .optional(),
   documents: joi
     .array()
-    .length(3)
+    .min(3)
     .items(
       joi.object({
         documentId: joi
@@ -183,6 +183,7 @@ Case.documentTypes = {
   requestForPlaceOfTrial: 'Request for Place of Trial',
   statementOfTaxpayerIdentificationNumber:
     'Statement of Taxpayer Identification Number',
+  answer: 'Answer',
 };
 
 module.exports = Case;

@@ -15,5 +15,6 @@ export default [
     taxpayer: [setCurrentPage('CaseDetail')],
     petitionsclerk: [setCurrentPage('ValidateCase')],
     intakeclerk: [setCurrentPage('ValidateCase')],
+    respondent: [setCurrentPage('CaseDetail')], // TODO: display different dashboard maybe?
   },
 ];

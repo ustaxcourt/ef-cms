@@ -8,9 +8,9 @@ const proxyquire = require('proxyquire');
 const getDownloadPolicyUrlStub = sinon.stub();
 const downloadPolicyUrl = proxyquire('./downloadPolicyUrl', {
   '../applicationContext': {
-    persistence: {
+    getPersistenceGateway: () => ({
       getDownloadPolicyUrl: getDownloadPolicyUrlStub,
-    },
+    })
   },
 });
 
@@ -25,8 +25,9 @@ describe('downloadPolicyUrl', function() {
         },
       })
       .expectResolve(result => {
-        expect(result.statusCode).to.equal(302);
-        expect(result.headers.Location).to.equal('http://example.com');
+        const body = JSON.parse(result.body);
+        expect(result.statusCode).to.equal('200');
+        expect(body.url).to.equal('http://example.com');
       });
   });
 
