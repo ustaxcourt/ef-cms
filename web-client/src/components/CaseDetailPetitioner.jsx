@@ -12,15 +12,18 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     user: state.user,
+    documentBlob: state.documentBlob,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
+    viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
-    baseUrl,
     caseDetail,
     user,
+    documentBlob,
     showDetails,
     togglePaymentDetails,
+    viewDocument,
   }) {
     return (
       <React.Fragment>
@@ -131,21 +134,18 @@ export default connect(
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
-                    <a
+                    <button
                       className="pdf-link"
                       aria-label="View PDF"
-                      href={
-                        baseUrl +
-                        '/documents/' +
-                        item.documentId +
-                        '/downloadPolicy'
-                      }
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      onClick={() => {
+                        viewDocument({
+                          documentId: item.documentId,
+                        });
+                      }}
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {item.documentType}
-                    </a>
+                    </button>
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>

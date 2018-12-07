@@ -1,4 +1,9 @@
-import persistenceGateway from '../../../shared/src/persistence/awsPersistenceGateway';
+const {
+  uploadPdf,
+  uploadPdfsForNewCase,
+  uploadDocument,
+  getDocument,
+} = require('../../../shared/src/persistence/awsS3Persistence');
 
 import { createCase } from '../../../shared/src/proxies/createCaseProxy';
 import { getCase } from '../../../shared/src/proxies/getCaseProxy';
@@ -8,6 +13,9 @@ import { getUser } from '../../../shared/src/business/useCases/getUser';
 import { sendPetitionToIRS } from '../../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../../shared/src/proxies/updateCaseProxy';
 import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs';
+import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile';
+import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer';
+import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 
 /**
  * Context for the dev environment
@@ -17,7 +25,12 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getPersistenceGateway: () => {
-    return persistenceGateway;
+    return {
+      uploadPdf,
+      uploadPdfsForNewCase,
+      uploadDocument,
+      getDocument,
+    };
   },
   getUseCases: () => {
     return {
@@ -29,6 +42,9 @@ const applicationContext = {
       sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
+      fileAnswer,
+      getCasesForRespondent,
+      downloadDocumentFile,
     };
   },
 };

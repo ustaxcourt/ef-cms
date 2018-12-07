@@ -22,9 +22,11 @@ describe('Create case', () => {
 
   it('Success', async () => {
     applicationContext = {
-      persistence: {
-        createCase: () =>
-          Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+      getPersistenceGateway: () => {
+        return {
+          createCase: () =>
+            Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+        };
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
@@ -41,8 +43,10 @@ describe('Create case', () => {
 
   it('failure', async () => {
     applicationContext = {
-      persistence: {
-        createCase: () => Promise.reject(new Error('problem')),
+      getPersistenceGateway: () => {
+        return {
+          createCase: () => Promise.reject(new Error('problem')),
+        };
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {

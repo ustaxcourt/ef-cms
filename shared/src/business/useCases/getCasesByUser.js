@@ -5,7 +5,7 @@
  * @returns {*|Promise<*>}
  */
 exports.getCasesByUser = ({ userId, applicationContext }) => {
-  return applicationContext.persistence.getCasesByUser({
+  return applicationContext.getPersistenceGateway().getCasesByUser({
     userId,
     applicationContext,
   });
