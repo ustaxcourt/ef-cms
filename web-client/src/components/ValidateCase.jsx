@@ -8,24 +8,22 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     submitSendToIRS: sequences.submitToIRS,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
     updateCaseValue: sequences.updateCaseValue,
     updateFormValue: sequences.updateFormValue,
+    viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
-    baseUrl,
     caseDetail,
-    form,
     submitUpdateCase,
     submitSendToIRS,
     toggleDocumentValidation,
     updateCaseValue,
     updateFormValue,
+    viewDocument,
   }) {
     return (
       <React.Fragment>
@@ -129,14 +127,11 @@ export default connect(
                     <a
                       className="pdf-link"
                       aria-label="View PDF"
-                      href={
-                        baseUrl +
-                        '/documents/' +
-                        document.documentId +
-                        '/downloadPolicy'
+                      onClick={() =>
+                        viewDocument({
+                          documentId: document.documentId,
+                        })
                       }
-                      rel="noopener noreferrer"
-                      target="_blank"
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {document.documentType}

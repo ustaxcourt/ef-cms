@@ -11,7 +11,7 @@ const {
   saveCase,
   incrementCounter,
   getCasesByUser,
-  getCasesByIRSAttorney,
+  getCasesForRespondent,
   getCasesByStatus,
 } = require('./awsDynamoPersistence');
 
@@ -229,14 +229,14 @@ describe('awsDynamoPersistence', function() {
 
   describe('getCasesByIRSAttorney', () => {
     it('should strip the pk and sk from the results', async () => {
-      const result = await getCasesByIRSAttorney({
+      const result = await getCasesForRespondent({
         irsAttorneyId: 'taxpayer',
         applicationContext,
       });
       expect(result).to.deep.equal([{ caseId: '123', status: 'new' }]);
     });
     it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
-      await getCasesByIRSAttorney({
+      await getCasesForRespondent({
         irsAttorneyId: 'taxpayer',
         applicationContext,
       });

@@ -7,6 +7,10 @@
   background-size: contain;
 }
 
+.pdf-link {
+  cursor: pointer;
+}
+
 h1[tabIndex='-1']:focus {
   outline: none;
 }

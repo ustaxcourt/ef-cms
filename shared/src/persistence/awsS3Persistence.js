@@ -7,7 +7,7 @@ const uuidv4 = require('uuid/v4');
  * @param file
  * @returns {Promise<*>}
  */
-const uploadPdf = async ({ policy, file }) => {
+exports.uploadPdf = async ({ policy, file }) => {
   const documentId = uuidv4();
   const formData = new FormData();
   formData.append('key', documentId);
@@ -40,22 +40,24 @@ exports.uploadPdfsForNewCase = async ({
     .getPersistenceGateway()
     .getUploadPolicy({ applicationContext });
 
-  const petitionDocumentId = await uploadPdf({
+  const petitionDocumentId = await exports.uploadPdf({
     policy,
     file: caseInitiator.petitionFile,
   });
   fileHasUploaded();
 
-  const requestForPlaceOfTrialDocumentId = await uploadPdf({
+  const requestForPlaceOfTrialDocumentId = await exports.uploadPdf({
     policy,
     file: caseInitiator.requestForPlaceOfTrial,
   });
   fileHasUploaded();
 
-  const statementOfTaxpayerIdentificationNumberDocumentId = await uploadPdf({
-    policy,
-    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
-  });
+  const statementOfTaxpayerIdentificationNumberDocumentId = await exports.uploadPdf(
+    {
+      policy,
+      file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+    },
+  );
   fileHasUploaded();
 
   return {

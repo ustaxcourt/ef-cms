@@ -1,7 +1,7 @@
 const awsDynamoPersistence = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
 const awsS3Persistence = require('ef-cms-shared/src/persistence/awsS3Persistence');
-const irsGateway = require('../../shared/src/external/irsGateway');
+const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const { createCase } = require('ef-cms-shared/src/business/useCases/createCase');
 const { getCase } = require('ef-cms-shared/src/business/useCases/getCase');
 const { getCases } = require('ef-cms-shared/src/business/useCases/getCases');
@@ -20,8 +20,8 @@ module.exports = {
     return {
       ...awsDynamoPersistence,
       ...awsS3Persistence,
-      ...getUploadPolicy,
-      ...getDownloadPolicyUrl,
+      getUploadPolicy,
+      getDownloadPolicyUrl,
     }
   },
   docketNumberGenerator,

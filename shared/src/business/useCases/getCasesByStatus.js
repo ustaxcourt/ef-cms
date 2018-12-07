@@ -18,7 +18,7 @@ exports.getCasesByStatus = async ({ status, userId, applicationContext }) => {
 
   status = status.toLowerCase();
 
-  return  applicationContext.getPersistenceGateway().getCasesByStatus({
+  return applicationContext.getPersistenceGateway().getCasesByStatus({
     status,
     applicationContext,
   });

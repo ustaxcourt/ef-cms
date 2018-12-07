@@ -29,6 +29,10 @@ const router = {
       document.title = `File a petition ${pageTitleSuffix}`;
       app.getSequence('gotoFilePetition')();
     });
+    route('/file-a-document', () => {
+      document.title = `File a document ${pageTitleSuffix}`;
+      app.getSequence('gotoFileDocument')();
+    });
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuide')();
