@@ -6,6 +6,7 @@
     "uuid": "^3.3.2",
     "ef-cms-shared": "file:../business"
   },
+  "license": "CC0",
   "devDependencies": {
     "artillery": "^1.6.0-25",
     "aws-sdk": "^2.344.0",
