@@ -7,6 +7,20 @@
   background-size: contain;
 }
 
+button.pdf-link {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-blue;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: underline;
+}
+
+button.pdf-link:hover {
+  color: $color-blue;
+}
+
 h1[tabIndex='-1']:focus {
   outline: none;
 }

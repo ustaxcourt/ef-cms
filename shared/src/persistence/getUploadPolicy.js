@@ -14,28 +14,23 @@ const getS3 = ({ region, s3Endpoint }) => {
   });
 };
 /**
- * getDownloadPolicyUrl
- * @param documentId
+ * getUploadPolicy
  * @param applicationContext
  * @returns {Promise<any>}
  */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
-  return new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).getSignedUrl(
-      'getObject',
+exports.getUploadPolicy = ({ applicationContext }) =>
+  new Promise((resolve, reject) => {
+    getS3(applicationContext.environment).createPresignedPost(
       {
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
-        Expires: 120,
+        Conditions: [
+          ['starts-with', '$key', ''],
+          ['starts-with', '$Content-Type', ''],
+        ],
       },
       (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve({
-          url: data,
-        });
+        if (err) return reject(err);
+        resolve(data);
       },
     );
   });
-};
