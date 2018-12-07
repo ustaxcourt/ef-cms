@@ -127,7 +127,7 @@ describe('Case entity', () => {
 
   describe('isValidDocketNumber', () => {
     it('returns true if a valid docketNumber', () => {
-      assert.ok(Case.isValidDocketNumber('00000-00'));
+      assert.ok(Case.isValidDocketNumber('00101-00'));
     });
 
     it('returns false if a invalid docketnumber', () => {
