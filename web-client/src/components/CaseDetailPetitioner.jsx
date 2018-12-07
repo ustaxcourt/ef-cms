@@ -12,7 +12,6 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     user: state.user,
-    documentBlob: state.documentBlob,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
     viewDocument: sequences.viewDocument,
@@ -20,7 +19,6 @@ export default connect(
   function CaseDetail({
     caseDetail,
     user,
-    documentBlob,
     showDetails,
     togglePaymentDetails,
     viewDocument,
