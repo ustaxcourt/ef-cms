@@ -33,7 +33,7 @@ describe('Tax payer', async () => {
   });
   fakeFile.name = 'requestForPlaceOfTrial.pdf';
 
-  describe.only('Initiate case', () => {
+  describe('Initiate case', () => {
     it('Submits successfully', async () => {
       await test.runSequence('gotoFilePetition');
       await test.runSequence('updatePetitionValue', {

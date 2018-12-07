@@ -124,7 +124,7 @@ export default connect(
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
-                    <a
+                    <button
                       className="pdf-link"
                       aria-label="View PDF"
                       onClick={() =>
@@ -135,7 +135,7 @@ export default connect(
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {document.documentType}
-                    </a>
+                    </button>
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>
