@@ -5,8 +5,11 @@ import getUserRole from '../actions/getUserRole';
 import setAlertError from '../actions/setAlertError';
 import setCases from '../actions/setCases';
 import setCurrentPage from '../actions/setCurrentPage';
+import isLoggedIn from '../actions/isLoggedIn';
+import setPath from '../actions/setPath';
+import navigateToLogin from '../actions/navigateToLogin';
 
-export default [
+const goToDashboard = [
   getUserRole,
   {
     taxpayer: [
@@ -27,5 +30,13 @@ export default [
       setCurrentPage('PetitionsWorkQueue'),
     ],
     intakeclerk: [clearAlerts, setCurrentPage('IntakeClerkDashboard')],
+  },
+];
+
+export default [
+  isLoggedIn,
+  {
+    unauthorized: [setPath, navigateToLogin],
+    isLoggedIn: goToDashboard,
   },
 ];

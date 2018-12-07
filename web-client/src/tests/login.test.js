@@ -9,7 +9,13 @@ mainModule.providers.router = { route: () => {} };
 
 const test = CerebralTest(mainModule);
 
-describe('Log in', () => {
+describe('Log in', async () => {
+  it('redirects to /log-in if not authorized', async () => {
+    await test.runSequence('gotoDashboard');
+    assert.equal(test.getState('currentPage'), 'LogIn');
+    assert.equal(test.getState('path'), '/');
+  });
+
   it('succeeds for Petitions clerk', async () => {
     await test.runSequence('gotoLogIn');
     assert.equal(test.getState('currentPage'), 'LogIn');
