@@ -135,8 +135,8 @@ export default connect(
                     <button
                       className="pdf-link"
                       aria-label="View PDF"
-                      onClick={async () => {
-                        await viewDocument({
+                      onClick={() => {
+                        viewDocument({
                           documentId: item.documentId,
                           callback: documentBlob => {
                             window.open(
