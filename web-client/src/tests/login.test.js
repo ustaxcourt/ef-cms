@@ -5,15 +5,19 @@ import mainModule from '../main';
 import applicationContext from '../applicationContexts/dev';
 
 mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = { route: () => {} };
-
+mainModule.providers.router = {
+  route: async url => {
+    if (url === '/log-in') {
+      await test.runSequence('gotoLogIn');
+    }
+  },
+};
 const test = CerebralTest(mainModule);
 
 describe('Log in', async () => {
   it('redirects to /log-in if not authorized', async () => {
     await test.runSequence('gotoDashboard');
     assert.equal(test.getState('currentPage'), 'LogIn');
-    assert.equal(test.getState('path'), '/');
   });
 
   it('succeeds for Petitions clerk', async () => {
