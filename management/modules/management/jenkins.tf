@@ -22,6 +22,13 @@ resource "aws_instance" "jenkins_web" {
 
   provisioner "remote-exec" {
     inline = [
+      # swap section
+      "sudo dd if=/dev/zero of=/root/bigswap bs=1M count=4096",
+      "sudo chmod 600 /root/bigswap",
+      "sudo mkswap /root/bigswap",
+      "sudo swapon /root/bigswap",
+      "sudo echo '/root/bigswap swap swap defaults 0 0' >> /etc/fstab",
+      # docker setup section
       "sudo usermod -a -G docker tomcat",
       "sudo sed -i -e 's|ExecStart=.*|ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375|' /lib/systemd/system/docker.service",
       "sudo systemctl daemon-reload",
