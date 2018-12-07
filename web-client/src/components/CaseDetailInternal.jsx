@@ -10,7 +10,6 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    form: state.form,
     submitUpdateCase: sequences.submitUpdateCase,
     submitSendToIRS: sequences.submitToIRS,
     toggleDocumentValidation: sequences.toggleDocumentValidation,
@@ -20,7 +19,6 @@ export default connect(
   function CaseDetail({
     baseUrl,
     caseDetail,
-    form,
     submitUpdateCase,
     submitSendToIRS,
     toggleDocumentValidation,
