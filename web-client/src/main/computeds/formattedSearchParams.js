@@ -3,6 +3,6 @@ import { state } from 'cerebral';
 
 export const formattedSearchParams = get => {
   let searchTerm = get(state.searchTerm);
-  searchTerm = _.padStart(searchTerm, 8, '0');
+  // noop
   return searchTerm;
 };
