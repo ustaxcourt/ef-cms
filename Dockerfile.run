@@ -31,4 +31,4 @@ RUN cd /home/app/web-client && npm i
 
 COPY . /home/app
 
-CMD echo "please overwrite this command"
+CMD echo "This container does not have a default command.  Please use the ./docker-run.sh script instead to run the entire application"
