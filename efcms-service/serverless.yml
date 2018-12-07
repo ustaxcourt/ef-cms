@@ -289,8 +289,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createPolicyUrl:
-    handler: src/documents/createPolicyUrl.create
+  getUploadPolicy:
+    handler: src/documents/getUploadPolicy.create
     events:
       - http:
           path: v1/documents/uploadPolicy
@@ -309,11 +309,11 @@ functions:
                 responseModels:
                   'application/json': 'policyUrl'
 
-  downloadPolicyUrl:
+  getDownloadPolicyUrl:
     handler: src/documents/downloadPolicyUrl.get
     events:
       - http:
-          path: v1/documents/{documentId}/downloadPolicy
+          path: v1/documents/{documentId}/downloadPolicyUrl
           method: get
           cors: true
           documentation:
@@ -328,26 +328,6 @@ functions:
                   description: 'pre-signed policy download url'
                 responseModels:
                   'application/json': 'policyUrl'
-
-  createDocument:
-    handler: src/documents/createDocument.create
-    events:
-      - http:
-          path: v1/documents
-          method: post
-          cors: true
-          documentation:
-            summary: create a rawDocument
-            tags:
-              - documents
-            description: >
-              Create a rawDocument.
-            methodResponses:
-              - statusCode: '200'
-                responseBody:
-                  description: 'rawDocument meta-data'
-                responseModels:
-                  'application/json': rawDocument
 
   updateCase:
     handler: src/cases/updateCase.put

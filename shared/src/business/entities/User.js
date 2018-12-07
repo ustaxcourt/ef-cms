@@ -51,7 +51,7 @@ function User(user) {
     if (!this.userId) {
       this.userId = 'intakeclerk';
     }
-  } else if (this.userId === 'irsattorney') {
+  } else if (this.userId === 'respondent') {
     if (!this.firstName) {
       this.firstName = 'IRS';
     }
@@ -59,16 +59,16 @@ function User(user) {
       this.lastName = 'Attorney';
     }
     if (!this.role) {
-      this.role = 'irsattorney';
+      this.role = 'respondent';
     }
     if (!this.barNumber) {
       this.barNumber = '12345';
     }
     if (!this.token) {
-      this.token = 'irsattorney';
+      this.token = 'respondent';
     }
     if (!this.userId) {
-      this.userId = 'irsattorney';
+      this.userId = 'respondent';
     }
   } else {
     throw new Error('invalid user');

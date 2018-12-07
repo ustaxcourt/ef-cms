@@ -8,9 +8,11 @@ describe('Get case', () => {
 
   it('Success case by case id', async () => {
     applicationContext = {
-      persistence: {
-        getCaseByCaseId: () =>
-          Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () =>
+            Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+        };
       },
       environment: { stage: 'local' },
     };
@@ -24,8 +26,10 @@ describe('Get case', () => {
 
   it('failure case by case id', async () => {
     applicationContext = {
-      persistence: {
-        getCaseByCaseId: () => Promise.resolve(null),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(null),
+        };
       },
       environment: { stage: 'local' },
     };
@@ -45,13 +49,15 @@ describe('Get case', () => {
 
   it('success case by docket number', async () => {
     applicationContext = {
-      persistence: {
-        getCaseByDocketNumber: () => {
-          return Promise.resolve({
-            docketNumber: '00000-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          });
-        },
+      getPersistenceGateway: () => {
+        return {
+          getCaseByDocketNumber: () => {
+            return Promise.resolve({
+              docketNumber: '00000-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            });
+          },
+        };
       },
       environment: { stage: 'local' },
     };
@@ -65,12 +71,14 @@ describe('Get case', () => {
 
   it('failure case by docket number', async () => {
     applicationContext = {
-      persistence: {
-        getCaseByDocketNumber: () =>
-          Promise.resolve({
-            docketNumber: '00000-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          }),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByDocketNumber: () =>
+            Promise.resolve({
+              docketNumber: '00000-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
       },
       environment: { stage: 'local' },
     };
@@ -87,14 +95,16 @@ describe('Get case', () => {
 
   it('failure case by invalid user', async () => {
     applicationContext = {
-      persistence: {
-        getCaseByDocketNumber: () =>
-          Promise.resolve([
-            {
-              docketNumber: '00000-00',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            },
-          ]),
+      getPersistenceGateway: () => {
+        return {
+          getCaseByDocketNumber: () =>
+            Promise.resolve([
+              {
+                docketNumber: '00000-00',
+                caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              },
+            ]),
+        };
       },
       environment: { stage: 'local' },
     };
