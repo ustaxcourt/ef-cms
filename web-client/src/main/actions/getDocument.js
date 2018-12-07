@@ -5,7 +5,5 @@ export default async ({ applicationContext, props }) => {
       documentId: props.documentId,
       applicationContext,
     });
-  return {
-    documentBlob,
-  };
+  props.callback(documentBlob);
 };
