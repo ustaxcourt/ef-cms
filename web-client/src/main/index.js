@@ -50,6 +50,7 @@ export default {
     updateSearchTerm,
   },
   state: {
+    path: '/',
     currentPage: 'Loading',
     usaBanner: {
       showDetails: false,

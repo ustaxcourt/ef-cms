@@ -22,4 +22,8 @@ CaseInitiator.prototype.isValid = function isValid() {
   );
 };
 
+CaseInitiator.prototype.exportObject = function exportObject() {
+  return Object.assign({}, this);
+};
+
 module.exports = CaseInitiator;
