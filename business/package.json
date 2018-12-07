@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/ustaxcourt/ef-cms.git"
   },
-  "license": "ISC",
+  "license": "CC0",
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "aws-sdk": "^2.367.0",
+    "aws-sdk": "^2.372.0",
     "axios": "^0.18.0",
     "joi-browser": "^13.4.0",
     "uuid": "^3.3.2"
