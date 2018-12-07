@@ -87,12 +87,28 @@ describe('Case entity', () => {
   });
 
   describe('isValidDocketNumber', () => {
-    it('returns true if a valid docketNumber', () => {
-      assert.ok(Case.isValidDocketNumber('00000-00'));
+    it('returns false if a valid docketnumber', () => {
+      assert.equal(Case.isValidDocketNumber('00101-18'), true);
+    });
+
+    it('returns false if a invalid docketnumber', () => {
+      assert.equal(Case.isValidDocketNumber('000101-18'), false);
+    });
+
+    it('returns false if a invalid docketnumber', () => {
+      assert.equal(Case.isValidDocketNumber('a00101-18'), false);
+    });
+
+    it('returns false if a invalid docketNumber', () => {
+      assert.equal(Case.isValidDocketNumber('00000-00'), false);
     });
 
     it('returns false if a invalid docketnumber', () => {
       assert.equal(Case.isValidDocketNumber('00'), false);
+    });
+
+    it('returns false if a invalid docketnumber', () => {
+      assert.equal(Case.isValidDocketNumber('00100-aa'), false);
     });
   });
 });
