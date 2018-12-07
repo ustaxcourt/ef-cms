@@ -80,11 +80,18 @@ export default {
       // lastName: 'taxpayer',
       // token: 'taxpayer',
       // role: 'taxpayer',
+
       // userId: 'petitionsclerk',
       // firstName: 'petitionsclerk',
       // lastName: 'petitionsclerk',
       // token: 'petitionsclerk',
       // role: 'petitionsclerk',
+
+      // userId: 'irsattorney',
+      // firstName: 'irsattorney',
+      // lastName: 'irsattorney',
+      // token: 'irsattorney',
+      // role: 'irsattorney',
     },
     caseDetail: {},
     cases: [],
