@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { state } from 'cerebral';
 
 export const formattedSearchParams = get => {

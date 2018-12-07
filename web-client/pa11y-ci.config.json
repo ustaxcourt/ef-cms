@@ -5,15 +5,14 @@
       "args": ["--no-sandbox"]
     }
   },
-  "notes": "// TODO: shorten case-detail paths to use short docket number (e.g. 101-18)",
   "urls": [
     "http://localhost:1234/",
     "http://localhost:1234/log-in",
     "http://localhost:1234/log-in?token=taxpayer&path=/",
-    "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/00101-18",
+    "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
     "http://localhost:1234/log-in?token=petitionsclerk&path=/",
-    "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/00101-18",
+    "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
     "http://localhost:1234/log-in?token=intakeclerk&path=/",
-    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/00101-18"
+    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18"
   ]
 }
