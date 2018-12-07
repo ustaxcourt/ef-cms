@@ -12,6 +12,7 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     user: state.user,
+    documentBlob: state.documentBlob,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
     viewDocument: sequences.viewDocument,
@@ -19,6 +20,7 @@ export default connect(
   function CaseDetail({
     caseDetail,
     user,
+    documentBlob,
     showDetails,
     togglePaymentDetails,
     viewDocument,
@@ -135,11 +137,11 @@ export default connect(
                     <button
                       className="pdf-link"
                       aria-label="View PDF"
-                      onClick={() =>
+                      onClick={() => {
                         viewDocument({
                           documentId: item.documentId,
-                        })
-                      }
+                        });
+                      }}
                     >
                       <FontAwesomeIcon icon="file-pdf" />
                       {item.documentType}

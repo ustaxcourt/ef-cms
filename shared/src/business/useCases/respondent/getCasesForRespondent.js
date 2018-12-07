@@ -1,12 +1,12 @@
 /**
- * getCasesByIRSAttorney
+ * getCasesForRespondent
  * @param userId
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getCasesForRespondent = ({ irsAttorneyId, applicationContext }) => {
+exports.getCasesForRespondent = ({ respondentId, applicationContext }) => {
   return applicationContext.getPersistenceGateway().getCasesForRespondent({
-    irsAttorneyId,
+    respondentId,
     applicationContext,
   });
 };

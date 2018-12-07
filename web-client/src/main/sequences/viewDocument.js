@@ -1,3 +1,5 @@
-import viewDocument from '../actions/viewDocument';
+import getDocument from '../actions/getDocument';
+import setDocument from '../actions/setDocument';
+import openDocumentInTab from '../actions/openDocumentInTab';
 
-export default [viewDocument];
+export default [getDocument, setDocument, openDocumentInTab];

@@ -17,7 +17,7 @@ exports.isAuthorized = (user, action, owner) => {
   }
 
   return (
-    (user === 'irsattorney' ||
+    (user === 'respondent' ||
       user === 'petitionsclerk' ||
       user === 'intakeclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||

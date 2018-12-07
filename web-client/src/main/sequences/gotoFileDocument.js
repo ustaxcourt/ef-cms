@@ -12,6 +12,6 @@ export default [
   setCase,
   getUserRole,
   {
-    irsattorney: [setCurrentPage('FileDocument')],
+    respondent: [setCurrentPage('FileDocument')],
   },
 ];

@@ -253,12 +253,12 @@ exports.getCasesByUser = ({ userId, applicationContext }) => {
  * @returns {*}
  */
 exports.getCasesForRespondent = async ({
-  irsAttorneyId,
+  respondentId,
   applicationContext,
 }) => {
   return getRecordsViaMapping({
     applicationContext,
-    key: irsAttorneyId,
+    key: respondentId,
     type: 'activeCase',
   });
 };
