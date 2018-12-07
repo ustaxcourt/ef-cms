@@ -22,6 +22,6 @@ describe('Create docket number', function() {
       .getFullYear()
       .toString()
       .substr(-2);
-    expect(result).to.equal(`00223-${last2YearDigits}`);
+    expect(result).to.equal(`223-${last2YearDigits}`);
   });
 });
