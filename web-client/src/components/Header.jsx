@@ -3,7 +3,6 @@ import { state, sequences } from 'cerebral';
 import React from 'react';
 import SearchBox from './SearchBox';
 
-
 import close from '../../node_modules/uswds/dist/img/close.svg';
 
 /**
@@ -13,7 +12,7 @@ export default connect(
   {
     user: state.user,
     mobileMenu: state.mobileMenu,
-    toggleMobileMenu: sequences.toggleMobileMenu
+    toggleMobileMenu: sequences.toggleMobileMenu,
   },
 
   function Header({ user, mobileMenu, toggleMobileMenu }) {
