@@ -15,6 +15,5 @@ exports.createDocketNumber = async ({ applicationContext }) => {
     .getFullYear()
     .toString()
     .substr(-2);
-  const pad = `00000${plus100}`.substr(-5);
-  return `${pad}-${last2YearDigits}`;
+  return `${plus100}-${last2YearDigits}`;
 };
