@@ -1,4 +1,4 @@
-const { UnauthorizedError } = require('./errors');
+const { UnauthorizedError, NotFoundError } = require('ef-cms-shared/src/errors/errors');
 
 const headers = {
   'Content-Type': 'application/json',
@@ -24,7 +24,17 @@ exports.handle = async fun => {
     const response = await fun();
     return exports.sendOk(response);
   } catch (err) {
-    return exports.sendError(err);
+    console.error('err', err);
+    if (err instanceof NotFoundError) {
+      err.statusCode = 404;
+      return exports.sendError(err);
+    } else if (err instanceof UnauthorizedError) {
+      err.statusCode = 403;
+      return exports.sendError(err);
+    } else {
+      return exports.sendError(err);
+    }
+
   }
 };
 

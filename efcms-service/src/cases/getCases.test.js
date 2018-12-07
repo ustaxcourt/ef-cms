@@ -1,8 +1,9 @@
-const aws = require('aws-sdk-mock');
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const getCases = require('./getCases');
 const chai = require('chai');
+const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
+const sinon = require('sinon');
 chai.use(require('chai-string'));
 
 describe('Get cases lambda', function() {
@@ -23,23 +24,19 @@ describe('Get cases lambda', function() {
 
   describe('success', function() {
     before(function() {
-      aws.mock('DynamoDB.DocumentClient', 'query', async function() {
-        return {
-          Items: [
-            {
-              userId: 'userId',
-              caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
-              docketNumber: '456789-18',
-              documents,
-              createdAt: '',
-            },
-          ],
-        };
-      });
+      sinon.stub(client, 'query').resolves([
+        {
+          userId: 'userId',
+          caseId: 'AAAAAAAA-AAAA-AAA-AAA-AAAAAAAAAAAA',
+          docketNumber: '456789-18',
+          documents,
+          createdAt: '',
+        },
+      ]);
     });
 
     after(function() {
-      aws.restore('DynamoDB.DocumentClient');
+      client.query.restore();
     });
 
     [

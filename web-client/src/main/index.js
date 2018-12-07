@@ -1,47 +1,76 @@
-import * as sequences from './sequences';
-
-import createCase from '../useCases/createCase';
-import getCaseDetail from '../useCases/getCaseDetail';
-import getCases from '../useCases/getCases';
-import getPetitionsClerkCaseList from '../useCases/getPetitionsClerkCaseList';
-import getUser from '../useCases/getUser';
-import updateCase from '../useCases/updateCase';
-import uploadCasePdfs from '../useCases/uploadCasePdfs.js';
+import gotoCaseDetail from './sequences/gotoCaseDetail';
+import gotoDashboard from './sequences/gotoDashboard';
+import gotoFilePetition from './sequences/gotoFilePetition';
+import gotoLogIn from './sequences/gotoLogIn';
+import gotoStyleGuide from './sequences/gotoStyleGuide';
+import submitFilePetition from './sequences/submitFilePetition';
+import submitLogIn from './sequences/submitLogIn';
+import submitSearch from './sequences/submitSearch';
+import submitUpdateCase from './sequences/submitUpdateCase';
+import toggleDocumentValidation from './sequences/toggleDocumentValidation';
+import togglePaymentDetails from './sequences/togglePaymentDetails';
+import toggleMobileMenu from './sequences/toggleMobileMenu';
+import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
+import updateCaseValue from './sequences/updateCaseValue';
+import updateFormValue from './sequences/updateFormValue';
+import updatePetitionValue from './sequences/updatePetitionValue';
+import updateSearchTerm from './sequences/updateSearchTerm';
+import { formattedSearchParams } from './computeds/formattedSearchParams';
+import {
+  formattedCaseDetail,
+  formattedCases,
+} from './computeds/formattedCaseDetail';
 
 /**
  * Main Cerebral module
  */
 export default {
-  providers: {
-    useCases: {
-      createCase,
-      getCaseDetail,
-      getCases,
-      getPetitionsClerkCaseList,
-      getUser,
-      updateCase,
-      uploadCasePdfs,
-    },
+  providers: {},
+  sequences: {
+    gotoCaseDetail,
+    gotoDashboard,
+    gotoFilePetition,
+    gotoLogIn,
+    gotoStyleGuide,
+    submitFilePetition,
+    submitLogIn,
+    submitSearch,
+    submitUpdateCase,
+    toggleDocumentValidation,
+    togglePaymentDetails,
+    toggleMobileMenu,
+    toggleUsaBannerDetails,
+    updateCaseValue,
+    updateFormValue,
+    updatePetitionValue,
+    updateSearchTerm,
   },
-  sequences,
   state: {
     currentPage: 'Loading',
     usaBanner: {
       showDetails: false,
+    },
+    mobileMenu: {
+      isVisible: false,
     },
     paymentInfo: {
       showDetails: false,
     },
     petition: {},
     form: {},
+    searchTerm: '',
     user: {
       userId: '',
-      // firstName: '',
-      // lastName: '',
-      // token: '',
-      // role: '',
+      // userId: 'petitionsclerk',
+      // firstName: 'petitionsclerk',
+      // lastName: 'petitionsclerk',
+      // token: 'petitionsclerk',
+      // role: 'petitionsclerk',
     },
     caseDetail: {},
     cases: [],
+    formattedCaseDetail,
+    formattedCases,
+    formattedSearchParams,
   },
 };

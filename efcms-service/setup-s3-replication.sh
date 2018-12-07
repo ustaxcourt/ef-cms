@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 stage=$1
 BUCKET="${EFCMS_DOMAIN}-documents-${stage}-us-east-1"
 backup_bucket="${EFCMS_DOMAIN}-documents-${stage}-us-west-1"
