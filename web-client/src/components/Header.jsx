@@ -1,31 +1,48 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 import React from 'react';
+import SearchBox from './SearchBox';
 
-// import close from '../../node_modules/uswds/dist/img/close.svg';
+
+import close from '../../node_modules/uswds/dist/img/close.svg';
 
 /**
  * Header
  */
 export default connect(
-  { user: state.user },
-  function Header({ user }) {
+  {
+    user: state.user,
+    mobileMenu: state.mobileMenu,
+    toggleMobileMenu: sequences.toggleMobileMenu
+  },
+
+  function Header({ user, mobileMenu, toggleMobileMenu }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
           <div className="usa-logo" id="extended-logo">
             <em className="usa-logo-text">
-              <a href="/">United States Tax Court</a>
+              <a href={user.userId ? '/' : '/log-in'}>
+                United States Tax Court
+              </a>
             </em>
           </div>
-          <button className="usa-menu-btn">Menu</button>
+          <button className="usa-menu-btn" onClick={() => toggleMobileMenu()}>
+            Menu
+          </button>
         </div>
 
-        <nav role="navigation" className="usa-nav">
+        <nav
+          role="navigation"
+          className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
+        >
           <div className="usa-nav-inner">
-            {/* <button className="usa-nav-close">
+            <button
+              className="usa-nav-close"
+              onClick={() => toggleMobileMenu()}
+            >
               <img src={close} alt="close" />
-            </button> */}
+            </button>
             {/* <ul className="usa-nav-primary usa-accordion">
               <li>
                 <button
@@ -82,21 +99,16 @@ export default connect(
               </li>
             </ul> */}
             <div className="usa-nav-secondary">
-              <ul className="usa-unstyled-list usa-nav-secondary-links">
-                {/* <li className="js-search-button-container">
-                  <button className="usa-header-search-button js-search-button">
-                    Search
-                  </button>
-                </li>
-                <li>
-                  <a href="/">Secondary priority link</a>
-                </li> */}
-                {user.userId && (
+              {user.userId && (
+                <ul className="usa-unstyled-list usa-nav-secondary-links">
+                  <li role="search" className="usa-search">
+                    <SearchBox />
+                  </li>
                   <li>
                     Hello, {user.firstName} {user.lastName}
                   </li>
-                )}
-              </ul>
+                </ul>
+              )}
             </div>
           </div>
         </nav>

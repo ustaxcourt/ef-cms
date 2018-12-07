@@ -1,0 +1,34 @@
+FROM node:8
+
+RUN apt-get update
+
+RUN apt-get install -y default-jre
+
+RUN apt-get install -yq git bash
+
+WORKDIR /home/app
+
+# Since the .git file is ignored in the .dockerignore file,
+# we init a git repo here so that serverless can get a new hash
+# to deploy with... serverless is coupled to git
+RUN git config --global user.email "blank@example.com" && \
+    git config --global user.name "local" && \
+    git init && \
+    touch tmp.txt && \
+    git add tmp.txt && \
+    git commit -m 'rev'
+
+RUN CI=true npm install cypress
+
+COPY business/package.json /home/app/business/package.json
+RUN cd /home/app/business && npm i --only=production
+
+COPY efcms-service/package.json /home/app/efcms-service/package.json
+RUN cd /home/app/efcms-service && npm i
+
+COPY web-client/package.json /home/app/web-client/package.json
+RUN cd /home/app/web-client && npm i
+
+COPY . /home/app
+
+CMD echo "This container does not have a default command.  Please use the ./docker-run.sh script instead to run the entire application"

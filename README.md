@@ -2,34 +2,43 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
-## Running this project locally
+# Running / Verifing the Project via Docker
+
+Assuming you have Docker installed, The following command will spin up a docker container with the UI, API, local S3, local Dynamo, etc all running inside it:
+
+`./docker-run.sh`
+
+You can access the UI at  http://localhost:1234
+You can access the API at http://localhost:3000
+You can access the dynamodb shell at http://localhost:8000/shell
+You can access the dynamodb-admin ui at http://localhost:8001
+You can access s3 local at http://localhost:9000
+
+In order to kill that docker container, you will need to run the following command in separate terminal:
+
+`./kill-docker-run.sh`
+
+## Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Each must be run in order to function.
 
-### UI (Terminal A)
+#### Prerequisites
+- node v8.10.0
+- npm 6.4.1
 
 #### Setup
 
-- `cd web-client`
-- `npm i`
+Both the web-client and efcms-service share code that exists in the business directory; therefore, before you can run either, you need to run an npm install inside the business directory.
 
-#### Running
+- `cd business && npm i`
+- `cd ../web-client && npm i`
+- `cd ../efcms-service && npm i`
 
-- `cd web-client`
-- `npm start`
+#### Terminal A
+- `cd web-client && npm start`
 
-### API (Terminal B)
-
-#### Setup
-
-- `cd efcms-service`
-- `npm i`
-- `npm run install:dynamodb`
-
-#### Running
-
-- `cd efcms-service`
-- `npm start`
+#### Terminal B
+- `cd efcms-service && npm start`
 
 ## CI/CD Setup
 
