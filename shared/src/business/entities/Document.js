@@ -49,6 +49,7 @@ function Document(rawDocument) {
 Document.prototype.isValid = function isValid() {
   return joi.validate(this, documentSchema).error === null;
 };
+
 /**
  * getValidationError
  * @returns {*}
@@ -56,6 +57,7 @@ Document.prototype.isValid = function isValid() {
 Document.prototype.getValidationError = function getValidationError() {
   return joi.validate(this, documentSchema).error;
 };
+
 /**
  * validate
  */

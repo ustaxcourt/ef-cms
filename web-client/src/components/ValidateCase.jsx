@@ -194,7 +194,7 @@ export default connect(
             <div className="usa-width-full">
               <button
                 className="float-right"
-                id="update-case"
+                id="update-case-page-end"
                 onClick={() => submitUpdateCase()}
               >
                 Save updates
