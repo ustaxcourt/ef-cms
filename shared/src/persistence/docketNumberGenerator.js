@@ -6,10 +6,10 @@
  *
  * @returns {Promise.<string>}
  */
-exports.createDocketNumber = async applicationContext => {
-  const id = await applicationContext.persistence.incrementCounter(
+exports.createDocketNumber = async ({ applicationContext }) => {
+  const id = await applicationContext.persistence.incrementCounter({
     applicationContext,
-  );
+  });
   const plus100 = id + 100;
   const last2YearDigits = new Date()
     .getFullYear()
