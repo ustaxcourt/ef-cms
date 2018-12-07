@@ -8,13 +8,17 @@
 }
 
 button.pdf-link {
-  cursor: pointer;
-  background: none;
-  color: #0071bc;
   padding: 0;
   margin: 0;
+  background: none;
+  color: $color-blue;
+  cursor: pointer;
   font-weight: normal;
   text-decoration: underline;
+}
+
+button.pdf-link:hover {
+  color: $color-blue
 }
 
 h1[tabIndex='-1']:focus {

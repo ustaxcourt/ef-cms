@@ -30,16 +30,18 @@ exports.fileAnswer = async ({
     documentType: Case.documentTypes.answer,
     documentId: answerDocumentId,
     userId: userId,
+    createdAt: new Date().toISOString(),
   };
   const caseWithAnswer = new Case({
     ...caseToUpdate,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],
   });
+
   caseWithAnswer.validateWithError(new UnprocessableEntityError());
 
   return await applicationContext.getUseCases().updateCase({
-    caseId: caseToUpdate.caseId,
-    caseToUpdate,
+    caseId: caseWithAnswer.caseId,
+    caseDetails: caseWithAnswer,
     userId,
     applicationContext,
   });

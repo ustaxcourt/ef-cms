@@ -41,7 +41,7 @@ const caseSchema = joi.object().keys({
     .optional(),
   documents: joi
     .array()
-    .length(3)
+    .min(3)
     .items(
       joi.object({
         documentId: joi
