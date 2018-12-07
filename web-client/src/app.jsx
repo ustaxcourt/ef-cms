@@ -1,5 +1,9 @@
 import { Container } from '@cerebral/react';
-import { faFilePdf, faFlag } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFilePdf,
+  faFlag,
+  faCaretLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
 import mainModule from './main';
@@ -14,8 +18,7 @@ import AppComponent from './components/App';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    library.add(faFilePdf);
-    library.add(faFlag);
+    library.add(faFilePdf, faFlag, faCaretLeft);
     mainModule.providers.applicationContext = applicationContext;
     mainModule.providers.router = {
       route,
