@@ -12,6 +12,9 @@ const {
 
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
 const { uploadPdfsForNewCase, uploadPdf } = require('ef-cms-shared/src/persistence/awsS3Persistence');
+const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPolicy');
+const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
+
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const { getCase } = require('ef-cms-shared/src/business/useCases/getCase');
 const { getCases } = require('ef-cms-shared/src/business/useCases/getCases');
@@ -23,8 +26,6 @@ const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendP
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs');
 const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent');
-const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPolicy');
-const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 module.exports = {
   getPersistenceGateway: () => {

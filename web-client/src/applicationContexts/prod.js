@@ -1,13 +1,9 @@
 const {
   uploadPdf,
   uploadPdfsForNewCase,
+  uploadDocument,
+  getDocument,
 } = require('../../../shared/src/persistence/awsS3Persistence');
-const {
-  getDownloadPolicyUrl,
-} = require('../../../shared/src/proxies/getDownloadPolicyUrlProxy');
-const {
-  getUploadPolicy,
-} = require('../../../shared/src/proxies/getUploadPolicyProxy');
 
 import { createCase } from '../../../shared/src/proxies/createCaseProxy';
 import { getCase } from '../../../shared/src/proxies/getCaseProxy';
@@ -19,6 +15,7 @@ import { updateCase } from '../../../shared/src/proxies/updateCaseProxy';
 import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs';
 import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer';
 import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile';
 
 /**
  * Context for the prod environment
@@ -30,9 +27,9 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return {
       uploadPdf,
-      getDownloadPolicyUrl,
-      getUploadPolicy,
+      getDocument,
       uploadPdfsForNewCase,
+      uploadDocument,
     };
   },
   getUseCases: () => {
@@ -47,6 +44,7 @@ const applicationContext = {
       uploadCasePdfs,
       fileAnswer,
       getCasesForRespondent,
+      downloadDocumentFile,
     };
   },
 };

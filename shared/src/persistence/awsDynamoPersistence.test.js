@@ -227,17 +227,17 @@ describe('awsDynamoPersistence', function() {
     });
   });
 
-  describe('getCasesByIRSAttorney', () => {
+  describe('getCasesForRespondent', () => {
     it('should strip the pk and sk from the results', async () => {
       const result = await getCasesForRespondent({
-        irsAttorneyId: 'taxpayer',
+        respondentId: 'taxpayer',
         applicationContext,
       });
       expect(result).to.deep.equal([{ caseId: '123', status: 'new' }]);
     });
     it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
       await getCasesForRespondent({
-        irsAttorneyId: 'taxpayer',
+        respondentId: 'taxpayer',
         applicationContext,
       });
       expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([

@@ -31,14 +31,51 @@ exports.uploadPdf = async ({ policy, file }) => {
   return documentId;
 };
 
+const getUploadPolicy = async ({ applicationContext }) => {
+  const response = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
+  );
+  return response.data;
+};
+
+const getDownloadPolicy = async ({ applicationContext, documentId }) => {
+  const {
+    data: { url },
+  } = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
+  );
+  return url;
+};
+
+exports.getDocument = async ({ applicationContext, documentId }) => {
+  const url = await getDownloadPolicy({ applicationContext, documentId });
+  const { data: fileBlob } = await axios({
+    url,
+    method: 'GET',
+    responseType: 'blob',
+  });
+  return new Blob([fileBlob], { type: 'application/pdf' });
+};
+
+exports.uploadDocument = async ({ applicationContext, answerDocument }) => {
+  const policy = await getUploadPolicy({ applicationContext });
+
+  const answerDocumentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadPdf({
+      policy,
+      file: answerDocument,
+    });
+
+  return answerDocumentId;
+};
+
 exports.uploadPdfsForNewCase = async ({
   applicationContext,
   caseInitiator,
   fileHasUploaded,
 }) => {
-  const policy = await applicationContext
-    .getPersistenceGateway()
-    .getUploadPolicy({ applicationContext });
+  const policy = await getUploadPolicy({ applicationContext });
 
   const petitionDocumentId = await exports.uploadPdf({
     policy,

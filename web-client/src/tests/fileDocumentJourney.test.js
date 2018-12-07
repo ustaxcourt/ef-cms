@@ -16,13 +16,13 @@ mainModule.providers.router = {
 
 test = CerebralTest(mainModule);
 
-describe.only('IRS Attorney', async () => {
+describe('Respondent', async () => {
   test.setState('user', {
-    firstName: 'IRS',
-    lastName: 'Attorney',
-    role: 'irsattorney',
-    token: 'irsattorney',
-    userId: 'irsattorney',
+    firstName: 'Re',
+    lastName: 'Spondent',
+    role: 'respondent',
+    token: 'respondent',
+    userId: 'respondent',
   });
 
   const fakeFile = new Buffer(['TEST'], {

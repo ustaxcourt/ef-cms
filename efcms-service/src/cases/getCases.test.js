@@ -121,10 +121,10 @@ describe('Get cases lambda', function() {
     [
       {
         httpMethod: 'GET',
-        headers: { Authorization: 'Bearer irsattorney' },
+        headers: { Authorization: 'Bearer respondent' },
       },
     ].forEach(function(documentBody) {
-      it('should return a the cases for the irsattorney', function() {
+      it('should return a the cases for the respondent', function() {
         return lambdaTester(getCases.get)
           .event(documentBody)
           .expectResolve(result => {

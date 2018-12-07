@@ -14,9 +14,9 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
       return await applicationContext
         .getUseCases()
         .getCasesByUser({ userId, applicationContext });
-    case 'irsattorney':
+    case 'respondent':
       return await applicationContext.getUseCases().getCasesForRespondent({
-        irsAttorneyId: user.barNumber,
+        respondentId: user.barNumber,
         applicationContext,
       });
     case 'petitionsclerk':

@@ -13,17 +13,12 @@ exports.fileAnswer = async ({
     );
   }
 
-  //get upload policy
-  const policy = await applicationContext
-    .getPersistenceGateway()
-    .getUploadPolicy({ applicationContext });
-
   //upload to S3 return uuid
   const answerDocumentId = await applicationContext
     .getPersistenceGateway()
-    .uploadPdf({
-      policy,
-      file: answerDocument,
+    .uploadDocument({
+      applicationContext,
+      answerDocument,
     });
 
   const answerDocumentMetadata = {
