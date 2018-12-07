@@ -1,8 +1,8 @@
 /**
  * awsPersistenceGateway
  */
-const { uploadPdf } = require('./awsS3Persistence');
+const { uploadPdfsForNewCase } = require('./awsS3Persistence');
 
 module.exports = {
-  uploadPdf,
+  uploadPdfsForNewCase,
 };

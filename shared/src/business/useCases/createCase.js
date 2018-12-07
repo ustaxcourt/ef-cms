@@ -1,4 +1,5 @@
 const Case = require('../entities/Case');
+
 /**
  * createCase
  *
@@ -9,7 +10,9 @@ const Case = require('../entities/Case');
  */
 exports.createCase = async ({ userId, documents, applicationContext }) => {
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
-    applicationContext,
+    {
+      applicationContext,
+    },
   );
   const caseToCreate = new Case({
     userId: userId,
