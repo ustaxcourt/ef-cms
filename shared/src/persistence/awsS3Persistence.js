@@ -1,81 +1,5 @@
-const { S3 } = require('aws-sdk');
 const axios = require('axios');
 const uuidv4 = require('uuid/v4');
-
-/**
- * getS3
- * @param region
- * @param s3Endpoint
- * @returns {S3}
- */
-const getS3 = ({ region, s3Endpoint }) => {
-  return new S3({
-    region,
-    s3ForcePathStyle: true,
-    endpoint: s3Endpoint,
-  });
-};
-
-/**
- * getDownloadPolicyUrl
- * @param documentId
- * @param applicationContext
- * @returns {Promise<any>}
- */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
-  return new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).getSignedUrl(
-      'getObject',
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
-        Expires: 120,
-      },
-      (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve({
-          url: data,
-        });
-      },
-    );
-  });
-};
-
-/**
- * createUploadPolicy
- * @param applicationContext
- * @returns {Promise<any>}
- */
-exports.createUploadPolicy = ({ applicationContext }) =>
-  new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).createPresignedPost(
-      {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Conditions: [
-          ['starts-with', '$key', ''],
-          ['starts-with', '$Content-Type', ''],
-        ],
-      },
-      (err, data) => {
-        if (err) return reject(err);
-        resolve(data);
-      },
-    );
-  });
-
-/**
- * getDocumentPolicy
- * @param applicationContext
- * @returns {Promise<*>}
- */
-const getDocumentUploadPolicy = async ({ applicationContext }) => {
-  const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
-  );
-  return response.data;
-};
 
 /**
  * uploadPdf
@@ -83,7 +7,7 @@ const getDocumentUploadPolicy = async ({ applicationContext }) => {
  * @param file
  * @returns {Promise<*>}
  */
-const uploadPdf = async ({ policy, file }) => {
+exports.uploadPdf = async ({ policy, file }) => {
   const documentId = uuidv4();
   const formData = new FormData();
   formData.append('key', documentId);
@@ -107,29 +31,70 @@ const uploadPdf = async ({ policy, file }) => {
   return documentId;
 };
 
+const getUploadPolicy = async ({ applicationContext }) => {
+  const response = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/uploadPolicy`,
+  );
+  return response.data;
+};
+
+const getDownloadPolicy = async ({ applicationContext, documentId }) => {
+  const {
+    data: { url },
+  } = await axios.get(
+    `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
+  );
+  return url;
+};
+
+exports.getDocument = async ({ applicationContext, documentId }) => {
+  const url = await getDownloadPolicy({ applicationContext, documentId });
+  const { data: fileBlob } = await axios({
+    url,
+    method: 'GET',
+    responseType: 'blob',
+  });
+  return new Blob([fileBlob], { type: 'application/pdf' });
+};
+
+exports.uploadDocument = async ({ applicationContext, answerDocument }) => {
+  const policy = await getUploadPolicy({ applicationContext });
+
+  const answerDocumentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadPdf({
+      policy,
+      file: answerDocument,
+    });
+
+  return answerDocumentId;
+};
+
 exports.uploadPdfsForNewCase = async ({
   applicationContext,
   caseInitiator,
   fileHasUploaded,
 }) => {
-  const policy = await getDocumentUploadPolicy({ applicationContext });
+  const policy = await getUploadPolicy({ applicationContext });
 
-  const petitionDocumentId = await uploadPdf({
+  const petitionDocumentId = await exports.uploadPdf({
     policy,
     file: caseInitiator.petitionFile,
   });
   fileHasUploaded();
 
-  const requestForPlaceOfTrialDocumentId = await uploadPdf({
+  const requestForPlaceOfTrialDocumentId = await exports.uploadPdf({
     policy,
     file: caseInitiator.requestForPlaceOfTrial,
   });
   fileHasUploaded();
 
-  const statementOfTaxpayerIdentificationNumberDocumentId = await uploadPdf({
-    policy,
-    file: caseInitiator.statementOfTaxpayerIdentificationNumber,
-  });
+  const statementOfTaxpayerIdentificationNumberDocumentId = await exports.uploadPdf(
+    {
+      policy,
+      file: caseInitiator.statementOfTaxpayerIdentificationNumber,
+    },
+  );
   fileHasUploaded();
 
   return {

@@ -18,24 +18,24 @@ const MOCK_RESPONSE = {
   },
 };
 
-const createUploadPolicyStub = sinon.stub();
-const createPolicyUrl = proxyquire('./createPolicyUrl', {
+const getUploadPolicyStub = sinon.stub();
+const getUploadPolicy = proxyquire('./getUploadPolicy', {
   '../applicationContext': {
-    persistence: {
-      createUploadPolicy: createUploadPolicyStub,
-    },
+    getPersistenceGateway: () => ({
+      getUploadPolicy: getUploadPolicyStub,
+    }),
   },
 });
 
-describe('Create policy url', function() {
+describe('getUploadPolicy url', function() {
   [
     {
       httpMethod: 'GET',
     },
   ].forEach(function(policyUrlResponse) {
     it('should create a policyUrlResponse on a GET', function() {
-      createUploadPolicyStub.resolves(MOCK_RESPONSE);
-      return lambdaTester(createPolicyUrl.create)
+      getUploadPolicyStub.resolves(MOCK_RESPONSE);
+      return lambdaTester(getUploadPolicy.create)
         .event(policyUrlResponse)
         .expectResolve(result => {
           const data = JSON.parse(result.body);
@@ -44,8 +44,8 @@ describe('Create policy url', function() {
     });
 
     it('should return an error if S3 errors', function() {
-      createUploadPolicyStub.rejects(new Error('error'));
-      return lambdaTester(createPolicyUrl.create)
+      getUploadPolicyStub.rejects(new Error('error'));
+      return lambdaTester(getUploadPolicy.create)
         .event(policyUrlResponse)
         .expectResolve(err => {
           expect(err.body).to.startsWith('"error');
