@@ -53,8 +53,14 @@ exports.updateCase = async ({
 
   caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate);
 
-  return applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: { ...caseToUpdate },
-    applicationContext,
-  });
+  const caseAfterUpdate = await applicationContext
+    .getPersistenceGateway()
+    .saveCase({
+      caseToSave: { ...caseToUpdate },
+      applicationContext,
+    });
+
+  new Case(caseAfterUpdate).validate();
+
+  return caseAfterUpdate;
 };

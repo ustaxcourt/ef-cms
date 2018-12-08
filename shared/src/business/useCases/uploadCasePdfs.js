@@ -1,4 +1,5 @@
 const CaseInitiator = require('../entities/CaseInitiator');
+const CaseInitiatorResponse = require('../entities/CaseInitiatorResponse');
 
 /**
  * uploadCasePdfs
@@ -13,7 +14,8 @@ exports.uploadCasePdfs = async ({
   caseInitiator,
   fileHasUploaded,
 }) => {
-  caseInitiator = new CaseInitiator(caseInitiator);
+  caseInitiator = new CaseInitiator(caseInitiator).validate();
+
   caseInitiator = caseInitiator.exportObject();
 
   const documentIDs = await applicationContext
@@ -23,6 +25,8 @@ exports.uploadCasePdfs = async ({
       caseInitiator,
       fileHasUploaded,
     });
+
+  new CaseInitiatorResponse(documentIDs).validate();
 
   return documentIDs;
 };
