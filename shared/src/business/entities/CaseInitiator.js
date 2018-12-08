@@ -26,4 +26,10 @@ CaseInitiator.prototype.exportObject = function exportObject() {
   return Object.assign({}, this);
 };
 
+CaseInitiator.prototype.validate = function validate() {
+  if (!this.isValid()) {
+    throw new Error('The case initiator was invalid');
+  }
+};
+
 module.exports = CaseInitiator;
