@@ -3,7 +3,7 @@ const assert = require('assert');
 const CaseInitiatorResponse = require('./CaseInitiatorResponse');
 
 describe('CaseInitiatorResponse', () => {
-  it('Creates a valid CaseInitiatorResponse', () => {
+  it('valid', () => {
     const caseInitiatorResponse = new CaseInitiatorResponse({
       petitionDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       requestForPlaceOfTrialDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
