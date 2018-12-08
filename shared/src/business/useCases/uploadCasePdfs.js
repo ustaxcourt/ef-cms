@@ -14,15 +14,14 @@ exports.uploadCasePdfs = async ({
   caseInitiator,
   fileHasUploaded,
 }) => {
-  caseInitiator = new CaseInitiator(caseInitiator).validate();
-
-  caseInitiator = caseInitiator.exportObject();
+  caseInitiator = new CaseInitiator(caseInitiator);
+  caseInitiator.validate();
 
   const documentIDs = await applicationContext
     .getPersistenceGateway()
     .uploadPdfsForNewCase({
       applicationContext,
-      caseInitiator,
+      caseInitiator: caseInitiator.toJSON(),
       fileHasUploaded,
     });
 

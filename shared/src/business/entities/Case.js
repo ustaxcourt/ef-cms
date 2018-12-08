@@ -1,77 +1,10 @@
+const { joiValidationDecorator } = require('./JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuidv4 = require('uuid/v4');
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
-
-/**
- * schema definition
- */
-const caseSchema = joi.object().keys({
-  caseId: joi
-    .string()
-    .uuid(uuidVersions)
-    .optional(),
-  userId: joi
-    .string()
-    // .uuid(uuidVersions)
-    .optional(),
-  createdAt: joi
-    .date()
-    .iso()
-    .optional(),
-  docketNumber: joi
-    .string()
-    .regex(/^[0-9]{5}-[0-9]{2}$/)
-    .optional(),
-  respondentId: joi.string().optional(),
-  irsSendDate: joi
-    .date()
-    .iso()
-    .optional(),
-  payGovId: joi.string().optional(),
-  payGovDate: joi
-    .date()
-    .iso()
-    .optional(),
-  status: joi
-    .string()
-    .regex(/^(new)|(general)$/)
-    .optional(),
-  documents: joi
-    .array()
-    .min(3)
-    .items(
-      joi.object({
-        documentId: joi
-          .string()
-          .uuid(uuidVersions)
-          .required(),
-        userId: joi
-          .string()
-          // .uuid(uuidVersions)
-          .optional(),
-        documentType: joi.string().required(),
-        validated: joi.boolean().optional(),
-        reviewDate: joi
-          .date()
-          .iso()
-          .optional(),
-        reviewUser: joi.string().optional(),
-        status: joi.string().optional(),
-        servedDate: joi
-          .date()
-          .iso()
-          .optional(),
-        createdAt: joi
-          .date()
-          .iso()
-          .optional(),
-      }),
-    )
-    .required(),
-});
 
 /**
  * Case
@@ -95,40 +28,73 @@ function Case(rawCase) {
   );
 }
 
-/**
- * isValid
- * @returns {boolean}
- */
-Case.prototype.isValid = function isValid() {
-  return joi.validate(this, caseSchema).error === null;
-};
-/**
- * getValidationError
- * @returns {*}
- */
-Case.prototype.getValidationError = function getValidationError() {
-  return joi.validate(this, caseSchema).error;
-};
-
-/**
- * validate
- */
-Case.prototype.validate = function validate() {
-  if (!this.isValid()) {
-    throw new Error('The case was invalid ' + this.getValidationError());
-  }
-};
-
-/**
- * validateWithError
- * will throw the error provided if the case entity is invalid
- */
-Case.prototype.validateWithError = function validate(error) {
-  if (!this.isValid()) {
-    error.message = `${error.message} ${this.getValidationError()}`;
-    throw error;
-  }
-};
+joiValidationDecorator(
+  Case,
+  joi.object().keys({
+    caseId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
+      .optional(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+    docketNumber: joi
+      .string()
+      .regex(/^[0-9]{5}-[0-9]{2}$/)
+      .optional(),
+    respondentId: joi.string().optional(),
+    irsSendDate: joi
+      .date()
+      .iso()
+      .optional(),
+    payGovId: joi.string().optional(),
+    payGovDate: joi
+      .date()
+      .iso()
+      .optional(),
+    status: joi
+      .string()
+      .regex(/^(new)|(general)$/)
+      .optional(),
+    documents: joi
+      .array()
+      .min(3)
+      .items(
+        joi.object({
+          documentId: joi
+            .string()
+            .uuid(uuidVersions)
+            .required(),
+          userId: joi
+            .string()
+            // .uuid(uuidVersions)
+            .optional(),
+          documentType: joi.string().required(),
+          validated: joi.boolean().optional(),
+          reviewDate: joi
+            .date()
+            .iso()
+            .optional(),
+          reviewUser: joi.string().optional(),
+          status: joi.string().optional(),
+          servedDate: joi
+            .date()
+            .iso()
+            .optional(),
+          createdAt: joi
+            .date()
+            .iso()
+            .optional(),
+        }),
+      )
+      .required(),
+  }),
+);
 
 /**
  * isPetitionPackageReviewed
