@@ -21,4 +21,10 @@ exports.joiValidationDecorator = function(entityConstructor, schema) {
       throw error;
     }
   };
+
+  entityConstructor.prototype.toJSON = function toJSON() {
+    return {
+      ...this,
+    };
+  };
 };
