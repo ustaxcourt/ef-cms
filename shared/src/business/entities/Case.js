@@ -46,7 +46,7 @@ joiValidationDecorator(
     docketNumber: joi
       .string()
       .regex(/^[0-9]{5}-[0-9]{2}$/)
-      .optional(),
+      .required(),
     respondentId: joi.string().optional(),
     irsSendDate: joi
       .date()
@@ -111,10 +111,12 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
   this.status = 'general';
   this.documents.every(document => (document.status = 'served'));
+  return this;
 };
 
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
+  return this;
 };
 
 /**
@@ -138,6 +140,10 @@ Case.isValidDocketNumber = docketNumber => {
     /^\d{5}-\d{2}$/.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
+};
+
+Case.prototype.preValidate = function() {
+  return Case.isValidDocketNumber(this.docketNumber);
 };
 
 /**

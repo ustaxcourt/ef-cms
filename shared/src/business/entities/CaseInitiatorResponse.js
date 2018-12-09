@@ -10,12 +10,12 @@ const uuidVersions = {
  * @param rawCase
  * @constructor
  */
-function CaseInitatorResponse(rawResponse) {
+function CaseInitiatorResponse(rawResponse) {
   Object.assign(this, rawResponse);
 }
 
 joiValidationDecorator(
-  CaseInitatorResponse,
+  CaseInitiatorResponse,
   joi.object().keys({
     petitionDocumentId: joi
       .string()
@@ -32,4 +32,4 @@ joiValidationDecorator(
   }),
 );
 
-module.exports = CaseInitatorResponse;
+exports.CaseInitiatorResponse = CaseInitiatorResponse;

@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const CaseInitiatorResponse = require('./CaseInitiatorResponse');
+const { CaseInitiatorResponse } = require('./CaseInitiatorResponse');
 
 describe('CaseInitiatorResponse', () => {
   it('valid', () => {

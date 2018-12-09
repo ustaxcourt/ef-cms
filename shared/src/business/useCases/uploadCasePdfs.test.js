@@ -24,9 +24,9 @@ describe('uploadCasesPdfs', () => {
       await uploadCasePdfs({
         fileHasUploaded: () => {},
         caseInitiator: {
-          petitionFile: 'not null',
-          requestForPlaceOfTrial: 'not null',
-          statementOfTaxpayerIdentificationNumber: 'not null',
+          petitionFile: {},
+          requestForPlaceOfTrial: {},
+          statementOfTaxpayerIdentificationNumber: {},
         },
         applicationContext,
       });
