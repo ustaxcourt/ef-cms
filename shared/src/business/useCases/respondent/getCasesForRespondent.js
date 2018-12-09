@@ -16,5 +16,5 @@ exports.getCasesForRespondent = async ({
       respondentId,
       applicationContext,
     });
-  return Case.validateCollection(cases);
+  return Case.validateRawCollection(cases);
 };
