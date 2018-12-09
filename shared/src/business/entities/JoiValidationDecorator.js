@@ -33,7 +33,7 @@ exports.joiValidationDecorator = function(entityConstructor, schema) {
     };
   };
 
-  entityConstructor.validateCollection = function(collection) {
+  entityConstructor.validateRawCollection = function(collection) {
     return collection.map(entity =>
       new entityConstructor(entity).validate().toJSON(),
     );

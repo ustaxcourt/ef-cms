@@ -25,5 +25,5 @@ exports.getCasesByStatus = async ({ status, userId, applicationContext }) => {
       status,
       applicationContext,
     });
-  return Case.validateCollection(cases);
+  return Case.validateRawCollection(cases);
 };

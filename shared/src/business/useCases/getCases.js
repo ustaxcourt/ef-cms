@@ -32,5 +32,5 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
     default:
       return;
   }
-  return Case.validateCollection(cases);
+  return Case.validateRawCollection(cases);
 };
