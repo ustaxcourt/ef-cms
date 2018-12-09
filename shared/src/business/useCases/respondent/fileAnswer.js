@@ -27,6 +27,7 @@ exports.fileAnswer = async ({
     userId: userId,
     createdAt: new Date().toISOString(),
   };
+
   const caseWithAnswer = new Case({
     ...caseToUpdate,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],

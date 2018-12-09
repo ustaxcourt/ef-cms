@@ -27,5 +27,6 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
         .toJSON(),
       applicationContext,
     });
+
   return new Case(createdCase).validate().toJSON();
 };
