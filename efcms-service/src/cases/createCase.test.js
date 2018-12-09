@@ -26,7 +26,7 @@ describe('Create case lambda', function() {
     beforeEach(function() {
       sinon.stub(client, 'put').resolves({
         userId: 'userId',
-        docketNumber: '456789-18',
+        docketNumber: '56789-18',
         documents,
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         createdAt: '',
@@ -73,7 +73,7 @@ describe('Create case lambda', function() {
     beforeEach(function() {
       sinon.stub(client, 'put').resolves({
         userId: 'userId',
-        docketNumber: '456789-18',
+        docketNumber: '56789-18',
         documents: documents,
         createdAt: '',
       });
@@ -121,7 +121,7 @@ describe('Create case lambda', function() {
         return lambdaTester(createCase.create)
           .event(post)
           .expectResolve(err => {
-            expect(err.body).to.startsWith('"The case was invalid');
+            expect(err.body).to.startsWith('"The entity was invalid');
           });
       });
     });

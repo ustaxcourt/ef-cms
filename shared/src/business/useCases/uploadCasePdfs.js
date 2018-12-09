@@ -1,5 +1,5 @@
 const CaseInitiator = require('../entities/CaseInitiator');
-const CaseInitiatorResponse = require('../entities/CaseInitiatorResponse');
+const { CaseInitiatorResponse } = require('../entities/CaseInitiatorResponse');
 
 /**
  * uploadCasePdfs
@@ -14,14 +14,11 @@ exports.uploadCasePdfs = async ({
   caseInitiator,
   fileHasUploaded,
 }) => {
-  caseInitiator = new CaseInitiator(caseInitiator);
-  caseInitiator.validate();
-
   const documentIDs = await applicationContext
     .getPersistenceGateway()
     .uploadPdfsForNewCase({
       applicationContext,
-      caseInitiator: caseInitiator.toJSON(),
+      caseInitiator: new CaseInitiator(caseInitiator).validate().toJSON(),
       fileHasUploaded,
     });
 

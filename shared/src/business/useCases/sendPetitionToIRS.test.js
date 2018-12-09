@@ -25,7 +25,7 @@ describe('Send petition to IRS', () => {
     userId: 'userId',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '45678-18',
-    documents: null,
+    documents,
     createdAt: '',
   };
 
@@ -78,7 +78,7 @@ describe('Send petition to IRS', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(),
+          getCaseByCaseId: () => Promise.resolve(null),
         };
       },
       environment: { stage: 'local' },

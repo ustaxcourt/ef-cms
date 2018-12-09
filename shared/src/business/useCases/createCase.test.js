@@ -25,7 +25,11 @@ describe('Create case', () => {
       getPersistenceGateway: () => {
         return {
           createCase: () =>
-            Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+            Promise.resolve({
+              docketNumber: '00101-18',
+              documents,
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
         };
       },
       environment: { stage: 'local' },

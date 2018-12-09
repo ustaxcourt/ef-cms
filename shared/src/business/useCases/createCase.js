@@ -14,15 +14,18 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
       applicationContext,
     },
   );
-  const caseToCreate = new Case({
-    userId: userId,
-    docketNumber: docketNumber,
-    documents: documents,
-  });
-  caseToCreate.validate();
 
-  return applicationContext.getPersistenceGateway().createCase({
-    caseRecord: { ...caseToCreate },
-    applicationContext,
-  });
+  const createdCase = await applicationContext
+    .getPersistenceGateway()
+    .createCase({
+      caseRecord: new Case({
+        userId: userId,
+        docketNumber: docketNumber,
+        documents: documents,
+      })
+        .validate()
+        .toJSON(),
+      applicationContext,
+    });
+  return new Case(createdCase).validate().toJSON();
 };

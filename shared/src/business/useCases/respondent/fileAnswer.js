@@ -34,10 +34,12 @@ exports.fileAnswer = async ({
 
   caseWithAnswer.validateWithError(new UnprocessableEntityError());
 
-  return await applicationContext.getUseCases().updateCase({
+  const updatedCase = await applicationContext.getUseCases().updateCase({
     caseId: caseWithAnswer.caseId,
-    caseDetails: caseWithAnswer,
+    caseDetails: caseWithAnswer.toJSON(),
     userId,
     applicationContext,
   });
+
+  return new Case(updatedCase).validate().toJSON();
 };
