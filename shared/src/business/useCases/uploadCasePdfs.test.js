@@ -36,7 +36,7 @@ describe('uploadCasesPdfs', () => {
     assert.ok(error);
   });
 
-  it('should throw an error if the caseInitiator passed in is invaliid', async () => {
+  it('should throw an error if the caseInitiator passed in is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {

@@ -40,8 +40,8 @@ exports.updateCase = async ({
   if (caseJson.documents) {
     caseJson.documents = setDocumentDetails(userId, caseJson.documents);
   }
-  const caseToUpdate = new Case(caseJson).validate();
 
+  const caseToUpdate = new Case(caseJson).validate();
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
