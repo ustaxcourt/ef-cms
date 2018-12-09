@@ -149,4 +149,56 @@ describe('Get case', () => {
       assert.equal(error.message, 'Unauthorized');
     }
   });
+
+  it('throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () =>
+            Promise.resolve({
+              docketNumber: '00101-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCase({
+        userId: 'intakeclerk',
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('The entity was invalid');
+  });
+
+  it('throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCaseByDocketNumber: () =>
+            Promise.resolve({
+              docketNumber: '00101-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCase({
+        userId: 'intakeclerk',
+        caseId: '00101-08',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('The entity was invalid');
+  });
 });
