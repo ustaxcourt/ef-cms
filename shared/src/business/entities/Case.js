@@ -6,6 +6,8 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
+const Document = require('./Document');
+
 const docketNumberMatcher = /^\d{3,5}-\d{2}$/;
 /**
  * Case
@@ -27,6 +29,13 @@ function Case(rawCase) {
       ? { payGovDate: new Date().toISOString() }
       : null,
   );
+
+  if (this.documents && Array.isArray(this.documents)) {
+    this.documents = this.documents.map(document => new Document(document));
+  } else {
+    this.documents = [];
+  }
+
 }
 
 joiValidationDecorator(
@@ -65,36 +74,14 @@ joiValidationDecorator(
     documents: joi
       .array()
       .min(3)
-      .items(
-        joi.object({
-          documentId: joi
-            .string()
-            .uuid(uuidVersions)
-            .required(),
-          userId: joi
-            .string()
-            // .uuid(uuidVersions)
-            .optional(),
-          documentType: joi.string().required(),
-          validated: joi.boolean().optional(),
-          reviewDate: joi
-            .date()
-            .iso()
-            .optional(),
-          reviewUser: joi.string().optional(),
-          status: joi.string().optional(),
-          servedDate: joi
-            .date()
-            .iso()
-            .optional(),
-          createdAt: joi
-            .date()
-            .iso()
-            .optional(),
-        }),
-      )
       .required(),
   }),
+  function() {
+    return (
+      Case.isValidDocketNumber(this.docketNumber) &&
+      Document.validateCollection(this.documents)
+    );
+  },
 );
 
 /**
@@ -142,10 +129,6 @@ Case.isValidDocketNumber = docketNumber => {
     docketNumberMatcher.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
-};
-
-Case.prototype.preValidate = function() {
-  return Case.isValidDocketNumber(this.docketNumber);
 };
 
 /**

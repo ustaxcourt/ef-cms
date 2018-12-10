@@ -38,6 +38,17 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .required(),
+    validated: joi.boolean().optional(),
+    reviewDate: joi
+      .date()
+      .iso()
+      .optional(),
+    reviewUser: joi.string().optional(),
+    status: joi.string().optional(),
+    servedDate: joi
+      .date()
+      .iso()
+      .optional(),
     createdAt: joi
       .date()
       .iso()

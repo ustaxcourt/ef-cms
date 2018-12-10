@@ -42,6 +42,7 @@ exports.updateCase = async ({
   }
 
   const caseToUpdate = new Case(caseJson).validate();
+
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -51,7 +52,7 @@ exports.updateCase = async ({
   }
 
   caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate).validate();
-
+  console.log(caseToUpdate.toJSON())
   const caseAfterUpdate = await applicationContext
     .getPersistenceGateway()
     .saveCase({

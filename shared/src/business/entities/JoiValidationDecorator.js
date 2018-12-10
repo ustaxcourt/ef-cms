@@ -1,10 +1,14 @@
 const joi = require('joi-browser');
 
-exports.joiValidationDecorator = function(entityConstructor, schema) {
+exports.joiValidationDecorator = function(
+  entityConstructor,
+  schema,
+  customValidate,
+) {
   entityConstructor.prototype.isValid = function isValid() {
     return (
       joi.validate(this, schema).error === null &&
-      (this.preValidate ? this.preValidate() : true)
+      (customValidate ? customValidate.call(this) : true)
     );
   };
 
@@ -37,5 +41,9 @@ exports.joiValidationDecorator = function(entityConstructor, schema) {
     return collection.map(entity =>
       new entityConstructor(entity).validate().toJSON(),
     );
+  };
+
+  entityConstructor.validateCollection = function(collection) {
+    return collection.map(entity => entity.validate());
   };
 };

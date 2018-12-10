@@ -12,14 +12,17 @@ const MOCK_CASE = {
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
   ],
 };
@@ -48,6 +51,7 @@ describe('updateCase', () => {
       error = err;
     }
     assert.ok(error);
+    console.log('!!!!!!!', error)
     assert.ok(error.message.startsWith('The entity was invalid'));
   });
 
