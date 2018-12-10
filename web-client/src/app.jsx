@@ -11,7 +11,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { router, route } from './router';
-import AppComponent from './components/App';
+import AppComponent from './views/App';
 
 /**
  * Instantiates the Cerebral app with React

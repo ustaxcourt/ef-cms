@@ -29,7 +29,7 @@ export default connect(
               id="name"
               type="text"
               name="name"
-              autocapitalize="off"
+              autoCapitalize="off"
               value={form.name}
               onChange={e => {
                 updateFormValue({
