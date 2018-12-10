@@ -12,7 +12,6 @@ const formatCase = (caseDetail, form) => {
 
   if (result.documents) result.documents.map(formatDocument);
 
-  result.docketNumber = _.trimStart(result.docketNumber, '0');
   result.irsDateFormatted = moment(result.irsDate).format('L');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
 
