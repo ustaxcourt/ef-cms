@@ -125,7 +125,6 @@ export default connect(
                       <td>Filing fee paid</td>
                       <td />
                       <td />
-                      <td />
                     </tr>
                   )}
                 </tbody>
@@ -135,7 +134,7 @@ export default connect(
           {currentTab == 'Case Information' && (
             <div className="tab-content">
               <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend>Petition Fee</legend>
+                <legend>Petition fee</legend>
                 {caseDetail.showPaymentRecord && (
                   <React.Fragment>
                     <p>Paid by pay.gov</p>
