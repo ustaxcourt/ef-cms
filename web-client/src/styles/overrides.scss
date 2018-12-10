@@ -2,6 +2,10 @@ input[type='file'] {
   height: auto;
 }
 
+input[type='text'] {
+  margin: 0 0 2rem 0;
+}
+
 label {
   margin-bottom: 0.5em;
   font-weight: 700;
@@ -38,4 +42,21 @@ p {
   padding-left: 0.5rem;
   color: transparent;
   content: '';
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px solid $color-gray-lightest;
+  margin: 2rem 0;
+  padding: 0;
+}
+
+table {
+  margin: 0;
+}
+
+button {
+  margin: 0 1rem 2rem 0;
 }

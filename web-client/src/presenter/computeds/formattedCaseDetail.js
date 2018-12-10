@@ -20,7 +20,7 @@ const formatCase = (caseDetail, form) => {
   result.showPayGovIdInput = form.paymentType == 'payGov';
   result.showPaymentOptions = !(caseDetail.payGovId && !form.paymentType);
   result.showPaymentRecord = result.payGovId && !form.paymentType;
-  result.datePetitionSentToIrsMessage = `R served on ${
+  result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
 
