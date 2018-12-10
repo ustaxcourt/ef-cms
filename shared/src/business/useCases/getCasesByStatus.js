@@ -3,6 +3,7 @@ const {
   GET_CASES_BY_STATUS,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
+const Case = require('../entities/Case');
 
 /**
  * getCasesByStatus
@@ -18,8 +19,11 @@ exports.getCasesByStatus = async ({ status, userId, applicationContext }) => {
 
   status = status.toLowerCase();
 
-  return applicationContext.getPersistenceGateway().getCasesByStatus({
-    status,
-    applicationContext,
-  });
+  const cases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByStatus({
+      status,
+      applicationContext,
+    });
+  return Case.validateRawCollection(cases);
 };

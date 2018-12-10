@@ -9,16 +9,16 @@ chai.use(require('chai-string'));
 describe('Get cases lambda', function() {
   const documents = [
     {
-      documentId: '123456789',
-      documentType: 'stin',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
     },
     {
-      documentId: '123456780',
-      documentType: 'stin',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
     },
     {
-      documentId: '123456781',
-      documentType: 'stin',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentType: 'Petition',
     },
   ];
 
@@ -33,8 +33,8 @@ describe('Get cases lambda', function() {
       sinon.stub(client, 'batchGet').resolves([
         {
           userId: 'userId',
-          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859A',
-          docketNumber: '456789-18',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '56789-18',
           documents,
           createdAt: '',
         },

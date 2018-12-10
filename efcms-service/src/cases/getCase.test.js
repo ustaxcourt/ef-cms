@@ -10,8 +10,23 @@ describe('Get case lambda', function() {
   const MOCK_CASE = {
     userId: 'userId',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    docketNumber: '456789-18',
-    createdAt: '',
+    docketNumber: '56789-18',
+    status: 'new',
+    createdAt: new Date().toISOString(),
+    documents: [
+      {
+        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        documentType: 'Petition',
+      },
+      {
+        documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        documentType: 'Petition',
+      },
+      {
+        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        documentType: 'Petition',
+      },
+    ]
   };
 
   describe('success - no cases exist in database', function() {
