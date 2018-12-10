@@ -1,38 +1,40 @@
 const assert = require('assert');
 
 const Case = require('./Case');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 const A_VALID_CASE = {
   docketNumber: '00101-18',
-  documents: [
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'a',
-      createdAt: '2018-11-21T20:49:28.192Z',
-      userId: 'taxpayer',
-      validated: true,
-      reviewDate: '2018-11-21T20:49:28.192Z',
-      reviewUser: 'petitionsclerk',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'b',
-      createdAt: '2018-11-21T20:49:28.192Z',
-      userId: 'taxpayer',
-      validated: true,
-      reviewDate: '2018-11-21T20:49:28.192Z',
-      reviewUser: 'petitionsclerk',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'c',
-      createdAt: '2018-11-21T20:49:28.192Z',
-      userId: 'taxpayer',
-      validated: true,
-      reviewDate: '2018-11-21T20:49:28.192Z',
-      reviewUser: 'petitionsclerk',
-    },
-  ],
+  documents: MOCK_DOCUMENTS,
+  // documents: [
+  //   {
+  //     documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  //     documentType: 'a',
+  //     createdAt: '2018-11-21T20:49:28.192Z',
+  //     userId: 'taxpayer',
+  //     validated: true,
+  //     reviewDate: '2018-11-21T20:49:28.192Z',
+  //     reviewUser: 'petitionsclerk',
+  //   },
+  //   {
+  //     documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  //     documentType: 'b',
+  //     createdAt: '2018-11-21T20:49:28.192Z',
+  //     userId: 'taxpayer',
+  //     validated: true,
+  //     reviewDate: '2018-11-21T20:49:28.192Z',
+  //     reviewUser: 'petitionsclerk',
+  //   },
+  //   {
+  //     documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  //     documentType: 'c',
+  //     createdAt: '2018-11-21T20:49:28.192Z',
+  //     userId: 'taxpayer',
+  //     validated: true,
+  //     reviewDate: '2018-11-21T20:49:28.192Z',
+  //     reviewUser: 'petitionsclerk',
+  //   },
+  // ],
 };
 
 describe('Case entity', () => {
