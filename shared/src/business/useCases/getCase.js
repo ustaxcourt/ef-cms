@@ -27,7 +27,7 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
-        docketNumber: caseId,
+        docketNumber: Case.stripLeadingZeros(caseId),
         applicationContext,
       });
   }

@@ -8,7 +8,7 @@ const uuidVersions = {
 
 const Document = require('./Document');
 
-const docketNumberMatcher = /^\d{3,5}-\d{2}$/;
+const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 /**
  * Case
  * @param rawCase
@@ -57,6 +57,9 @@ joiValidationDecorator(
       .regex(docketNumberMatcher)
       .required(),
     respondentId: joi.string().optional(),
+    respondentFirstName: joi.string().optional(),
+    respondentLastName: joi.string().optional(),
+    respondentBarNumber: joi.string().optional(),
     irsSendDate: joi
       .date()
       .iso()
@@ -128,6 +131,11 @@ Case.isValidDocketNumber = docketNumber => {
     docketNumberMatcher.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
+};
+
+Case.stripLeadingZeros = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${parseInt(number)}-${year}`;
 };
 
 /**
