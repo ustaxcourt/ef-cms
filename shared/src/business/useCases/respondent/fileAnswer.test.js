@@ -61,7 +61,7 @@ describe('fileAnswer', () => {
       respondentId: 'respondent',
       respondentFirstName: 'bob',
       respondentLastName: 'marley',
-      respondentBar: '12345',
+      respondentBarNumber: '12345',
     });
   });
 
