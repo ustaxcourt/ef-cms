@@ -52,7 +52,6 @@ exports.updateCase = async ({
   }
 
   caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate).validate();
-  console.log(caseToUpdate.toJSON())
   const caseAfterUpdate = await applicationContext
     .getPersistenceGateway()
     .saveCase({
