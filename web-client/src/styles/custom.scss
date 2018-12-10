@@ -30,6 +30,14 @@ h1[tabIndex='-1']:focus {
   outline: none;
 }
 
+table thead th,
+table thead td {
+  background-color: $color-gray-light;
+  color: $color-primary-darkest;
+}
+table tbody tr:nth-child(even) td {
+  background-color: $color-gray-lightest;
+}
 label.validated::after {
   display: inline-block;
   width: 1.8rem;
