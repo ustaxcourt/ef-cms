@@ -3,24 +3,12 @@ const sinon = require('sinon');
 const { sendPetitionToIRS } = require('./sendPetitionToIRS');
 const { getCase } = require('./getCase');
 const { omit } = require('lodash');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 describe('Send petition to IRS', () => {
   let applicationContext;
 
-  let documents = [
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-  ];
+  let documents = MOCK_DOCUMENTS;
 
   let caseRecord = {
     userId: 'userId',
