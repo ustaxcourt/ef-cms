@@ -71,7 +71,6 @@ export default {
     },
     petition: {},
     document: {},
-    documentBlob: null,
     form: {},
     searchTerm: '',
     user: {

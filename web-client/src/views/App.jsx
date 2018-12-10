@@ -3,7 +3,8 @@ import { state } from 'cerebral';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CaseDetail from './CaseDetail';
+import CaseDetailInternal from './CaseDetailInternal';
+import CaseDetailPetitioner from './CaseDetailPetitioner';
 import Dashboard from './Dashboard';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
@@ -15,10 +16,10 @@ import FileDocument from './FileDocument';
 import PetitionsWorkQueue from './PetitionsWorkQueue';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
-import ValidateCase from './ValidateCase';
 
 const pages = {
-  CaseDetail,
+  CaseDetailInternal,
+  CaseDetailPetitioner,
   Dashboard,
   FilePetition,
   IntakeClerkDashboard,
@@ -27,7 +28,6 @@ const pages = {
   FileDocument,
   PetitionsWorkQueue,
   StyleGuide,
-  ValidateCase,
 };
 
 /**

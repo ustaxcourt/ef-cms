@@ -4,26 +4,28 @@ import assert from 'assert';
 import {
   formattedCaseDetail,
   formattedCases,
-} from '../main/computeds/formattedCaseDetail';
+} from '../presenter/computeds/formattedCaseDetail';
 
-import { formattedSearchParams } from '../main/computeds/formattedSearchParams';
+import { formattedSearchParams } from '../presenter/computeds/formattedSearchParams';
 
 describe('formatted case details computed', () => {
-  it('formats the docket number', () => {
+  it('formats the date', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
-        caseDetail: { docketNumber: '00101-18', documents: [] },
+        caseDetail: { irsDate: '2018-11-21T20:49:28.192Z', documents: [] },
         form: {},
       },
     });
-    assert.equal(result.docketNumber, '101-18');
+    assert.equal(result.irsDateFormatted, '11/21/2018');
   });
 
-  it('formats the docket number in a list of cases', () => {
+  it('formats the date in a list of cases', () => {
     const result = runCompute(formattedCases, {
-      state: { cases: [{ docketNumber: '00101-18', documents: [] }] },
+      state: {
+        cases: [{ irsDate: '2018-11-21T20:49:28.192Z', documents: [] }],
+      },
     });
-    assert.equal(result[0].docketNumber, '101-18');
+    assert.equal(result[0].irsDateFormatted, '11/21/2018');
   });
 });
 
@@ -32,6 +34,7 @@ describe('formatted search parameters computed', () => {
     const result = runCompute(formattedSearchParams, {
       state: { searchTerm: '101-18' },
     });
-    assert.equal(result, '00101-18');
+    // currently noop
+    assert.equal(result, '101-18');
   });
 });
