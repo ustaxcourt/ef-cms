@@ -30,7 +30,7 @@ export default connect(
   }) {
     return (
       <React.Fragment>
-        <div className="usa-grid">
+        <div className="usa-grid breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back to dashboard
