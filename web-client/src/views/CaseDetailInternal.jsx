@@ -57,6 +57,7 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                  id="docket-record-tab"
                 >
                   Docket Record
                 </button>
@@ -65,6 +66,7 @@ export default connect(
                 <button
                   role="tab"
                   className="tab-link"
+                  id="case-info-tab"
                   onClick={() =>
                     updateCurrentTab({ value: 'Case Information' })
                   }
