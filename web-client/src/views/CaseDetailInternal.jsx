@@ -36,7 +36,7 @@ export default connect(
           <SuccessNotification />
           <ErrorNotification />
           <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
-          <p className="subsection">
+          <p>
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
           <p>
@@ -51,6 +51,9 @@ export default connect(
             </ul>
           </nav>
           <div className="tab-content">
+            <button id="send-to-irs" onClick={() => submitSendToIRS()}>
+              Send to IRS
+            </button>
             <table className="responsive-table">
               <thead>
                 <tr>
@@ -150,6 +153,12 @@ export default connect(
                             });
                           }}
                         />
+                        <button
+                          id="update-case-page-end"
+                          onClick={() => submitUpdateCase()}
+                        >
+                          Save updates
+                        </button>
                       </React.Fragment>
                     )}
                   </li>
@@ -165,22 +174,7 @@ export default connect(
                 : 'usa-grid-full'
             }
           >
-            <div className="usa-width-full">
-              <button
-                className="float-right"
-                id="update-case-page-end"
-                onClick={() => submitUpdateCase()}
-              >
-                Save updates
-              </button>
-              <button
-                className="float-right"
-                id="send-to-irs"
-                onClick={() => submitSendToIRS()}
-              >
-                Send to IRS
-              </button>
-            </div>
+            <div className="usa-width-full" />
           </div>
         </section>
       </React.Fragment>
