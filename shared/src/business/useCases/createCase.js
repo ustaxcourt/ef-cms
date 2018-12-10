@@ -19,9 +19,9 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
     .getPersistenceGateway()
     .createCase({
       caseRecord: new Case({
-        userId: userId,
-        docketNumber: docketNumber,
-        documents: documents,
+        userId,
+        docketNumber,
+        documents,
       })
         .validate()
         .toJSON(),
