@@ -16,6 +16,7 @@ import toggleMobileMenu from './sequences/toggleMobileMenu';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
 import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
 import updateCaseValue from './sequences/updateCaseValue';
+import updateCurrentTab from './sequences/updateCurrentTab';
 import updateDocumentValue from './sequences/updateDocumentValue';
 import updateFormValue from './sequences/updateFormValue';
 import updatePetitionValue from './sequences/updatePetitionValue';
@@ -32,8 +33,8 @@ export default {
   sequences: {
     gotoCaseDetail,
     gotoDashboard,
-    gotoFilePetition,
     gotoFileDocument,
+    gotoFilePetition,
     gotoLogIn,
     gotoStyleGuide,
     loginWithToken,
@@ -44,13 +45,14 @@ export default {
     submitToIRS,
     submitUpdateCase,
     toggleDocumentValidation,
-    togglePaymentDetails,
     toggleMobileMenu,
+    togglePaymentDetails,
     toggleUsaBannerDetails,
     updateCaseValue,
+    updateCurrentTab,
+    updateDocumentValue,
     updateFormValue,
     updatePetitionValue,
-    updateDocumentValue,
     updateSearchTerm,
     viewDocument,
   },
