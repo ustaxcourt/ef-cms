@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { fileAnswer } = require('./fileAnswer');
 
 describe('fileAnswer', () => {
