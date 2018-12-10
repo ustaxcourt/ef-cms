@@ -24,10 +24,12 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
         applicationContext,
       });
   } else if (Case.isValidDocketNumber(caseId)) {
-    return applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-      docketNumber: caseId,
-      applicationContext,
-    });
+    caseRecord = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        docketNumber: caseId,
+        applicationContext,
+      });
   }
 
   if (!caseRecord) {
@@ -38,5 +40,5 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return caseRecord;
+  return new Case(caseRecord).validate().toJSON();
 };

@@ -1,5 +1,7 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
+const Document = require('../../entities/Document');
+
 exports.fileAnswer = async ({
   userId,
   caseToUpdate,
@@ -27,6 +29,7 @@ exports.fileAnswer = async ({
     userId: userId,
     createdAt: new Date().toISOString(),
   };
+
   const caseWithAnswer = new Case({
     ...caseToUpdate,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],
@@ -34,10 +37,14 @@ exports.fileAnswer = async ({
 
   caseWithAnswer.validateWithError(new UnprocessableEntityError());
 
-  return await applicationContext.getUseCases().updateCase({
+  const updatedCase = await applicationContext.getUseCases().updateCase({
     caseId: caseWithAnswer.caseId,
-    caseDetails: caseWithAnswer,
+    caseDetails: caseWithAnswer.toJSON(),
     userId,
     applicationContext,
   });
+
+  new Case(updatedCase).validate();
+
+  return new Document(answerDocumentMetadata).validate().toJSON();
 };

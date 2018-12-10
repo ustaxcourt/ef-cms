@@ -1,3 +1,4 @@
+const { joiValidationDecorator } = require('./JoiValidationDecorator');
 const joi = require('joi-browser');
 
 const uuidVersions = {
@@ -8,26 +9,8 @@ const documentTypes = [
   'Petition',
   'Request for Place of Trial',
   'Statement of Taxpayer Identification Number',
+  'Answer',
 ];
-
-const documentSchema = joi.object().keys({
-  documentType: joi
-    .string()
-    .valid(documentTypes)
-    .required(),
-  documentId: joi
-    .string()
-    .uuid(uuidVersions)
-    .required(),
-  userId: joi
-    .string()
-    // .uuid(uuidVersions)
-    .required(),
-  createdAt: joi
-    .date()
-    .iso()
-    .optional(),
-});
 
 /**
  * constructor
@@ -40,29 +23,26 @@ function Document(rawDocument) {
   });
 }
 
-/**
- * isValid
- * @returns {boolean}
- */
-Document.prototype.isValid = function isValid() {
-  return joi.validate(this, documentSchema).error === null;
-};
-
-/**
- * getValidationError
- * @returns {*}
- */
-Document.prototype.getValidationError = function getValidationError() {
-  return joi.validate(this, documentSchema).error;
-};
-
-/**
- * validate
- */
-Document.prototype.validate = function validate() {
-  if (!this.isValid()) {
-    throw new Error('The document was invalid ' + this.getValidationError());
-  }
-};
+joiValidationDecorator(
+  Document,
+  joi.object().keys({
+    documentType: joi
+      .string()
+      .valid(documentTypes)
+      .required(),
+    documentId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
+      .required(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+  }),
+);
 
 module.exports = Document;
