@@ -1,5 +1,6 @@
 const assert = require('assert');
 const { getCase } = require('./getCase');
+const sinon = require('sinon');
 
 const documents = [
   {
@@ -82,15 +83,14 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
+    const getCaseByDocketNumberStub = sinon.stub().resolves({
+      docketNumber: '00101-00',
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documents,
+    });
     applicationContext = {
       getPersistenceGateway: () => ({
-        getCaseByDocketNumber: () => {
-          return Promise.resolve({
-            docketNumber: '00101-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            documents,
-          });
-        },
+        getCaseByDocketNumber: getCaseByDocketNumberStub,
       }),
       environment: { stage: 'local' },
     };
@@ -100,6 +100,10 @@ describe('Get case', () => {
       applicationContext,
     });
     assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
+    assert.equal(
+      getCaseByDocketNumberStub.getCall(0).args[0].docketNumber,
+      '101-00',
+    );
   });
 
   it('failure case by docket number', async () => {
