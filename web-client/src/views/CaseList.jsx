@@ -25,7 +25,9 @@ export default connect(
             <tr key={item.docketNumber}>
               <td className="responsive-title">
                 <span className="responsive-label">Docket number</span>
-                <a href={'/case-detail/' + item.caseId}>{item.docketNumber}</a>
+                <a href={'/case-detail/' + item.docketNumber}>
+                  {item.docketNumber}
+                </a>
               </td>
               <td>
                 <span className="responsive-label">Date filed</span>

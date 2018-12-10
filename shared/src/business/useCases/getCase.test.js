@@ -49,21 +49,19 @@ describe('Get case', () => {
 
   it('success case by docket number', async () => {
     applicationContext = {
-      getPersistenceGateway: () => {
-        return {
-          getCaseByDocketNumber: () => {
-            return Promise.resolve({
-              docketNumber: '00000-00',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            });
-          },
-        };
-      },
+      getPersistenceGateway: () => ({
+        getCaseByDocketNumber: () => {
+          return Promise.resolve({
+            docketNumber: '00101-00',
+            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          });
+        },
+      }),
       environment: { stage: 'local' },
     };
     const caseRecord = await getCase({
       userId: 'petitionsclerk',
-      caseId: '00000-00',
+      caseId: '00101-00',
       applicationContext,
     });
     assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
@@ -71,15 +69,13 @@ describe('Get case', () => {
 
   it('failure case by docket number', async () => {
     applicationContext = {
-      getPersistenceGateway: () => {
-        return {
-          getCaseByDocketNumber: () =>
-            Promise.resolve({
-              docketNumber: '00000-00',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            }),
-        };
-      },
+      getPersistenceGateway: () => ({
+        getCaseByDocketNumber: () =>
+          Promise.resolve({
+            docketNumber: '00101-00',
+            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+      }),
       environment: { stage: 'local' },
     };
     try {
@@ -95,23 +91,21 @@ describe('Get case', () => {
 
   it('failure case by invalid user', async () => {
     applicationContext = {
-      getPersistenceGateway: () => {
-        return {
-          getCaseByDocketNumber: () =>
-            Promise.resolve([
-              {
-                docketNumber: '00000-00',
-                caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              },
-            ]),
-        };
-      },
+      getPersistenceGateway: () => ({
+        getCaseByDocketNumber: () =>
+          Promise.resolve([
+            {
+              docketNumber: '00101-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            },
+          ]),
+      }),
       environment: { stage: 'local' },
     };
     try {
       await getCase({
         userId: 'someone',
-        caseId: '00000-00',
+        caseId: '00101-00',
         applicationContext,
       });
     } catch (error) {
