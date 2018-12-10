@@ -45,7 +45,7 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
    *
    * @param message
    */
-  constructor(message = 'problem in body or url') {
+  constructor(message = 'cannot process') {
     super(message);
 
     this.statusCode = 422;

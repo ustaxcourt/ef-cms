@@ -5,22 +5,10 @@ const sinon = require('sinon');
 const updateCase = require('./updateCase');
 const chai = require('chai');
 chai.use(require('chai-string'));
+const { MOCK_DOCUMENTS } = require('ef-cms-shared/src/test/mockDocuments');
 
 describe('Update case function', function() {
-  let documents = [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-  ];
+  let documents = MOCK_DOCUMENTS;
 
   const item = {
     caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -130,7 +118,7 @@ describe('Update case function', function() {
         return lambdaTester(updateCase.put)
           .event(put)
           .expectResolve(err => {
-            expect(err.body).to.startsWith('"problem in body or url');
+            expect(err.body).to.startsWith('\"cannot process');
           });
       });
     });

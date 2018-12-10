@@ -1,22 +1,10 @@
 const assert = require('assert');
 const { createCase } = require('./createCase');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 describe('Create case', () => {
   let applicationContext;
-  let documents = [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-  ];
+  let documents = MOCK_DOCUMENTS;
 
   beforeEach(() => {});
 
