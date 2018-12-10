@@ -35,7 +35,7 @@ exports.fileAnswer = async ({
   const caseWithAnswer = new Case({
     ...caseToUpdate,
     respondentId: userId,
-    respondentBar: user.barNumber,
+    respondentBarNumber: user.barNumber,
     respondentFirstName: user.firstName,
     respondentLastName: user.lastName,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],

@@ -51,7 +51,7 @@ joiValidationDecorator(
     respondentId: joi.string().optional(),
     respondentFirstName: joi.string().optional(),
     respondentLastName: joi.string().optional(),
-    respondentBar: joi.string().optional(),
+    respondentBarNumber: joi.string().optional(),
     irsSendDate: joi
       .date()
       .iso()
