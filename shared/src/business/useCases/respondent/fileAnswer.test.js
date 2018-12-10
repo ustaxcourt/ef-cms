@@ -1,5 +1,5 @@
 const { fileAnswer } = require('./fileAnswer');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments')
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 describe('fileAnswer', () => {
   let applicationContext;
   let documents = MOCK_DOCUMENTS;

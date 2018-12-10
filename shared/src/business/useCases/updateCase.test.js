@@ -90,14 +90,13 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
     };
     let updatedCase;
-    try {
-      updatedCase = await updateCase({
-        caseId: caseToUpdate.caseId,
-        caseJson: caseToUpdate,
-        userId: 'petitionsclerk',
-        applicationContext,
-      });
-    } catch (err) {}
+
+    updatedCase = await updateCase({
+      caseId: caseToUpdate.caseId,
+      caseJson: caseToUpdate,
+      userId: 'petitionsclerk',
+      applicationContext,
+    });
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
@@ -133,7 +132,6 @@ describe('updateCase', () => {
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
     expect(returnedDocument).toEqual(documentToMatch);
   });
-
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
     applicationContext = {
