@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
-import mainModule from './main';
+import presenter from './presenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -19,11 +19,11 @@ import AppComponent from './components/App';
 const app = {
   initialize: (applicationContext, debugTools) => {
     library.add(faFilePdf, faFlag, faCaretLeft);
-    mainModule.providers.applicationContext = applicationContext;
-    mainModule.providers.router = {
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = {
       route,
     };
-    const cerebralApp = App(mainModule, debugTools);
+    const cerebralApp = App(presenter, debugTools);
     router.initialize(cerebralApp);
     ReactDOM.render(
       <Container app={cerebralApp}>

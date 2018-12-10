@@ -4,6 +4,8 @@ import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
+import openDocumentBlob from './openDocumentBlob';
+
 /**
  *
  */
@@ -12,7 +14,6 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     user: state.user,
-    documentBlob: state.documentBlob,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetails: sequences.togglePaymentDetails,
     viewDocument: sequences.viewDocument,
@@ -20,7 +21,6 @@ export default connect(
   function CaseDetail({
     caseDetail,
     user,
-    documentBlob,
     showDetails,
     togglePaymentDetails,
     viewDocument,
@@ -140,6 +140,7 @@ export default connect(
                       onClick={() => {
                         viewDocument({
                           documentId: item.documentId,
+                          callback: openDocumentBlob,
                         });
                       }}
                     >
