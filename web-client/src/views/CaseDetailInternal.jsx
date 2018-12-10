@@ -5,6 +5,7 @@ import React from 'react';
 
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
+import openDocumentBlob from './openDocumentBlob';
 
 export default connect(
   {
@@ -130,15 +131,7 @@ export default connect(
                       onClick={() =>
                         viewDocument({
                           documentId: document.documentId,
-                          callback: documentBlob => {
-                            window.open(
-                              window.URL.createObjectURL(documentBlob, {
-                                type: 'application/pdf',
-                              }),
-                              '_blank',
-                              'noopener,noreferrer',
-                            );
-                          },
+                          callback: openDocumentBlob,
                         })
                       }
                     >
