@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/ustaxcourt/ef-cms.git"
   },
-  "license": "ISC",
+  "license": "CC0",
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
