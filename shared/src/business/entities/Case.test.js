@@ -3,6 +3,7 @@ const assert = require('assert');
 const Case = require('./Case');
 
 const A_VALID_CASE = {
+  docketNumber: '00101-18',
   documents: [
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -46,6 +47,7 @@ describe('Case entity', () => {
         caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
         createdAt: '2018-11-21T20:58:28.192Z',
         status: 'new',
+        docketNumber: '00101-18',
         documents: A_VALID_CASE.documents,
       };
       const myCase = new Case(previouslyCreatedCase);
@@ -59,6 +61,7 @@ describe('Case entity', () => {
         status: 'new',
         documents: A_VALID_CASE.documents,
         payGovId: '1234',
+        docketNumber: '00101-18',
       };
       const myCase = new Case(previouslyCreatedCase);
       assert.ok(myCase.isValid());

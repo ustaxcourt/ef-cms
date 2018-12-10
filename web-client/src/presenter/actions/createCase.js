@@ -1,8 +1,9 @@
 import { state } from 'cerebral';
+import { omit } from 'lodash';
 
 export default async ({ applicationContext, get, store }) => {
   const user = get(state.user);
-  const caseInitiator = get(state.petition);
+  const caseInitiator = omit(get(state.petition), 'uploadsFinished');
   const useCases = applicationContext.getUseCases();
 
   const fileHasUploaded = () => {
