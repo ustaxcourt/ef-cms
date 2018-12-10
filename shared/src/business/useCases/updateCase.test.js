@@ -51,7 +51,6 @@ describe('updateCase', () => {
       error = err;
     }
     assert.ok(error);
-    console.log('!!!!!!!', error)
     assert.ok(error.message.startsWith('The entity was invalid'));
   });
 
