@@ -15,6 +15,8 @@ exports.fileAnswer = async ({
     );
   }
 
+  const user = await applicationContext.getUseCases().getUser(userId);
+
   //upload to S3 return uuid
   const answerDocumentId = await applicationContext
     .getPersistenceGateway()
@@ -32,6 +34,10 @@ exports.fileAnswer = async ({
 
   const caseWithAnswer = new Case({
     ...caseToUpdate,
+    respondentId: userId,
+    respondentBarNumber: user.barNumber,
+    respondentFirstName: user.firstName,
+    respondentLastName: user.lastName,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],
   });
 
