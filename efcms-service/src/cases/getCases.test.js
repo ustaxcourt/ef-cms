@@ -4,23 +4,13 @@ const getCases = require('./getCases');
 const chai = require('chai');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
+
+const { MOCK_DOCUMENTS } = require('ef-cms-shared/src/test/mockDocuments');
+
 chai.use(require('chai-string'));
 
 describe('Get cases lambda', function() {
-  const documents = [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-  ];
+  const documents = MOCK_DOCUMENTS;
 
   describe('success', function() {
     before(function() {
@@ -65,7 +55,7 @@ describe('Get cases lambda', function() {
 
     [
       {
-        httpMethod: 'GET', 
+        httpMethod: 'GET',
         headers: { Authorization: 'Bearer petitionsclerk' },
       },
     ].forEach(function(documentBody) {

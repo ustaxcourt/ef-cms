@@ -5,22 +5,10 @@ const sinon = require('sinon');
 const createCase = require('./createCase');
 const chai = require('chai');
 chai.use(require('chai-string'));
+const { MOCK_DOCUMENTS } = require('ef-cms-shared/src/test/mockDocuments');
 
 describe('Create case lambda', function() {
-  let documents = [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-  ];
+  let documents = MOCK_DOCUMENTS;
 
   describe('success', function() {
     beforeEach(function() {
