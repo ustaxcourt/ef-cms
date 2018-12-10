@@ -13,6 +13,8 @@
     "http://localhost:1234/log-in?token=petitionsclerk&path=/",
     "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
     "http://localhost:1234/log-in?token=intakeclerk&path=/",
-    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18"
+    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
+    "http://localhost:1234/log-in?token=respondent&path=/",
+    "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18"
   ]
 }
