@@ -1,5 +1,7 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
+const Document = require('../../entities/Document');
+
 exports.fileAnswer = async ({
   userId,
   caseToUpdate,
@@ -42,5 +44,7 @@ exports.fileAnswer = async ({
     applicationContext,
   });
 
-  return new Case(updatedCase).validate().toJSON();
+  new Case(updatedCase).validate();
+
+  return new Document(answerDocumentMetadata).validate().toJSON();
 };
