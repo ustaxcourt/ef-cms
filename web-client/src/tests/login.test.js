@@ -1,18 +1,18 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
 
-import mainModule from '../main';
+import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = {
+presenter.providers.applicationContext = applicationContext;
+presenter.providers.router = {
   route: async url => {
     if (url === '/log-in') {
       await test.runSequence('gotoLogIn');
     }
   },
 };
-const test = CerebralTest(mainModule);
+const test = CerebralTest(presenter);
 
 describe('Log in', async () => {
   it('redirects to /log-in if not authorized', async () => {

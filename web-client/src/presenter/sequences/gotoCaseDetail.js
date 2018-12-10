@@ -12,9 +12,9 @@ export default [
   setCase,
   getUserRole,
   {
-    taxpayer: [setCurrentPage('CaseDetail')],
-    petitionsclerk: [setCurrentPage('ValidateCase')],
-    intakeclerk: [setCurrentPage('ValidateCase')],
-    respondent: [setCurrentPage('CaseDetail')], // TODO: display different dashboard maybe?
+    taxpayer: [setCurrentPage('CaseDetailPetitioner')],
+    petitionsclerk: [setCurrentPage('CaseDetailInternal')],
+    intakeclerk: [setCurrentPage('CaseDetailInternal')],
+    respondent: [setCurrentPage('CaseDetailPetitioner')], // TODO: display different dashboard maybe?
   },
 ];
