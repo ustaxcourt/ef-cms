@@ -2,6 +2,10 @@ input[type='file'] {
   height: auto;
 }
 
+input[type='text'] {
+  margin: 0 0 2rem;
+}
+
 label {
   margin-bottom: 0.5em;
   font-weight: 700;
@@ -16,7 +20,7 @@ label {
 }
 
 h1 {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0;
 }
 
 legend {
@@ -38,4 +42,25 @@ p {
   padding-left: 0.5rem;
   color: transparent;
   content: '';
+}
+
+.usa-section {
+  padding-top: 0;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  border-top: 2px solid $color-gray-lightest;
+  margin: 2rem 0;
+}
+
+table {
+  margin: 0;
+}
+
+button {
+  margin: 0 1rem 2rem 0;
 }

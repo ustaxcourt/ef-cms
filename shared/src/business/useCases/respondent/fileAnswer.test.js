@@ -3,23 +3,11 @@ const sinon = require('sinon');
 const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('fileAnswer', () => {
   let applicationContext;
-  let documents = [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-    },
-  ];
+  let documents = MOCK_DOCUMENTS;
 
   it('should attach the respondent information to the case when calling updateCase', async () => {
     const updateCaseStub = sinon.stub().resolves({
@@ -97,7 +85,9 @@ describe('fileAnswer', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).to.contain('problem in body or url ');
+    expect(error.message).to.contain(
+      'The entity was invalid ValidationError: child',
+    );
   });
 
   it('throws an error is the entity returned from persistence is invalid', async () => {
