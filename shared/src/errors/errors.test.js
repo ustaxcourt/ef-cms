@@ -54,7 +54,7 @@ describe('UnprocessableEntityError', () => {
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('problem in body or url');
+    expect(error.message).to.equal('cannot process');
   });
 });
 
