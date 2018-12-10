@@ -37,8 +37,6 @@ export default connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <SuccessNotification />
-          <ErrorNotification />
           <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
           <p>
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
@@ -47,7 +45,8 @@ export default connect(
             <span className="usa-label">{caseDetail.status}</span>
           </p>
           <hr />
-
+          <SuccessNotification />
+          <ErrorNotification />
           <nav className="horizontal-tabs">
             <ul>
               <li
