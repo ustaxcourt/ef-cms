@@ -147,7 +147,7 @@ export default connect(
                 <legend>Petition fee</legend>
                 {caseDetail.showPaymentRecord && (
                   <React.Fragment>
-                    <p>Paid by pay.gov</p>
+                    <p className="label">Paid by pay.gov</p>
                     <p>{caseDetail.payGovId}</p>
                   </React.Fragment>
                 )}
