@@ -1,5 +1,3 @@
-const assert = require('assert');
-const sinon = require('sinon');
 const { getCases } = require('./getCases');
 const { omit } = require('lodash');
 
