@@ -2,19 +2,19 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 import assert from 'assert';
 
-import mainModule from '../main';
+import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
 let test;
 const caseId = '3a6fb0fb-5f93-479a-9235-7eba43005800';
 
 global.FormData = FormData;
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = {
+presenter.providers.applicationContext = applicationContext;
+presenter.providers.router = {
   route: () => {},
 };
 
-test = CerebralTest(mainModule);
+test = CerebralTest(presenter);
 
 describe('Respondent', async () => {
   test.setState('user', {

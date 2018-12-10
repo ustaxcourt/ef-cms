@@ -2,14 +2,14 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 import assert from 'assert';
 
-import mainModule from '../main';
+import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
 let test;
 let caseId;
 global.FormData = FormData;
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = {
+presenter.providers.applicationContext = applicationContext;
+presenter.providers.router = {
   route: async url => {
     if (url === `/case-detail/${caseId}`) {
       await test.runSequence('gotoCaseDetail', { caseId });
@@ -17,7 +17,7 @@ mainModule.providers.router = {
   },
 };
 
-test = CerebralTest(mainModule);
+test = CerebralTest(presenter);
 
 describe('Tax payer', async () => {
   test.setState('user', {
@@ -69,7 +69,7 @@ describe('Tax payer', async () => {
   describe('Case Detail', () => {
     it('View case', async () => {
       await test.runSequence('gotoCaseDetail', { caseId });
-      assert.equal(test.getState('currentPage'), 'CaseDetail');
+      assert.equal(test.getState('currentPage'), 'CaseDetailPetitioner');
       assert.ok(test.getState('caseDetail'));
     });
   });
@@ -112,7 +112,7 @@ describe('Petitions clerk', () => {
     it('View case', async () => {
       test.setState('caseDetail', {});
       await test.runSequence('gotoCaseDetail', { caseId });
-      assert.equal(test.getState('currentPage'), 'ValidateCase');
+      assert.equal(test.getState('currentPage'), 'CaseDetailInternal');
       assert.ok(test.getState('caseDetail'));
       await test.runSequence('toggleDocumentValidation', {
         document: test.getState('caseDetail').documents[0],
