@@ -7,6 +7,7 @@ import { formattedSearchParams } from './computeds/formattedSearchParams';
 export default {
   path: '/',
   currentPage: 'Loading',
+  currentTab: '',
   usaBanner: {
     showDetails: false,
   },
@@ -24,20 +25,20 @@ export default {
     userId: '',
 
     // userId: 'taxpayer',
-    // firstName: 'taxpayer',
-    // lastName: 'taxpayer',
+    // firstName: 'Tax',
+    // lastName: 'Payer',
     // token: 'taxpayer',
     // role: 'taxpayer',
 
     // userId: 'petitionsclerk',
-    // firstName: 'petitionsclerk',
-    // lastName: 'petitionsclerk',
+    // firstName: 'Clerk',
+    // lastName: 'Kent',
     // token: 'petitionsclerk',
     // role: 'petitionsclerk',
 
     // userId: 'respondent',
-    // firstName: 'respondent',
-    // lastName: 'respondent',
+    // firstName: 'Res',
+    // lastName: 'Pondent',
     // token: 'respondent',
     // role: 'respondent',
   },
