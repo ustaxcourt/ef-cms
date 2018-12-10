@@ -28,8 +28,9 @@ export default connect(
     return (
       <React.Fragment>
         <div className="usa-grid">
+          <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
-            <FontAwesomeIcon icon="caret-left" /> Back to dashboard
+            Back to dashboard
           </a>
         </div>
         <section className="usa-section usa-grid">

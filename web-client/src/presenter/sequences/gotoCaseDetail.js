@@ -1,3 +1,6 @@
+import { state } from 'cerebral';
+import { set } from 'cerebral/factories';
+
 import clearAlerts from '../actions/clearAlerts';
 import getCase from '../actions/getCase';
 import getUserRole from '../actions/getUserRole';
@@ -10,6 +13,7 @@ export default [
   clearAlerts,
   getCase,
   setCase,
+  set(state.currentTab, 'Docket Record'),
   getUserRole,
   {
     taxpayer: [setCurrentPage('CaseDetailPetitioner')],

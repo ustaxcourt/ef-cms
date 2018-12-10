@@ -14,11 +14,12 @@ exports.uploadCasePdfs = async ({
   caseInitiator,
   fileHasUploaded,
 }) => {
+  new CaseInitiator(caseInitiator).validate();
   const documentIDs = await applicationContext
     .getPersistenceGateway()
     .uploadPdfsForNewCase({
       applicationContext,
-      caseInitiator: new CaseInitiator(caseInitiator).validate().toJSON(),
+      caseInitiator: new CaseInitiator(caseInitiator).validate(), // cannot call toJSON because caseinitiator holds a formdata and blob
       fileHasUploaded,
     });
 
