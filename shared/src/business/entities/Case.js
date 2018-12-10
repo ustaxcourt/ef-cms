@@ -5,6 +5,7 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
+const docketNumberMatcher = /^\d{3,5}-\d{2}$/;
 /**
  * schema definition
  */
@@ -23,7 +24,7 @@ const caseSchema = joi.object().keys({
     .optional(),
   docketNumber: joi
     .string()
-    .regex(/^[0-9]{5}-[0-9]{2}$/)
+    .regex(docketNumberMatcher)
     .optional(),
   respondentId: joi.string().optional(),
   irsSendDate: joi
@@ -37,7 +38,7 @@ const caseSchema = joi.object().keys({
     .optional(),
   status: joi
     .string()
-    .regex(/^(new)|(general)$/)
+    .regex(/^(new|general)$/)
     .optional(),
   documents: joi
     .array()
@@ -166,10 +167,11 @@ Case.isValidCaseId = caseId =>
  * @param docketNumber
  * @returns {*|boolean}
  */
+
 Case.isValidDocketNumber = docketNumber => {
   return (
     docketNumber &&
-    /^\d{5}-\d{2}$/.test(docketNumber) &&
+    docketNumberMatcher.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
 };
