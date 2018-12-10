@@ -12,6 +12,16 @@
   margin-right: 0.5rem;
 }
 
+button.tab-link {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-base;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: none;
+}
+
 button.pdf-link {
   padding: 0;
   margin: 0;
