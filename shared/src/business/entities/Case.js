@@ -35,7 +35,6 @@ function Case(rawCase) {
   } else {
     this.documents = [];
   }
-
 }
 
 joiValidationDecorator(
