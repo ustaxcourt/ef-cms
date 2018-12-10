@@ -1,13 +1,13 @@
 import { CerebralTest } from 'cerebral/test';
 import assert from 'assert';
 
-import mainModule from '../main';
+import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
-mainModule.providers.applicationContext = applicationContext;
-mainModule.providers.router = { route: () => {} };
+presenter.providers.applicationContext = applicationContext;
+presenter.providers.router = { route: () => {} };
 
-const test = CerebralTest(mainModule);
+const test = CerebralTest(presenter);
 
 describe('Miscellaneous', () => {
   it('Handles routing', async () => {
