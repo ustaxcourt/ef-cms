@@ -33,7 +33,7 @@ h1[tabIndex='-1']:focus {
 table thead th,
 table thead td {
   background-color: $color-gray-light;
-  color: $color-primary-darkest;
+  color: $color-base;
 }
 table tbody tr:nth-child(even) td {
   background-color: $color-gray-lightest;
