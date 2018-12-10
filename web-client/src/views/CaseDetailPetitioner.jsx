@@ -4,6 +4,8 @@ import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
+import openDocumentBlob from './openDocumentBlob';
+
 /**
  *
  */
@@ -138,15 +140,7 @@ export default connect(
                       onClick={() => {
                         viewDocument({
                           documentId: item.documentId,
-                          callback: documentBlob => {
-                            window.open(
-                              window.URL.createObjectURL(documentBlob, {
-                                type: 'application/pdf',
-                              }),
-                              '_blank',
-                              'noopener,noreferrer',
-                            );
-                          },
+                          callback: openDocumentBlob,
                         });
                       }}
                     >
