@@ -1,3 +1,4 @@
+const { joiValidationDecorator } = require('./JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuidv4 = require('uuid/v4');
 
@@ -6,74 +7,6 @@ const uuidVersions = {
 };
 
 const docketNumberMatcher = /^\d{3,5}-\d{2}$/;
-/**
- * schema definition
- */
-const caseSchema = joi.object().keys({
-  caseId: joi
-    .string()
-    .uuid(uuidVersions)
-    .optional(),
-  userId: joi
-    .string()
-    // .uuid(uuidVersions)
-    .optional(),
-  createdAt: joi
-    .date()
-    .iso()
-    .optional(),
-  docketNumber: joi
-    .string()
-    .regex(docketNumberMatcher)
-    .optional(),
-  respondentId: joi.string().optional(),
-  irsSendDate: joi
-    .date()
-    .iso()
-    .optional(),
-  payGovId: joi.string().optional(),
-  payGovDate: joi
-    .date()
-    .iso()
-    .optional(),
-  status: joi
-    .string()
-    .regex(/^(new|general)$/)
-    .optional(),
-  documents: joi
-    .array()
-    .min(3)
-    .items(
-      joi.object({
-        documentId: joi
-          .string()
-          .uuid(uuidVersions)
-          .required(),
-        userId: joi
-          .string()
-          // .uuid(uuidVersions)
-          .optional(),
-        documentType: joi.string().required(),
-        validated: joi.boolean().optional(),
-        reviewDate: joi
-          .date()
-          .iso()
-          .optional(),
-        reviewUser: joi.string().optional(),
-        status: joi.string().optional(),
-        servedDate: joi
-          .date()
-          .iso()
-          .optional(),
-        createdAt: joi
-          .date()
-          .iso()
-          .optional(),
-      }),
-    )
-    .required(),
-});
-
 /**
  * Case
  * @param rawCase
@@ -96,40 +29,73 @@ function Case(rawCase) {
   );
 }
 
-/**
- * isValid
- * @returns {boolean}
- */
-Case.prototype.isValid = function isValid() {
-  return joi.validate(this, caseSchema).error === null;
-};
-/**
- * getValidationError
- * @returns {*}
- */
-Case.prototype.getValidationError = function getValidationError() {
-  return joi.validate(this, caseSchema).error;
-};
-
-/**
- * validate
- */
-Case.prototype.validate = function validate() {
-  if (!this.isValid()) {
-    throw new Error('The case was invalid ' + this.getValidationError());
-  }
-};
-
-/**
- * validateWithError
- * will throw the error provided if the case entity is invalid
- */
-Case.prototype.validateWithError = function validate(error) {
-  if (!this.isValid()) {
-    error.message = `${error.message} ${this.getValidationError()}`;
-    throw error;
-  }
-};
+joiValidationDecorator(
+  Case,
+  joi.object().keys({
+    caseId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
+      .optional(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+    docketNumber: joi
+      .string()
+      .regex(docketNumberMatcher)
+      .required(),
+    respondentId: joi.string().optional(),
+    irsSendDate: joi
+      .date()
+      .iso()
+      .optional(),
+    payGovId: joi.string().optional(),
+    payGovDate: joi
+      .date()
+      .iso()
+      .optional(),
+    status: joi
+      .string()
+      .regex(/^(new|general)$/)
+      .optional(),
+    documents: joi
+      .array()
+      .min(3)
+      .items(
+        joi.object({
+          documentId: joi
+            .string()
+            .uuid(uuidVersions)
+            .required(),
+          userId: joi
+            .string()
+            // .uuid(uuidVersions)
+            .optional(),
+          documentType: joi.string().required(),
+          validated: joi.boolean().optional(),
+          reviewDate: joi
+            .date()
+            .iso()
+            .optional(),
+          reviewUser: joi.string().optional(),
+          status: joi.string().optional(),
+          servedDate: joi
+            .date()
+            .iso()
+            .optional(),
+          createdAt: joi
+            .date()
+            .iso()
+            .optional(),
+        }),
+      )
+      .required(),
+  }),
+);
 
 /**
  * isPetitionPackageReviewed
@@ -146,10 +112,12 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
   this.status = 'general';
   this.documents.every(document => (document.status = 'served'));
+  return this;
 };
 
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
+  return this;
 };
 
 /**
@@ -174,6 +142,10 @@ Case.isValidDocketNumber = docketNumber => {
     docketNumberMatcher.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
+};
+
+Case.prototype.preValidate = function() {
+  return Case.isValidDocketNumber(this.docketNumber);
 };
 
 /**

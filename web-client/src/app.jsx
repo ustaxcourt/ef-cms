@@ -3,6 +3,7 @@ import {
   faFilePdf,
   faFlag,
   faCaretLeft,
+  faCloudUploadAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
@@ -18,7 +19,7 @@ import AppComponent from './views/App';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    library.add(faFilePdf, faFlag, faCaretLeft);
+    library.add(faFilePdf, faFlag, faCaretLeft, faCloudUploadAlt);
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       route,

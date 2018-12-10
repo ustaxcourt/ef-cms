@@ -37,8 +37,6 @@ export default connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <SuccessNotification />
-          <ErrorNotification />
           <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
           <p>
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
@@ -47,7 +45,8 @@ export default connect(
             <span className="usa-label">{caseDetail.status}</span>
           </p>
           <hr />
-
+          <SuccessNotification />
+          <ErrorNotification />
           <nav className="horizontal-tabs">
             <ul role="tabslist">
               <li
@@ -77,6 +76,9 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
+              <button>
+                <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
+              </button>
               <button id="send-to-irs" onClick={() => submitSendToIRS()}>
                 Send to IRS
               </button>
@@ -133,7 +135,6 @@ export default connect(
                       <td>Filing fee paid</td>
                       <td />
                       <td />
-                      <td />
                     </tr>
                   )}
                 </tbody>
@@ -143,7 +144,7 @@ export default connect(
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
               <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend>Petition Fee</legend>
+                <legend>Petition fee</legend>
                 {caseDetail.showPaymentRecord && (
                   <React.Fragment>
                     <p>Paid by pay.gov</p>
