@@ -4,9 +4,9 @@ import assert from 'assert';
 import {
   formattedCaseDetail,
   formattedCases,
-} from '../main/computeds/formattedCaseDetail';
+} from '../presenter/computeds/formattedCaseDetail';
 
-import { formattedSearchParams } from '../main/computeds/formattedSearchParams';
+import { formattedSearchParams } from '../presenter/computeds/formattedSearchParams';
 
 describe('formatted case details computed', () => {
   it('formats the date', () => {

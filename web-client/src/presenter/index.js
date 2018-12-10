@@ -74,12 +74,12 @@ export default {
     form: {},
     searchTerm: '',
     user: {
-      // userId: '',
-      userId: 'taxpayer',
-      firstName: 'taxpayer',
-      lastName: 'taxpayer',
-      token: 'taxpayer',
-      role: 'taxpayer',
+      userId: '',
+      // userId: 'taxpayer',
+      // firstName: 'taxpayer',
+      // lastName: 'taxpayer',
+      // token: 'taxpayer',
+      // role: 'taxpayer',
 
       // userId: 'petitionsclerk',
       // firstName: 'petitionsclerk',
