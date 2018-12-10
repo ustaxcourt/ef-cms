@@ -48,23 +48,34 @@ export default connect(
           <SuccessNotification />
           <ErrorNotification />
           <nav className="horizontal-tabs">
-            <ul>
+            <ul role="tabslist">
               <li
+                role="presentation"
                 className={currentTab == 'Docket Record' ? 'active' : ''}
-                onClick={() => updateCurrentTab({ value: 'Docket Record' })}
               >
-                Docket Record
+                <button
+                  role="tab"
+                  className="tab-link"
+                  onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                >
+                  Docket Record
+                </button>
               </li>
-              <li
-                className={currentTab == 'Case Information' ? 'active' : ''}
-                onClick={() => updateCurrentTab({ value: 'Case Information' })}
-              >
-                Case Information
+              <li className={currentTab == 'Case Information' ? 'active' : ''}>
+                <button
+                  role="tab"
+                  className="tab-link"
+                  onClick={() =>
+                    updateCurrentTab({ value: 'Case Information' })
+                  }
+                >
+                  Case Information
+                </button>
               </li>
             </ul>
           </nav>
           {currentTab == 'Docket Record' && (
-            <div className="tab-content">
+            <div className="tab-content" role="tabpanel">
               <button>
                 <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
               </button>
@@ -131,7 +142,7 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <div className="tab-content">
+            <div className="tab-content" role="tabpanel">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Petition fee</legend>
                 {caseDetail.showPaymentRecord && (
