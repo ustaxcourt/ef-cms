@@ -11,7 +11,6 @@ import submitLogIn from './sequences/submitLogIn';
 import submitSearch from './sequences/submitSearch';
 import submitToIRS from './sequences/submitToIRS';
 import submitUpdateCase from './sequences/submitUpdateCase';
-import toggleDocumentValidation from './sequences/toggleDocumentValidation';
 import toggleMobileMenu from './sequences/toggleMobileMenu';
 import togglePaymentDetails from './sequences/togglePaymentDetails';
 import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
@@ -44,7 +43,6 @@ export default {
     submitSearch,
     submitToIRS,
     submitUpdateCase,
-    toggleDocumentValidation,
     toggleMobileMenu,
     togglePaymentDetails,
     toggleUsaBannerDetails,

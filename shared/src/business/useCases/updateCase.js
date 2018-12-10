@@ -40,9 +40,8 @@ exports.updateCase = async ({
   if (caseJson.documents) {
     caseJson.documents = setDocumentDetails(userId, caseJson.documents);
   }
-  const caseToUpdate = new Case(caseJson);
-  caseToUpdate.validate();
 
+  const caseToUpdate = new Case(caseJson).validate();
   if (!isAuthorized(userId, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -51,10 +50,14 @@ exports.updateCase = async ({
     throw new UnprocessableEntityError();
   }
 
-  caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate);
+  caseToUpdate.markAsPaidByPayGov(caseJson.payGovDate).validate();
 
-  return applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: { ...caseToUpdate },
-    applicationContext,
-  });
+  const caseAfterUpdate = await applicationContext
+    .getPersistenceGateway()
+    .saveCase({
+      caseToSave: caseToUpdate.toJSON(),
+      applicationContext,
+    });
+
+  return new Case(caseAfterUpdate).validate().toJSON();
 };

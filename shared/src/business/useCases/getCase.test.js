@@ -1,6 +1,36 @@
 const assert = require('assert');
 const { getCase } = require('./getCase');
 
+const documents = [
+  {
+    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    documentType: 'a',
+    createdAt: '2018-11-21T20:49:28.192Z',
+    userId: 'taxpayer',
+    validated: true,
+    reviewDate: '2018-11-21T20:49:28.192Z',
+    reviewUser: 'petitionsclerk',
+  },
+  {
+    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    documentType: 'b',
+    createdAt: '2018-11-21T20:49:28.192Z',
+    userId: 'taxpayer',
+    validated: true,
+    reviewDate: '2018-11-21T20:49:28.192Z',
+    reviewUser: 'petitionsclerk',
+  },
+  {
+    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    documentType: 'c',
+    createdAt: '2018-11-21T20:49:28.192Z',
+    userId: 'taxpayer',
+    validated: true,
+    reviewDate: '2018-11-21T20:49:28.192Z',
+    reviewUser: 'petitionsclerk',
+  },
+];
+
 describe('Get case', () => {
   let applicationContext;
 
@@ -11,7 +41,11 @@ describe('Get case', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () =>
-            Promise.resolve({ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }),
+            Promise.resolve({
+              docketNumber: '00101-18',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              documents,
+            }),
         };
       },
       environment: { stage: 'local' },
@@ -54,6 +88,7 @@ describe('Get case', () => {
           return Promise.resolve({
             docketNumber: '00101-00',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            documents,
           });
         },
       }),
@@ -74,6 +109,7 @@ describe('Get case', () => {
           Promise.resolve({
             docketNumber: '00101-00',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            documents,
           }),
       }),
       environment: { stage: 'local' },
@@ -97,6 +133,7 @@ describe('Get case', () => {
             {
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              documents,
             },
           ]),
       }),
@@ -111,5 +148,57 @@ describe('Get case', () => {
     } catch (error) {
       assert.equal(error.message, 'Unauthorized');
     }
+  });
+
+  it('throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () =>
+            Promise.resolve({
+              docketNumber: '00101-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCase({
+        userId: 'intakeclerk',
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('The entity was invalid');
+  });
+
+  it('throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCaseByDocketNumber: () =>
+            Promise.resolve({
+              docketNumber: '00101-00',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            }),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCase({
+        userId: 'intakeclerk',
+        caseId: '00101-08',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('The entity was invalid');
   });
 });
