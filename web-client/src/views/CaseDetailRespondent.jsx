@@ -33,9 +33,6 @@ export default connect(
           <p>
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
-          <p>
-            <span className="usa-label">{caseDetail.status}</span>
-          </p>
           <hr />
           <SuccessNotification />
           <ErrorNotification />
