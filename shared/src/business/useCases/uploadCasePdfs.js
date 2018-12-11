@@ -1,5 +1,35 @@
 const CaseInitiator = require('../entities/CaseInitiator');
-const { CaseInitiatorResponse } = require('../entities/CaseInitiatorResponse');
+
+const {
+  joiValidationDecorator,
+} = require('../../utilities/JoiValidationDecorator');
+const joi = require('joi-browser');
+
+const uuidVersions = {
+  version: ['uuidv4'],
+};
+
+function CaseInitiatorResponseValidator(rawResponse) {
+  Object.assign(this, rawResponse);
+}
+
+joiValidationDecorator(
+  CaseInitiatorResponseValidator,
+  joi.object().keys({
+    petitionDocumentId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
+    requestForPlaceOfTrialDocumentId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
+    statementOfTaxpayerIdentificationNumberDocumentId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
+  }),
+);
 
 /**
  * uploadCasePdfs
@@ -23,7 +53,7 @@ exports.uploadCasePdfs = async ({
       fileHasUploaded,
     });
 
-  new CaseInitiatorResponse(documentIDs).validate();
+  new CaseInitiatorResponseValidator(documentIDs).validate();
 
   return documentIDs;
 };
