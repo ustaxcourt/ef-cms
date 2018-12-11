@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
-const sendPetitionToIRS = require('./sendPetitionToIRS');
+const sendPetitionToIRS = require('./sendPetitionToIRS.lambda');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
