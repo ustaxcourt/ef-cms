@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 import openDocumentBlob from './openDocumentBlob';
+import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {

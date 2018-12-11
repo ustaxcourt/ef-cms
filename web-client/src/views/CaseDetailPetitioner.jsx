@@ -4,9 +4,9 @@ import { sequences, state } from 'cerebral';
 import moment from 'moment';
 import React from 'react';
 
-import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 import openDocumentBlob from './openDocumentBlob';
+import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
