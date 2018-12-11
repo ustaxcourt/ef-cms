@@ -2,7 +2,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
-const uuidv4 = require('uuid/v4');
+const uuid = require('uuid');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -21,7 +21,7 @@ function Case(rawCase) {
     this,
     rawCase,
     {
-      caseId: rawCase.caseId ? rawCase.caseId : uuidv4(),
+      caseId: rawCase.caseId ? rawCase.caseId : uuid.v4(),
       createdAt: rawCase.createdAt
         ? rawCase.createdAt
         : new Date().toISOString(),
