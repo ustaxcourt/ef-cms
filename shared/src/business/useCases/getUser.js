@@ -4,7 +4,7 @@ const User = require('../entities/User');
  * @param userId
  * @returns {User}
  */
-exports.getUser = userId => {
+exports.getUser = async userId => {
   try {
     return new User({ userId });
   } catch (err) {

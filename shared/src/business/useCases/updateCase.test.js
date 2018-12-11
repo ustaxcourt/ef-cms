@@ -1,6 +1,6 @@
-const assert = require('assert');
 const { updateCase } = require('./updateCase');
 const { omit } = require('lodash');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 const MOCK_CASE = {
   userId: 'userId',
@@ -12,14 +12,17 @@ const MOCK_CASE = {
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
+      userId: 'taxpayer',
     },
   ],
 };
@@ -47,8 +50,8 @@ describe('updateCase', () => {
     } catch (err) {
       error = err;
     }
-    assert.ok(error);
-    assert.ok(error.message.startsWith('The entity was invalid'));
+    expect(error).not.toBeNull;
+    expect(error.message).toContain('The entity was invalid');
   });
 
   it('should throw an error if the caseJson passed in is an invalid case', async () => {
@@ -71,7 +74,110 @@ describe('updateCase', () => {
     } catch (err) {
       error = err;
     }
-    assert.ok(error);
-    assert.ok(error.message.startsWith('The entity was invalid'));
+    expect(error).not.toBeNull();
+    expect(error.message).toContain('The entity was invalid');
+  });
+
+  it('should update a case', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+    caseToUpdate.documents = MOCK_DOCUMENTS;
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let updatedCase;
+
+    updatedCase = await updateCase({
+      caseId: caseToUpdate.caseId,
+      caseJson: caseToUpdate,
+      userId: 'petitionsclerk',
+      applicationContext,
+    });
+
+    const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
+    const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
+    expect(returnedDocument).toEqual(documentToMatch);
+  });
+
+  it('should update the validated documents on a case', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+    caseToUpdate.documents = MOCK_DOCUMENTS;
+    caseToUpdate.documents.forEach(document => {
+      document.validated = true;
+      document.reviewDate = undefined;
+      return document;
+    });
+
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+
+    const updatedCase = await updateCase({
+      caseId: caseToUpdate.caseId,
+      caseJson: caseToUpdate,
+      userId: 'petitionsclerk',
+      applicationContext,
+    });
+
+    const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
+    const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
+    expect(returnedDocument).toEqual(documentToMatch);
+  });
+
+  it('should throw an error if the user is unauthorized to update a case', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await updateCase({
+        caseId: MOCK_CASE.caseId,
+        caseJson: MOCK_CASE,
+        userId: 'someuser',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).not.toBeNull();
+    expect(error.message).toContain('Unauthorized for update case');
+  });
+
+  it('should throw an error if the user is unauthorized to update a case', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await updateCase({
+        caseId: '123',
+        caseJson: MOCK_CASE,
+        userId: 'someuser',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).not.toBeNull();
+    expect(error.message).toContain('Unauthorized for update case');
   });
 });
