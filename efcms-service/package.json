@@ -79,7 +79,11 @@
       "./**/node_modules",
       "**/coverage",
       "setup-global-tables.js",
-      "create-dynamo-tables.js"
+      "create-dynamo-tables.js",
+      "src/cases",
+      "src/documents",
+      "src/swagger",
+      "src/applicationContext.js"
     ],
     "reporter": [
       "text",
