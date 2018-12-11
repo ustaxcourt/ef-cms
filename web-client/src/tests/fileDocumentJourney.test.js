@@ -32,12 +32,12 @@ describe('Respondent', async () => {
 
   describe('Initiate case', () => {
     it('Submits successfully', async () => {
-      await test.runSequence('gotoFileDocument', { caseId });
-      await test.runSequence('updateDocumentValue', {
+      await test.runSequence('gotoFileDocumentSequence', { caseId });
+      await test.runSequence('updateDocumentValueSequence', {
         key: 'file',
         value: fakeFile,
       });
-      await test.runSequence('submitDocument');
+      await test.runSequence('submitDocumentSequence');
       assert.deepEqual(test.getState('alertSuccess'), {
         title: 'Your document was uploaded successfully.',
         message: 'Your document has been filed.',
