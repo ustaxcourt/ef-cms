@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { getCase } = require('./getCase');
+const { getCase } = require('./getCase.interactor');
 const sinon = require('sinon');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 

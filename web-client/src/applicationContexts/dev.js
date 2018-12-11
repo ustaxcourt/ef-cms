@@ -9,12 +9,12 @@ import { createCase } from '../../../shared/src/proxies/createCaseProxy';
 import { getCase } from '../../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../../shared/src/proxies/getCasesByUserProxy';
-import { getUser } from '../../../shared/src/business/useCases/getUser';
+import { getUser } from '../../../shared/src/business/useCases/getUser.interactor';
 import { sendPetitionToIRS } from '../../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../../shared/src/proxies/updateCaseProxy';
-import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs';
-import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile';
-import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer';
+import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCasePdfs.interactor';
+import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile.interactor';
+import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer.interactor';
 import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 
 /**
