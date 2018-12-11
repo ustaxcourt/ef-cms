@@ -14,7 +14,7 @@ export default async ({ applicationContext, get, path, props }) => {
     return path.success({
       alertSuccess: {
         title: 'Successfully served to IRS',
-        message: moment(irsSendDate).format('LLL'),
+        message: moment(irsSendDate).format('L LT'),
       },
     });
   } catch (error) {
