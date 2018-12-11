@@ -9,7 +9,8 @@ export default connect(
     return (
       submitting && (
         <div className="progress-indicator">
-          <img src={spinner} className="spinner" />
+          <img src={spinner} className="spinner" alt="progress indicator" />
+          <p>Loading</p>
         </div>
       )
     );
