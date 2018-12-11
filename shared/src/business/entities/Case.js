@@ -6,7 +6,9 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const docketNumberMatcher = /^\d{3,5}-\d{2}$/;
+const Document = require('./Document');
+
+const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 /**
  * Case
  * @param rawCase
@@ -27,6 +29,12 @@ function Case(rawCase) {
       ? { payGovDate: new Date().toISOString() }
       : null,
   );
+
+  if (this.documents && Array.isArray(this.documents)) {
+    this.documents = this.documents.map(document => new Document(document));
+  } else {
+    this.documents = [];
+  }
 }
 
 joiValidationDecorator(
@@ -49,6 +57,9 @@ joiValidationDecorator(
       .regex(docketNumberMatcher)
       .required(),
     respondentId: joi.string().optional(),
+    respondentFirstName: joi.string().optional(),
+    respondentLastName: joi.string().optional(),
+    respondentBarNumber: joi.string().optional(),
     irsSendDate: joi
       .date()
       .iso()
@@ -65,36 +76,14 @@ joiValidationDecorator(
     documents: joi
       .array()
       .min(3)
-      .items(
-        joi.object({
-          documentId: joi
-            .string()
-            .uuid(uuidVersions)
-            .required(),
-          userId: joi
-            .string()
-            // .uuid(uuidVersions)
-            .optional(),
-          documentType: joi.string().required(),
-          validated: joi.boolean().optional(),
-          reviewDate: joi
-            .date()
-            .iso()
-            .optional(),
-          reviewUser: joi.string().optional(),
-          status: joi.string().optional(),
-          servedDate: joi
-            .date()
-            .iso()
-            .optional(),
-          createdAt: joi
-            .date()
-            .iso()
-            .optional(),
-        }),
-      )
       .required(),
   }),
+  function() {
+    return (
+      Case.isValidDocketNumber(this.docketNumber) &&
+      Document.validateCollection(this.documents)
+    );
+  },
 );
 
 /**
@@ -144,8 +133,9 @@ Case.isValidDocketNumber = docketNumber => {
   );
 };
 
-Case.prototype.preValidate = function() {
-  return Case.isValidDocketNumber(this.docketNumber);
+Case.stripLeadingZeros = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${parseInt(number)}-${year}`;
 };
 
 /**

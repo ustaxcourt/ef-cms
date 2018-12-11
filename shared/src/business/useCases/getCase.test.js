@@ -1,35 +1,9 @@
 const assert = require('assert');
 const { getCase } = require('./getCase');
+const sinon = require('sinon');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
-const documents = [
-  {
-    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    documentType: 'a',
-    createdAt: '2018-11-21T20:49:28.192Z',
-    userId: 'taxpayer',
-    validated: true,
-    reviewDate: '2018-11-21T20:49:28.192Z',
-    reviewUser: 'petitionsclerk',
-  },
-  {
-    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    documentType: 'b',
-    createdAt: '2018-11-21T20:49:28.192Z',
-    userId: 'taxpayer',
-    validated: true,
-    reviewDate: '2018-11-21T20:49:28.192Z',
-    reviewUser: 'petitionsclerk',
-  },
-  {
-    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    documentType: 'c',
-    createdAt: '2018-11-21T20:49:28.192Z',
-    userId: 'taxpayer',
-    validated: true,
-    reviewDate: '2018-11-21T20:49:28.192Z',
-    reviewUser: 'petitionsclerk',
-  },
-];
+const documents = MOCK_DOCUMENTS;
 
 describe('Get case', () => {
   let applicationContext;
@@ -82,15 +56,14 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
+    const getCaseByDocketNumberStub = sinon.stub().resolves({
+      docketNumber: '00101-00',
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documents,
+    });
     applicationContext = {
       getPersistenceGateway: () => ({
-        getCaseByDocketNumber: () => {
-          return Promise.resolve({
-            docketNumber: '00101-00',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            documents,
-          });
-        },
+        getCaseByDocketNumber: getCaseByDocketNumberStub,
       }),
       environment: { stage: 'local' },
     };
@@ -100,6 +73,10 @@ describe('Get case', () => {
       applicationContext,
     });
     assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
+    assert.equal(
+      getCaseByDocketNumberStub.getCall(0).args[0].docketNumber,
+      '101-00',
+    );
   });
 
   it('failure case by docket number', async () => {
