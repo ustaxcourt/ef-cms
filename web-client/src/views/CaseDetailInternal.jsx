@@ -78,9 +78,6 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button>
-                <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
-              </button>
               <button id="send-to-irs" onClick={() => submitSendToIRS()}>
                 Send to IRS
               </button>
