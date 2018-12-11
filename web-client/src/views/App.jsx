@@ -5,28 +5,32 @@ import PropTypes from 'prop-types';
 
 import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
-import Dashboard from './Dashboard';
+import DashboardIntakeClerk from './DashboardIntakeClerk';
+import DashboardPetitioner from './DashboardPetitioner';
+import DashboardPetitionsClerk from './DashboardPetitionsClerk';
+import DashboardPublic from './DashboardPublic';
+import FileDocument from './FileDocument';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
 import IntakeClerkDashboard from './IntakeClerkDashboard';
 import Loading from './Loading';
 import LogIn from './LogIn';
-import FileDocument from './FileDocument';
-import PetitionsWorkQueue from './PetitionsWorkQueue';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
 
 const pages = {
   CaseDetailInternal,
   CaseDetailPetitioner,
-  Dashboard,
+  DashboardIntakeClerk,
+  DashboardPetitioner,
+  DashboardPetitionsClerk,
+  DashboardPublic,
+  FileDocument,
   FilePetition,
   IntakeClerkDashboard,
   Loading,
   LogIn,
-  FileDocument,
-  PetitionsWorkQueue,
   StyleGuide,
 };
 
