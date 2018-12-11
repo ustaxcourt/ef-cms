@@ -16,7 +16,7 @@ describe('formatted case details computed', () => {
         form: {},
       },
     });
-    assert.equal(result.irsDateFormatted, '11/21/2018');
+    expect(result.irsDateFormatted).toContain('11/21/2018');
   });
 
   it('formats the date in a list of cases', () => {
@@ -25,7 +25,7 @@ describe('formatted case details computed', () => {
         cases: [{ irsDate: '2018-11-21T20:49:28.192Z', documents: [] }],
       },
     });
-    assert.equal(result[0].irsDateFormatted, '11/21/2018');
+    expect(result[0].irsDateFormatted).toContain('11/21/2018');
   });
 });
 
