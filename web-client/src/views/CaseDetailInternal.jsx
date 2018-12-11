@@ -42,7 +42,9 @@ export default connect(
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
           <p>
-            <span className="usa-label">{caseDetail.status}</span>
+            <span className="usa-label case-status-label">
+              {caseDetail.status}
+            </span>
           </p>
           <hr />
           <SuccessNotification />
@@ -78,9 +80,11 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button id="send-to-irs" onClick={() => submitSendToIRS()}>
-                Send to IRS
-              </button>
+              {!caseDetail.showIrsServedDate && (
+                <button id="send-to-irs" onClick={() => submitSendToIRS()}>
+                  Send to IRS
+                </button>
+              )}
               <table className="responsive-table">
                 <thead>
                   <tr>
