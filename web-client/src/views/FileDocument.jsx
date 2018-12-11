@@ -29,6 +29,11 @@ export default connect(
             submitDocument();
           }}
         >
+          <label htmlFor="options">Document type</label>
+          <select name="options" id="options">
+            <option value>- Select -</option>
+            <option value="Answer">Answer</option>
+          </select>
           <label htmlFor="file" className={document.file && 'validated'}>
             Select file
           </label>
