@@ -16,16 +16,16 @@ const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPoli
 const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
-const { getCase } = require('ef-cms-shared/src/business/useCases/getCase');
-const { getCases } = require('ef-cms-shared/src/business/useCases/getCases');
-const { getCasesByStatus: getCasesByStatusUC } = require('ef-cms-shared/src/business/useCases/getCasesByStatus');
-const { createCase: createCaseUC } = require('ef-cms-shared/src/business/useCases/createCase');
-const { getCasesByUser: getCasesByUserUC } = require('ef-cms-shared/src/business/useCases/getCasesByUser');
-const { getUser } = require('ef-cms-shared/src/business/useCases/getUser');
-const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS');
-const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase');
-const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs');
-const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent');
+const { getCase } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
+const { getCases } = require('ef-cms-shared/src/business/useCases/getCases.interactor');
+const { getCasesByStatus: getCasesByStatusUC } = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
+const { createCase: createCaseUC } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
+const { getCasesByUser: getCasesByUserUC } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
+const { getUser } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
+const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS.interactor');
+const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
+const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
+const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
 
 module.exports = {
   getPersistenceGateway: () => {

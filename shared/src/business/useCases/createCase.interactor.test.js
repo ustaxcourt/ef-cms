@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { createCase } = require('./createCase');
+const { createCase } = require('./createCase.interactor');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 describe('Create case', () => {
