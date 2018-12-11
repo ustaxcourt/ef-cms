@@ -12,7 +12,6 @@ import DashboardPetitioner from './DashboardPetitioner';
 import DashboardPetitionsClerk from './DashboardPetitionsClerk';
 import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
-import FileDocument from './FileDocument';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
@@ -32,7 +31,6 @@ const pages = {
   DashboardPetitionsClerk,
   DashboardPublic,
   DashboardRespondent,
-  FileDocument,
   FilePetition,
   IntakeClerkDashboard,
   Loading,

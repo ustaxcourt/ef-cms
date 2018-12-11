@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
+import FileDocument from './FileDocument';
 import openDocumentBlob from './openDocumentBlob';
+import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
@@ -133,6 +134,7 @@ export default connect(
             <div className="tab-content" role="tabpanel" />
           )}
         </section>
+        <FileDocument />
       </React.Fragment>
     );
   },
