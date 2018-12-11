@@ -5,11 +5,11 @@ import getUserRole from '../actions/getUserRole';
 import setAlertError from '../actions/setAlertError';
 import setCases from '../actions/setCases';
 import setCurrentPage from '../actions/setCurrentPage';
-// import isLoggedIn from '../actions/isLoggedIn';
-// import setPath from '../actions/setPath';
-// import navigateToLogin from '../actions/navigateToLogin';
+import isLoggedIn from '../actions/isLoggedIn';
+import setPath from '../actions/setPath';
+import navigateToLogin from '../actions/navigateToLogin';
 
-export default [
+const goToDashboard = [
   getUserRole,
   {
     public: [setCurrentPage('DashboardPublic')],
@@ -35,11 +35,10 @@ export default [
   },
 ];
 
-// TODO: discuss wit Kris
-// export default [
-//   isLoggedIn,
-//   {
-//     unauthorized: [setPath, navigateToLogin],
-//     isLoggedIn: goToDashboard,
-//   },
-// ];
+export default [
+  isLoggedIn,
+  {
+    unauthorized: [setPath, navigateToLogin],
+    isLoggedIn: goToDashboard,
+  },
+];
