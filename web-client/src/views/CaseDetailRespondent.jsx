@@ -11,21 +11,13 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    submitSendToIRS: sequences.submitToIRS,
-    submitUpdateCase: sequences.submitUpdateCase,
-    updateCaseValue: sequences.updateCaseValue,
     updateCurrentTab: sequences.updateCurrentTab,
-    updateFormValue: sequences.updateFormValue,
     viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
-    submitUpdateCase,
-    submitSendToIRS,
-    updateCaseValue,
     updateCurrentTab,
-    updateFormValue,
     viewDocument,
   }) {
     return (
@@ -80,9 +72,6 @@ export default connect(
             <div className="tab-content" role="tabpanel">
               <button>
                 <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
-              </button>
-              <button id="send-to-irs" onClick={() => submitSendToIRS()}>
-                Send to IRS
               </button>
               <table className="responsive-table">
                 <thead>
@@ -144,59 +133,7 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel">
-              <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend>Petition fee</legend>
-                {caseDetail.showPaymentRecord && (
-                  <React.Fragment>
-                    <p className="label">Paid by pay.gov</p>
-                    <p>{caseDetail.payGovId}</p>
-                  </React.Fragment>
-                )}
-                {caseDetail.showPaymentOptions && (
-                  <ul className="usa-unstyled-list">
-                    <li>
-                      <input
-                        id="paygov"
-                        type="radio"
-                        name="paymentType"
-                        value="payGov"
-                        onChange={e => {
-                          updateFormValue({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label htmlFor="paygov">Paid by pay.gov</label>
-                      {caseDetail.showPayGovIdInput && (
-                        <React.Fragment>
-                          <label htmlFor="paygovid">Payment ID</label>
-                          <input
-                            id="paygovid"
-                            type="text"
-                            name="payGovId"
-                            value={caseDetail.payGovId || ''}
-                            onChange={e => {
-                              updateCaseValue({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <button
-                            id="update-case-page-end"
-                            onClick={() => submitUpdateCase()}
-                          >
-                            Save updates
-                          </button>
-                        </React.Fragment>
-                      )}
-                    </li>
-                  </ul>
-                )}
-              </fieldset>
-            </div>
+            <div className="tab-content" role="tabpanel" />
           )}
         </section>
       </React.Fragment>
