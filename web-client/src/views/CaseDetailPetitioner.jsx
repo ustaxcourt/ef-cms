@@ -13,19 +13,19 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     showDetails: state.paymentInfo.showDetails,
-    togglePaymentDetails: sequences.togglePaymentDetails,
-    updateCurrentTab: sequences.updateCurrentTab,
+    togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
+    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     user: state.user,
-    viewDocument: sequences.viewDocument,
+    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
     showDetails,
-    togglePaymentDetails,
-    updateCurrentTab,
+    togglePaymentDetailsSequence,
+    updateCurrentTabSequence,
     user,
-    viewDocument,
+    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -54,7 +54,9 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   id="tab-docket-record"
-                  onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                  onClick={() =>
+                    updateCurrentTabSequence({ value: 'Docket Record' })
+                  }
                 >
                   Docket Record
                 </button>
@@ -65,7 +67,7 @@ export default connect(
                   className="tab-link"
                   id="tab-case-info"
                   onClick={() =>
-                    updateCurrentTab({ value: 'Case Information' })
+                    updateCurrentTabSequence({ value: 'Case Information' })
                   }
                 >
                   Case Information
@@ -83,7 +85,7 @@ export default connect(
                       aria-expanded={showDetails}
                       aria-controls="paymentInfo"
                       id="actions-button"
-                      onClick={() => togglePaymentDetails()}
+                      onClick={() => togglePaymentDetailsSequence()}
                     >
                       <span>
                         <FontAwesomeIcon
@@ -180,7 +182,7 @@ export default connect(
                           className="pdf-link"
                           aria-label="View PDF"
                           onClick={() => {
-                            viewDocument({
+                            viewDocumentSequence({
                               documentId: item.documentId,
                               callback: openDocumentBlob,
                             });
