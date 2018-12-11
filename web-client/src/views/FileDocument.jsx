@@ -30,7 +30,16 @@ export default connect(
           }}
         >
           <label htmlFor="options">Document type</label>
-          <select name="options" id="options">
+          <select
+            name="documentType"
+            id="document-type"
+            onChange={e => {
+              updateDocumentValue({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          >
             <option value>- Select -</option>
             <option value="Answer">Answer</option>
           </select>
