@@ -1,4 +1,4 @@
-const { getCases } = require('./getCases');
+const { getCases } = require('./getCases.interactor');
 const { omit } = require('lodash');
 
 describe('getCases', () => {
