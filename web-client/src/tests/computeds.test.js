@@ -17,7 +17,6 @@ describe('formatted case details computed', () => {
       },
     });
     expect(result.irsDateFormatted).toContain('11/21/2018');
-    expect(result.irsDateFormatted).toContain(' PM');
   });
 
   it('formats the date in a list of cases', () => {
@@ -27,7 +26,6 @@ describe('formatted case details computed', () => {
       },
     });
     expect(result[0].irsDateFormatted).toContain('11/21/2018');
-    expect(result.irsDateFormatted).toContain(' PM');
   });
 });
 
