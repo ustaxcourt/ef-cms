@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
-const updateCase = require('./updateCase');
+const updateCase = require('./updateCase.lambda');
 const chai = require('chai');
 chai.use(require('chai-string'));
 const { MOCK_DOCUMENTS } = require('ef-cms-shared/src/test/mockDocuments');
