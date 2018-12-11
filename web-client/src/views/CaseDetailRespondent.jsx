@@ -4,6 +4,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
+import FileDocument from './FileDocument';
 import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 
@@ -11,21 +12,13 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    submitSendToIRS: sequences.submitToIRS,
-    submitUpdateCase: sequences.submitUpdateCase,
-    updateCaseValue: sequences.updateCaseValue,
     updateCurrentTab: sequences.updateCurrentTab,
-    updateFormValue: sequences.updateFormValue,
     viewDocument: sequences.viewDocument,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
-    submitUpdateCase,
-    submitSendToIRS,
-    updateCaseValue,
     updateCurrentTab,
-    updateFormValue,
     viewDocument,
   }) {
     return (
@@ -41,45 +34,49 @@ export default connect(
           <p>
             {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
           </p>
-          <p>
-            <span className="usa-label">{caseDetail.status}</span>
-          </p>
           <hr />
           <SuccessNotification />
           <ErrorNotification />
-          <nav className="horizontal-tabs">
-            <ul role="tabslist">
-              <li
-                role="presentation"
-                className={currentTab == 'Docket Record' ? 'active' : ''}
-              >
-                <button
-                  role="tab"
-                  className="tab-link"
-                  onClick={() => updateCurrentTab({ value: 'Docket Record' })}
-                  id="docket-record-tab"
+          {currentTab == 'File Document' && <FileDocument />}
+          {currentTab != 'File Document' && (
+            <nav className="horizontal-tabs">
+              <ul role="tabslist">
+                <li
+                  role="presentation"
+                  className={currentTab == 'Docket Record' ? 'active' : ''}
                 >
-                  Docket Record
-                </button>
-              </li>
-              <li className={currentTab == 'Case Information' ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="case-info-tab"
-                  onClick={() =>
-                    updateCurrentTab({ value: 'Case Information' })
-                  }
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                    id="docket-record-tab"
+                  >
+                    Docket Record
+                  </button>
+                </li>
+                <li
+                  className={currentTab == 'Case Information' ? 'active' : ''}
                 >
-                  Case Information
-                </button>
-              </li>
-            </ul>
-          </nav>
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    id="case-info-tab"
+                    onClick={() =>
+                      updateCurrentTab({ value: 'Case Information' })
+                    }
+                  >
+                    Case Information
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          )}
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button id="send-to-irs" onClick={() => submitSendToIRS()}>
-                Send to IRS
+              <button
+                onClick={() => updateCurrentTab({ value: 'File Document' })}
+              >
+                <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
               </button>
               <table className="responsive-table">
                 <thead>
@@ -141,59 +138,7 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel">
-              <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend>Petition fee</legend>
-                {caseDetail.showPaymentRecord && (
-                  <React.Fragment>
-                    <p className="label">Paid by pay.gov</p>
-                    <p>{caseDetail.payGovId}</p>
-                  </React.Fragment>
-                )}
-                {caseDetail.showPaymentOptions && (
-                  <ul className="usa-unstyled-list">
-                    <li>
-                      <input
-                        id="paygov"
-                        type="radio"
-                        name="paymentType"
-                        value="payGov"
-                        onChange={e => {
-                          updateFormValue({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label htmlFor="paygov">Paid by pay.gov</label>
-                      {caseDetail.showPayGovIdInput && (
-                        <React.Fragment>
-                          <label htmlFor="paygovid">Payment ID</label>
-                          <input
-                            id="paygovid"
-                            type="text"
-                            name="payGovId"
-                            value={caseDetail.payGovId || ''}
-                            onChange={e => {
-                              updateCaseValue({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <button
-                            id="update-case-page-end"
-                            onClick={() => submitUpdateCase()}
-                          >
-                            Save updates
-                          </button>
-                        </React.Fragment>
-                      )}
-                    </li>
-                  </ul>
-                )}
-              </fieldset>
-            </div>
+            <div className="tab-content" role="tabpanel" />
           )}
         </section>
       </React.Fragment>

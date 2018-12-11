@@ -12,13 +12,14 @@ import navigateToLogin from '../actions/navigateToLogin';
 const goToDashboard = [
   getUserRole,
   {
+    public: [setCurrentPage('DashboardPublic')],
     taxpayer: [
       getCasesByUser,
       {
         error: [setAlertError],
         success: [setCases],
       },
-      setCurrentPage('Dashboard'),
+      setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
       clearAlerts,
@@ -27,10 +28,10 @@ const goToDashboard = [
         error: [setAlertError],
         success: [setCases],
       },
-      setCurrentPage('PetitionsWorkQueue'),
+      setCurrentPage('DashboardPetitionsClerk'),
     ],
-    intakeclerk: [clearAlerts, setCurrentPage('IntakeClerkDashboard')],
-    respondent: [clearAlerts, setCurrentPage('Dashboard')],
+    intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
+    respondent: [clearAlerts, setCurrentPage('DashboardRespondent')],
   },
 ];
 

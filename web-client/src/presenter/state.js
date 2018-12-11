@@ -23,6 +23,7 @@ export default {
   searchTerm: '',
   user: {
     userId: '',
+    role: 'public',
 
     // userId: 'taxpayer',
     // firstName: 'Tax',
