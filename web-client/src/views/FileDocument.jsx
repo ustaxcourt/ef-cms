@@ -29,6 +29,20 @@ export default connect(
             submitDocument();
           }}
         >
+          <label htmlFor="options">Document type</label>
+          <select
+            name="documentType"
+            id="document-type"
+            onChange={e => {
+              updateDocumentValue({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          >
+            <option value>- Select -</option>
+            <option value="Answer">Answer</option>
+          </select>
           <label htmlFor="file" className={document.file && 'validated'}>
             Select file
           </label>
