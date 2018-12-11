@@ -5,9 +5,6 @@ import SearchBox from './SearchBox';
 
 import close from '../../node_modules/uswds/dist/img/close.svg';
 
-/**
- * Header
- */
 export default connect(
   {
     user: state.user,
@@ -21,9 +18,7 @@ export default connect(
         <div className="usa-navbar">
           <div className="usa-logo" id="extended-logo">
             <em className="usa-logo-text">
-              <a href={user.userId ? '/' : '/log-in'}>
-                United States Tax Court
-              </a>
+              <a href="/">United States Tax Court</a>
             </em>
           </div>
           <button className="usa-menu-btn" onClick={() => toggleMobileMenu()}>
@@ -98,16 +93,16 @@ export default connect(
               </li>
             </ul> */}
             <div className="usa-nav-secondary">
-              {user.userId && (
-                <ul className="usa-unstyled-list usa-nav-secondary-links">
-                  <li role="search" className="usa-search">
-                    <SearchBox />
-                  </li>
+              <ul className="usa-unstyled-list usa-nav-secondary-links">
+                <li role="search" className="usa-search">
+                  <SearchBox />
+                </li>
+                {user.userId && (
                   <li>
                     Hello, {user.firstName} {user.lastName}
                   </li>
-                </ul>
-              )}
+                )}
+              </ul>
             </div>
           </div>
         </nav>

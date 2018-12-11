@@ -59,7 +59,7 @@ describe('Tax payer', async () => {
   describe('Dashboard', () => {
     it('View cases', async () => {
       await test.runSequence('gotoDashboard');
-      assert.equal(test.getState('currentPage'), 'Dashboard');
+      assert.equal(test.getState('currentPage'), 'DashboardPetitioner');
       assert.ok(test.getState('cases').length > 0);
       caseId = test.getState('cases.0.caseId');
       assert.ok(caseId);
@@ -86,7 +86,7 @@ describe('Petitions clerk', () => {
         userId: 'petitionsclerk',
       });
       await test.runSequence('gotoDashboard');
-      assert.equal(test.getState('currentPage'), 'PetitionsWorkQueue');
+      assert.equal(test.getState('currentPage'), 'DashboardPetitionsClerk');
       assert.ok(test.getState('cases').length > 0);
     });
   });
