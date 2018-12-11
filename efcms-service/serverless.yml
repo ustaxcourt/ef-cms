@@ -290,7 +290,7 @@ resources:
 
 functions:
   getUploadPolicy:
-    handler: src/documents/getUploadPolicy.lambda.create
+    handler: src/documents/getUploadPolicyLambda.create
     events:
       - http:
           path: v1/documents/uploadPolicy
@@ -310,7 +310,7 @@ functions:
                   'application/json': 'policyUrl'
 
   getDownloadPolicyUrl:
-    handler: src/documents/downloadPolicyUrl.lambda.get
+    handler: src/documents/downloadPolicyUrlLambda.get
     events:
       - http:
           path: v1/documents/{documentId}/downloadPolicyUrl
@@ -330,7 +330,7 @@ functions:
                   'application/json': 'policyUrl'
 
   updateCase:
-    handler: src/cases/updateCase.lambda.put
+    handler: src/cases/updateCaseLambda.put
     events:
       - http:
           path: v1/cases/{caseId}
@@ -354,7 +354,7 @@ functions:
 
 
   createCase:
-    handler: src/cases/createCase.lambda.create
+    handler: src/cases/createCaseLambda.create
     events:
       - http:
           path: v1/cases
@@ -383,7 +383,7 @@ functions:
                   'application/json': case
 
   getCases:
-    handler: src/cases/getCases.lambda.get
+    handler: src/cases/getCasesLambda.get
     events:
       - http:
           path: v1/cases
@@ -403,7 +403,7 @@ functions:
                   'application/json': case
 
   getCase:
-    handler: src/cases/getCase.lambda.get
+    handler: src/cases/getCaseLambda.get
     events:
       - http:
           path: v1/cases/{caseId}
@@ -427,7 +427,7 @@ functions:
                   'application/json': case
 
   sendToIRS:
-    handler: src/cases/sendPetitionToIRS.lambda.post
+    handler: src/cases/sendPetitionToIRSLambda.post
     events:
       - http:
           path: v1/cases/{caseId}/irsPetitionPackage
@@ -450,7 +450,7 @@ functions:
                   'application/json': 'unprocessableEntityError'
 
   swagger:
-    handler: src/swagger/swagger.lambda.handler
+    handler: src/swagger/swaggerLambda.handler
     events:
       - http:
           path: v1/swagger
