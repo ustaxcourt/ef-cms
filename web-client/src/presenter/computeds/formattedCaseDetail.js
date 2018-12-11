@@ -12,7 +12,7 @@ const formatCase = (caseDetail, form) => {
 
   if (result.documents) result.documents.map(formatDocument);
 
-  result.irsDateFormatted = moment(result.irsDate).format('L');
+  result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
 
   result.showDocumentStatus = !result.irsSendDate;
@@ -23,6 +23,8 @@ const formatCase = (caseDetail, form) => {
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
+  result.status =
+    result.status === 'general' ? 'general docket' : result.status;
 
   return result;
 };
