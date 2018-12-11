@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 
 chai.use(require('chai-string'));
 
-const swagger = require('./swagger');
+const swagger = require('./swagger.lambda');
 
 describe('swagger GET', function() {
   it('should GET and return a 200 status', function() {
