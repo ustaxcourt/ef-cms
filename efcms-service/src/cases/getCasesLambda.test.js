@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const lambdaTester = require('lambda-tester');
-const getCases = require('./getCases');
+const getCases = require('./getCasesLambda');
 const chai = require('chai');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');

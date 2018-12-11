@@ -1,19 +1,19 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const { createCase } = require('ef-cms-shared/src/business/useCases/createCase');
+const { getCase } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
 const applicationContext = require('../applicationContext');
 
 /**
- * createCase
+ * getCase
  *
  * @param event
  * @returns {Promise<*|undefined>}
  */
-exports.create = event =>
+exports.get = event =>
   handle(() =>
-    createCase({
+    getCase({
       userId: getAuthHeader(event),
-      documents: JSON.parse(event.body).documents,
+      caseId: event.pathParameters.caseId,
       applicationContext,
     }),
   );

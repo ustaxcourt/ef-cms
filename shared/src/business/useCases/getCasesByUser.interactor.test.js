@@ -1,4 +1,4 @@
-const { getCasesByUser } = require('./getCasesByUser');
+const { getCasesByUser } = require('./getCasesByUser.interactor');
 const { omit } = require('lodash');
 
 describe('Send petition to IRS', () => {

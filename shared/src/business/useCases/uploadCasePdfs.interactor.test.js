@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { uploadCasePdfs } = require('./uploadCasePdfs');
+const { uploadCasePdfs } = require('./uploadCasePdfs.interactor');
 
 describe('uploadCasesPdfs', () => {
   let applicationContext;

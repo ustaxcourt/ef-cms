@@ -19,7 +19,7 @@ const MOCK_RESPONSE = {
 };
 
 const getUploadPolicyStub = sinon.stub();
-const getUploadPolicy = proxyquire('./getUploadPolicy', {
+const getUploadPolicy = proxyquire('./getUploadPolicyLambda', {
   '../applicationContext': {
     getPersistenceGateway: () => ({
       getUploadPolicy: getUploadPolicyStub,

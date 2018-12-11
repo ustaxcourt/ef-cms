@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
 const getDownloadPolicyUrlStub = sinon.stub();
-const downloadPolicyUrl = proxyquire('./downloadPolicyUrl', {
+const downloadPolicyUrl = proxyquire('./downloadPolicyUrlLambda', {
   '../applicationContext': {
     getPersistenceGateway: () => ({
       getDownloadPolicyUrl: getDownloadPolicyUrlStub,

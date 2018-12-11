@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const { getUser } = require('./getUser');
+const { getUser } = require('./getUser.interactor');
 
 describe('Get user', () => {
   it('Success taxpayer', async () => {
