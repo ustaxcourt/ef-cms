@@ -37,38 +37,45 @@ export default connect(
           <hr />
           <SuccessNotification />
           <ErrorNotification />
-          <nav className="horizontal-tabs">
-            <ul role="tabslist">
-              <li
-                role="presentation"
-                className={currentTab == 'Docket Record' ? 'active' : ''}
-              >
-                <button
-                  role="tab"
-                  className="tab-link"
-                  onClick={() => updateCurrentTab({ value: 'Docket Record' })}
-                  id="docket-record-tab"
+          {currentTab == 'File Document' && <FileDocument />}
+          {currentTab != 'File Document' && (
+            <nav className="horizontal-tabs">
+              <ul role="tabslist">
+                <li
+                  role="presentation"
+                  className={currentTab == 'Docket Record' ? 'active' : ''}
                 >
-                  Docket Record
-                </button>
-              </li>
-              <li className={currentTab == 'Case Information' ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="case-info-tab"
-                  onClick={() =>
-                    updateCurrentTab({ value: 'Case Information' })
-                  }
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                    id="docket-record-tab"
+                  >
+                    Docket Record
+                  </button>
+                </li>
+                <li
+                  className={currentTab == 'Case Information' ? 'active' : ''}
                 >
-                  Case Information
-                </button>
-              </li>
-            </ul>
-          </nav>
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    id="case-info-tab"
+                    onClick={() =>
+                      updateCurrentTab({ value: 'Case Information' })
+                    }
+                  >
+                    Case Information
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          )}
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button>
+              <button
+                onClick={() => updateCurrentTab({ value: 'File Document' })}
+              >
                 <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
               </button>
               <table className="responsive-table">
@@ -105,7 +112,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        Petitioner
+                        {document.userId}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
@@ -134,7 +141,6 @@ export default connect(
             <div className="tab-content" role="tabpanel" />
           )}
         </section>
-        <FileDocument />
       </React.Fragment>
     );
   },

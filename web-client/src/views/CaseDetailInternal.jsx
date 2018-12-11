@@ -118,7 +118,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        Petitioner
+                        {document.userId}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
