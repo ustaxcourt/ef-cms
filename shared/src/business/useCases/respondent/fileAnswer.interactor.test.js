@@ -1,4 +1,4 @@
-const { fileAnswer } = require('./fileAnswer');
+const { fileAnswer } = require('./fileAnswer.interactor');
 const sinon = require('sinon');
 const expect = require('chai').expect;
 const chai = require('chai');
