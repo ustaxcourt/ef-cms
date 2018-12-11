@@ -7,12 +7,14 @@ export default connect(
     document: state.document,
     submitDocument: sequences.submitDocument,
     submitting: state.submitting,
+    updateCurrentTab: sequences.updateCurrentTab,
     updateDocumentValue: sequences.updateDocumentValue,
   },
   function FilePetition({
     document,
     submitDocument,
     submitting,
+    updateCurrentTab,
     updateDocumentValue,
   }) {
     return (
@@ -51,7 +53,11 @@ export default connect(
             <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}
           </button>
-          <button type="button" className="usa-button-secondary">
+          <button
+            type="button"
+            className="usa-button-secondary"
+            onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+          >
             Cancel
           </button>
         </form>
