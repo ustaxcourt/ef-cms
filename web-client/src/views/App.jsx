@@ -5,10 +5,13 @@ import PropTypes from 'prop-types';
 
 import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
+import CaseDetailPublic from './CaseDetailPublic';
+import CaseDetailRespondent from './CaseDetailRespondent';
 import DashboardIntakeClerk from './DashboardIntakeClerk';
 import DashboardPetitioner from './DashboardPetitioner';
 import DashboardPetitionsClerk from './DashboardPetitionsClerk';
 import DashboardPublic from './DashboardPublic';
+import DashboardRespondent from './DashboardRespondent';
 import FileDocument from './FileDocument';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
@@ -22,10 +25,13 @@ import UsaBanner from './UsaBanner';
 const pages = {
   CaseDetailInternal,
   CaseDetailPetitioner,
+  CaseDetailPublic,
+  CaseDetailRespondent,
   DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPublic,
+  DashboardRespondent,
   FileDocument,
   FilePetition,
   IntakeClerkDashboard,

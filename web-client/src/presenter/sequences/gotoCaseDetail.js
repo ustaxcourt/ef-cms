@@ -18,6 +18,6 @@ export default [
     taxpayer: [setCurrentPage('CaseDetailPetitioner')],
     petitionsclerk: [setCurrentPage('CaseDetailInternal')],
     intakeclerk: [setCurrentPage('CaseDetailInternal')],
-    respondent: [setCurrentPage('CaseDetailPetitioner')], // TODO: display different dashboard maybe?
+    respondent: [setCurrentPage('CaseDetailRespondent')],
   },
 ];
