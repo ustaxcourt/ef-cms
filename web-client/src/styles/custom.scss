@@ -111,16 +111,21 @@ input:focus::placeholder {
   height: 100%;
   width: 100%;
   z-index: 100;
-  background-color: $color-primary-darkest;
-  opacity: 0.2;
+  background-color: rgba(0, 0, 0, 0.2);
   display: block;
   .spinner {
     display: block;
-    position: relative;
     height: 100px;
     width: 100px;
     margin: auto;
     margin-top: 200px;
+  }
+  p {
+    margin: auto;
+    color: $color-gray-lightest;
+    display: block;
+    text-align: center;
+    font-size: 6rem;
   }
 }
 
