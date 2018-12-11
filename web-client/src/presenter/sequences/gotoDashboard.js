@@ -5,20 +5,21 @@ import getUserRole from '../actions/getUserRole';
 import setAlertError from '../actions/setAlertError';
 import setCases from '../actions/setCases';
 import setCurrentPage from '../actions/setCurrentPage';
-import isLoggedIn from '../actions/isLoggedIn';
-import setPath from '../actions/setPath';
-import navigateToLogin from '../actions/navigateToLogin';
+// import isLoggedIn from '../actions/isLoggedIn';
+// import setPath from '../actions/setPath';
+// import navigateToLogin from '../actions/navigateToLogin';
 
-const goToDashboard = [
+export default [
   getUserRole,
   {
+    public: [setCurrentPage('DashboardPublic')],
     taxpayer: [
       getCasesByUser,
       {
         error: [setAlertError],
         success: [setCases],
       },
-      setCurrentPage('Dashboard'),
+      setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
       clearAlerts,
@@ -27,17 +28,18 @@ const goToDashboard = [
         error: [setAlertError],
         success: [setCases],
       },
-      setCurrentPage('PetitionsWorkQueue'),
+      setCurrentPage('DashboardPetitionsClerk'),
     ],
-    intakeclerk: [clearAlerts, setCurrentPage('IntakeClerkDashboard')],
-    respondent: [clearAlerts, setCurrentPage('Dashboard')],
+    intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
+    respondent: [clearAlerts, setCurrentPage('DashboardRespondent')],
   },
 ];
 
-export default [
-  isLoggedIn,
-  {
-    unauthorized: [setPath, navigateToLogin],
-    isLoggedIn: goToDashboard,
-  },
-];
+// TODO: discuss wit Kris
+// export default [
+//   isLoggedIn,
+//   {
+//     unauthorized: [setPath, navigateToLogin],
+//     isLoggedIn: goToDashboard,
+//   },
+// ];
