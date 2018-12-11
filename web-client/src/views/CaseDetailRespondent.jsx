@@ -74,6 +74,7 @@ export default connect(
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
               <button
+                id="button-file-document"
                 onClick={() => updateCurrentTab({ value: 'File Document' })}
               >
                 <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
