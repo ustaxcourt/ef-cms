@@ -12,6 +12,7 @@ const formatCase = (caseDetail, form) => {
 
   if (result.documents) result.documents.map(formatDocument);
 
+  result.createdAtFormatted = moment(result.createdAt).format('L');
   result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
 
@@ -19,6 +20,7 @@ const formatCase = (caseDetail, form) => {
   result.showIrsServedDate = !!result.irsSendDate;
   result.showPayGovIdInput = form.paymentType == 'payGov';
   result.showPaymentOptions = !(caseDetail.payGovId && !form.paymentType);
+  result.showActionRequired = !caseDetail.payGovId;
   result.showPaymentRecord = result.payGovId && !form.paymentType;
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
