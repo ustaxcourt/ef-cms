@@ -6,6 +6,7 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
+import PartyInformation from './PartyInformation';
 
 export default connect(
   {
@@ -128,7 +129,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
-                        {document.status === 'served' && (
+                        {document.isStatusServed && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
                         {caseDetail.showDocumentStatus && (
@@ -151,94 +152,60 @@ export default connect(
           )}
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
-              <div className="usa-grid">
-                <h4>Party Information</h4>
-                <div className="usa-width-one-half">
-                  {caseDetail.petitioners && (
+              <PartyInformation />
+              <div>
+                <fieldset className="usa-fieldset-inputs usa-sans">
+                  <legend>Petition fee</legend>
+                  {caseDetail.showPaymentRecord && (
                     <React.Fragment>
-                      <h5>Petitioner</h5>
-                      {caseDetail.petitioners.map((petitioner, key) => (
-                        <address key={key}>
-                          {petitioner.name} <br />
-                          {petitioner.addressLine1} <br />
-                          {petitioner.addressLine2} <br />
-                          {petitioner.city} {petitioner.state} {petitioner.zip}{' '}
-                          <br />
-                          {petitioner.phone} <br />
-                          {petitioner.email} <br />
-                        </address>
-                      ))}
+                      <p className="label">Paid by pay.gov</p>
+                      <p>{caseDetail.payGovId}</p>
                     </React.Fragment>
                   )}
-                </div>
-                <div className="usa-width-one-half">
-                  {caseDetail.respondent && (
-                    <React.Fragment>
-                      <h5>Respondent</h5>
-                      <address>
-                        {caseDetail.respondent.name} <br />
-                        {caseDetail.respondent.address} <br />
-                        {caseDetail.respondent.city} <br />
-                        {caseDetail.respondent.state} <br />
-                        {caseDetail.respondent.zip} <br />
-                        {caseDetail.respondent.phone} <br />
-                        {caseDetail.respondent.email} <br />
-                      </address>
-                    </React.Fragment>
+                  {caseDetail.showPaymentOptions && (
+                    <ul className="usa-unstyled-list">
+                      <li>
+                        <input
+                          id="paygov"
+                          type="radio"
+                          name="paymentType"
+                          value="payGov"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                        <label htmlFor="paygov">Paid by pay.gov</label>
+                        {caseDetail.showPayGovIdInput && (
+                          <React.Fragment>
+                            <label htmlFor="paygovid">Payment ID</label>
+                            <input
+                              id="paygovid"
+                              type="text"
+                              name="payGovId"
+                              value={caseDetail.payGovId || ''}
+                              onChange={e => {
+                                updateCaseValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <button
+                              id="update-case-page-end"
+                              onClick={() => submitUpdateCaseSequence()}
+                            >
+                              Save updates
+                            </button>
+                          </React.Fragment>
+                        )}
+                      </li>
+                    </ul>
                   )}
-                </div>
+                </fieldset>
               </div>
-              <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend>Petition fee</legend>
-                {caseDetail.showPaymentRecord && (
-                  <React.Fragment>
-                    <p className="label">Paid by pay.gov</p>
-                    <p>{caseDetail.payGovId}</p>
-                  </React.Fragment>
-                )}
-                {caseDetail.showPaymentOptions && (
-                  <ul className="usa-unstyled-list">
-                    <li>
-                      <input
-                        id="paygov"
-                        type="radio"
-                        name="paymentType"
-                        value="payGov"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label htmlFor="paygov">Paid by pay.gov</label>
-                      {caseDetail.showPayGovIdInput && (
-                        <React.Fragment>
-                          <label htmlFor="paygovid">Payment ID</label>
-                          <input
-                            id="paygovid"
-                            type="text"
-                            name="payGovId"
-                            value={caseDetail.payGovId || ''}
-                            onChange={e => {
-                              updateCaseValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <button
-                            id="update-case-page-end"
-                            onClick={() => submitUpdateCaseSequence()}
-                          >
-                            Save updates
-                          </button>
-                        </React.Fragment>
-                      )}
-                    </li>
-                  </ul>
-                )}
-              </fieldset>
             </div>
           )}
         </section>

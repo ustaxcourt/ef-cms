@@ -4,7 +4,7 @@ const Case = require('./Case');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 const A_VALID_CASE = {
-  docketNumber: '00101-18',
+  docketNumber: '101-18',
   documents: MOCK_DOCUMENTS,
 };
 
@@ -20,7 +20,7 @@ describe('Case entity', () => {
         caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
         createdAt: '2018-11-21T20:58:28.192Z',
         status: 'new',
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
         documents: A_VALID_CASE.documents,
       };
       const myCase = new Case(previouslyCreatedCase);
@@ -34,7 +34,7 @@ describe('Case entity', () => {
         status: 'new',
         documents: A_VALID_CASE.documents,
         payGovId: '1234',
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
       };
       const myCase = new Case(previouslyCreatedCase);
       assert.ok(myCase.isValid());
