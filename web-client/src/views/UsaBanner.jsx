@@ -12,9 +12,9 @@ import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';
 export default connect(
   {
     showDetails: state.usaBanner.showDetails,
-    toggleUsaBannerDetails: sequences.toggleUsaBannerDetails,
+    toggleUsaBannerDetailsSequence: sequences.toggleUsaBannerDetailsSequence,
   },
-  function UsaBanner({ showDetails, toggleUsaBannerDetails }) {
+  function UsaBanner({ showDetails, toggleUsaBannerDetailsSequence }) {
     return (
       <section className="usa-banner">
         <div className="usa-accordion">
@@ -26,7 +26,7 @@ export default connect(
                 className="usa-accordion-button usa-banner-button"
                 aria-expanded={showDetails}
                 aria-controls="gov-banner"
-                onClick={() => toggleUsaBannerDetails()}
+                onClick={() => toggleUsaBannerDetailsSequence()}
               >
                 <span className="usa-banner-button-text">
                   Here’s how you know&nbsp;

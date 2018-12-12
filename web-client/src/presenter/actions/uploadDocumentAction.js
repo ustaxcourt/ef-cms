@@ -10,7 +10,7 @@ export default async ({ applicationContext, get }) => {
     userId: get(state.user.token),
   });
   return {
-    caseId: caseToUpdate.caseId,
+    docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
       title: 'Your document was uploaded successfully.',
       message: 'Your document has been filed.',

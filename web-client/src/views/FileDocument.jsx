@@ -5,17 +5,17 @@ import React from 'react';
 export default connect(
   {
     document: state.document,
-    submitDocument: sequences.submitDocument,
+    submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
-    updateCurrentTab: sequences.updateCurrentTab,
-    updateDocumentValue: sequences.updateDocumentValue,
+    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
   },
   function FilePetition({
     document,
-    submitDocument,
+    submitDocumentSequence,
     submitting,
-    updateCurrentTab,
-    updateDocumentValue,
+    updateCurrentTabSequence,
+    updateDocumentValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -26,7 +26,7 @@ export default connect(
           noValidate
           onSubmit={e => {
             e.preventDefault();
-            submitDocument();
+            submitDocumentSequence();
           }}
         >
           <label htmlFor="options">Document type</label>
@@ -34,7 +34,7 @@ export default connect(
             name="documentType"
             id="document-type"
             onChange={e => {
-              updateDocumentValue({
+              updateDocumentValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -52,7 +52,7 @@ export default connect(
             accept=".pdf"
             name="file"
             onChange={e => {
-              updateDocumentValue({
+              updateDocumentValueSequence({
                 key: e.target.name,
                 value: e.target.files[0],
               });
@@ -70,7 +70,7 @@ export default connect(
           <button
             type="button"
             className="usa-button-secondary"
-            onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+            onClick={() => updateCurrentTabSequence({ value: 'Docket Record' })}
           >
             Cancel
           </button>

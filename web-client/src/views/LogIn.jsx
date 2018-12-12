@@ -7,10 +7,10 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     form: state.form,
-    updateFormValue: sequences.updateFormValue,
-    submitLogIn: sequences.submitLogIn,
+    submitLogInSequence: sequences.submitLogInSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function LogIn({ form, updateFormValue, submitLogIn }) {
+  function LogIn({ form, updateFormValueSequence, submitLogInSequence }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Log in</h1>
@@ -20,7 +20,7 @@ export default connect(
           noValidate
           onSubmit={e => {
             e.preventDefault();
-            submitLogIn();
+            submitLogInSequence();
           }}
         >
           <div className="usa-form-group">
@@ -32,7 +32,7 @@ export default connect(
               autoCapitalize="off"
               value={form.name}
               onChange={e => {
-                updateFormValue({
+                updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
