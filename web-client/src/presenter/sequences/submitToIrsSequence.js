@@ -1,9 +1,9 @@
-import clearAlerts from '../actions/clearAlerts';
-import setAlertError from '../actions/setAlertError';
-import setAlertSuccess from '../actions/setAlertSuccess';
-import setCase from '../actions/setCase';
-import getCase from '../actions/getCase';
-import sendToIRSAction from '../actions/sendPetitionToIRS';
+import clearAlerts from '../actions/clearAlertsAction';
+import setAlertError from '../actions/setAlertErrorAction';
+import setAlertSuccess from '../actions/setAlertSuccessAction';
+import setCase from '../actions/setCaseAction';
+import getCase from '../actions/getCaseAction';
+import sendToIRSAction from '../actions/sendPetitionToIrsAction';
 
 export default [
   clearAlerts,

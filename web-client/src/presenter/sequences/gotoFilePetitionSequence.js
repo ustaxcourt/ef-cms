@@ -1,5 +1,5 @@
-import clearAlerts from '../actions/clearAlerts';
-import clearPetition from '../actions/clearPetition';
-import setCurrentPage from '../actions/setCurrentPage';
+import clearAlerts from '../actions/clearAlertsAction';
+import clearPetition from '../actions/clearPetitionAction';
+import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [clearAlerts, clearPetition, setCurrentPage('FilePetition')];

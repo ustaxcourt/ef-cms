@@ -1,10 +1,10 @@
-import clearAlerts from '../actions/clearAlerts';
-import getUser from '../actions/getUser';
-import setAlertError from '../actions/setAlertError';
-import setFormSubmitting from '../actions/setFormSubmitting';
-import setUser from '../actions/setUser';
-import unsetFormSubmitting from '../actions/unsetFormSubmitting';
-import navigateToPath from '../actions/navigateToPath';
+import clearAlerts from '../actions/clearAlertsAction';
+import getUser from '../actions/getUserAction';
+import setAlertError from '../actions/setAlertErrorAction';
+import setFormSubmitting from '../actions/setFormSubmittingAction';
+import setUser from '../actions/setUserAction';
+import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
+import navigateToPath from '../actions/navigateToPathAction';
 
 export default [
   setFormSubmitting,

@@ -1,5 +1,5 @@
-import clearAlerts from '../actions/clearAlerts';
-import clearLoginForm from '../actions/clearLoginForm';
-import setCurrentPage from '../actions/setCurrentPage';
+import clearAlerts from '../actions/clearAlertsAction';
+import clearLoginForm from '../actions/clearLoginFormAction';
+import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [clearAlerts, clearLoginForm, setCurrentPage('LogIn')];

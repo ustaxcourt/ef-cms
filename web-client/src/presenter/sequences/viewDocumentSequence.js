@@ -1,3 +1,3 @@
-import getDocument from '../actions/getDocument';
+import getDocument from '../actions/getDocumentAction';
 
 export default [getDocument];

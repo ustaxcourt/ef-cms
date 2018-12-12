@@ -1,10 +1,10 @@
-import clearAlerts from '../actions/clearAlerts';
-import createCase from '../actions/createCase';
-import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccess';
-import navigateToDashboard from '../actions/navigateToDashboard';
-import setAlertSuccess from '../actions/setAlertSuccess';
-import setFormSubmitting from '../actions/setFormSubmitting';
-import unsetFormSubmitting from '../actions/unsetFormSubmitting';
+import clearAlerts from '../actions/clearAlertsAction';
+import createCase from '../actions/createCaseAction';
+import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccessAction';
+import navigateToDashboard from '../actions/navigateToDashboardAction';
+import setAlertSuccess from '../actions/setAlertSuccessAction';
+import setFormSubmitting from '../actions/setFormSubmittingAction';
+import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 export default [
   setFormSubmitting,
