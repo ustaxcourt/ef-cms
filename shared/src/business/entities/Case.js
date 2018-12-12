@@ -37,6 +37,14 @@ function Case(rawCase) {
   } else {
     this.documents = [];
   }
+
+  this.petitioners = [];
+  this.petitioners.push({
+    name: 'test taxpayer',
+    address: '123',
+    email: 'test@example.com',
+    phone: '(123) 456-7890',
+  });
 }
 
 joiValidationDecorator(
@@ -58,10 +66,19 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    respondentId: joi.string().optional(),
-    respondentFirstName: joi.string().optional(),
-    respondentLastName: joi.string().optional(),
-    respondentBarNumber: joi.string().optional(),
+    respondent: joi.object().keys({
+      respondentId: joi.string().optional(),
+      name: joi.string().optional(),
+      addressLine1: joi.string().optional(),
+      addressLine2: joi.string().optional(),
+      city: joi.string().optional(),
+      state: joi.string().optional(),
+      zip: joi.string().optional(),
+      email: joi.string().optional(),
+      isIRSAttorney: joi.boolean().optional(),
+      phone: joi.string().optional(),
+      barNumber: joi.string().optional(),
+    }),
     irsSendDate: joi
       .date()
       .iso()
@@ -74,6 +91,9 @@ joiValidationDecorator(
     status: joi
       .string()
       .regex(/^(new|general)$/)
+      .optional(),
+    petitioners: joi
+      .array()
       .optional(),
     documents: joi
       .array()
