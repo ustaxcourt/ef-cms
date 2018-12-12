@@ -16,7 +16,7 @@ describe('Get case', () => {
         return {
           getCaseByCaseId: () =>
             Promise.resolve({
-              docketNumber: '00101-18',
+              docketNumber: '101-18',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               documents,
             }),

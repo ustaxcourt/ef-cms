@@ -100,11 +100,7 @@ export default connect(
                 <li role="search" className="usa-search">
                   <SearchBox />
                 </li>
-                {user.userId && (
-                  <li>
-                    Hello, {user.firstName} {user.lastName}
-                  </li>
-                )}
+                {user.userId && <li>Hello, {user.name}</li>}
               </ul>
             </div>
           </div>

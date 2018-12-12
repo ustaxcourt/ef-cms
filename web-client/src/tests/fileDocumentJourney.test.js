@@ -37,9 +37,13 @@ describe('Respondent', async () => {
         key: 'file',
         value: fakeFile,
       });
+      await test.runSequence('updateDocumentValueSequence', {
+        key: 'documentType',
+        value: 'Answer',
+      });
       await test.runSequence('submitDocumentSequence');
       assert.deepEqual(test.getState('alertSuccess'), {
-        title: 'Your document was uploaded successfully.',
+        title: 'Your Answer was uploaded successfully.',
         message: 'Your document has been filed.',
       });
     });

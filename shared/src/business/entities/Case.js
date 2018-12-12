@@ -11,6 +11,7 @@ const uuidVersions = {
 const Document = require('./Document');
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
+
 /**
  * Case
  * @param rawCase
@@ -58,10 +59,7 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    respondentId: joi.string().optional(),
-    respondentFirstName: joi.string().optional(),
-    respondentLastName: joi.string().optional(),
-    respondentBarNumber: joi.string().optional(),
+    respondent: joi.object().optional(),
     irsSendDate: joi
       .date()
       .iso()
@@ -75,6 +73,7 @@ joiValidationDecorator(
       .string()
       .regex(/^(new|general)$/)
       .optional(),
+    petitioners: joi.array().optional(),
     documents: joi
       .array()
       .min(3)
@@ -102,7 +101,12 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
 Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
   this.status = 'general';
-  this.documents.every(document => (document.status = 'served'));
+  this.documents.forEach(document => {
+    const doc = new Document(document);
+    if (doc.isPetitionDocument()) {
+      document.status = 'served';
+    }
+  });
   return this;
 };
 

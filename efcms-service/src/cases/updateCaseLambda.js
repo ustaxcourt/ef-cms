@@ -13,7 +13,7 @@ exports.put = event =>
     const userId = getAuthHeader(event);
     return updateCase({
       caseId: event.pathParameters.caseId,
-      caseJson: JSON.parse(event.body),
+      caseToUpdate: JSON.parse(event.body),
       userId,
       applicationContext,
     });
