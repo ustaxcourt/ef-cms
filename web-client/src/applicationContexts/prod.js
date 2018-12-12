@@ -16,6 +16,9 @@ import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCase
 import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer.interactor';
 import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile.interactor';
+import { fileStipulatedDecision } from '../../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
+
+import Case from '../../../shared/src/business/entities/Case';
 
 /**
  * Context for the prod environment
@@ -50,8 +53,10 @@ const applicationContext = {
   getUseCaseForDocumentUpload: (documentType, role) => {
     if (role === 'respondent') {
       switch (documentType) {
-        case 'answer':
+        case Case.documentTypes.answer:
           return fileAnswer;
+        case Case.documentTypes.stipulatedDecision:
+          return fileStipulatedDecision;
         default:
           return updateCase;
       }

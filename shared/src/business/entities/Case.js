@@ -154,6 +154,7 @@ Case.documentTypes = {
   statementOfTaxpayerIdentificationNumber:
     'Statement of Taxpayer Identification Number',
   answer: 'Answer',
+  stipulatedDecision: 'Stipulated Decision',
 };
 
 module.exports = Case;

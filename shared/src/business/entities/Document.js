@@ -13,7 +13,11 @@ const petitionDocumentTypes = [
   'Statement of Taxpayer Identification Number',
 ];
 
-const documentTypes = [...petitionDocumentTypes, 'Answer'];
+const documentTypes = [
+  ...petitionDocumentTypes,
+  'Answer',
+  'Stipulated Decision',
+];
 
 /**
  * constructor
