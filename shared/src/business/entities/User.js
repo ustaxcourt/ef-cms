@@ -8,68 +8,59 @@ function User(user) {
 
   //petitioner
   if (this.userId === 'taxpayer') {
-    if (!this.firstName) {
-      this.firstName = 'Test';
-    }
-    if (!this.lastName) {
-      this.lastName = 'Taxpayer';
-    }
-    if (!this.role) {
-      this.role = 'taxpayer';
-    }
-    if (!this.token) {
-      this.token = 'taxpayer';
-    }
+    Object.assign(this, {
+      name: 'Test Taxpayer',
+      role: 'taxpayer',
+      token: 'taxpayer',
+      addressLine1: '111 Orange St.',
+      addressLine2: 'Building 2',
+      city: 'Orlando',
+      state: 'FL',
+      zip: '37208',
+      phone: '111-111-1111',
+      email: 'testtaxpayer@example.com',
+    });
   }
   //petitionsclerk
   else if (this.userId === 'petitionsclerk') {
-    if (!this.firstName) {
-      this.firstName = 'Test';
-    }
-    if (!this.lastName) {
-      this.lastName = 'Petitionsclerk';
-    }
-    if (!this.role) {
-      this.role = 'petitionsclerk';
-    }
-    if (!this.token) {
-      this.token = 'petitionsclerk';
-    }
+    Object.assign(this, {
+      name: 'Test Petitionsclerk',
+      role: 'petitionsclerk',
+      token: 'petitionsclerk',
+      addressLine1: '111 Orange St.',
+      addressLine2: 'Building 2',
+      city: 'Washington',
+      state: 'DC',
+      zip: '10111',
+      phone: '111-111-1111',
+      email: 'testpetitionsclerk@example.com',
+    });
   } else if (this.userId === 'intakeclerk') {
-    if (!this.firstName) {
-      this.firstName = 'Test';
-    }
-    if (!this.lastName) {
-      this.lastName = 'Intakeclerk';
-    }
-    if (!this.role) {
-      this.role = 'intakeclerk';
-    }
-    if (!this.token) {
-      this.token = 'intakeclerk';
-    }
-    if (!this.userId) {
-      this.userId = 'intakeclerk';
-    }
+    Object.assign(this, {
+      name: 'Test Intakeclerk',
+      role: 'intakeclerk',
+      token: 'intakeclerk',
+      addressLine1: '111 Orange St.',
+      addressLine2: 'Building 2',
+      city: 'Washington',
+      state: 'DC',
+      zip: '10111',
+      phone: '111-111-1111',
+      email: 'testintakeclerk@example.com',
+    });
   } else if (this.userId === 'respondent') {
-    if (!this.firstName) {
-      this.firstName = 'IRS';
-    }
-    if (!this.lastName) {
-      this.lastName = 'Attorney';
-    }
-    if (!this.role) {
-      this.role = 'respondent';
-    }
-    if (!this.barNumber) {
-      this.barNumber = '12345';
-    }
-    if (!this.token) {
-      this.token = 'respondent';
-    }
-    if (!this.userId) {
-      this.userId = 'respondent';
-    }
+    Object.assign(this, {
+      name: 'Test Respondent',
+      role: 'respondent',
+      token: 'respondent',
+      addressLine1: '111 Orange St.',
+      addressLine2: 'Building 2',
+      city: 'Washington',
+      state: 'DC',
+      zip: '10111',
+      phone: '111-111-1111',
+      email: 'testrespondent@example.com',
+    });
   } else {
     throw new Error('invalid user');
   }

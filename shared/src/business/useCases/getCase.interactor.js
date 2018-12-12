@@ -36,7 +36,7 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  if (!isAuthorized(userId, GET_CASE, userId)) {
+  if (!isAuthorized(userId, GET_CASE, caseRecord.userId)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

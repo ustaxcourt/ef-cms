@@ -5,11 +5,11 @@ const Document = require('../../entities/Document');
 exports.fileAnswer = async ({
   userId,
   caseToUpdate,
-  answerDocument,
+  document,
   applicationContext,
 }) => {
   //validate the pdf
-  if (!answerDocument) {
+  if (!document) {
     throw new UnprocessableEntityError(
       'answer document cannot be null or invalid',
     );
@@ -20,32 +20,23 @@ exports.fileAnswer = async ({
   const user = await applicationContext.getUseCases().getUser(userId);
 
   //upload to S3 return uuid
-  const answerDocumentId = await applicationContext
+  const documentId = await applicationContext
     .getPersistenceGateway()
     .uploadDocument({
       applicationContext,
-      answerDocument,
+      document,
     });
 
   const answerDocumentMetadata = {
     documentType: Case.documentTypes.answer,
-    documentId: answerDocumentId,
+    documentId: documentId,
     userId: userId,
     createdAt: new Date().toISOString(),
   };
 
   const respondent = {
+    ...user,
     respondentId: userId,
-    barNumber: user.barNumber,
-    name: user.name,
-    email: user.email,
-    addressLine1: user.addressLine1,
-    addressLine2: user.addressLine1,
-    city: user.addressCity,
-    state: user.state,
-    zip: user.zip,
-    isIRSAttorney: true,
-    phone: user.phone,
   };
 
   const caseWithAnswer = new Case({
@@ -55,10 +46,9 @@ exports.fileAnswer = async ({
   });
 
   caseWithAnswer.validateWithError(new UnprocessableEntityError());
-
   const updatedCase = await applicationContext.getUseCases().updateCase({
     caseId: caseWithAnswer.caseId,
-    caseDetails: caseWithAnswer.toJSON(),
+    caseToUpdate: caseWithAnswer.toJSON(),
     userId,
     applicationContext,
   });
