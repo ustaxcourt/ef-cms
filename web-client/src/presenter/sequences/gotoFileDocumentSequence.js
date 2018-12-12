@@ -1,9 +1,9 @@
-import clearAlerts from '../actions/clearAlerts';
-import clearDocument from '../actions/clearDocument';
-import setCurrentPage from '../actions/setCurrentPage';
-import getCase from '../actions/getCase';
-import getUserRole from '../actions/getUserRole';
-import setCase from '../actions/setCase';
+import clearAlerts from '../actions/clearAlertsAction';
+import clearDocument from '../actions/clearDocumentAction';
+import setCurrentPage from '../actions/setCurrentPageAction';
+import getCase from '../actions/getCaseAction';
+import getUserRole from '../actions/getUserRoleAction';
+import setCase from '../actions/setCaseAction';
 
 export default [
   clearAlerts,

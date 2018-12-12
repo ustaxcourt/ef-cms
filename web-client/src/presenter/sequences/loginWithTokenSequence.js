@@ -1,6 +1,6 @@
 import updateLoginValueSequence from '../sequences/updateLoginValueSequence';
 import submitLogInSequence from '../sequences/submitLogInSequence';
-import setPath from '../actions/setPath';
+import setPath from '../actions/setPathAction';
 
 /**
  * Combine several sequences; set login value, and

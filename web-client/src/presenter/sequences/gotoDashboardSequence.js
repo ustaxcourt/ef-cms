@@ -1,13 +1,13 @@
-import clearAlerts from '../actions/clearAlerts';
-import getCasesByUser from '../actions/getCasesByUser';
-import getCasesNew from '../actions/getCasesNew';
-import getUserRole from '../actions/getUserRole';
-import setAlertError from '../actions/setAlertError';
-import setCases from '../actions/setCases';
-import setCurrentPage from '../actions/setCurrentPage';
-import isLoggedIn from '../actions/isLoggedIn';
-import setPath from '../actions/setPath';
-import navigateToLogin from '../actions/navigateToLogin';
+import clearAlerts from '../actions/clearAlertsAction';
+import getCasesByUser from '../actions/getCasesByUserAction';
+import getCasesNew from '../actions/getCasesNewAction';
+import getUserRole from '../actions/getUserRoleAction';
+import setAlertError from '../actions/setAlertErrorAction';
+import setCases from '../actions/setCasesAction';
+import setCurrentPage from '../actions/setCurrentPageAction';
+import isLoggedIn from '../actions/isLoggedInAction';
+import setPath from '../actions/setPathAction';
+import navigateToLogin from '../actions/navigateToLoginAction';
 
 const goToDashboard = [
   getUserRole,

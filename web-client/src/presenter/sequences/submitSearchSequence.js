@@ -1,4 +1,4 @@
-import navigateToCaseDetail from '../actions/navigateToCaseDetail';
-import formatSearchParams from '../actions/formatSearchParams';
+import navigateToCaseDetail from '../actions/navigateToCaseDetailAction';
+import formatSearchParams from '../actions/formatSearchParamsAction';
 
 export default [formatSearchParams, navigateToCaseDetail];

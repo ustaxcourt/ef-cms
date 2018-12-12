@@ -1,9 +1,9 @@
-import clearAlerts from '../actions/clearAlerts';
-import clearForm from '../actions/clearForm';
-import setAlertError from '../actions/setAlertError';
-import setAlertSuccess from '../actions/setAlertSuccess';
-import setCase from '../actions/setCase';
-import updateCaseAction from '../actions/updateCase';
+import clearAlerts from '../actions/clearAlertsAction';
+import clearForm from '../actions/clearFormAction';
+import setAlertError from '../actions/setAlertErrorAction';
+import setAlertSuccess from '../actions/setAlertSuccessAction';
+import setCase from '../actions/setCaseAction';
+import updateCaseAction from '../actions/updateCaseAction';
 
 export default [
   clearAlerts,

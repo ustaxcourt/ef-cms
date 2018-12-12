@@ -1,3 +1,3 @@
-import setCurrentPage from '../actions/setCurrentPage';
+import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [setCurrentPage('StyleGuide')];
