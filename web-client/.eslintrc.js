@@ -6,7 +6,7 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
   ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
+  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jest'],
   rules: {
     'prettier/prettier': 'error',
     'arrow-parens': ['error', 'as-needed'],
@@ -36,6 +36,7 @@ module.exports = {
   },
   env: {
     'cypress/globals': true,
+    'jest/globals': true,
     browser: true,
     es6: true,
     mocha: true,

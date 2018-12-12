@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import assert from 'assert';
 import FormData from 'form-data';
 
 import presenter from '../presenter';
@@ -8,6 +7,7 @@ import applicationContext from '../applicationContexts/dev';
 let test;
 let docketNumber;
 global.FormData = FormData;
+global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
@@ -17,107 +17,153 @@ presenter.providers.router = {
   },
 };
 
+const fakeFile = new Buffer(['TEST'], {
+  type: 'application/pdf',
+});
+fakeFile.name = 'fakeFile.pdf';
+
 test = CerebralTest(presenter);
 
-describe('Tax payer', async () => {
-  test.setState('user', {
-    firstName: 'Test',
-    lastName: 'Taxpayer',
-    role: 'taxpayer',
-    token: 'taxpayer',
-    userId: 'taxpayer',
-  });
-
-  const fakeFile = new Buffer(['TEST'], {
-    type: 'application/pdf',
-  });
-  fakeFile.name = 'fakeFile.pdf';
-
-  describe('Initiate case', () => {
-    it('Submits successfully', async () => {
-      await test.runSequence('gotoFilePetitionSequence');
-      await test.runSequence('updatePetitionValueSequence', {
-        key: 'petitionFile',
-        value: fakeFile,
-      });
-      await test.runSequence('updatePetitionValueSequence', {
-        key: 'requestForPlaceOfTrial',
-        value: fakeFile,
-      });
-      await test.runSequence('updatePetitionValueSequence', {
-        key: 'statementOfTaxpayerIdentificationNumber',
-        value: fakeFile,
-      });
-      await test.runSequence('submitFilePetitionSequence');
-      assert.deepEqual(test.getState('alertSuccess'), {
-        title: 'Your files were uploaded successfully.',
-        message: 'Your case has now been created.',
-      });
+describe('Case journey', async () => {
+  it('Taxpayer logs in', async () => {
+    test.setState('user', {
+      firstName: 'Test',
+      lastName: 'Taxpayer',
+      role: 'taxpayer',
+      token: 'taxpayer',
+      userId: 'taxpayer',
     });
   });
 
-  describe('Dashboard', () => {
-    it('View cases', async () => {
-      await test.runSequence('gotoDashboardSequence');
-      assert.equal(test.getState('currentPage'), 'DashboardPetitioner');
-      assert.ok(test.getState('cases').length > 0);
-      docketNumber = test.getState('cases.0.docketNumber');
-      assert.ok(docketNumber);
+  it('Taxpayer creates a new case', async () => {
+    await test.runSequence('gotoFilePetitionSequence');
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'petitionFile',
+      value: fakeFile,
+    });
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'requestForPlaceOfTrial',
+      value: fakeFile,
+    });
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'statementOfTaxpayerIdentificationNumber',
+      value: fakeFile,
+    });
+    await test.runSequence('submitFilePetitionSequence');
+    expect(test.getState('alertSuccess')).toEqual({
+      title: 'Your files were uploaded successfully.',
+      message: 'Your case has now been created.',
     });
   });
 
-  describe('Case Detail', () => {
-    it('View case', async () => {
-      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-      assert.equal(test.getState('currentPage'), 'CaseDetailPetitioner');
-      assert.ok(test.getState('caseDetail'));
-    });
+  it('Taxpayer views dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
+    expect(test.getState('cases').length).toBeGreaterThan(0);
+    docketNumber = test.getState('cases.0.docketNumber');
   });
-});
 
-describe('Petitions clerk', () => {
-  describe('Dashboard', () => {
-    it('View cases', async () => {
-      test.setState('user', {
-        firstName: 'Petitions',
-        lastName: 'Clerk',
-        role: 'petitionsclerk',
-        token: 'petitionsclerk',
-        userId: 'petitionsclerk',
-      });
-      await test.runSequence('gotoDashboardSequence');
-      assert.equal(test.getState('currentPage'), 'DashboardPetitionsClerk');
-      assert.ok(test.getState('cases').length > 0);
+  it('Taxpayer views case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    await test.runSequence('viewDocumentSequence', {
+      documentId: test.getState('caseDetail.documents.0.documentId'),
+      callback: documentBlob => {
+        expect(documentBlob).toBeTruthy();
+      },
     });
   });
 
-  describe('Search box', async () => {
-    it('takes us to case details', async done => {
-      test.setState('user', {
-        firstName: 'Petitions',
-        lastName: 'Clerk',
-        role: 'petitionsclerk',
-        token: 'petitionsclerk',
-        userId: 'petitionsclerk',
-      });
-      test.setState('caseDetail', {});
-      await test.runSequence('updateSearchTermSequence', {
-        searchTerm: docketNumber,
-      });
-      await test.runSequence('submitSearchSequence');
-      assert.equal(test.getState('caseDetail.docketNumber'), docketNumber);
-      done();
+  it('Petitions clerk logs in', async () => {
+    test.setState('user', {
+      firstName: 'Petitions',
+      lastName: 'Clerk',
+      role: 'petitionsclerk',
+      token: 'petitionsclerk',
+      userId: 'petitionsclerk',
     });
   });
 
-  describe('Case Detail', () => {
-    it('View case', async () => {
-      test.setState('caseDetail', {});
-      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-      assert.equal(test.getState('currentPage'), 'CaseDetailInternal');
-      assert.ok(test.getState('caseDetail'));
-      await test.runSequence('submitUpdateCaseSequence');
-      await test.runSequence('submitToIrsSequence');
+  it('Petitions clerk views dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
+    expect(test.getState('cases').length).toBeGreaterThan(0);
+  });
+
+  it('Petitions clerk searches for case', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('updateSearchTermSequence', {
+      searchTerm: docketNumber,
     });
+    await test.runSequence('submitSearchSequence');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+  });
+
+  it('Petitions clerk views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.status')).toEqual('new');
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
+  });
+
+  it('Petitions clerk records pay.gov ID', async () => {
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovId',
+      value: '123',
+    });
+    await test.runSequence('submitUpdateCaseSequence');
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    expect(test.getState('caseDetail.payGovId')).toEqual('123');
+  });
+
+  it('Petitions clerk submits case to IRS', async () => {
+    await test.runSequence('submitToIrsSequence');
+    expect(test.getState('caseDetail.status')).toEqual('general');
+    expect(test.getState('alertSuccess.title')).toEqual(
+      'Successfully served to IRS',
+    );
+  });
+
+  it('Respondent logs in', async () => {
+    test.setState('user', {
+      firstName: 'Res',
+      lastName: 'Pondent',
+      role: 'respondent',
+      token: 'respondent',
+      userId: 'respondent',
+    });
+  });
+
+  it('Respondent views dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
+    expect(test.getState('cases').length).toBeGreaterThan(0);
+  });
+
+  it('Respondent views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.status')).toEqual('general');
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
+  });
+
+  it('Respondent adds answer', async () => {
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'documentType',
+      value: 'Answer',
+    });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'file',
+      value: fakeFile,
+    });
+    await test.runSequence('submitDocumentSequence');
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
   });
 });
