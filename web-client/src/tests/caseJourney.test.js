@@ -103,6 +103,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
     expect(test.getState('caseDetail.status')).toEqual('new');
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
 
   it('Petitions clerk records pay.gov ID', async () => {
@@ -111,6 +112,8 @@ describe('Case journey', async () => {
       value: '123',
     });
     await test.runSequence('submitUpdateCaseSequence');
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
   });
 
@@ -120,5 +123,44 @@ describe('Case journey', async () => {
     expect(test.getState('alertSuccess.title')).toEqual(
       'Successfully served to IRS',
     );
+  });
+
+  it('Respondent logs in', async () => {
+    test.setState('user', {
+      firstName: 'Res',
+      lastName: 'Pondent',
+      role: 'respondent',
+      token: 'respondent',
+      userId: 'respondent',
+    });
+  });
+
+  it('Respondent views dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
+    expect(test.getState('cases').length).toBeGreaterThan(0);
+    docketNumber = test.getState('cases.0.docketNumber');
+  });
+
+  it('Respondent views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.status')).toEqual('new');
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
+  });
+
+  it('Respondent adds answer', async () => {
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'documentType',
+      value: 'Answer',
+    });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'file',
+      value: fakeFile,
+    });
+    await test.runSequence('submitDocumentSequence');
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
   });
 });
