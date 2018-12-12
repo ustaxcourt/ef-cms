@@ -15,6 +15,7 @@
     {
       "url": "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
       "actions": [
+        "wait for #case-info-tab to be visible",
         "click element #case-info-tab",
         "wait for #paygov to be visible"
       ],
