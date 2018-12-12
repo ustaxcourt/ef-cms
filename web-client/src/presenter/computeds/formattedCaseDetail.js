@@ -5,6 +5,7 @@ import moment from 'moment';
 const formatDocument = result => {
   result.createdAtFormatted = moment(result.createdAt).format('l');
   result.showValidationInput = !result.reviewDate;
+  result.isStatusServed = result.status === 'served';
 };
 
 const formatCase = (caseDetail, form) => {
@@ -25,11 +26,9 @@ const formatCase = (caseDetail, form) => {
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
+
   result.status =
     result.status === 'general' ? 'general docket' : result.status;
-  // result.formattedPetitioners = result.petitioners.map(function(petitioner) {
-  //   return `${petitioner.name} ${petitioner.email}`;
-  // });
   return result;
 };
 
