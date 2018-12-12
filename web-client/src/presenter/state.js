@@ -7,6 +7,7 @@ import { formattedSearchParams } from './computeds/formattedSearchParams';
 export default {
   path: '/',
   currentPage: 'Loading',
+  submitting: false,
   currentTab: '',
   usaBanner: {
     showDetails: false,

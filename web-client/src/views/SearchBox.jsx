@@ -5,10 +5,14 @@ import { sequences, state } from 'cerebral';
 export default connect(
   {
     searchTerm: state.searchTerm,
-    submitSearch: sequences.submitSearch,
-    updateSearchTerm: sequences.updateSearchTerm,
+    submitSearchSequence: sequences.submitSearchSequence,
+    updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  function SearchBox({ searchTerm, submitSearch, updateSearchTerm }) {
+  function SearchBox({
+    searchTerm,
+    submitSearchSequence,
+    updateSearchTermSequence,
+  }) {
     return (
       <form
         className="usa-search"
@@ -16,7 +20,7 @@ export default connect(
         noValidate
         onSubmit={e => {
           e.preventDefault();
-          submitSearch();
+          submitSearchSequence();
         }}
       >
         <label className="usa-sr-only" htmlFor="search-field">
@@ -28,7 +32,7 @@ export default connect(
           name="searchTerm"
           value={searchTerm}
           onChange={e => {
-            updateSearchTerm({
+            updateSearchTermSequence({
               searchTerm: e.target.value,
             });
           }}

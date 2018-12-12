@@ -1,26 +1,25 @@
-import gotoCaseDetail from './sequences/gotoCaseDetail';
-import gotoDashboard from './sequences/gotoDashboard';
-import gotoFileDocument from './sequences/gotoFileDocument';
-import gotoFilePetition from './sequences/gotoFilePetition';
-import gotoLogIn from './sequences/gotoLogIn';
-import gotoStyleGuide from './sequences/gotoStyleGuide';
-import loginWithToken from './sequences/loginWithToken';
-import submitDocument from './sequences/submitDocument';
-import submitFilePetition from './sequences/submitFilePetition';
-import submitLogIn from './sequences/submitLogIn';
-import submitSearch from './sequences/submitSearch';
-import submitToIRS from './sequences/submitToIRS';
-import submitUpdateCase from './sequences/submitUpdateCase';
-import toggleMobileMenu from './sequences/toggleMobileMenu';
-import togglePaymentDetails from './sequences/togglePaymentDetails';
-import toggleUsaBannerDetails from './sequences/toggleUsaBannerDetails';
-import updateCaseValue from './sequences/updateCaseValue';
-import updateCurrentTab from './sequences/updateCurrentTab';
-import updateDocumentValue from './sequences/updateDocumentValue';
-import updateFormValue from './sequences/updateFormValue';
-import updatePetitionValue from './sequences/updatePetitionValue';
-import updateSearchTerm from './sequences/updateSearchTerm';
-import viewDocument from './sequences/viewDocument';
+import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
+import gotoDashboardSequence from './sequences/gotoDashboardSequence';
+import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
+import gotoLogInSequence from './sequences/gotoLogInSequence';
+import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
+import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import submitDocumentSequence from './sequences/submitDocumentSequence';
+import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
+import submitLogInSequence from './sequences/submitLogInSequence';
+import submitSearchSequence from './sequences/submitSearchSequence';
+import submitToIrsSequence from './sequences/submitToIrsSequence';
+import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
+import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
+import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
+import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
+import updateCaseValueSequence from './sequences/updateCaseValueSequence';
+import updateCurrentTabSequence from './sequences/updateCurrentTabSequence';
+import updateDocumentValueSequence from './sequences/updateDocumentValueSequence';
+import updateFormValueSequence from './sequences/updateFormValueSequence';
+import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
+import updateSearchTermSequence from './sequences/updateSearchTermSequence';
+import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import state from './state';
 
@@ -30,29 +29,28 @@ import state from './state';
 export default {
   providers: {},
   sequences: {
-    gotoCaseDetail,
-    gotoDashboard,
-    gotoFileDocument,
-    gotoFilePetition,
-    gotoLogIn,
-    gotoStyleGuide,
-    loginWithToken,
-    submitDocument,
-    submitFilePetition,
-    submitLogIn,
-    submitSearch,
-    submitToIRS,
-    submitUpdateCase,
-    toggleMobileMenu,
-    togglePaymentDetails,
-    toggleUsaBannerDetails,
-    updateCaseValue,
-    updateCurrentTab,
-    updateDocumentValue,
-    updateFormValue,
-    updatePetitionValue,
-    updateSearchTerm,
-    viewDocument,
+    gotoCaseDetailSequence,
+    gotoDashboardSequence,
+    gotoFilePetitionSequence,
+    gotoLogInSequence,
+    gotoStyleGuideSequence,
+    loginWithTokenSequence,
+    submitDocumentSequence,
+    submitFilePetitionSequence,
+    submitLogInSequence,
+    submitSearchSequence,
+    submitToIrsSequence,
+    submitUpdateCaseSequence,
+    toggleMobileMenuSequence,
+    togglePaymentDetailsSequence,
+    toggleUsaBannerDetailsSequence,
+    updateCaseValueSequence,
+    updateCurrentTabSequence,
+    updateDocumentValueSequence,
+    updateFormValueSequence,
+    updatePetitionValueSequence,
+    updateSearchTermSequence,
+    viewDocumentSequence,
   },
   state,
 };

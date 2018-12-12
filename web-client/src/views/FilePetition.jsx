@@ -6,16 +6,16 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    submitFilePetition: sequences.submitFilePetition,
-    updatePetitionValue: sequences.updatePetitionValue,
-    submitting: state.submitting,
     petition: state.petition,
+    submitFilePetitionSequence: sequences.submitFilePetitionSequence,
+    submitting: state.submitting,
+    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
   },
   function FilePetition({
-    submitFilePetition,
-    updatePetitionValue,
-    submitting,
     petition,
+    submitFilePetitionSequence,
+    submitting,
+    updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -32,7 +32,7 @@ export default connect(
           noValidate
           onSubmit={e => {
             e.preventDefault();
-            submitFilePetition();
+            submitFilePetitionSequence();
           }}
         >
           <div role="list">
@@ -50,7 +50,7 @@ export default connect(
                 accept=".pdf"
                 name="petitionFile"
                 onChange={e => {
-                  updatePetitionValue({
+                  updatePetitionValueSequence({
                     key: e.target.name,
                     value: e.target.files[0],
                   });
@@ -71,7 +71,7 @@ export default connect(
                 accept=".pdf"
                 name="requestForPlaceOfTrial"
                 onChange={e => {
-                  updatePetitionValue({
+                  updatePetitionValueSequence({
                     key: e.target.name,
                     value: e.target.files[0],
                   });
@@ -98,7 +98,7 @@ export default connect(
                 accept=".pdf"
                 name="statementOfTaxpayerIdentificationNumber"
                 onChange={e => {
-                  updatePetitionValue({
+                  updatePetitionValueSequence({
                     key: e.target.name,
                     value: e.target.files[0],
                   });

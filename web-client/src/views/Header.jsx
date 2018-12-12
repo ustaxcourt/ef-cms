@@ -7,12 +7,12 @@ import close from '../../node_modules/uswds/dist/img/close.svg';
 
 export default connect(
   {
-    user: state.user,
     mobileMenu: state.mobileMenu,
-    toggleMobileMenu: sequences.toggleMobileMenu,
+    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+    user: state.user,
   },
 
-  function Header({ user, mobileMenu, toggleMobileMenu }) {
+  function Header({ user, mobileMenu, toggleMobileMenuSequence }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
@@ -21,7 +21,10 @@ export default connect(
               <a href="/">United States Tax Court</a>
             </em>
           </div>
-          <button className="usa-menu-btn" onClick={() => toggleMobileMenu()}>
+          <button
+            className="usa-menu-btn"
+            onClick={() => toggleMobileMenuSequence()}
+          >
             Menu
           </button>
         </div>
@@ -33,7 +36,7 @@ export default connect(
           <div className="usa-nav-inner">
             <button
               className="usa-nav-close"
-              onClick={() => toggleMobileMenu()}
+              onClick={() => toggleMobileMenuSequence()}
             >
               <img src={close} alt="close" />
             </button>

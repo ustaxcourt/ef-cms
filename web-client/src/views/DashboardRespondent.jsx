@@ -50,7 +50,11 @@ export default connect(
                   <span className="responsive-label">Notification</span>
                   {item.showActionRequired && (
                     <span>
-                      <FontAwesomeIcon icon="flag" className="action-flag" size="sm" />{' '}
+                      <FontAwesomeIcon
+                        icon="flag"
+                        className="action-flag"
+                        size="sm"
+                      />{' '}
                       Action Required
                     </span>
                   )}
