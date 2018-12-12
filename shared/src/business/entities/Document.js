@@ -7,12 +7,13 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const documentTypes = [
+const petitionDocumentTypes = [
   'Petition',
   'Request for Place of Trial',
   'Statement of Taxpayer Identification Number',
-  'Answer',
 ];
+
+const documentTypes = [...petitionDocumentTypes, 'Answer'];
 
 /**
  * constructor
@@ -24,6 +25,10 @@ function Document(rawDocument) {
     createdAt: new Date().toISOString(),
   });
 }
+
+Document.prototype.isPetitionDocument = function() {
+  return petitionDocumentTypes.includes(this.documentType);
+};
 
 joiValidationDecorator(
   Document,
