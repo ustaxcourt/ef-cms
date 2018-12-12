@@ -68,6 +68,7 @@ class App extends React.Component {
           <CurrentPage />
         </main>
         <Footer />
+        <Loading />
       </React.Fragment>
     );
   }
