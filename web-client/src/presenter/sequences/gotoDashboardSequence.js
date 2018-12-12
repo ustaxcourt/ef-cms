@@ -31,7 +31,15 @@ const goToDashboard = [
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
-    respondent: [clearAlerts, setCurrentPage('DashboardRespondent')],
+    respondent: [
+      clearAlerts,
+      getCasesByUser,
+      {
+        error: [setAlertError],
+        success: [setCases],
+      },
+      setCurrentPage('DashboardRespondent'),
+    ],
   },
 ];
 

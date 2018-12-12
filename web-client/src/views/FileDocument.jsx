@@ -29,7 +29,7 @@ export default connect(
             submitDocumentSequence();
           }}
         >
-          <label htmlFor="options">Document type</label>
+          <label htmlFor="document-type">Document type</label>
           <select
             name="documentType"
             id="document-type"
