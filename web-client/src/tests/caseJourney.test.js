@@ -102,9 +102,23 @@ describe('Case journey', async () => {
     await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.status')).toEqual('new');
+  });
+
+  it('Petitions clerk records pay.gov ID', async () => {
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovId',
+      value: '123',
+    });
+    await test.runSequence('submitUpdateCaseSequence');
+    expect(test.getState('caseDetail.payGovId')).toEqual('123');
   });
 
   it('Petitions clerk submits case to IRS', async () => {
     await test.runSequence('submitToIrsSequence');
+    expect(test.getState('caseDetail.status')).toEqual('general');
+    expect(test.getState('alertSuccess.title')).toEqual(
+      'Successfully served to IRS',
+    );
   });
 });
