@@ -15,10 +15,10 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
     },
   );
 
+  const user = await applicationContext.getUseCases().getUser(userId);
+
   documents.forEach(document => {
-    if (!document.userId) {
-      document.userId = userId;
-    }
+    document.userId = userId;
   }); //initial case creation does not set the userid on each document
 
   const createdCase = await applicationContext
@@ -26,6 +26,11 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
     .createCase({
       caseRecord: new Case({
         userId,
+        petitioners: [
+          {
+            ...user,
+          },
+        ],
         docketNumber,
         documents,
       })

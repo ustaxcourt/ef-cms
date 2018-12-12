@@ -30,6 +30,14 @@ describe('createCase', () => {
           createCase: createCaseStub,
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          address: '123',
+          email: 'test@example.com',
+          name: 'test taxpayer',
+          phone: '(123) 456-7890',
+        }),
+      }),
       environment: { stage: 'local' },
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
@@ -45,6 +53,14 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: MOCK_CASE_ID,
       docketNumber: '00101-18',
+      petitioners: [
+        {
+          address: '123',
+          email: 'test@example.com',
+          name: 'test taxpayer',
+          phone: '(123) 456-7890',
+        },
+      ],
       documents: [
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -91,6 +107,12 @@ describe('createCase', () => {
           createCase: () => Promise.reject(new Error('problem')),
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          name: 'john doe',
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        }),
+      }),
       environment: { stage: 'local' },
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve('00101-00'),
@@ -98,7 +120,7 @@ describe('createCase', () => {
     };
     try {
       await createCase({
-        userid: 'petitionsclerk',
+        userId: 'petitionsclerk',
         documents: documents,
         applicationContext,
       });
@@ -118,6 +140,11 @@ describe('createCase', () => {
             }),
         };
       },
+      getUseCases: () => ({
+        getUser: () => ({
+          name: 'john doe',
+        }),
+      }),
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve('00101-00'),
       },

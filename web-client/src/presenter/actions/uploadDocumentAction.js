@@ -2,21 +2,23 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
+
+  const documentType = get(state.document.documentType);
   const useCase = applicationContext.getUseCaseForDocumentUpload(
-    get(state.document.documentType),
+    documentType,
     get(state.user.role),
   );
   await useCase({
     applicationContext,
-    answerDocument: get(state.document.file),
+    document: get(state.document.file),
     caseToUpdate,
     userId: get(state.user.token),
   });
   return {
     docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
-      title: 'Your document was uploaded successfully.',
-      message: 'Your document has been filed.',
+      title: `Your ${documentType} was uploaded successfully.`,
+      message: `Your document has been filed.`,
     },
   };
 };

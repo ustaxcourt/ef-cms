@@ -18,7 +18,7 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
       break;
     case 'respondent':
       cases = await applicationContext.getUseCases().getCasesForRespondent({
-        respondentId: user.barNumber,
+        respondentId: user.userId,
         applicationContext,
       });
       break;

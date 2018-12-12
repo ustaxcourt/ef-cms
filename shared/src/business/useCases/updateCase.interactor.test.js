@@ -43,7 +43,7 @@ describe('updateCase', () => {
     try {
       await updateCase({
         caseId: MOCK_CASE.caseId,
-        caseJson: MOCK_CASE,
+        caseToUpdate: MOCK_CASE,
         userId: 'petitionsclerk',
         applicationContext,
       });
@@ -54,7 +54,7 @@ describe('updateCase', () => {
     expect(error.message).toContain('The entity was invalid');
   });
 
-  it('should throw an error if the caseJson passed in is an invalid case', async () => {
+  it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
@@ -67,7 +67,7 @@ describe('updateCase', () => {
     try {
       await updateCase({
         caseId: MOCK_CASE.caseId,
-        caseJson: omit(MOCK_CASE, 'documents'),
+        caseToUpdate: omit(MOCK_CASE, 'documents'),
         userId: 'petitionsclerk',
         applicationContext,
       });
@@ -93,7 +93,7 @@ describe('updateCase', () => {
 
     updatedCase = await updateCase({
       caseId: caseToUpdate.caseId,
-      caseJson: caseToUpdate,
+      caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
       applicationContext,
     });
@@ -123,7 +123,7 @@ describe('updateCase', () => {
 
     const updatedCase = await updateCase({
       caseId: caseToUpdate.caseId,
-      caseJson: caseToUpdate,
+      caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
       applicationContext,
     });
@@ -146,7 +146,7 @@ describe('updateCase', () => {
     try {
       await updateCase({
         caseId: MOCK_CASE.caseId,
-        caseJson: MOCK_CASE,
+        caseToUpdate: MOCK_CASE,
         userId: 'someuser',
         applicationContext,
       });
@@ -170,7 +170,7 @@ describe('updateCase', () => {
     try {
       await updateCase({
         caseId: '123',
-        caseJson: MOCK_CASE,
+        caseToUpdate: MOCK_CASE,
         userId: 'someuser',
         applicationContext,
       });

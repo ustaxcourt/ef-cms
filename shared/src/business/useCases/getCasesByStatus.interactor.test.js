@@ -49,4 +49,17 @@ describe('getCasesByStatus', () => {
     }
     expect(error.message).toContain('The entity was invalid');
   });
+
+  it('throws an error if the user is unauthorized', async () => {
+    let error;
+    try {
+      await getCasesByStatus({
+        userId: 'baduser',
+        applicationContext: null,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized for getCasesByStatus');
+  });
 });

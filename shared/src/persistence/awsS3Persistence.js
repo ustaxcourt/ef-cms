@@ -57,17 +57,17 @@ exports.getDocument = async ({ applicationContext, documentId }) => {
   return new Blob([fileBlob], { type: 'application/pdf' });
 };
 
-exports.uploadDocument = async ({ applicationContext, answerDocument }) => {
+exports.uploadDocument = async ({ applicationContext, document }) => {
   const policy = await getUploadPolicy({ applicationContext });
 
-  const answerDocumentId = await applicationContext
+  const documentId = await applicationContext
     .getPersistenceGateway()
     .uploadPdf({
       policy,
-      file: answerDocument,
+      file: document,
     });
 
-  return answerDocumentId;
+  return documentId;
 };
 
 exports.uploadPdfsForNewCase = async ({

@@ -160,7 +160,8 @@ export default connect(
                       {caseDetail.petitioners.map((petitioner, key) => (
                         <address key={key}>
                           {petitioner.name} <br />
-                          {petitioner.address} <br />
+                          {petitioner.addressLine1} <br />
+                          {petitioner.addressLine2} <br />
                           {petitioner.city} {petitioner.state} {petitioner.zip}{' '}
                           <br />
                           {petitioner.phone} <br />

@@ -185,6 +185,20 @@ exports.incrementCounter = ({ applicationContext }) => {
   });
 };
 
+const createRespondentCaseMapping = async ({
+  caseId,
+  respondentId,
+  applicationContext,
+}) => {
+  return client.put({
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${respondentId}|activeCase`,
+      sk: caseId,
+    },
+  });
+};
+
 /**
  * saveCase
  * @param caseToSave
@@ -202,6 +216,14 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
   });
 
   const currentStatus = currentCaseState.status;
+
+  if (!currentCaseState.respondent && caseToSave.respondent) {
+    await createRespondentCaseMapping({
+      caseId: caseToSave.caseId,
+      respondentId: caseToSave.respondent.respondentId,
+      applicationContext,
+    });
+  }
 
   if (currentStatus !== caseToSave.status) {
     await client.delete({
