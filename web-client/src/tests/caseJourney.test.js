@@ -26,13 +26,14 @@ test = CerebralTest(presenter);
 describe('Case journey', async () => {
   describe('Tax payer creates a new case', async () => {
     describe('Initiate case', () => {
-      console.log('FIRST PEITIONER TEST');
-      test.setState('user', {
-        firstName: 'Test',
-        lastName: 'Taxpayer',
-        role: 'taxpayer',
-        token: 'taxpayer',
-        userId: 'taxpayer',
+      beforeAll(() => {
+        test.setState('user', {
+          firstName: 'Test',
+          lastName: 'Taxpayer',
+          role: 'taxpayer',
+          token: 'taxpayer',
+          userId: 'taxpayer',
+        });
       });
       it('Submits successfully', async () => {
         await test.runSequence('gotoFilePetitionSequence');
@@ -67,7 +68,6 @@ describe('Case journey', async () => {
 
     describe('View petitioner case detail', () => {
       it('Displays case', async () => {
-        console.log('LAST PEITIONER TEST');
         await test.runSequence('gotoCaseDetailSequence', { docketNumber });
         expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
         expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
@@ -79,12 +79,14 @@ describe('Case journey', async () => {
   describe('Petitions clerk sends case to IRS', () => {
     describe('View petitions clerk dashboard', () => {
       console.log('FIRST CLERK TEST');
-      test.setState('user', {
-        firstName: 'Petitions',
-        lastName: 'Clerk',
-        role: 'petitionsclerk',
-        token: 'petitionsclerk',
-        userId: 'petitionsclerk',
+      beforeAll(() => {
+        test.setState('user', {
+          firstName: 'Petitions',
+          lastName: 'Clerk',
+          role: 'petitionsclerk',
+          token: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        });
       });
       it('Displays cases', async () => {
         await test.runSequence('gotoDashboardSequence');
@@ -94,7 +96,6 @@ describe('Case journey', async () => {
     });
 
     describe('View case detail', () => {
-      console.log('LAST CLERK TEST');
       it('Displays case', async () => {
         test.setState('caseDetail', {});
         await test.runSequence('gotoCaseDetailSequence', { docketNumber });
