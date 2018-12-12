@@ -144,11 +144,9 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <React.Fragment>
-              <div className="tab-content" role="tabpanel">
-                <PartyInformation />
-              </div>
-            </React.Fragment>
+            <div className="tab-content" role="tabpanel">
+              <PartyInformation />
+            </div>
           )}
         </section>
       </React.Fragment>
