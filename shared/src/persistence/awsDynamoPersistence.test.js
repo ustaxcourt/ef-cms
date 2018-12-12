@@ -96,7 +96,7 @@ describe('awsDynamoPersistence', function() {
       const result = await getCaseByDocketNumber({
         pk: '123',
         sk: '123',
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
         applicationContext,
       });
       expect(result).to.deep.equal({ caseId: '123', status: 'new' });
@@ -107,7 +107,7 @@ describe('awsDynamoPersistence', function() {
       const result = await getCaseByDocketNumber({
         pk: '123',
         sk: '123',
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
         applicationContext,
       });
       expect(result).to.be.null;

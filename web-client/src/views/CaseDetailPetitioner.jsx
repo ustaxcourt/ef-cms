@@ -7,6 +7,7 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
+import PartyInformation from './PartyInformation';
 
 export default connect(
   {
@@ -155,6 +156,7 @@ export default connect(
                   </li>
                 </ul>
               )}
+              <PartyInformation />
             </div>
           )}
           {currentTab == 'Docket Record' && (
