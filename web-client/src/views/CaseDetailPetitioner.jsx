@@ -90,7 +90,7 @@ export default connect(
                       <span>
                         <FontAwesomeIcon
                           icon="flag"
-                          color="#CD2026"
+                          className="action-flag"
                           size="sm"
                         />{' '}
                         Pay $60.00 filing fee.
