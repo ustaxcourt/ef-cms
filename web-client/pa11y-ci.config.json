@@ -23,6 +23,15 @@
     "http://localhost:1234/log-in?token=intakeclerk&path=/",
     "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
     "http://localhost:1234/log-in?token=respondent&path=/",
-    "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18"
+    "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18",
+    {
+      "url": "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18",
+      "actions": [
+        "wait for #button-file-document to be visible",
+        "click element #button-file-document",
+        "wait for #file-a-document to be visible"
+      ],
+      "timeout": 5000
+    }
   ]
 }
