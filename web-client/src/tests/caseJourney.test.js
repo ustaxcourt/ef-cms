@@ -7,6 +7,7 @@ import applicationContext from '../applicationContexts/dev';
 let test;
 let docketNumber;
 global.FormData = FormData;
+global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
@@ -67,9 +68,12 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
     expect(test.getState('caseDetail.documents').length).toEqual(3);
-    // await test.runSequence('viewDocumentSequence', {
-    //   documentId: test.getState('caseDetail.documents.0.documentId'),
-    // });
+    await test.runSequence('viewDocumentSequence', {
+      documentId: test.getState('caseDetail.documents.0.documentId'),
+      callback: documentBlob => {
+        expect(documentBlob).toBeTruthy();
+      },
+    });
   });
 
   it('Petitions clerk logs in', async () => {
