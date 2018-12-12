@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import assert from 'assert';
 
 import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
@@ -12,25 +11,25 @@ const test = CerebralTest(presenter);
 describe('Miscellaneous', () => {
   it('Handles routing', async () => {
     await test.runSequence('gotoStyleGuideSequence');
-    assert.equal(test.getState('currentPage'), 'StyleGuide');
+    expect(test.getState('currentPage')).toEqual('StyleGuide');
   });
 
   it('Handles routing to file petition', async () => {
     await test.runSequence('gotoFilePetitionSequence');
-    assert.equal(test.getState('currentPage'), 'FilePetition');
+    expect(test.getState('currentPage')).toEqual('FilePetition');
   });
 
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    assert.equal(test.getState('usaBanner.showDetails'), true);
+    expect(test.getState('usaBanner.showDetails')).toEqual(true);
     await test.runSequence('toggleUsaBannerDetailsSequence');
-    assert.equal(test.getState('usaBanner.showDetails'), false);
+    expect(test.getState('usaBanner.showDetails')).toEqual(false);
   });
 
   it('Toggles payment info content', async () => {
     await test.runSequence('togglePaymentDetailsSequence');
-    assert.equal(test.getState('paymentInfo.showDetails'), true);
+    expect(test.getState('paymentInfo.showDetails')).toEqual(true);
     await test.runSequence('togglePaymentDetailsSequence');
-    assert.equal(test.getState('paymentInfo.showDetails'), false);
+    expect(test.getState('paymentInfo.showDetails')).toEqual(false);
   });
 });
