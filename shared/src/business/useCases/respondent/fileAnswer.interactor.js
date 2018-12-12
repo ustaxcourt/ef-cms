@@ -15,6 +15,8 @@ exports.fileAnswer = async ({
     );
   }
 
+  // when a irs attorney (respondent) uploads an answer, add the respondent to the case and add the document to the case with type "answer"
+
   const user = await applicationContext.getUseCases().getUser(userId);
 
   //upload to S3 return uuid
@@ -32,12 +34,23 @@ exports.fileAnswer = async ({
     createdAt: new Date().toISOString(),
   };
 
+  const respondent = {
+    respondentId: userId,
+    barNumber: user.barNumber,
+    name: user.name,
+    email: user.email,
+    addressLine1: user.addressLine1,
+    addressLine2: user.addressLine1,
+    city: user.addressCity,
+    state: user.state,
+    zip: user.zip,
+    isIRSAttorney: true,
+    phone: user.phone,
+  };
+
   const caseWithAnswer = new Case({
     ...caseToUpdate,
-    respondentId: userId,
-    respondentBarNumber: user.barNumber,
-    respondentFirstName: user.firstName,
-    respondentLastName: user.lastName,
+    respondent,
     documents: [...caseToUpdate.documents, answerDocumentMetadata],
   });
 

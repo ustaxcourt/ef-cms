@@ -1,9 +1,14 @@
 import { state } from 'cerebral';
 
 export default async ({ applicationContext, get }) => {
-  const useCases = applicationContext.getUseCases();
   const caseToUpdate = get(state.caseDetail);
-  await useCases.fileAnswer({
+  console.log(get(state.document.documentType))
+  console.log(get(state.user.role))
+  const useCase = applicationContext.getUseCaseForDocumentUpload(
+    get(state.document.documentType),
+    get(state.user.role),
+  );
+  await useCase({
     applicationContext,
     answerDocument: get(state.document.file),
     caseToUpdate,

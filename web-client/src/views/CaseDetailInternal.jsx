@@ -151,6 +151,42 @@ export default connect(
           )}
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
+              <div className="usa-grid">
+                <h4>Party Information</h4>
+                <div className="usa-width-one-half">
+                  {caseDetail.petitioners && (
+                    <React.Fragment>
+                      <h5>Petitioner</h5>
+                      {caseDetail.petitioners.map((petitioner, key) => (
+                        <address key={key}>
+                          {petitioner.name} <br />
+                          {petitioner.address} <br />
+                          {petitioner.city} {petitioner.state} {petitioner.zip}{' '}
+                          <br />
+                          {petitioner.phone} <br />
+                          {petitioner.email} <br />
+                        </address>
+                      ))}
+                    </React.Fragment>
+                  )}
+                </div>
+                <div className="usa-width-one-half">
+                  {caseDetail.respondent && (
+                    <React.Fragment>
+                      <h5>Respondent</h5>
+                      <address>
+                        {caseDetail.respondent.name} <br />
+                        {caseDetail.respondent.address} <br />
+                        {caseDetail.respondent.city} <br />
+                        {caseDetail.respondent.state} <br />
+                        {caseDetail.respondent.zip} <br />
+                        {caseDetail.respondent.phone} <br />
+                        {caseDetail.respondent.email} <br />
+                      </address>
+                    </React.Fragment>
+                  )}
+                </div>
+              </div>
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Petition fee</legend>
                 {caseDetail.showPaymentRecord && (

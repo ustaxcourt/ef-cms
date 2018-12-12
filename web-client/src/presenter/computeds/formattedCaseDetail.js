@@ -25,7 +25,9 @@ const formatCase = (caseDetail, form) => {
   }`;
   result.status =
     result.status === 'general' ? 'general docket' : result.status;
-
+  // result.formattedPetitioners = result.petitioners.map(function(petitioner) {
+  //   return `${petitioner.name} ${petitioner.email}`;
+  // });
   return result;
 };
 
