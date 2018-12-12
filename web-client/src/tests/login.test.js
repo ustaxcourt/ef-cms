@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import assert from 'assert';
 
 import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
@@ -17,57 +16,57 @@ const test = CerebralTest(presenter);
 describe('Log in', async () => {
   it('redirects to /log-in if not authorized', async () => {
     await test.runSequence('gotoDashboardSequence');
-    assert.equal(test.getState('currentPage'), 'LogIn');
+    expect(test.getState('currentPage')).toEqual('LogIn');
   });
 
   it('succeeds for Petitions clerk', async () => {
     await test.runSequence('gotoLogInSequence');
-    assert.equal(test.getState('currentPage'), 'LogIn');
+    expect(test.getState('currentPage')).toEqual('LogIn');
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
       value: 'petitionsclerk',
     });
-    assert.equal(test.getState('form.name'), 'petitionsclerk');
+    expect(test.getState('form.name')).toEqual('petitionsclerk');
     await test.runSequence('submitLogInSequence');
-    assert.equal(test.getState('user.userId'), 'petitionsclerk');
-    assert.equal(test.getState('user.role'), 'petitionsclerk');
+    expect(test.getState('user.userId')).toEqual('petitionsclerk');
+    expect(test.getState('user.role')).toEqual('petitionsclerk');
   });
 
   describe('for Taxpayer', () => {
     it('succeeds with normal log-in functionality', async () => {
       await test.runSequence('gotoLogInSequence');
-      assert.equal(test.getState('currentPage'), 'LogIn');
+      expect(test.getState('currentPage')).toEqual('LogIn');
       await test.runSequence('updateFormValueSequence', {
         key: 'name',
         value: 'taxpayer',
       });
-      assert.equal(test.getState('form.name'), 'taxpayer');
+      expect(test.getState('form.name')).toEqual('taxpayer');
       await test.runSequence('submitLogInSequence');
-      assert.equal(test.getState('user.userId'), 'taxpayer');
-      assert.equal(test.getState('user.role'), 'taxpayer');
+      expect(test.getState('user.userId')).toEqual('taxpayer');
+      expect(test.getState('user.role')).toEqual('taxpayer');
     });
 
     it('succeeds with token and path in URL', async () => {
       const token = 'taxpayer';
       const path = '/case-detail/101-18';
       await test.runSequence('loginWithTokenSequence', { token, path });
-      assert.equal(test.getState('path'), path);
-      assert.equal(test.getState('currentPage'), 'LogIn');
-      assert.equal(test.getState('form.name'), 'taxpayer');
-      assert.equal(test.getState('user.userId'), 'taxpayer');
-      assert.equal(test.getState('user.role'), 'taxpayer');
+      expect(test.getState('path')).toEqual(path);
+      expect(test.getState('currentPage')).toEqual('LogIn');
+      expect(test.getState('form.name')).toEqual('taxpayer');
+      expect(test.getState('user.userId')).toEqual('taxpayer');
+      expect(test.getState('user.role')).toEqual('taxpayer');
     });
   });
 
   it('fails with Bad actor', async () => {
     await test.runSequence('gotoLogInSequence');
-    assert.equal(test.getState('currentPage'), 'LogIn');
+    expect(test.getState('currentPage')).toEqual('LogIn');
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
       value: 'Bad actor',
     });
-    assert.equal(test.getState('form.name'), 'Bad actor');
+    expect(test.getState('form.name')).toEqual('Bad actor');
     await test.runSequence('submitLogInSequence');
-    assert.equal(test.getState('alertError.title'), 'User not found');
+    expect(test.getState('alertError.title')).toEqual('User not found');
   });
 });
