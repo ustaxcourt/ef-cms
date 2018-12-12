@@ -11,7 +11,7 @@ describe('fileAnswer', () => {
 
   it('should attach the respondent information to the case when calling updateCase', async () => {
     const updateCaseStub = sinon.stub().resolves({
-      docketNumber: '00101-18',
+      docketNumber: '101-18',
       caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documents,
     });
@@ -40,7 +40,7 @@ describe('fileAnswer', () => {
       userId: 'respondent',
       caseToUpdate: {
         documents,
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       },
       applicationContext,
@@ -78,7 +78,7 @@ describe('fileAnswer', () => {
         userId: 'respondent',
         caseToUpdate: {
           documents,
-          docketNumber: '00101-18',
+          docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         applicationContext,
@@ -103,7 +103,7 @@ describe('fileAnswer', () => {
         return {
           updateCase: () =>
             Promise.resolve({
-              docketNumber: '00101-18',
+              docketNumber: '101-18',
               caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             }),
           getUser: () =>
@@ -123,7 +123,7 @@ describe('fileAnswer', () => {
         userId: 'respondent',
         caseToUpdate: {
           documents,
-          docketNumber: '00101-18',
+          docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         applicationContext,
@@ -141,7 +141,7 @@ describe('fileAnswer', () => {
         userId: 'respondent',
         caseToUpdate: {
           documents,
-          docketNumber: '00101-18',
+          docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         applicationContext: null,

@@ -23,7 +23,7 @@ const router = {
       app.getSequence('gotoLogInSequence')();
     });
     route('/log-in...', () => {
-      // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/00101-18
+      // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = route.query();
       const token = query.token;
       const path = query.path || '/';

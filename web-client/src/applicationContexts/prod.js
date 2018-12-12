@@ -50,7 +50,7 @@ const applicationContext = {
   getUseCaseForDocumentUpload: (documentType, role) => {
     if (role === 'respondent') {
       switch (documentType) {
-        case 'answer':
+        case 'Answer':
           return fileAnswer;
         default:
           return updateCase;
