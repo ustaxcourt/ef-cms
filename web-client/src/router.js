@@ -10,9 +10,9 @@ const router = {
       document.title = `Dashboard ${pageTitleSuffix}`;
       app.getSequence('gotoDashboardSequence')();
     });
-    route('/case-detail/*', caseId => {
+    route('/case-detail/*', docketNumber => {
       document.title = `Case details ${pageTitleSuffix}`;
-      app.getSequence('gotoCaseDetailSequence')({ caseId });
+      app.getSequence('gotoCaseDetailSequence')({ docketNumber });
     });
     route('/case-detail/*/file-a-document', caseId => {
       document.title = `File a document ${pageTitleSuffix}`;
@@ -20,7 +20,7 @@ const router = {
     });
     route('/log-in', () => {
       document.title = `Log in ${pageTitleSuffix}`;
-      app.getSequence('gotoLogIn')();
+      app.getSequence('gotoLogInSequence')();
     });
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/00101-18

@@ -1,6 +1,5 @@
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
-import gotoFileDocumentSequence from './sequences/gotoFileDocumentSequence';
 import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
@@ -32,7 +31,6 @@ export default {
   sequences: {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
-    gotoFileDocumentSequence,
     gotoFilePetitionSequence,
     gotoLogInSequence,
     gotoStyleGuideSequence,
