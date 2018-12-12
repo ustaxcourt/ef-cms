@@ -12,14 +12,14 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    updateCurrentTab: sequences.updateCurrentTab,
-    viewDocument: sequences.viewDocument,
+    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
-    updateCurrentTab,
-    viewDocument,
+    updateCurrentTabSequence,
+    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -48,7 +48,9 @@ export default connect(
                   <button
                     role="tab"
                     className="tab-link"
-                    onClick={() => updateCurrentTab({ value: 'Docket Record' })}
+                    onClick={() =>
+                      updateCurrentTabSequence({ value: 'Docket Record' })
+                    }
                     id="docket-record-tab"
                   >
                     Docket Record
@@ -62,7 +64,7 @@ export default connect(
                     className="tab-link"
                     id="case-info-tab"
                     onClick={() =>
-                      updateCurrentTab({ value: 'Case Information' })
+                      updateCurrentTabSequence({ value: 'Case Information' })
                     }
                   >
                     Case Information
@@ -75,7 +77,9 @@ export default connect(
             <div className="tab-content" role="tabpanel">
               <button
                 id="button-file-document"
-                onClick={() => updateCurrentTab({ value: 'File Document' })}
+                onClick={() =>
+                  updateCurrentTabSequence({ value: 'File Document' })
+                }
               >
                 <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
               </button>
@@ -101,7 +105,7 @@ export default connect(
                           className="pdf-link"
                           aria-label="View PDF"
                           onClick={() =>
-                            viewDocument({
+                            viewDocumentSequence({
                               documentId: document.documentId,
                               callback: openDocumentBlob,
                             })

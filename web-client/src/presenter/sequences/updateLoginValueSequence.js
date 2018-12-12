@@ -6,4 +6,4 @@ import { state, props } from 'cerebral';
  * we went to /log-in and provided a username
  * to be used in combination with other sequences
  */
-export default [set(state`form.name`, props`token`)];
+export default [set(state.form.name, props.token)];

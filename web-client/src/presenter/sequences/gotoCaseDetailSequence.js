@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import clearAlerts from '../actions/clearAlerts';
-import getCase from '../actions/getCase';
-import getUserRole from '../actions/getUserRole';
-import setCase from '../actions/setCase';
-import setCurrentPage from '../actions/setCurrentPage';
+import clearAlerts from '../actions/clearAlertsAction';
+import getCase from '../actions/getCaseAction';
+import getUserRole from '../actions/getUserRoleAction';
+import setCase from '../actions/setCaseAction';
+import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [
   clearAlerts,

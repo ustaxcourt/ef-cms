@@ -1,6 +1,5 @@
 import { state } from 'cerebral';
 
 export default ({ store, props }) => {
-  store.set(state.cases, props.caseList);
-  return;
+  store.set(state.caseDetail, props.caseDetail);
 };
