@@ -18,15 +18,16 @@ export default connect(
                 <b>Petitioner</b>
                 {caseDetail.petitioners.map((petitioner, key) => (
                   <address key={key}>
-                    {petitioner.name} <br />
-                    <br />
-                    {petitioner.addressLine1} <br />
-                    {petitioner.addressLine2} <br />
-                    {petitioner.city} {petitioner.state} {petitioner.zip} <br />
-                    <br />
-                    {petitioner.phone} <br />
-                    <br />
-                    {petitioner.email} <br />
+                    <p>{petitioner.name}</p>
+                    <p>
+                      {petitioner.addressLine1}
+                      <br />
+                      {petitioner.addressLine2}
+                      <br />
+                      {petitioner.city} {petitioner.state} {petitioner.zip}
+                    </p>
+                    <p>{petitioner.phone}</p>
+                    <p>{petitioner.email}</p>
                   </address>
                 ))}
               </React.Fragment>
