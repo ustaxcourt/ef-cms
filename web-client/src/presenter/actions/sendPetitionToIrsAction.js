@@ -10,7 +10,7 @@ export default async ({ applicationContext, get, path, props }) => {
       userId: get(state.user.token),
       applicationContext,
     });
-    props.caseId = get(state.caseDetail).caseId;
+    props.docketNumber = get(state.caseDetail).docketNumber;
     return path.success({
       alertSuccess: {
         title: 'Successfully served to IRS',

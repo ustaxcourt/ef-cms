@@ -3,11 +3,11 @@ import setAlertError from '../actions/setAlertErrorAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
 import getCase from '../actions/getCaseAction';
-import sendToIRSAction from '../actions/sendPetitionToIrsAction';
+import sendToIrsAction from '../actions/sendPetitionToIrsAction';
 
 export default [
   clearAlerts,
-  sendToIRSAction,
+  sendToIrsAction,
   {
     error: [setAlertError],
     success: [getCase, setCase, setAlertSuccess],

@@ -6,7 +6,7 @@ import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
 let test;
-const caseId = '3a6fb0fb-5f93-479a-9235-7eba43005800';
+const docketNumber = '103-18';
 
 global.FormData = FormData;
 presenter.providers.applicationContext = applicationContext;
@@ -28,11 +28,11 @@ describe('Respondent', async () => {
   const fakeFile = new Buffer(['TEST'], {
     type: 'application/pdf',
   });
-  fakeFile.name = 'requestForPlaceOfTrial.pdf';
+  fakeFile.name = 'fakeFile.pdf';
 
   describe('Initiate case', () => {
     it('Submits successfully', async () => {
-      await test.runSequence('gotoFileDocumentSequence', { caseId });
+      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
       await test.runSequence('updateDocumentValueSequence', {
         key: 'file',
         value: fakeFile,

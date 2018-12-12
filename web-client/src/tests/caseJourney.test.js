@@ -1,18 +1,18 @@
 import { CerebralTest } from 'cerebral/test';
-import FormData from 'form-data';
 import assert from 'assert';
+import FormData from 'form-data';
 
 import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
 let test;
-let caseId;
+let docketNumber;
 global.FormData = FormData;
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
-    if (url === `/case-detail/${caseId}`) {
-      await test.runSequence('gotoCaseDetailSequence', { caseId });
+    if (url === `/case-detail/${docketNumber}`) {
+      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     }
   },
 };
@@ -31,7 +31,7 @@ describe('Tax payer', async () => {
   const fakeFile = new Buffer(['TEST'], {
     type: 'application/pdf',
   });
-  fakeFile.name = 'requestForPlaceOfTrial.pdf';
+  fakeFile.name = 'fakeFile.pdf';
 
   describe('Initiate case', () => {
     it('Submits successfully', async () => {
@@ -61,14 +61,14 @@ describe('Tax payer', async () => {
       await test.runSequence('gotoDashboardSequence');
       assert.equal(test.getState('currentPage'), 'DashboardPetitioner');
       assert.ok(test.getState('cases').length > 0);
-      caseId = test.getState('cases.0.caseId');
-      assert.ok(caseId);
+      docketNumber = test.getState('cases.0.docketNumber');
+      assert.ok(docketNumber);
     });
   });
 
   describe('Case Detail', () => {
     it('View case', async () => {
-      await test.runSequence('gotoCaseDetailSequence', { caseId });
+      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
       assert.equal(test.getState('currentPage'), 'CaseDetailPetitioner');
       assert.ok(test.getState('caseDetail'));
     });
@@ -102,10 +102,10 @@ describe('Petitions clerk', () => {
       });
       test.setState('caseDetail', {});
       await test.runSequence('updateSearchTermSequence', {
-        searchTerm: caseId,
+        searchTerm: docketNumber,
       });
       await test.runSequence('submitSearchSequence');
-      assert.equal(test.getState('caseDetail.caseId'), caseId);
+      assert.equal(test.getState('caseDetail.docketNumber'), docketNumber);
       done();
     });
   });
@@ -113,7 +113,7 @@ describe('Petitions clerk', () => {
   describe('Case Detail', () => {
     it('View case', async () => {
       test.setState('caseDetail', {});
-      await test.runSequence('gotoCaseDetailSequence', { caseId });
+      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
       assert.equal(test.getState('currentPage'), 'CaseDetailInternal');
       assert.ok(test.getState('caseDetail'));
       await test.runSequence('submitUpdateCaseSequence');
