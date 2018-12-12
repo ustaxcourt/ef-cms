@@ -5,6 +5,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import FileDocument from './FileDocument';
+import PartyInformation from './PartyInformation';
 import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 
@@ -143,7 +144,11 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel" />
+            <React.Fragment>
+              <div className="tab-content" role="tabpanel">
+                <PartyInformation />
+              </div>
+            </React.Fragment>
           )}
         </section>
       </React.Fragment>
