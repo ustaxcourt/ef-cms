@@ -49,7 +49,7 @@ describe('Log in', async () => {
 
     it('succeeds with token and path in URL', async () => {
       const token = 'taxpayer';
-      const path = '/case-detail/00101-18';
+      const path = '/case-detail/101-18';
       await test.runSequence('loginWithTokenSequence', { token, path });
       assert.equal(test.getState('path'), path);
       assert.equal(test.getState('currentPage'), 'LogIn');

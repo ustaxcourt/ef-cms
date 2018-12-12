@@ -98,6 +98,8 @@ exports.batchGet = ({ tableName, keys }) => {
     endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   });
 
+  if (!keys.length) return [];
+
   // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
   return documentClient
     .batchGet({

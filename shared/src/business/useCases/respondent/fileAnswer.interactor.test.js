@@ -11,7 +11,7 @@ describe('fileAnswer', () => {
 
   it('should attach the respondent information to the case when calling updateCase', async () => {
     const updateCaseStub = sinon.stub().resolves({
-      docketNumber: '00101-18',
+      docketNumber: '101-18',
       caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documents,
     });
@@ -27,8 +27,8 @@ describe('fileAnswer', () => {
           updateCase: updateCaseStub,
           getUser: () =>
             Promise.resolve({
-              firstName: 'bob',
-              lastName: 'marley',
+              name: 'john doe',
+              userId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               barNumber: '12345',
             }),
         };
@@ -36,20 +36,21 @@ describe('fileAnswer', () => {
       environment: { stage: 'local' },
     };
     await fileAnswer({
-      answerDocument: 'abc',
+      document: 'abc',
       userId: 'respondent',
       caseToUpdate: {
         documents,
-        docketNumber: '00101-18',
+        docketNumber: '101-18',
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       },
       applicationContext,
     });
-    expect(updateCaseStub.getCall(0).args[0].caseDetails).to.contain({
+    expect(
+      updateCaseStub.getCall(0).args[0].caseToUpdate.respondent,
+    ).to.contain({
       respondentId: 'respondent',
-      respondentFirstName: 'bob',
-      respondentLastName: 'marley',
-      respondentBarNumber: '12345',
+      name: 'john doe',
+      barNumber: '12345',
     });
   });
 
@@ -73,11 +74,11 @@ describe('fileAnswer', () => {
     let error;
     try {
       await fileAnswer({
-        answerDocument: 'abc',
+        document: 'abc',
         userId: 'respondent',
         caseToUpdate: {
           documents,
-          docketNumber: '00101-18',
+          docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         applicationContext,
@@ -102,7 +103,7 @@ describe('fileAnswer', () => {
         return {
           updateCase: () =>
             Promise.resolve({
-              docketNumber: '00101-18',
+              docketNumber: '101-18',
               caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             }),
           getUser: () =>
@@ -118,11 +119,11 @@ describe('fileAnswer', () => {
     let error;
     try {
       await fileAnswer({
-        answerDocument: 'abc',
+        document: 'abc',
         userId: 'respondent',
         caseToUpdate: {
           documents,
-          docketNumber: '00101-18',
+          docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
         applicationContext,
@@ -131,5 +132,25 @@ describe('fileAnswer', () => {
       error = err;
     }
     expect(error.message).to.contain('The entity was invalid');
+  });
+
+  it('throws an error if document is not passed in', async () => {
+    let error;
+    try {
+      await fileAnswer({
+        userId: 'respondent',
+        caseToUpdate: {
+          documents,
+          docketNumber: '101-18',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        },
+        applicationContext: null,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).to.contain(
+      'answer document cannot be null or invalid',
+    );
   });
 });

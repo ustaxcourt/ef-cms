@@ -47,6 +47,16 @@ const applicationContext = {
       downloadDocumentFile,
     };
   },
+  getUseCaseForDocumentUpload: (documentType, role) => {
+    if (role === 'respondent') {
+      switch (documentType) {
+        case 'Answer':
+          return fileAnswer;
+        default:
+          return updateCase;
+      }
+    }
+  },
 };
 
 export default applicationContext;

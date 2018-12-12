@@ -5,6 +5,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import FileDocument from './FileDocument';
+import PartyInformation from './PartyInformation';
 import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 
@@ -121,7 +122,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
-                        {caseDetail.showIrsServedDate && (
+                        {document.status === 'served' && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
                         {caseDetail.showDocumentStatus && (
@@ -143,7 +144,9 @@ export default connect(
             </div>
           )}
           {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel" />
+            <div className="tab-content" role="tabpanel">
+              <PartyInformation />
+            </div>
           )}
         </section>
       </React.Fragment>

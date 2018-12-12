@@ -5,7 +5,7 @@ export default async ({ applicationContext, get, path }) => {
   try {
     const caseDetail = await useCases.updateCase({
       applicationContext,
-      caseDetails: get(state.caseDetail),
+      caseToUpdate: get(state.caseDetail),
       userId: get(state.user.token),
     });
 
