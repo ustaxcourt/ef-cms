@@ -78,7 +78,6 @@ describe('Case journey', async () => {
 
   describe('Petitions clerk sends case to IRS', () => {
     describe('View petitions clerk dashboard', () => {
-      console.log('FIRST CLERK TEST');
       beforeAll(() => {
         test.setState('user', {
           firstName: 'Petitions',
