@@ -2,8 +2,6 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
-  console.log(get(state.document.documentType))
-  console.log(get(state.user.role))
   const useCase = applicationContext.getUseCaseForDocumentUpload(
     get(state.document.documentType),
     get(state.user.role),

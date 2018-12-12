@@ -128,7 +128,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
-                        {caseDetail.showIrsServedDate && (
+                        {document.status === 'served' && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
                         {caseDetail.showDocumentStatus && (

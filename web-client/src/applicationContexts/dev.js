@@ -48,6 +48,7 @@ const applicationContext = {
     };
   },
   getUseCaseForDocumentUpload: (documentType, role) => {
+    // TODO put user in so we can remove role
     if (role === 'respondent') {
       switch (documentType) {
         case 'Answer':
