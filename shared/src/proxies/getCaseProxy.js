@@ -8,10 +8,10 @@ const axios = require('axios');
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ applicationContext, caseId, userId }) => {
+exports.getCase = async ({ applicationContext, docketNumber, userId }) => {
   const userToken = userId; //TODO refactor for jwt
   const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/cases/${caseId}`,
+    `${applicationContext.getBaseUrl()}/cases/${docketNumber}`,
     {
       headers: {
         Authorization: `Bearer ${userToken}`,
