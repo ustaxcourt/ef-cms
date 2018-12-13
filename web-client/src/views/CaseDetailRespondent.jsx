@@ -81,6 +81,7 @@ export default connect(
             <div className="tab-content" role="tabpanel">
               <button
                 id="button-file-document"
+                className="usa-button"
                 onClick={() =>
                   updateCurrentTabSequence({ value: 'File Document' })
                 }
