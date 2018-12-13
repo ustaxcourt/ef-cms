@@ -225,6 +225,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
   }
 
+  // if a stipulated decision was uploaded, create a work item entry
   if (currentStatus !== caseToSave.status) {
     await client.delete({
       tableName: TABLE,
