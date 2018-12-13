@@ -38,16 +38,22 @@ export default connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
+          <h1 className="captioned" tabIndex="-1">
+            Docket number: {caseDetail.docketNumber}
+          </h1>
           <p>
-            {caseDetail.userId} v. Commissioner of Internal Revenue, Respondent
+            {caseDetail.petitioners[0].name} v. Commissioner of Internal
+            Revenue, Respondent
           </p>
           <p>
-            <span className="usa-label case-status-label">
-              {caseDetail.status}
+            <span
+              className="usa-label case-status-label"
+              aria-label={'status: ' + caseDetail.status}
+            >
+              <span aria-hidden="true">{caseDetail.status}</span>
             </span>
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           <nav className="horizontal-tabs">
@@ -59,6 +65,7 @@ export default connect(
                 <button
                   role="tab"
                   className="tab-link"
+                  aria-selected={currentTab === 'Docket Record'}
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Docket Record' })
                   }
@@ -71,6 +78,7 @@ export default connect(
                 <button
                   role="tab"
                   className="tab-link"
+                  aria-selected={currentTab === 'Case Information'}
                   id="case-info-tab"
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Case Information' })
@@ -125,7 +133,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        {document.userId}
+                        {document.filedBy}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>

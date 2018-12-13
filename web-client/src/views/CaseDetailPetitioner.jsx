@@ -16,7 +16,6 @@ export default connect(
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    user: state.user,
     viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
@@ -25,7 +24,6 @@ export default connect(
     showDetails,
     togglePaymentDetailsSequence,
     updateCurrentTabSequence,
-    user,
     viewDocumentSequence,
   }) {
     return (
@@ -37,10 +35,12 @@ export default connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
+          <h1 className="captioned" tabIndex="-1">
+            Docket number: {caseDetail.docketNumber}
+          </h1>
           <p>
-            {user.name}, Petitioner v. Commissioner of Internal Revenue,
-            Respondent
+            {caseDetail.petitioners[0].name} Petitioner v. Commissioner of
+            Internal Revenue, Respondent
           </p>
           <hr />
           <SuccessNotification />
@@ -199,7 +199,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        {document.userId}
+                        {item.filedBy}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>

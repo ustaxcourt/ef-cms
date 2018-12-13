@@ -1,9 +1,5 @@
 [
   {
-    "pk": "respondent|activeCase",
-    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
-  },
-  {
     "pk": "101-18|case",
     "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
   },
@@ -45,12 +41,43 @@
     "id": 3
   },
   {
-    "pk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
     "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
-    "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
-    "createdAt": "2018-11-21T20:49:28.192Z",
-    "userId": "taxpayer",
-    "docketNumber": "101-18",
+    "pk": "respondent|activeCase"
+  },
+  {
+    "documents": [
+      {
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "documentType": "Petition",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "documentType": "Request for Place of Trial",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "documentType": "Statement of Taxpayer Identification Number",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "documentId": "e528fc99-7068-4b93-b396-c2163991840b",
+        "documentType": "Answer",
+        "filedBy": "Respondent",
+        "userId": "respondent"
+      }
+    ],
     "respondent": {
       "zip": "10111",
       "role": "respondent",
@@ -63,8 +90,17 @@
       "userId": "respondent",
       "respondentId": "respondent",
       "email": "testrespondent@example.com",
-      "token": "respondent"
+      "token": "respondent",
+      "barNumber": "IR1228"
     },
+    "userId": "taxpayer",
+    "irsSendDate": "2018-12-12T23:32:48.416Z",
+    "createdAt": "2018-11-21T20:49:28.192Z",
+    "payGovDate": "2018-12-12T23:37:13.113Z",
+    "payGovId": "12345",
+    "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+    "pk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
     "petitioners": [
       {
         "zip": "37208",
@@ -80,32 +116,7 @@
         "token": "taxpayer"
       }
     ],
-    "documents": [
-      {
-        "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
-        "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
-      },
-      {
-        "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
-        "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
-      },
-      {
-        "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
-        "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
-      },
-      {
-        "documentType": "Answer",
-        "documentId": "854d7aca-3cb1-4679-a73f-75001b660e20",
-        "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "respondent"
-      }
-    ],
+    "docketNumber": "101-18",
     "status": "general"
   },
   {

@@ -13,7 +13,6 @@ export default connect(
         <h1 tabIndex="-1">Dashboard</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <h2>Cases</h2>
         <p>
           <a
             className="usa-button"

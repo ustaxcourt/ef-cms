@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state } from 'cerebral';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
@@ -14,14 +13,12 @@ export default connect(
         <h1 tabIndex="-1">Respondent Dashboard</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <h2>Cases</h2>
         <table className="responsive-table" id="workQueue">
           <thead>
             <tr>
               <th>Docket number</th>
               <th>Petitioner name</th>
               <th>Date filed</th>
-              <th>Notifications</th>
             </tr>
           </thead>
           <tbody>
@@ -45,19 +42,6 @@ export default connect(
                 <td>
                   <span className="responsive-label">Date filed</span>
                   {item.createdAtFormatted}
-                </td>
-                <td>
-                  <span className="responsive-label">Notification</span>
-                  {item.showActionRequired && (
-                    <span>
-                      <FontAwesomeIcon
-                        icon="flag"
-                        className="action-flag"
-                        size="sm"
-                      />{' '}
-                      Action Required
-                    </span>
-                  )}
                 </td>
               </tr>
             ))}
