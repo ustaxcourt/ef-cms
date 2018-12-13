@@ -9,22 +9,26 @@ export default connect(
   },
   function PartyInformation({ caseDetail }) {
     return (
-      <div className="subsection">
-        <div className="usa-font-lead">Party Information</div>
+      <div className="subsection party-information">
+        <h3>Party Information</h3>
         <div className="usa-grid-full">
           <div className="usa-width-one-half">
             {caseDetail.petitioners && (
               <React.Fragment>
-                <b>Petitioner</b>
+                <h4>Petitioner</h4>
                 {caseDetail.petitioners.map((petitioner, key) => (
                   <address key={key}>
                     <p>{petitioner.name}</p>
                     <p>
-                      {petitioner.addressLine1}
-                      <br />
-                      {petitioner.addressLine2}
-                      <br />
-                      {petitioner.city} {petitioner.state} {petitioner.zip}
+                      <span className="address-line">
+                        {petitioner.addressLine1}
+                      </span>
+                      <span className="address-line">
+                        {petitioner.addressLine2}
+                      </span>
+                      <span className="address-line">
+                        {petitioner.city}, {petitioner.state} {petitioner.zip}
+                      </span>
                     </p>
                     <p>{petitioner.phone}</p>
                     <p>{petitioner.email}</p>
@@ -36,17 +40,23 @@ export default connect(
           <div className="usa-width-one-half">
             {caseDetail.respondent && (
               <React.Fragment>
-                <b>Respondent</b>
+                <h4>Respondent</h4>
                 <address>
-                  {caseDetail.respondent.name} <br />
-                  <br />
-                  {caseDetail.respondent.address} <br />
-                  {caseDetail.respondent.city} {caseDetail.respondent.state}{' '}
-                  {caseDetail.respondent.zip} <br />
-                  <br />
-                  {caseDetail.respondent.phone} <br />
-                  <br />
-                  {caseDetail.respondent.email} <br />
+                  <p>{caseDetail.respondent.name}</p>
+                  <p>
+                    <span className="address-line">
+                      {caseDetail.respondent.addressLine1}
+                    </span>
+                    <span className="address-line">
+                      {caseDetail.respondent.addressLine2}
+                    </span>
+                    <span className="address-line">
+                      {caseDetail.respondent.city},{' '}
+                      {caseDetail.respondent.state} {caseDetail.respondent.zip}
+                    </span>
+                  </p>
+                  <p>{caseDetail.respondent.phone}</p>
+                  <p>{caseDetail.respondent.email}</p>
                 </address>
               </React.Fragment>
             )}
