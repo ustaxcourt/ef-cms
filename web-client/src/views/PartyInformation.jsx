@@ -9,7 +9,7 @@ export default connect(
   },
   function PartyInformation({ caseDetail }) {
     return (
-      <div className="subsection">
+      <div className="subsection party-information">
         <h3>Party Information</h3>
         <div className="usa-grid-full">
           <div className="usa-width-one-half">
