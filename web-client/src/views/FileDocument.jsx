@@ -42,6 +42,7 @@ export default connect(
           >
             <option value>- Select -</option>
             <option value="Answer">Answer</option>
+            <option value="Stipulated Decision">Stipulated Decision</option>
           </select>
           <label htmlFor="file" className={document.file && 'validated'}>
             Select file
