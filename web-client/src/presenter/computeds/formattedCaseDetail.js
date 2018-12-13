@@ -12,7 +12,10 @@ const formatCase = (caseDetail, form) => {
   const result = _.cloneDeep(caseDetail);
 
   if (result.documents) result.documents.map(formatDocument);
-
+  if (result.respondent)
+    result.respondent.formattedName = `${result.respondent.name} ${
+      result.respondent.barNumber
+    }`;
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
@@ -29,6 +32,7 @@ const formatCase = (caseDetail, form) => {
 
   result.status =
     result.status === 'general' ? 'general docket' : result.status;
+
   return result;
 };
 
