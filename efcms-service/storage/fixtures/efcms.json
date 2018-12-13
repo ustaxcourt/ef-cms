@@ -90,7 +90,8 @@
       "userId": "respondent",
       "respondentId": "respondent",
       "email": "testrespondent@example.com",
-      "token": "respondent"
+      "token": "respondent",
+      "barNumber": "IR1228"
     },
     "userId": "taxpayer",
     "irsSendDate": "2018-12-12T23:32:48.416Z",

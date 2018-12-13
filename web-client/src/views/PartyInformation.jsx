@@ -38,7 +38,8 @@ export default connect(
               <React.Fragment>
                 <b>Respondent</b>
                 <address>
-                  {caseDetail.respondent.name} <br />
+                  {caseDetail.respondent.name} {caseDetail.respondent.barNumber}{' '}
+                  <br />
                   <br />
                   {caseDetail.respondent.address} <br />
                   {caseDetail.respondent.city} {caseDetail.respondent.state}{' '}
