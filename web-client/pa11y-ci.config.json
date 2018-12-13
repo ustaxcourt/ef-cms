@@ -15,10 +15,11 @@
     {
       "url": "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
       "actions": [
+        "wait for #case-info-tab to be visible",
         "click element #case-info-tab",
         "wait for #paygov to be visible"
       ],
-      "timeout": 5000
+      "timeout": 10000
     },
     "http://localhost:1234/log-in?token=intakeclerk&path=/",
     "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
@@ -31,7 +32,7 @@
         "click element #button-file-document",
         "wait for #file-a-document to be visible"
       ],
-      "timeout": 5000
+      "timeout": 10000
     }
   ]
 }
