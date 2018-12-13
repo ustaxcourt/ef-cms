@@ -18,7 +18,10 @@ exports.fileStipulatedDecision = async ({
         message: 'A stipulated decision is ready for review',
         sentBy: userId,
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         assigneeId: 'docketclerk',
+        docketNumber: caseToUpdate.docketNumber,
+        //document is added later
       },
     ],
   });
