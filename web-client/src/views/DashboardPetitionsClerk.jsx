@@ -14,7 +14,6 @@ export default connect(
         <h1 tabIndex="-1">Petitions section work queue</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <h2>Cases</h2>
         <table className="responsive-table" id="workQueue">
           <thead>
             <tr>

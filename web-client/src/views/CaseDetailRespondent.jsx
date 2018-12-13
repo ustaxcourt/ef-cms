@@ -31,9 +31,12 @@ export default connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
+          <h1 className="captioned" tabIndex="-1">
+            Docket number: {caseDetail.docketNumber}
+          </h1>
           <p>
-            {caseDetail.petitioners[0].name} v. Commissioner of Internal Revenue, Respondent
+            {caseDetail.petitioners[0].name} v. Commissioner of Internal
+            Revenue, Respondent
           </p>
           <hr />
           <SuccessNotification />
@@ -78,11 +81,13 @@ export default connect(
             <div className="tab-content" role="tabpanel">
               <button
                 id="button-file-document"
+                className="usa-button"
                 onClick={() =>
                   updateCurrentTabSequence({ value: 'File Document' })
                 }
               >
-                <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
+                <FontAwesomeIcon icon="cloud-upload-alt" />
+                File Document
               </button>
               <table className="responsive-table">
                 <thead>
