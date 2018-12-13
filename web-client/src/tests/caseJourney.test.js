@@ -27,8 +27,7 @@ test = CerebralTest(presenter);
 describe('Case journey', async () => {
   it('Taxpayer logs in', async () => {
     test.setState('user', {
-      firstName: 'Test',
-      lastName: 'Taxpayer',
+      name: 'Test Taxpayer',
       role: 'taxpayer',
       token: 'taxpayer',
       userId: 'taxpayer',
@@ -78,8 +77,7 @@ describe('Case journey', async () => {
 
   it('Petitions clerk logs in', async () => {
     test.setState('user', {
-      firstName: 'Petitions',
-      lastName: 'Clerk',
+      name: 'Petitions Clerk',
       role: 'petitionsclerk',
       token: 'petitionsclerk',
       userId: 'petitionsclerk',
@@ -131,8 +129,7 @@ describe('Case journey', async () => {
 
   it('Respondent logs in', async () => {
     test.setState('user', {
-      firstName: 'Res',
-      lastName: 'Pondent',
+      name: 'IRS Attorney',
       role: 'respondent',
       token: 'respondent',
       userId: 'respondent',
