@@ -15,29 +15,31 @@ export default connect(
           <div className="usa-width-one-half">
             {caseDetail.petitioners && (
               <React.Fragment>
-                <b>Petitioner</b>
-                {caseDetail.petitioners.map((petitioner, key) => (
-                  <address key={key}>
-                    <p>{petitioner.name}</p>
-                    <p>
-                      {petitioner.addressLine1}
-                      <br />
-                      {petitioner.addressLine2}
-                      <br />
-                      {petitioner.city} {petitioner.state} {petitioner.zip}
-                    </p>
-                    <p>{petitioner.phone}</p>
-                    <p>{petitioner.email}</p>
-                  </address>
-                ))}
+                <b id="petitioners-label">Petitioner</b>
+                <div aria-labelledby="petitioners-label">
+                  {caseDetail.petitioners.map((petitioner, key) => (
+                    <address key={key} aria-labelledby={'pn-' + key}>
+                      <p id={'pn-' + key}>{petitioner.name}</p>
+                      <p>
+                        {petitioner.addressLine1}
+                        <br />
+                        {petitioner.addressLine2}
+                        <br />
+                        {petitioner.city} {petitioner.state} {petitioner.zip}
+                      </p>
+                      <p>{petitioner.phone}</p>
+                      <p>{petitioner.email}</p>
+                    </address>
+                  ))}
+                </div>
               </React.Fragment>
             )}
           </div>
           <div className="usa-width-one-half">
             {caseDetail.respondent && (
               <React.Fragment>
-                <b>Respondent</b>
-                <address>
+                <b id="respondent-label">Respondent</b>
+                <address aria-labelledby="respondent-label">
                   {caseDetail.respondent.name} <br />
                   <br />
                   {caseDetail.respondent.address} <br />
