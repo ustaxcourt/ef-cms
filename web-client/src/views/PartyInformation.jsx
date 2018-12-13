@@ -5,7 +5,7 @@ import { state } from 'cerebral';
 
 export default connect(
   {
-    caseDetail: state.caseDetail,
+    caseDetail: state.formattedCaseDetail,
   },
   function PartyInformation({ caseDetail }) {
     return (
@@ -44,7 +44,7 @@ export default connect(
               <React.Fragment>
                 <h4 id="respondent-label">Respondent</h4>
                 <address aria-labelledby="respondent-label">
-                  <p>{caseDetail.respondent.name}</p>
+                  <p>{caseDetail.respondent.formattedName}</p>
                   <p>
                     <span className="address-line">
                       {caseDetail.respondent.addressLine1}
