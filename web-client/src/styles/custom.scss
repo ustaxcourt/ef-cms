@@ -1,3 +1,7 @@
+h1.captioned {
+  margin-bottom: 0;
+}
+
 .spinner {
   display: inline-block;
   width: 1rem;
@@ -29,6 +33,10 @@
   color: $color-red;
 }
 
+.fa-cloud-upload-alt {
+  margin-right: 1rem;
+}
+
 .label {
   margin-bottom: 0;
 }
@@ -50,6 +58,7 @@ button.pdf-link {
   color: $color-blue;
   cursor: pointer;
   font-weight: normal;
+  text-align: left;
   text-decoration: underline;
 }
 
@@ -146,6 +155,10 @@ iframe {
   border: none;
 }
 
+.party-information p {
+  margin-bottom: 0.7rem;
+}
+
 .horizontal-tabs {
   ul {
     padding: 0;
@@ -169,6 +182,14 @@ iframe {
 .tab-content {
   padding: 2rem;
   border: 2px solid $color-gray-lightest;
+
+  h3 {
+    margin-bottom: 3rem;
+  }
+}
+
+.address-line {
+  display: block;
 }
 
 .float-right {
