@@ -2,7 +2,7 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 
 import presenter from '../presenter';
-import applicationContext from '../applicationContexts/dev';
+import applicationContext from '../applicationContext';
 
 let test;
 let docketNumber;
