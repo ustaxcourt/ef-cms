@@ -41,7 +41,8 @@ export default connect(
                   {caseDetail.respondent.formattedName}
                   <br />
                   <br />
-                  {caseDetail.respondent.address} <br />
+                  {caseDetail.respondent.addressLine1} <br />
+                  {caseDetail.respondent.addressLine2} <br />
                   {caseDetail.respondent.city} {caseDetail.respondent.state}{' '}
                   {caseDetail.respondent.zip} <br />
                   <br />
