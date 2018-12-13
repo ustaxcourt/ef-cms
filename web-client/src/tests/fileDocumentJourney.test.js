@@ -18,8 +18,7 @@ test = CerebralTest(presenter);
 
 describe('Respondent', async () => {
   test.setState('user', {
-    firstName: 'Re',
-    lastName: 'Spondent',
+    name: 'IRS Attorney',
     role: 'respondent',
     token: 'respondent',
     userId: 'respondent',

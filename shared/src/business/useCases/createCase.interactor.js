@@ -19,7 +19,8 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
 
   documents.forEach(document => {
     document.userId = userId;
-  }); //initial case creation does not set the userid on each document
+    document.filedBy = `Petitioner ${user.name}`;
+  });
 
   const createdCase = await applicationContext
     .getPersistenceGateway()

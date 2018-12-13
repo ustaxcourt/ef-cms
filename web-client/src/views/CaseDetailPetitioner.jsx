@@ -39,7 +39,7 @@ export default connect(
         <section className="usa-section usa-grid">
           <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
           <p>
-            {user.firstName} {user.lastName}, Petitioner v. Commissioner of
+            {caseDetail.petitioners[0].name} Petitioner v. Commissioner of
             Internal Revenue, Respondent
           </p>
           <hr />
@@ -196,7 +196,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        {document.userId}
+                        {item.filedBy}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>

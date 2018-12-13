@@ -27,20 +27,17 @@ export default {
     role: 'public',
 
     // userId: 'taxpayer',
-    // firstName: 'Tax',
-    // lastName: 'Payer',
+    // name: 'Tax Payer',
     // token: 'taxpayer',
     // role: 'taxpayer',
 
     // userId: 'petitionsclerk',
-    // firstName: 'Clerk',
-    // lastName: 'Kent',
+    // name: 'Clerk Kent',
     // token: 'petitionsclerk',
     // role: 'petitionsclerk',
 
     // userId: 'respondent',
-    // firstName: 'Res',
-    // lastName: 'Pondent',
+    // name: 'Res Pondent',
     // token: 'respondent',
     // role: 'respondent',
   },

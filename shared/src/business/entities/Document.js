@@ -45,6 +45,7 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .required(),
+    filedBy: joi.string().optional(),
     validated: joi.boolean().optional(),
     reviewDate: joi
       .date()
