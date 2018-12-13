@@ -199,6 +199,81 @@ const createRespondentCaseMapping = async ({
   });
 };
 
+const deleteCaseMappingRecord = async ({
+  skId,
+  pkId,
+  type,
+  applicationContext,
+}) => {
+  await client.delete({
+    tableName: `efcms-${applicationContext.environment.stage}`,
+    key: {
+      pk: `${pkId}|${type}`,
+      sk: skId,
+    },
+  });
+};
+
+const createCaseMappingRecord = async ({
+  skId,
+  pkId,
+  type,
+  item = {},
+  applicationContext,
+}) => {
+  return client.put({
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${pkId}|${type}`,
+      sk: skId,
+      ...item,
+    },
+  });
+};
+
+exports.syncWorkItems = async ({
+  applicationContext,
+  caseToSave,
+  currentCaseState,
+  deleteCaseMappingRecord,
+  createCaseMappingRecord,
+}) => {
+  for (let workItem of caseToSave.workItems || []) {
+    const existing = (currentCaseState.workItems || []).find(
+      i => i.id === workItem.id,
+    );
+    if (!existing) {
+      // we did not find an existing work item in the current state, add a new record
+      await createCaseMappingRecord({
+        pkId: workItem.assigneeId,
+        skId: caseToSave.caseId,
+        type: 'workItem',
+        item: workItem,
+        applicationContext,
+      });
+    } else {
+      // the item exists in the current state, but check if the assigneId changed
+      if (workItem.assigneeId !== existing.assigneeId) {
+        // the item has changed assignees, delete item
+        await deleteCaseMappingRecord({
+          pkId: existing.assigneeId,
+          skId: caseToSave.caseId,
+          type: 'workItem',
+          applicationContext,
+        });
+
+        await createCaseMappingRecord({
+          pkId: workItem.assigneeId,
+          skId: caseToSave.caseId,
+          type: 'workItem',
+          item: workItem,
+          applicationContext,
+        });
+      }
+    }
+  }
+};
+
 /**
  * saveCase
  * @param caseToSave
@@ -225,6 +300,15 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
   }
 
+  await exports.syncWorkItems({
+    applicationContext,
+    caseToSave,
+    currentCaseState,
+    deleteCaseMappingRecord,
+    createCaseMappingRecord,
+  });
+
+  // if a stipulated decision was uploaded, create a work item entry
   if (currentStatus !== caseToSave.status) {
     await client.delete({
       tableName: TABLE,

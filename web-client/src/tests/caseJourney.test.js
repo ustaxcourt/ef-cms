@@ -4,6 +4,8 @@ import FormData from 'form-data';
 import presenter from '../presenter';
 import applicationContext from '../applicationContexts/dev';
 
+import Case from '../../../shared/src/business/entities/Case';
+
 let test;
 let docketNumber;
 global.FormData = FormData;
@@ -154,7 +156,7 @@ describe('Case journey', async () => {
   it('Respondent adds answer', async () => {
     await test.runSequence('updateDocumentValueSequence', {
       key: 'documentType',
-      value: 'Answer',
+      value: Case.documentTypes.answer,
     });
     await test.runSequence('updateDocumentValueSequence', {
       key: 'file',
@@ -162,5 +164,18 @@ describe('Case journey', async () => {
     });
     await test.runSequence('submitDocumentSequence');
     expect(test.getState('caseDetail.documents').length).toEqual(4);
+  });
+
+  it('Respondent adds a stipulated decision', async () => {
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'documentType',
+      value: Case.documentTypes.stipulatedDecision,
+    });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'file',
+      value: fakeFile,
+    });
+    await test.runSequence('submitDocumentSequence');
+    expect(test.getState('caseDetail.documents').length).toEqual(5);
   });
 });
