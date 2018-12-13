@@ -9,7 +9,7 @@ describe('fileAnswer', () => {
   let applicationContext;
   let documents = MOCK_DOCUMENTS;
 
-  it.only('should attach the respondent information to the case when calling updateCase', async () => {
+  it('should attach the respondent information to the case when calling updateCase', async () => {
     const saveCaseStub = sinon.stub().resolves({
       docketNumber: '101-18',
       caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
