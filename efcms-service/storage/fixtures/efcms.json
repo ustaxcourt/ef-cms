@@ -115,20 +115,6 @@
     "createdAt": "2018-11-21T20:51:28.192Z",
     "userId": "taxpayer",
     "docketNumber": "102-18",
-    "respondent": {
-      "zip": "10111",
-      "role": "respondent",
-      "city": "Washington",
-      "phone": "111-111-1111",
-      "name": "Test Respondent",
-      "addressLine1": "111 Orange St.",
-      "addressLine2": "Building 2",
-      "state": "DC",
-      "userId": "respondent",
-      "respondentId": "respondent",
-      "email": "testrespondent@example.com",
-      "token": "respondent"
-    },
     "petitioners": [
       {
         "zip": "37208",
@@ -173,20 +159,6 @@
     "createdAt": "2018-11-21T20:58:28.192Z",
     "userId": "taxpayer",
     "docketNumber": "103-18",
-    "respondent": {
-      "zip": "10111",
-      "role": "respondent",
-      "city": "Washington",
-      "phone": "111-111-1111",
-      "name": "Test Respondent",
-      "addressLine1": "111 Orange St.",
-      "addressLine2": "Building 2",
-      "state": "DC",
-      "userId": "respondent",
-      "respondentId": "respondent",
-      "email": "testrespondent@example.com",
-      "token": "respondent"
-    },
     "petitioners": [
       {
         "zip": "37208",

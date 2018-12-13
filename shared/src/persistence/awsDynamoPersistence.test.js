@@ -276,7 +276,7 @@ describe('awsDynamoPersistence', function() {
       createCaseStub = sinon.stub().returns(null);
     });
 
-    it('should do stuff', async () => {
+    it('should create a new mapping record for the workItem', async () => {
       await syncWorkItems({
         applicationContext,
         caseToSave: {
@@ -298,11 +298,12 @@ describe('awsDynamoPersistence', function() {
         pkId: 'bob',
         skId: CASE_ID,
         type: 'workItem',
+        item: { id: '1', assigneeId: 'bob' },
         applicationContext,
       });
     });
 
-    it('should do nothing', async () => {
+    it('should not invoke any create or delete methods', async () => {
       await syncWorkItems({
         applicationContext,
         caseToSave: {
@@ -335,7 +336,7 @@ describe('awsDynamoPersistence', function() {
       expect(deleteCaseStub.called).to.be.false;
     });
 
-    it('should do stuff', async () => {
+    it('should create a new mapping record and delete the old one', async () => {
       await syncWorkItems({
         applicationContext,
         caseToSave: {
@@ -362,6 +363,7 @@ describe('awsDynamoPersistence', function() {
         pkId: 'rick',
         skId: CASE_ID,
         type: 'workItem',
+        item: { id: '1', assigneeId: 'rick' },
         applicationContext,
       });
       expect(deleteCaseStub.getCall(0).args[0]).to.deep.equal({

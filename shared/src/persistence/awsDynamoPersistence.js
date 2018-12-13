@@ -218,6 +218,7 @@ const createCaseMappingRecord = async ({
   skId,
   pkId,
   type,
+  item = {},
   applicationContext,
 }) => {
   return client.put({
@@ -225,6 +226,7 @@ const createCaseMappingRecord = async ({
     Item: {
       pk: `${pkId}|${type}`,
       sk: skId,
+      ...item,
     },
   });
 };
@@ -246,6 +248,7 @@ exports.syncWorkItems = async ({
         pkId: workItem.assigneeId,
         skId: caseToSave.caseId,
         type: 'workItem',
+        item: workItem,
         applicationContext,
       });
     } else {
@@ -263,6 +266,7 @@ exports.syncWorkItems = async ({
           pkId: workItem.assigneeId,
           skId: caseToSave.caseId,
           type: 'workItem',
+          item: workItem,
           applicationContext,
         });
       }
