@@ -1,5 +1,9 @@
 [
   {
+    "pk": "respondent|activeCase",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
     "pk": "101-18|case",
     "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
   },
@@ -94,6 +98,12 @@
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer"
+      },
+      {
+        "documentType": "Answer",
+        "documentId": "854d7aca-3cb1-4679-a73f-75001b660e20",
+        "createdAt": "2018-11-21T20:49:28.192Z",
+        "userId": "respondent"
       }
     ],
     "status": "general"
