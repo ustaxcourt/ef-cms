@@ -78,6 +78,7 @@ joiValidationDecorator(
       .array()
       .min(3)
       .required(),
+    workItems: joi.array().optional(),
   }),
   function() {
     return (

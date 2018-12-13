@@ -60,6 +60,7 @@ function User(user) {
       zip: '10111',
       phone: '111-111-1111',
       email: 'testrespondent@example.com',
+      barNumber: '12345',
     });
   } else {
     throw new Error('invalid user');
