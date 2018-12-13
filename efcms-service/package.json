@@ -9,7 +9,7 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "artillery": "^1.6.0-25",
-    "aws-sdk": "^2.374.0",
+    "aws-sdk": "^2.375.0",
     "aws-sdk-mock": "^4.2.0",
     "chai": "^4.1.2",
     "chai-string": "^1.4.0",
@@ -28,7 +28,7 @@
     "proxyquire": "^2.1.0",
     "serverless": "^1.32.0",
     "serverless-aws-documentation": "^1.1.0",
-    "serverless-domain-manager": "^2.6.5",
+    "serverless-domain-manager": "^2.6.7",
     "serverless-dynamodb-local": "^0.2.35",
     "serverless-offline": "^3.30.0",
     "serverless-plugin-aws-alerts": "^1.2.4",
