@@ -18,7 +18,7 @@ export default connect(
     updateDocumentValueSequence,
   }) {
     return (
-      <section className="usa-section usa-grid">
+      <React.Fragment>
         <h2>File a document</h2>
         <form
           id="file-a-document"
@@ -75,7 +75,7 @@ export default connect(
             Cancel
           </button>
         </form>
-      </section>
+      </React.Fragment>
     );
   },
 );
