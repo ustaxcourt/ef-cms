@@ -15,33 +15,35 @@ export default connect(
           <div className="usa-width-one-half">
             {caseDetail.petitioners && (
               <React.Fragment>
-                <h4>Petitioner</h4>
-                {caseDetail.petitioners.map((petitioner, key) => (
-                  <address key={key}>
-                    <p>{petitioner.name}</p>
-                    <p>
-                      <span className="address-line">
-                        {petitioner.addressLine1}
-                      </span>
-                      <span className="address-line">
-                        {petitioner.addressLine2}
-                      </span>
-                      <span className="address-line">
-                        {petitioner.city}, {petitioner.state} {petitioner.zip}
-                      </span>
-                    </p>
-                    <p>{petitioner.phone}</p>
-                    <p>{petitioner.email}</p>
-                  </address>
-                ))}
+                <h4 id="petitioners-label">Petitioner</h4>
+                <div aria-labelledby="petitioners-label">
+                  {caseDetail.petitioners.map((petitioner, key) => (
+                    <address key={key}>
+                      <p>{petitioner.name}</p>
+                      <p>
+                        <span className="address-line">
+                          {petitioner.addressLine1}
+                        </span>
+                        <span className="address-line">
+                          {petitioner.addressLine2}
+                        </span>
+                        <span className="address-line">
+                          {petitioner.city}, {petitioner.state} {petitioner.zip}
+                        </span>
+                      </p>
+                      <p>{petitioner.phone}</p>
+                      <p>{petitioner.email}</p>
+                    </address>
+                  ))}
+                </div>
               </React.Fragment>
             )}
           </div>
           <div className="usa-width-one-half">
             {caseDetail.respondent && (
               <React.Fragment>
-                <h4>Respondent</h4>
-                <address>
+                <h4 id="respondent-label">Respondent</h4>
+                <address aria-labelledby="respondent-label">
                   <p>{caseDetail.respondent.formattedName}</p>
                   <p>
                     <span className="address-line">
