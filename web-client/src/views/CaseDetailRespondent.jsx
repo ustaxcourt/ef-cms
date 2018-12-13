@@ -33,7 +33,8 @@ export default connect(
         <section className="usa-section usa-grid">
           <h1 tabIndex="-1">Docket number: {caseDetail.docketNumber}</h1>
           <p>
-            {caseDetail.petitioners[0].name} v. Commissioner of Internal Revenue, Respondent
+            {caseDetail.petitioners[0].name} v. Commissioner of Internal
+            Revenue, Respondent
           </p>
           <hr />
           <SuccessNotification />
@@ -82,7 +83,8 @@ export default connect(
                   updateCurrentTabSequence({ value: 'File Document' })
                 }
               >
-                <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
+                <FontAwesomeIcon icon="cloud-upload-alt" />
+                File Document
               </button>
               <table className="responsive-table">
                 <thead>
