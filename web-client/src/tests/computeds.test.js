@@ -31,7 +31,7 @@ describe('formatted case details computed', () => {
   it('formats the respondent name to include barnumber', () => {
     const result = runCompute(formattedCases, {
       state: {
-        cases: [{ respondent: { name: 'test', barNumber: '123'} }],
+        cases: [{ respondent: { name: 'test', barNumber: '123' } }],
       },
     });
     expect(result[0].respondent.formattedName).toContain('test 123');
