@@ -62,7 +62,13 @@ exports.fileRespondentDocument = async ({
     document,
   });
 
-  workItemsToAdd.forEach(item => (item.documentId = documentId));
+  workItemsToAdd.forEach(
+    item =>
+      (item.document = {
+        documentId,
+        documentType,
+      }),
+  );
 
   attachWorkItemsToCase({
     caseToUpdate,

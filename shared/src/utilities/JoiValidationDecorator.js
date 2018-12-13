@@ -23,13 +23,13 @@ exports.joiValidationDecorator = function(
 ) {
   entityConstructor.prototype.isValid = function isValid() {
     return (
-      joi.validate(this, schema).error === null &&
+      joi.validate(this, schema, { allowUnknown: true }).error === null &&
       (customValidate ? customValidate.call(this) : true)
     );
   };
 
   entityConstructor.prototype.getValidationError = function getValidationError() {
-    return joi.validate(this, schema).error;
+    return joi.validate(this, schema, { allowUnknown: true }).error;
   };
 
   entityConstructor.prototype.validate = function validate() {
