@@ -1,7 +1,7 @@
 import { CerebralTest } from 'cerebral/test';
 
 import presenter from '../presenter';
-import applicationContext from '../applicationContexts/dev';
+import applicationContext from '../applicationContext';
 
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = { route: () => {} };
