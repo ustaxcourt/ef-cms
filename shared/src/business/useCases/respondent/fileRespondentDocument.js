@@ -9,18 +9,19 @@ const attachDocumentToCase = ({
   documentId,
   userId,
 }) => {
-  const stipulatedDecisionDocumentMetadata = {
+  const documentMetadata = {
     documentType,
     documentId,
     userId: userId,
+    filedBy: 'Respondent',
     createdAt: new Date().toISOString(),
   };
 
   Object.assign(caseToUpdate, {
-    documents: [...caseToUpdate.documents, stipulatedDecisionDocumentMetadata],
+    documents: [...caseToUpdate.documents, documentMetadata],
   });
 
-  return stipulatedDecisionDocumentMetadata;
+  return documentMetadata;
 };
 
 const attachRespondentToCase = ({ user, caseToUpdate }) => {
