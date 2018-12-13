@@ -16,6 +16,9 @@ import { uploadCasePdfs } from '../../../shared/src/business/useCases/uploadCase
 import { downloadDocumentFile } from '../../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileAnswer } from '../../../shared/src/business/useCases/respondent/fileAnswer.interactor';
 import { getCasesForRespondent } from '../../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { fileStipulatedDecision } from '../../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
+
+import Case from '../../../shared/src/business/entities/Case';
 
 /**
  * Context for the dev environment
@@ -30,6 +33,7 @@ const applicationContext = {
       uploadPdfsForNewCase,
       uploadDocument,
       getDocument,
+      saveCase: updateCase,
     };
   },
   getUseCases: () => {
@@ -51,8 +55,10 @@ const applicationContext = {
     // TODO put user in so we can remove role
     if (role === 'respondent') {
       switch (documentType) {
-        case 'Answer':
+        case Case.documentTypes.answer:
           return fileAnswer;
+        case Case.documentTypes.stipulatedDecision:
+          return fileStipulatedDecision;
         default:
           return updateCase;
       }

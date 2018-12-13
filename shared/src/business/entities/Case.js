@@ -78,6 +78,7 @@ joiValidationDecorator(
       .array()
       .min(3)
       .required(),
+    workItems: joi.array().optional(),
   }),
   function() {
     return (
@@ -154,6 +155,7 @@ Case.documentTypes = {
   statementOfTaxpayerIdentificationNumber:
     'Statement of Taxpayer Identification Number',
   answer: 'Answer',
+  stipulatedDecision: 'Stipulated Decision',
 };
 
 module.exports = Case;
