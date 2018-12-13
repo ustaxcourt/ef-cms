@@ -178,6 +178,14 @@ iframe {
 .tab-content {
   padding: 2rem;
   border: 2px solid $color-gray-lightest;
+
+  h3 {
+    margin-bottom: 3rem;
+  }
+}
+
+.address-line {
+  display: block;
 }
 
 .float-right {
