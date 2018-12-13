@@ -31,6 +31,7 @@ exports.fileAnswer = async ({
     documentType: Case.documentTypes.answer,
     documentId: documentId,
     userId: userId,
+    filedBy: 'Respondent',
     createdAt: new Date().toISOString(),
   };
 
