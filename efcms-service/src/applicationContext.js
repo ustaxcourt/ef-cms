@@ -26,6 +26,9 @@ const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendP
 const { updateCase } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
 const { uploadCasePdfs } = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
 const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
+const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
+const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
+const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 
 module.exports = {
   getPersistenceGateway: () => {
@@ -65,6 +68,9 @@ module.exports = {
       updateCase,
       uploadCasePdfs,
       getCasesForRespondent: getCasesForRespondentUC,
+      getWorkItem,
+      getWorkItems,
+      updateWorkItem,
     };
   },
 };
