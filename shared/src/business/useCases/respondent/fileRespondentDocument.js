@@ -56,6 +56,9 @@ exports.fileRespondentDocument = async ({
     document => document.documentType !== undefined,
   );
 
+  console.log('documents', documents);
+  console.log('caseToUpdate.documents ', caseToUpdate.documents);
+
   //validate the pdf
   if (!documents.length || documents.length > 1) {
     throw new UnprocessableEntityError(
@@ -71,7 +74,7 @@ exports.fileRespondentDocument = async ({
     documentType,
   });
 
-  console.log(caseToUpdate.documents)
+  console.log(caseToUpdate.documents);
 
   const user = await getUser({
     token: userId,
@@ -103,7 +106,7 @@ exports.fileRespondentDocument = async ({
 
   await applicationContext.getPersistenceGateway().saveCase({
     userId: user.userId,
-    caseToUpdate: caseToUpdateRaw,
+    caseToSave: caseToUpdateRaw,
     applicationContext,
   });
 

@@ -6,6 +6,7 @@ exports.fileAnswerUpdateCase = async ({
   caseToUpdate,
   applicationContext,
 }) => {
+  console.log('caseToUpdate', caseToUpdate);
   return fileRespondentDocument({
     userId,
     caseToUpdate,
