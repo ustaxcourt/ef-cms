@@ -17,7 +17,9 @@ import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAn
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
-
+import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
+import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import Case from '../../shared/src/business/entities/Case';
 
 /**
@@ -49,6 +51,9 @@ const applicationContext = {
       fileAnswer,
       getCasesForRespondent,
       downloadDocumentFile,
+      getWorkItem,
+      getWorkItems,
+      updateWorkItem,
     };
   },
   getUseCaseForDocumentUpload: (documentType, role) => {
