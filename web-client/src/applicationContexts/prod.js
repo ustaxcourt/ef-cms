@@ -33,6 +33,7 @@ const applicationContext = {
       getDocument,
       uploadPdfsForNewCase,
       uploadDocument,
+      saveCase: updateCase,
     };
   },
   getUseCases: () => {
