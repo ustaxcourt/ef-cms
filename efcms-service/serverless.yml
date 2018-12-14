@@ -97,8 +97,8 @@ custom:
             createdAt:
               type: string
               description: date case created
-      - name: 'rawDocument'
-        description: 'a rawDocument response'
+      - name: 'document'
+        description: 'a document response'
         contentType: 'application/json'
         schema:
           type: object
@@ -108,13 +108,41 @@ custom:
               description: id of rawDocument
             userId:
               type: string
-              description: id of user who created the rawDocument
+              description: id of user who created the document
             documentType:
               type: string
-              description: type of this rawDocument
+              description: type of this document
             createdAt:
               type: string
-              description: date rawDocument created
+              description: date document created
+      - name: 'workItem'
+        description: 'a workItem response'
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            workItemId:
+              type: string
+              description: id of work item
+            assigneeId:
+              type: string
+              description: id of user currently assigned the work item
+            messages:
+              type: array
+              items:
+                type: object
+                properties:
+                  messageId:
+                    type: string
+                  messageType:
+                    type: string
+              description: array of messages associated with the workitem
+            createdAt:
+              type: string
+              description: date workItem created
+            updatedAt:
+              type: string
+              description: date workItem created
       - name: 'policyUrl'
         description: 'a policy url response'
         contentType: 'application/json'
@@ -301,7 +329,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for rawDocument uploads to S3.
+              Create a pre-signed url for  document uploads to S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -321,7 +349,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for rawDocument downloads from S3.
+              Create a pre-signed url for  document downloads from S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -370,7 +398,7 @@ functions:
               - name: documents
                 in: body
                 required: true
-                description: rawDocument metadata
+                description:  document metadata
                 schema:
                   type: array
                   items:
@@ -448,6 +476,66 @@ functions:
               - statusCode: '422'
                 responseModels:
                   'application/json': 'unprocessableEntityError'
+
+  getWorkItem:
+    handler: src/workitems/getWorkItemLambda.get
+    events:
+      - http:
+          path: v1/workitems/{workItemId}
+          method: get
+          cors: true
+          documentation:
+            summary: get a workitem by workItemId
+            tags:
+              - workitems
+            description: >
+              Get a workitem.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
+  updateWorkItem:
+    handler: src/workitems/updateWorkItemLambda.put
+    events:
+      - http:
+          path: v1/workitems/{workItemId}
+          method: put
+          cors: true
+          documentation:
+            summary: update a workitem by workItemId
+            tags:
+              - workitems
+            description: >
+              Update a workitem.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
+  getWorkItems:
+    handler: src/workitems/getWorkItemsLambda.get
+    events:
+      - http:
+          path: v1/workitems
+          method: get
+          cors: true
+          documentation:
+            summary: get all workitems for a user
+            tags:
+              - workitems
+            description: >
+              Get all workitems for a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
 
   swagger:
     handler: src/swagger/swaggerLambda.handler
