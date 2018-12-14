@@ -1,5 +1,5 @@
 const client = require('./dynamodbClientService');
-const { syncWorkItems } = require('./dynamo/workItems/syncWorkItems');
+const { syncWorkItems } = require('./dynamo/workitems/syncWorkItems');
 
 const stripInternalKeys = items => {
   const strip = item => {
