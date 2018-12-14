@@ -16,8 +16,9 @@ function User(user) {
   ];
 
   if (validRoles.includes(this.userId)) {
+    const name = 'Test ' + this.userId.replace(/^\w/, c => c.toUpperCase());
     Object.assign(this, {
-      name: `Test ${this.userId.toUpperCase()}`,
+      name,
       role: this.userId,
       token: this.userId,
       email: `test${this.userId}@example.com`,
