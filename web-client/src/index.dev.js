@@ -2,7 +2,7 @@ import '@babel/polyfill';
 import Devtools from 'cerebral/devtools';
 
 import app from './app';
-import applicationContext from './applicationContexts/dev';
+import applicationContext from './applicationContext';
 import Case from '../../shared/src/business/entities/Case';
 import User from '../../shared/src/business/entities/User';
 
