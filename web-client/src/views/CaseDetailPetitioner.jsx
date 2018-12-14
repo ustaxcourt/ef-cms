@@ -203,7 +203,7 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
-                        {caseDetail.irsSendDate && (
+                        {item.isStatusServed && (
                           <span>
                             R served on {moment(caseDetail.irsDate).format('L')}
                           </span>
