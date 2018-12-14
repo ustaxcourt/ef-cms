@@ -41,7 +41,7 @@ exports.updateCase = async ({
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  if (caseId !== caseToUpdate.caseId) {
+  if (!caseToUpdate || caseId !== caseToUpdate.caseId) {
     throw new UnprocessableEntityError();
   }
 
