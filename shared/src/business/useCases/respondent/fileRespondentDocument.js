@@ -42,7 +42,7 @@ const attachWorkItemsToCase = ({ workItemsToAdd, caseToUpdate }) => {
 exports.fileRespondentDocument = async ({
   userId,
   caseToUpdate,
-  document,
+  documentId,
   documentType,
   workItemsToAdd = [],
   applicationContext,
@@ -56,11 +56,6 @@ exports.fileRespondentDocument = async ({
 
   const user = await getUser({
     token: userId,
-  });
-
-  const documentId = await uploadFileToS3({
-    applicationContext,
-    document,
   });
 
   workItemsToAdd.forEach(
