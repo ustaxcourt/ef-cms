@@ -4,21 +4,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CaseDetail from './CaseDetail';
-import ValidateCase from './ValidateCase';
 import Dashboard from './Dashboard';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
+import IntakeClerkDashboard from './IntakeClerkDashboard';
 import Loading from './Loading';
 import LogIn from './LogIn';
 import PetitionsWorkQueue from './PetitionsWorkQueue';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
+import ValidateCase from './ValidateCase';
 
 const pages = {
   CaseDetail,
   Dashboard,
   FilePetition,
+  IntakeClerkDashboard,
   Loading,
   LogIn,
   PetitionsWorkQueue,
