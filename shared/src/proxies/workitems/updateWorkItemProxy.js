@@ -1,18 +1,19 @@
 const axios = require('axios');
-
 /**
- * updateCase
+ * updateWorkItem
  *
  * @param applicationContext
- * @param caseToUpdate
+ * @param workItemToUpdate
  * @param userId
  * @returns {Promise<*>}
  */
-exports.updateCase = async ({ applicationContext, caseToUpdate, userId }) => {
+exports.updateWorkItem = async ({ applicationContext, workItemToUpdate, userId }) => {
   const userToken = userId; // TODO: refactor for jwt
   const response = await axios.put(
-    `${applicationContext.getBaseUrl()}/cases/${caseToUpdate.caseId}`,
-    caseToUpdate,
+    `${applicationContext.getBaseUrl()}/workitems/${
+      workItemToUpdate.workItemId
+    }`,
+    workItemToUpdate,
     {
       headers: {
         Authorization: `Bearer ${userToken}`,
