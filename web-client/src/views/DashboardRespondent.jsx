@@ -7,7 +7,7 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   { caseList: state.formattedCases },
-  function Dashboard({ caseList }) {
+  function DashboardRespondent({ caseList }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Respondent Dashboard</h1>

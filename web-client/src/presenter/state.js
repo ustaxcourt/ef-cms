@@ -40,6 +40,16 @@ export default {
     // name: 'Res Pondent',
     // token: 'respondent',
     // role: 'respondent',
+
+    // userId: 'docketclerk',
+    // name: 'Docket Clerk',
+    // token: 'docketclerk',
+    // role: 'docketclerk',
+
+    // userId: 'seniorattorney',
+    // name: 'Señor Attorney',
+    // token: 'seniorattorney',
+    // role: 'seniorattorney',
   },
   caseDetail: {},
   cases: [],
