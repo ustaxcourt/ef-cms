@@ -37,8 +37,8 @@ The end result of this is not a dev, staging, or production website, but is inst
 3. [Create a Route 53 zone in AWS](https://console.aws.amazon.com/route53/) that matches the domain in step 1 (e.g., `ef-cms.example.gov`).
 4. Run the `deploy-infrastructure.sh` script, found in `management/management/`:
    - `cd management/management && ./deploy-infrastructure.sh`
-   - This command continously prints out `module.management.jenkins-certificate.aws_acm_certificate_validation.dns_validation: Still creating...` until you have finished the next step (step 5) and waited for the DNS updates to propagate.
-   - This command will generate 2 files: `ssh/id_rsa` and `ssh/id_rsa.pub`). Without these keys, you will be unable to SSH into the bastion or Jenkins EC2 instances, so save a copy of them somewhere.
+   - This command continuously prints out `module.management.jenkins-certificate.aws_acm_certificate_validation.dns_validation: Still creating...` until you have finished the next step (step 5) and waited for the DNS updates to propagate.
+   - This command will generate 2 files: `ssh/id_rsa` and `ssh/id_rsa.pub`. Without these keys, you will be unable to SSH into the bastion or Jenkins EC2 instances, so save a copy of them somewhere.
 5. Create `NS` records on your domain’s existing DNS to point a subdomain to Route 53. For example, if your site is `example.gov`, the `example.gov` DNS entry must be modified to delegate authority for `ef-cms.example.gov` to use Route 53.
    - [Open Route 53’s list of hosted zones](https://console.aws.amazon.com/route53/home#hosted-zones:).
    - Select your domain (e.g., `ef-cms.example.gov`).
