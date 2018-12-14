@@ -1,43 +1,6 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
 const { getUser } = require('../utilities/getUser');
-const { uploadFileToS3 } = require('../utilities/uploadFileToS3');
-
-const attachDocumentToCase = ({
-  caseToUpdate,
-  documentType,
-  documentId,
-  userId,
-}) => {
-  const documentMetadata = {
-    documentType,
-    documentId,
-    userId: userId,
-    filedBy: 'Respondent',
-    createdAt: new Date().toISOString(),
-  };
-
-  Object.assign(caseToUpdate, {
-    documents: [...caseToUpdate.documents, documentMetadata],
-  });
-
-  return documentMetadata;
-};
-
-const attachRespondentToCase = ({ user, caseToUpdate }) => {
-  const respondent = {
-    ...user,
-    respondentId: user.userId,
-  };
-
-  Object.assign(caseToUpdate, { respondent });
-};
-
-const attachWorkItemsToCase = ({ workItemsToAdd, caseToUpdate }) => {
-  Object.assign(caseToUpdate, {
-    workItems: [...(caseToUpdate.workItems || []), ...workItemsToAdd],
-  });
-};
 
 exports.fileRespondentDocument = async ({
   userId,
@@ -54,14 +17,16 @@ exports.fileRespondentDocument = async ({
     );
   }
 
-  const user = await getUser({
-    token: userId,
-  });
+  caseToUpdate = new Case(caseToUpdate);
 
-  const documentId = await uploadFileToS3({
-    applicationContext,
-    document,
-  });
+  const user = await getUser(userId);
+
+  const documentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadDocument({
+      applicationContext,
+      document,
+    });
 
   workItemsToAdd.forEach(
     item =>
@@ -71,26 +36,23 @@ exports.fileRespondentDocument = async ({
       }),
   );
 
-  attachWorkItemsToCase({
-    caseToUpdate,
+  caseToUpdate.attachWorkItems({
     workItemsToAdd,
   });
 
-  attachDocumentToCase({
+  caseToUpdate.attachDocument({
     userId,
     documentId,
-    caseToUpdate,
     documentType,
   });
 
   if (!caseToUpdate.respondent) {
-    attachRespondentToCase({
+    caseToUpdate.attachRespondent({
       user,
-      caseToUpdate,
     });
   }
 
-  const caseToUpdateRaw = new Case(caseToUpdate)
+  const caseToUpdateRaw = caseToUpdate
     .validateWithError(new UnprocessableEntityError())
     .toJSON();
 
@@ -100,5 +62,5 @@ exports.fileRespondentDocument = async ({
     applicationContext,
   });
 
-  return caseToUpdate;
+  return caseToUpdateRaw;
 };

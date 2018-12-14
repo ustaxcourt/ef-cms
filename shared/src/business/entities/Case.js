@@ -96,6 +96,36 @@ Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() 
   return this.documents.every(document => document.validated === true);
 };
 
+Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
+  const documentMetadata = {
+    documentType,
+    documentId,
+    userId: userId,
+    filedBy: 'Respondent',
+    createdAt: new Date().toISOString(),
+  };
+
+  this.documents = [...(this.documents || []), documentMetadata];
+  this.documents = this.documents.map(document => new Document(document));
+
+  return documentMetadata;
+};
+
+Case.prototype.attachRespondent = function({ user }) {
+  const respondent = {
+    ...user,
+    respondentId: user.userId,
+  };
+
+  this.respondent = respondent;
+};
+
+Case.prototype.attachWorkItems = function({ workItemsToAdd }) {
+  Object.assign(this, {
+    workItems: [...(this.workItems || []), ...workItemsToAdd],
+  });
+};
+
 /**
  * markAsSentToIrs
  */

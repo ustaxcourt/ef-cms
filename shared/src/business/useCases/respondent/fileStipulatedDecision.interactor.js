@@ -1,5 +1,10 @@
 const Case = require('../../entities/Case');
 const { fileRespondentDocument } = require('./fileRespondentDocument');
+const {
+  isAuthorized,
+  FILE_STIPULATED_DECISION,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.fileStipulatedDecision = async ({
   userId,
@@ -7,6 +12,10 @@ exports.fileStipulatedDecision = async ({
   document,
   applicationContext,
 }) => {
+  if (!isAuthorized(userId, FILE_STIPULATED_DECISION)) {
+    throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
+  }
+
   return fileRespondentDocument({
     userId,
     caseToUpdate,
