@@ -17,17 +17,17 @@ The end result of this is not a dev, staging, or production website, but is inst
 
 - [Install Terraform](https://www.terraform.io/downloads.html) locally. Terraform will build AWS infrastructure automatically.
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
-	- [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) locally.
-	- In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a user or role with administrator privileges (e.g. attach the `AdministratorAccess` policy).
-	- [Configure the AWS CLI account](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html) on your local machine to use the role or user you just created in IAM.
+- [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) locally.
+- In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a user or role with administrator privileges (e.g. attach the `AdministratorAccess` policy).
+- [Configure the AWS CLI account](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html) on your local machine to use the role or user you just created in IAM.
 - Clone this GitHub repository locally.
 - [Create a new GitHub account](https://github.com/join), with read-level access to the repository, which Jenkins will use to interact with GitHub. (GitHub describes these as “bot accounts” or “machine accounts,” and they are the exception to GitHub’s rule that accounts are intended for humans.)
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
-	- [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
+- [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - [Create a token](https://sonarcloud.io/account/security) that Jenkins can use to interact with SonarCloud. (This will be referred to as `SONAR_TOKEN` when setting up Jenkins.)
   - There are two sub-projects to the EF-CMS — the front-end (the UI) and the back-end (the API). Each is handled separately by Jenkins and SonarCloud.
-	  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
-	  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN ` when setting up Jenkins.)
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
 
 ## Setup Steps
 
@@ -44,7 +44,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Note the values of the four `NS` domains. These are what need to be added to the DNS entry for your main domain name.
    - The method of modifying your main domain name’s DNS will vary enormously, so specific guidance is impossible, but you need to create four new `NS` records, one for each of those Route 53 records, with a host name of the subdomain (e.g., `ef-cms`) and a value of the AWS DNS (e.g., `ns-123.awsdns-56.net`). If you are limited in the number of `NS` records that you can create, simply create as many of the four as you can.
 5. If completing the prior step took more than a few minutes, then step 2 failed. That’s OK! Simply re-run `deploy-infrastructure.sh`.
-6. After `deploy-infrastructure.sh` has completed successfully,  run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`.
+6. After `deploy-infrastructure.sh` has completed successfully, run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`, but from within `management/management` — `../bin/setup-jenkins.sh`.
 7. Log into Jenkins.
    - Get the Jenkins credentials, using `show-passwords.sh`, found in `management/management/`.
    - Note the Jenkins username and password.
@@ -53,19 +53,23 @@ The end result of this is not a dev, staging, or production website, but is inst
      - You may be prompted to restart Jenkins, in which case you should do so.
      - After restarting, the modal will pop up again — just click the `x` again.
 8. Create 3 global credentials in Jenkins, so that Jenkins has permission to interact with GitHub and SonarCloud, using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
-     - Create a “username with password” type. Provide an ID of `GITHUB_USER`, and enter the username and password for the GitHub account that you created.
-     - Create a “secret text” type. Provide an an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
-     - Create a “secret text” type. Provide an an ID of `UI_SONAR_TOKEN `, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “username with password” type. Provide an ID of `GITHUB_USER`, and enter the username and password for the GitHub account that you created.
+   - Create a “secret text” type. Provide an an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “secret text” type. Provide an an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
 9. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
- - `SONAR_ORG` / your sonar organization’s name
- - `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
- - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
- - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+
+- `SONAR_ORG` / your sonar organization’s name
+- `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
+- `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
+- `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+
 10. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
-	- Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
-   - Your organization’s name in GitHub, e.g. `examplecourt`.
-   - The project repository’s name in GitHub, e.g. `ef-cms`.
+    - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
+
+- Your organization’s name in GitHub, e.g. `examplecourt`.
+- The project repository’s name in GitHub, e.g. `ef-cms`.
+
 11. Increase the number of Jenkins executors to five. Choose `Jenkins` ⟶ `Build Executor Status` ⟶ `Master` ⟶ `Configure`, and change `# of executors` from `2` to `5`.
-11. Restart Jenkins. This can be done by choosing `Jenkins` (i.e., going to the home page), and appending `safeRestart` to the URL, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/safeRestart`.
+12. Restart Jenkins. This can be done by choosing `Jenkins` (i.e., going to the home page), and appending `safeRestart` to the URL, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/safeRestart`.
 
 You are done — the CI/CD pipeline is now ready to operate. To run a build, [see Jenkins documentation](https://jenkins.io/doc/).

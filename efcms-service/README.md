@@ -11,8 +11,6 @@
 - `npm install -g serverless`
 - [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
 
-## Usage
-
 ### Starting Serverless-Offline
 
 `npm start`
@@ -66,10 +64,8 @@ Update the name of the service in `deploy-sandbox.sh` to match your service name
 
 See “[Running AWS Lambda and API Gateway locally: serverless-offline](https://medium.com/a-man-with-no-server/running-aws-lambda-and-api-gateway-locally-serverless-offline-3c64b3e54772)” for background. Note that Docker is required.
 
-1. `npm run install:lambda` install Docker for Lambda to run locally with serverless-local
-2. `npm run install:dynamodb` install a local DynamoDB (optional)
-3. `npm run start:dynamodb` run DynamoDB on port 8000 (optional)
-4. `npm run start:local` in another terminal to run the serverless-local on 3000
+1. `npm run install:dynamodb` install a local dynamodb (optional)
+2. `npm start` in another terminal run the serverless-local on 3000
 
 ## Load and Smoke Testing with Artillery
 
