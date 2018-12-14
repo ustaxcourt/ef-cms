@@ -17,9 +17,14 @@ function User(user) {
 
   if (validRoles.includes(this.userId)) {
     const name = 'Test ' + this.userId.replace(/^\w/, c => c.toUpperCase());
+    const barNumber =
+      this.userId === 'respondent' || this.userId === 'seniorattorney'
+        ? '12345'
+        : undefined;
     Object.assign(this, {
       name,
       role: this.userId,
+      barNumber,
       token: this.userId,
       email: `test${this.userId}@example.com`,
       addressLine1: '111 Orange St.',
