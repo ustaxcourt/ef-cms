@@ -3,16 +3,16 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const applicationContext = require('../applicationContext');
 
 /**
- * getCase
+ * getWorkItem
  *
  * @param event
  * @returns {Promise<*|undefined>}
  */
 exports.get = event =>
   handle(() =>
-    applicationContext.getUseCases().getCase({
+    applicationContext.getUseCases().getWorkItem({
       userId: getAuthHeader(event),
-      caseId: event.pathParameters.caseId,
+      workItemId: event.pathParameters.workItemId,
       applicationContext,
     }),
   );

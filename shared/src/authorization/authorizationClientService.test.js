@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const {
   GET_CASES_BY_STATUS,
   GET_CASE,
+  WORKITEM,
   isAuthorized,
 } = require('./authorizationClientService');
 const chai = require('chai');
@@ -26,5 +27,17 @@ describe('Authorization client service', () => {
 
   it('should return false when a user doesnt have a petitionsclerk role', () => {
     expect(isAuthorized('notapetitionsclerk', GET_CASES_BY_STATUS)).to.be.false;
+  });
+
+  it('should authorize a petitions clerk for workitems', () => {
+    expect(isAuthorized('petitionsclerk', WORKITEM)).to.be.true;
+  });
+
+  it('should authorize a docket clerk for workitems', () => {
+    expect(isAuthorized('docketclerk', WORKITEM)).to.be.true;
+  });
+
+  it('should authorize a srattorney for workitems', () => {
+    expect(isAuthorized('srattorney', WORKITEM)).to.be.true;
   });
 });
