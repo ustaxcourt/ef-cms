@@ -1,6 +1,5 @@
 const Case = require('../../entities/Case');
 const { fileRespondentDocument } = require('./fileRespondentDocument');
-const WorkItem = require('../../entities/WorkItem');
 
 exports.fileStipulatedDecision = async ({
   userId,
