@@ -8,7 +8,7 @@ export default connect(
   function Loading({ submitting }) {
     return (
       submitting && (
-        <div className="progress-indicator">
+        <div className="progress-indicator" aria-live="assertive">
           <img src={spinner} className="spinner" alt="progress indicator" />
           <p>Loading</p>
         </div>
