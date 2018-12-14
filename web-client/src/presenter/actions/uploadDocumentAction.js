@@ -17,7 +17,7 @@ export default async ({ applicationContext, get }) => {
     userId: get(state.user.token),
   });
 
-  await applicationContext.getUseCases().getUseCaseForDocumentUpdate({
+  await applicationContext.getUseCaseForDocumentUpdate({
     userId: user.userId,
     caseToUpdate: {
       documents: [
