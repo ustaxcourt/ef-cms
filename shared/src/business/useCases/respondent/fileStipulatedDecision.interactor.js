@@ -1,5 +1,6 @@
 const Case = require('../../entities/Case');
 const { fileRespondentDocument } = require('./fileRespondentDocument');
+const WorkItem = require('../../entities/WorkItem');
 
 exports.fileStipulatedDecision = async ({
   userId,
@@ -13,15 +14,23 @@ exports.fileStipulatedDecision = async ({
     document,
     documentType: Case.documentTypes.stipulatedDecision,
     applicationContext,
-    workItemsToAdd: [
+    rawWorkItemsToAdd: [
       {
-        message: 'A stipulated decision is ready for review',
         sentBy: userId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        caseId: caseToUpdate.caseId,
         assigneeId: 'docketclerk',
         docketNumber: caseToUpdate.docketNumber,
-        //document is added later
+        messages: [
+          {
+            message: `Stipulated Decision submitted`,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+        assigneName: 'Docket Clerk',
+        caseTitle: `${
+          caseToUpdate.petitioners[0].name
+        } v. Commissioner of Internal Revenue, Respondent`,
+        caseStatus: caseToUpdate.status,
       },
     ],
   });

@@ -6,7 +6,6 @@
 function User(user) {
   Object.assign(this, user);
 
-  //petitioner
   if (this.userId === 'taxpayer') {
     Object.assign(this, {
       name: 'Test Taxpayer',
@@ -20,9 +19,7 @@ function User(user) {
       phone: '111-111-1111',
       email: 'testtaxpayer@example.com',
     });
-  }
-  //petitionsclerk
-  else if (this.userId === 'petitionsclerk') {
+  } else if (this.userId === 'petitionsclerk') {
     Object.assign(this, {
       name: 'Test Petitionsclerk',
       role: 'petitionsclerk',

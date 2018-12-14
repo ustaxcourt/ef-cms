@@ -106,13 +106,8 @@ describe('dynamodbClientService', function() {
     });
     it('should throw an error if the item is not returned', async () => {
       documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
-      let error;
-      try {
-        await get({});
-      } catch (err) {
-        error = err;
-      }
-      expect(error).to.not.be.undefined;
+      const result = await get({});
+      expect(result).to.be.undefined;
     });
   });
 

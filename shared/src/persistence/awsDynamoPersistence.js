@@ -1,4 +1,5 @@
 const client = require('./dynamodbClientService');
+const { syncWorkItems } = require('./dynamo/workItems/syncWorkItems');
 
 const stripInternalKeys = items => {
   const strip = item => {
@@ -42,6 +43,8 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   return stripInternalKeys(results);
 };
 
+exports.getRecordsViaMapping = getRecordsViaMapping;
+
 const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
@@ -70,6 +73,8 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
 
   return stripInternalKeys(results);
 };
+
+exports.getRecordViaMapping = getRecordViaMapping;
 
 /**
  * createCase
@@ -199,9 +204,9 @@ const createRespondentCaseMapping = async ({
   });
 };
 
-const deleteCaseMappingRecord = async ({
-  skId,
+exports.deleteMappingRecord = async ({
   pkId,
+  skId,
   type,
   applicationContext,
 }) => {
@@ -214,11 +219,10 @@ const deleteCaseMappingRecord = async ({
   });
 };
 
-const createCaseMappingRecord = async ({
-  skId,
+exports.createMappingRecord = async ({
   pkId,
+  skId,
   type,
-  item = {},
   applicationContext,
 }) => {
   return client.put({
@@ -226,52 +230,8 @@ const createCaseMappingRecord = async ({
     Item: {
       pk: `${pkId}|${type}`,
       sk: skId,
-      ...item,
     },
   });
-};
-
-exports.syncWorkItems = async ({
-  applicationContext,
-  caseToSave,
-  currentCaseState,
-  deleteCaseMappingRecord,
-  createCaseMappingRecord,
-}) => {
-  for (let workItem of caseToSave.workItems || []) {
-    const existing = (currentCaseState.workItems || []).find(
-      i => i.id === workItem.id,
-    );
-    if (!existing) {
-      // we did not find an existing work item in the current state, add a new record
-      await createCaseMappingRecord({
-        pkId: workItem.assigneeId,
-        skId: caseToSave.caseId,
-        type: 'workItem',
-        item: workItem,
-        applicationContext,
-      });
-    } else {
-      // the item exists in the current state, but check if the assigneId changed
-      if (workItem.assigneeId !== existing.assigneeId) {
-        // the item has changed assignees, delete item
-        await deleteCaseMappingRecord({
-          pkId: existing.assigneeId,
-          skId: caseToSave.caseId,
-          type: 'workItem',
-          applicationContext,
-        });
-
-        await createCaseMappingRecord({
-          pkId: workItem.assigneeId,
-          skId: caseToSave.caseId,
-          type: 'workItem',
-          item: workItem,
-          applicationContext,
-        });
-      }
-    }
-  }
 };
 
 /**
@@ -300,12 +260,10 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
   }
 
-  await exports.syncWorkItems({
+  await syncWorkItems({
     applicationContext,
     caseToSave,
     currentCaseState,
-    deleteCaseMappingRecord,
-    createCaseMappingRecord,
   });
 
   // if a stipulated decision was uploaded, create a work item entry
