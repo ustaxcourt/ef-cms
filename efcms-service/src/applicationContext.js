@@ -29,7 +29,7 @@ const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-share
 const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
 const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
-
+const { fileAnswerUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileAnswerUpdateCase.interactor');
 module.exports = {
   getPersistenceGateway: () => {
     return {
@@ -71,6 +71,7 @@ module.exports = {
       getWorkItem,
       getWorkItems,
       updateWorkItem,
+      fileAnswerUpdateCase,
     };
   },
 };
