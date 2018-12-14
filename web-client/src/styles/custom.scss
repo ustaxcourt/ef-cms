@@ -70,13 +70,39 @@ h1[tabIndex='-1']:focus {
   outline: none;
 }
 
-table thead th,
-table thead td {
+table.work-queue {
+  margin-top: 3rem;
+  border: 1px solid $color-gray-light;
+  border-collapse: collapse;
+  th,
+  td {
+    font-weight: inherit;
+    border: none;
+    background-color: inherit;
+    vertical-align: top;
+  }
+  td {
+    padding-bottom: 1rem;
+  }
+  thead {
+    border: 1px solid $color-gray-light;
+  }
+  th {
+    font-size: 1.5rem;
+  }
+  a {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1rem;
+  }
+}
+table.case-list thead th,
+table.case-list thead td {
   background-color: $color-gray-light;
   color: $color-base;
 }
 
-table tbody tr:nth-child(even) td {
+table.case-list tbody tr:nth-child(even) td {
   background-color: $color-gray-lightest;
 }
 
