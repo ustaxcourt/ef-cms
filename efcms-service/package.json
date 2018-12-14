@@ -83,6 +83,7 @@
       "src/cases",
       "src/documents",
       "src/swagger",
+      "src/workitems",
       "src/applicationContext.js"
     ],
     "reporter": [
