@@ -1,14 +1,15 @@
 const { fileRespondentDocument } = require('./fileRespondentDocument');
 const Case = require('../../entities/Case');
 
-exports.fileAnswer = async ({
+exports.fileAnswerUpdateCase = async ({
   userId,
   caseToUpdate,
-  document,
   applicationContext,
 }) => {
-  return await applicationContext.getPersistenceGateway().uploadDocument({
+  return fileRespondentDocument({
+    userId,
+    caseToUpdate,
+    documentType: Case.documentTypes.answer,
     applicationContext,
-    document,
   });
 };

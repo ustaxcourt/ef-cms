@@ -10,7 +10,8 @@ const applicationContext = require('../applicationContext');
 exports.put = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    return applicationContext.getUseCases().updateCase({
+    const interactorName = event.queryParameters.interactorName || 'updateCase';
+    return applicationContext.getUseCases()[interactorName]({
       caseId: event.pathParameters.caseId,
       caseToUpdate: JSON.parse(event.body),
       userId,
