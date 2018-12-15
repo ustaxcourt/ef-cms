@@ -71,31 +71,33 @@ h1[tabIndex='-1']:focus {
 }
 
 table.work-queue {
-  margin-top: 3rem;
-  border: 1px solid $color-gray-light;
-  border-collapse: collapse;
-  th,
-  td {
-    font-weight: inherit;
-    border: none;
-    background-color: inherit;
-    vertical-align: top;
+  a {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: bold;
   }
+
+  border: 1px solid $color-gray-light;
+  margin-top: 3rem;
+  border-collapse: collapse;
+
   td {
     padding-bottom: 1rem;
+    border: none;
+    background-color: inherit;
+    font-weight: inherit;
+    vertical-align: top;
   }
+
   thead {
     border: 1px solid $color-gray-light;
   }
+
   th {
     font-size: 1.5rem;
   }
-  a {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 1rem;
-  }
 }
+
 table.case-list thead th,
 table.case-list thead td {
   background-color: $color-gray-light;
