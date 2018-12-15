@@ -55,7 +55,7 @@
     "messages": [
      {
         "message": "here is a random message! yay!"
-     } 
+     }
     ],
     "sentBy": "respondent",
     "createdAt": "2018-12-12T23:45:02.474Z",
@@ -63,7 +63,7 @@
     "assigneeId": "docketclerk",
     "docketNumber": "101-18",
     "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
-    "assigneName": "John Smith (Docketclerk)",
+    "assigneeName": "John Smith (Docketclerk)",
     "caseTitle": "Bob vs State of Idaho",
     "caseStatus": "General Docket",
     "document": {
