@@ -18,6 +18,7 @@ import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCa
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
 import { fileAnswerUpdateCase } from '../../shared/src/proxies/fileAnswerUpdateCaseProxy';
+import { fileStipulatedDecisionUpdateCase } from '../../shared/src/proxies/fileStipulatedDecisionUpdateCaseProxy';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -51,6 +52,7 @@ const applicationContext = {
       getCasesForRespondent,
       downloadDocumentFile,
       fileAnswerUpdateCase,
+      fileStipulatedDecisionUpdateCase
     };
   },
   getUseCaseForDocumentUpdate: (documentType, role) => {
@@ -59,7 +61,7 @@ const applicationContext = {
         case Case.documentTypes.answer:
           return fileAnswerUpdateCase;
         case Case.documentTypes.stipulatedDecision:
-          return fileStipulatedDecision;
+          return fileStipulatedDecisionUpdateCase;
         default:
           return updateCase;
       }
