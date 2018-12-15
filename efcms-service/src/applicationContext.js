@@ -30,6 +30,8 @@ const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/g
 const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const { fileAnswerUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileAnswerUpdateCase.interactor');
+const { fileStipulatedDecisionUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileStipulatedDecisionUpdateCase.interactor');
+
 module.exports = {
   getPersistenceGateway: () => {
     return {
@@ -72,6 +74,18 @@ module.exports = {
       getWorkItems,
       updateWorkItem,
       fileAnswerUpdateCase,
+      fileStipulatedDecisionUpdateCase,
     };
   },
+  getUpdateCaseInteractorQueryParam: event => {
+    const interactorName = (event.queryStringParameters || {}).interactorName || "updateCase";
+    switch (interactorName) {
+    case "fileAnswerUpdateCase":
+      return fileAnswerUpdateCase;
+    case "fileStipulatedDecisionUpdateCase":
+      return fileStipulatedDecisionUpdateCase;
+    default:
+      return updateCase;
+    }
+  }
 };

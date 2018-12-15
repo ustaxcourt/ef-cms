@@ -56,9 +56,6 @@ exports.fileRespondentDocument = async ({
     document => document.documentType !== undefined,
   );
 
-  console.log('documents', documents);
-  console.log('caseToUpdate.documents ', caseToUpdate.documents);
-
   //validate the pdf
   if (!documents.length || documents.length > 1) {
     throw new UnprocessableEntityError(
@@ -73,8 +70,6 @@ exports.fileRespondentDocument = async ({
     caseToUpdate,
     documentType,
   });
-
-  console.log(caseToUpdate.documents);
 
   const user = await getUser({
     token: userId,
