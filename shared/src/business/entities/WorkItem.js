@@ -47,7 +47,7 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .required(),
-    assigneName: joi.string().required(),
+    assigneeName: joi.string().required(),
     caseTitle: joi.string().required(),
     caseStatus: joi.string().required(),
     document: joi.object().required(), // should be a Document entity at some point

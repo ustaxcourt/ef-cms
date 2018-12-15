@@ -25,7 +25,7 @@ exports.fileStipulatedDecision = async ({
             createdAt: new Date().toISOString(),
           },
         ],
-        assigneName: 'Docket Clerk',
+        assigneeName: 'Docket Clerk',
         caseTitle: `${
           caseToUpdate.petitioners[0].name
         } v. Commissioner of Internal Revenue, Respondent`,
