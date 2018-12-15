@@ -10,7 +10,12 @@ const {
   getCasesByStatus,
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
+const { getWorkItemsForUser } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
+const { getWorkItemById } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
+const { saveWorkItem } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
+
 const { uploadPdfsForNewCase, uploadPdf } = require('ef-cms-shared/src/persistence/awsS3Persistence');
 const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPolicy');
 const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
@@ -48,6 +53,9 @@ module.exports = {
       uploadPdf,
       getUploadPolicy,
       getDownloadPolicyUrl,
+      getWorkItemsForUser,
+      getWorkItemById,
+      saveWorkItem,
     }
   },
   docketNumberGenerator,

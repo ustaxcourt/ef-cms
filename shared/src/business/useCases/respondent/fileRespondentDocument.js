@@ -1,5 +1,6 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
+const WorkItem = require('../../entities/WorkItem');
 const { getUser } = require('../utilities/getUser');
 // const { uploadFileToS3 } = require('../utilities/uploadFileToS3');
 
@@ -43,7 +44,7 @@ exports.fileRespondentDocument = async ({
   userId,
   caseToUpdate,
   documentType,
-  workItemsToAdd = [],
+  rawWorkItemsToAdd = [],
   applicationContext,
 }) => {
   //find the new document - documentType will be undefined
@@ -64,7 +65,7 @@ exports.fileRespondentDocument = async ({
   }
   const documentId = documents[0].documentId;
 
-  attachDocumentToCase({
+  const documentMetadata = attachDocumentToCase({
     userId,
     documentId,
     caseToUpdate,
@@ -75,17 +76,19 @@ exports.fileRespondentDocument = async ({
     token: userId,
   });
 
-  workItemsToAdd.forEach(
+  const workItemsToAdd = rawWorkItemsToAdd.map(
     item =>
-      (item.document = {
-        documentId,
-        documentType,
+      new WorkItem({
+        ...item,
+        document: documentMetadata,
       }),
   );
 
+  WorkItem.validateCollection(workItemsToAdd);
+
   attachWorkItemsToCase({
     caseToUpdate,
-    workItemsToAdd,
+    workItemsToAdd: workItemsToAdd.map(item => item.toJSON()),
   });
 
   if (!caseToUpdate.respondent) {

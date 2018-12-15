@@ -39,6 +39,8 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
     let response = await fileStipulatedDecisionUpdateCase({
       userId: 'respondent',
       caseToUpdate: {
+        status: 'general',
+        petitioners: [{ name: 'bob' }],
         documents,
         docketNumber: '101-18',
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -77,30 +79,17 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
     let result = await fileStipulatedDecisionUpdateCase({
       userId: 'respondent',
       caseToUpdate: {
+        status: 'general',
+        petitioners: [{ name: 'bob' }],
         documents,
         docketNumber: '101-18',
         caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        workItemsToAdd: [
-          {
-            messages: [
-              {
-                sender: 'Respondent',
-                message: 'A stipulated decision is ready for review',
-              },
-            ],
-            sentBy: 'respondent',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            assigneeId: 'docketclerk',
-            docketNumber: '101-18',
-          },
-        ],
       },
       applicationContext,
     });
 
     expect(result.workItems[0].messages[0].message).to.contain(
-      'A stipulated decision is ready for review',
+      'Stipulated Decision submitted',
     );
     expect(result.workItems[0].sentBy).to.equal('respondent');
     expect(result.workItems[0].assigneeId).to.equal('docketclerk');
@@ -132,6 +121,8 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
       await fileStipulatedDecisionUpdateCase({
         userId: 'respondent',
         caseToUpdate: {
+          status: 'general',
+          petitioners: [{ name: 'hazel' }],
           documents,
           docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d385X',
@@ -141,7 +132,7 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).to.contain('cannot process ValidationError');
+    expect(error.message).to.contain('The entity was invalid ValidationError');
   });
 
   it('throws an error if new document is not passed in on case.documents', async () => {
@@ -150,6 +141,8 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
       await fileStipulatedDecisionUpdateCase({
         userId: 'respondent',
         caseToUpdate: {
+          status: 'general',
+          petitioners: [{ name: 'hazel' }],
           documents,
           docketNumber: '101-18',
           caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',

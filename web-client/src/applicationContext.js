@@ -52,7 +52,7 @@ const applicationContext = {
       getCasesForRespondent,
       downloadDocumentFile,
       fileAnswerUpdateCase,
-      fileStipulatedDecisionUpdateCase
+      fileStipulatedDecisionUpdateCase,
     };
   },
   getUseCaseForDocumentUpdate: (documentType, role) => {
