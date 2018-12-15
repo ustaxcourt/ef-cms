@@ -58,18 +58,3 @@ exports.getAuthHeader = event => {
 
   return usernameTokenArray[1];
 };
-
-exports.getInteractorQueryParam = (event, applicationContext) => {
-  const interactorName = (event.queryStringParameters || {}).interactorName || "updateCase";
-  switch (interactorName) {
-  case "updateCase":
-    break;
-  case "fileAnswerUpdateCase":
-    return applicationContext.getUseCases()
-      .fileAnswerUpdateCase();
-  case "fileStipulatedDecisionUpdateCase":
-    return applicationContext.getUseCases()
-      .fileStipulatedDecisionUpdateCase();
-  default:
-  }
-};
