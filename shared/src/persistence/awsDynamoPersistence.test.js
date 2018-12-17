@@ -13,7 +13,6 @@ const {
   getCasesByUser,
   getCasesForRespondent,
   getCasesByStatus,
-  syncWorkItems,
 } = require('./awsDynamoPersistence');
 
 const applicationContext = {
@@ -21,8 +20,6 @@ const applicationContext = {
     stage: 'local',
   },
 };
-
-const CASE_ID = 'abc';
 
 describe('awsDynamoPersistence', function() {
   beforeEach(() => {
@@ -265,113 +262,6 @@ describe('awsDynamoPersistence', function() {
       expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([
         { pk: '123', sk: '123' },
       ]);
-    });
-  });
-
-  describe('syncWorkItems', () => {
-    let deleteCaseStub, createCaseStub;
-
-    beforeEach(() => {
-      deleteCaseStub = sinon.stub().returns(null);
-      createCaseStub = sinon.stub().returns(null);
-    });
-
-    it('should create a new mapping record for the workItem', async () => {
-      await syncWorkItems({
-        applicationContext,
-        caseToSave: {
-          caseId: CASE_ID,
-          workItems: [
-            {
-              id: '1',
-              assigneeId: 'bob',
-            },
-          ],
-        },
-        currentCaseState: {
-          workItems: [],
-        },
-        deleteCaseMappingRecord: deleteCaseStub,
-        createCaseMappingRecord: createCaseStub,
-      });
-      expect(createCaseStub.getCall(0).args[0]).to.deep.equal({
-        pkId: 'bob',
-        skId: CASE_ID,
-        type: 'workItem',
-        item: { id: '1', assigneeId: 'bob' },
-        applicationContext,
-      });
-    });
-
-    it('should not invoke any create or delete methods', async () => {
-      await syncWorkItems({
-        applicationContext,
-        caseToSave: {
-          caseId: CASE_ID,
-          workItems: [],
-        },
-        currentCaseState: {
-          workItems: [],
-        },
-        deleteCaseMappingRecord: deleteCaseStub,
-        createCaseMappingRecord: createCaseStub,
-      });
-      expect(createCaseStub.called).to.be.false;
-      expect(deleteCaseStub.called).to.be.false;
-    });
-
-    it('should not throw any errors', async () => {
-      await syncWorkItems({
-        applicationContext,
-        caseToSave: {
-          caseId: CASE_ID,
-        },
-        currentCaseState: {
-          caseId: CASE_ID,
-        },
-        deleteCaseMappingRecord: deleteCaseStub,
-        createCaseMappingRecord: createCaseStub,
-      });
-      expect(createCaseStub.called).to.be.false;
-      expect(deleteCaseStub.called).to.be.false;
-    });
-
-    it('should create a new mapping record and delete the old one', async () => {
-      await syncWorkItems({
-        applicationContext,
-        caseToSave: {
-          caseId: CASE_ID,
-          workItems: [
-            {
-              id: '1',
-              assigneeId: 'rick',
-            },
-          ],
-        },
-        currentCaseState: {
-          workItems: [
-            {
-              id: '1',
-              assigneeId: 'bob',
-            },
-          ],
-        },
-        deleteCaseMappingRecord: deleteCaseStub,
-        createCaseMappingRecord: createCaseStub,
-      });
-      expect(createCaseStub.getCall(0).args[0]).to.deep.equal({
-        pkId: 'rick',
-        skId: CASE_ID,
-        type: 'workItem',
-        item: { id: '1', assigneeId: 'rick' },
-        applicationContext,
-      });
-      expect(deleteCaseStub.getCall(0).args[0]).to.deep.equal({
-        pkId: 'bob',
-        skId: CASE_ID,
-        type: 'workItem',
-        applicationContext,
-      });
     });
   });
 });

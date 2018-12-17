@@ -30,6 +30,7 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardPetitionsClerk'),
     ],
+    docketclerk: [clearAlerts, setCurrentPage('DashboardDocketClerk')],
     intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
       clearAlerts,
@@ -40,6 +41,7 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardRespondent'),
     ],
+    seniorattorney: [clearAlerts, setCurrentPage('DashboardSeniorAttorney')],
   },
 ];
 
