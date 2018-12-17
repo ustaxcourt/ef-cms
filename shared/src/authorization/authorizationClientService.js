@@ -3,6 +3,7 @@ exports.UPDATE_CASE = 'updateCase';
 exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
+exports.FILE_ANSWER = 'fileAnswer';
 
 /**
  * isAuthorized
@@ -27,7 +28,10 @@ exports.isAuthorized = (user, action, owner) => {
     );
   }
 
-  if (action === exports.FILE_STIPULATED_DECISION) {
+  if (
+    action === exports.FILE_STIPULATED_DECISION ||
+    action == exports.FILE_ANSWER
+  ) {
     return user === 'respondent';
   }
 

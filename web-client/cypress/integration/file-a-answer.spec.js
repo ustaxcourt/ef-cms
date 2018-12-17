@@ -4,7 +4,7 @@ describe('File an Answer', function() {
     cy.login('respondent');
   });
 
-  describe('Respondent dashboard view (should contain 1 item of 101-18)', () => {
+  describe('Respondent dashboard view (should contain 1 item of 102-18)', () => {
     it('finds footer element', () => {
       cy.get('footer').should('exist');
     });
