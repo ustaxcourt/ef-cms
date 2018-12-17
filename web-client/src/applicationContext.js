@@ -1,24 +1,24 @@
 const {
+  getDocument,
+  uploadDocument,
   uploadPdf,
   uploadPdfsForNewCase,
-  uploadDocument,
-  getDocument,
 } = require('../../shared/src/persistence/awsS3Persistence');
 
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
+import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
+import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAnswer.interactor';
+import { fileAnswerUpdateCase } from '../../shared/src/proxies/fileAnswerUpdateCaseProxy';
+import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
+import { fileStipulatedDecisionUpdateCase } from '../../shared/src/proxies/fileStipulatedDecisionUpdateCaseProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
-import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAnswer.interactor';
-import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
-import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
-import { fileAnswerUpdateCase } from '../../shared/src/proxies/fileAnswerUpdateCaseProxy';
-import { fileStipulatedDecisionUpdateCase } from '../../shared/src/proxies/fileStipulatedDecisionUpdateCaseProxy';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -31,28 +31,28 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
-      uploadPdf,
       getDocument,
-      uploadPdfsForNewCase,
-      uploadDocument,
       saveCase: updateCase,
+      uploadDocument,
+      uploadPdf,
+      uploadPdfsForNewCase,
     };
   },
   getUseCases: () => {
     return {
       createCase,
+      downloadDocumentFile,
+      fileAnswer,
+      fileAnswerUpdateCase,
+      fileStipulatedDecisionUpdateCase,
       getCase,
       getCasesByStatus,
       getCasesByUser,
+      getCasesForRespondent,
       getUser,
       sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
-      fileAnswer,
-      getCasesForRespondent,
-      downloadDocumentFile,
-      fileAnswerUpdateCase,
-      fileStipulatedDecisionUpdateCase,
     };
   },
   getUseCaseForDocumentUpdate: (documentType, role) => {
