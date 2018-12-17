@@ -6,8 +6,6 @@ import {
   formattedCases,
 } from '../presenter/computeds/formattedCaseDetail';
 
-import { formattedSearchParams } from '../presenter/computeds/formattedSearchParams';
-
 describe('formatted case details computed', () => {
   it('formats the date', () => {
     const result = runCompute(formattedCaseDetail, {
@@ -35,15 +33,5 @@ describe('formatted case details computed', () => {
       },
     });
     expect(result[0].respondent.formattedName).toContain('test 123');
-  });
-});
-
-describe('formatted search parameters computed', () => {
-  it('formats a docket number search param', () => {
-    const result = runCompute(formattedSearchParams, {
-      state: { searchTerm: '101-18' },
-    });
-    // currently noop
-    assert.equal(result, '101-18');
   });
 });
