@@ -2,6 +2,7 @@ exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.UPDATE_CASE = 'updateCase';
 exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
+exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 
 /**
  * isAuthorized
@@ -16,6 +17,7 @@ exports.isAuthorized = (user, action, owner) => {
   if (user && user === owner) {
     return true;
   }
+
   if (action === exports.WORKITEM) {
     return (
       user === 'petitionsclerk' ||
@@ -23,6 +25,10 @@ exports.isAuthorized = (user, action, owner) => {
       user === 'srattorney' ||
       user === 'docketclerk'
     );
+  }
+
+  if (action === exports.FILE_STIPULATED_DECISION) {
+    return user === 'respondent';
   }
 
   return (

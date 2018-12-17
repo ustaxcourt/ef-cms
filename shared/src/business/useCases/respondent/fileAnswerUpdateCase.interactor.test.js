@@ -1,13 +1,17 @@
-const { fileAnswer } = require('./fileAnswer.interactor');
+const { fileAnswerUpdateCase } = require('./fileAnswerUpdateCase.interactor');
 const sinon = require('sinon');
 const expect = require('chai').expect;
 const chai = require('chai');
 chai.use(require('chai-string'));
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
-describe('fileAnswer', () => {
+describe('fileAnswerUpdateCaseInteractor', () => {
   let applicationContext;
   let documents = MOCK_DOCUMENTS;
+
+  afterEach(() => {
+    documents = MOCK_DOCUMENTS;
+  });
 
   it('should attach the respondent information to the case when calling updateCase', async () => {
     const saveCaseStub = sinon.stub().resolves({
@@ -25,8 +29,12 @@ describe('fileAnswer', () => {
       },
       environment: { stage: 'local' },
     };
-    await fileAnswer({
-      document: 'abc',
+    documents = [
+      ...documents,
+      { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
+    ];
+
+    let response = await fileAnswerUpdateCase({
       userId: 'respondent',
       caseToUpdate: {
         documents,
@@ -35,7 +43,8 @@ describe('fileAnswer', () => {
       },
       applicationContext,
     });
-    expect(saveCaseStub.getCall(0).args[0].caseToUpdate.respondent).to.contain({
+
+    expect(response.respondent).to.contain({
       respondentId: 'respondent',
       name: 'Test Respondent',
       barNumber: '12345',
@@ -60,29 +69,30 @@ describe('fileAnswer', () => {
       environment: { stage: 'local' },
     };
     let error;
+    documents = [
+      ...documents,
+      { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
+    ];
     try {
-      await fileAnswer({
-        document: 'abc',
+      await fileAnswerUpdateCase({
         userId: 'respondent',
         caseToUpdate: {
           documents,
           docketNumber: '101-18',
-          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d385X',
         },
         applicationContext,
       });
     } catch (err) {
       error = err;
     }
-    expect(error.message).to.contain(
-      'The entity was invalid ValidationError: child',
-    );
+    expect(error.message).to.contain('cannot process ValidationError');
   });
 
-  it('throws an error if document is not passed in', async () => {
+  it('throws an error if new document is not passed in on case.documents', async () => {
     let error;
     try {
-      await fileAnswer({
+      await fileAnswerUpdateCase({
         userId: 'respondent',
         caseToUpdate: {
           documents,
