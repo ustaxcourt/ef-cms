@@ -36,7 +36,7 @@ export default connect(
                     href={'/case-detail/' + item.docketNumber}
                     className="case-link"
                   >
-                    {item.documentType}
+                    {item.documentType || 'Answer'}
                   </a>
                   {item.message}
                 </td>

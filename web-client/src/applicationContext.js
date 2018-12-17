@@ -14,8 +14,11 @@ import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
+import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 
@@ -44,8 +47,11 @@ const applicationContext = {
       getCasesByUser,
       getCasesForRespondent,
       getUser,
+      getWorkItem,
+      getWorkItems,
       sendPetitionToIRS,
       updateCase,
+      updateWorkItem,
       uploadCasePdfs,
       associateRespondentDocumentToCase,
     };
