@@ -38,7 +38,7 @@ export default connect(
             {caseDetail.petitioners[0].name} v. Commissioner of Internal
             Revenue, Respondent
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           {currentTab == 'File Document' && <FileDocument />}
@@ -52,6 +52,7 @@ export default connect(
                   <button
                     role="tab"
                     className="tab-link"
+                    aria-selected={currentTab === 'Docket Record'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Docket Record' })
                     }
@@ -67,6 +68,7 @@ export default connect(
                     role="tab"
                     className="tab-link"
                     id="case-info-tab"
+                    aria-selected={currentTab === 'Case Information'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Case Information' })
                     }
