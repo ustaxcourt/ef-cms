@@ -1,8 +1,9 @@
-import { CerebralTest } from 'cerebral/test';
+import { CerebralTest, runCompute } from 'cerebral/test';
 import FormData from 'form-data';
 
-import presenter from '../presenter';
 import applicationContext from '../applicationContext';
+import caseDetailHelper from '../presenter/computeds/caseDetailHelper';
+import presenter from '../presenter';
 
 import Case from '../../../shared/src/business/entities/Case';
 
@@ -108,6 +109,15 @@ describe('Case journey', async () => {
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
     expect(test.getState('caseDetail.status')).toEqual('new');
     expect(test.getState('caseDetail.documents').length).toEqual(3);
+
+    const helper = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    expect(helper.showDocumentStatus).toEqual(true);
+    expect(helper.showIrsServedDate).toEqual(false);
+    expect(helper.showPayGovIdInput).toEqual(false);
+    expect(helper.showPaymentOptions).toEqual(true);
+    expect(helper.showActionRequired).toEqual(true);
   });
 
   it('Petitions clerk records pay.gov ID', async () => {
@@ -119,6 +129,11 @@ describe('Case journey', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
+
+    const helper = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    expect(helper.showPaymentRecord).toEqual(true);
   });
 
   it('Petitions clerk submits case to IRS', async () => {
