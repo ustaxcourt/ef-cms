@@ -1,15 +1,13 @@
 const { fileRespondentDocument } = require('./fileRespondentDocument');
-const Case = require('../../entities/Case');
 
-exports.fileAnswerUpdateCase = async ({
-  userId,
-  caseToUpdate,
+exports.associateRespondentDocumentToCase = async ({
   applicationContext,
+  caseToUpdate,
+  userId,
 }) => {
   return fileRespondentDocument({
     userId,
     caseToUpdate,
-    documentType: Case.documentTypes.answer,
     applicationContext,
   });
 };

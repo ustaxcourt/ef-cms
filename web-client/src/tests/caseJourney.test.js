@@ -142,6 +142,7 @@ describe('Case journey', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardRespondent');
     expect(test.getState('cases').length).toBeGreaterThan(0);
+    docketNumber = '102-18';
   });
 
   it('Respondent views case detail', async () => {
@@ -149,7 +150,7 @@ describe('Case journey', async () => {
     await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('general');
+    expect(test.getState('caseDetail.status')).toEqual('new');
     expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
 
