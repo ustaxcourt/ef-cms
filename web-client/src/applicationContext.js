@@ -17,8 +17,7 @@ import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAn
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
-import { fileAnswerUpdateCase } from '../../shared/src/proxies/fileAnswerUpdateCaseProxy';
-import { fileStipulatedDecisionUpdateCase } from '../../shared/src/proxies/fileStipulatedDecisionUpdateCaseProxy';
+import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -51,21 +50,8 @@ const applicationContext = {
       fileAnswer,
       getCasesForRespondent,
       downloadDocumentFile,
-      fileAnswerUpdateCase,
-      fileStipulatedDecisionUpdateCase,
+      associateRespondentDocumentToCase,
     };
-  },
-  getUseCaseForDocumentUpdate: (documentType, role) => {
-    if (role === 'respondent') {
-      switch (documentType) {
-        case Case.documentTypes.answer:
-          return fileAnswerUpdateCase;
-        case Case.documentTypes.stipulatedDecision:
-          return fileStipulatedDecisionUpdateCase;
-        default:
-          return updateCase;
-      }
-    }
   },
   getUseCaseForDocumentUpload: (documentType, role) => {
     if (role === 'respondent') {

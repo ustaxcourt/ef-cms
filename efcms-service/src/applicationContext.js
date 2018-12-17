@@ -34,8 +34,7 @@ const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-share
 const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
 const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
-const { fileAnswerUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileAnswerUpdateCase.interactor');
-const { fileStipulatedDecisionUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileStipulatedDecisionUpdateCase.interactor');
+const { associateRespondentDocumentToCase } = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentDocumentToCase.interactor');
 
 module.exports = {
   getPersistenceGateway: () => {
@@ -81,17 +80,14 @@ module.exports = {
       getWorkItem,
       getWorkItems,
       updateWorkItem,
-      fileAnswerUpdateCase,
-      fileStipulatedDecisionUpdateCase,
+      associateRespondentDocumentToCase,
     };
   },
   getUpdateCaseInteractorQueryParam: event => {
     const interactorName = (event.queryStringParameters || {}).interactorName || "updateCase";
     switch (interactorName) {
-    case "fileAnswerUpdateCase":
-      return fileAnswerUpdateCase;
-    case "fileStipulatedDecisionUpdateCase":
-      return fileStipulatedDecisionUpdateCase;
+    case "associateRespondentDocumentToCase":
+      return associateRespondentDocumentToCase;
     default:
       return updateCase;
     }

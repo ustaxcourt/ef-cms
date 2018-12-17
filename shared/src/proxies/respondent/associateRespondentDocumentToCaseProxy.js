@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-exports.fileAnswerUpdateCase = async ({
+exports.associateRespondentDocumentToCase = async ({
   applicationContext,
   caseToUpdate,
   userId,
@@ -9,7 +9,7 @@ exports.fileAnswerUpdateCase = async ({
   const response = await axios.put(
     `${applicationContext.getBaseUrl()}/cases/${
       caseToUpdate.caseId
-    }?interactorName=fileAnswerUpdateCase`, // TODO: Refactor to use axios params if possible
+    }?interactorName=associateRespondentDocumentToCase`,
     caseToUpdate,
     {
       headers: {
