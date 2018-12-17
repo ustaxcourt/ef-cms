@@ -3,6 +3,8 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import caseDetailHelper from './computeds/caseDetailHelper';
+
 export default {
   path: '/',
   currentPage: 'Loading',
@@ -70,6 +72,7 @@ export default {
   },
   caseDetail: {},
   cases: [],
+  caseDetailHelper,
   formattedCaseDetail,
   formattedCases,
 };
