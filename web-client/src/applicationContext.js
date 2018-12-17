@@ -8,9 +8,7 @@ const {
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAnswer.interactor';
-import { fileAnswerUpdateCase } from '../../shared/src/proxies/fileAnswerUpdateCaseProxy';
 import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
-import { fileStipulatedDecisionUpdateCase } from '../../shared/src/proxies/fileStipulatedDecisionUpdateCaseProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
@@ -19,6 +17,7 @@ import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
+import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -40,8 +39,6 @@ const applicationContext = {
       createCase,
       downloadDocumentFile,
       fileAnswer,
-      fileAnswerUpdateCase,
-      fileStipulatedDecisionUpdateCase,
       getCase,
       getCasesByStatus,
       getCasesByUser,
@@ -50,17 +47,8 @@ const applicationContext = {
       sendPetitionToIRS,
       updateCase,
       uploadCasePdfs,
+      associateRespondentDocumentToCase,
     };
-  },
-  getUseCaseForDocumentUpdate: (documentType, role) => {
-    if (role === 'respondent') {
-      switch (documentType) {
-        case Case.documentTypes.answer:
-          return fileAnswerUpdateCase;
-        case Case.documentTypes.stipulatedDecision:
-          return fileStipulatedDecisionUpdateCase;
-      }
-    }
   },
   getUseCaseForDocumentUpload: (documentType, role) => {
     if (role === 'respondent') {
