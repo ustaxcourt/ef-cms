@@ -8,13 +8,13 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   { caseList: state.formattedCases },
-  function Dashboard({ caseList }) {
+  function DashboardPetitionsClerk({ caseList }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Petitions section work queue</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <table className="responsive-table" id="workQueue">
+        <table className="responsive-table case-list" id="workQueue">
           <thead>
             <tr>
               <th>Docket number</th>

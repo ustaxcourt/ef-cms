@@ -10,7 +10,12 @@ const {
   getCasesByStatus,
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
+const { getWorkItemsForUser } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
+const { getWorkItemById } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
+const { saveWorkItem } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
+
 const { uploadPdfsForNewCase, uploadPdf } = require('ef-cms-shared/src/persistence/awsS3Persistence');
 const { getUploadPolicy } = require('ef-cms-shared/src/persistence/getUploadPolicy');
 const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
@@ -29,6 +34,8 @@ const { getCasesForRespondent: getCasesForRespondentUC } = require('ef-cms-share
 const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
 const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
+const { fileAnswerUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileAnswerUpdateCase.interactor');
+const { fileStipulatedDecisionUpdateCase } = require('ef-cms-shared/src/business/useCases/respondent/fileStipulatedDecisionUpdateCase.interactor');
 
 module.exports = {
   getPersistenceGateway: () => {
@@ -46,6 +53,9 @@ module.exports = {
       uploadPdf,
       getUploadPolicy,
       getDownloadPolicyUrl,
+      getWorkItemsForUser,
+      getWorkItemById,
+      saveWorkItem,
     }
   },
   docketNumberGenerator,
@@ -71,6 +81,19 @@ module.exports = {
       getWorkItem,
       getWorkItems,
       updateWorkItem,
+      fileAnswerUpdateCase,
+      fileStipulatedDecisionUpdateCase,
     };
   },
+  getUpdateCaseInteractorQueryParam: event => {
+    const interactorName = (event.queryStringParameters || {}).interactorName || "updateCase";
+    switch (interactorName) {
+    case "fileAnswerUpdateCase":
+      return fileAnswerUpdateCase;
+    case "fileStipulatedDecisionUpdateCase":
+      return fileStipulatedDecisionUpdateCase;
+    default:
+      return updateCase;
+    }
+  }
 };

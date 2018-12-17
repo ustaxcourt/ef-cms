@@ -2,7 +2,8 @@ import {
   formattedCaseDetail,
   formattedCases,
 } from './computeds/formattedCaseDetail';
-import { formattedSearchParams } from './computeds/formattedSearchParams';
+
+import caseDetailHelper from './computeds/caseDetailHelper';
 
 export default {
   path: '/',
@@ -22,6 +23,24 @@ export default {
   document: {},
   form: {},
   searchTerm: '',
+  workQueue: [
+    {
+      docketNumber: '00101-18',
+      receivedDate: '12/15/2018 9:33am',
+      sentBy: 'Susie Smith',
+      message: 'This is a message',
+      documentType: 'Stipulated Decision',
+      trialDate: 'n/a',
+    },
+    {
+      docketNumber: '00101-18',
+      receivedDate: '12/15/2018 9:33am',
+      sentBy: 'Susie Smith',
+      message: 'This is a message',
+      documentType: 'Stipulated Decision',
+      trialDate: 'n/a',
+    },
+  ],
   user: {
     userId: '',
     role: 'public',
@@ -40,10 +59,20 @@ export default {
     // name: 'Res Pondent',
     // token: 'respondent',
     // role: 'respondent',
+
+    // userId: 'docketclerk',
+    // name: 'Docket Clerk',
+    // token: 'docketclerk',
+    // role: 'docketclerk',
+
+    // userId: 'seniorattorney',
+    // name: 'Señor Attorney',
+    // token: 'seniorattorney',
+    // role: 'seniorattorney',
   },
   caseDetail: {},
   cases: [],
+  caseDetailHelper,
   formattedCaseDetail,
   formattedCases,
-  formattedSearchParams,
 };
