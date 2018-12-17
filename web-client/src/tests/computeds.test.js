@@ -9,7 +9,17 @@ describe('formatted case details computed', () => {
   it('formats the date', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
-        caseDetail: { irsDate: '2018-11-21T20:49:28.192Z', documents: [] },
+        caseDetail: {
+          irsDate: '2018-11-21T20:49:28.192Z',
+          documents: [
+            {
+              documentType: 'fakeType',
+              createdAt: '2018-11-21T20:49:28.192Z',
+              reviewDate: '2018-11-22T20:49:28.192Z',
+              status: 'served',
+            },
+          ],
+        },
         form: {},
       },
     });
@@ -19,7 +29,19 @@ describe('formatted case details computed', () => {
   it('formats the date in a list of cases', () => {
     const result = runCompute(formattedCases, {
       state: {
-        cases: [{ irsDate: '2018-11-21T20:49:28.192Z', documents: [] }],
+        cases: [
+          {
+            irsDate: '2018-11-21T20:49:28.192Z',
+            documents: [
+              {
+                documentType: 'fakeType',
+                createdAt: '2018-11-21T20:49:28.192Z',
+                reviewDate: '2018-11-22T20:49:28.192Z',
+                status: 'served',
+              },
+            ],
+          },
+        ],
       },
     });
     expect(result[0].irsDateFormatted).toContain('11/21/2018');
