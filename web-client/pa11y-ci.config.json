@@ -16,6 +16,7 @@
     "http://localhost:1234/log-in",
     "http://localhost:1234/log-in?token=taxpayer&path=/",
     "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
+
     "http://localhost:1234/log-in?token=petitionsclerk&path=/",
     "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
     {
@@ -27,8 +28,10 @@
         "wait for #paygov to be visible"
       ]
     },
+
     "http://localhost:1234/log-in?token=intakeclerk&path=/",
     "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
+
     "http://localhost:1234/log-in?token=respondent&path=/",
     "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18",
     {
@@ -39,6 +42,12 @@
         "click element #button-file-document",
         "wait for #file-a-document to be visible"
       ]
-    }
+    },
+
+    "http://localhost:1234/log-in?token=docketclerk&path=/",
+    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",
+
+    "http://localhost:1234/log-in?token=seniorattorney&path=/",
+    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18"
   ]
 }
