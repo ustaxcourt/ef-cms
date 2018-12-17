@@ -12,6 +12,7 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
+    helper: state.caseDetailHelper,
     submitSendToIrsSequence: sequences.submitToIrsSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -22,8 +23,9 @@ export default connect(
   function CaseDetail({
     caseDetail,
     currentTab,
-    submitUpdateCaseSequence,
+    helper,
     submitSendToIrsSequence,
+    submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
@@ -91,8 +93,9 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              {!caseDetail.showIrsServedDate && (
+              {!helper.showIrsServedDate && (
                 <button
+                  className="usa-button"
                   id="send-to-irs"
                   onClick={() => submitSendToIrsSequence()}
                 >
@@ -140,13 +143,13 @@ export default connect(
                         {document.isStatusServed && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
-                        {caseDetail.showDocumentStatus && (
+                        {helper.showDocumentStatus && (
                           <span>{document.status}</span>
                         )}
                       </td>
                     </tr>
                   ))}
-                  {caseDetail.showPaymentRecord && (
+                  {helper.showPaymentRecord && (
                     <tr>
                       <td>{caseDetail.payGovDateFormatted}</td>
                       <td>Filing fee paid</td>
@@ -164,13 +167,13 @@ export default connect(
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>
-                  {caseDetail.showPaymentRecord && (
+                  {helper.showPaymentRecord && (
                     <React.Fragment>
                       <p className="label">Paid by pay.gov</p>
                       <p>{caseDetail.payGovId}</p>
                     </React.Fragment>
                   )}
-                  {caseDetail.showPaymentOptions && (
+                  {helper.showPaymentOptions && (
                     <ul className="usa-unstyled-list">
                       <li>
                         <input
@@ -186,7 +189,7 @@ export default connect(
                           }}
                         />
                         <label htmlFor="paygov">Paid by pay.gov</label>
-                        {caseDetail.showPayGovIdInput && (
+                        {helper.showPayGovIdInput && (
                           <React.Fragment>
                             <label htmlFor="paygovid">Payment ID</label>
                             <input

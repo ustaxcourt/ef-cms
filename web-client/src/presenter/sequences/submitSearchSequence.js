@@ -1,4 +1,6 @@
-import navigateToCaseDetail from '../actions/navigateToCaseDetailAction';
-import formatSearchParams from '../actions/formatSearchParamsAction';
+import { set } from 'cerebral/factories';
+import { state, props } from 'cerebral';
 
-export default [formatSearchParams, navigateToCaseDetail];
+import navigateToCaseDetail from '../actions/navigateToCaseDetailAction';
+
+export default [set(props.caseId, state.searchTerm), navigateToCaseDetail];
