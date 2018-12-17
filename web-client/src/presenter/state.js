@@ -2,7 +2,8 @@ import {
   formattedCaseDetail,
   formattedCases,
 } from './computeds/formattedCaseDetail';
-import { formattedSearchParams } from './computeds/formattedSearchParams';
+
+import caseDetailHelper from './computeds/caseDetailHelper';
 
 export default {
   path: '/',
@@ -71,7 +72,7 @@ export default {
   },
   caseDetail: {},
   cases: [],
+  caseDetailHelper,
   formattedCaseDetail,
   formattedCases,
-  formattedSearchParams,
 };
