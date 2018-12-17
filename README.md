@@ -35,9 +35,9 @@ The EF-CMS is comprised of two components: the API and the UI. Each must be run 
 
 #### Setup
 
-Both the web-client and efcms-service share code that exists in the business directory; therefore, before you can run either, you need to run an npm install inside the business directory.
+Both the web-client and efcms-service share code that exists in the shared directory; therefore, before you can run either, you need to run an npm install inside the shared directory.
 
-- `cd business && npm i`
+- `cd shared && npm i`
 - `cd ../web-client && npm i`
 - `cd ../efcms-service && npm i`
 
