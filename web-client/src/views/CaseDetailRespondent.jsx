@@ -13,12 +13,14 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
+    helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
+    helper,
     updateCurrentTabSequence,
     viewDocumentSequence,
   }) {
@@ -130,13 +132,13 @@ export default connect(
                         {document.isStatusServed && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
-                        {caseDetail.showDocumentStatus && (
+                        {helper.showDocumentStatus && (
                           <span>{document.status}</span>
                         )}
                       </td>
                     </tr>
                   ))}
-                  {caseDetail.showPaymentRecord && (
+                  {helper.showPaymentRecord && (
                     <tr>
                       <td>{caseDetail.payGovDateFormatted}</td>
                       <td>Filing fee paid</td>
