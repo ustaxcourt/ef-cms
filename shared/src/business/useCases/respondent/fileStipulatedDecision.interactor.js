@@ -1,36 +1,20 @@
-const Case = require('../../entities/Case');
-const { fileRespondentDocument } = require('./fileRespondentDocument');
+const {
+  isAuthorized,
+  FILE_STIPULATED_DECISION,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.fileStipulatedDecision = async ({
   userId,
-  caseToUpdate,
   document,
   applicationContext,
 }) => {
-  return fileRespondentDocument({
-    userId,
-    caseToUpdate,
-    document,
-    documentType: Case.documentTypes.stipulatedDecision,
+  if (!isAuthorized(userId, FILE_STIPULATED_DECISION)) {
+    throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
+  }
+
+  return await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
-    rawWorkItemsToAdd: [
-      {
-        sentBy: userId,
-        caseId: caseToUpdate.caseId,
-        assigneeId: 'docketclerk',
-        docketNumber: caseToUpdate.docketNumber,
-        messages: [
-          {
-            message: `Stipulated Decision submitted`,
-            createdAt: new Date().toISOString(),
-          },
-        ],
-        assigneeName: 'Docket Clerk',
-        caseTitle: `${
-          caseToUpdate.petitioners[0].name
-        } v. Commissioner of Internal Revenue, Respondent`,
-        caseStatus: caseToUpdate.status,
-      },
-    ],
+    document,
   });
 };
