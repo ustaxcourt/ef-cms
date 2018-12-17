@@ -42,7 +42,7 @@ export default connect(
             {caseDetail.petitioners[0].name} Petitioner v. Commissioner of
             Internal Revenue, Respondent
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           {!caseDetail.payGovId && (
@@ -136,6 +136,7 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   id="tab-docket-record"
+                  aria-selected={currentTab === 'Docket Record'}
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Docket Record' })
                   }
@@ -148,6 +149,7 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   id="tab-case-info"
+                  aria-selected={currentTab === 'Case Information'}
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Case Information' })
                   }
