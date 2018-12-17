@@ -23,24 +23,7 @@ export default {
   document: {},
   form: {},
   searchTerm: '',
-  workQueue: [
-    {
-      docketNumber: '00101-18',
-      receivedDate: '12/15/2018 9:33am',
-      sentBy: 'Susie Smith',
-      message: 'This is a message',
-      documentType: 'Stipulated Decision',
-      trialDate: 'n/a',
-    },
-    {
-      docketNumber: '00101-18',
-      receivedDate: '12/15/2018 9:33am',
-      sentBy: 'Susie Smith',
-      message: 'This is a message',
-      documentType: 'Stipulated Decision',
-      trialDate: 'n/a',
-    },
-  ],
+  workQueue: [],
   user: {
     userId: '',
     role: 'public',

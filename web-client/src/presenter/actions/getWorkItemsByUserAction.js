@@ -5,12 +5,12 @@ export default async ({ applicationContext, get, path }) => {
   const useCases = applicationContext.getUseCases();
   const userId = get(state.user.userId);
   try {
-    let result = await useCases.getWorkItems({
+    let workItems = await useCases.getWorkItems({
       applicationContext,
       userId,
     });
-    result = _.orderBy(result, 'createdAt', 'desc');
-    return path.success({ result });
+    workItems = _.orderBy(workItems, 'createdAt', 'desc');
+    return path.success({ workItems });
   } catch (e) {
     return path.error({
       alertError: {
