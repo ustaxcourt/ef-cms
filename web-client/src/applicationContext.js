@@ -22,9 +22,6 @@ import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdf
 
 import Case from '../../shared/src/business/entities/Case';
 
-/**
- * Context for the prod environment
- */
 const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
@@ -62,8 +59,6 @@ const applicationContext = {
           return fileAnswerUpdateCase;
         case Case.documentTypes.stipulatedDecision:
           return fileStipulatedDecisionUpdateCase;
-        default:
-          return updateCase;
       }
     }
   },
@@ -74,8 +69,6 @@ const applicationContext = {
           return fileAnswer;
         case Case.documentTypes.stipulatedDecision:
           return fileStipulatedDecision;
-        default:
-          return updateCase;
       }
     }
   },
