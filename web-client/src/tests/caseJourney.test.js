@@ -193,4 +193,19 @@ describe('Case journey', async () => {
     await test.runSequence('submitDocumentSequence');
     expect(test.getState('caseDetail.documents').length).toEqual(5);
   });
+
+  it('Docketclerk logs in', async () => {
+    test.setState('user', {
+      name: 'Docket Clerk',
+      role: 'docketclerk',
+      token: 'docketclerk',
+      userId: 'docketclerk',
+    });
+  });
+
+  it('Docketclerk views dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+    expect(test.getState('workQueue').length).toBeGreaterThan(0);
+  });
 });
