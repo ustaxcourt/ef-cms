@@ -1,5 +1,4 @@
 import { runCompute } from 'cerebral/test';
-import assert from 'assert';
 
 import {
   formattedCaseDetail,
