@@ -1,12 +1,14 @@
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('../../awsDynamoPersistence');
 
-exports.getWorkItemById = ({ workItemId, applicationContext }) => {
+exports.getWorkItemById = async ({ workItemId, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
-  return client.get({
+  const workItem = await client.get({
     TableName: TABLE,
     Key: {
       pk: workItemId,
       sk: workItemId,
     },
   });
+  return stripInternalKeys(workItem);
 };

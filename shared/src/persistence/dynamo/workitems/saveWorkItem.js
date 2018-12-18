@@ -1,6 +1,7 @@
 const client = require('../../dynamodbClientService');
 const { getWorkItemById } = require('./getWorkItemById');
 const { reassignWorkItem } = require('./syncWorkItems');
+const { stripInternalKeys } = require('../../awsDynamoPersistence');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   const existingWorkItem = await getWorkItemById({
@@ -16,7 +17,7 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     });
   }
 
-  return client.put({
+  const workItem = await client.put({
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
@@ -24,4 +25,6 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
       ...workItemToSave,
     },
   });
+
+  return stripInternalKeys(workItem);
 };

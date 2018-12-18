@@ -1,8 +1,10 @@
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
+import updateWorkItemSequence from './sequences/updateWorkItemSequence';
 import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
+import gotoWorkItemSequence from './sequences/gotoWorkItemSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -29,9 +31,11 @@ import state from './state';
 export default {
   providers: {},
   sequences: {
+    gotoWorkItemSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoFilePetitionSequence,
+    updateWorkItemSequence,
     gotoLogInSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
