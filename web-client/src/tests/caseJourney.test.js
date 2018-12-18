@@ -274,7 +274,7 @@ describe('Case journey', async () => {
   it('the docketclerk forwards the work item to the senior attorney', async () => {
     test.setState('workItem', {
       ...test.getState('workItem'),
-      assigneeId: 'srattorney',
+      assigneeId: 'seniorattorney',
     });
     await test.runSequence('updateWorkItemSequence');
   });
@@ -287,5 +287,42 @@ describe('Case journey', async () => {
       item => item.docketNumber === docketNumber,
     );
     expect(workItemCreated).toEqual(undefined);
+  });
+
+  it('the seniorattorney logs in', async () => {
+    test.setState('user', {
+      name: 'Senior Attorney',
+      role: 'seniorattorney',
+      token: 'seniorattorney',
+      userId: 'seniorattorney',
+    });
+  });
+
+  it('the expected work item appears on the seniorattorney work queue', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardSeniorAttorney');
+    const workItems = test.getState('workQueue');
+    const workItemCreated = workItems.find(
+      item => item.docketNumber === docketNumber,
+    );
+    expect(workItemCreated).toMatchObject({
+      assigneeId: 'seniorattorney',
+      assigneeName: 'Docket Clerk',
+      caseStatus: 'general',
+      caseTitle:
+        'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
+      docketNumber,
+      document: {
+        documentType: 'Stipulated Decision',
+        filedBy: 'Respondent',
+        userId: 'respondent',
+      },
+      messages: [
+        {
+          message: 'Stipulated Decision submitted',
+        },
+      ],
+      sentBy: 'respondent',
+    });
   });
 });
