@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 /**
  * Footer
