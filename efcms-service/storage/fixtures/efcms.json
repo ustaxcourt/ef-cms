@@ -1,6 +1,10 @@
 [
   {
-    "pk": "docketclerk2|workItem",
+    "pk": "docketclerk|workItem",
+    "sk": "a86fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "seniorattorney|workItem",
     "sk": "a86fb0fb-5f93-479a-9235-7eba43005800"
   },
   {
@@ -53,9 +57,9 @@
     "sk": "a86fb0fb-5f93-479a-9235-7eba43005800",
     "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
     "messages": [
-     {
+      {
         "message": "here is a random message! yay!"
-     }
+      }
     ],
     "sentBy": "respondent",
     "createdAt": "2018-12-12T23:45:02.474Z",
