@@ -13,5 +13,6 @@ exports.getCasesByUser = async ({ userId, applicationContext }) => {
       userId,
       applicationContext,
     });
+
   return Case.validateRawCollection(cases);
 };

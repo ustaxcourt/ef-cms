@@ -49,16 +49,65 @@
     "id": 3
   },
   {
-    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
-    "pk": "respondent|activeCase"
+    "pk": "respondent|activeCase",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
   },
+
+
+  {
+    "pk": "112edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "122edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "132edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+
+
+  {
+    "pk": "211edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "221edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "231edd00-1d94-40cd-9374-8d1bc7ae6d7b|case",
+    "sk": "2a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+
+  
+
+  {
+    "pk": "314d7aca-3cb1-4679-a73f-75001b660e20|case",
+    "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "324d7aca-3cb1-4679-a73f-75001b660e20|case",
+    "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
+    "pk": "334d7aca-3cb1-4679-a73f-75001b660e20|case",
+    "sk": "3a6fb0fb-5f93-479a-9235-7eba43005800"
+  },
+
   {
     "pk": "a86fb0fb-5f93-479a-9235-7eba43005800",
     "sk": "a86fb0fb-5f93-479a-9235-7eba43005800",
     "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
     "messages": [
       {
-        "message": "here is a random message! yay!"
+        "message": "here is a random message! yay!",
+        "createdAt": "2018-12-12T23:45:02.474Z"
       }
     ],
     "sentBy": "respondent",
@@ -72,17 +121,21 @@
     "caseStatus": "General Docket",
     "document": {
       "createdAt": "2018-12-12T23:45:02.474Z",
-      "documentId": "e528fc99-7068-4b93-b396-c2163991840b",
+      "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
       "documentType": "Answer",
       "filedBy": "Respondent",
       "userId": "respondent"
     }
   },
+
+
+
+  
   {
     "documents": [
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "documentId": "112edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "documentType": "Petition",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
@@ -90,7 +143,7 @@
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "documentId": "122edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "documentType": "Request for Place of Trial",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
@@ -98,7 +151,7 @@
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "documentId": "132edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "documentType": "Statement of Taxpayer Identification Number",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
@@ -106,10 +159,37 @@
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
-        "documentId": "e528fc99-7068-4b93-b396-c2163991840b",
+        "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "documentType": "Answer",
         "filedBy": "Respondent",
         "userId": "respondent"
+      }
+    ],
+    "workItems": [
+      {
+        "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
+        "messages": [
+          {
+            "message": "here is a random message! yay!",
+            "createdAt": "2018-12-12T23:45:02.474Z"
+          }
+        ],
+        "sentBy": "respondent",
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "updatedAt": "2018-12-12T23:45:02.474Z",
+        "assigneeId": "docketclerk",
+        "docketNumber": "101-18",
+        "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+        "assigneeName": "John Smith (Docketclerk)",
+        "caseTitle": "Bob vs State of Idaho",
+        "caseStatus": "General Docket",
+        "document": {
+          "createdAt": "2018-12-12T23:45:02.474Z",
+          "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+          "documentType": "Answer",
+          "filedBy": "Respondent",
+          "userId": "respondent"
+        }
       }
     ],
     "respondent": {
@@ -178,21 +258,21 @@
     "documents": [
       {
         "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "documentId": "211edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "documentId": "221edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "documentId": "231edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
@@ -225,21 +305,21 @@
     "documents": [
       {
         "documentType": "Petition",
-        "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+        "documentId": "314d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
-        "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
+        "documentId": "324d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
-        "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
+        "documentId": "334d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer"
