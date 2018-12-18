@@ -31,7 +31,7 @@ export default connect(
               <span aria-hidden="true">general docket</span>
             </span>
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           <div className="usa-grid-full">
@@ -55,10 +55,38 @@ export default connect(
                 </div>
                 <p>Stipulated decision filed by Respondent</p>
                 <div className="subsection">
-                  <span>Docket clerk name</span>
+                  <span>
+                    {' '}
+                    <FontAwesomeIcon
+                      icon="flag"
+                      className="action-flag"
+                      size="sm"
+                    />{' '}
+                    Docket clerk name
+                  </span>
                   <span className="float-right">
                     <a href="/">Forward</a>
                   </span>
+                  <div id="forward-form">
+                    <b>Send to</b>
+                    <br />
+                    <select>
+                      <option value=""> -- Select -- </option>
+                    </select>
+                    <b>Add document message</b>
+                    <br />
+                    <textarea />
+                    <button
+                      type="submit"
+                      className="usa-button"
+                      aria-disabled="false"
+                    >
+                      <span>Forward</span>
+                    </button>
+                    <button type="button" className="usa-button-secondary">
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
