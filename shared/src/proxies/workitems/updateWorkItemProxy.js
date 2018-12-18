@@ -10,13 +10,12 @@ const axios = require('axios');
 exports.updateWorkItem = async ({
   applicationContext,
   workItemToUpdate,
+  workItemId,
   userId,
 }) => {
   const userToken = userId; // TODO: refactor for jwt
   const response = await axios.put(
-    `${applicationContext.getBaseUrl()}/workitems/${
-      workItemToUpdate.workItemId
-    }`,
+    `${applicationContext.getBaseUrl()}/workitems/${workItemId}`,
     workItemToUpdate,
     {
       headers: {
