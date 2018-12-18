@@ -24,7 +24,6 @@ const { getDownloadPolicyUrl } = require('ef-cms-shared/src/persistence/getDownl
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const { getCase } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
-const { getCases } = require('ef-cms-shared/src/business/useCases/getCases.interactor');
 const { getCasesByStatus: getCasesByStatusUC } = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
 const { createCase: createCaseUC } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
 const { getCasesByUser: getCasesByUserUC } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
@@ -85,12 +84,11 @@ module.exports = ({userId} = {}) => {
     },
     user,
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
+    isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
     getUseCases: () => {
       return {
         createCase: createCaseUC,
         getCase,
-        getCases,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
         getUser,
