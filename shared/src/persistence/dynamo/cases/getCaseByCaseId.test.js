@@ -4,15 +4,16 @@ chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
-const { incrementCounter } = require('./awsDynamoPersistence');
+const { getCaseByCaseId } = require('./getCaseByCaseId');
 
 const applicationContext = {
   environment: {
     stage: 'local',
   },
+  isAuthorizedForWorkItems: () => true,
 };
 
-describe('awsDynamoPersistence', function() {
+describe('getCaseByCaseId', async () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       pk: '123',
@@ -60,15 +61,23 @@ describe('awsDynamoPersistence', function() {
     client.updateConsistent.restore();
   });
 
-  describe('incrementCounter', () => {
-    it('should invoke the correct client updateConsistence method using the correct pk and sk', async () => {
-      await incrementCounter({ applicationContext });
-      expect(client.updateConsistent.getCall(0).args[0].Key.pk).to.equal(
-        'docketNumberCounter',
-      );
-      expect(client.updateConsistent.getCall(0).args[0].Key.sk).to.equal(
-        'docketNumberCounter',
-      );
+  it('should strip out the internal keys used for persistence before returning', async () => {
+    const result = await getCaseByCaseId({
+      caseId: '123',
+      applicationContext,
     });
+    expect(result).to.deep.equal({
+      caseId: '123',
+      status: 'new',
+    });
+  });
+
+  it('should return null if nothing is returned from the client get request', async () => {
+    client.get.resolves(null);
+    const result = await getCaseByCaseId({
+      caseId: '123',
+      applicationContext,
+    });
+    expect(result).to.be.null;
   });
 });

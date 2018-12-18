@@ -32,10 +32,6 @@ exports.createCase = async ({ caseRecord, applicationContext }) => {
         pk: `${caseRecord.userId}|case`,
         sk: caseRecord.caseId,
       },
-      ...caseRecord.documents.map(document => ({
-        pk: `${document.documentId}|case`,
-        sk: caseRecord.caseId,
-      })),
     ],
   });
 

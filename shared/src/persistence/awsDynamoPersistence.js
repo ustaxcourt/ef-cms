@@ -152,14 +152,18 @@ exports.createMappingRecord = async ({
 
 const stripWorkItems = (casesToModify, shouldDeleteWorkItems) => {
   if (!shouldDeleteWorkItems) return casesToModify;
+  if (!casesToModify) return casesToModify;
+
   const strip = caseToModify => {
     delete caseToModify.workItems;
   };
 
   if (casesToModify.length) {
-    return casesToModify.map(strip);
+    casesToModify.forEach(strip);
+    return casesToModify;
   } else {
-    return strip(casesToModify);
+    strip(casesToModify);
+    return casesToModify;
   }
 };
 exports.stripWorkItems = stripWorkItems;

@@ -4,15 +4,16 @@ chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
-const { incrementCounter } = require('./awsDynamoPersistence');
+const { getCasesByStatus } = require('./getCasesByStatus');
 
 const applicationContext = {
   environment: {
     stage: 'local',
   },
+  isAuthorizedForWorkItems: () => true,
 };
 
-describe('awsDynamoPersistence', function() {
+describe('getCasesByStatus', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       pk: '123',
@@ -60,15 +61,20 @@ describe('awsDynamoPersistence', function() {
     client.updateConsistent.restore();
   });
 
-  describe('incrementCounter', () => {
-    it('should invoke the correct client updateConsistence method using the correct pk and sk', async () => {
-      await incrementCounter({ applicationContext });
-      expect(client.updateConsistent.getCall(0).args[0].Key.pk).to.equal(
-        'docketNumberCounter',
-      );
-      expect(client.updateConsistent.getCall(0).args[0].Key.sk).to.equal(
-        'docketNumberCounter',
-      );
+  it('should strip the pk and sk from the results', async () => {
+    const result = await getCasesByStatus({
+      status: 'new',
+      applicationContext,
     });
+    expect(result).to.deep.equal([{ caseId: '123', status: 'new' }]);
+  });
+  it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
+    await getCasesByStatus({
+      status: 'new',
+      applicationContext,
+    });
+    expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([
+      { pk: '123', sk: '123' },
+    ]);
   });
 });
