@@ -33,7 +33,7 @@ export default connect(
                 <td>
                   <span className="responsive-label">Message</span>
                   <a
-                    href={'/case-detail/' + item.docketNumber}
+                    href={`/case-detail/${item.docketNumber}/documents/1234`}
                     className="case-link"
                   >
                     {item.document.documentType || 'Answer'}
