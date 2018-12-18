@@ -4,8 +4,7 @@ chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
-const { incrementCounter } = require('./awsDynamoPersistence');
-
+const { incrementCounter, stripWorkItems } = require('./awsDynamoPersistence');
 const applicationContext = {
   environment: {
     stage: 'local',
@@ -69,6 +68,40 @@ describe('awsDynamoPersistence', function() {
       expect(client.updateConsistent.getCall(0).args[0].Key.sk).to.equal(
         'docketNumberCounter',
       );
+    });
+  });
+
+  describe('stripWorkItems', () => {
+    it('removes the workItems if not authorized', async () => {
+      let caseRecord = { caseId: 1, workItems: [{ workItemId: 1 }] };
+      stripWorkItems(caseRecord, false);
+      expect(caseRecord.workItems).to.be.undefined;
+    });
+
+    it('does not remove the workItems if authorized', async () => {
+      let caseRecord = { caseId: 1, workItems: [{ workItemId: 1 }] };
+      stripWorkItems(caseRecord, true);
+      expect(caseRecord.workItems).to.not.be.undefined;
+    });
+
+    it('removes the workItems on a collection if not authorized', async () => {
+      let caseRecord = [
+        { caseId: 1, workItems: [{ workItemId: 1 }] },
+        { caseId: 2, workItems: [{ workItemId: 2 }] },
+      ];
+      stripWorkItems(caseRecord, false);
+      expect(caseRecord[0].workItems).to.be.undefined;
+      expect(caseRecord[1].workItems).to.be.undefined;
+    });
+
+    it('does not remove the workItems on a collection if authorized', async () => {
+      let caseRecord = [
+        { caseId: 1, workItems: [{ workItemId: 1 }] },
+        { caseId: 2, workItems: [{ workItemId: 2 }] },
+      ];
+      stripWorkItems(caseRecord, true);
+      expect(caseRecord[0].workItems).to.not.be.undefined;
+      expect(caseRecord[1].workItems).to.not.be.undefined;
     });
   });
 });
