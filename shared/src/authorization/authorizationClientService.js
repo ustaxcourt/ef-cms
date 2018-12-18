@@ -4,6 +4,7 @@ exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.FILE_ANSWER = 'fileAnswer';
+exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 
 /**
  * isAuthorized
@@ -19,7 +20,10 @@ exports.isAuthorized = (user, action, owner) => {
     return true;
   }
 
-  if (action === exports.WORKITEM) {
+  if (
+    action === exports.WORKITEM ||
+    action === exports.GET_CASES_BY_DOCUMENT_ID
+  ) {
     return (
       user === 'petitionsclerk' ||
       user === 'intakeclerk' ||

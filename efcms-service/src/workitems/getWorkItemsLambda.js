@@ -1,5 +1,5 @@
 const { getAuthHeader, handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
  * GET WorkItems API Lambda
@@ -12,5 +12,6 @@ const applicationContext = require('../applicationContext');
 exports.get = event =>
   handle(() => {
     const userId = getAuthHeader(event);
+    const applicationContext = createApplicationContext({ userId })
     return applicationContext.getUseCases().getWorkItems({ userId: userId, applicationContext});
   });

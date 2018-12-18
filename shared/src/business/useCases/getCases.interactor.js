@@ -2,7 +2,12 @@ const User = require('../entities/User');
 const { UnauthorizedError } = require('../../errors/errors');
 const Case = require('../entities/Case');
 
-exports.getCases = async ({ userId, status, applicationContext }) => {
+exports.getCases = async ({
+  documentId,
+  userId,
+  status,
+  applicationContext,
+}) => {
   let user;
   try {
     user = new User({ userId });
@@ -22,12 +27,20 @@ exports.getCases = async ({ userId, status, applicationContext }) => {
         applicationContext,
       });
       break;
+    case 'docketclerk':
     case 'petitionsclerk':
+    case 'seniorattorney':
     case 'intakeclerk':
       if (!status) status = 'new';
-      cases = await applicationContext
-        .getUseCases()
-        .getCasesByStatus({ status, userId, applicationContext });
+      if (documentId) {
+        cases = await applicationContext
+          .getUseCases()
+          .getCasesByDocumentId({ documentId, userId, applicationContext });
+      } else {
+        cases = await applicationContext
+          .getUseCases()
+          .getCasesByStatus({ status, userId, applicationContext });
+      }
       break;
     default:
       return;
