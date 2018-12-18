@@ -4,15 +4,16 @@ chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
-const { incrementCounter } = require('./awsDynamoPersistence');
+const { saveCase } = require('./saveCase');
 
 const applicationContext = {
   environment: {
     stage: 'local',
   },
+  isAuthorizedForWorkItems: () => true,
 };
 
-describe('awsDynamoPersistence', function() {
+describe('saveCase', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       pk: '123',
@@ -60,15 +61,30 @@ describe('awsDynamoPersistence', function() {
     client.updateConsistent.restore();
   });
 
-  describe('incrementCounter', () => {
-    it('should invoke the correct client updateConsistence method using the correct pk and sk', async () => {
-      await incrementCounter({ applicationContext });
-      expect(client.updateConsistent.getCall(0).args[0].Key.pk).to.equal(
-        'docketNumberCounter',
-      );
-      expect(client.updateConsistent.getCall(0).args[0].Key.sk).to.equal(
-        'docketNumberCounter',
-      );
+  it('should strip the pk and sk from the returned case', async () => {
+    const result = await saveCase({
+      caseToSave: {
+        caseId: '123',
+        status: 'new',
+      },
+      applicationContext,
     });
+    expect(result).to.deep.equal({ caseId: '123', status: 'new' });
+  });
+
+  it('should attempt to delete and put a new status mapping if the status changes', async () => {
+    await saveCase({
+      caseToSave: {
+        caseId: '123',
+        status: 'general',
+      },
+      applicationContext,
+    });
+    expect(client.delete.getCall(0).args[0].key.pk).to.equal('new|case-status');
+    expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
+      'general|case-status',
+    );
+    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
   });
 });
