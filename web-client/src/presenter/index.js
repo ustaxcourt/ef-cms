@@ -1,6 +1,6 @@
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
-import updateWorkItemSequence from './sequences/updateWorkItemSequence';
+import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
 import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
@@ -21,6 +21,7 @@ import updateDocumentValueSequence from './sequences/updateDocumentValueSequence
 import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
+import updateWorkItemSequence from './sequences/updateWorkItemSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import state from './state';
@@ -31,13 +32,13 @@ import state from './state';
 export default {
   providers: {},
   sequences: {
-    gotoWorkItemSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
+    gotoDocumentDetailSequence,
     gotoFilePetitionSequence,
-    updateWorkItemSequence,
     gotoLogInSequence,
     gotoStyleGuideSequence,
+    gotoWorkItemSequence,
     loginWithTokenSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
@@ -54,6 +55,7 @@ export default {
     updateFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
+    updateWorkItemSequence,
     viewDocumentSequence,
   },
   state,

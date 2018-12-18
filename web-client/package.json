@@ -91,7 +91,7 @@
     "nightwatch": "^1.0.16",
     "nock": "^10.0.4",
     "pa11y-ci": "^2.1.1",
-    "parcel-bundler": "^1.10.3",
+    "parcel-bundler": "^1.11.0",
     "prettier": "^1.15.3",
     "prop-types": "^15.6.2",
     "pug": "^2.0.3",
