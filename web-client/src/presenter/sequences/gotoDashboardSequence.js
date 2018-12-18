@@ -51,7 +51,15 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardRespondent'),
     ],
-    seniorattorney: [clearAlerts, setCurrentPage('DashboardSeniorAttorney')],
+    seniorattorney: [
+      clearAlerts,
+      getWorkItemsByUser,
+      {
+        error: [setAlertError],
+        success: [setWorkItems],
+      },
+      setCurrentPage('DashboardSeniorAttorney'),
+    ],
   },
 ];
 
