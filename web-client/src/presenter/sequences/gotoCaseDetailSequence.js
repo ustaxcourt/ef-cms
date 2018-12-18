@@ -14,10 +14,12 @@ export default [
   set(state.currentTab, 'Docket Record'),
   getUserRole,
   {
-    public: [setCurrentPage('CaseDetailPublic')],
-    taxpayer: [setCurrentPage('CaseDetailPetitioner')],
-    petitionsclerk: [setCurrentPage('CaseDetailInternal')],
+    docketclerk: [setCurrentPage('CaseDetailInternal')],
     intakeclerk: [setCurrentPage('CaseDetailInternal')],
+    petitionsclerk: [setCurrentPage('CaseDetailInternal')],
+    public: [setCurrentPage('CaseDetailPublic')],
     respondent: [setCurrentPage('CaseDetailRespondent')],
+    seniorattorney: [setCurrentPage('CaseDetailInternal')],
+    taxpayer: [setCurrentPage('CaseDetailPetitioner')],
   },
 ];
