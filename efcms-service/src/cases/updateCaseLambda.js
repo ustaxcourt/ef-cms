@@ -7,13 +7,15 @@ const applicationContext = require('../applicationContext');
  * @param event
  * @returns {Promise<*|undefined>}
  */
-exports.put = event =>
-  handle(() => {
+exports.put = event => {
+  return handle(() => {
     const userId = getAuthHeader(event);
-    return applicationContext.getUseCases().updateCase({
+
+    return applicationContext.getUpdateCaseInteractorQueryParam(event)({
       caseId: event.pathParameters.caseId,
       caseToUpdate: JSON.parse(event.body),
       userId,
-      applicationContext,
+      applicationContext
     });
   });
+};

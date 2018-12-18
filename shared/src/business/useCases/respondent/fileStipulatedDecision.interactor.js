@@ -1,5 +1,9 @@
+const {
+  isAuthorized,
+  FILE_STIPULATED_DECISION,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
-const { fileRespondentDocument } = require('./fileRespondentDocument');
 
 exports.fileStipulatedDecision = async ({
   userId,
@@ -7,22 +11,49 @@ exports.fileStipulatedDecision = async ({
   document,
   applicationContext,
 }) => {
-  return fileRespondentDocument({
+  if (!isAuthorized(userId, FILE_STIPULATED_DECISION)) {
+    throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
+  }
+
+  const documentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadDocument({
+      applicationContext,
+      document,
+    });
+
+  await applicationContext.getUseCases().associateRespondentDocumentToCase({
     userId,
-    caseToUpdate,
-    document,
-    documentType: Case.documentTypes.stipulatedDecision,
+    caseToUpdate: {
+      ...caseToUpdate,
+      documents: [
+        ...(caseToUpdate.documents || []),
+        {
+          documentId,
+          documentType: Case.documentTypes.stipulatedDecision,
+        },
+      ],
+      workItems: [
+        ...(caseToUpdate.workItems || []),
+        {
+          sentBy: userId,
+          caseId: caseToUpdate.caseId,
+          assigneeId: 'docketclerk',
+          docketNumber: caseToUpdate.docketNumber,
+          messages: [
+            {
+              message: `Stipulated Decision submitted`,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+          assigneeName: 'Docket Clerk',
+          caseTitle: `${
+            caseToUpdate.petitioners[0].name
+          } v. Commissioner of Internal Revenue, Respondent`,
+          caseStatus: caseToUpdate.status,
+        },
+      ],
+    },
     applicationContext,
-    workItemsToAdd: [
-      {
-        message: 'A stipulated decision is ready for review',
-        sentBy: userId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        assigneeId: 'docketclerk',
-        docketNumber: caseToUpdate.docketNumber,
-        //document is added later
-      },
-    ],
   });
 };

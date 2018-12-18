@@ -13,12 +13,14 @@ export default connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
+    helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
     caseDetail,
     currentTab,
+    helper,
     updateCurrentTabSequence,
     viewDocumentSequence,
   }) {
@@ -38,7 +40,7 @@ export default connect(
             {caseDetail.petitioners[0].name} v. Commissioner of Internal
             Revenue, Respondent
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           {currentTab == 'File Document' && <FileDocument />}
@@ -52,6 +54,7 @@ export default connect(
                   <button
                     role="tab"
                     className="tab-link"
+                    aria-selected={currentTab === 'Docket Record'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Docket Record' })
                     }
@@ -67,6 +70,7 @@ export default connect(
                     role="tab"
                     className="tab-link"
                     id="case-info-tab"
+                    aria-selected={currentTab === 'Case Information'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Case Information' })
                     }
@@ -130,13 +134,13 @@ export default connect(
                         {document.isStatusServed && (
                           <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                         )}
-                        {caseDetail.showDocumentStatus && (
+                        {helper.showDocumentStatus && (
                           <span>{document.status}</span>
                         )}
                       </td>
                     </tr>
                   ))}
-                  {caseDetail.showPaymentRecord && (
+                  {helper.showPaymentRecord && (
                     <tr>
                       <td>{caseDetail.payGovDateFormatted}</td>
                       <td>Filing fee paid</td>

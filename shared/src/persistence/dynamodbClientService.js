@@ -9,9 +9,11 @@ const region = process.env.AWS_REGION || 'us-east-1';
 
 const removeAWSGlobalFields = item => {
   // dynamodb always adds these fields for purposes of global tables
-  delete item['aws:rep:deleting'];
-  delete item['aws:rep:updateregion'];
-  delete item['aws:rep:updatetime'];
+  if (item) {
+    delete item['aws:rep:deleting'];
+    delete item['aws:rep:updateregion'];
+    delete item['aws:rep:updatetime'];
+  }
   return item;
 };
 
@@ -64,8 +66,9 @@ exports.get = params => {
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     })
-    .catch(() => {
-      throw new Error(`get failed on ${JSON.stringify(params)}`);
+    .catch(err => {
+      console.error(err);
+      return null;
     });
 };
 

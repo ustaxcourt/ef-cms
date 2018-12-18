@@ -6,61 +6,33 @@
 function User(user) {
   Object.assign(this, user);
 
-  //petitioner
-  if (this.userId === 'taxpayer') {
+  const validRoles = [
+    'taxpayer',
+    'petitionsclerk',
+    'intakeclerk',
+    'respondent',
+    'docketclerk',
+    'seniorattorney',
+  ];
+
+  if (validRoles.includes(this.userId)) {
+    const name = 'Test ' + this.userId.replace(/^\w/, c => c.toUpperCase());
+    const barNumber =
+      this.userId === 'respondent' || this.userId === 'seniorattorney'
+        ? '12345'
+        : undefined;
     Object.assign(this, {
-      name: 'Test Taxpayer',
-      role: 'taxpayer',
-      token: 'taxpayer',
+      name,
+      role: this.userId,
+      barNumber,
+      token: this.userId,
+      email: `test${this.userId}@example.com`,
       addressLine1: '111 Orange St.',
       addressLine2: 'Building 2',
       city: 'Orlando',
       state: 'FL',
       zip: '37208',
       phone: '111-111-1111',
-      email: 'testtaxpayer@example.com',
-    });
-  }
-  //petitionsclerk
-  else if (this.userId === 'petitionsclerk') {
-    Object.assign(this, {
-      name: 'Test Petitionsclerk',
-      role: 'petitionsclerk',
-      token: 'petitionsclerk',
-      addressLine1: '111 Orange St.',
-      addressLine2: 'Building 2',
-      city: 'Washington',
-      state: 'DC',
-      zip: '10111',
-      phone: '111-111-1111',
-      email: 'testpetitionsclerk@example.com',
-    });
-  } else if (this.userId === 'intakeclerk') {
-    Object.assign(this, {
-      name: 'Test Intakeclerk',
-      role: 'intakeclerk',
-      token: 'intakeclerk',
-      addressLine1: '111 Orange St.',
-      addressLine2: 'Building 2',
-      city: 'Washington',
-      state: 'DC',
-      zip: '10111',
-      phone: '111-111-1111',
-      email: 'testintakeclerk@example.com',
-    });
-  } else if (this.userId === 'respondent') {
-    Object.assign(this, {
-      name: 'Test Respondent',
-      role: 'respondent',
-      token: 'respondent',
-      addressLine1: '111 Orange St.',
-      addressLine2: 'Building 2',
-      city: 'Washington',
-      state: 'DC',
-      zip: '10111',
-      phone: '111-111-1111',
-      email: 'testrespondent@example.com',
-      barNumber: '12345',
     });
   } else {
     throw new Error('invalid user');

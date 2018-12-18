@@ -1,5 +1,10 @@
-const { fileRespondentDocument } = require('./fileRespondentDocument');
 const Case = require('../../entities/Case');
+
+const {
+  isAuthorized,
+  FILE_ANSWER,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.fileAnswer = async ({
   userId,
@@ -7,11 +12,29 @@ exports.fileAnswer = async ({
   document,
   applicationContext,
 }) => {
-  return fileRespondentDocument({
+  if (!isAuthorized(userId, FILE_ANSWER)) {
+    throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
+  }
+
+  const documentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadDocument({
+      applicationContext,
+      document,
+    });
+
+  await applicationContext.getUseCases().associateRespondentDocumentToCase({
     userId,
-    caseToUpdate,
-    document,
-    documentType: Case.documentTypes.answer,
+    caseToUpdate: {
+      ...caseToUpdate,
+      documents: [
+        ...(caseToUpdate.documents || []),
+        {
+          documentId,
+          documentType: Case.documentTypes.answer,
+        },
+      ],
+    },
     applicationContext,
   });
 };

@@ -1,104 +1,81 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
+const WorkItem = require('../../entities/WorkItem');
 const { getUser } = require('../utilities/getUser');
-const { uploadFileToS3 } = require('../utilities/uploadFileToS3');
-
-const attachDocumentToCase = ({
-  caseToUpdate,
-  documentType,
-  documentId,
-  userId,
-}) => {
-  const documentMetadata = {
-    documentType,
-    documentId,
-    userId: userId,
-    filedBy: 'Respondent',
-    createdAt: new Date().toISOString(),
-  };
-
-  Object.assign(caseToUpdate, {
-    documents: [...caseToUpdate.documents, documentMetadata],
-  });
-
-  return documentMetadata;
-};
-
-const attachRespondentToCase = ({ user, caseToUpdate }) => {
-  const respondent = {
-    ...user,
-    respondentId: user.userId,
-  };
-
-  Object.assign(caseToUpdate, { respondent });
-};
-
-const attachWorkItemsToCase = ({ workItemsToAdd, caseToUpdate }) => {
-  Object.assign(caseToUpdate, {
-    workItems: [...(caseToUpdate.workItems || []), ...workItemsToAdd],
-  });
-};
 
 exports.fileRespondentDocument = async ({
   userId,
   caseToUpdate,
-  document,
-  documentType,
-  workItemsToAdd = [],
   applicationContext,
 }) => {
+  //find the new document - documentType will be undefined
+  const documents = (caseToUpdate.documents || []).filter(
+    document => document.createdAt === undefined,
+  );
+
+  //remove the empty document from the caseToUpdate
+  caseToUpdate.documents = (caseToUpdate.documents || []).filter(
+    document => document.createdAt !== undefined,
+  );
+
+  //find the new workItems - workItemId will be undefined
+  const workItems = (caseToUpdate.workItems || []).filter(
+    workItem => workItem.workItemId === undefined,
+  );
+
+  //remove the empty workItem from the caseToUpdate
+  caseToUpdate.workItems = (caseToUpdate.workItems || []).filter(
+    workItem => workItem.workItemId !== undefined,
+  );
+
   //validate the pdf
-  if (!document) {
+  if (!documents.length || documents.length > 1) {
     throw new UnprocessableEntityError(
-      `${documentType} document cannot be null or invalid`,
+      `document cannot be null or invalid or more than one`,
     );
   }
 
-  const user = await getUser({
-    token: userId,
-  });
+  const { documentId, documentType } = documents[0];
 
-  const documentId = await uploadFileToS3({
-    applicationContext,
-    document,
-  });
+  caseToUpdate = new Case(caseToUpdate);
 
-  workItemsToAdd.forEach(
-    item =>
-      (item.document = {
-        documentId,
-        documentType,
-      }),
-  );
-
-  attachWorkItemsToCase({
-    caseToUpdate,
-    workItemsToAdd,
-  });
-
-  attachDocumentToCase({
+  const documentMetadata = caseToUpdate.attachDocument({
     userId,
     documentId,
-    caseToUpdate,
     documentType,
   });
 
+  const user = await getUser(userId);
+
+  const workItemsToAdd = workItems.map(
+    item =>
+      new WorkItem({
+        ...item,
+        document: documentMetadata,
+      }),
+  );
+
+  WorkItem.validateCollection(workItemsToAdd);
+
+  caseToUpdate.attachWorkItems({
+    workItemsToAdd: workItemsToAdd.map(item => item.toJSON()),
+  });
+
   if (!caseToUpdate.respondent) {
-    attachRespondentToCase({
+    caseToUpdate.attachRespondent({
       user,
-      caseToUpdate,
     });
   }
 
-  const caseToUpdateRaw = new Case(caseToUpdate)
+  const caseToUpdateRaw = caseToUpdate
     .validateWithError(new UnprocessableEntityError())
     .toJSON();
 
   await applicationContext.getPersistenceGateway().saveCase({
     userId: user.userId,
-    caseToUpdate: caseToUpdateRaw,
+    caseToSave: caseToUpdateRaw,
     applicationContext,
   });
 
-  return caseToUpdate;
+  return caseToUpdateRaw;
 };

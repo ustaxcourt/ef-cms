@@ -21,10 +21,6 @@ You can access the dynamodb shell at http://localhost:8000/shell
 You can access the dynamodb-admin ui at http://localhost:8001
 You can access s3 local at http://localhost:9000
 
-In order to kill that docker container, you will need to run the following command in separate terminal:
-
-`./kill-docker-run.sh`
-
 ## Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Each must be run in order to function.
