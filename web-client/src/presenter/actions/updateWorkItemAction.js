@@ -7,6 +7,7 @@ export default async ({ applicationContext, get, path, action }) => {
     const workItem = await useCases.updateWorkItem({
       applicationContext,
       workItemToUpdate: get(state.workItem),
+      workItemId: get(state.workItem).workItemId,
       userId: get(state.user.token),
     });
 
