@@ -15,6 +15,7 @@ const stripInternalKeys = items => {
   }
   return items;
 };
+exports.stripInternalKeys = stripInternalKeys;
 
 const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;

@@ -9,6 +9,7 @@ import Case from '../../../shared/src/business/entities/Case';
 
 let test;
 let docketNumber;
+let workItemId;
 global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
@@ -157,7 +158,6 @@ describe('Case journey', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardRespondent');
     expect(test.getState('cases').length).toBeGreaterThan(0);
-    docketNumber = '102-18';
   });
 
   it('Respondent views case detail', async () => {
@@ -165,7 +165,7 @@ describe('Case journey', async () => {
     await test.runSequence('gotoCaseDetailSequence', { docketNumber });
     expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('new');
+    expect(test.getState('caseDetail.status')).toEqual('general');
     expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
 
@@ -195,7 +195,20 @@ describe('Case journey', async () => {
     expect(test.getState('caseDetail.documents').length).toEqual(5);
   });
 
-  it('Docketclerk logs in', async () => {
+  it('the respondent uploads a stipulated decision to the case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'documentType',
+      value: Case.documentTypes.stipulatedDecision,
+    });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'file',
+      value: fakeFile,
+    });
+    await test.runSequence('submitDocumentSequence');
+  });
+
+  it('the docketclerk logs in', async () => {
     test.setState('user', {
       name: 'Docket Clerk',
       role: 'docketclerk',
@@ -204,9 +217,75 @@ describe('Case journey', async () => {
     });
   });
 
-  it('Docketclerk views dashboard', async () => {
+  it('the expected work item appears on the docketclerk queue', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
-    expect(test.getState('workQueue').length).toBeGreaterThan(0);
+    const workItems = test.getState('workQueue');
+    const workItemCreated = workItems.find(
+      item => item.docketNumber === docketNumber,
+    );
+    workItemId = workItemCreated.workItemId;
+    expect(workItemCreated).toMatchObject({
+      assigneeId: 'docketclerk',
+      assigneeName: 'Docket Clerk',
+      caseStatus: 'general',
+      caseTitle:
+        'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
+      docketNumber,
+      document: {
+        documentType: 'Stipulated Decision',
+        filedBy: 'Respondent',
+        userId: 'respondent',
+      },
+      messages: [
+        {
+          message: 'Stipulated Decision submitted',
+        },
+      ],
+      sentBy: 'respondent',
+    });
+  });
+
+  it('the docketclerk navigates to view the work item', async () => {
+    await test.runSequence('gotoWorkItemSequence', {
+      workItemId,
+    });
+    expect(test.getState('workItem')).toMatchObject({
+      assigneeId: 'docketclerk',
+      assigneeName: 'Docket Clerk',
+      caseStatus: 'general',
+      caseTitle:
+        'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
+      docketNumber,
+      document: {
+        documentType: 'Stipulated Decision',
+        filedBy: 'Respondent',
+        userId: 'respondent',
+      },
+      messages: [
+        {
+          message: 'Stipulated Decision submitted',
+        },
+      ],
+      sentBy: 'respondent',
+    });
+  });
+
+  it('the docketclerk forwards the work item to the senior attorney', async () => {
+    test.setState('workItem', {
+      ...test.getState('workItem'),
+      assigneeId: 'srattorney',
+    });
+    await test.runSequence('updateWorkItemSequence');
+  });
+
+  it('the expected work item is gone from the docketclerk queue', async () => {
+    await test.runSequence('gotoDashboardSequence');
+    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+    const workItems = test.getState('workQueue');
+    const workItemCreated = workItems.find(
+      item => item.docketNumber === docketNumber,
+    );
+    expect(workItemCreated).toEqual(undefined);
   });
 });
