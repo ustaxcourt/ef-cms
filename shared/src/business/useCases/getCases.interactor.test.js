@@ -27,7 +27,7 @@ describe('getCases', () => {
     createdAt: '',
   };
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('taxpayer - throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getUseCases: () => {
         return {
@@ -50,7 +50,7 @@ describe('getCases', () => {
     expect(error.message).toContain('The entity was invalid');
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('respondent - throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getUseCases: () => {
         return {
@@ -73,7 +73,7 @@ describe('getCases', () => {
     expect(error.message).toContain('The entity was invalid');
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('petitionsclerk - throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getUseCases: () => {
         return {
@@ -96,7 +96,7 @@ describe('getCases', () => {
     expect(error.message).toContain('The entity was invalid');
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('intakeclerk - throws an error is the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getUseCases: () => {
         return {
@@ -117,5 +117,53 @@ describe('getCases', () => {
       error = err;
     }
     expect(error.message).toContain('The entity was invalid');
+  });
+
+  it('unauthorized user - throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getUseCases: () => {
+        return {
+          getCasesByStatus: () =>
+            Promise.resolve([omit(caseRecord, 'documents')]),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCases({
+        userId: 'baduser',
+        status: 'new',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized');
+  });
+
+  it('unauthorized user - getCasesByDocumentId - throws an error is the entity returned from persistence is invalid', async () => {
+    applicationContext = {
+      getUseCases: () => {
+        return {
+          getCasesByStatus: () =>
+            Promise.resolve([omit(caseRecord, 'documents')]),
+          getCasesByDocumentId: () =>
+            Promise.resolve([omit(caseRecord, 'documents')]),
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let error;
+    try {
+      await getCases({
+        userId: 'intakeclerk',
+        documentId: 'abc',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('The entity was invalid ValidationError');
   });
 });

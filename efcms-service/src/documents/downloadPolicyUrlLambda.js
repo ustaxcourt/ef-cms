@@ -1,5 +1,5 @@
+const createApplicationContext = require('../applicationContext');
 const { handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
 
 /**
  * GET Pre-signed Policy URL API Lambda
@@ -9,9 +9,10 @@ const applicationContext = require('../applicationContext');
  * @param callback
  */
 exports.get = event =>
-  handle(() =>
-    applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+  handle(() => {
+    const applicationContext = createApplicationContext()
+    return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,
-    }),
-  );
+    });
+  });

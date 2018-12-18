@@ -4,27 +4,31 @@ exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.FILE_ANSWER = 'fileAnswer';
+exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 
 /**
  * isAuthorized
  *
- * @param user
+ * @param userId
  * @param action
  * @param owner
  * @returns {boolean}
  */
-exports.isAuthorized = (user, action, owner) => {
+exports.isAuthorized = (userId, action, owner) => {
   //STAYING ON THE HAPPY PATH WITH HAPPY ELF FOOTPRINTS
-  if (user && user === owner) {
+  if (userId && userId === owner) {
     return true;
   }
 
-  if (action === exports.WORKITEM) {
+  if (
+    action === exports.WORKITEM ||
+    action === exports.GET_CASES_BY_DOCUMENT_ID
+  ) {
     return (
-      user === 'petitionsclerk' ||
-      user === 'intakeclerk' ||
-      user === 'seniorattorney' ||
-      user === 'docketclerk'
+      userId === 'petitionsclerk' ||
+      userId === 'intakeclerk' ||
+      userId === 'seniorattorney' ||
+      userId === 'docketclerk'
     );
   }
 
@@ -32,15 +36,15 @@ exports.isAuthorized = (user, action, owner) => {
     action === exports.FILE_STIPULATED_DECISION ||
     action == exports.FILE_ANSWER
   ) {
-    return user === 'respondent';
+    return userId === 'respondent';
   }
 
   return (
-    (user === 'respondent' ||
-      user === 'petitionsclerk' ||
-      user === 'intakeclerk' ||
-      user === 'seniorattorney' ||
-      user === 'docketclerk') &&
+    (userId === 'respondent' ||
+      userId === 'petitionsclerk' ||
+      userId === 'intakeclerk' ||
+      userId === 'seniorattorney' ||
+      userId === 'docketclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
       action === exports.GET_CASE)

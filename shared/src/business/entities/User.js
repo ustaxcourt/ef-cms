@@ -47,4 +47,8 @@ User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
 };
 
+User.prototype.hasAccessToWorkItems = function hasAccessToWorkItems() {
+  return;
+};
+
 module.exports = User;
