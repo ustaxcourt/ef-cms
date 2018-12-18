@@ -150,8 +150,8 @@ exports.createMappingRecord = async ({
   });
 };
 
-const stripWorkItems = (casesToModify, shouldDeleteWorkItems) => {
-  if (!shouldDeleteWorkItems) return casesToModify;
+const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
+  if (isAuthorizedForWorkItems) return casesToModify;
   if (!casesToModify) return casesToModify;
 
   const strip = caseToModify => {
