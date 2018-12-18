@@ -66,7 +66,7 @@
       <submoduleCfg class="list"/>
       <extensions/>
     </scm>
-    <scriptPath>web-client/Jenkinsfile</scriptPath>
+    <scriptPath>shared/Jenkinsfile</scriptPath>
     <lightweight>false</lightweight>
   </definition>
   <triggers/>

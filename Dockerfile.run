@@ -20,8 +20,8 @@ RUN git config --global user.email "blank@example.com" && \
 
 RUN CI=true npm install cypress
 
-COPY business/package.json /home/app/business/package.json
-RUN cd /home/app/business && npm i --only=production
+COPY shared/package.json /home/app/shared/package.json
+RUN cd /home/app/shared && npm i --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service && npm i
@@ -31,4 +31,4 @@ RUN cd /home/app/web-client && npm i
 
 COPY . /home/app
 
-CMD echo "please overwrite this command"
+CMD echo "This container does not have a default command.  Please use the ./docker-run.sh script instead to run the entire application"

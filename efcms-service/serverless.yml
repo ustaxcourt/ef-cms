@@ -9,13 +9,14 @@ plugins:
   - serverless-offline
 custom:
   serverless-offline:
-    host: localhost
+    host: 0.0.0.0
 
   s3:
-    host: localhost
+    host: 0.0.0.0
     port: 9000
     directory: ./storage/s3
     cors: cors-policy.xml
+
   dynamodb:
     start:
       inMemory: true
@@ -27,9 +28,9 @@ custom:
           - table: ${opt:documentsTableName}
             sources:
               - ./storage/fixtures/documents.json
-          - table: ${opt:casesTableName}
+          - table: ${opt:efcmsTableName}
             sources:
-              - ./storage/fixtures/cases.json
+              - ./storage/fixtures/efcms.json
 
   alerts:
     stages:
@@ -96,8 +97,8 @@ custom:
             createdAt:
               type: string
               description: date case created
-      - name: 'rawDocument'
-        description: 'a rawDocument response'
+      - name: 'document'
+        description: 'a document response'
         contentType: 'application/json'
         schema:
           type: object
@@ -107,13 +108,41 @@ custom:
               description: id of rawDocument
             userId:
               type: string
-              description: id of user who created the rawDocument
+              description: id of user who created the document
             documentType:
               type: string
-              description: type of this rawDocument
+              description: type of this document
             createdAt:
               type: string
-              description: date rawDocument created
+              description: date document created
+      - name: 'workItem'
+        description: 'a workItem response'
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            workItemId:
+              type: string
+              description: id of work item
+            assigneeId:
+              type: string
+              description: id of user currently assigned the work item
+            messages:
+              type: array
+              items:
+                type: object
+                properties:
+                  messageId:
+                    type: string
+                  messageType:
+                    type: string
+              description: array of messages associated with the workitem
+            createdAt:
+              type: string
+              description: date workItem created
+            updatedAt:
+              type: string
+              description: date workItem created
       - name: 'policyUrl'
         description: 'a policy url response'
         contentType: 'application/json'
@@ -226,12 +255,13 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:BatchGetItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
       Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:casesTableName}/index/*
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}/index/*
 
@@ -287,8 +317,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createPolicyUrl:
-    handler: src/documents/createPolicyUrl.create
+  getUploadPolicy:
+    handler: src/documents/getUploadPolicyLambda.create
     events:
       - http:
           path: v1/documents/uploadPolicy
@@ -299,7 +329,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for rawDocument uploads to S3.
+              Create a pre-signed url for  document uploads to S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -307,11 +337,11 @@ functions:
                 responseModels:
                   'application/json': 'policyUrl'
 
-  downloadPolicyUrl:
-    handler: src/documents/downloadPolicyUrl.get
+  getDownloadPolicyUrl:
+    handler: src/documents/downloadPolicyUrlLambda.get
     events:
       - http:
-          path: v1/documents/{documentId}/downloadPolicy
+          path: v1/documents/{documentId}/downloadPolicyUrl
           method: get
           cors: true
           documentation:
@@ -319,7 +349,7 @@ functions:
             tags:
               - documents
             description: >
-              Create a pre-signed url for rawDocument downloads from S3.
+              Create a pre-signed url for  document downloads from S3.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -327,28 +357,8 @@ functions:
                 responseModels:
                   'application/json': 'policyUrl'
 
-  createDocument:
-    handler: src/documents/createDocument.create
-    events:
-      - http:
-          path: v1/documents
-          method: post
-          cors: true
-          documentation:
-            summary: create a rawDocument
-            tags:
-              - documents
-            description: >
-              Create a rawDocument.
-            methodResponses:
-              - statusCode: '200'
-                responseBody:
-                  description: 'rawDocument meta-data'
-                responseModels:
-                  'application/json': rawDocument
-
   updateCase:
-    handler: src/cases/updateCase.put
+    handler: src/cases/updateCaseLambda.put
     events:
       - http:
           path: v1/cases/{caseId}
@@ -370,8 +380,9 @@ functions:
                 responseModels:
                   'application/json': 'unprocessableEntityError'
 
+
   createCase:
-    handler: src/cases/createCase.create
+    handler: src/cases/createCaseLambda.create
     events:
       - http:
           path: v1/cases
@@ -387,7 +398,7 @@ functions:
               - name: documents
                 in: body
                 required: true
-                description: rawDocument metadata
+                description:  document metadata
                 schema:
                   type: array
                   items:
@@ -400,7 +411,7 @@ functions:
                   'application/json': case
 
   getCases:
-    handler: src/cases/getCases.get
+    handler: src/cases/getCasesLambda.get
     events:
       - http:
           path: v1/cases
@@ -420,7 +431,7 @@ functions:
                   'application/json': case
 
   getCase:
-    handler: src/cases/getCase.get
+    handler: src/cases/getCaseLambda.get
     events:
       - http:
           path: v1/cases/{caseId}
@@ -443,8 +454,91 @@ functions:
                 responseModels:
                   'application/json': case
 
+  sendToIRS:
+    handler: src/cases/sendPetitionToIRSLambda.post
+    events:
+      - http:
+          path: v1/cases/{caseId}/irsPetitionPackage
+          method: post
+          cors: true
+          documentation:
+            summary: send a case package to the respondent
+            tags:
+              - cases
+            description: >
+              Send a packaged case to the respondent.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'updated case including send date'
+                responseModels:
+                  'application/json': case
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'
+
+  getWorkItem:
+    handler: src/workitems/getWorkItemLambda.get
+    events:
+      - http:
+          path: v1/workitems/{workItemId}
+          method: get
+          cors: true
+          documentation:
+            summary: get a workitem by workItemId
+            tags:
+              - workitems
+            description: >
+              Get a workitem.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
+  updateWorkItem:
+    handler: src/workitems/updateWorkItemLambda.put
+    events:
+      - http:
+          path: v1/workitems/{workItemId}
+          method: put
+          cors: true
+          documentation:
+            summary: update a workitem by workItemId
+            tags:
+              - workitems
+            description: >
+              Update a workitem.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
+  getWorkItems:
+    handler: src/workitems/getWorkItemsLambda.get
+    events:
+      - http:
+          path: v1/workitems
+          method: get
+          cors: true
+          documentation:
+            summary: get all workitems for a user
+            tags:
+              - workitems
+            description: >
+              Get all workitems for a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
   swagger:
-    handler: src/swagger/swagger.handler
+    handler: src/swagger/swaggerLambda.handler
     events:
       - http:
           path: v1/swagger

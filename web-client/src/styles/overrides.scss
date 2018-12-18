@@ -2,6 +2,14 @@ input[type='file'] {
   height: auto;
 }
 
+.usa-header .usa-nav-secondary .usa-search {
+  margin-top: -0.6rem;
+}
+
+input[type='text'] {
+  margin: 0 0 2rem;
+}
+
 label {
   margin-bottom: 0.5em;
   font-weight: 700;
@@ -16,7 +24,12 @@ label {
 }
 
 h1 {
-  margin-bottom: 0.2rem;
+  font-size: 32px;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 26px;
 }
 
 legend {
@@ -32,4 +45,35 @@ h5,
 h6,
 p {
   margin-top: 0;
+}
+
+.usa-nav-secondary-links li:not(:last-child)::after {
+  padding-left: 0.5rem;
+  color: transparent;
+  content: '';
+}
+
+.usa-nav-secondary-links li {
+  padding-left: 1rem;
+}
+
+.usa-section {
+  padding-top: 0;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  border-top: 2px solid $color-gray-lightest;
+  margin: 2rem 0;
+}
+
+table {
+  margin: 0;
+}
+
+.usa-button {
+  margin: 0 2rem 2rem 0;
 }
