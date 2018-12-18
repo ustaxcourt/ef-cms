@@ -36,21 +36,21 @@ export default connect(
                     href={'/case-detail/' + item.docketNumber}
                     className="case-link"
                   >
-                    {item.documentType || 'Answer'}
+                    {item.document.documentType || 'Answer'}
                   </a>
-                  {item.message}
+                  {item.messages[0].message}
                 </td>
                 <td>
                   <span className="responsive-label">Trial Date</span>
-                  {item.receivedDate}
+                  {item.trialDate}
                 </td>
                 <td>
                   <span className="responsive-label">Sent By</span>
-                  {item.sentBy}
+                  {item.messages[0].sentBy || 'Jan Petersen'}
                 </td>
                 <td>
                   <span className="responsive-label">Received</span>
-                  {item.receivedDate}
+                  {item.messages[0].receivedDate || 'Dec 31, 1969'}
                 </td>
               </tr>
             ))}
