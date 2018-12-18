@@ -1,5 +1,9 @@
 [
   {
+    "pk": "docketclerk|workItem",
+    "sk": "a86fb0fb-5f93-479a-9235-7eba43005800"
+  },
+  {
     "pk": "101-18|case",
     "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800"
   },
@@ -43,6 +47,32 @@
   {
     "sk": "1a6fb0fb-5f93-479a-9235-7eba43005800",
     "pk": "respondent|activeCase"
+  },
+  {
+    "pk": "a86fb0fb-5f93-479a-9235-7eba43005800",
+    "sk": "a86fb0fb-5f93-479a-9235-7eba43005800",
+    "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
+    "messages": [
+     {
+        "message": "here is a random message! yay!"
+     }
+    ],
+    "sentBy": "respondent",
+    "createdAt": "2018-12-12T23:45:02.474Z",
+    "updatedAt": "2018-12-12T23:45:02.474Z",
+    "assigneeId": "docketclerk",
+    "docketNumber": "101-18",
+    "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+    "assigneeName": "John Smith (Docketclerk)",
+    "caseTitle": "Bob vs State of Idaho",
+    "caseStatus": "General Docket",
+    "document": {
+      "createdAt": "2018-12-12T23:45:02.474Z",
+      "documentId": "e528fc99-7068-4b93-b396-c2163991840b",
+      "documentType": "Answer",
+      "filedBy": "Respondent",
+      "userId": "respondent"
+    }
   },
   {
     "documents": [
@@ -146,19 +176,22 @@
         "documentType": "Petition",
         "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
         "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       }
     ],
     "status": "new"
@@ -190,19 +223,22 @@
         "documentType": "Petition",
         "documentId": "241edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Request for Place of Trial",
         "documentId": "67274d05-1e30-469d-83a7-acadba72bd2d",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       },
       {
         "documentType": "Statement of Taxpayer Identification Number",
         "documentId": "754d7aca-3cb1-4679-a73f-75001b660e20",
         "createdAt": "2018-11-21T20:49:28.192Z",
-        "userId": "taxpayer"
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer"
       }
     ],
     "status": "new"

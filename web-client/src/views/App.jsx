@@ -7,11 +7,13 @@ import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
 import CaseDetailPublic from './CaseDetailPublic';
 import CaseDetailRespondent from './CaseDetailRespondent';
+import DashboardDocketClerk from './DashboardDocketClerk';
 import DashboardIntakeClerk from './DashboardIntakeClerk';
 import DashboardPetitioner from './DashboardPetitioner';
 import DashboardPetitionsClerk from './DashboardPetitionsClerk';
 import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
+import DashboardSeniorAttorney from './DashboardSeniorAttorney';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
@@ -26,10 +28,12 @@ const pages = {
   CaseDetailPetitioner,
   CaseDetailPublic,
   CaseDetailRespondent,
+  DashboardDocketClerk,
   DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPublic,
+  DashboardSeniorAttorney,
   DashboardRespondent,
   FilePetition,
   IntakeClerkDashboard,

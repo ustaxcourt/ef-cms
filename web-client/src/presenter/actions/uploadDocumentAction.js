@@ -4,16 +4,18 @@ export default async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
 
   const documentType = get(state.document.documentType);
-  const useCase = applicationContext.getUseCaseForDocumentUpload(
-    documentType,
-    get(state.user.role),
+
+  const user = get(state.user);
+
+  await applicationContext.getUseCaseForDocumentUpload(documentType, user.role)(
+    {
+      applicationContext,
+      document: get(state.document.file),
+      caseToUpdate,
+      userId: user.token,
+    },
   );
-  await useCase({
-    applicationContext,
-    document: get(state.document.file),
-    caseToUpdate,
-    userId: get(state.user.token),
-  });
+
   return {
     docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {

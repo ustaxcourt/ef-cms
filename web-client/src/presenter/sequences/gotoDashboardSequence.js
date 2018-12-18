@@ -8,6 +8,8 @@ import setCurrentPage from '../actions/setCurrentPageAction';
 import isLoggedIn from '../actions/isLoggedInAction';
 import setPath from '../actions/setPathAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
+import setWorkItems from '../actions/setWorkItemsAction';
+import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
 
 const goToDashboard = [
   getUserRole,
@@ -30,6 +32,15 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardPetitionsClerk'),
     ],
+    docketclerk: [
+      clearAlerts,
+      getWorkItemsByUser,
+      {
+        error: [setAlertError],
+        success: [setWorkItems],
+      },
+      setCurrentPage('DashboardDocketClerk'),
+    ],
     intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
       clearAlerts,
@@ -40,6 +51,7 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardRespondent'),
     ],
+    seniorattorney: [clearAlerts, setCurrentPage('DashboardSeniorAttorney')],
   },
 ];
 

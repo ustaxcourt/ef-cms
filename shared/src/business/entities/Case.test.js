@@ -2,6 +2,8 @@ const assert = require('assert');
 
 const Case = require('./Case');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const DATE = '2018-12-17T15:33:23.492Z';
+const sinon = require('sinon');
 
 const A_VALID_CASE = {
   docketNumber: '101-18',
@@ -156,6 +158,33 @@ describe('Case entity', () => {
         error = e;
       }
       assert.ok(!error);
+    });
+  });
+
+  describe('attachDocument', () => {
+    beforeEach(() => {
+      sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
+    });
+
+    afterEach(() => {
+      window.Date.prototype.toISOString.restore();
+    });
+
+    it('should attach the document to the case', () => {
+      const caseToVerify = new Case({});
+      caseToVerify.attachDocument({
+        documentType: 'Answer',
+        documentId: '123',
+        userId: 'respondent',
+      });
+      expect(caseToVerify.documents.length).toEqual(1);
+      expect(caseToVerify.documents[0]).toEqual({
+        documentType: 'Answer',
+        documentId: '123',
+        userId: 'respondent',
+        filedBy: 'Respondent',
+        createdAt: DATE,
+      });
     });
   });
 });

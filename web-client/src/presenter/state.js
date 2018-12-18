@@ -2,7 +2,8 @@ import {
   formattedCaseDetail,
   formattedCases,
 } from './computeds/formattedCaseDetail';
-import { formattedSearchParams } from './computeds/formattedSearchParams';
+
+import caseDetailHelper from './computeds/caseDetailHelper';
 
 export default {
   path: '/',
@@ -22,6 +23,7 @@ export default {
   document: {},
   form: {},
   searchTerm: '',
+  workQueue: [],
   user: {
     userId: '',
     role: 'public',
@@ -40,10 +42,20 @@ export default {
     // name: 'Res Pondent',
     // token: 'respondent',
     // role: 'respondent',
+
+    // userId: 'docketclerk',
+    // name: 'Docket Clerk',
+    // token: 'docketclerk',
+    // role: 'docketclerk',
+
+    // userId: 'seniorattorney',
+    // name: 'Señor Attorney',
+    // token: 'seniorattorney',
+    // role: 'seniorattorney',
   },
   caseDetail: {},
   cases: [],
+  caseDetailHelper,
   formattedCaseDetail,
   formattedCases,
-  formattedSearchParams,
 };

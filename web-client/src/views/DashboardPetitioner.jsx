@@ -7,7 +7,7 @@ import CaseList from './CaseList';
 
 export default connect(
   {},
-  function Dashboard() {
+  function DashboardPetitioner() {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Dashboard</h1>

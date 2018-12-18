@@ -16,9 +16,9 @@ export default connect(
             {caseDetail.petitioners && (
               <React.Fragment>
                 <h4 id="petitioners-label">Petitioner</h4>
-                <div aria-labelledby="petitioners-label">
+                <div>
                   {caseDetail.petitioners.map((petitioner, key) => (
-                    <address key={key}>
+                    <address aria-labelledby="petitioners-label" key={key}>
                       <p>{petitioner.name}</p>
                       <p>
                         <span className="address-line">
