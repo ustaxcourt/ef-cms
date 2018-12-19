@@ -10,7 +10,7 @@ const createApplicationContext = require('../applicationContext');
 exports.put = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    const applicationContext = createApplicationContext({ userId })
+    const applicationContext = createApplicationContext({ userId });
     return applicationContext.getUseCases().updateWorkItem({
       workItemId: event.pathParameters.workItemId,
       workItemToUpdate: JSON.parse(event.body),

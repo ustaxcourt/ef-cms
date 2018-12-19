@@ -11,7 +11,7 @@ const createApplicationContext = require('../applicationContext');
 exports.get = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    const applicationContext = createApplicationContext({ userId })
+    const applicationContext = createApplicationContext({ userId });
     return applicationContext.getUseCases().getWorkItem({
       userId: getAuthHeader(event),
       workItemId: event.pathParameters.workItemId,

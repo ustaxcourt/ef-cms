@@ -2,9 +2,7 @@ const swagger = require('../../swagger.json');
 /**
  * Swagger HTML Page Lambda
  *
- * @param event
- * @param context
- * @param callback
+ *
  */
 exports.handler = async () => {
   const body = `<html>
