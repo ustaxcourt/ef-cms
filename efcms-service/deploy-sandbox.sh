@@ -29,7 +29,7 @@ function prepare_serverless() {
     export NODE_PRESERVE_SYMLINKS=1
     rm -rf ./node_modules/
     npm install
-    pushd ../business
+    pushd ../shared
     rm -rf ./node_modules/
     npm install --production
     popd
