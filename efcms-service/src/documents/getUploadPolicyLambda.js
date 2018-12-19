@@ -1,5 +1,5 @@
 const { handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
  * Create Document API Lambda
@@ -13,6 +13,7 @@ const applicationContext = require('../applicationContext');
  */
 exports.create = () =>
   handle(() => {
+    const applicationContext = createApplicationContext();
     return applicationContext.getPersistenceGateway().getUploadPolicy({
       applicationContext,
     });
