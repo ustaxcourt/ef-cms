@@ -13,7 +13,7 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.create = () =>
   handle(() => {
-    const applicationContext = createApplicationContext()
+    const applicationContext = createApplicationContext();
     return applicationContext.getPersistenceGateway().getUploadPolicy({
       applicationContext,
     });
