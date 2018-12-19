@@ -9,7 +9,7 @@ const EXPECTED_HEADERS = {
 
 describe('handle', () => {
   it ('should return an object representing an 200 status back if the callback funtion executes successfully', async () => {
-    const response = await handle(async () => 'success')
+    const response = await handle(async () => 'success');
     expect(response).to.deep.equal({
       statusCode: '200',
       body: JSON.stringify('success'),
@@ -26,7 +26,7 @@ describe('handle', () => {
       body: JSON.stringify('an error'),
       headers: EXPECTED_HEADERS,
     });
-  })
+  });
 
 
   it ('should return an object representing an 404 status if the function returns a NotFoundError', async () => {
@@ -38,7 +38,7 @@ describe('handle', () => {
       body: JSON.stringify('an error'),
       headers: EXPECTED_HEADERS,
     });
-  })
+  });
 
   it ('should return an object representing an 404 status if the function returns a NotFoundError', async () => {
     const response = await handle(async () => {
@@ -50,7 +50,7 @@ describe('handle', () => {
       headers: EXPECTED_HEADERS,
     });
   })
-})
+});
 
 
 
@@ -60,18 +60,18 @@ describe('getAuthHeader', () => {
       headers: {
         Authorization: 'Bearer taxpayer',
       }
-    })
+    });
     expect(response).to.deep.equal('taxpayer');
-  })
+  });
 
   it('should return the user token from the authorization header (lowercase a in authorization)', () => {
     const response = getAuthHeader({
       headers: {
         authorization: 'Bearer taxpayer',
       }
-    })
+    });
     expect(response).to.deep.equal('taxpayer');
-  })
+  });
 
   it('should return the user token from the Authorization header', () => {
     let error;
@@ -83,7 +83,7 @@ describe('getAuthHeader', () => {
       error = err;
     }
     expect(error).to.not.be.undefined;
-  })
+  });
 
   it('should return the user token from the Authorization header', () => {
     let error;
@@ -98,4 +98,4 @@ describe('getAuthHeader', () => {
     }
     expect(error).to.not.be.undefined;
   })
-})
+});

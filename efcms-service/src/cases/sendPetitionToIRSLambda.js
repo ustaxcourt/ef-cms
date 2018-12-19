@@ -1,6 +1,5 @@
-const { sendPetitionToIRS } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS.interactor');
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
  * updateCase
@@ -11,7 +10,8 @@ const applicationContext = require('../applicationContext');
 exports.post = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    return sendPetitionToIRS({
+    const applicationContext = createApplicationContext({ userId });
+    return applicationContext.getUseCases().sendPetitionToIRS({
       caseId: event.pathParameters.caseId,
       userId,
       applicationContext,

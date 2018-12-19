@@ -12,7 +12,11 @@ const Case = require('../entities/Case');
  * @param applicationContext
  * @returns {Promise<Promise<*>|*>}
  */
-exports.getCasesByStatus = async ({ status, userId, applicationContext }) => {
+exports.getCasesByStatus = async ({
+  status = 'new',
+  userId,
+  applicationContext,
+}) => {
   if (!isAuthorized(userId, GET_CASES_BY_STATUS)) {
     throw new UnauthorizedError('Unauthorized for getCasesByStatus');
   }
