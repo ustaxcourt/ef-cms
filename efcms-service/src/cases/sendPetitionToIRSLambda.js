@@ -10,7 +10,7 @@ const createApplicationContext = require('../applicationContext');
 exports.post = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    const applicationContext = createApplicationContext({ userId })
+    const applicationContext = createApplicationContext({ userId });
     return applicationContext.getUseCases().sendPetitionToIRS({
       caseId: event.pathParameters.caseId,
       userId,

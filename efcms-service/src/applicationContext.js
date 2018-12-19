@@ -113,4 +113,4 @@ module.exports = ({userId} = {}) => {
     },
     getInteractorForGettingCases,
   };
-}
+};
