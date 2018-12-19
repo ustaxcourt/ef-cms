@@ -1,26 +1,30 @@
 import { Container } from '@cerebral/react';
-import { faFilePdf, faFlag } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFilePdf,
+  faFlag,
+  faCaretLeft,
+  faCloudUploadAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
-import mainModule from './main';
+import presenter from './presenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { router, route } from './router';
-import AppComponent from './components/App';
+import AppComponent from './views/App';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    library.add(faFilePdf);
-    library.add(faFlag);
-    mainModule.providers.applicationContext = applicationContext;
-    mainModule.providers.router = {
+    library.add(faFilePdf, faFlag, faCaretLeft, faCloudUploadAlt);
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = {
       route,
     };
-    const cerebralApp = App(mainModule, debugTools);
+    const cerebralApp = App(presenter, debugTools);
     router.initialize(cerebralApp);
     ReactDOM.render(
       <Container app={cerebralApp}>
