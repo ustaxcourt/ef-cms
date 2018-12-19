@@ -6,8 +6,6 @@ const createApplicationContext = require('../applicationContext');
  * GET Cases API Lambda
  *
  * @param event
- * @param context
- * @param callback
  */
 
 exports.get = event =>
@@ -17,7 +15,7 @@ exports.get = event =>
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
     const useCase = applicationContext.getInteractorForGettingCases({
-      userId, 
+      userId,
       documentId,
       applicationContext
     });
