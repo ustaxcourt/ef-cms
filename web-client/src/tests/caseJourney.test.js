@@ -5,18 +5,23 @@ import applicationContext from '../applicationContext';
 import caseDetailHelper from '../presenter/computeds/caseDetailHelper';
 import presenter from '../presenter';
 
+import taxpayerLogin from './journey/taxpayerLogin';
+import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+
 import Case from '../../../shared/src/business/entities/Case';
 
 let test;
-let docketNumber;
 let workItemId;
 global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
-    if (url === `/case-detail/${docketNumber}`) {
-      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    if (url === `/case-detail/${test.docketNumber}`) {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: test.docketNumber,
+      });
     }
   },
 };
@@ -29,47 +34,16 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
-  it('Taxpayer logs in', async () => {
-    test.setState('user', {
-      name: 'Test Taxpayer',
-      role: 'taxpayer',
-      token: 'taxpayer',
-      userId: 'taxpayer',
-    });
-  });
-
-  it('Taxpayer creates a new case', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'requestForPlaceOfTrial',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'statementOfTaxpayerIdentificationNumber',
-      value: fakeFile,
-    });
-    await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your files were uploaded successfully.',
-      message: 'Your case has now been created.',
-    });
-  });
-
-  it('Taxpayer views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-    docketNumber = test.getState('cases.0.docketNumber');
-  });
+  taxpayerLogin(test);
+  taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
 
   it('Taxpayer views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.documents').length).toEqual(3);
     await test.runSequence('viewDocumentSequence', {
       documentId: test.getState('caseDetail.documents.0.documentId'),
@@ -97,17 +71,19 @@ describe('Case journey', async () => {
   it('Petitions clerk searches for case', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('updateSearchTermSequence', {
-      searchTerm: docketNumber,
+      searchTerm: test.docketNumber,
     });
     await test.runSequence('submitSearchSequence');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
   });
 
   it('Petitions clerk views case detail', async () => {
     test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual('new');
     expect(test.getState('caseDetail.documents').length).toEqual(3);
 
@@ -128,7 +104,9 @@ describe('Case journey', async () => {
     });
     await test.runSequence('submitUpdateCaseSequence');
     test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
 
     const helper = runCompute(caseDetailHelper, {
@@ -162,9 +140,11 @@ describe('Case journey', async () => {
 
   it('Respondent views case detail', async () => {
     test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual('general');
     expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
@@ -196,7 +176,9 @@ describe('Case journey', async () => {
   });
 
   it('the respondent uploads a stipulated decision to the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     await test.runSequence('updateDocumentValueSequence', {
       key: 'documentType',
       value: Case.documentTypes.stipulatedDecision,
@@ -222,7 +204,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     workItemId = workItemCreated.workItemId;
     expect(workItemCreated).toMatchObject({
@@ -231,7 +213,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',
@@ -256,7 +238,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',
@@ -284,7 +266,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     expect(workItemCreated).toEqual(undefined);
   });
@@ -303,7 +285,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardSeniorAttorney');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     expect(workItemCreated).toMatchObject({
       assigneeId: 'seniorattorney',
@@ -311,7 +293,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',
