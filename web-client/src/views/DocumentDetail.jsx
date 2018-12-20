@@ -8,14 +8,13 @@ import { state, sequences } from 'cerebral';
 
 export default connect(
   {
-    showForwardInputs: state.document.showForwardInputs,
+    showForwardInputs: state.form.showForwardInputs,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     submitForwardSequence: sequences.submitForwardSequence,
   },
   function DocumentDetail({
     showForwardInputs,
-    updateDocumentValueSequence,
     updateFormValueSequence,
     submitForwardSequence,
   }) {
@@ -86,7 +85,7 @@ export default connect(
                         className="link"
                         aria-label="Forward message"
                         onClick={() => {
-                          updateDocumentValueSequence({
+                          updateFormValueSequence({
                             key: 'showForwardInputs',
                             value: true,
                           });
@@ -140,7 +139,7 @@ export default connect(
                         type="button"
                         className="usa-button-secondary"
                         onClick={() => {
-                          updateDocumentValueSequence({
+                          updateFormValueSequence({
                             key: 'showForwardInputs',
                             value: false,
                           });
