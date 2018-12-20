@@ -4,7 +4,6 @@
  * @constructor
  */
 function User(user) {
-  console.log('user', user);
   Object.assign(this, user);
 
   const validRoles = [

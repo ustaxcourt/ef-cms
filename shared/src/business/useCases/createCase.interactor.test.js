@@ -53,6 +53,8 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: MOCK_CASE_ID,
       docketNumber: '101-18',
+      caseTitle:
+        'test taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       petitioners: [
         {
           address: '123',

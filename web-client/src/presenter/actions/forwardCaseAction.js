@@ -13,6 +13,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
     workItem => workItem.workItemId === props.workItemId,
   );
   workItemToUpdate.assigneeId = get(state.form.forwardRecipientId);
+  workItemToUpdate.assigneeName = 'Senior Attorney';
   const message = get(state.form.forwardMessage);
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
@@ -25,7 +26,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
   store.set(state.caseDetail, caseDetail);
 
   const useCases = applicationContext.getUseCases();
-  await await useCases.updateWorkItem({
+  await useCases.updateWorkItem({
     applicationContext,
     workItemToUpdate,
     workItemId: props.workItemId,
