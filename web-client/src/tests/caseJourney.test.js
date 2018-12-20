@@ -2,21 +2,38 @@ import { CerebralTest, runCompute } from 'cerebral/test';
 import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
-import caseDetailHelper from '../presenter/computeds/caseDetailHelper';
 import presenter from '../presenter';
+
+import taxpayerLogin from './journey/taxpayerLogIn';
+import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+
+import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
+import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
+import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+
+import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+
+import respondentLogIn from './journey/respondentLogIn';
+import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 
 import Case from '../../../shared/src/business/entities/Case';
 
 let test;
-let docketNumber;
 let workItemId;
 global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
-    if (url === `/case-detail/${docketNumber}`) {
-      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    if (url === `/case-detail/${test.docketNumber}`) {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: test.docketNumber,
+      });
     }
   },
 };
@@ -29,145 +46,19 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
-  it('Taxpayer logs in', async () => {
-    test.setState('user', {
-      name: 'Test Taxpayer',
-      role: 'taxpayer',
-      token: 'taxpayer',
-      userId: 'taxpayer',
-    });
-  });
-
-  it('Taxpayer creates a new case', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'requestForPlaceOfTrial',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'statementOfTaxpayerIdentificationNumber',
-      value: fakeFile,
-    });
-    await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your files were uploaded successfully.',
-      message: 'Your case has now been created.',
-    });
-  });
-
-  it('Taxpayer views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-    docketNumber = test.getState('cases.0.docketNumber');
-  });
-
-  it('Taxpayer views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-    await test.runSequence('viewDocumentSequence', {
-      documentId: test.getState('caseDetail.documents.0.documentId'),
-      callback: documentBlob => {
-        expect(documentBlob).toBeTruthy();
-      },
-    });
-  });
-
-  it('Petitions clerk logs in', async () => {
-    test.setState('user', {
-      name: 'Petitions Clerk',
-      role: 'petitionsclerk',
-      token: 'petitionsclerk',
-      userId: 'petitionsclerk',
-    });
-  });
-
-  it('Petitions clerk views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-  });
-
-  it('Petitions clerk searches for case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('updateSearchTermSequence', {
-      searchTerm: docketNumber,
-    });
-    await test.runSequence('submitSearchSequence');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-  });
-
-  it('Petitions clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('new');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showDocumentStatus).toEqual(true);
-    expect(helper.showIrsServedDate).toEqual(false);
-    expect(helper.showPayGovIdInput).toEqual(false);
-    expect(helper.showPaymentOptions).toEqual(true);
-    expect(helper.showActionRequired).toEqual(true);
-  });
-
-  it('Petitions clerk records pay.gov ID', async () => {
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'payGovId',
-      value: '123',
-    });
-    await test.runSequence('submitUpdateCaseSequence');
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('caseDetail.payGovId')).toEqual('123');
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPaymentRecord).toEqual(true);
-  });
-
-  it('Petitions clerk submits case to IRS', async () => {
-    await test.runSequence('submitToIrsSequence');
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('alertSuccess.title')).toEqual(
-      'Successfully served to IRS',
-    );
-  });
-
-  it('Respondent logs in', async () => {
-    test.setState('user', {
-      name: 'IRS Attorney',
-      role: 'respondent',
-      token: 'respondent',
-      userId: 'respondent',
-    });
-  });
-
-  it('Respondent views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-  });
-
-  it('Respondent views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-  });
+  taxpayerLogin(test);
+  taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
+  taxpayerViewsCaseDetail(test);
+  petitionsClerkLogIn(test);
+  petitionsClerkCaseSearch(test);
+  petitionsClerkViewsDashboard(test);
+  petitionsClerkViewsCaseDetail(test, runCompute);
+  petitionsClerkRecordsPayGovId(test, runCompute);
+  petitionsClerkSubmitsCaseToIrs(test);
+  respondentLogIn(test);
+  respondentViewsDashboard(test);
+  respondentViewsCaseDetail(test);
 
   it('Respondent adds answer', async () => {
     await test.runSequence('updateDocumentValueSequence', {
@@ -196,7 +87,9 @@ describe('Case journey', async () => {
   });
 
   it('the respondent uploads a stipulated decision to the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
     await test.runSequence('updateDocumentValueSequence', {
       key: 'documentType',
       value: Case.documentTypes.stipulatedDecision,
@@ -222,7 +115,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     workItemId = workItemCreated.workItemId;
     expect(workItemCreated).toMatchObject({
@@ -231,7 +124,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',
@@ -256,7 +149,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',
@@ -284,7 +177,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     expect(workItemCreated).toEqual(undefined);
   });
@@ -303,7 +196,7 @@ describe('Case journey', async () => {
     expect(test.getState('currentPage')).toEqual('DashboardSeniorAttorney');
     const workItems = test.getState('workQueue');
     const workItemCreated = workItems.find(
-      item => item.docketNumber === docketNumber,
+      item => item.docketNumber === test.docketNumber,
     );
     expect(workItemCreated).toMatchObject({
       assigneeId: 'seniorattorney',
@@ -311,7 +204,7 @@ describe('Case journey', async () => {
       caseStatus: 'general',
       caseTitle:
         'Test Taxpayer v. Commissioner of Internal Revenue, Respondent',
-      docketNumber,
+      docketNumber: test.docketNumber,
       document: {
         documentType: 'Stipulated Decision',
         filedBy: 'Respondent',

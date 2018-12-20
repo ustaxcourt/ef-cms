@@ -19,6 +19,7 @@ exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
       },
     })
     .then(response => {
+      // TODO: this should probably be sorted in a computed
       if (!(response.data && Array.isArray(response.data))) {
         return response.data;
       } else {
