@@ -4,10 +4,14 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
+import { state, sequences } from 'cerebral';
 
 export default connect(
-  {},
-  function DocumentDetail() {
+  {
+    showForwardInputs: state.document.showForwardInputs,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+  },
+  function DocumentDetail({ showForwardInputs, updateDocumentValueSequence }) {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -53,7 +57,7 @@ export default connect(
                   <span className="label">Respondent</span>
                   <span className="float-right">12/12/2019</span>
                 </div>
-                <p>Stipulated decision filed by Respondent</p>
+                <p>Stipulated Decision Filed by Respondent</p>
                 <div className="subsection">
                   <span>
                     {' '}
@@ -64,29 +68,50 @@ export default connect(
                     />{' '}
                     Docket clerk name
                   </span>
-                  <span className="float-right">
-                    <a href="/">Forward</a>
-                  </span>
-                  <div id="forward-form">
-                    <b>Send to</b>
-                    <br />
-                    <select>
-                      <option value=""> -- Select -- </option>
-                    </select>
-                    <b>Add document message</b>
-                    <br />
-                    <textarea />
-                    <button
-                      type="submit"
-                      className="usa-button"
-                      aria-disabled="false"
-                    >
-                      <span>Forward</span>
-                    </button>
-                    <button type="button" className="usa-button-secondary">
-                      Cancel
-                    </button>
-                  </div>
+                  {!showForwardInputs && (
+                    <span className="float-right">
+                      <button
+                        className="link"
+                        aria-label="Forward message"
+                        onClick={() => {
+                          updateDocumentValueSequence({
+                            key: 'showForwardInputs',
+                            value: true,
+                          });
+                        }}
+                      >
+                        Forward
+                      </button>
+                    </span>
+                  )}
+                  {showForwardInputs && (
+                    <div id="forward-form">
+                      <b>Send to</b>
+                      <br />
+                      <select>
+                        <option value=""> -- Select -- </option>
+                        <option>Answer</option>
+                      </select>
+                      <b>Add document message</b>
+                      <br />
+                      <textarea />
+                      <button type="submit" className="usa-button">
+                        <span>Forward</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="usa-button-secondary"
+                        onClick={() => {
+                          updateDocumentValueSequence({
+                            key: 'showForwardInputs',
+                            value: false,
+                          });
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
