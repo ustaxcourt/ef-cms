@@ -5,6 +5,7 @@ import moment from 'moment';
 export const formatWorkItem = workItem => {
   const result = _.cloneDeep(workItem);
   result.createdAtFormatted = moment(result.createdAt).format('L');
+  result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(
     message =>
       (message.createdAtFormatted = moment(message.createdAt).format('L')),

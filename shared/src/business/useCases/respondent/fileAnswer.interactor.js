@@ -5,6 +5,7 @@ const {
   FILE_ANSWER,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const User = require('../../entities/User');
 
 exports.fileAnswer = async ({
   userId,
@@ -15,6 +16,8 @@ exports.fileAnswer = async ({
   if (!isAuthorized(userId, FILE_ANSWER)) {
     throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
   }
+
+  const user = new User({ userId });
 
   const documentId = await applicationContext
     .getPersistenceGateway()
@@ -31,6 +34,7 @@ exports.fileAnswer = async ({
         ...(caseToUpdate.documents || []),
         {
           userId,
+          filedBy: user.name,
           documentId,
           documentType: Case.documentTypes.answer,
         },

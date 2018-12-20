@@ -31,8 +31,8 @@ export default {
   searchTerm: '',
   workQueue: [],
   user: {
-    userId: '',
-    role: 'public',
+    // userId: '',
+    // role: 'public',
 
     // userId: 'taxpayer',
     // name: 'Tax Payer',
@@ -49,10 +49,10 @@ export default {
     // token: 'respondent',
     // role: 'respondent',
 
-    // userId: 'docketclerk',
-    // name: 'Docket Clerk',
-    // token: 'docketclerk',
-    // role: 'docketclerk',
+    userId: 'docketclerk',
+    name: 'Docket Clerk',
+    token: 'docketclerk',
+    role: 'docketclerk',
 
     // userId: 'seniorattorney',
     // name: 'Señor Attorney',

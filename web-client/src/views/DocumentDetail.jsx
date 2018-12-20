@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
@@ -8,11 +8,19 @@ import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
-    workItems: state.extractedWorkItems,
     caseDetail: state.formattedCaseDetail,
+    workItems: state.extractedWorkItems,
     document: state.extractedDocument,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    showForwardInputs: state.document.showForwardInputs,
   },
-  function DocumentDetail({ workItems, caseDetail, document }) {
+  function DocumentDetail({
+    showForwardInputs,
+    updateDocumentValueSequence,
+    workItems,
+    caseDetail,
+    document,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -36,7 +44,7 @@ export default connect(
               <span aria-hidden="true">{caseDetail.status}</span>
             </span>
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           <div className="usa-grid-full">
@@ -49,31 +57,79 @@ export default connect(
                 </div>
                 <div className="usa-width-one-half">
                   <span className="label">Filed by</span>
-                  <p>{document.userId}</p>
+                  <p>{document.filedBy}</p>
                 </div>
               </div>
-              <span className="label">Messages</span>
+              <span className="label" id="messages-label">
+                Messages
+              </span>
               {workItems.map((workItem, idx) => (
-                <div className="card" key={idx}>
+                <div
+                  className="card messages-card"
+                  aria-labelledby="messages-label"
+                  key={idx}
+                >
                   <div className="subsection">
-                    <span className="label">
-                      {workItem.messages[workItem.messages.length - 1].sentBy}
-                    </span>
+                    <span className="label">{workItem.messages[0].sentBy}</span>
                     <span className="float-right">
-                      {
-                        workItem.messages[workItem.messages.length - 1]
-                          .createdAtFormatted
-                      }
+                      {workItem.messages[0].createdAtFormatted}
                     </span>
                   </div>
-                  <p>
-                    {workItem.messages[workItem.messages.length - 1].message}
-                  </p>
+                  <p>{workItem.messages[0].message}</p>
                   <div className="subsection">
-                    <span>{workItem.assigneeName}</span>
-                    <span className="float-right">
-                      <a href="/">Forward</a>
+                    <span className="flagged-name">
+                      {' '}
+                      <FontAwesomeIcon
+                        icon="flag"
+                        className="action-flag"
+                        size="sm"
+                      />{' '}
+                      {workItem.assigneeName}
                     </span>
+                    {!showForwardInputs && (
+                      <span className="float-right">
+                        <button
+                          className="link"
+                          aria-label="Forward message"
+                          onClick={() => {
+                            updateDocumentValueSequence({
+                              key: 'showForwardInputs',
+                              value: true,
+                            });
+                          }}
+                        >
+                          Forward
+                        </button>
+                      </span>
+                    )}
+                    {showForwardInputs && (
+                      <div id="forward-form">
+                        <b>Send to</b>
+                        <br />
+                        <select>
+                          <option value=""> -- Select -- </option>
+                          <option>Answer</option>
+                        </select>
+                        <b>Add document message</b>
+                        <br />
+                        <textarea />
+                        <button type="submit" className="usa-button">
+                          <span>Forward</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="usa-button-secondary"
+                          onClick={() => {
+                            updateDocumentValueSequence({
+                              key: 'showForwardInputs',
+                              value: false,
+                            });
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

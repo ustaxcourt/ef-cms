@@ -7,6 +7,7 @@ const Case = require('../../entities/Case');
 const Message = require('../../entities/Message');
 const WorkItem = require('../../entities/WorkItem');
 const Document = require('../../entities/Document');
+const User = require('../../entities/User');
 
 exports.fileStipulatedDecision = async ({
   userId,
@@ -17,6 +18,8 @@ exports.fileStipulatedDecision = async ({
   if (!isAuthorized(userId, FILE_STIPULATED_DECISION)) {
     throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
   }
+
+  const user = new User({ userId });
 
   const documentId = await applicationContext
     .getPersistenceGateway()
@@ -29,6 +32,7 @@ exports.fileStipulatedDecision = async ({
   const documentEntity = new Document({
     userId,
     documentId,
+    filedBy: user.name,
     documentType: Case.documentTypes.stipulatedDecision,
   });
 

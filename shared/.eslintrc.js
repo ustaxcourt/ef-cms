@@ -43,11 +43,8 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 9,
     sourceType: 'module',
-    jsx: true,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+    jsx: true
   },
 };
