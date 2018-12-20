@@ -4,10 +4,20 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
+import { state, sequences } from 'cerebral';
 
 export default connect(
-  {},
-  function DocumentDetail() {
+  {
+    showForwardInputs: state.form.showForwardInputs,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    submitForwardSequence: sequences.submitForwardSequence,
+  },
+  function DocumentDetail({
+    showForwardInputs,
+    updateFormValueSequence,
+    submitForwardSequence,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -31,7 +41,7 @@ export default connect(
               <span aria-hidden="true">general docket</span>
             </span>
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           <div className="usa-grid-full">
@@ -47,18 +57,98 @@ export default connect(
                   <p>Respondent</p>
                 </div>
               </div>
-              <span className="label">Messages</span>
-              <div className="card">
+              <span className="label" id="messages-label">
+                Messages
+              </span>
+              <div
+                className="card messages-card"
+                aria-labelledby="messages-label"
+              >
                 <div className="subsection">
                   <span className="label">Respondent</span>
                   <span className="float-right">12/12/2019</span>
                 </div>
-                <p>Stipulated decision filed by Respondent</p>
+                <p>Stipulated Decision Filed by Respondent</p>
                 <div className="subsection">
-                  <span>Docket clerk name</span>
-                  <span className="float-right">
-                    <a href="/">Forward</a>
+                  <span className="flagged-name">
+                    {' '}
+                    <FontAwesomeIcon
+                      icon="flag"
+                      className="action-flag"
+                      size="sm"
+                    />{' '}
+                    Docket clerk name
                   </span>
+                  {!showForwardInputs && (
+                    <span className="float-right">
+                      <button
+                        className="link"
+                        aria-label="Forward message"
+                        onClick={() => {
+                          updateFormValueSequence({
+                            key: 'showForwardInputs',
+                            value: true,
+                          });
+                        }}
+                      >
+                        Forward
+                      </button>
+                    </span>
+                  )}
+                  {showForwardInputs && (
+                    <form
+                      id="forward-form"
+                      role="form"
+                      noValidate
+                      onSubmit={e => {
+                        e.preventDefault();
+                        submitForwardSequence();
+                      }}
+                    >
+                      <b>Send to</b>
+                      <br />
+                      <select
+                        name="forwardRecipientId"
+                        id="forward-recipient-id"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      >
+                        <option value=""> -- Select -- </option>
+                        <option value="seniorattorney">Senior Attorney</option>
+                      </select>
+                      <b>Add document message</b>
+                      <br />
+                      <textarea
+                        name="forwardMessage"
+                        id="forward-message"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <button type="submit" className="usa-button">
+                        <span>Forward</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="usa-button-secondary"
+                        onClick={() => {
+                          updateFormValueSequence({
+                            key: 'showForwardInputs',
+                            value: false,
+                          });
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
