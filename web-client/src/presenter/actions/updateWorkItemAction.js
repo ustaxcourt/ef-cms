@@ -1,7 +1,8 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path, action }) => {
+export default async ({ applicationContext, get, path, action, props }) => {
   const useCases = applicationContext.getUseCases();
+  console.log('props', props);
   try {
     //TODO get specific usecase for workitem from app ctx .getWorkItemUseCaseByAction()
     const workItem = await useCases.updateWorkItem({

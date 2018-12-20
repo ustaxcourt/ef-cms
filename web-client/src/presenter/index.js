@@ -7,6 +7,7 @@ import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
+import submitForwardSequence from './sequences/submitForwardSequence';
 import submitLogInSequence from './sequences/submitLogInSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
 import submitToIrsSequence from './sequences/submitToIrsSequence';
@@ -40,6 +41,7 @@ export default {
     loginWithTokenSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
+    submitForwardSequence,
     submitLogInSequence,
     submitSearchSequence,
     submitToIrsSequence,
