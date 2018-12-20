@@ -13,6 +13,10 @@ export default connect(
     document: state.extractedDocument,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
     showForwardInputs: state.document.showForwardInputs,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    submitForwardSequence: sequences.submitForwardSequence,
+    form: state.form,
+    updateWorkItemSequence: sequences.updateWorkItemSequence,
   },
   function DocumentDetail({
     showForwardInputs,
@@ -20,6 +24,10 @@ export default connect(
     workItems,
     caseDetail,
     document,
+    updateFormValueSequence,
+    submitForwardSequence,
+    updateWorkItemSequence,
+    form,
   }) {
     return (
       <React.Fragment>
@@ -101,17 +109,55 @@ export default connect(
                       </span>
                     )}
                     {showForwardInputs && (
-                      <div id="forward-form">
+                      <form
+                        id="forward-form"
+                        role="form"
+                        noValidate
+                        onSubmit={e => {
+                          e.preventDefault();
+                          submitForwardSequence();
+                        }}
+                      >
                         <b>Send to</b>
                         <br />
-                        <select>
+                        <select
+                          name="forwardRecipientId"
+                          id="forward-recipient-id"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        >
                           <option value=""> -- Select -- </option>
-                          <option>Answer</option>
+                          <option value="seniorattorney">
+                            Senior Attorney
+                          </option>
                         </select>
                         <b>Add document message</b>
                         <br />
-                        <textarea />
-                        <button type="submit" className="usa-button">
+                        <textarea
+                          name="forwardMessage"
+                          id="forward-message"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                        <button
+                          type="submit"
+                          className="usa-button"
+                          onClick={() => {
+                            updateWorkItemSequence({
+                              workItem,
+                              message: form.forwardMessage,
+                              assigneeId: form.forwardRecipientId,
+                            });
+                          }}
+                        >
                           <span>Forward</span>
                         </button>
                         <button
@@ -126,7 +172,7 @@ export default connect(
                         >
                           Cancel
                         </button>
-                      </div>
+                      </form>
                     )}
                   </div>
                 </div>
