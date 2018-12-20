@@ -28,7 +28,7 @@ const WorkItem = require('./WorkItem');
  */
 function Document(rawDocument) {
   Object.assign(this, rawDocument, {
-    createdAt: new Date().toISOString(),
+    createdAt: rawDocument.createdAt || new Date().toISOString(),
   });
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem),

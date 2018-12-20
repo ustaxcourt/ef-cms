@@ -15,8 +15,8 @@ const uuid = require('uuid');
  */
 function Message(rawMessage) {
   Object.assign(this, rawMessage, {
-    messageId: rawMessage.messageId ? rawMessage.messageId : uuid.v4(),
-    createdAt: new Date().toISOString(),
+    messageId: rawMessage.messageId || uuid.v4(),
+    createdAt: rawMessage.createdAt || new Date().toISOString(),
   });
 }
 
