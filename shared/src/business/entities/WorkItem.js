@@ -51,8 +51,6 @@ joiValidationDecorator(
       .uuid(uuidVersions)
       .required(),
     assigneeName: joi.string().required(),
-    caseTitle: joi.string().required(),
-    caseStatus: joi.string().required(),
     document: joi.object().required(),
   }),
   function() {
