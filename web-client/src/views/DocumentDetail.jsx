@@ -10,8 +10,15 @@ export default connect(
   {
     showForwardInputs: state.document.showForwardInputs,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    submitForwardSequence: sequences.submitForwardSequence,
   },
-  function DocumentDetail({ showForwardInputs, updateDocumentValueSequence }) {
+  function DocumentDetail({
+    showForwardInputs,
+    updateDocumentValueSequence,
+    updateFormValueSequence,
+    submitForwardSequence,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -90,16 +97,42 @@ export default connect(
                     </span>
                   )}
                   {showForwardInputs && (
-                    <div id="forward-form">
+                    <form
+                      id="forward-form"
+                      role="form"
+                      noValidate
+                      onSubmit={e => {
+                        e.preventDefault();
+                        submitForwardSequence();
+                      }}
+                    >
                       <b>Send to</b>
                       <br />
-                      <select>
+                      <select
+                        name="forwardRecipientId"
+                        id="forward-recipient-id"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      >
                         <option value=""> -- Select -- </option>
-                        <option>Answer</option>
+                        <option value="seniorattorney">Senior Attorney</option>
                       </select>
                       <b>Add document message</b>
                       <br />
-                      <textarea />
+                      <textarea
+                        name="forwardMessage"
+                        id="forward-message"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
                       <button type="submit" className="usa-button">
                         <span>Forward</span>
                       </button>
@@ -115,7 +148,7 @@ export default connect(
                       >
                         Cancel
                       </button>
-                    </div>
+                    </form>
                   )}
                 </div>
               </div>
