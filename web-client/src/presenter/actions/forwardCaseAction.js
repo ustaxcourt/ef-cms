@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { state } from 'cerebral';
 
-export default async ({ get, applicationContext, path, props }) => {
+export default async ({ get, store, applicationContext, path, props }) => {
   const forwardSendDate = new Date().toISOString();
 
   const caseDetail = get(state.caseDetail);
@@ -22,6 +22,7 @@ export default async ({ get, applicationContext, path, props }) => {
       sentBy: get(state.user.name),
     },
   ];
+  store.set(state.caseDetail, caseDetail);
 
   const useCases = applicationContext.getUseCases();
   await await useCases.updateWorkItem({
