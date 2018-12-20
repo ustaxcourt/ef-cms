@@ -12,7 +12,7 @@ export default connect(
     workItems: state.extractedWorkItems,
     document: state.extractedDocument,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
-    showForwardInputs: state.document.showForwardInputs,
+    showForwardInputs: state.form.showForwardInputs,
     updateFormValueSequence: sequences.updateFormValueSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     form: state.form,
@@ -98,7 +98,7 @@ export default connect(
                           className="link"
                           aria-label="Forward message"
                           onClick={() => {
-                            updateDocumentValueSequence({
+                            updateFormValueSequence({
                               key: 'showForwardInputs',
                               value: true,
                             });
@@ -115,7 +115,9 @@ export default connect(
                         noValidate
                         onSubmit={e => {
                           e.preventDefault();
-                          submitForwardSequence();
+                          submitForwardSequence({
+                            workItemId: workItem.workItemId,
+                          });
                         }}
                       >
                         <b>Send to</b>
@@ -147,17 +149,7 @@ export default connect(
                             });
                           }}
                         />
-                        <button
-                          type="submit"
-                          className="usa-button"
-                          onClick={() => {
-                            updateWorkItemSequence({
-                              workItem,
-                              message: form.forwardMessage,
-                              assigneeId: form.forwardRecipientId,
-                            });
-                          }}
-                        >
+                        <button type="submit" className="usa-button">
                           <span>Forward</span>
                         </button>
                         <button
