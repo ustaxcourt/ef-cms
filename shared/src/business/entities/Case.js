@@ -22,11 +22,9 @@ function Case(rawCase) {
     this,
     rawCase,
     {
-      caseId: rawCase.caseId ? rawCase.caseId : uuid.v4(),
-      createdAt: rawCase.createdAt
-        ? rawCase.createdAt
-        : new Date().toISOString(),
-      status: rawCase.status ? rawCase.status : 'new',
+      caseId: rawCase.caseId || uuid.v4(),
+      createdAt: rawCase.createdAt || new Date().toISOString(),
+      status: rawCase.status || 'new',
     },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }

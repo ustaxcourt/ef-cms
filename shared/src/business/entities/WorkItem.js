@@ -16,9 +16,9 @@ const Message = require('./Message');
  */
 function WorkItem(rawWorkItem) {
   Object.assign(this, rawWorkItem, {
-    workItemId: rawWorkItem.workItemId ? rawWorkItem.workItemId : uuid.v4(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    workItemId: rawWorkItem.workItemId || uuid.v4(),
+    createdAt: rawWorkItem.createdAt || new Date().toISOString(),
+    updatedAt: rawWorkItem.updatedAt || new Date().toISOString(),
   });
 
   this.messages = (this.messages || []).map(message => new Message(message));
