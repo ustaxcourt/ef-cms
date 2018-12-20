@@ -120,6 +120,11 @@ Case.prototype.attachRespondent = function({ user }) {
   this.respondent = respondent;
 };
 
+Case.prototype.addDocument = function(document) {
+  document.caseId = this.caseId;
+  this.documents = [...(this.documents || []), document];
+};
+
 Case.prototype.attachWorkItems = function({ workItemsToAdd }) {
   Object.assign(this, {
     workItems: [...(this.workItems || []), ...workItemsToAdd],

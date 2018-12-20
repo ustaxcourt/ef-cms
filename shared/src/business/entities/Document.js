@@ -19,6 +19,8 @@ const documentTypes = [
   'Stipulated Decision',
 ];
 
+const WorkItem = require('./WorkItem');
+
 /**
  * constructor
  * @param rawDocument
@@ -28,6 +30,9 @@ function Document(rawDocument) {
   Object.assign(this, rawDocument, {
     createdAt: new Date().toISOString(),
   });
+  this.workItems = (this.workItems || []).map(
+    workItem => new WorkItem(workItem),
+  );
 }
 
 Document.prototype.isPetitionDocument = function() {
@@ -66,6 +71,13 @@ joiValidationDecorator(
       .iso()
       .optional(),
   }),
+  function() {
+    return WorkItem.validateCollection(this.workItems);
+  },
 );
+
+Document.prototype.addWorkItem = function(workItem) {
+  this.workItems = [...(this.workItems || []), workItem];
+};
 
 module.exports = Document;

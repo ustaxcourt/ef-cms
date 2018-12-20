@@ -71,6 +71,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -81,6 +82,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -91,6 +93,7 @@ describe('createCase', () => {
           validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
       ],
       createdAt: DATE,

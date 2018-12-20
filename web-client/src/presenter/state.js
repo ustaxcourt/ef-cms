@@ -3,6 +3,11 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+
+import { extractedWorkItems } from './computeds/extractWorkItems';
+import { extractedDocument } from './computeds/extractDocument';
+
 import caseDetailHelper from './computeds/caseDetailHelper';
 
 export default {
@@ -21,6 +26,7 @@ export default {
   },
   petition: {},
   document: {},
+  documentId: null,
   form: {},
   searchTerm: '',
   workQueue: [],
@@ -58,4 +64,7 @@ export default {
   caseDetailHelper,
   formattedCaseDetail,
   formattedCases,
+  formattedWorkQueue,
+  extractedWorkItems,
+  extractedDocument,
 };

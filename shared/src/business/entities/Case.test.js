@@ -184,6 +184,7 @@ describe('Case entity', () => {
         userId: 'respondent',
         filedBy: 'Respondent',
         createdAt: DATE,
+        workItems: [],
       });
     });
   });
