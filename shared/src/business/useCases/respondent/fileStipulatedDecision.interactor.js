@@ -47,10 +47,6 @@ exports.fileStipulatedDecision = async ({
     assigneeId: 'docketclerk',
     docketNumber: caseToUpdate.docketNumber,
     assigneeName: 'Docket Clerk',
-    caseTitle: `${
-      caseToUpdate.petitioners[0].name
-    } v. Commissioner of Internal Revenue, Respondent`,
-    caseStatus: caseToUpdate.status,
   });
   delete workItem.createdAt; // persistence layer won't save the workItem unless createdAt is null.... this is bad design
   const message = new Message({

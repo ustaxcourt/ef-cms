@@ -34,6 +34,9 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
         ],
         docketNumber,
         documents,
+        caseTitle: `${
+          user.name
+        }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
       })
         .validate()
         .toJSON(),
