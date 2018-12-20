@@ -51,15 +51,20 @@ export default connect(
                   <p>Respondent</p>
                 </div>
               </div>
-              <span className="label">Messages</span>
-              <div className="card">
+              <span className="label" id="messages-label">
+                Messages
+              </span>
+              <div
+                className="card messages-card"
+                aria-labelledby="messages-label"
+              >
                 <div className="subsection">
                   <span className="label">Respondent</span>
                   <span className="float-right">12/12/2019</span>
                 </div>
                 <p>Stipulated Decision Filed by Respondent</p>
                 <div className="subsection">
-                  <span>
+                  <span className="flagged-name">
                     {' '}
                     <FontAwesomeIcon
                       icon="flag"

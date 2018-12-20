@@ -75,10 +75,20 @@ h1[tabIndex='-1']:focus {
 
 #forward-form {
   margin-top: 2rem;
+
   textarea {
     height: 60px;
   }
 }
+
+.flagged-name {
+  color: $color-red-dark;
+}
+
+.messages-card {
+  margin-top: 2rem;
+}
+
 table.work-queue {
   a {
     display: block;
