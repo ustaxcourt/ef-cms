@@ -2,7 +2,6 @@ import { CerebralTest, runCompute } from 'cerebral/test';
 import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
-import caseDetailHelper from '../presenter/computeds/caseDetailHelper';
 import presenter from '../presenter';
 
 import taxpayerLogin from './journey/taxpayerLogin';
@@ -14,6 +13,13 @@ import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+
+import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+
+import respondentLogIn from './journey/respondentLogIn';
+import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 
 import Case from '../../../shared/src/business/entities/Case';
 
@@ -44,63 +50,15 @@ describe('Case journey', async () => {
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
-
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsDashboard(test);
   petitionsClerkViewsCaseDetail(test, runCompute);
-
-  it('Petitions clerk records pay.gov ID', async () => {
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'payGovId',
-      value: '123',
-    });
-    await test.runSequence('submitUpdateCaseSequence');
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    expect(test.getState('caseDetail.payGovId')).toEqual('123');
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPaymentRecord).toEqual(true);
-  });
-
-  it('Petitions clerk submits case to IRS', async () => {
-    await test.runSequence('submitToIrsSequence');
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('alertSuccess.title')).toEqual(
-      'Successfully served to IRS',
-    );
-  });
-
-  it('Respondent logs in', async () => {
-    test.setState('user', {
-      name: 'IRS Attorney',
-      role: 'respondent',
-      token: 'respondent',
-      userId: 'respondent',
-    });
-  });
-
-  it('Respondent views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-  });
-
-  it('Respondent views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-  });
+  petitionsClerkRecordsPayGovId(test, runCompute);
+  petitionsClerkSubmitsCaseToIrs(test);
+  respondentLogIn(test);
+  respondentViewsDashboard(test);
+  respondentViewsCaseDetail(test);
 
   it('Respondent adds answer', async () => {
     await test.runSequence('updateDocumentValueSequence', {
