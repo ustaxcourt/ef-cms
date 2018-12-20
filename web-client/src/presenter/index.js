@@ -4,7 +4,6 @@ import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
 import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
-import gotoWorkItemSequence from './sequences/gotoWorkItemSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -38,7 +37,6 @@ export default {
     gotoFilePetitionSequence,
     gotoLogInSequence,
     gotoStyleGuideSequence,
-    gotoWorkItemSequence,
     loginWithTokenSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,

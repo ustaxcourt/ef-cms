@@ -30,6 +30,7 @@ exports.fileAnswer = async ({
       documents: [
         ...(caseToUpdate.documents || []),
         {
+          userId,
           documentId,
           documentType: Case.documentTypes.answer,
         },

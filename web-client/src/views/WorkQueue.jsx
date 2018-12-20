@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  */
 export default connect(
   {
-    workQueue: state.workQueue,
+    workQueue: state.formattedWorkQueue,
   },
   function WorkQueue({ workQueue }) {
     return (
@@ -25,7 +25,7 @@ export default connect(
           </thead>
           <tbody>
             {workQueue.map(item => (
-              <tr key={item.docketNumber}>
+              <tr key={item.workItemId}>
                 <td className="responsive-title">
                   <span className="responsive-label">Docket number</span>
                   {item.docketNumber}
@@ -33,7 +33,9 @@ export default connect(
                 <td>
                   <span className="responsive-label">Message</span>
                   <a
-                    href={`/case-detail/${item.docketNumber}/documents/1234`}
+                    href={`/case-detail/${item.docketNumber}/documents/${
+                      item.document.documentId
+                    }`}
                     className="case-link"
                   >
                     {item.document.documentType || 'Answer'}
@@ -50,7 +52,7 @@ export default connect(
                 </td>
                 <td>
                   <span className="responsive-label">Received</span>
-                  {item.messages[0].receivedDate || 'Dec 31, 1969'}
+                  {item.messages[0].createdAtFormatted || 'Dec 31, 1969'}
                 </td>
               </tr>
             ))}

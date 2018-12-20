@@ -8,9 +8,20 @@ exports.syncWorkItems = async ({
   caseToSave,
   currentCaseState,
 }) => {
-  for (let workItem of caseToSave.workItems || []) {
-    const existing = (currentCaseState.workItems || []).find(
-      i => i.id === workItem.id,
+  let currentWorkItems = [];
+  let newWorkItems = [];
+  (currentCaseState.documents || []).forEach(
+    document =>
+      (currentWorkItems = [...currentWorkItems, ...(document.workItems || [])]),
+  );
+  (caseToSave.documents || []).forEach(
+    document =>
+      (newWorkItems = [...newWorkItems, ...(document.workItems || [])]),
+  );
+
+  for (let workItem of newWorkItems) {
+    const existing = currentWorkItems.find(
+      item => item.workItemId === workItem.workItemId,
     );
     if (!existing) {
       await persistence.createMappingRecord({
