@@ -4,7 +4,7 @@ import FormData from 'form-data';
 import applicationContext from '../applicationContext';
 import presenter from '../presenter';
 
-import taxpayerLogin from './journey/taxpayerLogin';
+import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
