@@ -154,7 +154,7 @@ export default connect(
                           type="button"
                           className="usa-button-secondary"
                           onClick={() => {
-                            updateDocumentValueSequence({
+                            updateFormValueSequence({
                               key: 'showForwardInputs',
                               value: false,
                             });
