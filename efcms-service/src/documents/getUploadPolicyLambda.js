@@ -1,15 +1,12 @@
 const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
+
 /**
- * Create Document API Lambda
+ * used for getting the upload policy which is needed for users to upload directly to S3 via the UI
  *
- * @param event
- * @param context
- * @param callback
- */
-/**
- * Create Upload Policy API Lambda
+ * @param {Object} event
+ * @returns {Promise<*|undefined>}
  */
 exports.create = () =>
   handle(() => {

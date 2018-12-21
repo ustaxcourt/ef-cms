@@ -3,9 +3,9 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
- * getCase
+ * used for fetching a single case
  *
- * @param event
+ * @param {Object} event
  * @returns {Promise<*|undefined>}
  */
 exports.get = event =>
