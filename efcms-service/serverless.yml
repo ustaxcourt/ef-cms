@@ -84,6 +84,31 @@ custom:
             userId:
               type: string
               description: id of user who created the case
+            createdAt:
+              type: string
+              description: date case created
+            docketNumber:
+              type: string
+              description: the unique docket number associated with the case
+            respondent:
+              type: string
+              description: the respondent who is associated with the case
+            irsSendDate: 
+              type: string
+              description: the date the case was sent to the IRS
+            payGovId:
+              type: string
+              description: the pay gov id generated from pay.gov
+            payGovDate:
+              type: string
+              description: the date the pay gov id was updated
+            status:
+              type: string
+              description: the status of the case
+            petitioners:
+              type: array
+              items: 
+                type: object
             documents:
               type: array
               items:
@@ -93,10 +118,12 @@ custom:
                     type: string
                   documentType:
                     type: string
+                  workItems:
+                    type: array
+                    items:
+                      type: object
               description: array of rawDocument ids and types associated with the case
-            createdAt:
-              type: string
-              description: date case created
+            
       - name: 'document'
         description: 'a document response'
         contentType: 'application/json'
@@ -106,12 +133,30 @@ custom:
             documentId:
               type: string
               description: id of rawDocument
-            userId:
-              type: string
-              description: id of user who created the document
             documentType:
               type: string
               description: type of this document
+            userId:
+              type: string
+              description: id of user who created the document
+            filedBy: 
+              type: boolean
+              description: the user's name who filed the document
+            validated: 
+              type: boolean
+              description: if the document has been validated
+            reviewDate:
+              type: string
+              description: the date the user reviewed the document
+            reviewUser:
+              type: string
+              description: the user who reviewed the document
+            status:
+              type: string
+              description: the status of the document
+            servedDate:
+              type: string
+              description: date document served
             createdAt:
               type: string
               description: date document created
@@ -124,9 +169,6 @@ custom:
             workItemId:
               type: string
               description: id of work item
-            assigneeId:
-              type: string
-              description: id of user currently assigned the work item
             messages:
               type: array
               items:
@@ -137,6 +179,30 @@ custom:
                   messageType:
                     type: string
               description: array of messages associated with the workitem
+            sentBy:
+              type: string
+              description: the user or system function that generate or sent this original work item
+            assigneeId:
+              type: string
+              description: id of user currently assigned the work item
+            assigneeName:
+              type: string
+              description: the name of the user currently assigned the work item
+            docketNumber:
+              type: string
+              description: date workItem created
+            caseId:
+              type: string
+              description: 
+            document: 
+              type: object
+              properties:
+                documentId:
+                  type: string
+                documentType:
+                  type: string
+                createAt:
+                  type: string
             createdAt:
               type: string
               description: date workItem created
