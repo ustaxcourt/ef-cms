@@ -2,9 +2,6 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import { state } from 'cerebral';
 
-/**
- * Footer
- */
 export default connect(
   {
     workQueue: state.formattedWorkQueue,
