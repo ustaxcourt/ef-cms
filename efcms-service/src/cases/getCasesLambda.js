@@ -3,11 +3,11 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
- * GET Cases API Lambda
+ * used for fetching all cases of a particular status, user role, etc
  *
- * @param event
+ * @param {Object} event
+ * @returns {Promise<*|undefined>}
  */
-
 exports.get = event =>
   handle(() => {
     const status = (event.queryStringParameters || {}).status;

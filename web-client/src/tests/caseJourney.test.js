@@ -1,4 +1,4 @@
-import { CerebralTest, runCompute } from 'cerebral/test';
+import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
@@ -54,7 +54,7 @@ test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
   });
 
   taxpayerLogin(test);
@@ -64,8 +64,8 @@ describe('Case journey', async () => {
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsDashboard(test);
-  petitionsClerkViewsCaseDetail(test, runCompute);
-  petitionsClerkRecordsPayGovId(test, runCompute);
+  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkRecordsPayGovId(test);
   petitionsClerkSubmitsCaseToIrs(test);
   respondentLogIn(test);
   respondentViewsDashboard(test);
