@@ -1,0 +1,45 @@
+########
+# Shellcheck Section
+FROM koalaman/shellcheck-alpine as shellcheck
+
+FROM node:8-alpine
+COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
+
+RUN apk add git
+RUN apk add bash
+
+ENV AWS_CLI_VERSION 1.16.31
+
+RUN apk --no-cache update && \
+    apk --no-cache add openjdk8-jre python py-pip py-setuptools ca-certificates groff less && \
+    apk --no-cache add bash git openssh && \
+    pip install --upgrade pip && \
+    pip --no-cache-dir install awscli==${AWS_CLI_VERSION} && \
+    rm -rf /var/cache/apk/*
+
+RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.8/terraform_0.11.8_linux_amd64.zip && \
+    unzip -o terraform_0.11.8_linux_amd64.zip terraform
+
+RUN cp terraform /usr/local/bin/
+
+WORKDIR /home/app
+
+# Since the .git file is ignored in the .dockerignore file,
+# we init a git repo here so that serverless can get a new hash
+# to deploy with... serverless is coupled to git
+RUN git config --global user.email "blank@example.com" && \
+    git config --global user.name "local" && \
+    git init && \
+    touch tmp.txt && \
+    git add tmp.txt && \
+    git commit -m 'rev'
+
+COPY shared/package.json /home/app/shared/package.json
+RUN cd /home/app/shared && npm i --only=production
+
+COPY efcms-service/package.json /home/app/efcms-service/package.json
+RUN cd /home/app/efcms-service && npm i --only=production
+
+COPY . /home/app
+
+CMD echo "please overwrite this command"
