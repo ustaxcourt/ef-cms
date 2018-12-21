@@ -1,4 +1,5 @@
 const WorkItem = require('../../entities/WorkItem');
+const User = require('../../entities/User');
 const {
   isAuthorized,
   WORKITEM,
@@ -30,6 +31,9 @@ exports.updateWorkItem = async ({
   if (!workItemToUpdate || workItemId !== workItemToUpdate.workItemId) {
     throw new UnprocessableEntityError();
   }
+
+  const user = new User({ userId: workItemToUpdate.assigneeId });
+  workItemToUpdate.assigneeName = user.name;
 
   const updatedWorkItem = new WorkItem(workItemToUpdate).validate().toJSON();
 

@@ -11,7 +11,6 @@ import clearFormAction from '../actions/clearFormAction';
 export default [
   setFormSubmitting,
   clearAlerts,
-  // TODO forwardAction
   unsetFormSubmitting,
   forwardCaseAction,
   {
