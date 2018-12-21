@@ -3,7 +3,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
- * getWorkItem
+ * returns a single work item via the workItemId passed in the path of the url
  *
  * @param event
  * @returns {Promise<*|undefined>}
