@@ -1,32 +1,49 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 
-export default connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    document: state.extractedDocument,
-    form: state.form,
-    showForwardInputs: state.form.showForwardInputs,
-    submitForwardSequence: sequences.submitForwardSequence,
-    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    workItems: state.extractedWorkItems,
-  },
-  function DocumentDetail({
-    caseDetail,
-    document,
-    form,
-    showForwardInputs,
-    submitForwardSequence,
-    updateDocumentValueSequence,
-    updateFormValueSequence,
-    workItems,
-  }) {
+class DocumentDetail extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { documentUrl: '' };
+  }
+
+  displayPdf(documentBlob) {
+    this.setState({
+      documentUrl: window.URL.createObjectURL(documentBlob, {
+        type: 'application/pdf',
+      }),
+    });
+  }
+
+  componentDidMount() {
+    this.props.viewDocumentSequence({
+      documentId: this.props.document.documentId,
+      callback: this.displayPdf.bind(this),
+    });
+  }
+
+  componentWillUnmount() {
+    window.URL.revokeObjectURL(this.state.documentUrl);
+  }
+
+  render() {
+    const {
+      caseDetail,
+      document,
+      form,
+      showForwardInputs,
+      submitForwardSequence,
+      updateDocumentValueSequence,
+      updateFormValueSequence,
+      workItems,
+    } = this.props;
+
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -169,11 +186,38 @@ export default connect(
               ))}
             </div>
             <div className="usa-width-two-thirds">
-              <iframe src="https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf" />
+              <iframe src={this.state.documentUrl} />
             </div>
           </div>
         </section>
       </React.Fragment>
     );
+  }
+}
+
+DocumentDetail.propTypes = {
+  caseDetail: PropTypes.object,
+  document: PropTypes.object,
+  form: PropTypes.object,
+  showForwardInputs: PropTypes.object,
+  submitForwardSequence: PropTypes.func,
+  updateDocumentValueSequence: PropTypes.func,
+  updateFormValueSequence: PropTypes.func,
+  workItems: PropTypes.array,
+  viewDocumentSequence: PropTypes.func,
+};
+
+export default connect(
+  {
+    caseDetail: state.formattedCaseDetail,
+    document: state.extractedDocument,
+    form: state.form,
+    showForwardInputs: state.form.showForwardInputs,
+    submitForwardSequence: sequences.submitForwardSequence,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    workItems: state.extractedWorkItems,
+    viewDocumentSequence: sequences.viewDocumentSequence,
   },
+  DocumentDetail,
 );
