@@ -1,3 +1,7 @@
+import { runCompute } from 'cerebral/test';
+
+import { formattedWorkQueue } from '../../presenter/computeds/formattedWorkQueue';
+
 export default test => {
   return it('Docket clerk views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
@@ -9,5 +13,11 @@ export default test => {
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
+
+    const queue = runCompute(formattedWorkQueue, {
+      state: test.getState(),
+    });
+    expect(queue[0].createdAtFormatted).toBeDefined();
+    expect(queue[0].messages[0].createdAtFormatted).toBeDefined();
   });
 };
