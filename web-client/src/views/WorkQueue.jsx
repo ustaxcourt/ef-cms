@@ -16,7 +16,7 @@ export default connect(
         <table className="responsive-table work-queue" id="work-queue">
           <thead>
             <tr>
-              <th />
+              <th aria-label="Docket Number" />
               <th>Message</th>
               <th>Trial Date</th>
               <th>Sent by</th>
