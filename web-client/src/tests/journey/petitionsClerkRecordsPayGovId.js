@@ -1,6 +1,8 @@
+import { runCompute } from 'cerebral/test';
+
 import caseDetailHelper from '../../presenter/computeds/caseDetailHelper';
 
-export default (test, runCompute) => {
+export default test => {
   return it('Petitions clerk records pay.gov ID', async () => {
     await test.runSequence('updateCaseValueSequence', {
       key: 'payGovId',
