@@ -53,6 +53,10 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
+
   taxpayerLogin(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
