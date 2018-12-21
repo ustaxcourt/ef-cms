@@ -9,25 +9,23 @@ import SuccessNotification from './SuccessNotification';
 export default connect(
   {
     caseDetail: state.formattedCaseDetail,
-    workItems: state.extractedWorkItems,
     document: state.extractedDocument,
-    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
-    showForwardInputs: state.form.showForwardInputs,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    submitForwardSequence: sequences.submitForwardSequence,
     form: state.form,
-    updateWorkItemSequence: sequences.updateWorkItemSequence,
+    showForwardInputs: state.form.showForwardInputs,
+    submitForwardSequence: sequences.submitForwardSequence,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    workItems: state.extractedWorkItems,
   },
   function DocumentDetail({
-    showForwardInputs,
-    updateDocumentValueSequence,
-    workItems,
     caseDetail,
     document,
-    updateFormValueSequence,
-    submitForwardSequence,
-    updateWorkItemSequence,
     form,
+    showForwardInputs,
+    submitForwardSequence,
+    updateDocumentValueSequence,
+    updateFormValueSequence,
+    workItems,
   }) {
     return (
       <React.Fragment>
