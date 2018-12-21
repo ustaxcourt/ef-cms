@@ -109,6 +109,9 @@ custom:
               type: array
               items: 
                 type: object
+                properties:
+                  userId:
+                    type: string
             documents:
               type: array
               items:
@@ -141,7 +144,7 @@ custom:
               description: id of user who created the document
             filedBy: 
               type: boolean
-              description: the user's name who filed the document
+              description: the user name who filed the document
             validated: 
               type: boolean
               description: if the document has been validated
@@ -193,7 +196,7 @@ custom:
               description: date workItem created
             caseId:
               type: string
-              description: 
+              description: the case id
             document: 
               type: object
               properties:
