@@ -39,7 +39,6 @@ class DocumentDetail extends React.Component {
       form,
       showForwardInputs,
       submitForwardSequence,
-      updateDocumentValueSequence,
       updateFormValueSequence,
       workItems,
     } = this.props;
@@ -60,7 +59,7 @@ class DocumentDetail extends React.Component {
           <p>
             <span
               className="usa-label case-status-label"
-              aria-label={'status: general docket'}
+              aria-label={`status: ${caseDetail.status}`}
             >
               <span aria-hidden="true">{caseDetail.status}</span>
             </span>
@@ -135,11 +134,12 @@ class DocumentDetail extends React.Component {
                           });
                         }}
                       >
-                        <b>Send to</b>
+                        <b id="recipient-label">Send to</b>
                         <br />
                         <select
                           name="forwardRecipientId"
                           id="forward-recipient-id"
+                          aria-labelledby="recipient-label"
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -152,9 +152,10 @@ class DocumentDetail extends React.Component {
                             Senior Attorney
                           </option>
                         </select>
-                        <b>Add document message</b>
+                        <b id="message-label">Add document message</b>
                         <br />
                         <textarea
+                          aria-labelledby="message-label"
                           name="forwardMessage"
                           id="forward-message"
                           onChange={e => {
@@ -186,7 +187,10 @@ class DocumentDetail extends React.Component {
               ))}
             </div>
             <div className="usa-width-two-thirds">
-              <iframe src={this.state.documentUrl} />
+              <iframe
+                title={`Document type: ${document.documentType}`}
+                src={this.state.documentUrl}
+              />
             </div>
           </div>
         </section>
@@ -199,9 +203,8 @@ DocumentDetail.propTypes = {
   caseDetail: PropTypes.object,
   document: PropTypes.object,
   form: PropTypes.object,
-  showForwardInputs: PropTypes.object,
+  showForwardInputs: PropTypes.bool,
   submitForwardSequence: PropTypes.func,
-  updateDocumentValueSequence: PropTypes.func,
   updateFormValueSequence: PropTypes.func,
   workItems: PropTypes.array,
   viewDocumentSequence: PropTypes.func,
@@ -214,7 +217,6 @@ export default connect(
     form: state.form,
     showForwardInputs: state.form.showForwardInputs,
     submitForwardSequence: sequences.submitForwardSequence,
-    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     workItems: state.extractedWorkItems,
     viewDocumentSequence: sequences.viewDocumentSequence,
