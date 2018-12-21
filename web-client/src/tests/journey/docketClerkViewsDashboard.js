@@ -14,10 +14,10 @@ export default test => {
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
 
-    const queue = runCompute(formattedWorkQueue, {
+    const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
-    expect(queue[0].createdAtFormatted).toBeDefined();
-    expect(queue[0].messages[0].createdAtFormatted).toBeDefined();
+    expect(formatted[0].createdAtFormatted).toBeDefined();
+    expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
   });
 };
