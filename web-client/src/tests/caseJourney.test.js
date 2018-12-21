@@ -23,8 +23,13 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 
 import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
+import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
+import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
+import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
 
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
+import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
 
 let test;
 global.FormData = FormData;
@@ -48,6 +53,10 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
+
   taxpayerLogin(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
@@ -64,5 +73,10 @@ describe('Case journey', async () => {
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   docketClerkLogIn(test);
+  docketClerkViewsDashboard(test);
+  docketClerkViewsDocument(test);
+  docketClerkForwardWorkItem(test);
+  docketClerkViewsDashboardWithoutWorkItem(test);
   seniorAttorneyLogIn(test);
+  seniorAttorneyViewsDashboard(test);
 });

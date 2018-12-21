@@ -7,6 +7,7 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 const uuid = require('uuid');
+const Message = require('./Message');
 
 /**
  * constructor
@@ -15,10 +16,12 @@ const uuid = require('uuid');
  */
 function WorkItem(rawWorkItem) {
   Object.assign(this, rawWorkItem, {
-    workItemId: rawWorkItem.workItemId ? rawWorkItem.workItemId : uuid.v4(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    workItemId: rawWorkItem.workItemId || uuid.v4(),
+    createdAt: rawWorkItem.createdAt || new Date().toISOString(),
+    updatedAt: rawWorkItem.updatedAt || new Date().toISOString(),
   });
+
+  this.messages = (this.messages || []).map(message => new Message(message));
 }
 
 joiValidationDecorator(
@@ -36,7 +39,7 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
+      .optional(),
     updatedAt: joi
       .date()
       .iso()
@@ -48,10 +51,15 @@ joiValidationDecorator(
       .uuid(uuidVersions)
       .required(),
     assigneeName: joi.string().required(),
-    caseTitle: joi.string().required(),
-    caseStatus: joi.string().required(),
-    document: joi.object().required(), // should be a Document entity at some point
+    document: joi.object().required(),
   }),
+  function() {
+    return Message.validateCollection(this.messages);
+  },
 );
+
+WorkItem.prototype.addMessage = function(message) {
+  this.messages = [...(this.messages || []), message];
+};
 
 module.exports = WorkItem;
