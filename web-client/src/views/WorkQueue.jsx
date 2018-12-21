@@ -38,7 +38,7 @@ export default connect(
                     }`}
                     className="case-link"
                   >
-                    {item.document.documentType || 'Answer'}
+                    {item.document.documentType}
                   </a>
                   {item.messages[0].message}
                 </td>
@@ -48,11 +48,11 @@ export default connect(
                 </td>
                 <td>
                   <span className="responsive-label">Sent By</span>
-                  {item.messages[0].sentBy || 'Jan Petersen'}
+                  {item.messages[0].sentBy}
                 </td>
                 <td>
                   <span className="responsive-label">Received</span>
-                  {item.messages[0].createdAtFormatted || 'Dec 31, 1969'}
+                  {item.messages[0].createdAtFormatted}
                 </td>
               </tr>
             ))}
