@@ -46,8 +46,10 @@
 
     "http://localhost:1234/log-in?token=docketclerk&path=/",
     "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",
+    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
 
     "http://localhost:1234/log-in?token=seniorattorney&path=/",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18"
+    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18",
+    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18/documents/142edd00-1d94-40cd-9374-8d1bc7ae6d7b"
   ]
 }
