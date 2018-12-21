@@ -4,7 +4,17 @@
   "version": "0.1.0",
   "dependencies": {
     "uuid": "^3.3.2",
-    "ef-cms-shared": "file:../shared"
+    "ef-cms-shared": "file:../shared",
+    "serverless": "^1.35.1",
+    "serverless-aws-documentation": "^1.1.0",
+    "serverless-domain-manager": "^2.6.9",
+    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-offline": "^3.30.0",
+    "serverless-plugin-aws-alerts": "^1.2.4",
+    "serverless-plugin-bind-deployment-id": "github:codyseibert/serverless-plugin-bind-deployment-id#update_lodash",
+    "serverless-plugin-git-variables": "^3.2.0",
+    "serverless-plugin-split-stacks": "^1.7.0",
+    "serverless-s3-local": "github:codyseibert/serverless-s3-local"
   },
   "license": "CC0-1.0",
   "devDependencies": {
@@ -26,16 +36,6 @@
     "nyc": "^13.0.1",
     "prettier": "^1.14.3",
     "proxyquire": "^2.1.0",
-    "serverless": "^1.35.1",
-    "serverless-aws-documentation": "^1.1.0",
-    "serverless-domain-manager": "^2.6.9",
-    "serverless-dynamodb-local": "^0.2.35",
-    "serverless-offline": "^3.30.0",
-    "serverless-plugin-aws-alerts": "^1.2.4",
-    "serverless-plugin-bind-deployment-id": "github:codyseibert/serverless-plugin-bind-deployment-id#update_lodash",
-    "serverless-plugin-git-variables": "^3.2.0",
-    "serverless-plugin-split-stacks": "^1.7.0",
-    "serverless-s3-local": "github:codyseibert/serverless-s3-local",
     "spawn-sync": "^2.0.0",
     "try-thread-sleep": "^2.0.0"
   },
