@@ -54,7 +54,7 @@ test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
   });
 
   taxpayerLogin(test);

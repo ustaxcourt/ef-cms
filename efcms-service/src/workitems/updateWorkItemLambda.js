@@ -1,8 +1,9 @@
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
+
 /**
- * updateCase
+ * updates a work item
  *
  * @param event
  * @returns {Promise<*|undefined>}

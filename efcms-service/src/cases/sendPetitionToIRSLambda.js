@@ -1,10 +1,11 @@
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
+
 /**
- * updateCase
+ * used for sending the case to the irs
  *
- * @param event
+ * @param {Object} event
  * @returns {Promise<*|undefined>}
  */
 exports.post = event =>
