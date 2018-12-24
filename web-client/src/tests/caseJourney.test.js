@@ -23,7 +23,7 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 
 import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
+// import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard'; // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';

@@ -1,4 +1,3 @@
-const Case = require('../../entities/Case');
 const User = require('../../entities/User');
 const {
   getCaseEntityForUpload,
