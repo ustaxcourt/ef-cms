@@ -6,23 +6,22 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import FileDocument from './FileDocument';
 import PartyInformation from './PartyInformation';
-import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
+    baseUrl,
     caseDetail,
     currentTab,
     helper,
     updateCurrentTabSequence,
-    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -111,19 +110,17 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
-                        <button
-                          className="pdf-link"
+                        <a
+                          href={`${baseUrl}/documents/${
+                            document.documentId
+                          }/documentDownloadUrl`}
+                          target="_blank"
+                          rel="noreferrer noopener"
                           aria-label="View PDF"
-                          onClick={() =>
-                            viewDocumentSequence({
-                              documentId: document.documentId,
-                              callback: openDocumentBlob,
-                            })
-                          }
                         >
                           <FontAwesomeIcon icon="file-pdf" />
                           {document.documentType}
-                        </button>
+                        </a>
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
