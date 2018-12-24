@@ -50,7 +50,6 @@ exports.syncWorkItems = async ({
       });
     } else {
       // the item exists in the current state, but check if the assigneId changed
-      console.log('should be hitting here', workItem, existing);
       if (workItem.assigneeId !== existing.assigneeId) {
         // the item has changed assignees, delete item
         await exports.reassignWorkItem({

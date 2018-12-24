@@ -6,7 +6,7 @@ export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
     await test.runSequence('gotoDocketSectionSequence');
     const workQueue = test.getState('workQueue');
-    expect(workQueue.length).toBeGreaterThan(2);
+    expect(workQueue.length).toBeGreaterThanOrEqual(2);
     const workItem = workQueue.find(
       workItem =>
         workItem.docketNumber === test.docketNumber &&
