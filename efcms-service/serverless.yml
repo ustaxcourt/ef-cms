@@ -406,6 +406,26 @@ functions:
                 responseModels:
                   'application/json': 'policyUrl'
 
+  getDocumentDownloadUrl:
+    handler: src/documents/getDocumentDownloadUrl.get
+    events:
+      - http:
+          path: v1/documents/{documentId}/documentDownloadUrl
+          method: get
+          cors: true
+          documentation:
+            summary: redirects to the s3 url for downloading a document
+            tags:
+              - documents
+            description: >
+              Create and redirects the user to a pre-signed url for document downloads from S3.
+            methodResponses:
+              - statusCode: '302'
+                responseBody:
+                  description: 'a redirect to the s3 presigned download url'
+                responseModels:
+                  'application/json': 'policyUrl'
+
   getDownloadPolicyUrl:
     handler: src/documents/downloadPolicyUrlLambda.get
     events:
