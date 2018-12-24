@@ -8,32 +8,9 @@ import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 
 class DocumentDetail extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { documentUrl: '' };
-  }
-
-  displayPdf(documentBlob) {
-    this.setState({
-      documentUrl: window.URL.createObjectURL(documentBlob, {
-        type: 'application/pdf',
-      }),
-    });
-  }
-
-  componentDidMount() {
-    this.props.viewDocumentSequence({
-      documentId: this.props.document.documentId,
-      callback: this.displayPdf.bind(this),
-    });
-  }
-
-  componentWillUnmount() {
-    window.URL.revokeObjectURL(this.state.documentUrl);
-  }
-
   render() {
     const {
+      baseUrl,
       caseDetail,
       document,
       form,
@@ -189,7 +166,9 @@ class DocumentDetail extends React.Component {
             <div className="usa-width-two-thirds">
               <iframe
                 title={`Document type: ${document.documentType}`}
-                src={this.state.documentUrl}
+                src={`${baseUrl}/documents/${
+                  document.documentId
+                }/documentDownloadUrl`}
               />
             </div>
           </div>
@@ -200,6 +179,7 @@ class DocumentDetail extends React.Component {
 }
 
 DocumentDetail.propTypes = {
+  baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   document: PropTypes.object,
   form: PropTypes.object,
@@ -207,11 +187,11 @@ DocumentDetail.propTypes = {
   submitForwardSequence: PropTypes.func,
   updateFormValueSequence: PropTypes.func,
   workItems: PropTypes.array,
-  viewDocumentSequence: PropTypes.func,
 };
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     document: state.extractedDocument,
     form: state.form,
@@ -219,7 +199,6 @@ export default connect(
     submitForwardSequence: sequences.submitForwardSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     workItems: state.extractedWorkItems,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   DocumentDetail,
 );
