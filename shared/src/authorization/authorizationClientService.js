@@ -4,6 +4,7 @@ exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.FILE_ANSWER = 'fileAnswer';
+exports.FILE_GENERIC_DOCUMENT = 'fileGenericDocument';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 
 /**
@@ -47,6 +48,7 @@ exports.isAuthorized = (userId, action, owner) => {
       userId === 'docketclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
-      action === exports.GET_CASE)
+      action === exports.GET_CASE ||
+      action === exports.FILE_GENERIC_DOCUMENT)
   );
 };

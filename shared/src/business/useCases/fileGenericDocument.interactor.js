@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  FILE_STIPULATED_DECISION,
+  FILE_GENERIC_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
@@ -9,14 +9,14 @@ const WorkItem = require('../../entities/WorkItem');
 const Document = require('../../entities/Document');
 const User = require('../../entities/User');
 
-exports.fileStipulatedDecision = async ({
+exports.fileGenericDocument = async ({
   userId,
   caseToUpdate,
-  document,
+  documentType,
   applicationContext,
 }) => {
-  if (!isAuthorized(userId, FILE_STIPULATED_DECISION)) {
-    throw new UnauthorizedError('Unauthorized to upload a stipulated decision');
+  if (!isAuthorized(userId, FILE_GENERIC_DOCUMENT)) {
+    throw new UnauthorizedError(`Unauthorized to upload a ${documentType}`);
   }
 
   const user = new User({ userId });
@@ -33,7 +33,7 @@ exports.fileStipulatedDecision = async ({
     userId,
     documentId,
     filedBy: user.name,
-    documentType: Case.documentTypes.stipulatedDecision,
+    documentType,
   });
 
   const workItem = new WorkItem({
@@ -51,9 +51,7 @@ exports.fileStipulatedDecision = async ({
   });
   delete workItem.createdAt; // persistence layer won't save the workItem unless createdAt is null.... this is bad design
   const message = new Message({
-    message: `a ${Case.documentTypes.stipulatedDecision} filed by ${
-      user.role
-    } is ready for review`,
+    message: `a ${documentType} filed by ${user.role} is ready for review`,
     sentBy: user.name,
     userId,
     createdAt: new Date().toISOString(),
@@ -63,7 +61,7 @@ exports.fileStipulatedDecision = async ({
   documentEntity.addWorkItem(workItem);
   caseEntity.addDocument(documentEntity);
 
-  await applicationContext.getUseCases().associateRespondentDocumentToCase({
+  await applicationContext.getUseCases().associateDocumentToCase({
     userId,
     caseToUpdate: caseEntity.validate().toJSON(),
     applicationContext,

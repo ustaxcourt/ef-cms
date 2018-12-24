@@ -21,6 +21,7 @@ import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
+import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
 
 import Case from '../../shared/src/business/entities/Case';
 
@@ -54,6 +55,7 @@ const applicationContext = {
       updateWorkItem,
       uploadCasePdfs,
       associateRespondentDocumentToCase,
+      associateDocumentToCase,
     };
   },
   getUseCaseForDocumentUpload: (documentType, role) => {
