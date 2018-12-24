@@ -36,6 +36,7 @@ const { getWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/g
 const { getWorkItems } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const { associateRespondentDocumentToCase } = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentDocumentToCase.interactor');
+const { associateDocumentToCase } = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
 const { getInteractorForGettingCases } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 
 const {
@@ -99,6 +100,7 @@ module.exports = ({userId} = {}) => {
         getWorkItem,
         getWorkItems,
         updateWorkItem,
+        associateDocumentToCase,
         associateRespondentDocumentToCase,
       };
     },
@@ -107,6 +109,8 @@ module.exports = ({userId} = {}) => {
       switch (interactorName) {
       case "associateRespondentDocumentToCase":
         return associateRespondentDocumentToCase;
+      case "associateDocumentToCase":
+        return associateDocumentToCase;
       default:
         return updateCase;
       }
