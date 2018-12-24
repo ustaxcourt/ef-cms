@@ -29,6 +29,20 @@ exports.handle = async fun => {
   }
 };
 
+exports.redirect = async (fun, statusCode = 302) => {
+  try {
+    const { url } = await fun();
+    return {
+      statusCode,
+      headers: {
+        Location: url,
+      },
+    };
+  } catch (err) {
+    return exports.sendError(err);
+  }
+};
+
 
 /**
  * creates and returns a 400 status lambda api gateway object containing the error message
