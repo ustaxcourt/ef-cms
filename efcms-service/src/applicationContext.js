@@ -123,7 +123,6 @@ module.exports = ({userId} = {}) => {
     },
     getWorkItemsInteractor: event => {
       const section = (event.queryStringParameters || {}).section;
-      console.log('section', section, event.queryStringParameters);
       if (section) {
         return getWorkItemsBySection;
       } else {
