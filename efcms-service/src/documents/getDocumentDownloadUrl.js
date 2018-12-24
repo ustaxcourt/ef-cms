@@ -1,4 +1,4 @@
-const { handle } = require('../middleware/apiGatewayHelper');
+const { redirect } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
@@ -8,7 +8,7 @@ const createApplicationContext = require('../applicationContext');
  * @returns {Promise<*|undefined>}
  */
 exports.get = event =>
-  handle(() => {
+  redirect(() => {
     const applicationContext = createApplicationContext();
     return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
