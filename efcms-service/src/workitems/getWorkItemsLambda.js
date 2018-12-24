@@ -11,5 +11,6 @@ exports.get = event =>
   handle(() => {
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
-    return applicationContext.getUseCases().getWorkItems({ userId: userId, applicationContext});
+    const section = (event.queryStringParameters || {}).section;
+    return applicationContext.getWorkItemsInteractor(event)({ userId: userId, section, applicationContext});
   });

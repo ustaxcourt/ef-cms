@@ -7,8 +7,8 @@ const {
 
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileAnswer } from '../../shared/src/business/useCases/respondent/fileAnswer.interactor';
-import { fileStipulatedDecision } from '../../shared/src/business/useCases/respondent/fileStipulatedDecision.interactor';
+import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
+import { fileGenericDocument } from '../../shared/src/business/useCases/fileGenericDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
@@ -22,8 +22,7 @@ import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkIte
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
-
-import Case from '../../shared/src/business/entities/Case';
+import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -42,7 +41,6 @@ const applicationContext = {
     return {
       createCase,
       downloadDocumentFile,
-      fileAnswer,
       getCase,
       getCasesByStatus,
       getCasesByUser,
@@ -56,17 +54,10 @@ const applicationContext = {
       uploadCasePdfs,
       associateRespondentDocumentToCase,
       associateDocumentToCase,
+      fileRespondentDocument,
+      fileGenericDocument,
+      getWorkItemsBySection,
     };
-  },
-  getUseCaseForDocumentUpload: (documentType, role) => {
-    if (role === 'respondent') {
-      switch (documentType) {
-        case Case.documentTypes.answer:
-          return fileAnswer;
-        case Case.documentTypes.stipulatedDecision:
-          return fileStipulatedDecision;
-      }
-    }
   },
 };
 

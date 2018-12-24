@@ -1,10 +1,9 @@
 const { getRecordsViaMapping } = require('../../awsDynamoPersistence');
 
-exports.getWorkItemsForUser = ({ userId, applicationContext }) => {
-  console.log('we are here', userId);
+exports.getWorkItemsBySection = ({ section, applicationContext }) => {
   return getRecordsViaMapping({
     applicationContext,
-    key: userId,
+    key: section,
     type: 'workItem',
   });
 };

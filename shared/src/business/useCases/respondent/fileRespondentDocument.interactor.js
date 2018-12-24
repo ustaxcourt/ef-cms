@@ -1,23 +1,23 @@
-const Case = require('../entities/Case');
-const User = require('../entities/User');
+const Case = require('../../entities/Case');
+const User = require('../../entities/User');
 const {
   getCaseEntityForUpload,
-} = require('./utilities/getCaseEntityForUpload');
+} = require('../utilities/getCaseEntityForUpload');
 
 const {
   isAuthorized,
-  FILE_GENERIC_DOCUMENT,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+  FILE_RESPONDENT_DOCUMENT,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.fileGenericDocument = async ({
+exports.fileRespondentDocument = async ({
   userId,
   caseToUpdate,
   document,
   documentType,
   applicationContext,
 }) => {
-  if (!isAuthorized(userId, FILE_GENERIC_DOCUMENT)) {
+  if (!isAuthorized(userId, FILE_RESPONDENT_DOCUMENT)) {
     throw new UnauthorizedError(`Unauthorized to upload a ${documentType}`);
   }
 
@@ -33,7 +33,7 @@ exports.fileGenericDocument = async ({
   const caseEntity = getCaseEntityForUpload({
     caseToUpdate,
     documentId,
-    documentType: Case.documentTypes.answer,
+    documentType,
     user,
   });
 

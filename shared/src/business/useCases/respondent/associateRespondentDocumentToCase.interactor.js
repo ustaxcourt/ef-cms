@@ -1,13 +1,14 @@
-const { fileRespondentDocument } = require('./fileRespondentDocument');
+const { fileDocument } = require('../utilities/fileDocument');
 
 exports.associateRespondentDocumentToCase = async ({
   applicationContext,
   caseToUpdate,
   userId,
 }) => {
-  return fileRespondentDocument({
+  return fileDocument({
     userId,
     caseToUpdate,
+    isRespondentDocument: true,
     applicationContext,
   });
 };
