@@ -16,6 +16,12 @@ export default test => {
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
 
+    expect(workItem.messages[0]).toMatchObject({
+      message: 'a Stipulated Decision filed by respondent is ready for review',
+      sentBy: 'Test Respondent',
+      userId: 'respondent',
+    });
+
     const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
