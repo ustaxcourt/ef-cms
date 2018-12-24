@@ -24,8 +24,17 @@ exports.syncWorkItems = async ({
       item => item.workItemId === workItem.workItemId,
     );
     if (!existing) {
+      if (workItem.assigneeId) {
+        await persistence.createMappingRecord({
+          pkId: workItem.assigneeId,
+          skId: workItem.workItemId,
+          type: 'workItem',
+          applicationContext,
+        });
+      }
+
       await persistence.createMappingRecord({
-        pkId: workItem.assigneeId,
+        pkId: workItem.section,
         skId: workItem.workItemId,
         type: 'workItem',
         applicationContext,
@@ -41,6 +50,7 @@ exports.syncWorkItems = async ({
       });
     } else {
       // the item exists in the current state, but check if the assigneId changed
+      console.log('should be hitting here', workItem, existing);
       if (workItem.assigneeId !== existing.assigneeId) {
         // the item has changed assignees, delete item
         await exports.reassignWorkItem({
@@ -58,12 +68,14 @@ exports.reassignWorkItem = async ({
   workItemToSave,
   applicationContext,
 }) => {
-  await persistence.deleteMappingRecord({
-    pkId: existingWorkItem.assigneeId,
-    skId: workItemToSave.workItemId,
-    type: 'workItem',
-    applicationContext,
-  });
+  if (existingWorkItem.assigneeId) {
+    await persistence.deleteMappingRecord({
+      pkId: existingWorkItem.assigneeId,
+      skId: workItemToSave.workItemId,
+      type: 'workItem',
+      applicationContext,
+    });
+  }
 
   await persistence.createMappingRecord({
     pkId: workItemToSave.assigneeId,

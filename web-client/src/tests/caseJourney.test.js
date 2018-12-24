@@ -9,8 +9,8 @@ import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 
-import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
@@ -24,6 +24,7 @@ import respondentAddsStipulatedDecision from './journey/respondentAddsStipulated
 
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
+import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
 import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
@@ -73,7 +74,8 @@ describe('Case journey', async () => {
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   docketClerkLogIn(test);
-  docketClerkViewsDashboard(test);
+  docketClerkDocketDashboard(test);
+  // docketClerkViewsDashboard(test); // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
   docketClerkViewsDashboardWithoutWorkItem(test);

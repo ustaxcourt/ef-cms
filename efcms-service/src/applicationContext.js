@@ -5,6 +5,7 @@ const {
 const { getWorkItemsForUser } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
 const { getWorkItemById } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
 const { saveWorkItem } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const { getWorkItemsBySection } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
 
 // cases
 const { getCasesByDocumentId } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByDocumentId');
@@ -38,6 +39,7 @@ const { updateWorkItem } = require('ef-cms-shared/src/business/useCases/workitem
 const { associateRespondentDocumentToCase } = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentDocumentToCase.interactor');
 const { associateDocumentToCase } = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
 const { getInteractorForGettingCases } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
+const { getWorkItemsBySection: getWorkItemsBySectionUC } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 
 const {
   isAuthorized,
@@ -59,6 +61,9 @@ module.exports = ({userId} = {}) => {
         uploadPdf,
         getUploadPolicy,
         getDownloadPolicyUrl,
+
+        // work items
+        getWorkItemsBySection,
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
@@ -102,6 +107,7 @@ module.exports = ({userId} = {}) => {
         updateWorkItem,
         associateDocumentToCase,
         associateRespondentDocumentToCase,
+        getWorkItemsBySection: getWorkItemsBySectionUC,
       };
     },
     getUpdateCaseInteractorQueryParam: event => {
@@ -113,6 +119,15 @@ module.exports = ({userId} = {}) => {
         return associateDocumentToCase;
       default:
         return updateCase;
+      }
+    },
+    getWorkItemsInteractor: event => {
+      const section = (event.queryStringParameters || {}).section;
+      console.log('section', section);
+      if (section) {
+        return getWorkItemsBySection;
+      } else {
+        return getWorkItemsForUser;
       }
     },
     getInteractorForGettingCases,

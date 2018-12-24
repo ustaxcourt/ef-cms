@@ -1,25 +1,14 @@
-const { UnprocessableEntityError } = require('../../../errors/errors');
-const Case = require('../../entities/Case');
-const { getUser } = require('../utilities/getUser');
+const { fileDocument } = require('./utilities/fileDocument');
 
-exports.fileRespondentDocument = async ({
-  userId,
-  caseToUpdate,
+exports.associateDocumentToCase = async ({
   applicationContext,
+  caseToUpdate,
+  userId,
 }) => {
-  caseToUpdate = new Case(caseToUpdate);
-
-  const user = await getUser(userId);
-
-  const caseToUpdateRaw = caseToUpdate
-    .validateWithError(new UnprocessableEntityError())
-    .toJSON();
-
-  await applicationContext.getPersistenceGateway().saveCase({
-    userId: user.userId,
-    caseToSave: caseToUpdateRaw,
+  return fileDocument({
+    userId,
+    caseToUpdate,
+    isRespondentDocument: false,
     applicationContext,
   });
-
-  return caseToUpdateRaw;
 };
