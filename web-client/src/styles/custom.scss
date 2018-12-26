@@ -89,32 +89,70 @@ h1[tabIndex='-1']:focus {
   margin-top: 2rem;
 }
 
+.work-queue-tab-container {
+  background-color: $color-gray-light;
+}
+
+.work-queue-tab {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-top: 2px solid $color-gray-light;
+  border-left: 2px solid $color-gray-light;
+  margin: 0;
+  background-color: $color-white;
+}
+
 table.work-queue {
-  a {
-    display: block;
-    margin-bottom: 1rem;
-    font-weight: bold;
+  td,
+  th {
+    border: none;
   }
 
-  border: 1px solid $color-gray-light;
-  margin-top: 3rem;
-  border-collapse: collapse;
+  tbody tr {
+    border-top: 2px solid $color-gray-light;
+  }
 
   td {
-    padding-bottom: 1rem;
-    border: none;
-    background-color: inherit;
-    font-weight: inherit;
-    vertical-align: top;
+    font-size: 1.4rem; // 14px
+    label {
+      margin: 0;
+    }
   }
 
-  thead {
-    border: 1px solid $color-gray-light;
+  thead th {
+    background-color: $color-white;
   }
 
-  th {
-    font-size: 1.5rem;
+  .action-bar {
+    background-color: #f1f9fc;
+    font-size: 1.7rem;
+
+    label {
+      display: inline-block;
+      margin: 0;
+    }
+
+    select {
+      display: inline-block;
+      width: auto;
+      margin: 0 1rem;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .selected-count {
+      margin-right: 3rem;
+      font-weight: $font-bold;
+    }
   }
+
+  width: 100%;
+  border-top: none;
+  border-right: 2px solid $color-gray-light;
+  border-bottom: 2px solid $color-gray-light;
+  border-left: 2px solid $color-gray-light;
 }
 
 table.case-list thead th,
@@ -143,6 +181,15 @@ input:focus::placeholder {
   color: transparent;
 }
 
+.fa-file-pdf {
+  margin-right: 1rem;
+}
+
+#paygov-link-container {
+  padding-bottom: 2rem;
+  text-align: center;
+}
+
 .progress-container {
   max-width: 50rem;
   height: 2rem;
@@ -156,15 +203,6 @@ input:focus::placeholder {
   height: 100%;
   background-color: $color-primary-darkest;
   transition: all 2s;
-}
-
-.fa-file-pdf {
-  margin-right: 1rem;
-}
-
-#paygov-link-container {
-  padding-bottom: 2rem;
-  text-align: center;
 }
 
 .progress-indicator {
@@ -217,12 +255,20 @@ iframe {
     padding: 0.5rem 2rem;
     margin: 0;
     cursor: pointer;
+
+    h2 {
+      font-weight: $font-normal;
+    }
   }
 
   .active {
     border-bottom: 0.3rem $color-blue solid;
     cursor: default;
     font-weight: $font-bold;
+
+    h2 {
+      font-weight: $font-bold;
+    }
   }
 }
 
@@ -253,46 +299,5 @@ iframe {
 
   .card {
     background-color: white;
-  }
-}
-
-.responsive-table {
-  width: 100%;
-
-  label {
-    margin: 1rem 0 !important;
-  }
-
-  .responsive-label {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: $small-screen) {
-  .responsive-table {
-    thead {
-      display: none;
-    }
-
-    tr {
-      display: block;
-    }
-
-    td {
-      display: block;
-      border: none;
-    }
-
-    .responsive-title {
-      border-bottom: 1px solid $color-gray-light;
-      background: $color-gray-lightest;
-      font-weight: $font-bold;
-    }
-
-    .responsive-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: $font-bold;
-    }
   }
 }
