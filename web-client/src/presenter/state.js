@@ -30,6 +30,7 @@ export default {
   form: {},
   searchTerm: '',
   workQueue: [],
+  users: [],
   assigneeId: null,
   selectedWorkItems: [],
   user: {

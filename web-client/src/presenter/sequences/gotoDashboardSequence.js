@@ -10,6 +10,7 @@ import setPath from '../actions/setPathAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
 import setWorkItems from '../actions/setWorkItemsAction';
 import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
+import getUsersInSection from '../actions/getUsersInSectionAction';
 
 const goToDashboard = [
   getUserRole,
@@ -34,6 +35,7 @@ const goToDashboard = [
     ],
     docketclerk: [
       clearAlerts,
+      getUsersInSection('docket'),
       getWorkItemsByUser,
       {
         error: [setAlertError],
