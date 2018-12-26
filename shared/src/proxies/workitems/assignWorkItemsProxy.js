@@ -8,21 +8,11 @@ const axios = require('axios');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({
-  userId,
-  assigneeId,
-  assigneeName,
-  workItemIds,
-  applicationContext,
-}) => {
+exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
   const userToken = userId;
-  const response = await axios.post(
-    `${applicationContext.getBaseUrl()}/assignWorkItems`,
-    {
-      workItemIds,
-      assigneeId,
-      assigneeName,
-    },
+  const response = await axios.put(
+    `${applicationContext.getBaseUrl()}/workitems`,
+    workItems,
     {
       headers: {
         Authorization: `Bearer ${userToken}`,

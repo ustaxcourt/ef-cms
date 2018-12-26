@@ -1,22 +1,21 @@
-exports.assignWorkItems = async ({
-  assigneeId,
-  assigneeName,
-  workItemIds,
-  applicationContext,
-}) => {
-  const workItems = await Promise.all(
-    workItemIds.map(workItemId =>
-      applicationContext.getPersistenceGateway().getWorkItemById({
-        workItemId,
-        applicationContext,
-      }),
-    ),
+exports.assignWorkItems = async ({ workItems, applicationContext }) => {
+  const fullWorkItems = await Promise.all(
+    workItems.map(workItem => {
+      return applicationContext
+        .getPersistenceGateway()
+        .getWorkItemById({
+          workItemId: workItem.workItemId,
+          applicationContext,
+        })
+        .then(fullWorkItem => ({
+          ...fullWorkItem,
+          ...workItem,
+        }));
+    }),
   );
 
   await Promise.all(
-    workItems.map(workItem => {
-      workItem.assigneeId = assigneeId;
-      workItem.assigneeName = assigneeName;
+    fullWorkItems.map(workItem => {
       return applicationContext.getPersistenceGateway().saveWorkItem({
         workItemToSave: workItem,
         applicationContext,

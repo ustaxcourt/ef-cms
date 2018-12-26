@@ -12,9 +12,10 @@ exports.assign = event =>
   handle(() => {
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
+    const workItems = JSON.parse(event.body);
     return applicationContext.getUseCases().assignWorkItems({
       userId: getAuthHeader(event),
-      ...JSON.parse(event.body),
+      workItems: workItems,
       applicationContext,
     });
   });
