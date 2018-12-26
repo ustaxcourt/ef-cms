@@ -4,6 +4,7 @@ import {
 } from './computeds/formattedCaseDetail';
 
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 
 import { extractedWorkItems } from './computeds/extractWorkItems';
 import { extractedDocument } from './computeds/extractDocument';
@@ -30,7 +31,9 @@ export default {
   form: {},
   searchTerm: '',
   workQueue: [],
+  sectionWorkQueue: [],
   users: [],
+  workQueueToDisplay: 'individual',
   assigneeId: null,
   selectedWorkItems: [],
   user: {
@@ -68,6 +71,7 @@ export default {
   formattedCaseDetail,
   formattedCases,
   formattedWorkQueue,
+  formattedSectionWorkQueue,
   extractedWorkItems,
   extractedDocument,
 };
