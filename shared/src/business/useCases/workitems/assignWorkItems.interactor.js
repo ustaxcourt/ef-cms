@@ -2,8 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getWorkItem
@@ -14,6 +13,10 @@ const WorkItem = require('../../entities/WorkItem');
  * @returns {Promise<*>}
  */
 exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
+  if (!isAuthorized(userId, WORKITEM)) {
+    throw new UnauthorizedError(`Unauthorized to assign work item`);
+  }
+
   return applicationContext.getPersistenceGateway().assignWorkItems({
     workItems,
     applicationContext,
