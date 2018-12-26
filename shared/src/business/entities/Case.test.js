@@ -188,4 +188,21 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('addDocument', () => {
+    it('should attach the document to the case', () => {
+      const caseToVerify = new Case({});
+      caseToVerify.addDocument({
+        documentType: 'Answer',
+        documentId: '123',
+        userId: 'respondent',
+      });
+      expect(caseToVerify.documents.length).toEqual(1);
+      expect(caseToVerify.documents[0]).toMatchObject({
+        documentType: 'Answer',
+        documentId: '123',
+        userId: 'respondent',
+      });
+    });
+  });
 });
