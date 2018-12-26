@@ -6,7 +6,6 @@ const { getWorkItemsForUser } = require('ef-cms-shared/src/persistence/dynamo/wo
 const { getWorkItemById } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
 const { saveWorkItem } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
 const { getWorkItemsBySection } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
-const { assignWorkItems } = require('ef-cms-shared/src/persistence/dynamo/workitems/assignWorkItems');
 
 // cases
 const { getCasesByDocumentId } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByDocumentId');
@@ -69,7 +68,6 @@ module.exports = ({userId} = {}) => {
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
-        assignWorkItems,
 
         // cases
         getCasesByStatus,
