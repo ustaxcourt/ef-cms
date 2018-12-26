@@ -18,7 +18,7 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
     throw new UnauthorizedError(`Unauthorized to assign work item`);
   }
 
-  const fullWorkItems = await Promise.all(
+  const workItemEntities = await Promise.all(
     workItems.map(workItem => {
       return applicationContext
         .getPersistenceGateway()
@@ -26,17 +26,19 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
           workItemId: workItem.workItemId,
           applicationContext,
         })
-        .then(fullWorkItem => ({
-          ...fullWorkItem,
-          ...workItem,
-        }));
+        .then(fullWorkItem =>
+          new WorkItem(fullWorkItem).assignToUser({
+            assigneeId: workItem.assigneeId,
+            assigneeName: workItem.assigneeName,
+          }),
+        );
     }),
   );
 
   await Promise.all(
-    fullWorkItems.map(workItem => {
+    workItemEntities.map(workItemEntity => {
       return applicationContext.getPersistenceGateway().saveWorkItem({
-        workItemToSave: new WorkItem(workItem).validate().toJSON(),
+        workItemToSave: workItemEntity.validate().toJSON(),
         applicationContext,
       });
     }),
