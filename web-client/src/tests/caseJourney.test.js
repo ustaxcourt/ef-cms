@@ -23,11 +23,14 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 
 import docketClerkLogIn from './journey/docketClerkLogIn';
-// import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard'; // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
+import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard'; // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
 import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
+import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
+import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
+import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
@@ -74,11 +77,14 @@ describe('Case journey', async () => {
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   docketClerkLogIn(test);
+  docketClerkViewsDashboardWithoutWorkItem(test);
   docketClerkDocketDashboard(test);
-  // docketClerkViewsDashboard(test); // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
+  docketClerkSelectsAssignee(test);
+  docketClerkSelectsWorkItems(test);
+  docketClerkAssignWorkItems(test);
+  docketClerkViewsDashboard(test);
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
-  docketClerkViewsDashboardWithoutWorkItem(test);
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);
 });

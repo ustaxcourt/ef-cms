@@ -6,6 +6,7 @@ const { getWorkItemsForUser } = require('ef-cms-shared/src/persistence/dynamo/wo
 const { getWorkItemById } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
 const { saveWorkItem } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
 const { getWorkItemsBySection } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
+const { assignWorkItems } = require('ef-cms-shared/src/persistence/dynamo/workitems/assignWorkItems');
 
 // cases
 const { getCasesByDocumentId } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByDocumentId');
@@ -40,6 +41,7 @@ const { associateRespondentDocumentToCase } = require('ef-cms-shared/src/busines
 const { associateDocumentToCase } = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
 const { getInteractorForGettingCases } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const { getWorkItemsBySection: getWorkItemsBySectionUC } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const { assignWorkItems: assignWorkItemsUC } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
 
 const {
   isAuthorized,
@@ -67,6 +69,7 @@ module.exports = ({userId} = {}) => {
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
+        assignWorkItems,
 
         // cases
         getCasesByStatus,
@@ -108,6 +111,7 @@ module.exports = ({userId} = {}) => {
         associateDocumentToCase,
         associateRespondentDocumentToCase,
         getWorkItemsBySection: getWorkItemsBySectionUC,
+        assignWorkItems: assignWorkItemsUC,
       };
     },
     getUpdateCaseInteractorQueryParam: event => {
