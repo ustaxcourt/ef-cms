@@ -21,13 +21,14 @@ export default test => {
       }),
     );
     expect(workItem).toMatchObject({
-      assigneeId: null,
-      assigneeName: null,
+      assigneeId: 'docketclerk',
+      assigneeName: 'Test Docketclerk',
     });
+
     expect(workItem.messages[0]).toMatchObject({
-      message: 'a Stipulated Decision filed by respondent is ready for review',
-      userId: 'respondent',
-      sentBy: 'Test Respondent',
+      message: test.selectedWorkItem.messages[0].message,
+      userId: test.selectedWorkItem.messages[0].userId,
+      sentBy: test.selectedWorkItem.messages[0].sentBy,
     });
 
     const documentResult = runCompute(extractedDocument, {

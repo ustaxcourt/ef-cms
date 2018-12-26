@@ -30,7 +30,8 @@ exports.isAuthorized = (userId, action, owner) => {
       userId === 'petitionsclerk' ||
       userId === 'intakeclerk' ||
       userId === 'seniorattorney' ||
-      userId === 'docketclerk'
+      userId === 'docketclerk' ||
+      userId === 'docketclerk1'
     );
   }
 
@@ -47,7 +48,8 @@ exports.isAuthorized = (userId, action, owner) => {
       userId === 'petitionsclerk' ||
       userId === 'intakeclerk' ||
       userId === 'seniorattorney' ||
-      userId === 'docketclerk') &&
+      userId === 'docketclerk' ||
+      userId === 'docketclerk1') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
       action === exports.GET_CASE ||

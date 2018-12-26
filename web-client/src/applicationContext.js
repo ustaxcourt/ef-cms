@@ -23,6 +23,7 @@ import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdf
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
+import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -39,6 +40,7 @@ const applicationContext = {
   },
   getUseCases: () => {
     return {
+      assignWorkItems,
       createCase,
       downloadDocumentFile,
       getCase,

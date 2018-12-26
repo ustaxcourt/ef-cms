@@ -40,6 +40,7 @@ const { associateRespondentDocumentToCase } = require('ef-cms-shared/src/busines
 const { associateDocumentToCase } = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
 const { getInteractorForGettingCases } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const { getWorkItemsBySection: getWorkItemsBySectionUC } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const { assignWorkItems: assignWorkItemsUC } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
 
 const {
   isAuthorized,
@@ -108,6 +109,7 @@ module.exports = ({userId} = {}) => {
         associateDocumentToCase,
         associateRespondentDocumentToCase,
         getWorkItemsBySection: getWorkItemsBySectionUC,
+        assignWorkItems: assignWorkItemsUC,
       };
     },
     getUpdateCaseInteractorQueryParam: event => {
