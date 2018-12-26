@@ -120,6 +120,11 @@ table.work-queue {
     }
   }
 
+  thead {
+    box-shadow: 0 2px 4px $color-black, -20px 0 0 $color-white, 20px 0 0 red;
+    transform: scale(1);
+  }
+
   thead th {
     background-color: $color-white;
     font-weight: 600;
