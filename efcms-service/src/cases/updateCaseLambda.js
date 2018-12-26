@@ -15,6 +15,7 @@ exports.put = event => {
     return applicationContext.getUpdateCaseInteractorQueryParam(event)({
       caseId: event.pathParameters.caseId,
       caseToUpdate: JSON.parse(event.body),
+      ...JSON.parse(event.body),
       userId,
       applicationContext
     });

@@ -1,8 +1,3 @@
-const User = require('../../entities/User');
-const {
-  getCaseEntityForUpload,
-} = require('../utilities/getCaseEntityForUpload');
-
 const {
   isAuthorized,
   FILE_RESPONDENT_DOCUMENT,
@@ -20,8 +15,6 @@ exports.fileRespondentDocument = async ({
     throw new UnauthorizedError(`Unauthorized to upload a ${documentType}`);
   }
 
-  const user = new User({ userId });
-
   const documentId = await applicationContext
     .getPersistenceGateway()
     .uploadDocument({
@@ -29,16 +22,11 @@ exports.fileRespondentDocument = async ({
       document,
     });
 
-  const caseEntity = getCaseEntityForUpload({
-    caseToUpdate,
-    documentId,
-    documentType,
-    user,
-  });
-
   await applicationContext.getUseCases().associateRespondentDocumentToCase({
     userId,
-    caseToUpdate: caseEntity.validate().toJSON(),
+    documentType,
+    documentId,
+    caseId: caseToUpdate.caseId,
     applicationContext,
   });
 };
