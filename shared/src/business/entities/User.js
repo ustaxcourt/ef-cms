@@ -12,6 +12,7 @@ function User(user) {
     'intakeclerk',
     'respondent',
     'docketclerk',
+    'docketclerk1',
     'seniorattorney',
   ];
 
