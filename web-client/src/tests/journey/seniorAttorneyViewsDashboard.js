@@ -6,6 +6,7 @@ export default test => {
     const workItem = test
       .getState('workQueue')
       .find(workItem => workItem.workItemId === test.workItemId);
+
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;

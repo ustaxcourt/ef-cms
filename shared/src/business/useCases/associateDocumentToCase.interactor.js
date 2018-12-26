@@ -1,10 +1,10 @@
-const User = require('../../entities/User');
-const { fileDocument } = require('../utilities/fileDocument');
+const User = require('../entities/User');
+const { fileDocument } = require('./utilities/fileDocument');
 const {
   getCaseEntityForUpload,
-} = require('../utilities/getCaseEntityForUpload');
+} = require('./utilities/getCaseEntityForUpload');
 
-exports.associateRespondentDocumentToCase = async ({
+exports.associateDocumentToCase = async ({
   applicationContext,
   caseId,
   documentType,
@@ -30,7 +30,7 @@ exports.associateRespondentDocumentToCase = async ({
   return fileDocument({
     userId,
     caseToUpdate: caseEntity.validate().toJSON(),
-    isRespondentDocument: true,
+    isRespondentDocument: false,
     applicationContext,
   });
 };

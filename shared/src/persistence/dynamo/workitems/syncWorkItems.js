@@ -24,8 +24,17 @@ exports.syncWorkItems = async ({
       item => item.workItemId === workItem.workItemId,
     );
     if (!existing) {
+      if (workItem.assigneeId) {
+        await persistence.createMappingRecord({
+          pkId: workItem.assigneeId,
+          skId: workItem.workItemId,
+          type: 'workItem',
+          applicationContext,
+        });
+      }
+
       await persistence.createMappingRecord({
-        pkId: workItem.assigneeId,
+        pkId: workItem.section,
         skId: workItem.workItemId,
         type: 'workItem',
         applicationContext,
@@ -58,12 +67,14 @@ exports.reassignWorkItem = async ({
   workItemToSave,
   applicationContext,
 }) => {
-  await persistence.deleteMappingRecord({
-    pkId: existingWorkItem.assigneeId,
-    skId: workItemToSave.workItemId,
-    type: 'workItem',
-    applicationContext,
-  });
+  if (existingWorkItem.assigneeId) {
+    await persistence.deleteMappingRecord({
+      pkId: existingWorkItem.assigneeId,
+      skId: workItemToSave.workItemId,
+      type: 'workItem',
+      applicationContext,
+    });
+  }
 
   await persistence.createMappingRecord({
     pkId: workItemToSave.assigneeId,
