@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "aws-sdk": "^2.372.0",
+    "aws-sdk": "^2.382.0",
     "axios": "^0.18.0",
     "joi-browser": "^13.4.0",
     "moment": "^2.22.2",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-string": "^1.5.0",
-    "eslint": "^5.9.0",
+    "eslint": "^5.11.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-cypress": "^2.1.2",
     "eslint-plugin-jsx-a11y": "^6.1.2",

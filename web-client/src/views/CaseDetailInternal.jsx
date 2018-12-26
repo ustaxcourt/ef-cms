@@ -4,12 +4,12 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
-import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 import PartyInformation from './PartyInformation';
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
@@ -18,9 +18,9 @@ export default connect(
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
+    baseUrl,
     caseDetail,
     currentTab,
     helper,
@@ -29,7 +29,6 @@ export default connect(
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
-    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -120,19 +119,17 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
-                        <button
-                          className="pdf-link"
+                        <a
+                          href={`${baseUrl}/documents/${
+                            document.documentId
+                          }/documentDownloadUrl`}
+                          target="_blank"
+                          rel="noreferrer noopener"
                           aria-label="View PDF"
-                          onClick={() =>
-                            viewDocumentSequence({
-                              documentId: document.documentId,
-                              callback: openDocumentBlob,
-                            })
-                          }
                         >
                           <FontAwesomeIcon icon="file-pdf" />
                           {document.documentType}
-                        </button>
+                        </a>
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
