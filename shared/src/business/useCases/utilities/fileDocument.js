@@ -1,10 +1,11 @@
 const { UnprocessableEntityError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
-const { getUser } = require('../utilities/getUser');
+const { getUser } = require('./getUser');
 
-exports.fileRespondentDocument = async ({
+exports.fileDocument = async ({
   userId,
   caseToUpdate,
+  isRespondentDocument = false,
   applicationContext,
 }) => {
   //find the new document - documentType will be undefined
@@ -23,7 +24,7 @@ exports.fileRespondentDocument = async ({
 
   const user = await getUser(userId);
 
-  if (!caseToUpdate.respondent) {
+  if (isRespondentDocument && !caseToUpdate.respondent) {
     caseToUpdate.attachRespondent({
       user,
     });

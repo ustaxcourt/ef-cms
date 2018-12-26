@@ -25,9 +25,6 @@ custom:
     seed:
       test:
         sources:
-          - table: ${opt:documentsTableName}
-            sources:
-              - ./storage/fixtures/documents.json
           - table: ${opt:efcmsTableName}
             sources:
               - ./storage/fixtures/efcms.json
@@ -331,8 +328,6 @@ provider:
       Resource:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:documentsTableName}/index/*
 
 package:
   exclude:

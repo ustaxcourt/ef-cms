@@ -36,8 +36,14 @@ joiValidationDecorator(
       .items(joi.object())
       .required(), // should be a Message entity at some point
     sentBy: joi.string().required(),
-    assigneeId: joi.string().required(),
-    assigneeName: joi.string().required(),
+    assigneeId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    assigneeName: joi
+      .string()
+      .allow(null)
+      .optional(),
     docketNumber: joi.string().required(),
     caseId: joi
       .string()
