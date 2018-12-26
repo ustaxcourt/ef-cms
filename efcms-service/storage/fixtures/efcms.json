@@ -107,7 +107,8 @@
     "messages": [
       {
         "message": "here is a random message! yay!",
-        "createdAt": "2018-12-12T23:45:02.474Z"
+        "createdAt": "2018-12-12T23:45:02.474Z",
+        "sentBy": "system"
       }
     ],
     "sentBy": "respondent",
@@ -129,7 +130,6 @@
   },
 
 
-
   
   {
     "documents": [
@@ -139,7 +139,8 @@
         "documentType": "Petition",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
-        "status": "served"
+        "status": "served",
+        "workItems": []
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
@@ -147,7 +148,8 @@
         "documentType": "Request for Place of Trial",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
-        "status": "served"
+        "status": "served",
+        "workItems": []
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
@@ -155,41 +157,43 @@
         "documentType": "Statement of Taxpayer Identification Number",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
-        "status": "served"
+        "status": "served",
+        "workItems": []
       },
       {
         "createdAt": "2018-12-12T23:45:02.474Z",
         "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
         "documentType": "Answer",
         "filedBy": "Respondent",
-        "userId": "respondent"
-      }
-    ],
-    "workItems": [
-      {
-        "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
-        "messages": [
+        "userId": "respondent",
+        "workItems": [
           {
-            "message": "here is a random message! yay!",
-            "createdAt": "2018-12-12T23:45:02.474Z"
+            "workItemId": "a86fb0fb-5f93-479a-9235-7eba43005800",
+            "messages": [
+              {
+                "message": "here is a random message! yay!",
+                "createdAt": "2018-12-12T23:45:02.474Z",
+                "sentBy": "system"
+              }
+            ],
+            "sentBy": "respondent",
+            "createdAt": "2018-12-12T23:45:02.474Z",
+            "updatedAt": "2018-12-12T23:45:02.474Z",
+            "assigneeId": "docketclerk",
+            "docketNumber": "101-18",
+            "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
+            "assigneeName": "John Smith (Docketclerk)",
+            "caseTitle": "Bob vs State of Idaho",
+            "caseStatus": "General Docket",
+            "document": {
+              "createdAt": "2018-12-12T23:45:02.474Z",
+              "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+              "documentType": "Answer",
+              "filedBy": "Respondent",
+              "userId": "respondent"
+            }
           }
-        ],
-        "sentBy": "respondent",
-        "createdAt": "2018-12-12T23:45:02.474Z",
-        "updatedAt": "2018-12-12T23:45:02.474Z",
-        "assigneeId": "docketclerk",
-        "docketNumber": "101-18",
-        "caseId": "1a6fb0fb-5f93-479a-9235-7eba43005800",
-        "assigneeName": "John Smith (Docketclerk)",
-        "caseTitle": "Bob vs State of Idaho",
-        "caseStatus": "General Docket",
-        "document": {
-          "createdAt": "2018-12-12T23:45:02.474Z",
-          "documentId": "142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
-          "documentType": "Answer",
-          "filedBy": "Respondent",
-          "userId": "respondent"
-        }
+        ]
       }
     ],
     "respondent": {

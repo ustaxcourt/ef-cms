@@ -31,7 +31,7 @@ joiValidationDecorator(
     userId: joi
       .string()
       // .uuid(uuidVersions)
-      .required(),
+      .optional(),
     sentBy: joi.string().required(),
     createdAt: joi
       .date()
