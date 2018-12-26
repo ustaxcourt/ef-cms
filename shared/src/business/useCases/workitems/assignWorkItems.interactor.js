@@ -3,6 +3,7 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const WorkItem = require('../../entities/WorkItem');
 
 /**
  * getWorkItem
@@ -17,8 +18,27 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
     throw new UnauthorizedError(`Unauthorized to assign work item`);
   }
 
-  return applicationContext.getPersistenceGateway().assignWorkItems({
-    workItems,
-    applicationContext,
-  });
+  const fullWorkItems = await Promise.all(
+    workItems.map(workItem => {
+      return applicationContext
+        .getPersistenceGateway()
+        .getWorkItemById({
+          workItemId: workItem.workItemId,
+          applicationContext,
+        })
+        .then(fullWorkItem => ({
+          ...fullWorkItem,
+          ...workItem,
+        }));
+    }),
+  );
+
+  await Promise.all(
+    fullWorkItems.map(workItem => {
+      return applicationContext.getPersistenceGateway().saveWorkItem({
+        workItemToSave: new WorkItem(workItem).validate().toJSON(),
+        applicationContext,
+      });
+    }),
+  );
 };
