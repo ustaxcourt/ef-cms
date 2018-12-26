@@ -1,5 +1,7 @@
 describe('File a petition', function() {
   let rowCount;
+  let createdDocketNumber;
+
   before(() => {
     cy.login('taxpayer');
   });
@@ -81,7 +83,14 @@ describe('File a petition', function() {
     });
 
     it('submits forms and shows a success message', () => {
+      cy.server();
+      cy.route('POST', '*/cases').as('postCase');
       cy.get('form#file-a-petition button[type="submit"]').click();
+      cy.wait('@postCase');
+      cy.get('@postCase').should(xhr => {
+        expect(xhr.responseBody).to.have.property('docketNumber');
+        createdDocketNumber = xhr.responseBody.docketNumber;
+      });
       cy.get('.usa-alert-success', { timeout: 10000 }).should(
         'contain',
         'uploaded successfully',
@@ -96,9 +105,7 @@ describe('File a petition', function() {
 
   describe('can view case detail', () => {
     before(() => {
-      cy.get('#case-list a')
-        .first()
-        .click();
+      cy.routeTo(`/case-detail/${createdDocketNumber}`);
       cy.url().should('include', 'case-detail');
     });
 
