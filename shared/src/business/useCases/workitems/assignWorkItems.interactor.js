@@ -37,6 +37,7 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
 
   await Promise.all(
     workItemEntities.map(workItemEntity => {
+      console.log(workItemEntity.toJSON());
       return applicationContext.getPersistenceGateway().saveWorkItem({
         workItemToSave: workItemEntity.validate().toJSON(),
         applicationContext,

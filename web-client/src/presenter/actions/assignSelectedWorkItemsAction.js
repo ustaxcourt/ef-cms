@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, store }) => {
   const selectedWorkItems = get(state.selectedWorkItems);
-  const workQueue = get(state.workQueue);
+  const sectionWorkQueue = get(state.sectionWorkQueue);
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
   await applicationContext.getUseCases().assignWorkItems({
@@ -15,8 +15,8 @@ export default async ({ applicationContext, get, store }) => {
     userId: get(state.user.token),
   });
   store.set(
-    state.workQueue,
-    workQueue.map(workItem => ({
+    state.sectionWorkQueue,
+    sectionWorkQueue.map(workItem => ({
       ...workItem,
       assigneeId,
       assigneeName,
