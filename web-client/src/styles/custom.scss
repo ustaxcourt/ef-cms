@@ -90,16 +90,17 @@ h1[tabIndex='-1']:focus {
 }
 
 .work-queue-tab-container {
-  background-color: $color-gray-light;
+  border: 1px solid $color-gray-light;
+  background-color: $color-gray-lightest;
 }
 
 .work-queue-tab {
   display: inline-block;
   padding: 1rem 2rem;
-  border-top: 2px solid $color-gray-light;
-  border-left: 2px solid $color-gray-light;
+  border-right: 1px solid $color-gray-light;
   margin: 0;
   background-color: $color-white;
+  box-shadow: 0 2px 0 $color-white;
 }
 
 table.work-queue {
@@ -109,7 +110,7 @@ table.work-queue {
   }
 
   tbody tr {
-    border-top: 2px solid $color-gray-light;
+    border-top: 1px solid $color-gray-light;
   }
 
   td {
@@ -121,10 +122,11 @@ table.work-queue {
 
   thead th {
     background-color: $color-white;
+    font-weight: 600;
   }
 
   .action-bar {
-    background-color: #f1f9fc;
+    background-color: $color-primary-alt-lightest;
     font-size: 1.7rem;
 
     label {
@@ -150,9 +152,9 @@ table.work-queue {
 
   width: 100%;
   border-top: none;
-  border-right: 2px solid $color-gray-light;
-  border-bottom: 2px solid $color-gray-light;
-  border-left: 2px solid $color-gray-light;
+  border-right: 1px solid $color-gray-light;
+  border-bottom: 1px solid $color-gray-light;
+  border-left: 1px solid $color-gray-light;
 }
 
 table.case-list thead th,
@@ -252,8 +254,8 @@ iframe {
 
   li {
     display: inline-block;
-    padding: 0.5rem 2rem;
-    margin: 0;
+    padding: 0.5rem 0;
+    margin: 0 2rem 0 0;
     cursor: pointer;
 
     h2 {
