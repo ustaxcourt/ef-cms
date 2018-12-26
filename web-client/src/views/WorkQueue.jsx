@@ -1,12 +1,14 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 
 export default connect(
   {
     workQueue: state.formattedWorkQueue,
+    users: state.users,
+    selectAssigneeSequence: sequences.selectAssigneeSequence,
   },
-  function WorkQueue({ workQueue }) {
+  function WorkQueue({ workQueue, users, selectAssigneeSequence }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
@@ -41,11 +43,23 @@ export default connect(
               <td colSpan="8" className="action-bar">
                 <span className="selected-count">2 selected</span>
                 <label htmlFor="options">Send to</label>
-                <select name="options" id="options">
+                <select
+                  onChange={event =>
+                    selectAssigneeSequence({
+                      assigneeId: event.target.value,
+                      assigneeName:
+                        event.target.options[event.target.selectedIndex].text,
+                    })
+                  }
+                  name="options"
+                  id="options"
+                >
                   <option value>- Select -</option>
-                  <option value="value1">Option A</option>
-                  <option value="value2">Option B</option>
-                  <option value="value3">Option C</option>
+                  {users.map(user => (
+                    <option key={user.userId} value={user.userId}>
+                      {user.name}
+                    </option>
+                  ))}
                 </select>
                 <button className="usa-button">Send</button>
               </td>

@@ -15,6 +15,7 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
@@ -43,6 +44,7 @@ const applicationContext = {
       assignWorkItems,
       createCase,
       downloadDocumentFile,
+      getUsersInSection,
       getCase,
       getCasesByStatus,
       getCasesByUser,
