@@ -10,25 +10,61 @@ export default connect(
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
-        <table className="responsive-table work-queue" id="work-queue">
+        <div className="horizontal-tabs subsection">
+          <ul>
+            <li className="active">
+              <h2>My Queue</h2>
+            </li>
+            <li>
+              <h2>Section Queue</h2>
+            </li>
+          </ul>
+        </div>
+        <div className="work-queue-tab-container">
+          <h3 className="work-queue-tab">Inbox</h3>
+        </div>
+        <table className="work-queue" id="work-queue">
           <thead>
             <tr>
-              <th aria-label="Docket Number" />
-              <th>Message</th>
-              <th>Trial Date</th>
-              <th>Sent by</th>
+              <th>Select</th>
+              <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
+              <th>Document</th>
+              <th>Status</th>
+              <th>Due</th>
+              <th>From</th>
+              <th>To</th>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td colSpan="8" className="action-bar">
+                <span className="selected-count">2 selected</span>
+                <label htmlFor="options">Send to</label>
+                <select name="options" id="options">
+                  <option value>- Select -</option>
+                  <option value="value1">Option A</option>
+                  <option value="value2">Option B</option>
+                  <option value="value3">Option C</option>
+                </select>
+                <button className="usa-button">Send</button>
+              </td>
+            </tr>
             {workQueue.map(item => (
               <tr key={item.workItemId}>
-                <td className="responsive-title">
-                  <span className="responsive-label">Docket number</span>
-                  {item.docketNumber}
-                </td>
                 <td>
-                  <span className="responsive-label">Message</span>
+                  <input
+                    id={item.workItemId}
+                    type="checkbox"
+                    name="historical-figures-1"
+                    value={item.workItemId}
+                    checked
+                  />
+                  <label htmlFor={item.workItemId} />
+                </td>
+                <td>{item.docketNumber}</td>
+                <td>Received</td>
+                <td>
                   <a
                     href={`/case-detail/${item.docketNumber}/documents/${
                       item.document.documentId
@@ -37,20 +73,11 @@ export default connect(
                   >
                     {item.document.documentType}
                   </a>
-                  {item.messages[0].message}
                 </td>
-                <td>
-                  <span className="responsive-label">Trial Date</span>
-                  {item.trialDate}
-                </td>
-                <td>
-                  <span className="responsive-label">Sent By</span>
-                  {item.messages[0].sentBy}
-                </td>
-                <td>
-                  <span className="responsive-label">Received</span>
-                  {item.messages[0].createdAtFormatted}
-                </td>
+                <td>General Docket</td>
+                <td>12/15/2018</td>
+                <td>{item.messages[0].sentBy}</td>
+                <td>Unassigned</td>
               </tr>
             ))}
           </tbody>
