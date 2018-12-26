@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-exports.associatDocumentToCase = async ({
+exports.associateDocumentToCase = async ({
   applicationContext,
   caseId,
   documentType,
