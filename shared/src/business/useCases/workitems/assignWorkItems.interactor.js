@@ -13,17 +13,9 @@ const WorkItem = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({
-  userId,
-  assigneeId,
-  assigneeName,
-  workItemIds,
-  applicationContext,
-}) => {
+exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
   return applicationContext.getPersistenceGateway().assignWorkItems({
-    assigneeId,
-    assigneeName,
-    workItemIds,
+    workItems,
     applicationContext,
   });
 };

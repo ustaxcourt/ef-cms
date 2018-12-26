@@ -6,10 +6,12 @@ export default async ({ applicationContext, get, store }) => {
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
   await applicationContext.getUseCases().assignWorkItems({
-    workItemIds: selectedWorkItems.map(workItem => workItem.workItemId),
     applicationContext,
-    assigneeId,
-    assigneeName,
+    workItems: selectedWorkItems.map(workItem => ({
+      workItemId: workItem.workItemId,
+      assigneeId,
+      assigneeName,
+    })),
     userId: get(state.user.token),
   });
   store.set(
