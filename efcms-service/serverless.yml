@@ -561,6 +561,26 @@ functions:
                 responseModels:
                   'application/json': 'unprocessableEntityError'
 
+  assignWorkItems:
+    handler: src/workitems/assignWorkItemsLambda.assign
+    events:
+      - http:
+          path: v1/assignWorkItems
+          method: post
+          cors: true
+          documentation:
+            summary: assigns an assigneId to a list of work item ids
+            tags:
+              - workitems
+            description: >
+              Get a workitem.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
   getWorkItem:
     handler: src/workitems/getWorkItemLambda.get
     events:
