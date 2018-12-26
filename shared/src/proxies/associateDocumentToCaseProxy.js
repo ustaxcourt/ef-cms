@@ -1,16 +1,19 @@
 const axios = require('axios');
 
-exports.associateRespondentDocumentToCase = async ({
+exports.associatDocumentToCase = async ({
   applicationContext,
-  caseToUpdate,
+  caseId,
+  documentType,
+  documentId,
   userId,
 }) => {
   const userToken = userId;
   const response = await axios.put(
-    `${applicationContext.getBaseUrl()}/cases/${
-      caseToUpdate.caseId
-    }?interactorName=associateDocumentToCase`,
-    caseToUpdate,
+    `${applicationContext.getBaseUrl()}/cases/${caseId}?interactorName=associateDocumentToCase`,
+    {
+      documentType,
+      documentId,
+    },
     {
       headers: {
         Authorization: `Bearer ${userToken}`,
