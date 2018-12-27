@@ -49,6 +49,7 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .required(),
+    caseStatus: joi.string().optional(),
     document: joi.object().required(),
     createdAt: joi
       .date()

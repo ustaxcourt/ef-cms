@@ -25,6 +25,7 @@ exports.getCaseEntityForUpload = ({
       documentType,
       createdAt: documentEntity.createdAt,
     },
+    caseStatus: caseToUpdate.status,
     assigneeId: null,
     docketNumber: caseToUpdate.docketNumber,
     section: 'docket',

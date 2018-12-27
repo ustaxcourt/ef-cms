@@ -38,7 +38,7 @@ export default connect(
                 })
               }
             >
-              <h2>My Queue</h2>
+              <h2>My Queue ({workQueue.length})</h2>
             </li>
             <li
               className={workQueueToDisplay === 'section' ? 'active' : ''}
@@ -48,7 +48,7 @@ export default connect(
                 })
               }
             >
-              <h2>Section Queue</h2>
+              <h2>Section Queue ({sectionWorkQueue.length})</h2>
             </li>
           </ul>
         </div>
@@ -123,7 +123,7 @@ export default connect(
                     <label htmlFor={item.workItemId} />
                   </td>
                   <td>{item.docketNumber}</td>
-                  <td>Received</td>
+                  <td>{item.messages[0].createdAtFormatted}</td>
                   <td>
                     <a
                       href={`/case-detail/${item.docketNumber}/documents/${
@@ -135,7 +135,7 @@ export default connect(
                     </a>
                   </td>
                   <td>{item.caseStatus}</td>
-                  <td>{item.messages[0].formattedCreatedAt}</td>
+                  <td>{item.messages[0].createdAtFormatted}</td>
                   <td>{item.messages[0].sentBy}</td>
                   <td>{item.assigneeName}</td>
                 </tr>
@@ -160,7 +160,7 @@ export default connect(
               {workQueue.map(item => (
                 <tr key={item.workItemId}>
                   <td>{item.docketNumber}</td>
-                  <td>Received</td>
+                  <td>{item.messages[0].createdAtFormatted}</td>
                   <td>
                     <a
                       href={`/case-detail/${item.docketNumber}/documents/${
