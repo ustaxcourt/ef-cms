@@ -4,26 +4,28 @@ import { state, sequences } from 'cerebral';
 
 export default connect(
   {
-    workQueue: state.formattedWorkQueue,
-    sectionWorkQueue: state.formattedSectionWorkQueue,
-    users: state.users,
-    selectedWorkItems: state.selectedWorkItems,
-    workQueueToDisplay: state.workQueueToDisplay,
-    selectAssigneeSequence: sequences.selectAssigneeSequence,
-    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
-    selectWorkItemSequence: sequences.selectWorkItemSequence,
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
+    sectionWorkQueue: state.formattedSectionWorkQueue,
+    selectAssigneeSequence: sequences.selectAssigneeSequence,
+    selectedWorkItems: state.selectedWorkItems,
+    selectWorkItemSequence: sequences.selectWorkItemSequence,
+    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    users: state.users,
+    workQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
+    workQueueToDisplay: state.workQueueToDisplay,
   },
   function WorkQueue({
-    workQueue,
-    sectionWorkQueue,
-    users,
-    selectedWorkItems,
-    workQueueToDisplay,
-    selectAssigneeSequence,
-    switchWorkQueueSequence,
-    selectWorkItemSequence,
     assignSelectedWorkItemsSequence,
+    sectionWorkQueue,
+    selectAssigneeSequence,
+    selectedWorkItems,
+    selectWorkItemSequence,
+    switchWorkQueueSequence,
+    users,
+    workQueue,
+    workQueueHelper,
+    workQueueToDisplay,
   }) {
     return (
       <React.Fragment>
@@ -70,38 +72,41 @@ export default connect(
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan="8" className="action-bar">
-                  <span className="selected-count">
-                    {selectedWorkItems.length} selected
-                  </span>
-                  <label htmlFor="options">Send to</label>
-                  <select
-                    onChange={event =>
-                      selectAssigneeSequence({
-                        assigneeId: event.target.value,
-                        assigneeName:
-                          event.target.options[event.target.selectedIndex].text,
-                      })
-                    }
-                    name="options"
-                    id="options"
-                  >
-                    <option value>- Select -</option>
-                    {users.map(user => (
-                      <option key={user.userId} value={user.userId}>
-                        {user.name}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    onClick={() => assignSelectedWorkItemsSequence()}
-                    className="usa-button"
-                  >
-                    Send
-                  </button>
-                </td>
-              </tr>
+              {workQueueHelper.showSendToBar && (
+                <tr>
+                  <td colSpan="8" className="action-bar">
+                    <span className="selected-count">
+                      {selectedWorkItems.length} selected
+                    </span>
+                    <label htmlFor="options">Send to</label>
+                    <select
+                      onChange={event =>
+                        selectAssigneeSequence({
+                          assigneeId: event.target.value,
+                          assigneeName:
+                            event.target.options[event.target.selectedIndex]
+                              .text,
+                        })
+                      }
+                      name="options"
+                      id="options"
+                    >
+                      <option value>- Select -</option>
+                      {users.map(user => (
+                        <option key={user.userId} value={user.userId}>
+                          {user.name}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={() => assignSelectedWorkItemsSequence()}
+                      className="usa-button"
+                    >
+                      Send
+                    </button>
+                  </td>
+                </tr>
+              )}
               {sectionWorkQueue.map(item => (
                 <tr key={item.workItemId}>
                   <td>
