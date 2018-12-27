@@ -13,7 +13,6 @@ export default connect(
     users: state.users,
     workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
-    workQueueToDisplay: state.workQueueToDisplay,
   },
   function WorkQueue({
     assignSelectedWorkItemsSequence,
@@ -25,7 +24,6 @@ export default connect(
     users,
     workQueue,
     workQueueHelper,
-    workQueueToDisplay,
   }) {
     return (
       <React.Fragment>
