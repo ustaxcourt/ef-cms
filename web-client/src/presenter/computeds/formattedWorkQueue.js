@@ -6,10 +6,15 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
   const result = _.cloneDeep(workItem);
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
-  result.messages.forEach(
-    message =>
-      (message.createdAtFormatted = moment(message.createdAt).format('L')),
-  );
+  result.messages.forEach(message => {
+    const now = moment();
+    const then = moment(message.createdAt);
+    if (now.format('L') == then.format('L')) {
+      message.createdAtFormatted = then.format('LT');
+    } else {
+      message.createdAtFormatted = moment(message.createdAt).format('L');
+    }
+  });
   result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
