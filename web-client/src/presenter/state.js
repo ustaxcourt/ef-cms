@@ -3,12 +3,12 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
-import { formattedWorkQueue } from './computeds/formattedWorkQueue';
-
-import { extractedWorkItems } from './computeds/extractWorkItems';
 import { extractedDocument } from './computeds/extractDocument';
-
+import { extractedWorkItems } from './computeds/extractWorkItems';
+import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
+import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import caseDetailHelper from './computeds/caseDetailHelper';
+import workQueueHelper from './computeds/workQueueHelper';
 
 export default {
   path: '/',
@@ -30,6 +30,11 @@ export default {
   form: {},
   searchTerm: '',
   workQueue: [],
+  sectionWorkQueue: [],
+  users: [],
+  workQueueToDisplay: 'individual',
+  assigneeId: null,
+  selectedWorkItems: [],
   user: {
     userId: '',
     role: 'public',
@@ -62,9 +67,11 @@ export default {
   caseDetail: {},
   cases: [],
   caseDetailHelper,
+  extractedDocument,
+  extractedWorkItems,
   formattedCaseDetail,
   formattedCases,
+  formattedSectionWorkQueue,
   formattedWorkQueue,
-  extractedWorkItems,
-  extractedDocument,
+  workQueueHelper,
 };

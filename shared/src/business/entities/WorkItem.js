@@ -49,6 +49,7 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .required(),
+    caseStatus: joi.string().optional(),
     document: joi.object().required(),
     createdAt: joi
       .date()
@@ -66,6 +67,14 @@ joiValidationDecorator(
 
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...(this.messages || []), message];
+};
+
+WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName }) {
+  Object.assign(this, {
+    assigneeId,
+    assigneeName,
+  });
+  return this;
 };
 
 module.exports = WorkItem;
