@@ -131,11 +131,7 @@ export default connect(
                           workItem: item,
                         })
                       }
-                      value={
-                        !!selectedWorkItems.find(
-                          workItem => workItem.workItemId === item.workItemId,
-                        )
-                      }
+                      checked={item.selected}
                     />
                     <label htmlFor={item.workItemId} />
                   </td>
