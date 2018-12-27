@@ -22,7 +22,6 @@ import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
-import gotoDocketSectionSequence from './sequences/gotoDocketSectionSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
@@ -40,7 +39,6 @@ export default {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
-    gotoDocketSectionSequence,
     gotoFilePetitionSequence,
     gotoLogInSequence,
     gotoStyleGuideSequence,
