@@ -10,6 +10,8 @@ export const formatWorkItem = workItem => {
     message =>
       (message.createdAtFormatted = moment(message.createdAt).format('L')),
   );
+  result.caseStatus =
+    result.caseStatus === 'general' ? 'general docket' : result.caseStatus;
   return result;
 };
 
