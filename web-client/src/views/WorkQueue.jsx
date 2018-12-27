@@ -13,7 +13,6 @@ export default connect(
     users: state.users,
     workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
-    workQueueToDisplay: state.workQueueToDisplay,
   },
   function WorkQueue({
     assignSelectedWorkItemsSequence,
@@ -25,19 +24,22 @@ export default connect(
     users,
     workQueue,
     workQueueHelper,
-    workQueueToDisplay,
   }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
         <div className="horizontal-tabs subsection">
           <ul role="tablist">
-            <li className={workQueueToDisplay === 'individual' ? 'active' : ''}>
+            <li
+              className={
+                workQueueHelper.showIndividualWorkQueue ? 'active' : ''
+              }
+            >
               <button
                 role="tab"
                 className="tab-link"
                 id="tab-my-queue"
-                aria-selected={workQueueToDisplay === 'individual'}
+                aria-selected={workQueueHelper.showIndividualWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
                     workQueueToDisplay: 'individual',
@@ -47,12 +49,14 @@ export default connect(
                 <h2>My Queue ({workQueue.length})</h2>{' '}
               </button>
             </li>
-            <li className={workQueueToDisplay === 'section' ? 'active' : ''}>
+            <li
+              className={workQueueHelper.showSectionWorkQueue ? 'active' : ''}
+            >
               <button
                 role="tab"
                 className="tab-link"
                 id="tab-work-queue"
-                aria-selected={workQueueToDisplay === 'section'}
+                aria-selected={workQueueHelper.showSectionWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
                     workQueueToDisplay: 'section',
@@ -67,7 +71,7 @@ export default connect(
         <div className="work-queue-tab-container">
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
-        {workQueueToDisplay === 'section' && (
+        {workQueueHelper.showSectionWorkQueue && (
           <table className="work-queue" id="work-queue" role="tabpanel">
             <thead>
               <tr>
@@ -122,7 +126,6 @@ export default connect(
                     <input
                       id={item.workItemId}
                       type="checkbox"
-                      name="historical-figures-1"
                       onChange={() =>
                         selectWorkItemSequence({
                           workItem: item,
@@ -156,7 +159,7 @@ export default connect(
             </tbody>
           </table>
         )}
-        {workQueueToDisplay === 'individual' && (
+        {workQueueHelper.showIndividualWorkQueue && (
           <table className="work-queue" id="work-queue" role="tabpanel">
             <thead>
               <tr>
