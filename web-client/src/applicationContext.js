@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const {
   getDocument,
   uploadDocument,
@@ -30,6 +32,7 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
+  getHttpClient: () => axios,
   getPersistenceGateway: () => {
     return {
       getDocument,
