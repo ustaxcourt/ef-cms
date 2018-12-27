@@ -68,7 +68,6 @@ export default connect(
                 <th>Received</th>
                 <th>Document</th>
                 <th>Status</th>
-                <th>Due</th>
                 <th>From</th>
                 <th>To</th>
               </tr>
@@ -142,7 +141,6 @@ export default connect(
                     </a>
                   </td>
                   <td>{item.caseStatus}</td>
-                  <td>{item.messages[0].createdAtFormatted}</td>
                   <td>{item.messages[0].sentBy}</td>
                   <td>{item.assigneeName}</td>
                 </tr>
@@ -158,7 +156,6 @@ export default connect(
                 <th>Received</th>
                 <th>Document</th>
                 <th>Status</th>
-                <th>Due</th>
                 <th>From</th>
                 <th>To</th>
               </tr>
@@ -179,7 +176,6 @@ export default connect(
                     </a>
                   </td>
                   <td>{item.caseStatus}</td>
-                  <td>{item.messages[0].formattedCreatedAt}</td>
                   <td>{item.messages[0].sentBy}</td>
                   <td>{item.assigneeName}</td>
                 </tr>
