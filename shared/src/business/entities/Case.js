@@ -123,12 +123,6 @@ Case.prototype.addDocument = function(document) {
   this.documents = [...(this.documents || []), document];
 };
 
-Case.prototype.attachWorkItems = function({ workItemsToAdd }) {
-  Object.assign(this, {
-    workItems: [...(this.workItems || []), ...workItemsToAdd],
-  });
-};
-
 /**
  * markAsSentToIrs
  */

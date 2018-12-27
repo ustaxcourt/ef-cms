@@ -1,13 +1,13 @@
 import { runCompute } from 'cerebral/test';
 
-import { formattedWorkQueue } from '../../presenter/computeds/formattedWorkQueue';
+import { formattedSectionWorkQueue } from '../../presenter/computeds/formattedSectionWorkQueue';
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
-    await test.runSequence('gotoDocketSectionSequence');
-    const workQueue = test.getState('workQueue');
-    expect(workQueue.length).toBeGreaterThanOrEqual(2);
-    const workItem = workQueue.find(
+    await test.runSequence('gotoDashboardSequence');
+    const sectionWorkQueue = test.getState('sectionWorkQueue');
+    expect(sectionWorkQueue.length).toBeGreaterThanOrEqual(2);
+    const workItem = sectionWorkQueue.find(
       workItem =>
         workItem.docketNumber === test.docketNumber &&
         workItem.document.documentType === 'Stipulated Decision',
@@ -22,7 +22,7 @@ export default test => {
       userId: 'respondent',
     });
 
-    const formatted = runCompute(formattedWorkQueue, {
+    const formatted = runCompute(formattedSectionWorkQueue, {
       state: test.getState(),
     });
     expect(formatted[0].createdAtFormatted).toBeDefined();
