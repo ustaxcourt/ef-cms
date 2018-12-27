@@ -1,7 +1,7 @@
 export default test => {
   return it('Docket clerk selects some work items', async () => {
     const unassignedWorkItem = test
-      .getState('workQueue')
+      .getState('sectionWorkQueue')
       .find(
         workItem =>
           !workItem.assigneeId && workItem.docketNumber === test.docketNumber,

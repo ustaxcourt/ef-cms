@@ -7,17 +7,23 @@ export default connect(
     workQueue: state.formattedWorkQueue,
     sectionWorkQueue: state.formattedSectionWorkQueue,
     users: state.users,
+    selectedWorkItems: state.selectedWorkItems,
     workQueueToDisplay: state.workQueueToDisplay,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    selectWorkItemSequence: sequences.selectWorkItemSequence,
+    assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
   },
   function WorkQueue({
     workQueue,
     sectionWorkQueue,
     users,
+    selectedWorkItems,
     workQueueToDisplay,
     selectAssigneeSequence,
     switchWorkQueueSequence,
+    selectWorkItemSequence,
+    assignSelectedWorkItemsSequence,
   }) {
     return (
       <React.Fragment>
@@ -66,7 +72,9 @@ export default connect(
             <tbody>
               <tr>
                 <td colSpan="8" className="action-bar">
-                  <span className="selected-count">2 selected</span>
+                  <span className="selected-count">
+                    {selectedWorkItems.length} selected
+                  </span>
                   <label htmlFor="options">Send to</label>
                   <select
                     onChange={event =>
@@ -86,18 +94,31 @@ export default connect(
                       </option>
                     ))}
                   </select>
-                  <button className="usa-button">Send</button>
+                  <button
+                    onClick={() => assignSelectedWorkItemsSequence()}
+                    className="usa-button"
+                  >
+                    Send
+                  </button>
                 </td>
               </tr>
-              {workQueue.map(item => (
+              {sectionWorkQueue.map(item => (
                 <tr key={item.workItemId}>
                   <td>
                     <input
                       id={item.workItemId}
                       type="checkbox"
                       name="historical-figures-1"
-                      value={item.workItemId}
-                      checked
+                      onChange={() =>
+                        selectWorkItemSequence({
+                          workItem: item,
+                        })
+                      }
+                      value={
+                        !!selectedWorkItems.find(
+                          workItem => workItem.workItemId === item.workItemId,
+                        )
+                      }
                     />
                     <label htmlFor={item.workItemId} />
                   </td>
@@ -113,10 +134,10 @@ export default connect(
                       {item.document.documentType}
                     </a>
                   </td>
-                  <td>General Docket</td>
-                  <td>12/15/2018</td>
+                  <td>{item.caseStatus}</td>
+                  <td>{item.messages[0].formattedCreatedAt}</td>
                   <td>{item.messages[0].sentBy}</td>
-                  <td>Unassigned</td>
+                  <td>{item.assigneeName}</td>
                 </tr>
               ))}
             </tbody>
@@ -136,7 +157,7 @@ export default connect(
               </tr>
             </thead>
             <tbody>
-              {sectionWorkQueue.map(item => (
+              {workQueue.map(item => (
                 <tr key={item.workItemId}>
                   <td>{item.docketNumber}</td>
                   <td>Received</td>
@@ -150,10 +171,10 @@ export default connect(
                       {item.document.documentType}
                     </a>
                   </td>
-                  <td>General Docket</td>
-                  <td>12/15/2018</td>
+                  <td>{item.caseStatus}</td>
+                  <td>{item.messages[0].formattedCreatedAt}</td>
                   <td>{item.messages[0].sentBy}</td>
-                  <td>Unassigned</td>
+                  <td>{item.assigneeName}</td>
                 </tr>
               ))}
             </tbody>
