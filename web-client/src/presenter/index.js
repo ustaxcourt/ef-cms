@@ -23,6 +23,10 @@ import updatePetitionValueSequence from './sequences/updatePetitionValueSequence
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 import gotoDocketSectionSequence from './sequences/gotoDocketSectionSequence';
+import selectAssigneeSequence from './sequences/selectAssigneeSequence';
+import selectWorkItemSequence from './sequences/selectWorkItemSequence';
+import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
+import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 
 import state from './state';
 
@@ -32,6 +36,7 @@ import state from './state';
 export default {
   providers: {},
   sequences: {
+    assignSelectedWorkItemsSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
@@ -40,6 +45,8 @@ export default {
     gotoLogInSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
+    selectAssigneeSequence,
+    selectWorkItemSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -47,6 +54,7 @@ export default {
     submitSearchSequence,
     submitToIrsSequence,
     submitUpdateCaseSequence,
+    switchWorkQueueSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
