@@ -7,8 +7,7 @@ describe('Filing an Answer', function() {
   describe('File Document Form ', () => {
     before(() => {
       cy.routeTo('/case-detail/102-18');
-      cy.contains('h1', 'Docket number');
-      cy.get('table')
+      cy.get('table#case-detail')
         .find('tr')
         .then($trs => {
           rowCount = $trs.length;
@@ -30,18 +29,17 @@ describe('Filing an Answer', function() {
     });
 
     it('docket record table reflects newly-added record', () => {
-      cy.get('table')
+      cy.get('table#case-detail')
         .find('tr')
         .should('have.length', rowCount + 1);
-      cy.get('table')
+      cy.get('table#case-detail')
         .find('a')
         .should('contain', 'Answer');
     });
 
     it('reflects changes to 102-18 by showing it in respondent work queue', () => {
       cy.routeTo('/');
-      cy.contains('h1', 'Respondent Dashboard');
-      cy.get('table')
+      cy.get('table#workQueue')
         .find('a')
         .should('contain', '102-18');
     });
