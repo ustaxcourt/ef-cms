@@ -12,11 +12,15 @@ function User(user) {
     'intakeclerk',
     'respondent',
     'docketclerk',
-    'docketclerk1',
     'seniorattorney',
   ];
 
-  if (validRoles.includes(this.userId)) {
+  let role = this.userId;
+  if (role === 'docketclerk1') {
+    role = 'docketclerk';
+  }
+
+  if (validRoles.includes(role)) {
     const name = 'Test ' + this.userId.replace(/^\w/, c => c.toUpperCase());
     const barNumber =
       this.userId === 'respondent' || this.userId === 'seniorattorney'
@@ -24,7 +28,7 @@ function User(user) {
         : undefined;
     Object.assign(this, {
       name,
-      role: this.userId,
+      role: role,
       barNumber,
       token: this.userId,
       email: `test${this.userId}@example.com`,
