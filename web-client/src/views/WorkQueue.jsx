@@ -114,7 +114,6 @@ export default connect(
                     <input
                       id={item.workItemId}
                       type="checkbox"
-                      name="historical-figures-1"
                       onChange={() =>
                         selectWorkItemSequence({
                           workItem: item,
