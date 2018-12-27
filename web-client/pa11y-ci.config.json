@@ -45,11 +45,29 @@
     },
 
     "http://localhost:1234/log-in?token=docketclerk&path=/",
+    {
+      "notes": "checks a11y of section queue tab panel",
+      "url": "http://localhost:1234/log-in?token=docketclerk&path=/&info=section-queue-tab",
+      "actions": [
+        "wait for #tab-work-queue to be visible",
+        "click element #tab-work-queue",
+        "wait for #section-work-queue to be visible"
+      ]
+    },
     "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/142edd00-1d94-40cd-9374-8d1bc7ae6d7b",
+    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+    {
+      "notes": "checks a11y of forward form",
+      "url": "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
+      "actions": [
+        "wait for button.link to be visible",
+        "click element button.link",
+        "wait for form#forward-form to be visible"
+      ]
+    },
 
     "http://localhost:1234/log-in?token=seniorattorney&path=/",
     "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18/documents/142edd00-1d94-40cd-9374-8d1bc7ae6d7b"
+    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd"
   ]
 }
