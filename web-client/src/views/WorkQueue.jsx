@@ -59,7 +59,7 @@ export default connect(
         <div className="work-queue-tab-container">
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
-        {workQueueToDisplay === 'section' && (
+        {workQueueHelper.showSectionWorkQueue && (
           <table className="work-queue" id="work-queue">
             <thead>
               <tr>
@@ -119,11 +119,7 @@ export default connect(
                           workItem: item,
                         })
                       }
-                      value={
-                        !!selectedWorkItems.find(
-                          workItem => workItem.workItemId === item.workItemId,
-                        )
-                      }
+                      checked={item.selected}
                     />
                     <label htmlFor={item.workItemId} />
                   </td>
@@ -147,7 +143,7 @@ export default connect(
             </tbody>
           </table>
         )}
-        {workQueueToDisplay === 'individual' && (
+        {workQueueHelper.showIndividualWorkQueue && (
           <table className="work-queue" id="work-queue">
             <thead>
               <tr>
