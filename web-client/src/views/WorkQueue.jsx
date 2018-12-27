@@ -33,7 +33,9 @@ export default connect(
         <div className="horizontal-tabs subsection">
           <ul>
             <li
-              className={workQueueToDisplay === 'individual' ? 'active' : ''}
+              className={
+                workQueueHelper.showIndividualWorkQueue ? 'active' : ''
+              }
               onClick={() =>
                 switchWorkQueueSequence({
                   workQueueToDisplay: 'individual',
@@ -43,7 +45,7 @@ export default connect(
               <h2>My Queue ({workQueue.length})</h2>
             </li>
             <li
-              className={workQueueToDisplay === 'section' ? 'active' : ''}
+              className={workQueueHelper.showSectionWorkQueue ? 'active' : ''}
               onClick={() =>
                 switchWorkQueueSequence({
                   workQueueToDisplay: 'section',
