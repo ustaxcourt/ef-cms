@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
 export default ({ store, props }) => {
-  store.set(state.sectionWorkQueue, props.workItems);
+  store.set(state.sectionWorkQueue, props.sectionWorkItems);
 };
