@@ -3,7 +3,6 @@
   "description": "US Tax Court Document Service API",
   "version": "0.1.0",
   "dependencies": {
-    "uuid": "^3.3.2",
     "ef-cms-shared": "file:../shared",
     "serverless": "^1.35.1",
     "serverless-aws-documentation": "^1.1.0",
@@ -14,7 +13,8 @@
     "serverless-plugin-bind-deployment-id": "github:codyseibert/serverless-plugin-bind-deployment-id#update_lodash",
     "serverless-plugin-git-variables": "^3.2.0",
     "serverless-plugin-split-stacks": "^1.7.0",
-    "serverless-s3-local": "github:codyseibert/serverless-s3-local"
+    "serverless-s3-local": "github:codyseibert/serverless-s3-local",
+    "uuid": "^3.3.2"
   },
   "license": "CC0-1.0",
   "devDependencies": {
