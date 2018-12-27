@@ -6,6 +6,8 @@ export default async ({ applicationContext, get, store }) => {
   const workQueue = get(state.workQueue);
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
+  const userId = get(state.user.token);
+
   await applicationContext.getUseCases().assignWorkItems({
     applicationContext,
     workItems: selectedWorkItems.map(workItem => ({
@@ -13,7 +15,7 @@ export default async ({ applicationContext, get, store }) => {
       assigneeId,
       assigneeName,
     })),
-    userId: get(state.user.token),
+    userId,
   });
 
   store.set(
@@ -38,5 +40,10 @@ export default async ({ applicationContext, get, store }) => {
       workQueue.push(item);
     }
   });
-  store.set(state.workQueue, workQueue);
+
+  const filteredWorkQueue = workQueue.filter(
+    item => item.assigneeId !== userId,
+  );
+
+  store.set(state.workQueue, filteredWorkQueue);
 };
