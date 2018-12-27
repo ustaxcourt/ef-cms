@@ -44,8 +44,8 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
 });
 
 Cypress.Commands.add('routeTo', route => {
-  // hitchhike on skipnav element as route trigger
-  cy.get('.usa-skipnav')
+  // hitchhike on an existing element as route trigger
+  cy.get('#extended-logo a')
     .then($navLink => {
       return $navLink.first().attr('href', route);
     })
