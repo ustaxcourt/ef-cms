@@ -35,15 +35,25 @@ export default async ({ applicationContext, get, store }) => {
     }),
   );
 
-  selectedWorkItems.forEach(item => {
-    if (!workQueue.find(existing => existing.workItemId === item.workItemId)) {
-      workQueue.push(item);
-    }
-  });
-
   const filteredWorkQueue = workQueue.filter(
     item => item.assigneeId !== userId,
   );
+
+  if (userId === assigneeId) {
+    selectedWorkItems.forEach(item => {
+      if (
+        !filteredWorkQueue.find(
+          existing => existing.workItemId === item.workItemId,
+        )
+      ) {
+        filteredWorkQueue.push({
+          ...item,
+          assigneeId,
+          assigneeName,
+        });
+      }
+    });
+  }
 
   store.set(state.workQueue, filteredWorkQueue);
 };
