@@ -4,5 +4,6 @@ import { formatWorkItem } from './formattedWorkQueue';
 
 export const formattedSectionWorkQueue = get => {
   const workItems = get(state.sectionWorkQueue);
-  return workItems.map(formatWorkItem);
+  const selectedWorkItems = get(state.selectedWorkItems);
+  return workItems.map(items => formatWorkItem(items, selectedWorkItems));
 };
