@@ -72,7 +72,7 @@ export default connect(
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
         {workQueueHelper.showSectionWorkQueue && (
-          <table className="work-queue" id="work-queue" role="tabpanel">
+          <table className="work-queue" id="section-work-queue" role="tabpanel">
             <thead>
               <tr>
                 <th>Select</th>
@@ -156,7 +156,7 @@ export default connect(
           </table>
         )}
         {workQueueHelper.showIndividualWorkQueue && (
-          <table className="work-queue" id="work-queue" role="tabpanel">
+          <table className="work-queue" id="my-work-queue" role="tabpanel">
             <thead>
               <tr>
                 <th aria-label="Docket Number">Docket</th>
