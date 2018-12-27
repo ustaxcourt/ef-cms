@@ -119,7 +119,7 @@ export default connect(
                           workItem: item,
                         })
                       }
-                      value={
+                      checked={
                         !!selectedWorkItems.find(
                           workItem => workItem.workItemId === item.workItemId,
                         )
