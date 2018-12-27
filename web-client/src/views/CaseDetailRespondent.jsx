@@ -92,7 +92,7 @@ export default connect(
                 <FontAwesomeIcon icon="cloud-upload-alt" />
                 File Document
               </button>
-              <table className="responsive-table">
+              <table className="responsive-table" id="case-detail">
                 <thead>
                   <tr>
                     <th>Date filed</th>
