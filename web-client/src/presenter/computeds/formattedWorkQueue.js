@@ -12,7 +12,7 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
     if (now.format('L') == then.format('L')) {
       message.createdAtFormatted = then.format('LT');
     } else {
-      message.createdAtFormatted = moment(message.createdAt).format('L');
+      message.createdAtFormatted = then.format('L');
     }
   });
   result.assigneeName = result.assigneeName || 'Unassigned';
