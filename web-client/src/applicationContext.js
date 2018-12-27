@@ -15,6 +15,7 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
@@ -23,6 +24,7 @@ import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdf
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
+import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -39,8 +41,10 @@ const applicationContext = {
   },
   getUseCases: () => {
     return {
+      assignWorkItems,
       createCase,
       downloadDocumentFile,
+      getUsersInSection,
       getCase,
       getCasesByStatus,
       getCasesByUser,
