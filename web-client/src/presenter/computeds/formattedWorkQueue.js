@@ -12,8 +12,7 @@ export const formatWorkItem = workItem => {
   );
   result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =
-    result.caseStatus === 'general' ? 'general docket' : result.caseStatus;
-
+    result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
   return result;
 };
 
