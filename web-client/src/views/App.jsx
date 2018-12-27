@@ -18,7 +18,6 @@ import DocumentDetail from './DocumentDetail';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
-import IntakeClerkDashboard from './IntakeClerkDashboard';
 import Loading from './Loading';
 import LogIn from './LogIn';
 import StyleGuide from './StyleGuide';
@@ -38,7 +37,6 @@ const pages = {
   DashboardSeniorAttorney,
   DocumentDetail,
   FilePetition,
-  IntakeClerkDashboard,
   Loading,
   LogIn,
   StyleGuide,
