@@ -10,6 +10,7 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
     message =>
       (message.createdAtFormatted = moment(message.createdAt).format('L')),
   );
+  result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
 
