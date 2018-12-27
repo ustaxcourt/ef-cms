@@ -85,7 +85,8 @@
       "src/documents",
       "src/swagger",
       "src/workitems",
-      "src/applicationContext.js"
+      "src/applicationContext.js",
+      "dynamo-export.js"
     ],
     "reporter": [
       "text",
