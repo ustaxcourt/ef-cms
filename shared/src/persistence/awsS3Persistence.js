@@ -64,6 +64,7 @@ exports.uploadDocument = async ({ applicationContext, document }) => {
   const documentId = await applicationContext
     .getPersistenceGateway()
     .uploadPdf({
+      applicationContext,
       policy,
       file: document,
     });
@@ -79,12 +80,14 @@ exports.uploadPdfsForNewCase = async ({
   const policy = await getUploadPolicy({ applicationContext });
 
   const petitionDocumentId = await exports.uploadPdf({
+    applicationContext,
     policy,
     file: caseInitiator.petitionFile,
   });
   fileHasUploaded();
 
   const requestForPlaceOfTrialDocumentId = await exports.uploadPdf({
+    applicationContext,
     policy,
     file: caseInitiator.requestForPlaceOfTrial,
   });
@@ -92,6 +95,7 @@ exports.uploadPdfsForNewCase = async ({
 
   const statementOfTaxpayerIdentificationNumberDocumentId = await exports.uploadPdf(
     {
+      applicationContext,
       policy,
       file: caseInitiator.statementOfTaxpayerIdentificationNumber,
     },
