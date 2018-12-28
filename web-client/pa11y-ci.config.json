@@ -2,14 +2,19 @@
   "README": [
     "When developing new views or URLs, please add a check for accessibility as seen below.",
     "If further actions are required at a given URL, use the 'actions' array to carry out the necessary steps.",
-    "If tests fail due to timeouts, try walking through tests manually."
+    "If tests fail due to timeouts, try walking through tests manually.",
+    "See info on actions here: https://github.com/pa11y/pa11y#actions"
   ],
   "defaults": {
-    "standard": "WCAG2AA",
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     },
-    "timeout": 10000
+    "debug": true,
+    "include-notices": true,
+    "include-warnings": true,
+    "standard": "WCAG2AA",
+    "timeout": 30000,
+    "wait": 1000
   },
   "urls": [
     "http://localhost:1234/",
@@ -46,12 +51,14 @@
 
     "http://localhost:1234/log-in?token=docketclerk&path=/",
     {
-      "notes": "checks a11y of section queue tab panel",
+      "notes": "checks a11y of section queue tab panel, may become brittle if element IDs change",
       "url": "http://localhost:1234/log-in?token=docketclerk&path=/&info=section-queue-tab",
       "actions": [
         "wait for #tab-work-queue to be visible",
         "click element #tab-work-queue",
-        "wait for #section-work-queue to be visible"
+        "wait for #section-work-queue to be visible",
+        "click element #label-af60fe99-37dc-435c-9bdf-24be67769344",
+        "wait for td.action-bar to be visible"
       ]
     },
     "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",

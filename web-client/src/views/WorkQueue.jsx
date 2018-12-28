@@ -72,123 +72,139 @@ export default connect(
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
         {workQueueHelper.showSectionWorkQueue && (
-          <table className="work-queue" id="section-work-queue" role="tabpanel">
-            <thead>
-              <tr>
-                <th>Select</th>
-                <th aria-label="Docket Number">Docket</th>
-                <th>Received</th>
-                <th>Document</th>
-                <th>Status</th>
-                <th>From</th>
-                <th>To</th>
-              </tr>
-            </thead>
-            <tbody>
-              {workQueueHelper.showSendToBar && (
+          <div role="tabpanel">
+            <table
+              className="work-queue"
+              id="section-work-queue"
+              aria-describedby="tab-work-queue"
+            >
+              <thead>
                 <tr>
-                  <td colSpan="7" className="action-bar">
-                    <span className="selected-count">
-                      {selectedWorkItems.length} selected
-                    </span>
-                    <label htmlFor="options">Send to</label>
-                    <select
-                      onChange={event =>
-                        selectAssigneeSequence({
-                          assigneeId: event.target.value,
-                          assigneeName:
-                            event.target.options[event.target.selectedIndex]
-                              .text,
-                        })
-                      }
-                      name="options"
-                      id="options"
-                    >
-                      <option value>- Select -</option>
-                      {users.map(user => (
-                        <option key={user.userId} value={user.userId}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      onClick={() => assignSelectedWorkItemsSequence()}
-                      className="usa-button"
-                    >
-                      Send
-                    </button>
-                  </td>
+                  <th>Select</th>
+                  <th aria-label="Docket Number">Docket</th>
+                  <th>Received</th>
+                  <th>Document</th>
+                  <th>Status</th>
+                  <th>From</th>
+                  <th>To</th>
                 </tr>
-              )}
-              {sectionWorkQueue.map(item => (
-                <tr key={item.workItemId}>
-                  <td>
-                    <input
-                      id={item.workItemId}
-                      type="checkbox"
-                      onChange={() =>
-                        selectWorkItemSequence({
-                          workItem: item,
-                        })
-                      }
-                      checked={item.selected}
-                    />
-                    <label htmlFor={item.workItemId} />
-                  </td>
-                  <td>{item.docketNumber}</td>
-                  <td>{item.messages[0].createdAtFormatted}</td>
-                  <td>
-                    <a
-                      href={`/case-detail/${item.docketNumber}/documents/${
-                        item.document.documentId
-                      }`}
-                      className="case-link"
-                    >
-                      {item.document.documentType}
-                    </a>
-                  </td>
-                  <td>{item.caseStatus}</td>
-                  <td>{item.messages[0].sentBy}</td>
-                  <td>{item.assigneeName}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {workQueueHelper.showSendToBar && (
+                  <tr>
+                    <td colSpan="7" className="action-bar">
+                      <span className="selected-count">
+                        {selectedWorkItems.length} selected
+                      </span>
+                      <label htmlFor="options">Send to</label>
+                      <select
+                        onChange={event =>
+                          selectAssigneeSequence({
+                            assigneeId: event.target.value,
+                            assigneeName:
+                              event.target.options[event.target.selectedIndex]
+                                .text,
+                          })
+                        }
+                        name="options"
+                        id="options"
+                      >
+                        <option value>- Select -</option>
+                        {users.map(user => (
+                          <option key={user.userId} value={user.userId}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => assignSelectedWorkItemsSequence()}
+                        className="usa-button"
+                      >
+                        Send
+                      </button>
+                    </td>
+                  </tr>
+                )}
+                {sectionWorkQueue.map(item => (
+                  <tr key={item.workItemId}>
+                    <td>
+                      <input
+                        id={item.workItemId}
+                        type="checkbox"
+                        onChange={() =>
+                          selectWorkItemSequence({
+                            workItem: item,
+                          })
+                        }
+                        checked={item.selected}
+                        aria-label="Select work item"
+                      />
+                      <label
+                        htmlFor={item.workItemId}
+                        id={`label-${item.workItemId}`}
+                      />
+                    </td>
+                    <td>{item.docketNumber}</td>
+                    <td>{item.messages[0].createdAtFormatted}</td>
+                    <td>
+                      <a
+                        href={`/case-detail/${item.docketNumber}/documents/${
+                          item.document.documentId
+                        }`}
+                        className="case-link"
+                      >
+                        {item.document.documentType}
+                      </a>
+                    </td>
+                    <td>{item.caseStatus}</td>
+                    <td>{item.messages[0].sentBy}</td>
+                    <td>{item.assigneeName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
         {workQueueHelper.showIndividualWorkQueue && (
-          <table className="work-queue" id="my-work-queue" role="tabpanel">
-            <thead>
-              <tr>
-                <th aria-label="Docket Number">Docket</th>
-                <th>Received</th>
-                <th>Document</th>
-                <th>Status</th>
-                <th>From</th>
-                <th>To</th>
-              </tr>
-            </thead>
-            <tbody>
-              {workQueue.map(item => (
-                <tr key={item.workItemId}>
-                  <td>{item.docketNumber}</td>
-                  <td>{item.messages[0].createdAtFormatted}</td>
-                  <td>
-                    <a
-                      href={`/case-detail/${item.docketNumber}/documents/${
-                        item.document.documentId
-                      }`}
-                      className="case-link"
-                    >
-                      {item.document.documentType}
-                    </a>
-                  </td>
-                  <td>{item.caseStatus}</td>
-                  <td>{item.messages[0].sentBy}</td>
-                  <td>{item.assigneeName}</td>
+          <div role="tabpanel">
+            <table
+              className="work-queue"
+              id="my-work-queue"
+              aria-describedby="tab-my-queue"
+            >
+              <thead>
+                <tr>
+                  <th aria-label="Docket Number">Docket</th>
+                  <th>Received</th>
+                  <th>Document</th>
+                  <th>Status</th>
+                  <th>From</th>
+                  <th>To</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {workQueue.map(item => (
+                  <tr key={item.workItemId}>
+                    <td>{item.docketNumber}</td>
+                    <td>{item.messages[0].createdAtFormatted}</td>
+                    <td>
+                      <a
+                        href={`/case-detail/${item.docketNumber}/documents/${
+                          item.document.documentId
+                        }`}
+                        className="case-link"
+                      >
+                        {item.document.documentType}
+                      </a>
+                    </td>
+                    <td>{item.caseStatus}</td>
+                    <td>{item.messages[0].sentBy}</td>
+                    <td>{item.assigneeName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </React.Fragment>
     );
