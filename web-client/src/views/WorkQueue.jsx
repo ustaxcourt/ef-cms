@@ -29,28 +29,42 @@ export default connect(
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
         <div className="horizontal-tabs subsection">
-          <ul>
+          <ul role="tablist">
             <li
               className={
                 workQueueHelper.showIndividualWorkQueue ? 'active' : ''
               }
-              onClick={() =>
-                switchWorkQueueSequence({
-                  workQueueToDisplay: 'individual',
-                })
-              }
             >
-              <h2>My Queue ({workQueue.length})</h2>
+              <button
+                role="tab"
+                className="tab-link"
+                id="tab-my-queue"
+                aria-selected={workQueueHelper.showIndividualWorkQueue}
+                onClick={() =>
+                  switchWorkQueueSequence({
+                    workQueueToDisplay: 'individual',
+                  })
+                }
+              >
+                <h2>My Queue ({workQueue.length})</h2>{' '}
+              </button>
             </li>
             <li
               className={workQueueHelper.showSectionWorkQueue ? 'active' : ''}
-              onClick={() =>
-                switchWorkQueueSequence({
-                  workQueueToDisplay: 'section',
-                })
-              }
             >
-              <h2>Section Queue ({sectionWorkQueue.length})</h2>
+              <button
+                role="tab"
+                className="tab-link"
+                id="tab-work-queue"
+                aria-selected={workQueueHelper.showSectionWorkQueue}
+                onClick={() =>
+                  switchWorkQueueSequence({
+                    workQueueToDisplay: 'section',
+                  })
+                }
+              >
+                <h2>Section Queue ({sectionWorkQueue.length})</h2>
+              </button>
             </li>
           </ul>
         </div>
@@ -58,7 +72,7 @@ export default connect(
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
         {workQueueHelper.showSectionWorkQueue && (
-          <table className="work-queue" id="work-queue">
+          <table className="work-queue" id="section-work-queue" role="tabpanel">
             <thead>
               <tr>
                 <th>Select</th>
@@ -142,7 +156,7 @@ export default connect(
           </table>
         )}
         {workQueueHelper.showIndividualWorkQueue && (
-          <table className="work-queue" id="work-queue">
+          <table className="work-queue" id="my-work-queue" role="tabpanel">
             <thead>
               <tr>
                 <th aria-label="Docket Number">Docket</th>
