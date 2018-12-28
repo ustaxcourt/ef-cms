@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 exports.associateRespondentDocumentToCase = async ({
   applicationContext,
   caseId,
@@ -8,7 +6,7 @@ exports.associateRespondentDocumentToCase = async ({
   userId,
 }) => {
   const userToken = userId;
-  const response = await axios.put(
+  const response = await applicationContext.getHttpClient().put(
     `${applicationContext.getBaseUrl()}/cases/${caseId}?interactorName=associateRespondentDocumentToCase`,
     {
       documentType,

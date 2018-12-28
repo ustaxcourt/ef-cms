@@ -1,4 +1,3 @@
-const axios = require('axios');
 /**
  * getCasesByStatus
  *
@@ -9,7 +8,8 @@ const axios = require('axios');
  */
 exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
   const userToken = userId; //TODO refactor for jwt
-  return await axios
+  return await applicationContext
+    .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {
         Authorization: `Bearer ${userToken}`,
