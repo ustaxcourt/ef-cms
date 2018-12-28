@@ -139,7 +139,10 @@ export default connect(
                         checked={item.selected}
                         aria-label="Select work item"
                       />
-                      <label htmlFor={item.workItemId} />
+                      <label
+                        htmlFor={item.workItemId}
+                        id={`label-${item.workItemId}`}
+                      />
                     </td>
                     <td>{item.docketNumber}</td>
                     <td>{item.messages[0].createdAtFormatted}</td>
