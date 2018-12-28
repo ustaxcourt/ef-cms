@@ -30,7 +30,7 @@ const MOCK_CASE = {
 describe('updateCase', () => {
   let applicationContext;
 
-  it('should throw an error if the persistence layer returns an invalid Case', async () => {
+  it('should throw an error if the persistence layer returns an invalid case', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
