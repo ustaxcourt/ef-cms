@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export default section => {
-  return async ({ applicationContext, get, path }) => {
+  return async ({ applicationContext, get }) => {
     const useCases = applicationContext.getUseCases();
     const userId = get(state.user.userId);
     let sectionWorkItems = await useCases.getWorkItemsBySection({
@@ -9,6 +9,6 @@ export default section => {
       section,
       userId,
     });
-    return path.success({ sectionWorkItems });
+    return { sectionWorkItems };
   };
 };
