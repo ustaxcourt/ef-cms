@@ -92,7 +92,7 @@ export default connect(
               <tbody>
                 {workQueueHelper.showSendToBar && (
                   <tr>
-                    <td colSpan="8" className="action-bar">
+                    <td colSpan="7" className="action-bar">
                       <span className="selected-count">
                         {selectedWorkItems.length} selected
                       </span>
