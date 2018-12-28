@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 /**
  * getWorkItem
  *
@@ -10,14 +8,12 @@ const axios = require('axios');
  */
 exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
   const userToken = userId;
-  const response = await axios.put(
-    `${applicationContext.getBaseUrl()}/workitems`,
-    workItems,
-    {
+  const response = await applicationContext
+    .getHttpClient()
+    .put(`${applicationContext.getBaseUrl()}/workitems`, workItems, {
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
-    },
-  );
+    });
   return response.data;
 };
