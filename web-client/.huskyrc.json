@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "pre-commit": "npm run test",
+    "pre-push": "sed -i '' -e 's/http:\/\//https:\/\//g' package-lock.json"
+  }
+}

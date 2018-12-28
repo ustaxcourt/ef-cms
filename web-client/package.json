@@ -107,5 +107,8 @@
     "stylelint-config-standard": "^18.2.0",
     "uswds": "^1.6.9",
     "webdriver-manager": "^12.1.0"
+  },
+  "devDependencies": {
+    "husky": "^1.3.1"
   }
 }
