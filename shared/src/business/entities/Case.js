@@ -88,14 +88,6 @@ joiValidationDecorator(
   },
 );
 
-/**
- * isPetitionPackageReviewed
- * @returns boolean
- */
-Case.prototype.isPetitionPackageReviewed = function isPetitionPackageReviewed() {
-  return this.documents.every(document => document.validated === true);
-};
-
 Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
   const documentMetadata = {
     documentType,
