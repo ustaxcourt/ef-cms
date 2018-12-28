@@ -254,12 +254,12 @@ iframe {
 
   li {
     display: inline-block;
-    padding: 0.5rem 0;
+    padding: 0;
     margin: 0 2rem 0 0;
     cursor: pointer;
 
     h2 {
-      font-weight: $font-normal;
+      font-weight: 500;
     }
   }
 
@@ -269,7 +269,7 @@ iframe {
     font-weight: $font-bold;
 
     h2 {
-      font-weight: $font-bold;
+      font-weight: 500;
     }
   }
 }
