@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 /**
  * getCaseProxy
  *
@@ -14,14 +12,13 @@ exports.getCaseByDocumentId = async ({
   userId,
 }) => {
   const userToken = userId;
-  const response = await axios.get(
-    `${applicationContext.getBaseUrl()}/cases?documentId=${documentId}`,
-    {
+  const response = await applicationContext
+    .getHttpClient()
+    .get(`${applicationContext.getBaseUrl()}/cases?documentId=${documentId}`, {
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
-    },
-  );
+    });
   if (response.data.length && response.data.length === 1) {
     return response.data[0];
   } else {
