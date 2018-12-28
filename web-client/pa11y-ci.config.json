@@ -58,7 +58,6 @@
         "click element #tab-work-queue",
         "wait for #section-work-queue to be visible",
         "click element #label-af60fe99-37dc-435c-9bdf-24be67769344",
-        "screen capture example.png",
         "wait for td.action-bar to be visible"
       ]
     },
