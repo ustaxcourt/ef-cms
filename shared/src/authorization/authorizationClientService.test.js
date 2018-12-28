@@ -37,7 +37,7 @@ describe('Authorization client service', () => {
     expect(isAuthorized('docketclerk', WORKITEM)).to.be.true;
   });
 
-  it('should authorize a srattorney for workitems', () => {
-    expect(isAuthorized('srattorney', WORKITEM)).to.be.true;
+  it('should authorize a seniorattorney for workitems', () => {
+    expect(isAuthorized('seniorattorney', WORKITEM)).to.be.true;
   });
 });
