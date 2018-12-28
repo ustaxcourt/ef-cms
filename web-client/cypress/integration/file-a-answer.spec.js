@@ -1,5 +1,6 @@
 describe('Filing an Answer', function() {
   let rowCount;
+  const tableSelector = 'table#docket-record';
   before(() => {
     cy.login('respondent');
   });
@@ -7,7 +8,7 @@ describe('Filing an Answer', function() {
   describe('File Document Form ', () => {
     before(() => {
       cy.routeTo('/case-detail/102-18');
-      cy.get('table#case-detail')
+      cy.get(tableSelector)
         .find('tr')
         .then($trs => {
           rowCount = $trs.length;
@@ -29,10 +30,10 @@ describe('Filing an Answer', function() {
     });
 
     it('docket record table reflects newly-added record', () => {
-      cy.get('table#case-detail')
+      cy.get(tableSelector)
         .find('tr')
         .should('have.length', rowCount + 1);
-      cy.get('table#case-detail')
+      cy.get(tableSelector)
         .find('a')
         .should('contain', 'Answer');
     });
