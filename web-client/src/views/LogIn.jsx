@@ -29,7 +29,7 @@ export default connect(
               id="name"
               type="text"
               name="name"
-              autoCapitalize="off"
+              autoCapitalize="none"
               value={form.name}
               onChange={e => {
                 updateFormValueSequence({

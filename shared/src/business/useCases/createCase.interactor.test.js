@@ -132,7 +132,7 @@ describe('createCase', () => {
     }
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
