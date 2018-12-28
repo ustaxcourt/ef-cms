@@ -92,7 +92,11 @@ export default connect(
                 <FontAwesomeIcon icon="cloud-upload-alt" />
                 File Document
               </button>
-              <table className="responsive-table" id="case-detail">
+              <table
+                className="responsive-table"
+                id="docket-record"
+                aria-describedby="docket-record-tab"
+              >
                 <thead>
                   <tr>
                     <th>Date filed</th>
@@ -116,7 +120,7 @@ export default connect(
                           }/documentDownloadUrl`}
                           target="_blank"
                           rel="noreferrer noopener"
-                          aria-label="View PDF"
+                          aria-label={`View PDF: ${document.documentType}`}
                         >
                           <FontAwesomeIcon icon="file-pdf" />
                           {document.documentType}
