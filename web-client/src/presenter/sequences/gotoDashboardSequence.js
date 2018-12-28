@@ -13,6 +13,7 @@ import setSectionWorkQueue from '../actions/setSectionWorkQueueAction';
 import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
 import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
+import setUsers from '../actions/setUsersAction';
 
 const goToDashboard = [
   getUserRole,
@@ -38,6 +39,10 @@ const goToDashboard = [
     docketclerk: [
       clearAlerts,
       getUsersInSection('docket'),
+      {
+        error: [setAlertError],
+        success: [setUsers],
+      },
       getWorkItemsForSection('docket'),
       {
         error: [setAlertError],
