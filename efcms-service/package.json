@@ -7,7 +7,7 @@
     "serverless": "^1.35.1",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-domain-manager": "^2.6.9",
-    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^3.30.0",
     "serverless-plugin-aws-alerts": "^1.2.4",
     "serverless-plugin-bind-deployment-id": "github:codyseibert/serverless-plugin-bind-deployment-id#update_lodash",
