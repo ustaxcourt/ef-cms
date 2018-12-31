@@ -103,16 +103,6 @@ h1[tabIndex='-1']:focus {
   box-shadow: 0 2px 0 $color-white;
 }
 
-table.responsive-table.row-border-only {
-  tr {
-    border: 1px solid $color-gray-light;
-  }
-
-  td {
-    border: none;
-  }
-}
-
 table.work-queue {
   td,
   th {
@@ -165,6 +155,16 @@ table.work-queue {
   border-right: 1px solid $color-gray-light;
   border-bottom: 1px solid $color-gray-light;
   border-left: 1px solid $color-gray-light;
+}
+
+table.row-border-only {
+  td {
+    border: none;
+  }
+
+  tbody tr {
+    border: 1px solid $color-gray-light;
+  }
 }
 
 table.case-list thead th,
