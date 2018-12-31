@@ -14,6 +14,7 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
     } else {
       message.createdAtFormatted = then.format('L');
     }
+    message.sentTo = message.sentTo || 'Unassigned';
     message.createdAtTimeFormatted = moment(message.createdAt).format(
       'YYYY/MM/DD hh:mm a',
     );

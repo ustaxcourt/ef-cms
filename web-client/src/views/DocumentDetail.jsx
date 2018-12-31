@@ -14,10 +14,13 @@ class DocumentDetail extends React.Component {
       caseDetail,
       document,
       form,
+      workItemActions,
       showForwardInputs,
       submitForwardSequence,
       updateFormValueSequence,
+      setWorkItemActionSequence,
       workItems,
+      showAction,
     } = this.props;
 
     return (
@@ -44,62 +47,123 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
+          <div className="usa-grid-full mb-2">
+            <span className="label font-large mr-4">
+              {document.documentType}
+            </span>
+            <span className="label mr-2">Date filed</span>{' '}
+            <span className="mr-4">{document.createdAtFormatted}</span>
+            <span className="label mr-2">Filed by</span> {document.filedBy}
+          </div>
+
+          <div className="usa-grid-full mb-2">
+            <span className="font-medium" id="messages-label">
+              Messages
+            </span>
+          </div>
+
           <div className="usa-grid-full">
-            <div className="usa-width-one-third card">
-              <h2>{document.documentType}</h2>
-              <div className="usa-grid-full subsection">
-                <div className="usa-width-one-half">
-                  <span className="label">Date filed</span>
-                  <p>{document.createdAtFormatted}</p>
-                </div>
-                <div className="usa-width-one-half">
-                  <span className="label">Filed by</span>
-                  <p>{document.filedBy}</p>
-                </div>
-              </div>
-              <span className="label" id="messages-label">
-                Messages
-              </span>
+            <div className="usa-width-one-third">
               {workItems.map((workItem, idx) => (
                 <div
-                  className="card messages-card"
+                  className="card"
                   aria-labelledby="messages-label"
                   key={idx}
                 >
-                  <div className="subsection">
-                    <span className="label">{workItem.messages[0].sentBy}</span>
-                    <span className="float-right">
-                      {workItem.messages[0].createdAtFormatted}
-                    </span>
+                  <div className="card-body">
+                    <div className="mb-2">
+                      <div className="mb-1">
+                        <span className="label">To</span>{' '}
+                        {workItem.messages[0].sentTo}
+                      </div>
+
+                      <div className="mb-1">
+                        <span className="label">From</span>{' '}
+                        {workItem.messages[0].sentBy}
+                      </div>
+
+                      <div>
+                        <span className="label">Received</span>{' '}
+                        {workItem.messages[0].createdAtFormatted}
+                      </div>
+                    </div>
+
+                    <div className="mb-1">{workItem.messages[0].message}</div>
                   </div>
-                  <p>{workItem.messages[0].message}</p>
-                  <div className="subsection">
-                    <span className="flagged-name">
-                      {' '}
-                      <FontAwesomeIcon
-                        icon="flag"
-                        className="action-flag"
-                        size="sm"
-                      />{' '}
-                      {workItem.assigneeName}
-                    </span>
-                    {!showForwardInputs && (
-                      <span className="float-right">
-                        <button
-                          className="link"
-                          aria-label="Forward message"
-                          onClick={() => {
-                            updateFormValueSequence({
-                              key: 'showForwardInputs',
-                              value: true,
-                            });
-                          }}
-                        >
-                          Forward
-                        </button>
-                      </span>
-                    )}
-                    {showForwardInputs && (
+
+                  <div className="usa-grid-full extra pt-1 pb-1 toggles">
+                    <div
+                      className={`usa-width-one-third toggle ${
+                        showAction('history', workItem.workItemId)
+                          ? 'selected'
+                          : ''
+                      }`}
+                      onClick={() =>
+                        setWorkItemActionSequence({
+                          workItemId: workItem.workItemId,
+                          action: 'history',
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="list-ul" size="sm" /> View History
+                    </div>
+                    <div
+                      className={`usa-width-one-third toggle ${
+                        showAction('complete', workItem.workItemId)
+                          ? 'selected'
+                          : ''
+                      }`}
+                      onClick={() =>
+                        setWorkItemActionSequence({
+                          workItemId: workItem.workItemId,
+                          action: 'complete',
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
+                    </div>
+                    <div
+                      className={`usa-width-one-third toggle ${
+                        showAction('forward', workItem.workItemId)
+                          ? 'selected'
+                          : ''
+                      }`}
+                      onClick={() =>
+                        setWorkItemActionSequence({
+                          workItemId: workItem.workItemId,
+                          action: 'forward',
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="share-square" size="sm" /> Send To
+                    </div>
+                  </div>
+
+                  {showAction('history', workItem.workItemId) && (
+                    <div className="card-body extra pb-4">
+                      {workItem.messages.map((message, mIdx) => (
+                        <div key={mIdx} className="mb-2">
+                          <div className="mb-1">
+                            <span className="label">To</span> {message.sentTo}
+                          </div>
+
+                          <div className="mb-1">
+                            <span className="label">From</span> {message.sentBy}
+                          </div>
+
+                          <div className="mb-1">
+                            <span className="label">Received</span>{' '}
+                            {message.createdAtFormatted}
+                          </div>
+
+                          <div className="mb-1">{message.message}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {showAction('forward', workItem.workItemId) && (
+                    <div className="card-body extra">
                       <form
                         id="forward-form"
                         role="form"
@@ -149,17 +213,17 @@ class DocumentDetail extends React.Component {
                           type="button"
                           className="usa-button-secondary"
                           onClick={() => {
-                            updateFormValueSequence({
-                              key: 'showForwardInputs',
-                              value: false,
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: null,
                             });
                           }}
                         >
                           Cancel
                         </button>
                       </form>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -183,10 +247,13 @@ DocumentDetail.propTypes = {
   caseDetail: PropTypes.object,
   document: PropTypes.object,
   form: PropTypes.object,
+  workItemActions: PropTypes.object,
   showForwardInputs: PropTypes.bool,
   submitForwardSequence: PropTypes.func,
   updateFormValueSequence: PropTypes.func,
+  setWorkItemActionSequence: PropTypes.func,
   workItems: PropTypes.array,
+  showAction: PropTypes.func,
 };
 
 export default connect(
@@ -195,10 +262,13 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     document: state.extractedDocument,
     form: state.form,
+    workItemActions: state.workItemActions,
     showForwardInputs: state.form.showForwardInputs,
     submitForwardSequence: sequences.submitForwardSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     workItems: state.extractedWorkItems,
+    showAction: state.showAction,
   },
   DocumentDetail,
 );
