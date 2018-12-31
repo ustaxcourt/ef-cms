@@ -29,7 +29,7 @@ exports.syncWorkItems = async ({
         },
       });
     } else {
-      // the item exists in the current state, but check if the assigneId changed
+      // the item exists in the current state, but check if the assigneeId changed
       if (workItem.assigneeId !== existing.assigneeId) {
         // the item has changed assignees, delete item
         await exports.reassignWorkItem({

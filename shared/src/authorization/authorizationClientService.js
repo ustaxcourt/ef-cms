@@ -22,7 +22,7 @@ exports.isAuthorized = (user, action, owner) => {
     return (
       user === 'petitionsclerk' ||
       user === 'intakeclerk' ||
-      user === 'srattorney' ||
+      user === 'seniorattorney' ||
       user === 'docketclerk'
     );
   }
@@ -35,7 +35,7 @@ exports.isAuthorized = (user, action, owner) => {
     (user === 'respondent' ||
       user === 'petitionsclerk' ||
       user === 'intakeclerk' ||
-      user === 'srattorney' ||
+      user === 'seniorattorney' ||
       user === 'docketclerk') &&
     (action === exports.GET_CASES_BY_STATUS ||
       action === exports.UPDATE_CASE ||
