@@ -74,8 +74,6 @@ h1[tabIndex='-1']:focus {
 }
 
 #forward-form {
-  margin-top: 2rem;
-
   textarea {
     height: 60px;
   }
@@ -306,14 +304,88 @@ iframe {
 }
 
 .card {
-  padding: 1rem;
-  background-color: $color-gray-lightest;
+  border: 1px solid $color-gray-lightest;
+  box-shadow: 5px 5px 10px #999;
+}
 
-  .card {
-    background-color: white;
-  }
+.card-body {
+  padding: 2rem;
 }
 
 .mb-4 {
   margin-bottom: 40px;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
+}
+
+.font-large {
+  font-size: 30px;
+}
+
+.font-medium {
+  font-size: 24px;
+}
+
+.mr-4 {
+  margin-right: 40px;
+}
+
+.mr-2 {
+  margin-right: 20px;
+}
+
+.mb-4 {
+  margin-bottom: 40px;
+}
+
+.mb-2 {
+  margin-bottom: 20px;
+}
+
+.toggles {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.toggle {
+  font-size: 13px;
+  color: #0069a3;
+  text-align: center;
+  vertical-align: top;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: white;
+  background-color: #0069a3;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+
+.toggle.selected {
+  color: white;
+  background-color: #0069a3;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.extra {
+  background-color: #eff9fd;
+}
+
+.pt-1 {
+  padding-top: 10px;
+}
+
+.pb-1 {
+  padding-bottom: 10px;
 }

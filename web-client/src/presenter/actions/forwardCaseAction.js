@@ -21,6 +21,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
       message,
       userId: get(state.user.token),
       sentBy: get(state.user.name),
+      sentTo: 'Senior Attorney',
     },
   ];
   store.set(state.caseDetail, caseDetail);

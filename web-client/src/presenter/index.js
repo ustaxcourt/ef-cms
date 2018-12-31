@@ -26,6 +26,7 @@ import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
+import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 
 import state from './state';
 
@@ -63,6 +64,7 @@ export default {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     viewDocumentSequence,
+    setWorkItemActionSequence,
   },
   state,
 };
