@@ -6,14 +6,11 @@ const Case = require('../../entities/Case');
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getCasesForRespondent = async ({
-  respondentId,
-  applicationContext,
-}) => {
+exports.getCasesForRespondent = async ({ userId, applicationContext }) => {
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesForRespondent({
-      respondentId,
+      userId,
       applicationContext,
     });
   return Case.validateRawCollection(cases);

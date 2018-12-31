@@ -7,12 +7,14 @@ class SuccessNotification extends React.Component {
   componentDidUpdate() {
     this.focusNotification();
   }
+
   focusNotification() {
     const notification = this.notificationRef.current;
     if (notification) {
       notification.scrollIntoView();
     }
   }
+
   render() {
     const alertSuccess = this.props.alertSuccess;
     this.notificationRef = React.createRef();
@@ -40,6 +42,7 @@ class SuccessNotification extends React.Component {
 SuccessNotification.propTypes = {
   alertSuccess: PropTypes.object,
 };
+
 export default connect(
   {
     alertSuccess: state.alertSuccess,

@@ -8,13 +8,33 @@ exports.syncWorkItems = async ({
   caseToSave,
   currentCaseState,
 }) => {
-  for (let workItem of caseToSave.workItems || []) {
-    const existing = (currentCaseState.workItems || []).find(
-      i => i.id === workItem.id,
+  let currentWorkItems = [];
+  let newWorkItems = [];
+  (currentCaseState.documents || []).forEach(
+    document =>
+      (currentWorkItems = [...currentWorkItems, ...(document.workItems || [])]),
+  );
+  (caseToSave.documents || []).forEach(
+    document =>
+      (newWorkItems = [...newWorkItems, ...(document.workItems || [])]),
+  );
+
+  for (let workItem of newWorkItems) {
+    const existing = currentWorkItems.find(
+      item => item.workItemId === workItem.workItemId,
     );
     if (!existing) {
+      if (workItem.assigneeId) {
+        await persistence.createMappingRecord({
+          pkId: workItem.assigneeId,
+          skId: workItem.workItemId,
+          type: 'workItem',
+          applicationContext,
+        });
+      }
+
       await persistence.createMappingRecord({
-        pkId: workItem.assigneeId,
+        pkId: workItem.section,
         skId: workItem.workItemId,
         type: 'workItem',
         applicationContext,
@@ -47,12 +67,14 @@ exports.reassignWorkItem = async ({
   workItemToSave,
   applicationContext,
 }) => {
-  await persistence.deleteMappingRecord({
-    pkId: existingWorkItem.assigneeId,
-    skId: workItemToSave.workItemId,
-    type: 'workItem',
-    applicationContext,
-  });
+  if (existingWorkItem.assigneeId) {
+    await persistence.deleteMappingRecord({
+      pkId: existingWorkItem.assigneeId,
+      skId: workItemToSave.workItemId,
+      type: 'workItem',
+      applicationContext,
+    });
+  }
 
   await persistence.createMappingRecord({
     pkId: workItemToSave.assigneeId,

@@ -1,4 +1,3 @@
-const axios = require('axios');
 /**
  * getCasesByStatus
  *
@@ -9,7 +8,8 @@ const axios = require('axios');
  */
 exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
   const userToken = userId; //TODO refactor for jwt
-  return await axios
+  return await applicationContext
+    .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -19,6 +19,7 @@ exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
       },
     })
     .then(response => {
+      // TODO: this should probably be sorted in a computed
       if (!(response.data && Array.isArray(response.data))) {
         return response.data;
       } else {
