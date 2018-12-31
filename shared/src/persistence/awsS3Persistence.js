@@ -1,5 +1,3 @@
-const uuidv4 = require('uuid/v4');
-
 /**
  * uploadPdf
  * @param policy
@@ -7,7 +5,7 @@ const uuidv4 = require('uuid/v4');
  * @returns {Promise<*>}
  */
 exports.uploadPdf = async ({ applicationContext, policy, file }) => {
-  const documentId = uuidv4();
+  const documentId = applicationContext.getUniqueId();
   const formData = new FormData();
   formData.append('key', documentId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);

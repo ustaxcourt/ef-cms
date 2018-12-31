@@ -17,7 +17,12 @@ exports.get = event =>
     const useCase = applicationContext.getInteractorForGettingCases({
       userId,
       documentId,
-      applicationContext
+      applicationContext,
     });
-    return useCase({ documentId, userId: userId, status: status, applicationContext});
+    return useCase({
+      documentId,
+      userId: userId,
+      status: status,
+      applicationContext,
+    });
   });
