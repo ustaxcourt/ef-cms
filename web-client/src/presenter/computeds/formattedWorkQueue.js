@@ -14,6 +14,9 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
     } else {
       message.createdAtFormatted = then.format('L');
     }
+    message.createdAtTimeFormatted = moment(message.createdAt).format(
+      'YYYY/MM/DD hh:mm a',
+    );
   });
   result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =

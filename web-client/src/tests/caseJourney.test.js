@@ -31,6 +31,7 @@ import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViews
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
+import dockerClerkViewsCaseDetail from './journey/dockerClerkViewsCaseDetail';
 
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
@@ -80,6 +81,7 @@ describe('Case journey', async () => {
   respondentAddsStipulatedDecision(test, fakeFile);
   docketClerkLogIn(test);
   docketClerkViewsDashboardWithoutWorkItem(test);
+  dockerClerkViewsCaseDetail(test);
   docketClerkLogIn(test, 'docketclerk1');
   docketClerkDocketDashboard(test);
   docketClerkSelectsAssignee(test);
