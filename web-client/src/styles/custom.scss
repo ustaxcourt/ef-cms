@@ -157,6 +157,16 @@ table.work-queue {
   border-left: 1px solid $color-gray-light;
 }
 
+table.row-border-only {
+  td {
+    border: none;
+  }
+
+  tbody tr {
+    border: 1px solid $color-gray-light;
+  }
+}
+
 table.case-list thead th,
 table.case-list thead td {
   background-color: $color-gray-light;
@@ -302,4 +312,8 @@ iframe {
   .card {
     background-color: white;
   }
+}
+
+.mb-4 {
+  margin-bottom: 40px;
 }
