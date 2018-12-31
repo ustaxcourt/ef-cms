@@ -14,6 +14,13 @@ const router = {
       document.title = `Case details ${pageTitleSuffix}`;
       app.getSequence('gotoCaseDetailSequence')({ docketNumber });
     });
+    route('/case-detail/*/documents/*', (docketNumber, documentId) => {
+      document.title = `Document details ${pageTitleSuffix}`;
+      app.getSequence('gotoDocumentDetailSequence')({
+        docketNumber,
+        documentId,
+      });
+    });
     route('/case-detail/*/file-a-document', caseId => {
       document.title = `File a document ${pageTitleSuffix}`;
       app.getSequence('gotoFileDocumentSequence')({ caseId });

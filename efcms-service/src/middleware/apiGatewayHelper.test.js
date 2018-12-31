@@ -1,4 +1,4 @@
-const { handle, getAuthHeader } = require('./apiGatewayHelper');
+const { redirect, handle, getAuthHeader } = require('./apiGatewayHelper');
 const expect = require('chai').expect;
 const {
   UnauthorizedError,

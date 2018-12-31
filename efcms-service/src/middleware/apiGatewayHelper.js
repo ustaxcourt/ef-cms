@@ -5,6 +5,12 @@ const headers = {
   'Access-Control-Allow-Origin': '*',
 };
 
+/**
+ * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
+ *
+ * @param {Function} fun
+ * @returns {Object}
+ */
 exports.handle = async fun => {
   try {
     const response = await fun();
@@ -20,10 +26,30 @@ exports.handle = async fun => {
     } else {
       return exports.sendError(err);
     }
-
   }
 };
 
+exports.redirect = async (fun, statusCode = 302) => {
+  try {
+    const { url } = await fun();
+    return {
+      statusCode,
+      headers: {
+        Location: url,
+      },
+    };
+  } catch (err) {
+    return exports.sendError(err);
+  }
+};
+
+
+/**
+ * creates and returns a 400 status lambda api gateway object containing the error message
+ *
+ * @param {Error} err
+ * @returns {Object}
+ */
 exports.sendError = err => {
   return {
     statusCode: err.statusCode || '400',
@@ -32,6 +58,12 @@ exports.sendError = err => {
   };
 };
 
+/**
+ * returns a lambda api-gateway object with a 400 status code and the response payload passed in
+ *
+ * @param {Error} err
+ * @returns {Object}
+ */
 exports.sendOk = (response, statusCode = '200') => {
   return {
     statusCode,
@@ -40,6 +72,17 @@ exports.sendOk = (response, statusCode = '200') => {
   };
 };
 
+
+/**
+ * Extracts and validates the auth header from the api-gateway event.
+ * 
+ * This assumes the auth header is formatted with either:
+ *  - Authorization: "Bearer SOME_TOKEN"
+ *  - authorization: "Bearer SOME_TOKEN"
+ *
+ * @param {Error} err
+ * @returns {String} the token in the header
+ */
 exports.getAuthHeader = event => {
   let usernameTokenArray;
   const authorizationHeader =

@@ -6,23 +6,22 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import FileDocument from './FileDocument';
 import PartyInformation from './PartyInformation';
-import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
+    baseUrl,
     caseDetail,
     currentTab,
     helper,
     updateCurrentTabSequence,
-    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -40,7 +39,7 @@ export default connect(
             {caseDetail.petitioners[0].name} v. Commissioner of Internal
             Revenue, Respondent
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           {currentTab == 'File Document' && <FileDocument />}
@@ -54,6 +53,7 @@ export default connect(
                   <button
                     role="tab"
                     className="tab-link"
+                    aria-selected={currentTab === 'Docket Record'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Docket Record' })
                     }
@@ -69,6 +69,7 @@ export default connect(
                     role="tab"
                     className="tab-link"
                     id="case-info-tab"
+                    aria-selected={currentTab === 'Case Information'}
                     onClick={() =>
                       updateCurrentTabSequence({ value: 'Case Information' })
                     }
@@ -91,7 +92,11 @@ export default connect(
                 <FontAwesomeIcon icon="cloud-upload-alt" />
                 File Document
               </button>
-              <table className="responsive-table">
+              <table
+                className="responsive-table"
+                id="docket-record"
+                aria-describedby="docket-record-tab"
+              >
                 <thead>
                   <tr>
                     <th>Date filed</th>
@@ -109,19 +114,17 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
-                        <button
-                          className="pdf-link"
-                          aria-label="View PDF"
-                          onClick={() =>
-                            viewDocumentSequence({
-                              documentId: document.documentId,
-                              callback: openDocumentBlob,
-                            })
-                          }
+                        <a
+                          href={`${baseUrl}/documents/${
+                            document.documentId
+                          }/documentDownloadUrl`}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          aria-label={`View PDF: ${document.documentType}`}
                         >
                           <FontAwesomeIcon icon="file-pdf" />
                           {document.documentType}
-                        </button>
+                        </a>
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>

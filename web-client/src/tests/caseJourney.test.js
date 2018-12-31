@@ -1,26 +1,57 @@
-import { CerebralTest, runCompute } from 'cerebral/test';
+import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
-import caseDetailHelper from '../presenter/computeds/caseDetailHelper';
 import presenter from '../presenter';
 
-import Case from '../../../shared/src/business/entities/Case';
+import taxpayerLogin from './journey/taxpayerLogIn';
+import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+
+import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
+import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
+import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+
+import respondentLogIn from './journey/respondentLogIn';
+import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
+import respondentAddsAnswer from './journey/respondentAddsAnswer';
+import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
+
+import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard'; // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
+import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
+import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
+import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
+import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
+import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
+import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
+import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
+
+import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
+import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
 
 let test;
-let docketNumber;
 global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   route: async url => {
-    if (url === `/case-detail/${docketNumber}`) {
-      await test.runSequence('gotoCaseDetailSequence', { docketNumber });
+    if (url === `/case-detail/${test.docketNumber}`) {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: test.docketNumber,
+      });
     }
   },
 };
 
-const fakeFile = new Buffer(['TEST'], {
+const fakeData =
+  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
+const fakeFile = new Buffer(fakeData, 'base64', {
   type: 'application/pdf',
 });
 fakeFile.name = 'fakeFile.pdf';
@@ -28,169 +59,36 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
-  it('Taxpayer logs in', async () => {
-    test.setState('user', {
-      name: 'Test Taxpayer',
-      role: 'taxpayer',
-      token: 'taxpayer',
-      userId: 'taxpayer',
-    });
+  beforeEach(() => {
+    jest.setTimeout(30000);
   });
 
-  it('Taxpayer creates a new case', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'requestForPlaceOfTrial',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'statementOfTaxpayerIdentificationNumber',
-      value: fakeFile,
-    });
-    await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your files were uploaded successfully.',
-      message: 'Your case has now been created.',
-    });
-  });
-
-  it('Taxpayer views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-    docketNumber = test.getState('cases.0.docketNumber');
-  });
-
-  it('Taxpayer views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-    await test.runSequence('viewDocumentSequence', {
-      documentId: test.getState('caseDetail.documents.0.documentId'),
-      callback: documentBlob => {
-        expect(documentBlob).toBeTruthy();
-      },
-    });
-  });
-
-  it('Petitions clerk logs in', async () => {
-    test.setState('user', {
-      name: 'Petitions Clerk',
-      role: 'petitionsclerk',
-      token: 'petitionsclerk',
-      userId: 'petitionsclerk',
-    });
-  });
-
-  it('Petitions clerk views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-  });
-
-  it('Petitions clerk searches for case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('updateSearchTermSequence', {
-      searchTerm: docketNumber,
-    });
-    await test.runSequence('submitSearchSequence');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-  });
-
-  it('Petitions clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('new');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showDocumentStatus).toEqual(true);
-    expect(helper.showIrsServedDate).toEqual(false);
-    expect(helper.showPayGovIdInput).toEqual(false);
-    expect(helper.showPaymentOptions).toEqual(true);
-    expect(helper.showActionRequired).toEqual(true);
-  });
-
-  it('Petitions clerk records pay.gov ID', async () => {
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'payGovId',
-      value: '123',
-    });
-    await test.runSequence('submitUpdateCaseSequence');
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('caseDetail.payGovId')).toEqual('123');
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPaymentRecord).toEqual(true);
-  });
-
-  it('Petitions clerk submits case to IRS', async () => {
-    await test.runSequence('submitToIrsSequence');
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('alertSuccess.title')).toEqual(
-      'Successfully served to IRS',
-    );
-  });
-
-  it('Respondent logs in', async () => {
-    test.setState('user', {
-      name: 'IRS Attorney',
-      role: 'respondent',
-      token: 'respondent',
-      userId: 'respondent',
-    });
-  });
-
-  it('Respondent views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('cases').length).toBeGreaterThan(0);
-  });
-
-  it('Respondent views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', { docketNumber });
-    expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
-  });
-
-  it('Respondent adds answer', async () => {
-    await test.runSequence('updateDocumentValueSequence', {
-      key: 'documentType',
-      value: Case.documentTypes.answer,
-    });
-    await test.runSequence('updateDocumentValueSequence', {
-      key: 'file',
-      value: fakeFile,
-    });
-    await test.runSequence('submitDocumentSequence');
-    expect(test.getState('caseDetail.documents').length).toEqual(4);
-  });
-
-  it('Respondent adds a stipulated decision', async () => {
-    await test.runSequence('updateDocumentValueSequence', {
-      key: 'documentType',
-      value: Case.documentTypes.stipulatedDecision,
-    });
-    await test.runSequence('updateDocumentValueSequence', {
-      key: 'file',
-      value: fakeFile,
-    });
-    await test.runSequence('submitDocumentSequence');
-    expect(test.getState('caseDetail.documents').length).toEqual(5);
-  });
+  taxpayerLogin(test);
+  taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
+  taxpayerViewsCaseDetail(test);
+  petitionsClerkLogIn(test);
+  petitionsClerkCaseSearch(test);
+  petitionsClerkViewsDashboard(test);
+  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkRecordsPayGovId(test);
+  petitionsClerkSubmitsCaseToIrs(test);
+  respondentLogIn(test);
+  respondentViewsDashboard(test);
+  respondentViewsCaseDetail(test);
+  respondentAddsAnswer(test, fakeFile);
+  respondentAddsStipulatedDecision(test, fakeFile);
+  docketClerkLogIn(test);
+  docketClerkViewsDashboardWithoutWorkItem(test);
+  docketClerkLogIn(test, 'docketclerk1');
+  docketClerkDocketDashboard(test);
+  docketClerkSelectsAssignee(test);
+  docketClerkSelectsWorkItems(test);
+  docketClerkAssignWorkItems(test);
+  docketClerkLogIn(test);
+  docketClerkViewsDashboard(test);
+  docketClerkViewsDocument(test);
+  docketClerkForwardWorkItem(test);
+  seniorAttorneyLogIn(test);
+  seniorAttorneyViewsDashboard(test);
 });
