@@ -70,7 +70,6 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -81,7 +80,6 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -92,7 +90,6 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -137,7 +134,7 @@ describe('createCase', () => {
     }
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {

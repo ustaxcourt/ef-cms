@@ -6,3 +6,4 @@ If you notice any issues with the Jenkins box, it may be related to the lack of 
 - `chmod 600 /root/bigswap`
 - `mkswap /root/bigswap`
 - `swapon /root/bigswap`
+- `echo "/root/bigswap swap swap defaults 0 0" >> /etc/fstab`
