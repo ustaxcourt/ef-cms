@@ -103,6 +103,16 @@ h1[tabIndex='-1']:focus {
   box-shadow: 0 2px 0 $color-white;
 }
 
+table.responsive-table.row-border-only {
+  tr {
+    border: 1px solid $color-gray-light;
+  }
+
+  td {
+    border: none;
+  }
+}
+
 table.work-queue {
   td,
   th {
@@ -302,4 +312,8 @@ iframe {
   .card {
     background-color: white;
   }
+}
+
+.mb-4 {
+  margin-bottom: 40px;
 }

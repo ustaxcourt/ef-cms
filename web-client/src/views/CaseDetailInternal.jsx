@@ -11,6 +11,7 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
+    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
     submitSendToIrsSequence: sequences.submitToIrsSequence,
@@ -29,6 +30,7 @@ export default connect(
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
+    extractedPendingMessages,
   }) {
     return (
       <React.Fragment>
@@ -57,6 +59,45 @@ export default connect(
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
+
+          <div className="mb-4">
+            <h3>Pending Messages</h3>
+            {extractedPendingMessages.length === 0 && (
+              <div>No Pending Messages</div>
+            )}
+
+            <table className="responsive-table row-border-only">
+              <tbody>
+                {extractedPendingMessages.map((workItem, idx) => (
+                  <tr key={idx}>
+                    <td className="responsive-title">
+                      <b>To</b> {workItem.assigneeName}
+                      <br />
+                      <b>From</b> {workItem.messages[0].sentBy}
+                    </td>
+                    <td>
+                      <a
+                        href={`/case-detail/${
+                          workItem.docketNumber
+                        }/documents/${workItem.document.documentId}`}
+                        className="case-link"
+                      >
+                        <FontAwesomeIcon icon="file-pdf" />
+                        {workItem.document.documentType}
+                      </a>
+                      <br />
+                      {workItem.messages[0].message}
+                    </td>
+                    <td>
+                      <b>Receieved</b>{' '}
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <nav className="horizontal-tabs">
             <ul role="tabslist">
               <li
