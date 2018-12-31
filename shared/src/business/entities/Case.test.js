@@ -111,13 +111,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isPetitionPackageReviewed', () => {
-    it('return true is all documents are validated', () => {
-      const caseRecord = new Case(A_VALID_CASE);
-      assert.ok(caseRecord.isPetitionPackageReviewed());
-    });
-  });
-
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
       const caseRecord = new Case(A_VALID_CASE);

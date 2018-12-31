@@ -95,7 +95,7 @@ describe('fileStipulatedDecisionUpdateCase interactor', () => {
     expect(result.workItems[0].assigneeId).to.equal('docketclerk');
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getUseCases: () => ({
         getUser: () =>
