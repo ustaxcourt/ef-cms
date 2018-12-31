@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedWorkItems } from './computeds/extractWorkItems';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
@@ -69,6 +70,7 @@ export default {
   caseDetailHelper,
   extractedDocument,
   extractedWorkItems,
+  extractedPendingMessagesFromCaseDetail,
   formattedCaseDetail,
   formattedCases,
   formattedSectionWorkQueue,
