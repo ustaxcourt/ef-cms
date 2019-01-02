@@ -6,7 +6,7 @@
  */
 exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   return new Promise((resolve, reject) => {
-    applicationContext.getS3().getSignedUrl(
+    applicationContext.getStorageClient().getSignedUrl(
       'getObject',
       {
         Bucket: applicationContext.getDocumentsBucketName(),

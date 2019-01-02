@@ -1,16 +1,17 @@
+const AWS = require('aws-sdk');
 const chai = require('chai');
 const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
-const AWS = require('aws-sdk');
+
+chai.use(require('chai-string'));
 
 const {
-  put,
-  query,
-  delete: deleteObj,
-  get,
   batchGet,
   batchWrite,
+  delete: deleteObj,
+  get,
+  put,
+  query,
   updateConsistent,
 } = require('./dynamodbClientService');
 

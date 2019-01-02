@@ -1,7 +1,7 @@
 const {
-  stripWorkItems,
   getRecordViaMapping,
   stripInternalKeys,
+  stripWorkItems,
 } = require('../../awsDynamoPersistence');
 
 /**
@@ -11,8 +11,8 @@ const {
  * @returns {*}
  */
 exports.getCaseByDocketNumber = async ({
-  docketNumber,
   applicationContext,
+  docketNumber,
 }) => {
   const aCase = await getRecordViaMapping({
     applicationContext,

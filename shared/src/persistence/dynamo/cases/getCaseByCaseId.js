@@ -13,6 +13,7 @@ const client = require('../../dynamodbClientService');
 exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
   const results = await client.get({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: caseId,
