@@ -29,7 +29,7 @@ exports.associateRespondentDocumentToCase = async ({
 
   return fileDocument({
     userId,
-    caseToUpdate: caseEntity.validate().toJSON(),
+    caseToUpdate: caseEntity.validate().toRawObject(),
     isRespondentDocument: true,
     applicationContext,
   });
