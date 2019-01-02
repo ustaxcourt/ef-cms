@@ -20,6 +20,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const mapping = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -33,6 +34,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const ids = mapping.map(metadata => metadata.sk);
 
   const results = await client.batchGet({
+    applicationContext,
     tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
@@ -49,6 +51,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const [mapping] = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -64,6 +67,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const sk = mapping.sk;
 
   const results = await client.get({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: sk,
@@ -88,6 +92,7 @@ exports.incrementCounter = ({ applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   return client.updateConsistent({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: 'docketNumberCounter',
@@ -105,11 +110,12 @@ exports.incrementCounter = ({ applicationContext }) => {
 };
 
 const createRespondentCaseMapping = async ({
+  applicationContext,
   caseId,
   respondentId,
-  applicationContext,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${respondentId}|activeCase`,
@@ -121,12 +127,13 @@ const createRespondentCaseMapping = async ({
 exports.createRespondentCaseMapping = createRespondentCaseMapping;
 
 exports.deleteMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   await client.delete({
+    applicationContext,
     tableName: `efcms-${applicationContext.environment.stage}`,
     key: {
       pk: `${pkId}|${type}`,
@@ -136,12 +143,13 @@ exports.deleteMappingRecord = async ({
 };
 
 exports.createMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${pkId}|${type}`,
@@ -166,4 +174,5 @@ const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
     return casesToModify;
   }
 };
+
 exports.stripWorkItems = stripWorkItems;

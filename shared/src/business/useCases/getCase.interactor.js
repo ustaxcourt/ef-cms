@@ -40,5 +40,5 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new Case(caseRecord).validate().toJSON();
+  return new Case(caseRecord).validate().toRawObject();
 };

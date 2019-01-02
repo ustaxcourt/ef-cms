@@ -1,4 +1,5 @@
 import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 
 const {
   getDocument,
@@ -33,6 +34,9 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getHttpClient: () => axios,
+  getUniqueId: () => {
+    return uuidv4();
+  },
   getPersistenceGateway: () => {
     return {
       getDocument,

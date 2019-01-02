@@ -1,4 +1,5 @@
-const { S3 } = require('aws-sdk');
+const { S3, DynamoDB } = require('aws-sdk');
+const uuidv4 = require('uuid/v4');
 
 const {
   incrementCounter,
@@ -117,10 +118,11 @@ const {
 const User = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
-  stage: process.env.STAGE || 'local',
+  documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+  dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-  documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+  stage: process.env.STAGE || 'local',
 };
 
 module.exports = ({ userId } = {}) => {
@@ -129,15 +131,24 @@ module.exports = ({ userId } = {}) => {
     user = new User({ userId });
   }
   return {
-    getS3: () => {
+    getStorageClient: () => {
       return new S3({
         endpoint: environment.s3Endpoint,
         region: environment.region,
         s3ForcePathStyle: true,
       });
     },
+    getDocumentClient: () => {
+      return new DynamoDB.DocumentClient({
+        endpoint: environment.dynamoDbEndpoint,
+        region: environment.region,
+      });
+    },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
+    },
+    getUniqueId: () => {
+      return uuidv4();
     },
     getPersistenceGateway: () => {
       return {

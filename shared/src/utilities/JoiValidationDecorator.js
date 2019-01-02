@@ -1,14 +1,14 @@
 const joi = require('joi-browser');
 
-function toJSON(entity) {
+function toRawObject(entity) {
   const keys = Object.keys(entity);
   const obj = {};
   for (let key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
-      obj[key] = value.map(v => toJSON(v));
+      obj[key] = value.map(v => toRawObject(v));
     } else if (typeof value === 'object' && value !== null) {
-      obj[key] = toJSON(value);
+      obj[key] = toRawObject(value);
     } else {
       obj[key] = value;
     }
@@ -47,13 +47,13 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
-  entityConstructor.prototype.toJSON = function convertToJSON() {
-    return toJSON(this);
+  entityConstructor.prototype.toRawObject = function convertToRawObject() {
+    return toRawObject(this);
   };
 
   entityConstructor.validateRawCollection = function(collection) {
     return collection.map(entity =>
-      new entityConstructor(entity).validate().toJSON(),
+      new entityConstructor(entity).validate().toRawObject(),
     );
   };
 

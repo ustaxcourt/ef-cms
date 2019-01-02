@@ -1,7 +1,6 @@
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
-
 /**
  * used for updating a case
  *
@@ -17,7 +16,7 @@ exports.put = event => {
       caseToUpdate: JSON.parse(event.body),
       ...JSON.parse(event.body),
       userId,
-      applicationContext
+      applicationContext,
     });
   });
 };
