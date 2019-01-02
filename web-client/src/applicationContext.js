@@ -31,9 +31,7 @@ import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdf
 
 const applicationContext = {
   getBaseUrl: () => {
-    return (
-      process.env.API_URL || 'https://efcms-dev.ustc-case-mgmt.flexion.us/v1'
-    );
+    return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getHttpClient: () => axios,
   getUniqueId: () => {
