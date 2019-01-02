@@ -6,21 +6,21 @@ const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   const existingWorkItem = await getWorkItemById({
-    workItemId: workItemToSave.workItemId,
     applicationContext,
+    workItemId: workItemToSave.workItemId,
   });
 
   if (existingWorkItem.assigneeId !== workItemToSave.assigneeId) {
     await reassignWorkItem({
+      applicationContext,
       existingWorkItem,
       workItemToSave,
-      applicationContext,
     });
   }
 
   const caseToUpdate = await getCaseByCaseId({
-    caseId: workItemToSave.caseId,
     applicationContext,
+    caseId: workItemToSave.caseId,
   });
 
   caseToUpdate.documents.forEach(document =>
@@ -32,6 +32,7 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   );
 
   await client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: caseToUpdate.caseId,
@@ -41,6 +42,7 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   });
 
   const workItem = await client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
