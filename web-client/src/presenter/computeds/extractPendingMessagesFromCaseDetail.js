@@ -8,5 +8,7 @@ export const extractedPendingMessagesFromCaseDetail = get => {
     (acc, document) => [...acc, ...document.workItems],
     [],
   );
-  return workItems.map(workItem => formatWorkItem(workItem, []));
+  return workItems
+    .filter(items => !items.completedAt)
+    .map(workItem => formatWorkItem(workItem, []));
 };
