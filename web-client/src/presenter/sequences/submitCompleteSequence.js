@@ -6,7 +6,7 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import completeWorkItemAction from '../actions/completeWorkItemAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import clearFormAction from '../actions/clearFormAction';
+import clearCompleteFormAction from '../actions/clearCompleteFormAction';
 
 export default [
   setFormSubmitting,
@@ -16,7 +16,7 @@ export default [
   {
     error: [setAlertError],
     success: [
-      clearFormAction,
+      clearCompleteFormAction,
       set(state.document.showForwardInputs, false), // TODO
       setAlertSuccess,
     ],
