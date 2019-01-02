@@ -2,7 +2,6 @@ const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
-
 /**
  * lambda which is used for creating a new case
  *
@@ -19,4 +18,3 @@ exports.create = event =>
       applicationContext,
     });
   });
-  

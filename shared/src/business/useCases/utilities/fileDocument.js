@@ -32,7 +32,7 @@ exports.fileDocument = async ({
 
   const caseToUpdateRaw = caseToUpdate
     .validateWithError(new UnprocessableEntityError())
-    .toJSON();
+    .toRawObject();
 
   await applicationContext.getPersistenceGateway().saveCase({
     userId: user.userId,
