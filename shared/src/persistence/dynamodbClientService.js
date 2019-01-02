@@ -95,16 +95,12 @@ exports.query = params => {
  * BATCH GET for aws-sdk dynamodb client
  * @param params
  */
-exports.batchGet = ({ tableName, keys }) => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
+exports.batchGet = ({ applicationContext, tableName, keys }) => {
   if (!keys.length) return [];
 
   // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
-  return documentClient
+  return applicationContext
+    .getDocumentClient()
     .batchGet({
       RequestItems: {
         [tableName]: {
@@ -124,13 +120,9 @@ exports.batchGet = ({ tableName, keys }) => {
 /**
  * batchWrite
  */
-exports.batchWrite = ({ tableName, items }) => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
-  return documentClient
+exports.batchWrite = ({ applicationContext, tableName, items }) => {
+  return applicationContext
+    .getDocumentClient()
     .batchWrite({
       RequestItems: {
         [tableName]: items.map(item => ({
@@ -148,13 +140,9 @@ exports.batchWrite = ({ tableName, items }) => {
     .promise();
 };
 
-exports.delete = ({ tableName, key }) => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
-  return documentClient
+exports.delete = ({ applicationContext, tableName, key }) => {
+  return applicationContext
+    .getDocumentClient()
     .delete({
       TableName: tableName,
       Key: key,
