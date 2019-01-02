@@ -107,7 +107,7 @@ class DocumentDetail extends React.Component {
                     >
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
                     </button>
-                    <div
+                    <button
                       className={`usa-width-one-third toggle ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
@@ -121,8 +121,8 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
-                    </div>
-                    <div
+                    </button>
+                    <button
                       data-workitemid={workItem.workItemId}
                       className={`usa-width-one-third send-to toggle ${
                         showAction('forward', workItem.workItemId)
@@ -137,7 +137,7 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="share-square" size="sm" /> Send To
-                    </div>
+                    </button>
                   </div>
 
                   {showAction('history', workItem.workItemId) && (
