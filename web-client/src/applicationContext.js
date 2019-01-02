@@ -8,30 +8,32 @@ const {
   uploadPdfsForNewCase,
 } = require('../../shared/src/persistence/awsS3Persistence');
 
+import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
+import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
+import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { fileGenericDocument } from '../../shared/src/business/useCases/fileGenericDocument.interactor';
+import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
-import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
+import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
+import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
-import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
-import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
-import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 
 const applicationContext = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000/v1';
+    return (
+      process.env.API_URL || 'https://efcms-dev.ustc-case-mgmt.flexion.us/v1'
+    );
   },
   getHttpClient: () => axios,
   getUniqueId: () => {
@@ -49,25 +51,25 @@ const applicationContext = {
   getUseCases: () => {
     return {
       assignWorkItems,
+      associateDocumentToCase,
+      associateRespondentDocumentToCase,
       createCase,
       downloadDocumentFile,
-      getUsersInSection,
+      fileGenericDocument,
+      fileRespondentDocument,
       getCase,
       getCasesByStatus,
       getCasesByUser,
       getCasesForRespondent,
       getUser,
+      getUsersInSection,
       getWorkItem,
       getWorkItems,
+      getWorkItemsBySection,
       sendPetitionToIRS,
       updateCase,
       updateWorkItem,
       uploadCasePdfs,
-      associateRespondentDocumentToCase,
-      associateDocumentToCase,
-      fileRespondentDocument,
-      fileGenericDocument,
-      getWorkItemsBySection,
     };
   },
 };

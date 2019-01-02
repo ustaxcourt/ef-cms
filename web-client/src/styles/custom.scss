@@ -305,7 +305,7 @@ iframe {
 
 .card {
   border: 1px solid $color-gray-lightest;
-  box-shadow: 5px 5px 10px #999;
+  box-shadow: 0.3rem 0.3rem 0.6rem $color-gray-light;
 }
 
 .card-body {
@@ -348,7 +348,7 @@ iframe {
 .toggle {
   padding-top: 5px;
   padding-bottom: 5px;
-  color: #0069a3;
+  color: $color-base;
   cursor: pointer;
   font-size: 13px;
   text-align: center;
@@ -356,19 +356,19 @@ iframe {
 }
 
 .toggle:hover {
-  background-color: #0069a3;
-  border-radius: 15px;
-  color: white;
+  background-color: $color-base;
+  border-radius: 1rem;
+  color: $color-white;
 }
 
 .toggle.selected {
-  background-color: #0069a3;
-  border-radius: 15px;
-  color: white;
+  background-color: $color-base;
+  border-radius: 1rem;
+  color: $color-white;
 }
 
 .extra {
-  background-color: #eff9fd;
+  background-color: $color-primary-alt-lightest;
 }
 
 .pt-1 {
