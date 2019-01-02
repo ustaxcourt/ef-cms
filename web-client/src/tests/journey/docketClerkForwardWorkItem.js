@@ -15,7 +15,7 @@ export default test => {
     let workItem;
     caseDetail.documents.forEach(document =>
       document.workItems.forEach(item => {
-        if (item.workItemId === test.workItemId) {
+        if (item.workItemId === test.stipulatedDecisionWorkItemId) {
           workItem = item;
         }
       }),
