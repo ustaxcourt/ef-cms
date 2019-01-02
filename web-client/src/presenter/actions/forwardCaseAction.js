@@ -1,9 +1,6 @@
-import moment from 'moment';
 import { state } from 'cerebral';
 
 export default async ({ get, store, applicationContext, path, props }) => {
-  const forwardSendDate = new Date().toISOString();
-
   const caseDetail = get(state.caseDetail);
   let workItems = [];
   caseDetail.documents.forEach(

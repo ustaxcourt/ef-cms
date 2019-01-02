@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { state } from 'cerebral';
 
 export default async ({ get, store, applicationContext, path, props }) => {
