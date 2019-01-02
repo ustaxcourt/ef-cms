@@ -6,7 +6,7 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import forwardCaseAction from '../actions/forwardCaseAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import clearFormAction from '../actions/clearFormAction';
+import clearForwardFormAction from '../actions/clearForwardFormAction';
 
 export default [
   setFormSubmitting,
@@ -16,7 +16,7 @@ export default [
   {
     error: [setAlertError],
     success: [
-      clearFormAction,
+      clearForwardFormAction,
       set(state.document.showForwardInputs, false),
       setAlertSuccess,
     ],
