@@ -29,5 +29,5 @@ exports.getWorkItem = async ({ userId, workItemId, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new WorkItem(workItem).validate().toJSON();
+  return new WorkItem(workItem).validate().toRawObject();
 };

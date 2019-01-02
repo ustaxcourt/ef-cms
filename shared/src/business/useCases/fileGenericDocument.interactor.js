@@ -39,7 +39,7 @@ exports.fileGenericDocument = async ({
 
   await applicationContext.getUseCases().associateRespondentDocumentToCase({
     userId,
-    caseToUpdate: caseEntity.validate().toJSON(),
+    caseToUpdate: caseEntity.validate().toRawObject(),
     applicationContext,
   });
 };

@@ -1,4 +1,7 @@
-const { UnauthorizedError, NotFoundError } = require('ef-cms-shared/src/errors/errors');
+const {
+  UnauthorizedError,
+  NotFoundError,
+} = require('ef-cms-shared/src/errors/errors');
 
 const headers = {
   'Content-Type': 'application/json',
@@ -43,7 +46,6 @@ exports.redirect = async (fun, statusCode = 302) => {
   }
 };
 
-
 /**
  * creates and returns a 400 status lambda api gateway object containing the error message
  *
@@ -72,10 +74,9 @@ exports.sendOk = (response, statusCode = '200') => {
   };
 };
 
-
 /**
  * Extracts and validates the auth header from the api-gateway event.
- * 
+ *
  * This assumes the auth header is formatted with either:
  *  - Authorization: "Bearer SOME_TOKEN"
  *  - authorization: "Bearer SOME_TOKEN"

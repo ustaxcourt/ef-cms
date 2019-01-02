@@ -11,8 +11,8 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     currentTab: state.currentTab,
+    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
     submitSendToIrsSequence: sequences.submitToIrsSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
@@ -24,13 +24,13 @@ export default connect(
     baseUrl,
     caseDetail,
     currentTab,
+    extractedPendingMessages,
     helper,
     submitSendToIrsSequence,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
-    extractedPendingMessages,
   }) {
     return (
       <React.Fragment>

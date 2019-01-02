@@ -27,7 +27,7 @@ exports.handler = async () => {
     body: body,
     headers: {
       'Content-Type': 'text/html',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
-  }
+  };
 };
