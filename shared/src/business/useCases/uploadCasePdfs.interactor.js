@@ -49,7 +49,7 @@ exports.uploadCasePdfs = async ({
     .getPersistenceGateway()
     .uploadPdfsForNewCase({
       applicationContext,
-      caseInitiator: new CaseInitiator(caseInitiator).validate(), // cannot call toJSON because caseinitiator holds a formdata and blob
+      caseInitiator: new CaseInitiator(caseInitiator).validate(), // cannot call toRawObject because caseinitiator holds a formdata and blob
       fileHasUploaded,
     });
 

@@ -34,13 +34,14 @@ exports.syncWorkItems = async ({
       }
 
       await persistence.createMappingRecord({
+        applicationContext,
         pkId: workItem.section,
         skId: workItem.workItemId,
         type: 'workItem',
-        applicationContext,
       });
 
       await client.put({
+        applicationContext,
         TableName: `efcms-${applicationContext.environment.stage}`,
         Item: {
           pk: workItem.workItemId,
@@ -53,9 +54,9 @@ exports.syncWorkItems = async ({
       if (workItem.assigneeId !== existing.assigneeId) {
         // the item has changed assignees, delete item
         await exports.reassignWorkItem({
+          applicationContext,
           existingWorkItem: existing,
           workItemToSave: workItem,
-          applicationContext,
         });
       }
     }
@@ -63,23 +64,23 @@ exports.syncWorkItems = async ({
 };
 
 exports.reassignWorkItem = async ({
+  applicationContext,
   existingWorkItem,
   workItemToSave,
-  applicationContext,
 }) => {
   if (existingWorkItem.assigneeId) {
     await persistence.deleteMappingRecord({
+      applicationContext,
       pkId: existingWorkItem.assigneeId,
       skId: workItemToSave.workItemId,
       type: 'workItem',
-      applicationContext,
     });
   }
 
   await persistence.createMappingRecord({
+    applicationContext,
     pkId: workItemToSave.assigneeId,
     skId: workItemToSave.workItemId,
     type: 'workItem',
-    applicationContext,
   });
 };
