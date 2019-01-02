@@ -21,6 +21,12 @@ const MOCK_ITEM = {
 
 let documentClientStub;
 
+const applicationContext = {
+  getDocumentClient: () => {
+    return documentClientStub;
+  },
+};
+
 describe('dynamodbClientService', function() {
   beforeEach(() => {
     documentClientStub = {
@@ -87,6 +93,7 @@ describe('dynamodbClientService', function() {
   describe('put', async () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
+        applicationContext,
         Item: MOCK_ITEM,
       });
       expect(result).to.deep.equal(MOCK_ITEM);
@@ -95,26 +102,26 @@ describe('dynamodbClientService', function() {
 
   describe('updateConsistent', async () => {
     it('should return the  same Item property passed in in the params', async () => {
-      const result = await updateConsistent({});
+      const result = await updateConsistent({ applicationContext });
       expect(result).to.deep.equal('123');
     });
   });
 
   describe('get', async () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await get({});
+      const result = await get({ applicationContext });
       expect(result).to.deep.equal(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
       documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
-      const result = await get({});
+      const result = await get({ applicationContext });
       expect(result).to.be.undefined;
     });
   });
 
   describe('query', async () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await query({});
+      const result = await query({ applicationContext });
       expect(result).to.deep.equal([MOCK_ITEM]);
     });
   });
@@ -122,6 +129,7 @@ describe('dynamodbClientService', function() {
   describe('batchGet', async () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
+        applicationContext,
         tableName: 'a',
         keys: [
           {
@@ -141,6 +149,7 @@ describe('dynamodbClientService', function() {
         ...MOCK_ITEM,
       };
       await batchWrite({
+        applicationContext,
         tableName: 'a',
         items: [item],
       });
@@ -166,6 +175,7 @@ describe('dynamodbClientService', function() {
   describe('delete', async () => {
     it('should try to delete using the key passed in', async () => {
       await deleteObj({
+        applicationContext,
         tableName: 'a',
         key: {
           pk: '123',
