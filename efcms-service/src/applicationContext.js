@@ -1,4 +1,5 @@
 const { S3 } = require('aws-sdk');
+const uuidv4 = require('uuid/v4');
 
 const {
   incrementCounter,
@@ -138,6 +139,9 @@ module.exports = ({ userId } = {}) => {
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
+    },
+    getUniqueId: () => {
+      return uuidv4();
     },
     getPersistenceGateway: () => {
       return {

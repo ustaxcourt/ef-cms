@@ -1,7 +1,6 @@
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
-
 /**
  * used for sending the case to the irs
  *

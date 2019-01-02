@@ -35,7 +35,9 @@ exports.updateWorkItem = async ({
   const user = new User({ userId: workItemToUpdate.assigneeId });
   workItemToUpdate.assigneeName = user.name;
 
-  const updatedWorkItem = new WorkItem(workItemToUpdate).validate().toJSON();
+  const updatedWorkItem = new WorkItem(workItemToUpdate)
+    .validate()
+    .toRawObject();
 
   const caseAfterUpdate = await applicationContext
     .getPersistenceGateway()
@@ -44,5 +46,5 @@ exports.updateWorkItem = async ({
       applicationContext,
     });
 
-  return new WorkItem(caseAfterUpdate).validate().toJSON();
+  return new WorkItem(caseAfterUpdate).validate().toRawObject();
 };
