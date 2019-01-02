@@ -14,12 +14,13 @@ class DocumentDetail extends React.Component {
       caseDetail,
       document,
       form,
+      setWorkItemActionSequence,
+      showAction,
       submitCompleteSequence,
       submitForwardSequence,
       updateForwardFormValueSequence,
       updateCompleteFormValueSequence,
       workItems,
-      showAction,
     } = this.props;
 
     return (
