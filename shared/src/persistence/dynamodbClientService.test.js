@@ -117,6 +117,11 @@ describe('dynamodbClientService', function() {
       const result = await get({ applicationContext });
       expect(result).to.be.undefined;
     });
+    it('should return nothing if the promise is rejected', async () => {
+      documentClientStub.get.returns({ promise: () => Promise.reject({}) });
+      const result = await get({ applicationContext });
+      expect(result).to.be.undefined;
+    });
   });
 
   describe('query', async () => {
@@ -138,6 +143,14 @@ describe('dynamodbClientService', function() {
         ],
       });
       expect(result).to.deep.equal([MOCK_ITEM]);
+    });
+    it('should return empty array if no keys', async () => {
+      const result = await batchGet({
+        applicationContext,
+        tableName: 'a',
+        keys: [],
+      });
+      expect(result).to.deep.equal([]);
     });
   });
 
