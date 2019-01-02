@@ -20,6 +20,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const mapping = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -33,6 +34,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const ids = mapping.map(metadata => metadata.sk);
 
   const results = await client.batchGet({
+    applicationContext,
     tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
