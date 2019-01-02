@@ -49,6 +49,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const [mapping] = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -64,6 +65,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const sk = mapping.sk;
 
   const results = await client.get({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: sk,
@@ -88,6 +90,7 @@ exports.incrementCounter = ({ applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   return client.updateConsistent({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: 'docketNumberCounter',
@@ -110,6 +113,7 @@ const createRespondentCaseMapping = async ({
   respondentId,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${respondentId}|activeCase`,
@@ -127,6 +131,7 @@ exports.deleteMappingRecord = async ({
   type,
 }) => {
   await client.delete({
+    applicationContext,
     tableName: `efcms-${applicationContext.environment.stage}`,
     key: {
       pk: `${pkId}|${type}`,
@@ -142,6 +147,7 @@ exports.createMappingRecord = async ({
   type,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${pkId}|${type}`,

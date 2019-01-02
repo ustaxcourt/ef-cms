@@ -1,12 +1,8 @@
-const AWS = require('aws-sdk');
-const region = process.env.AWS_REGION || 'us-east-1';
-
 /**
  * PUT for dynamodb aws-sdk client
  * @param item
  * @returns {*}
  */
-
 const removeAWSGlobalFields = item => {
   // dynamodb always adds these fields for purposes of global tables
   if (item) {
@@ -23,16 +19,13 @@ const removeAWSGlobalFields = item => {
  * @returns {*}
  */
 exports.put = params => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
-  return documentClient
+  return params.applicationContext
+    .getDocumentClient()
     .put(params)
     .promise()
     .then(() => params.Item);
 };
+
 /**
  * updateConsistent
  * @param params
@@ -40,27 +33,21 @@ exports.put = params => {
  */
 exports.updateConsistent = params => {
   // TODO: refactor: this method is not generic enough; it expects all updates to return back an object with a 'id' property..
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: process.env.MASTER_REGION || 'us-east-1',
-    endpoint: process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-  return documentClient
+  return params.applicationContext
+    .getDocumentClient()
     .update(params)
     .promise()
     .then(data => data.Attributes.id);
 };
+
 /**
  * get
  * @param params
  * @returns {*}
  */
 exports.get = params => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
-  return documentClient
+  return params.applicationContext
+    .getDocumentClient()
     .get(params)
     .promise()
     .then(res => {
@@ -77,12 +64,8 @@ exports.get = params => {
  * @param params
  */
 exports.query = params => {
-  const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: region,
-    endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  });
-
-  return documentClient
+  return params.applicationContext
+    .getDocumentClient()
     .query(params)
     .promise()
     .then(result => {
@@ -97,7 +80,6 @@ exports.query = params => {
  */
 exports.batchGet = ({ applicationContext, tableName, keys }) => {
   if (!keys.length) return [];
-
   // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
   return applicationContext
     .getDocumentClient()
