@@ -36,6 +36,11 @@ import dockerClerkViewsCaseDetail from './journey/dockerClerkViewsCaseDetail';
 
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
+import seniorAttorneyViewsCaseDetail from './journey/seniorAttorneyViewsCaseDetail';
+import seniorAttorneyViewsDocumentDetail from './journey/seniorAttorneyViewsDocumentDetail';
+import seniorAttorneyMarksStipulatedWorkItemAsCompleted from './journey/seniorAttorneyMarksStipulatedWorkItemAsCompleted';
+import seniorAttorneyViewsCaseDetailAfterComplete from './journey/seniorAttorneyViewsCaseDetailAfterComplete';
+import seniorAttorneyViewsDashboardAfterComplete from './journey/seniorAttorneyViewsDashboardAfterComplete';
 
 let test;
 global.FormData = FormData;
@@ -100,4 +105,9 @@ describe('Case journey', async () => {
 
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);
+  seniorAttorneyViewsCaseDetail(test);
+  seniorAttorneyViewsDocumentDetail(test);
+  seniorAttorneyMarksStipulatedWorkItemAsCompleted(test);
+  seniorAttorneyViewsCaseDetailAfterComplete(test);
+  seniorAttorneyViewsDashboardAfterComplete(test);
 });
