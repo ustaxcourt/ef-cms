@@ -1,6 +1,6 @@
 const {
-  stripWorkItems,
   getRecordsViaMapping,
+  stripWorkItems,
 } = require('../../awsDynamoPersistence');
 
 /**

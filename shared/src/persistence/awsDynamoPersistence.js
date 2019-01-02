@@ -105,9 +105,9 @@ exports.incrementCounter = ({ applicationContext }) => {
 };
 
 const createRespondentCaseMapping = async ({
+  applicationContext,
   caseId,
   respondentId,
-  applicationContext,
 }) => {
   return client.put({
     TableName: `efcms-${applicationContext.environment.stage}`,
@@ -121,10 +121,10 @@ const createRespondentCaseMapping = async ({
 exports.createRespondentCaseMapping = createRespondentCaseMapping;
 
 exports.deleteMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   await client.delete({
     tableName: `efcms-${applicationContext.environment.stage}`,
@@ -136,10 +136,10 @@ exports.deleteMappingRecord = async ({
 };
 
 exports.createMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   return client.put({
     TableName: `efcms-${applicationContext.environment.stage}`,
@@ -166,4 +166,5 @@ const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
     return casesToModify;
   }
 };
+
 exports.stripWorkItems = stripWorkItems;
