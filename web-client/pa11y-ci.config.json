@@ -14,7 +14,7 @@
     "include-warnings": true,
     "standard": "WCAG2AA",
     "timeout": 30000,
-    "wait": 1000
+    "wait": 2000
   },
   "urls": [
     "http://localhost:1234/",
