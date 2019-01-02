@@ -20,7 +20,6 @@ class DocumentDetail extends React.Component {
       setWorkItemActionSequence,
       updateCompleteFormValueSequence,
       workItems,
-      showAction,
     } = this.props;
 
     return (
@@ -92,7 +91,7 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   <div className="usa-grid-full extra pt-1 pb-1 toggles">
-                    <div
+                    <button
                       className={`usa-width-one-third toggle ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
@@ -106,8 +105,8 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
-                    </div>
-                    <div
+                    </button>
+                    <button
                       className={`usa-width-one-third toggle ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
@@ -121,8 +120,8 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
-                    </div>
-                    <div
+                    </button>
+                    <button
                       data-workitemid={workItem.workItemId}
                       className={`usa-width-one-third send-to toggle ${
                         showAction('forward', workItem.workItemId)
@@ -137,7 +136,7 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="share-square" size="sm" /> Send To
-                    </div>
+                    </button>
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
@@ -305,12 +304,13 @@ DocumentDetail.propTypes = {
   caseDetail: PropTypes.object,
   document: PropTypes.object,
   form: PropTypes.object,
-  workItemActions: PropTypes.object,
+  setWorkItemActionSequence: PropTypes.func,
+  showAction: PropTypes.func,
   showForwardInputs: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
-  setWorkItemActionSequence: PropTypes.func,
+  workItemActions: PropTypes.object,
   workItems: PropTypes.array,
   showAction: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
@@ -322,12 +322,13 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     document: state.extractedDocument,
     form: state.form,
-    workItemActions: state.workItemActions,
+    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
+    showAction: state.showAction,
     showForwardInputs: state.form.showForwardInputs,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
-    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
+    workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
     showAction: state.showAction,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
