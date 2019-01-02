@@ -14,13 +14,13 @@ class DocumentDetail extends React.Component {
       caseDetail,
       document,
       form,
-      workItemActions,
+      setWorkItemActionSequence,
+      showAction,
       showForwardInputs,
       submitForwardSequence,
       updateForwardFormValueSequence,
-      setWorkItemActionSequence,
+      workItemActions,
       workItems,
-      showAction,
     } = this.props;
 
     return (
@@ -92,7 +92,7 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   <div className="usa-grid-full extra pt-1 pb-1 toggles">
-                    <div
+                    <button
                       className={`usa-width-one-third toggle ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
@@ -106,7 +106,7 @@ class DocumentDetail extends React.Component {
                       }
                     >
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
-                    </div>
+                    </button>
                     <div
                       className={`usa-width-one-third toggle ${
                         showAction('complete', workItem.workItemId)
@@ -255,13 +255,13 @@ DocumentDetail.propTypes = {
   caseDetail: PropTypes.object,
   document: PropTypes.object,
   form: PropTypes.object,
-  workItemActions: PropTypes.object,
+  setWorkItemActionSequence: PropTypes.func,
+  showAction: PropTypes.func,
   showForwardInputs: PropTypes.bool,
   submitForwardSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
-  setWorkItemActionSequence: PropTypes.func,
+  workItemActions: PropTypes.object,
   workItems: PropTypes.array,
-  showAction: PropTypes.func,
 };
 
 export default connect(
@@ -270,13 +270,13 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     document: state.extractedDocument,
     form: state.form,
-    workItemActions: state.workItemActions,
+    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
+    showAction: state.showAction,
     showForwardInputs: state.form.showForwardInputs,
     submitForwardSequence: sequences.submitForwardSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
-    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
+    workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
-    showAction: state.showAction,
   },
   DocumentDetail,
 );
