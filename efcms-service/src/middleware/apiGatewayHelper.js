@@ -5,20 +5,6 @@ const headers = {
   'Access-Control-Allow-Origin': '*',
 };
 
-exports.redirect = async (fun, statusCode = 302) => {
-  try {
-    const { url } = await fun();
-    return {
-      statusCode,
-      headers: {
-        Location: url,
-      },
-    };
-  } catch (err) {
-    return exports.sendError(err);
-  }
-};
-
 exports.handle = async fun => {
   try {
     const response = await fun();

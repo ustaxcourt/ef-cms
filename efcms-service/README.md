@@ -4,7 +4,6 @@
 
 - [install JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - install Node dependencies: `npm i`
-- install DynamoDB local: `npm run install:dynamodb`
 
 ## Optional prerequisites, if setting up a local sandbox
 
@@ -17,30 +16,13 @@
 
 This will host a local service at http://localhost:3000.
 
-### Running Unit Test Coverage on a Watcher
+### Running Unit Tests with Coverage
 
-`npm run test:coverage:watch`
+- `npm test`
 
-### Running the Full Build
+# Trouble Shooting
 
-`npm run build`
-
-This is what Jenkins will run.
-
-## API Gateway Execution and Access Request Execution Logging
-
-Some manual steps are necessary, but only need to be done once for execution logging.
-
-Go through [AWS’s “Set Up CloudWatch API Logging in API Gateway”](https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/).
-
-In general, you need to:
-
-1.  [Create a new IAM role](https://console.aws.amazon.com/iam/home?region=us-east-1#/roles$new?step=type) (for example, `apigateway-cloudwatch-logs-role`) with trust policy `apigateway.amazonaws.com`
-2.  Attach AWS’s existing `AmazonAPIGatewayPushToCloudWatchLogs` policy to this role.
-3.  Note this IAM role’s ARN.
-4.  Add the role’s ARN to [`API Gateway` -> `Settings` -> `CloudWatch log role ARN\*`](https://console.aws.amazon.com/apigateway/home?region=us-east-1#/settings)
-
-Cloudwatch log is `API-Gateway-Execution-Logs\_<rest-api-id>/<stage>`.
+Sometimes you may get errors when doing npm install.  To fix, removce the package-lock.json file and re-run npm install.
 
 ## Usage
 
@@ -56,16 +38,7 @@ $serverless deploy --stage myStageName
 
 Run `EFCMS_DOMAIN=ustc-case-mgmt.example.gov ENVIRONMENT=<yourname> REGION=us-east-1 ./deploy-sandbox.sh`, substituting your domain for `ustc-case-mgmt.example.gov`.
 
-Modify `API_URL` in `web-client/environments/dev.js` to match the URL returned from the serverless deploy.
-
-Update the name of the service in `deploy-sandbox.sh` to match your service name from `serverless.yml`.
-
-## Serverless Local
-
-See “[Running AWS Lambda and API Gateway locally: serverless-offline](https://medium.com/a-man-with-no-server/running-aws-lambda-and-api-gateway-locally-serverless-offline-3c64b3e54772)” for background. Note that Docker is required.
-
-1. `npm run install:dynamodb` install a local dynamodb (optional)
-2. `npm start` in another terminal run the serverless-local on 3000
+If you want to point your local ui to your sandbox, modify the API_URL in web-client/environments/dev.js to match the URL returned from the serverless deploy.
 
 ## Load and Smoke Testing with Artillery
 

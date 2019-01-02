@@ -29,7 +29,7 @@ pipeline {
         stage('Shared') {
           when {
             expression {
-              return checkCommit('business')
+              return checkCommit('shared')
             }
           }
           steps {

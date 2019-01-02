@@ -6,28 +6,28 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
   ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
+  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jest'],
   rules: {
     'prettier/prettier': 'error',
-      'arrow-parens': ['error', 'as-needed'],
-      'no-underscore-dangle': ['error', { allowAfterThis: true }],
-      'jsx-a11y/anchor-is-valid': [
-        'error',
-        {
-          components: ['Link'],
-          specialLink: ['to'],
+    'arrow-parens': ['error', 'as-needed'],
+    'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'jsx-a11y/anchor-is-valid': [
+      'error',
+      {
+        components: ['Link'],
+        specialLink: ['to'],
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      2,
+      {
+        components: ['Label'],
+        required: {
+          every: ['id'],
         },
-      ],
-      'jsx-a11y/label-has-for': [
-        2,
-        {
-          components: ['Label'],
-          required: {
-            every: ['id'],
-          },
-          allowChildren: false,
-        },
-      ],
+        allowChildren: false,
+      },
+    ],
   },
   settings: {
     react: {
@@ -36,17 +36,15 @@ module.exports = {
   },
   env: {
     'cypress/globals': true,
+    'jest/globals': true,
     browser: true,
     es6: true,
     mocha: true,
     node: true,
   },
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 9,
     sourceType: 'module',
     jsx: true,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
   },
 };
