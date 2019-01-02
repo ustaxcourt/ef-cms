@@ -20,6 +20,7 @@ class DocumentDetail extends React.Component {
       setWorkItemActionSequence,
       updateCompleteFormValueSequence,
       workItems,
+      showAction,
     } = this.props;
 
     return (
@@ -312,7 +313,6 @@ DocumentDetail.propTypes = {
   updateForwardFormValueSequence: PropTypes.func,
   workItemActions: PropTypes.object,
   workItems: PropTypes.array,
-  showAction: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
 };
 
@@ -330,7 +330,6 @@ export default connect(
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
-    showAction: state.showAction,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
