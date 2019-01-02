@@ -53,9 +53,8 @@ exports.get = params => {
     .then(res => {
       return removeAWSGlobalFields(res.Item);
     })
-    .catch(err => {
-      console.error(err);
-      return null;
+    .catch(() => {
+      return undefined;
     });
 };
 
