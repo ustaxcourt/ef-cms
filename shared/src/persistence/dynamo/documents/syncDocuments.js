@@ -13,10 +13,10 @@ exports.syncDocuments = async ({
     );
     if (!existing) {
       await persistence.createMappingRecord({
+        applicationContext,
         pkId: document.documentId,
         skId: caseToSave.caseId,
         type: 'case',
-        applicationContext,
       });
     }
   }

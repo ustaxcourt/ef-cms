@@ -1,7 +1,7 @@
 const {
-  stripWorkItems,
   createRespondentCaseMapping,
   stripInternalKeys,
+  stripWorkItems,
 } = require('../../awsDynamoPersistence');
 const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
@@ -17,6 +17,7 @@ const client = require('../../dynamodbClientService');
 exports.saveCase = async ({ caseToSave, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
   const currentCaseState = await client.get({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: caseToSave.caseId,
@@ -28,9 +29,9 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
 
   if (!currentCaseState.respondent && caseToSave.respondent) {
     await createRespondentCaseMapping({
+      applicationContext,
       caseId: caseToSave.caseId,
       respondentId: caseToSave.respondent.respondentId,
-      applicationContext,
     });
   }
 
@@ -49,6 +50,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
   // if a stipulated decision was uploaded, create a work item entry
   if (currentStatus !== caseToSave.status) {
     await client.delete({
+      applicationContext,
       tableName: TABLE,
       key: {
         pk: `${currentStatus}|case-status`,
@@ -57,6 +59,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
 
     await client.put({
+      applicationContext,
       TableName: TABLE,
       Item: {
         pk: `${caseToSave.status}|case-status`,
@@ -66,6 +69,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
   }
 
   const results = await client.put({
+    applicationContext,
     TableName: TABLE,
     Item: {
       pk: caseToSave.caseId,

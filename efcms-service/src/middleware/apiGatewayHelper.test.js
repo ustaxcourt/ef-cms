@@ -98,23 +98,22 @@ describe('getAuthHeader', () => {
     }
     expect(error).to.not.be.undefined;
   });
-
 });
 
 describe('redirect', () => {
   it('should return a redirect status in the header', async () => {
-    const response = await redirect(async () => ({url: 'testing.com'}));
+    const response = await redirect(async () => ({ url: 'testing.com' }));
     expect(response).to.deep.equal({
       statusCode: 302,
       headers: {
         Location: 'testing.com',
-      }
+      },
     });
   });
 
   it('should return error object on errors', async () => {
-    const response = await redirect(async () => { 
-      throw new Error('an error')
+    const response = await redirect(async () => {
+      throw new Error('an error');
     });
     expect(response).to.deep.equal({
       statusCode: '400',

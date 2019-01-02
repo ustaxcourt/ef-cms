@@ -1,7 +1,7 @@
 const {
+  getRecordsViaMapping,
   stripInternalKeys,
   stripWorkItems,
-  getRecordsViaMapping,
 } = require('../../awsDynamoPersistence');
 
 /**
