@@ -5,6 +5,7 @@ import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
@@ -47,6 +48,7 @@ export default {
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
+    submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,

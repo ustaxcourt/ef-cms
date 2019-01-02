@@ -14,8 +14,7 @@ class DocumentDetail extends React.Component {
       caseDetail,
       document,
       form,
-      workItemActions,
-      showForwardInputs,
+      submitCompleteSequence,
       submitForwardSequence,
       updateForwardFormValueSequence,
       setWorkItemActionSequence,
@@ -140,6 +139,51 @@ class DocumentDetail extends React.Component {
                     </div>
                   </div>
 
+                  {showAction('complete', workItem.workItemId) && (
+                    <div className="card-body extra pb-4">
+                      <form
+                        id="complete-form"
+                        role="form"
+                        noValidate
+                        onSubmit={e => {
+                          e.preventDefault();
+                          submitCompleteSequence({
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      >
+                        <b id="message-label">Add message (optional)</b>
+                        <br />
+                        <textarea
+                          aria-labelledby="message-label"
+                          name="completeMessage"
+                          id="complete-message"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                        <button type="submit" className="usa-button">
+                          <span>Complete</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="usa-button-secondary"
+                          onClick={() => {
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: null,
+                            });
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </form>
+                    </div>
+                  )}
+
                   {showAction('history', workItem.workItemId) && (
                     <div className="card-body extra pb-4">
                       {workItem.messages.map((message, mIdx) => (
@@ -257,6 +301,7 @@ DocumentDetail.propTypes = {
   form: PropTypes.object,
   workItemActions: PropTypes.object,
   showForwardInputs: PropTypes.bool,
+  submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
@@ -272,6 +317,7 @@ export default connect(
     form: state.form,
     workItemActions: state.workItemActions,
     showForwardInputs: state.form.showForwardInputs,
+    submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
