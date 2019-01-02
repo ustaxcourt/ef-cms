@@ -29,6 +29,7 @@ import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
+import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
 
 import state from './state';
 
@@ -69,6 +70,7 @@ export default {
     viewDocumentSequence,
     setWorkItemActionSequence,
     updateForwardFormValueSequence,
+    updateCompleteFormValueSequence,
   },
   state,
 };

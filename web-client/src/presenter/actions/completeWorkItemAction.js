@@ -12,8 +12,11 @@ export default async ({ get, store, applicationContext, path, props }) => {
   const workItemToUpdate = workItems.find(
     workItem => workItem.workItemId === props.workItemId,
   );
-  const message = get(state.form.completeMessage);
-  console.log('message', message);
+  const completeForm = get(state.completeForm);
+  const message =
+    (completeForm[props.workItemId] || {}).completeMessage ||
+    'work item completed';
+
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
     {
@@ -23,6 +26,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
       completedAt: completeWorkItemDate,
     },
   ];
+
   if (!workItemToUpdate.assigneeId) {
     workItemToUpdate.assigneeId = get(state.user.token);
     workItemToUpdate.assigneeName = get(state.user.name);
@@ -31,7 +35,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
   store.set(state.caseDetail, caseDetail);
 
   const useCases = applicationContext.getUseCases();
-  console.log('workItemToUpdate in action', workItemToUpdate);
+
   await useCases.updateWorkItem({
     applicationContext,
     workItemToUpdate,

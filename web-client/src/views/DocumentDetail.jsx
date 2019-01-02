@@ -18,6 +18,7 @@ class DocumentDetail extends React.Component {
       submitForwardSequence,
       updateForwardFormValueSequence,
       setWorkItemActionSequence,
+      updateCompleteFormValueSequence,
       workItems,
       showAction,
     } = this.props;
@@ -150,6 +151,10 @@ class DocumentDetail extends React.Component {
                           submitCompleteSequence({
                             workItemId: workItem.workItemId,
                           });
+                          setWorkItemActionSequence({
+                            workItemId: workItem.workItemId,
+                            action: null,
+                          });
                         }}
                       >
                         <b id="message-label">Add message (optional)</b>
@@ -159,9 +164,10 @@ class DocumentDetail extends React.Component {
                           name="completeMessage"
                           id="complete-message"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateCompleteFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
+                              workItemId: workItem.workItemId,
                             });
                           }}
                         />
@@ -307,6 +313,7 @@ DocumentDetail.propTypes = {
   setWorkItemActionSequence: PropTypes.func,
   workItems: PropTypes.array,
   showAction: PropTypes.func,
+  updateCompleteFormValueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -323,6 +330,7 @@ export default connect(
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     workItems: state.extractedWorkItems,
     showAction: state.showAction,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
 );
