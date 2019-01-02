@@ -17,7 +17,7 @@ class DocumentDetail extends React.Component {
       workItemActions,
       showForwardInputs,
       submitForwardSequence,
-      updateFormValueSequence,
+      updateForwardFormValueSequence,
       setWorkItemActionSequence,
       workItems,
       showAction,
@@ -123,7 +123,7 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
                     </div>
                     <div
-                      data-workItemId={workItem.workItemId}
+                      data-workitemid={workItem.workItemId}
                       className={`usa-width-one-third send-to toggle ${
                         showAction('forward', workItem.workItemId)
                           ? 'selected'
@@ -166,7 +166,7 @@ class DocumentDetail extends React.Component {
                   {showAction('forward', workItem.workItemId) && (
                     <div className="card-body extra">
                       <form
-                        data-workItemId={workItem.workItemId}
+                        data-workitemid={workItem.workItemId}
                         className="forward-form"
                         role="form"
                         noValidate
@@ -174,6 +174,10 @@ class DocumentDetail extends React.Component {
                           e.preventDefault();
                           submitForwardSequence({
                             workItemId: workItem.workItemId,
+                          });
+                          setWorkItemActionSequence({
+                            workItemId: workItem.workItemId,
+                            action: null,
                           });
                         }}
                       >
@@ -184,9 +188,10 @@ class DocumentDetail extends React.Component {
                           id="forward-recipient-id"
                           aria-labelledby="recipient-label"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateForwardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
+                              workItemId: workItem.workItemId,
                             });
                           }}
                         >
@@ -202,9 +207,10 @@ class DocumentDetail extends React.Component {
                           name="forwardMessage"
                           id="forward-message"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateForwardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
+                              workItemId: workItem.workItemId,
                             });
                           }}
                         />
@@ -252,7 +258,7 @@ DocumentDetail.propTypes = {
   workItemActions: PropTypes.object,
   showForwardInputs: PropTypes.bool,
   submitForwardSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
+  updateForwardFormValueSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   workItems: PropTypes.array,
   showAction: PropTypes.func,
@@ -267,7 +273,7 @@ export default connect(
     workItemActions: state.workItemActions,
     showForwardInputs: state.form.showForwardInputs,
     submitForwardSequence: sequences.submitForwardSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     workItems: state.extractedWorkItems,
     showAction: state.showAction,

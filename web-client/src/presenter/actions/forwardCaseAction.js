@@ -12,9 +12,11 @@ export default async ({ get, store, applicationContext, path, props }) => {
   const workItemToUpdate = workItems.find(
     workItem => workItem.workItemId === props.workItemId,
   );
-  workItemToUpdate.assigneeId = get(state.form.forwardRecipientId);
+  const form = get(state.form)[props.workItemId];
+
+  workItemToUpdate.assigneeId = form.forwardRecipientId;
   workItemToUpdate.assigneeName = 'Senior Attorney';
-  const message = get(state.form.forwardMessage);
+  const message = form.forwardMessage;
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
     {
