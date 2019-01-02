@@ -101,16 +101,16 @@ describe('File a petition', function() {
         .click();
       cy.url().should('include', 'case-detail');
     });
-    it('shows accordion header', () => {
-      cy.get('#actions-button').should('exist');
+
+    it('shows docket record table and data', () => {
+      cy.get('table#docket-record tbody tr').should('exist');
     });
+
     it('accordion header expands/collapses', () => {
+      cy.get('#tab-case-info').click();
+      cy.get('#actions-button').should('exist');
       cy.get('#actions-button').click();
       cy.get('#paymentInfo').should('be.visible');
-    });
-    it('shows activities table and data', () => {
-      cy.get('table#case-activities').should('exist');
-      cy.get('table#case-activities tbody tr').should('exist');
     });
   });
 });
