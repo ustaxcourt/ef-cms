@@ -336,46 +336,35 @@ iframe {
   margin-right: 20px;
 }
 
-.mb-4 {
-  margin-bottom: 40px;
-}
-
 .mb-2 {
   margin-bottom: 20px;
 }
 
 .toggles {
-  padding-left: 4px;
   padding-right: 4px;
+  padding-left: 4px;
 }
 
 .toggle {
-  font-size: 13px;
-  color: #0069a3;
-  text-align: center;
-  vertical-align: top;
   padding-top: 5px;
   padding-bottom: 5px;
+  color: #0069a3;
   cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  vertical-align: top;
 }
 
 .toggle:hover {
-  color: white;
   background-color: #0069a3;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-radius: 15px;
+  color: white;
 }
 
-
 .toggle.selected {
-  color: white;
   background-color: #0069a3;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-radius: 15px;
+  color: white;
 }
 
 .extra {
