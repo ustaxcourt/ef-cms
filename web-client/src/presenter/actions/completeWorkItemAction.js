@@ -17,13 +17,13 @@ export default async ({ get, store, applicationContext, path, props }) => {
     (completeForm[props.workItemId] || {}).completeMessage ||
     'work item completed';
 
+  workItemToUpdate.completedAt = completeWorkItemDate;
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
     {
       message,
       sentBy: get(state.user.token),
       userId: get(state.user.token),
-      completedAt: completeWorkItemDate,
     },
   ];
 
