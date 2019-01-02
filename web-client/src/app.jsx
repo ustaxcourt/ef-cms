@@ -1,6 +1,9 @@
 import {
   faFilePdf,
   faFlag,
+  faShareSquare,
+  faCheckCircle,
+  faListUl,
   faCaretLeft,
   faCloudUploadAlt,
 } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +22,15 @@ import presenter from './presenter';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    library.add(faFilePdf, faFlag, faCaretLeft, faCloudUploadAlt);
+    library.add(
+      faFilePdf,
+      faFlag,
+      faShareSquare,
+      faCheckCircle,
+      faListUl,
+      faCaretLeft,
+      faCloudUploadAlt,
+    );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       route,

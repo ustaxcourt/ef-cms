@@ -8,6 +8,7 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedWorkItems } from './computeds/extractWorkItems';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { showAction } from './computeds/documentDetailHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
 import workQueueHelper from './computeds/workQueueHelper';
 
@@ -67,6 +68,7 @@ export default {
   },
   caseDetail: {},
   cases: [],
+  workItemActions: {},
   caseDetailHelper,
   extractedDocument,
   extractedWorkItems,
@@ -76,4 +78,5 @@ export default {
   formattedSectionWorkQueue,
   formattedWorkQueue,
   workQueueHelper,
+  showAction,
 };

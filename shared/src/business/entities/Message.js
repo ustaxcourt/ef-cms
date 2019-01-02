@@ -33,6 +33,7 @@ joiValidationDecorator(
       // .uuid(uuidVersions)
       .optional(),
     sentBy: joi.string().required(),
+    sentTo: joi.string().optional(),
     createdAt: joi
       .date()
       .iso()

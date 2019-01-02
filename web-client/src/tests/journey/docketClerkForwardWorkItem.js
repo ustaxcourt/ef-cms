@@ -3,8 +3,10 @@ import _ from 'lodash';
 export default test => {
   return it('Docket clerk forward work item', async () => {
     test.setState('form', {
-      forwardRecipientId: 'seniorattorney',
-      forwardMessage: 'hello world',
+      [test.workItemId]: {
+        forwardRecipientId: 'seniorattorney',
+        forwardMessage: 'hello world',
+      },
     });
     await test.runSequence('submitForwardSequence', {
       workItemId: test.workItemId,
