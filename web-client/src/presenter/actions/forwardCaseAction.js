@@ -36,10 +36,5 @@ export default async ({ get, store, applicationContext, path, props }) => {
     userId: get(state.user.token),
   });
 
-  return path.success({
-    alertSuccess: {
-      title: 'Message successfully sent.',
-      message: moment(forwardSendDate).format('L LT'),
-    },
-  });
+  return path.success();
 };
