@@ -1,10 +1,12 @@
 const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
-const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
+const expect = require('chai').expect;
+const sinon = require('sinon');
 
 const { incrementCounter, stripWorkItems } = require('./awsDynamoPersistence');
+
+chai.use(require('chai-string'));
+
 const applicationContext = {
   environment: {
     stage: 'local',
