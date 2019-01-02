@@ -13,6 +13,7 @@ const client = require('../../dynamodbClientService');
  */
 exports.createCase = async ({ caseRecord, applicationContext }) => {
   await client.batchWrite({
+    applicationContext,
     tableName: `efcms-${applicationContext.environment.stage}`,
     items: [
       {

@@ -5,7 +5,7 @@
  */
 exports.getUploadPolicy = ({ applicationContext }) =>
   new Promise((resolve, reject) => {
-    applicationContext.getS3().createPresignedPost(
+    applicationContext.getStorageClient().createPresignedPost(
       {
         Bucket: applicationContext.getDocumentsBucketName(),
         Conditions: [
