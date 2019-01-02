@@ -123,7 +123,8 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
                     </div>
                     <div
-                      className={`usa-width-one-third toggle ${
+                      data-workItemId={workItem.workItemId}
+                      className={`usa-width-one-third send-to toggle ${
                         showAction('forward', workItem.workItemId)
                           ? 'selected'
                           : ''
@@ -165,7 +166,8 @@ class DocumentDetail extends React.Component {
                   {showAction('forward', workItem.workItemId) && (
                     <div className="card-body extra">
                       <form
-                        id="forward-form"
+                        data-workItemId={workItem.workItemId}
+                        className="forward-form"
                         role="form"
                         noValidate
                         onSubmit={e => {
