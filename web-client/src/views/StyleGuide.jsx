@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export default function StyleGuide() {
@@ -98,6 +99,11 @@ export default function StyleGuide() {
         </button>
         <button className="usa-button usa-button-secondary" disabled>
           Disabled
+        </button>
+        <h2>Icon button</h2>
+        <button className="usa-button">
+          <FontAwesomeIcon icon="check-circle" size="sm" />
+          Icon
         </button>
         <h2>Big button</h2>
         <button className="usa-button usa-button-big">Default</button>
