@@ -14,13 +14,13 @@ class DocumentDetail extends React.Component {
       caseDetail,
       document,
       form,
+      setWorkItemActionSequence,
+      showAction,
       submitCompleteSequence,
       submitForwardSequence,
       updateForwardFormValueSequence,
-      setWorkItemActionSequence,
       updateCompleteFormValueSequence,
       workItems,
-      showAction,
     } = this.props;
 
     return (
@@ -58,12 +58,17 @@ class DocumentDetail extends React.Component {
 
           <div className="usa-grid-full mb-2">
             <span className="font-medium" id="messages-label">
-              Messages
+              Pending Messages
             </span>
           </div>
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
+              {!workItems.length && (
+                <div>
+                  There are no pending messages associated with this document.
+                </div>
+              )}
               {workItems.map((workItem, idx) => (
                 <div
                   className="card"
