@@ -1,3 +1,15 @@
+label {
+  margin: 0 0 15px;
+  font-size: 17px;
+  font-weight: $font-semibold;
+  line-height: 1.45em;
+}
+
+legend {
+  margin-bottom: 0.5em;
+  font-size: 1em;
+}
+
 input[type='file'] {
   height: auto;
 }

@@ -1,37 +1,31 @@
-.usa-header {
-  margin-bottom: 3rem;
+hr {
+  display: block;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  border-top: 2px solid $color-gray-lightest;
+  margin: 2rem 0;
 }
 
 .case-status-label {
   font-size: 1.4rem;
-  font-weight: bold;
+  font-weight: $font-bold;
 }
 
 .breadcrumb {
   margin-bottom: 3rem;
 }
 
-.fa-caret-left {
-  margin-right: 0.5rem;
-  color: $color-blue;
-}
-
-legend {
-  margin-bottom: 0.5em;
-  font-size: 1em;
-}
-
-.action-flag {
-  color: $color-red;
-}
-
-.fa-cloud-upload-alt {
-  margin-right: 1rem;
-}
-
 .label {
+  display: block;
   margin-bottom: 0;
-  font-weight: $font-bold;
+  font-weight: $font-medium;
+}
+
+.label-inline {
+  display: inline-block;
+  margin: 0 1rem 0 0;
+  font-weight: $font-semibold;
 }
 
 .forward-form {
@@ -42,10 +36,6 @@ legend {
 
 .flagged-name {
   color: $color-red-dark;
-}
-
-.fa-file-pdf {
-  margin-right: 1rem;
 }
 
 #paygov-link-container {
@@ -73,14 +63,6 @@ iframe {
 
 .subsection {
   margin-bottom: 2em;
-}
-
-.card {
-  border: 1px solid $color-gray-light;
-}
-
-.card-body {
-  padding: 2rem;
 }
 
 .mb-4 {
