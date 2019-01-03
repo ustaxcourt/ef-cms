@@ -10,40 +10,12 @@ input[type='text'] {
   margin: 0 0 2rem;
 }
 
-label {
-  margin-bottom: 0.5em;
-  font-weight: 700;
-}
-
 #file-a-petition .usa-button-active:disabled {
   background-color: $color-primary-darkest;
 }
 
 .usa-alert {
   margin-bottom: 2rem;
-}
-
-h1 {
-  font-size: 32px;
-}
-
-h2 {
-  font-size: 24px;
-}
-
-legend {
-  margin-bottom: 0.5em;
-  font-size: 1em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-top: 0;
 }
 
 .usa-nav-secondary-links li:not(:last-child)::after {
@@ -67,12 +39,4 @@ hr {
   border: 0;
   border-top: 2px solid $color-gray-lightest;
   margin: 2rem 0;
-}
-
-table {
-  margin: 0;
-}
-
-.usa-button {
-  margin: 0 2rem 2rem 0;
 }
