@@ -125,7 +125,7 @@ export default connect(
               </ul>
             </div>
           )}
-          <nav className="horizontal-tabs">
+          <nav className="horizontal-tabs subsection">
             <ul role="tabslist">
               <li
                 role="presentation"

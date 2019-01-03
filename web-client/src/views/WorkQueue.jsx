@@ -28,7 +28,7 @@ export default connect(
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
-        <div className="horizontal-tabs subsection">
+        <nav className="horizontal-tabs subsection">
           <ul role="tablist">
             <li
               className={
@@ -67,7 +67,7 @@ export default connect(
               </button>
             </li>
           </ul>
-        </div>
+        </nav>
         <div className="work-queue-tab-container">
           <h3 className="work-queue-tab">Inbox</h3>
         </div>
