@@ -28,6 +28,10 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case journey', async () => {
+  beforeEach(() => {
+    jest.setTimeout(30000);
+  });
+
   it('Taxpayer logs in', async () => {
     test.setState('user', {
       name: 'Test Taxpayer',
