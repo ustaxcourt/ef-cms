@@ -105,6 +105,24 @@ table.work-queue {
 
   tbody tr {
     border-top: 1px solid $color-gray-light;
+    td {
+      transition: all 0.1s ease-in-out;
+    }
+    &:hover {
+      cursor: pointer;
+      td {
+        box-shadow: inset 0px 2px 0px 0px #0071bc,
+          inset 0px -2px 0px 0px #0071bc;
+      }
+      td:first-child {
+        box-shadow: inset 2px 2px 0px 0px #0071bc,
+          inset 2px -2px 0px 0px #0071bc;
+      }
+      td:last-child {
+        box-shadow: inset -2px 2px 0px 0px #0071bc,
+          inset -2px -2px 0px 0px #0071bc;
+      }
+    }
   }
 
   td {
