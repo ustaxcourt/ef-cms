@@ -33,5 +33,7 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
 export const formattedWorkQueue = get => {
   const workItems = get(state.workQueue);
   const selectedWorkItems = get(state.selectedWorkItems);
-  return workItems.map(items => formatWorkItem(items, selectedWorkItems));
+  return workItems
+    .filter(items => !items.completedAt)
+    .map(items => formatWorkItem(items, selectedWorkItems));
 };
