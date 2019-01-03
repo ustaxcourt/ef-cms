@@ -1,0 +1,118 @@
+table {
+  margin: 0;
+}
+
+table.work-queue {
+  td,
+  th {
+    border: none;
+  }
+
+  tbody tr {
+    border-top: 1px solid $color-gray-light;
+  }
+
+  td {
+    font-size: 1.4rem; // 14px
+    label {
+      margin: 0;
+    }
+  }
+
+  thead th {
+    background-color: $color-white;
+    font-weight: 600;
+  }
+
+  .action-bar {
+    background-color: $color-primary-alt-lightest;
+    font-size: 1.7rem;
+
+    label {
+      display: inline-block;
+      margin: 0;
+    }
+
+    select {
+      display: inline-block;
+      width: auto;
+      margin: 0 1rem;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .selected-count {
+      margin-right: 3rem;
+      font-weight: $font-bold;
+    }
+  }
+
+  width: 100%;
+  border-top: none;
+  border-right: 1px solid $color-gray-light;
+  border-bottom: 1px solid $color-gray-light;
+  border-left: 1px solid $color-gray-light;
+}
+
+table.row-border-only {
+  td {
+    border: none;
+  }
+
+  tbody tr {
+    border: 1px solid $color-gray-light;
+  }
+}
+
+table.case-list thead th,
+table.case-list thead td {
+  background-color: $color-gray-light;
+  color: $color-base;
+}
+
+table.case-list tbody tr:nth-child(even) td {
+  background-color: $color-gray-lightest;
+}
+
+.responsive-table {
+  width: 100%;
+
+  label {
+    margin: 1rem 0 !important;
+  }
+
+  .responsive-label {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $small-screen) {
+  .responsive-table {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+    }
+
+    td {
+      display: block;
+      border: none;
+    }
+
+    .responsive-title {
+      border-bottom: 1px solid $color-gray-light;
+      background: $color-gray-lightest;
+      font-weight: $font-bold;
+    }
+
+    .responsive-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: $font-bold;
+    }
+  }
+}
