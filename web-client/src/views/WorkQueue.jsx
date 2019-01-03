@@ -46,7 +46,7 @@ export default connect(
                   })
                 }
               >
-                <h2>My Queue</h2>
+                My Queue
               </button>
             </li>
             <li
@@ -63,7 +63,7 @@ export default connect(
                   })
                 }
               >
-                <h2>Section Queue</h2>
+                Section Queue
               </button>
             </li>
           </ul>

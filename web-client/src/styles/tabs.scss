@@ -20,23 +20,28 @@
 
   li {
     display: inline-block;
-    padding: 0;
-    margin: 0 2rem 0 0;
-    cursor: pointer;
 
-    h2 {
+    button {
+      padding-bottom: 10px;
+      margin: 0 45px 0 0;
+      border-radius: 0;
+      cursor: pointer;
+      font-family: $font-serif;
+      font-size: 24px;
       font-weight: $font-medium;
+      line-height: 1.3em;
     }
   }
 
-  .active {
-    border-bottom: 0.3rem $color-blue solid;
+  li.active button {
+    border-bottom: 3px $color-blue solid;
     cursor: default;
     font-weight: $font-bold;
+  }
 
-    h2 {
-      font-weight: $font-medium;
-    }
+  li button:hover {
+    border-bottom: 3px $color-primary-darkest solid;
+    color: $color-primary-darkest;
   }
 }
 
