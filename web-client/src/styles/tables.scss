@@ -21,7 +21,7 @@ table.work-queue {
 
   thead th {
     background-color: $color-white;
-    font-weight: 600;
+    font-weight: $font-semibold;
   }
 
   .action-bar {
@@ -76,16 +76,18 @@ table.case-list tbody tr:nth-child(even) td {
   background-color: $color-gray-lightest;
 }
 
-.responsive-table {
-  width: 100%;
-
+table.responsive-table {
+  /* stylelint-disable */
   label {
     margin: 1rem 0 !important;
   }
+  /* stylelint-enable */
 
   .responsive-label {
     display: none;
   }
+
+  width: 100%;
 }
 
 @media only screen and (max-width: $small-screen) {
