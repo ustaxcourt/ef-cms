@@ -14,11 +14,13 @@ import setPath from '../actions/setPathAction';
 import setSectionWorkQueue from '../actions/setSectionWorkQueueAction';
 import setUsers from '../actions/setUsersAction';
 import setWorkItems from '../actions/setWorkItemsAction';
+import setFormSubmitting from '../actions/setFormSubmittingAction';
+import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 const goToDashboard = [
+  setFormSubmitting,
   getUserRole,
   {
-    public: [setCurrentPage('DashboardPublic')],
     taxpayer: [
       getCasesByUser,
       {
@@ -66,6 +68,7 @@ const goToDashboard = [
       setCurrentPage('DashboardSeniorAttorney'),
     ],
   },
+  unsetFormSubmitting,
 ];
 
 export default [
