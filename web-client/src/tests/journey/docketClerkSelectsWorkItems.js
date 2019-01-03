@@ -4,7 +4,9 @@ export default test => {
       .getState('sectionWorkQueue')
       .find(
         workItem =>
-          !workItem.assigneeId && workItem.docketNumber === test.docketNumber,
+          !workItem.assigneeId &&
+          workItem.docketNumber === test.docketNumber &&
+          workItem.workItemId === test.stipulatedDecisionWorkItemId,
       );
     expect(unassignedWorkItem).toBeDefined();
     expect(test.getState('selectedWorkItems').length).toEqual(0);

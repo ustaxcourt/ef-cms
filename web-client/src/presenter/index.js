@@ -5,6 +5,7 @@ import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
@@ -28,6 +29,7 @@ import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
+import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
 
 import state from './state';
 
@@ -47,6 +49,7 @@ export default {
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
+    submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -67,6 +70,7 @@ export default {
     viewDocumentSequence,
     setWorkItemActionSequence,
     updateForwardFormValueSequence,
+    updateCompleteFormValueSequence,
   },
   state,
 };
