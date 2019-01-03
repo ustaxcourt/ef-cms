@@ -28,3 +28,7 @@ button.tab-link {
   font-weight: normal;
   text-decoration: none;
 }
+
+#file-a-petition .usa-button-active:disabled {
+  background-color: $color-primary-darkest;
+}
