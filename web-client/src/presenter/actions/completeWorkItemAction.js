@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { state } from 'cerebral';
 
 export default async ({ get, store, applicationContext, path, props }) => {
@@ -43,10 +42,5 @@ export default async ({ get, store, applicationContext, path, props }) => {
     userId: get(state.user.token),
   });
 
-  return path.success({
-    alertSuccess: {
-      title: 'Message successfully sent.',
-      message: moment(completeWorkItemDate).format('L LT'),
-    },
-  });
+  return path.success();
 };
