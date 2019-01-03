@@ -78,7 +78,6 @@ h1[tabIndex='-1']:focus {
 
 p {
   margin-top: 0;
-  font-size: 17px;
   font-weight: $font-regular;
   line-height: 1.45em;
 }
@@ -91,6 +90,7 @@ p.lead {
 }
 
 label {
+  margin-bottom: 15px;
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1.45em;
