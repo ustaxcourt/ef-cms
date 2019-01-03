@@ -1,6 +1,6 @@
 describe('Filing an Answer', function() {
   let rowCount;
-  const tableSelector = 'table.responsive-table';
+  const tableSelector = 'table#docket-record';
   before(() => {
     cy.login('respondent');
   });
