@@ -7,8 +7,11 @@ import getUserRole from '../actions/getUserRoleAction';
 import setBaseUrl from '../actions/setBaseUrlAction';
 import setCase from '../actions/setCaseAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
+import setFormSubmitting from '../actions/setFormSubmittingAction';
+import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 export default [
+  setFormSubmitting,
   clearAlerts,
   getCase,
   setCase,
@@ -24,4 +27,5 @@ export default [
     seniorattorney: [setCurrentPage('CaseDetailInternal')],
     taxpayer: [setCurrentPage('CaseDetailPetitioner')],
   },
+  unsetFormSubmitting,
 ];
