@@ -10,11 +10,11 @@ import navigateToLogin from '../actions/navigateToLoginAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
+import setFormSubmitting from '../actions/setFormSubmittingAction';
 import setPath from '../actions/setPathAction';
 import setSectionWorkQueue from '../actions/setSectionWorkQueueAction';
 import setUsers from '../actions/setUsersAction';
 import setWorkItems from '../actions/setWorkItemsAction';
-import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 const goToDashboard = [
