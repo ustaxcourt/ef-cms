@@ -69,6 +69,7 @@ export default {
   caseDetail: {},
   cases: [],
   workItemActions: {},
+  completeForm: {},
   caseDetailHelper,
   extractedDocument,
   extractedWorkItems,
