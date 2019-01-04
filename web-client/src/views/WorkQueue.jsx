@@ -9,6 +9,7 @@ export default connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
+    setFocusedWorkItem: sequences.setFocusedWorkItem,
     switchWorkQueueSequence: sequences.switchWorkQueueSequence,
     users: state.users,
     workQueue: state.formattedWorkQueue,
@@ -20,6 +21,7 @@ export default connect(
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
+    setFocusedWorkItem,
     switchWorkQueueSequence,
     users,
     workQueue,
@@ -174,7 +176,9 @@ export default connect(
             >
               <thead>
                 <tr>
-                  <th aria-label="Docket Number">Docket</th>
+                  <th colSpan="2" aria-label="Docket Number">
+                    Docket
+                  </th>
                   <th>Received</th>
                   <th>Document</th>
                   <th>Status</th>
@@ -184,23 +188,61 @@ export default connect(
               </thead>
               <tbody>
                 {workQueue.map(item => (
-                  <tr key={item.workItemId}>
-                    <td>{item.docketNumber}</td>
-                    <td>{item.messages[0].createdAtFormatted}</td>
-                    <td>
-                      <a
-                        href={`/case-detail/${item.docketNumber}/documents/${
-                          item.document.documentId
-                        }`}
-                        className="case-link"
+                  <React.Fragment key={item.workItemId}>
+                    <tr
+                      onClick={() =>
+                        setFocusedWorkItem({ workItemId: item.workItemId })
+                      }
+                      className={
+                        item.isFocused ? 'queue-focus queue-primary' : ''
+                      }
+                    >
+                      <td
+                        className="focus-toggle"
+                        rowSpan={item.isFocused ? '2' : '1'}
                       >
-                        {item.document.documentType}
-                      </a>
-                    </td>
-                    <td>{item.caseStatus}</td>
-                    <td>{item.messages[0].sentBy}</td>
-                    <td>{item.assigneeName}</td>
-                  </tr>
+                        <button
+                          className="focus-button"
+                          aria-label="Expand message detail"
+                          aria-expanded={item.isFocused}
+                        >
+                          &nbsp;
+                        </button>
+                      </td>
+                      <td>{item.docketNumber}</td>
+                      <td>{item.messages[0].createdAtFormatted}</td>
+                      <td>
+                        <a
+                          href={`/case-detail/${item.docketNumber}/documents/${
+                            item.document.documentId
+                          }`}
+                          className="case-link"
+                        >
+                          {item.document.documentType}
+                        </a>
+                      </td>
+                      <td>{item.caseStatus}</td>
+                      <td>{item.messages[0].sentBy}</td>
+                      <td>{item.assigneeName}</td>
+                    </tr>
+                    {item.isFocused && (
+                      <tr
+                        className="queue-focus queue-message"
+                        onClick={() =>
+                          setFocusedWorkItem({ workItemId: item.workItemId })
+                        }
+                      >
+                        <td colSpan="2" aria-hidden="true" />
+                        <td
+                          colSpan="4"
+                          className="message-detail"
+                          aria-label="Message detail"
+                        >
+                          {item.messages[0].message}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
