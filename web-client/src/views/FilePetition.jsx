@@ -113,8 +113,8 @@ export default connect(
             className={submitting ? 'usa-button-active' : 'usa-button'}
             aria-disabled={submitting ? 'true' : 'false'}
           >
-            <span>{submitting ? 'Uploading...' : 'Upload'}</span>
             {submitting && <div className="spinner" />}
+            <span>{submitting ? 'Uploading' : 'Upload'}</span>
           </button>
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">

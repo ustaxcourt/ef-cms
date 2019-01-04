@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export default function StyleGuide() {
@@ -73,10 +74,11 @@ export default function StyleGuide() {
             </ol>
           </div>
         </div>
-
+      </section>
+      <section className="usa-section usa-grid">
         <h1>Buttons</h1>
         <hr />
-        <h6>Primary buttons</h6>
+        <h2>Primary buttons</h2>
         <button className="usa-button">Default</button>
         <button className="usa-button usa-button-hover">Hover</button>
         <button className="usa-button usa-button-active">Active</button>
@@ -84,20 +86,170 @@ export default function StyleGuide() {
         <button className="usa-button" disabled>
           Disabled
         </button>
-
-        <h6>Secondary buttons</h6>
-        <button className="usa-button-secondary">Default</button>
-        <button className="usa-button-secondary usa-button-hover">Hover</button>
-        <button className="usa-button-secondary usa-button-active">
+        <h2>Secondary buttons</h2>
+        <button className="usa-button usa-button-secondary">Default</button>
+        <button className="usa-button usa-button-secondary usa-button-hover">
+          Hover
+        </button>
+        <button className="usa-button usa-button-secondary usa-button-active">
           Active
         </button>
-        <button className="usa-button-secondary usa-focus">Focus</button>
-        <button className="usa-button-secondary" disabled>
+        <button className="usa-button usa-button-secondary usa-focus">
+          Focus
+        </button>
+        <button className="usa-button usa-button-secondary" disabled>
           Disabled
         </button>
+        <h2>Icon button</h2>
+        <button className="usa-button">
+          <FontAwesomeIcon icon="check-circle" size="sm" />
+          Icon
+        </button>
+        <h2>Big button</h2>
+        <button className="usa-button usa-button-big">Default</button>
+      </section>
 
-        <h6>Big button</h6>
-        <button className="usa-button-big">Default</button>
+      <section className="usa-section usa-grid">
+        <h1>Tabs</h1>
+        <hr />
+        <h2>Primary Tabs</h2>
+        <div className="horizontal-tabs subsection">
+          <ul role="tablist">
+            <li className="active">
+              <button role="tab" className="tab-link" aria-selected={true}>
+                My Queue
+              </button>
+            </li>
+            <li>
+              <button role="tab" className="tab-link" aria-selected={false}>
+                Section Queue
+              </button>
+            </li>
+          </ul>
+        </div>
+        <h2>Secondary Tabs</h2>
+        <div className="work-queue-tab-container">
+          <h3 className="work-queue-tab">Inbox</h3>
+        </div>
+      </section>
+
+      <section className="usa-section usa-grid">
+        <h1>Tables</h1>
+        <hr />
+        <h2>Responsive Table</h2>
+        <table className="responsive-table">
+          <thead>
+            <tr>
+              <th>Docket number</th>
+              <th>Date filed</th>
+              <th>Petitioner name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Work Queue Table</h2>
+        <table className="work-queue">
+          <thead>
+            <tr>
+              <th>Docket number</th>
+              <th>Date filed</th>
+              <th>Petitioner name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section className="usa-section usa-grid">
+        <h1>Cards</h1>
+        <div className="card">
+          <div className="content-wrapper">
+            <span className="label-inline">Label</span>
+            <span>Value</span>
+          </div>
+          <div className="actions-wrapper">
+            <div className="content-wrapper">
+              <span>Buttons</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="usa-section usa-grid">
