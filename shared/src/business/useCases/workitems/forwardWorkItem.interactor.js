@@ -8,7 +8,6 @@ const Message = require('../../entities/Message');
 const User = require('../../entities/User');
 
 exports.forwardWorkItem = async ({
-  userId,
   workItemId,
   assigneeId,
   message,
