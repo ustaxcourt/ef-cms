@@ -20,6 +20,9 @@ export default test => {
           'a Stipulated Decision filed by respondent is ready for review',
       },
       {
+        message: 'The work item was assigned.',
+      },
+      {
         message: 'hello world',
       },
     ]);
