@@ -28,6 +28,7 @@ import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSPro
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
+import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -68,6 +69,7 @@ const applicationContext = {
       updateCase,
       updateWorkItem,
       uploadCasePdfs,
+      forwardWorkItem,
     };
   },
 };

@@ -111,6 +111,10 @@ const {
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
 
 const {
+  forwardWorkItem
+} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItem.interactor');
+
+const {
   isAuthorized,
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
@@ -194,6 +198,7 @@ module.exports = ({ userId } = {}) => {
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
         getUser,
+        forwardWorkItem,
         sendPetitionToIRS,
         updateCase,
         uploadCasePdfs,
@@ -217,6 +222,16 @@ module.exports = ({ userId } = {}) => {
         return associateDocumentToCase;
       default:
         return updateCase;
+      }
+    },
+    getUpdateWorkItemInteractor: event => {
+      const interactorName =
+        (event.queryStringParameters || {}).interactorName || 'updateWorkItem';
+      switch (interactorName) {
+      case 'forwardWorkItem':
+        return forwardWorkItem;
+      default:
+        return updateWorkItem;
       }
     },
     getWorkItemsInteractor: event => {
