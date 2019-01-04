@@ -16,10 +16,10 @@ class DocumentDetail extends React.Component {
       form,
       setWorkItemActionSequence,
       showAction,
-      showForwardInputs,
+      submitCompleteSequence,
       submitForwardSequence,
       updateForwardFormValueSequence,
-      workItemActions,
+      updateCompleteFormValueSequence,
       workItems,
     } = this.props;
 
@@ -58,12 +58,17 @@ class DocumentDetail extends React.Component {
 
           <div className="usa-grid-full mb-2">
             <span className="font-medium" id="messages-label">
-              Messages
+              Pending Messages
             </span>
           </div>
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
+              {!workItems.length && (
+                <div>
+                  There are no pending messages associated with this document.
+                </div>
+              )}
               {workItems.map((workItem, idx) => (
                 <div
                   className="card"
@@ -139,6 +144,56 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="share-square" size="sm" /> Send To
                     </button>
                   </div>
+
+                  {showAction('complete', workItem.workItemId) && (
+                    <div className="card-body extra pb-4">
+                      <form
+                        id="complete-form"
+                        role="form"
+                        noValidate
+                        onSubmit={e => {
+                          e.preventDefault();
+                          submitCompleteSequence({
+                            workItemId: workItem.workItemId,
+                          });
+                          setWorkItemActionSequence({
+                            workItemId: workItem.workItemId,
+                            action: null,
+                          });
+                        }}
+                      >
+                        <b id="message-label">Add message (optional)</b>
+                        <br />
+                        <textarea
+                          aria-labelledby="message-label"
+                          name="completeMessage"
+                          id="complete-message"
+                          onChange={e => {
+                            updateCompleteFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        />
+                        <button type="submit" className="usa-button">
+                          <span>Complete</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="usa-button-secondary"
+                          onClick={() => {
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: null,
+                            });
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </form>
+                    </div>
+                  )}
 
                   {showAction('history', workItem.workItemId) && (
                     <div className="card-body extra pb-4">
@@ -258,10 +313,12 @@ DocumentDetail.propTypes = {
   setWorkItemActionSequence: PropTypes.func,
   showAction: PropTypes.func,
   showForwardInputs: PropTypes.bool,
+  submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   workItemActions: PropTypes.object,
   workItems: PropTypes.array,
+  updateCompleteFormValueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -273,10 +330,12 @@ export default connect(
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     showAction: state.showAction,
     showForwardInputs: state.form.showForwardInputs,
+    submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
 );
