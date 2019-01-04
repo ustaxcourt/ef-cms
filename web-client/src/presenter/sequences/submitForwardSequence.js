@@ -3,7 +3,7 @@ import { set } from 'cerebral/factories';
 import clearAlerts from '../actions/clearAlertsAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
-import forwardCaseAction from '../actions/forwardCaseAction';
+import forwardWorkItemAction from '../actions/forwardWorkItemAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import clearForwardFormAction from '../actions/clearForwardFormAction';
@@ -12,7 +12,7 @@ export default [
   setFormSubmitting,
   clearAlerts,
   unsetFormSubmitting,
-  forwardCaseAction,
+  forwardWorkItemAction,
   {
     error: [setAlertError],
     success: [
