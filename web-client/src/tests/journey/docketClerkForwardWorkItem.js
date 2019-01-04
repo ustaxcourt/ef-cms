@@ -22,14 +22,14 @@ export default test => {
     );
     expect(workItem).toMatchObject({
       assigneeId: 'seniorattorney',
-      assigneeName: 'Senior Attorney',
+      assigneeName: 'Test Seniorattorney',
     });
     const messages = _.orderBy(workItem.messages, 'createdAt', 'desc');
     expect(messages.length).toEqual(3);
     expect(messages[0]).toMatchObject({
       message: 'hello world',
       userId: 'docketclerk',
-      sentBy: 'Docket Clerk',
+      sentBy: 'Test Docketclerk',
     });
   });
 };
