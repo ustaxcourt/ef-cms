@@ -18,8 +18,8 @@ class DocumentDetail extends React.Component {
       showAction,
       submitCompleteSequence,
       submitForwardSequence,
-      updateForwardFormValueSequence,
       updateCompleteFormValueSequence,
+      updateForwardFormValueSequence,
       workItems,
     } = this.props;
 
@@ -76,31 +76,26 @@ class DocumentDetail extends React.Component {
                   key={idx}
                 >
                   <div className="card-body">
-                    <div className="mb-2">
-                      <div className="mb-1">
-                        <span className="label">To</span>{' '}
+                    <div className="">
+                      <p>
+                        <span className="label-inline">To</span>
                         {workItem.currentMessage.sentTo}
-                      </div>
-
-                      <div className="mb-1">
-                        <span className="label">From</span>{' '}
+                      </p>
+                      <p>
+                        <span className="label-inline">From</span>
                         {workItem.currentMessage.sentBy}
-                      </div>
-
-                      <div>
-                        <span className="label">Received</span>{' '}
+                      </p>
+                      <p>
+                        <span className="label-inline">Received</span>
                         {workItem.currentMessage.createdAtFormatted}
-                      </div>
+                      </p>
                     </div>
-
-                    <div className="mb-1">
-                      {workItem.currentMessage.message}
-                    </div>
+                    <p>{workItem.currentMessage.message}</p>
                   </div>
 
-                  <div className="usa-grid-full extra pt-1 pb-1 toggles">
+                  <div className="usa-grid-full">
                     <button
-                      className={`usa-width-one-third toggle ${
+                      className={`usa-width-one-third ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
                           : ''
@@ -115,7 +110,7 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
                     </button>
                     <button
-                      className={`usa-width-one-third toggle ${
+                      className={`usa-width-one-third ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
                           : ''
@@ -131,7 +126,7 @@ class DocumentDetail extends React.Component {
                     </button>
                     <button
                       data-workitemid={workItem.workItemId}
-                      className={`usa-width-one-third send-to toggle ${
+                      className={`usa-width-one-third send-to ${
                         showAction('forward', workItem.workItemId)
                           ? 'selected'
                           : ''
@@ -148,7 +143,7 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
+                    <div className="">
                       <form
                         id="complete-form"
                         role="form"
@@ -164,10 +159,10 @@ class DocumentDetail extends React.Component {
                           });
                         }}
                       >
-                        <b id="message-label">Add message (optional)</b>
-                        <br />
+                        <label htmlFor="complete-message">
+                          Add message (optional)
+                        </label>
                         <textarea
-                          aria-labelledby="message-label"
                           name="completeMessage"
                           id="complete-message"
                           onChange={e => {
@@ -183,7 +178,7 @@ class DocumentDetail extends React.Component {
                         </button>
                         <button
                           type="button"
-                          className="usa-button-secondary"
+                          className="usa-button usa-button-secondary"
                           onClick={() => {
                             setWorkItemActionSequence({
                               workItemId: workItem.workItemId,
@@ -199,34 +194,31 @@ class DocumentDetail extends React.Component {
 
                   {showAction('history', workItem.workItemId) &&
                     !workItem.historyMessages.length && (
-                      <div>No additional messages are available.</div>
+                      <p>No additional messages are available.</p>
                     )}
 
                   {showAction('history', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
+                    <div className="">
                       {workItem.historyMessages.map((message, mIdx) => (
-                        <div key={mIdx} className="mb-2">
-                          <div className="mb-1">
+                        <div key={mIdx} className="">
+                          <p>
                             <span className="label">To</span> {message.sentTo}
-                          </div>
-
-                          <div className="mb-1">
+                          </p>
+                          <p>
                             <span className="label">From</span> {message.sentBy}
-                          </div>
-
-                          <div className="mb-1">
+                          </p>
+                          <p>
                             <span className="label">Received</span>{' '}
                             {message.createdAtFormatted}
-                          </div>
-
-                          <div className="mb-1">{message.message}</div>
+                          </p>
+                          <p>{message.message}</p>
                         </div>
                       ))}
                     </div>
                   )}
 
                   {showAction('forward', workItem.workItemId) && (
-                    <div className="card-body extra">
+                    <div className="">
                       <form
                         data-workitemid={workItem.workItemId}
                         className="forward-form"
@@ -243,8 +235,7 @@ class DocumentDetail extends React.Component {
                           });
                         }}
                       >
-                        <b id="recipient-label">Send to</b>
-                        <br />
+                        <label htmlFor="forward-recipient-id">Send to</label>
                         <select
                           name="forwardRecipientId"
                           id="forward-recipient-id"
@@ -262,8 +253,9 @@ class DocumentDetail extends React.Component {
                             Senior Attorney
                           </option>
                         </select>
-                        <b id="message-label">Add document message</b>
-                        <br />
+                        <label htmlFor="forward-message">
+                          Add document message
+                        </label>
                         <textarea
                           aria-labelledby="message-label"
                           name="forwardMessage"
@@ -277,7 +269,7 @@ class DocumentDetail extends React.Component {
                           }}
                         />
                         <button type="submit" className="usa-button">
-                          <span>Forward</span>
+                          Forward
                         </button>
                         <button
                           type="button"
@@ -322,10 +314,10 @@ DocumentDetail.propTypes = {
   showForwardInputs: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
+  updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   workItemActions: PropTypes.object,
   workItems: PropTypes.array,
-  updateCompleteFormValueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -339,10 +331,10 @@ export default connect(
     showForwardInputs: state.form.showForwardInputs,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
-    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
 );
