@@ -11,7 +11,8 @@ exports.put = event =>
   handle(() => {
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
-    return applicationContext.getUseCases().updateWorkItem({
+    return applicationContext.getUpdateWorkItemInteractor(event)({
+      ...JSON.parse(event.body),
       workItemId: event.pathParameters.workItemId,
       workItemToUpdate: JSON.parse(event.body),
       userId,
