@@ -9,6 +9,7 @@ export default connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
+    setFocusedWorkItem: sequences.setFocusedWorkItem,
     switchWorkQueueSequence: sequences.switchWorkQueueSequence,
     users: state.users,
     workQueue: state.formattedWorkQueue,
@@ -20,6 +21,7 @@ export default connect(
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
+    setFocusedWorkItem,
     switchWorkQueueSequence,
     users,
     workQueue,
@@ -174,7 +176,9 @@ export default connect(
             >
               <thead>
                 <tr>
-                  <th aria-label="Docket Number">Docket</th>
+                  <th colSpan="2" aria-label="Docket Number">
+                    Docket
+                  </th>
                   <th>Received</th>
                   <th>Document</th>
                   <th>Status</th>
@@ -182,9 +186,20 @@ export default connect(
                   <th>To</th>
                 </tr>
               </thead>
-              <tbody>
-                {workQueue.map(item => (
-                  <tr key={item.workItemId}>
+              {workQueue.map(item => (
+                <tbody key={item.workItemId}>
+                  <tr
+                    onClick={() =>
+                      setFocusedWorkItem({ workItemId: item.workItemId })
+                    }
+                  >
+                    <td className="focus-toggle">
+                      <button
+                        className="focus-button"
+                        aria-label="Expand message detail"
+                        aria-expanded={item.isFocused}
+                      />
+                    </td>
                     <td>{item.docketNumber}</td>
                     <td>{item.messages[0].createdAtFormatted}</td>
                     <td>
@@ -201,8 +216,32 @@ export default connect(
                     <td>{item.messages[0].sentBy}</td>
                     <td>{item.assigneeName}</td>
                   </tr>
-                ))}
-              </tbody>
+                  {item.isFocused && (
+                    <tr
+                      className="queue-focus queue-message"
+                      onClick={() =>
+                        setFocusedWorkItem({ workItemId: item.workItemId })
+                      }
+                    >
+                      <td className="focus-toggle">
+                        <button
+                          className="focus-button"
+                          tabIndex="-1"
+                          aria-disabled="true"
+                        />
+                      </td>
+                      <td colSpan="2" aria-hidden="true" />
+                      <td
+                        colSpan="4"
+                        className="message-detail"
+                        aria-label="Message detail"
+                      >
+                        {item.messages[0].message}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              ))}
             </table>
           </div>
         )}
