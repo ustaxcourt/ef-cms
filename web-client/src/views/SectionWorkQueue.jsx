@@ -43,7 +43,12 @@ export default connect(
         {workQueueHelper.showSendToBar && (
           <tbody className="action-bar">
             <tr>
-              <td colSpan="8" className="action-bar">
+              <td
+                colSpan="8"
+                className="action-bar"
+                aria-label="Action bar: choose an assignee."
+                aria-live="polite"
+              >
                 <span className="selected-count">
                   {selectedWorkItems.length} selected
                 </span>
