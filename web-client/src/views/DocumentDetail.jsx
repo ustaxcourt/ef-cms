@@ -51,11 +51,11 @@ class DocumentDetail extends React.Component {
             <h2>{document.documentType}</h2>
             <p>
               <span className="label-inline">Date filed</span>
-              <span className="">{document.createdAtFormatted}</span>
+              <span>{document.createdAtFormatted}</span>
             </p>
             <p>
               <span className="label-inline">Filed by</span>
-              <span className="">{document.filedBy}</span>
+              <span>{document.filedBy}</span>
             </p>
           </div>
           <h3>Pending Messages</h3>
@@ -195,7 +195,7 @@ class DocumentDetail extends React.Component {
                   {showAction('history', workItem.workItemId) && (
                     <div className="content-wrapper actions-wrapper">
                       {workItem.historyMessages.map((message, mIdx) => (
-                        <div key={mIdx} className="">
+                        <div key={mIdx}>
                           <p>
                             <span className="label-inline">To</span>
                             {message.sentTo}
