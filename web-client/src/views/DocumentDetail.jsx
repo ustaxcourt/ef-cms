@@ -60,7 +60,7 @@ class DocumentDetail extends React.Component {
           </div>
           <h3>Pending Messages</h3>
           <div className="usa-grid-full">
-            <div className="usa-width-one-third">
+            <div className="usa-width-one-half">
               {!workItems.length && (
                 <div>
                   There are no pending messages associated with this document.
@@ -286,7 +286,7 @@ class DocumentDetail extends React.Component {
                 </div>
               ))}
             </div>
-            <div className="usa-width-two-thirds">
+            <div className="usa-width-one-half">
               <iframe
                 title={`Document type: ${document.documentType}`}
                 src={`${baseUrl}/documents/${
