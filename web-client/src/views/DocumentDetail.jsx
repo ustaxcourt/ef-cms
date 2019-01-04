@@ -47,21 +47,18 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          <div className="usa-grid-full mb-2">
-            <span className="label font-large mr-4">
-              {document.documentType}
-            </span>
-            <span className="label mr-2">Date filed</span>{' '}
-            <span className="mr-4">{document.createdAtFormatted}</span>
-            <span className="label mr-2">Filed by</span> {document.filedBy}
+          <div className="usa-grid-full subsection">
+            <h2>{document.documentType}</h2>
+            <p>
+              <span className="label-inline">Date filed</span>
+              <span className="">{document.createdAtFormatted}</span>
+            </p>
+            <p>
+              <span className="label-inline">Filed by</span>
+              <span className="">{document.filedBy}</span>
+            </p>
           </div>
-
-          <div className="usa-grid-full mb-2">
-            <span className="font-medium" id="messages-label">
-              Pending Messages
-            </span>
-          </div>
-
+          <h3>Pending Messages</h3>
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
               {!workItems.length && (
@@ -75,30 +72,28 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="messages-label"
                   key={idx}
                 >
-                  <div className="card-body">
-                    <div className="">
-                      <p>
-                        <span className="label-inline">To</span>
-                        {workItem.currentMessage.sentTo}
-                      </p>
-                      <p>
-                        <span className="label-inline">From</span>
-                        {workItem.currentMessage.sentBy}
-                      </p>
-                      <p>
-                        <span className="label-inline">Received</span>
-                        {workItem.currentMessage.createdAtFormatted}
-                      </p>
-                    </div>
+                  <div className="content-wrapper">
+                    <p>
+                      <span className="label-inline">To</span>
+                      {workItem.currentMessage.sentTo}
+                    </p>
+                    <p>
+                      <span className="label-inline">From</span>
+                      {workItem.currentMessage.sentBy}
+                    </p>
+                    <p>
+                      <span className="label-inline">Received</span>
+                      {workItem.currentMessage.createdAtFormatted}
+                    </p>
                     <p>{workItem.currentMessage.message}</p>
                   </div>
 
-                  <div className="usa-grid-full">
+                  <div className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper">
                     <button
                       className={`usa-width-one-third ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -113,7 +108,7 @@ class DocumentDetail extends React.Component {
                       className={`usa-width-one-third ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -129,7 +124,7 @@ class DocumentDetail extends React.Component {
                       className={`usa-width-one-third send-to ${
                         showAction('forward', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -143,7 +138,7 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
-                    <div className="">
+                    <div className="content-wrapper actions-wrapper">
                       <form
                         id="complete-form"
                         role="form"
@@ -198,17 +193,19 @@ class DocumentDetail extends React.Component {
                     )}
 
                   {showAction('history', workItem.workItemId) && (
-                    <div className="">
+                    <div className="content-wrapper actions-wrapper">
                       {workItem.historyMessages.map((message, mIdx) => (
                         <div key={mIdx} className="">
                           <p>
-                            <span className="label">To</span> {message.sentTo}
+                            <span className="label-inline">To</span>
+                            {message.sentTo}
                           </p>
                           <p>
-                            <span className="label">From</span> {message.sentBy}
+                            <span className="label-inline">From</span>
+                            {message.sentBy}
                           </p>
                           <p>
-                            <span className="label">Received</span>{' '}
+                            <span className="label-inline">Received</span>
                             {message.createdAtFormatted}
                           </p>
                           <p>{message.message}</p>
@@ -218,7 +215,7 @@ class DocumentDetail extends React.Component {
                   )}
 
                   {showAction('forward', workItem.workItemId) && (
-                    <div className="">
+                    <div className="content-wrapper actions-wrapper">
                       <form
                         data-workitemid={workItem.workItemId}
                         className="forward-form"
