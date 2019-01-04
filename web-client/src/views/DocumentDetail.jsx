@@ -18,8 +18,8 @@ class DocumentDetail extends React.Component {
       showAction,
       submitCompleteSequence,
       submitForwardSequence,
-      updateForwardFormValueSequence,
       updateCompleteFormValueSequence,
+      updateForwardFormValueSequence,
       workItems,
     } = this.props;
 
@@ -47,23 +47,20 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          <div className="usa-grid-full mb-2">
-            <span className="label font-large mr-4">
-              {document.documentType}
-            </span>
-            <span className="label mr-2">Date filed</span>{' '}
-            <span className="mr-4">{document.createdAtFormatted}</span>
-            <span className="label mr-2">Filed by</span> {document.filedBy}
+          <div className="usa-grid-full subsection">
+            <h2>{document.documentType}</h2>
+            <p>
+              <span className="label-inline">Date filed</span>
+              <span>{document.createdAtFormatted}</span>
+            </p>
+            <p>
+              <span className="label-inline">Filed by</span>
+              <span>{document.filedBy}</span>
+            </p>
           </div>
-
-          <div className="usa-grid-full mb-2">
-            <span className="font-medium" id="messages-label">
-              Pending Messages
-            </span>
-          </div>
-
+          <h3>Pending Messages</h3>
           <div className="usa-grid-full">
-            <div className="usa-width-one-third">
+            <div className="usa-width-one-half">
               {!workItems.length && (
                 <div>
                   There are no pending messages associated with this document.
@@ -75,35 +72,28 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="messages-label"
                   key={idx}
                 >
-                  <div className="card-body">
-                    <div className="mb-2">
-                      <div className="mb-1">
-                        <span className="label">To</span>{' '}
-                        {workItem.currentMessage.sentTo}
-                      </div>
-
-                      <div className="mb-1">
-                        <span className="label">From</span>{' '}
-                        {workItem.currentMessage.sentBy}
-                      </div>
-
-                      <div>
-                        <span className="label">Received</span>{' '}
-                        {workItem.currentMessage.createdAtFormatted}
-                      </div>
-                    </div>
-
-                    <div className="mb-1">
-                      {workItem.currentMessage.message}
-                    </div>
+                  <div className="content-wrapper">
+                    <p>
+                      <span className="label-inline">To</span>
+                      {workItem.currentMessage.sentTo}
+                    </p>
+                    <p>
+                      <span className="label-inline">From</span>
+                      {workItem.currentMessage.sentBy}
+                    </p>
+                    <p>
+                      <span className="label-inline">Received</span>
+                      {workItem.currentMessage.createdAtFormatted}
+                    </p>
+                    <p>{workItem.currentMessage.message}</p>
                   </div>
 
-                  <div className="usa-grid-full extra pt-1 pb-1 toggles">
+                  <div className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper">
                     <button
-                      className={`usa-width-one-third toggle ${
+                      className={`usa-width-one-third ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -115,10 +105,10 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
                     </button>
                     <button
-                      className={`usa-width-one-third toggle ${
+                      className={`usa-width-one-third ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -131,10 +121,10 @@ class DocumentDetail extends React.Component {
                     </button>
                     <button
                       data-workitemid={workItem.workItemId}
-                      className={`usa-width-one-third send-to toggle ${
+                      className={`usa-width-one-third send-to ${
                         showAction('forward', workItem.workItemId)
                           ? 'selected'
-                          : ''
+                          : 'unselected'
                       }`}
                       onClick={() =>
                         setWorkItemActionSequence({
@@ -148,7 +138,7 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
+                    <div className="content-wrapper actions-wrapper">
                       <form
                         id="complete-form"
                         role="form"
@@ -164,10 +154,10 @@ class DocumentDetail extends React.Component {
                           });
                         }}
                       >
-                        <b id="message-label">Add message (optional)</b>
-                        <br />
+                        <label htmlFor="complete-message">
+                          Add message (optional)
+                        </label>
                         <textarea
-                          aria-labelledby="message-label"
                           name="completeMessage"
                           id="complete-message"
                           onChange={e => {
@@ -183,7 +173,7 @@ class DocumentDetail extends React.Component {
                         </button>
                         <button
                           type="button"
-                          className="usa-button-secondary"
+                          className="usa-button usa-button-secondary"
                           onClick={() => {
                             setWorkItemActionSequence({
                               workItemId: workItem.workItemId,
@@ -199,34 +189,33 @@ class DocumentDetail extends React.Component {
 
                   {showAction('history', workItem.workItemId) &&
                     !workItem.historyMessages.length && (
-                      <div>No additional messages are available.</div>
+                      <p>No additional messages are available.</p>
                     )}
 
                   {showAction('history', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
+                    <div className="content-wrapper actions-wrapper">
                       {workItem.historyMessages.map((message, mIdx) => (
-                        <div key={mIdx} className="mb-2">
-                          <div className="mb-1">
-                            <span className="label">To</span> {message.sentTo}
-                          </div>
-
-                          <div className="mb-1">
-                            <span className="label">From</span> {message.sentBy}
-                          </div>
-
-                          <div className="mb-1">
-                            <span className="label">Received</span>{' '}
+                        <div key={mIdx}>
+                          <p>
+                            <span className="label-inline">To</span>
+                            {message.sentTo}
+                          </p>
+                          <p>
+                            <span className="label-inline">From</span>
+                            {message.sentBy}
+                          </p>
+                          <p>
+                            <span className="label-inline">Received</span>
                             {message.createdAtFormatted}
-                          </div>
-
-                          <div className="mb-1">{message.message}</div>
+                          </p>
+                          <p>{message.message}</p>
                         </div>
                       ))}
                     </div>
                   )}
 
                   {showAction('forward', workItem.workItemId) && (
-                    <div className="card-body extra">
+                    <div className="content-wrapper actions-wrapper">
                       <form
                         data-workitemid={workItem.workItemId}
                         className="forward-form"
@@ -243,8 +232,7 @@ class DocumentDetail extends React.Component {
                           });
                         }}
                       >
-                        <b id="recipient-label">Send to</b>
-                        <br />
+                        <label htmlFor="forward-recipient-id">Send to</label>
                         <select
                           name="forwardRecipientId"
                           id="forward-recipient-id"
@@ -262,8 +250,9 @@ class DocumentDetail extends React.Component {
                             Senior Attorney
                           </option>
                         </select>
-                        <b id="message-label">Add document message</b>
-                        <br />
+                        <label htmlFor="forward-message">
+                          Add document message
+                        </label>
                         <textarea
                           aria-labelledby="message-label"
                           name="forwardMessage"
@@ -277,7 +266,7 @@ class DocumentDetail extends React.Component {
                           }}
                         />
                         <button type="submit" className="usa-button">
-                          <span>Forward</span>
+                          Forward
                         </button>
                         <button
                           type="button"
@@ -297,7 +286,7 @@ class DocumentDetail extends React.Component {
                 </div>
               ))}
             </div>
-            <div className="usa-width-two-thirds">
+            <div className="usa-width-one-half">
               <iframe
                 title={`Document type: ${document.documentType}`}
                 src={`${baseUrl}/documents/${
@@ -322,10 +311,10 @@ DocumentDetail.propTypes = {
   showForwardInputs: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
+  updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   workItemActions: PropTypes.object,
   workItems: PropTypes.array,
-  updateCompleteFormValueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -339,10 +328,10 @@ export default connect(
     showForwardInputs: state.form.showForwardInputs,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
-    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
 );
