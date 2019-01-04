@@ -18,8 +18,8 @@ class DocumentDetail extends React.Component {
       showAction,
       submitCompleteSequence,
       submitForwardSequence,
-      updateForwardFormValueSequence,
       updateCompleteFormValueSequence,
+      updateForwardFormValueSequence,
       workItems,
     } = this.props;
 
@@ -47,21 +47,18 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          <div className="usa-grid-full mb-2">
-            <span className="label font-large mr-4">
-              {document.documentType}
-            </span>
-            <span className="label mr-2">Date filed</span>{' '}
-            <span className="mr-4">{document.createdAtFormatted}</span>
-            <span className="label mr-2">Filed by</span> {document.filedBy}
+          <div className="usa-grid-full">
+            <span className="label">{document.documentType}</span>
+            <span className="label">Date filed</span>
+            <span className="">{document.createdAtFormatted}</span>
+            <span className="label">Filed by</span>
+            {document.filedBy}
           </div>
-
-          <div className="usa-grid-full mb-2">
-            <span className="font-medium" id="messages-label">
+          <div className="usa-grid-full">
+            <span className="" id="messages-label">
               Pending Messages
             </span>
           </div>
-
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
               {!workItems.length && (
@@ -75,221 +72,224 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="messages-label"
                   key={idx}
                 >
-                  <div className="card-body">
-                    <div className="mb-2">
-                      <div className="mb-1">
-                        <span className="label">To</span>{' '}
-                        {workItem.messages[0].sentTo}
-                      </div>
+                  <div className="content-wrapper">
+                    <p>
+                      <span className="label-inline">To</span>
+                      {workItem.messages[0].sentTo}
+                    </p>
+                    <p>
+                      <span className="label-inline">From </span>
+                      {workItem.messages[0].sentBy}
+                    </p>
+                    <p>
+                      <span className="label-inline">Received</span>
+                      {workItem.messages[0].createdAtFormatted}
+                    </p>
+                    <p>{workItem.messages[0].message}</p>
+                  </div>
 
-                      <div className="mb-1">
-                        <span className="label">From</span>{' '}
-                        {workItem.messages[0].sentBy}
-                      </div>
-
-                      <div>
-                        <span className="label">Received</span>{' '}
-                        {workItem.messages[0].createdAtFormatted}
+                  <div className="actions-wrapper">
+                    <div className="content-wrapper">
+                      <div className="usa-grid-full">
+                        <button
+                          className={`usa-width-one-third ${
+                            showAction('history', workItem.workItemId)
+                              ? 'selected'
+                              : ''
+                          }`}
+                          onClick={() =>
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: 'history',
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon="list-ul" size="sm" />
+                          View History
+                        </button>
+                        <button
+                          className={`usa-width-one-third ${
+                            showAction('complete', workItem.workItemId)
+                              ? 'selected'
+                              : ''
+                          }`}
+                          onClick={() =>
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: 'complete',
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon="check-circle" size="sm" />
+                          Complete
+                        </button>
+                        <button
+                          data-workitemid={workItem.workItemId}
+                          className={`usa-width-one-third send-to ${
+                            showAction('forward', workItem.workItemId)
+                              ? 'selected'
+                              : ''
+                          }`}
+                          onClick={() =>
+                            setWorkItemActionSequence({
+                              workItemId: workItem.workItemId,
+                              action: 'forward',
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon="share-square" size="sm" /> Send
+                          To
+                        </button>
                       </div>
                     </div>
 
-                    <div className="mb-1">{workItem.messages[0].message}</div>
-                  </div>
-
-                  <div className="usa-grid-full extra pt-1 pb-1 toggles">
-                    <button
-                      className={`usa-width-one-third toggle ${
-                        showAction('history', workItem.workItemId)
-                          ? 'selected'
-                          : ''
-                      }`}
-                      onClick={() =>
-                        setWorkItemActionSequence({
-                          workItemId: workItem.workItemId,
-                          action: 'history',
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon="list-ul" size="sm" /> View History
-                    </button>
-                    <button
-                      className={`usa-width-one-third toggle ${
-                        showAction('complete', workItem.workItemId)
-                          ? 'selected'
-                          : ''
-                      }`}
-                      onClick={() =>
-                        setWorkItemActionSequence({
-                          workItemId: workItem.workItemId,
-                          action: 'complete',
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
-                    </button>
-                    <button
-                      data-workitemid={workItem.workItemId}
-                      className={`usa-width-one-third send-to toggle ${
-                        showAction('forward', workItem.workItemId)
-                          ? 'selected'
-                          : ''
-                      }`}
-                      onClick={() =>
-                        setWorkItemActionSequence({
-                          workItemId: workItem.workItemId,
-                          action: 'forward',
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon="share-square" size="sm" /> Send To
-                    </button>
-                  </div>
-
-                  {showAction('complete', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
-                      <form
-                        id="complete-form"
-                        role="form"
-                        noValidate
-                        onSubmit={e => {
-                          e.preventDefault();
-                          submitCompleteSequence({
-                            workItemId: workItem.workItemId,
-                          });
-                          setWorkItemActionSequence({
-                            workItemId: workItem.workItemId,
-                            action: null,
-                          });
-                        }}
-                      >
-                        <b id="message-label">Add message (optional)</b>
-                        <br />
-                        <textarea
-                          aria-labelledby="message-label"
-                          name="completeMessage"
-                          id="complete-message"
-                          onChange={e => {
-                            updateCompleteFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
+                    {showAction('complete', workItem.workItemId) && (
+                      <div className="content-wrapper">
+                        <form
+                          id="complete-form"
+                          role="form"
+                          noValidate
+                          onSubmit={e => {
+                            e.preventDefault();
+                            submitCompleteSequence({
                               workItemId: workItem.workItemId,
                             });
-                          }}
-                        />
-                        <button type="submit" className="usa-button">
-                          <span>Complete</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="usa-button-secondary"
-                          onClick={() => {
                             setWorkItemActionSequence({
                               workItemId: workItem.workItemId,
                               action: null,
                             });
                           }}
                         >
-                          Cancel
-                        </button>
-                      </form>
-                    </div>
-                  )}
+                          <label htmlFor="complete-message">
+                            Add message (optional)
+                          </label>
+                          <textarea
+                            aria-labelledby="message-label"
+                            name="completeMessage"
+                            id="complete-message"
+                            onChange={e => {
+                              updateCompleteFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          />
+                          <button type="submit" className="usa-button">
+                            Complete
+                          </button>
+                          <button
+                            type="button"
+                            className="usa-button-secondary"
+                            onClick={() => {
+                              setWorkItemActionSequence({
+                                workItemId: workItem.workItemId,
+                                action: null,
+                              });
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </form>
+                      </div>
+                    )}
 
-                  {showAction('history', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
-                      {workItem.messages.map((message, mIdx) => (
-                        <div key={mIdx} className="mb-2">
-                          <div className="mb-1">
-                            <span className="label">To</span> {message.sentTo}
+                    {showAction('history', workItem.workItemId) && (
+                      <div className="content-wrapper">
+                        {workItem.messages.map((message, mIdx) => (
+                          <div key={mIdx} className="">
+                            <div className="">
+                              <span className="label-inline">To</span>
+                              {message.sentTo}
+                            </div>
+                            <div className="">
+                              <span className="label-inline">From</span>
+                              {message.sentBy}
+                            </div>
+                            <p>
+                              <span className="label-inline">Received</span>
+                              {message.createdAtFormatted}
+                            </p>
+                            <p>{message.message}</p>
                           </div>
+                        ))}
+                      </div>
+                    )}
 
-                          <div className="mb-1">
-                            <span className="label">From</span> {message.sentBy}
-                          </div>
-
-                          <div className="mb-1">
-                            <span className="label">Received</span>{' '}
-                            {message.createdAtFormatted}
-                          </div>
-
-                          <div className="mb-1">{message.message}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {showAction('forward', workItem.workItemId) && (
-                    <div className="card-body extra">
-                      <form
-                        data-workitemid={workItem.workItemId}
-                        className="forward-form"
-                        role="form"
-                        noValidate
-                        onSubmit={e => {
-                          e.preventDefault();
-                          submitForwardSequence({
-                            workItemId: workItem.workItemId,
-                          });
-                          setWorkItemActionSequence({
-                            workItemId: workItem.workItemId,
-                            action: null,
-                          });
-                        }}
-                      >
-                        <b id="recipient-label">Send to</b>
-                        <br />
-                        <select
-                          name="forwardRecipientId"
-                          id="forward-recipient-id"
-                          aria-labelledby="recipient-label"
-                          onChange={e => {
-                            updateForwardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
+                    {showAction('forward', workItem.workItemId) && (
+                      <div className="content-wrapper">
+                        <form
+                          data-workitemid={workItem.workItemId}
+                          className="forward-form"
+                          role="form"
+                          noValidate
+                          onSubmit={e => {
+                            e.preventDefault();
+                            submitForwardSequence({
                               workItemId: workItem.workItemId,
                             });
-                          }}
-                        >
-                          <option value=""> -- Select -- </option>
-                          <option value="seniorattorney">
-                            Senior Attorney
-                          </option>
-                        </select>
-                        <b id="message-label">Add document message</b>
-                        <br />
-                        <textarea
-                          aria-labelledby="message-label"
-                          name="forwardMessage"
-                          id="forward-message"
-                          onChange={e => {
-                            updateForwardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                              workItemId: workItem.workItemId,
-                            });
-                          }}
-                        />
-                        <button type="submit" className="usa-button">
-                          <span>Forward</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="usa-button-secondary"
-                          onClick={() => {
                             setWorkItemActionSequence({
                               workItemId: workItem.workItemId,
                               action: null,
                             });
                           }}
                         >
-                          Cancel
-                        </button>
-                      </form>
-                    </div>
-                  )}
+                          <label htmlFor="forward-recipient-id">Send to</label>
+                          <select
+                            name="forwardRecipientId"
+                            id="forward-recipient-id"
+                            aria-labelledby="recipient-label"
+                            onChange={e => {
+                              updateForwardFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          >
+                            <option value=""> -- Select -- </option>
+                            <option value="seniorattorney">
+                              Senior Attorney
+                            </option>
+                          </select>
+                          <label htmlFor="forward-message">
+                            Add document message
+                          </label>
+                          <textarea
+                            aria-labelledby="message-label"
+                            name="forwardMessage"
+                            id="forward-message"
+                            onChange={e => {
+                              updateForwardFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          />
+                          <button type="submit" className="usa-button">
+                            Forward
+                          </button>
+                          <button
+                            type="button"
+                            className="usa-button usa-button-secondary"
+                            onClick={() => {
+                              setWorkItemActionSequence({
+                                workItemId: workItem.workItemId,
+                                action: null,
+                              });
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
+
             <div className="usa-width-two-thirds">
               <iframe
                 title={`Document type: ${document.documentType}`}
@@ -315,10 +315,10 @@ DocumentDetail.propTypes = {
   showForwardInputs: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
+  updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   workItemActions: PropTypes.object,
   workItems: PropTypes.array,
-  updateCompleteFormValueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -332,10 +332,10 @@ export default connect(
     showForwardInputs: state.form.showForwardInputs,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     workItemActions: state.workItemActions,
     workItems: state.extractedWorkItems,
-    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
   },
   DocumentDetail,
 );
