@@ -1,17 +1,13 @@
-input[type='file'] {
-  height: auto;
+.usa-header {
+  margin-bottom: 3rem;
+}
+
+.usa-form-group {
+  margin-bottom: 30px;
 }
 
 .usa-header .usa-nav-secondary .usa-search {
   margin-top: -0.6rem;
-}
-
-input[type='text'] {
-  margin: 0 0 2rem;
-}
-
-#file-a-petition .usa-button-active:disabled {
-  background-color: $color-primary-darkest;
 }
 
 .usa-alert {
@@ -30,13 +26,4 @@ input[type='text'] {
 
 .usa-section {
   padding-top: 0;
-}
-
-hr {
-  display: block;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  border-top: 2px solid $color-gray-lightest;
-  margin: 2rem 0;
 }

@@ -18,7 +18,6 @@ import setWorkItems from '../actions/setWorkItemsAction';
 const goToDashboard = [
   getUserRole,
   {
-    public: [setCurrentPage('DashboardPublic')],
     taxpayer: [
       getCasesByUser,
       {

@@ -7,12 +7,12 @@ describe('Log in page', function() {
     cy.get('header nav').should('not.contain', 'Hello,');
     cy.get('form#log-in').should('exist');
     cy.get('form#log-in #name').should('exist');
-    cy.get('form#log-in input[type="submit"]').should('exist');
+    cy.get('form#log-in button[type="submit"]').should('exist');
   });
 
   it('fails login', () => {
     cy.get('form#log-in #name').type('Bad Actor');
-    cy.get('form#log-in input[type="submit"]').click();
+    cy.get('form#log-in button[type="submit"]').click();
     cy.get('.usa-alert-error').should('contain', 'User not found');
     cy.url().should('include', 'log-in');
   });
@@ -21,7 +21,7 @@ describe('Log in page', function() {
     cy.get('form#log-in #name')
       .clear()
       .type('taxpayer');
-    cy.get('form#log-in input[type="submit"]').click();
+    cy.get('form#log-in button[type="submit"]').click();
     cy.url().should('not.include', 'log-in');
     cy.get('header').should('contain', 'Hello, Test');
   });
