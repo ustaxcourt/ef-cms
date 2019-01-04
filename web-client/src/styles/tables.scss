@@ -16,52 +16,60 @@ table.work-queue {
     }
   }
 
-  tbody tr {
+  tr {
     border-top: 1px solid $color-gray-lighter;
+  }
 
-    td {
-      transition: all 0.1s ease-in-out;
-
-      &.focus-toggle {
-        position: relative;
-        overflow: hidden;
-        width: 5px;
-        padding: 0;
-        margin: 0;
-
-        .focus-button {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          width: 5px;
-          padding: 0;
-          margin: 0;
-          background-color: transparent;
-          border-radius: unset;
-
-          &:hover,
-          &:focus,
-          &:active {
-            background-color: $color-blue;
-          }
-        }
-      }
-    }
-
-    &.queue-focus {
-      td {
-        background-color: $color-primary-alt-lightest;
-      }
-    }
-
+  &#my-work-queue tbody {
     &:hover {
       cursor: pointer;
 
       td.focus-toggle {
         button.focus-button {
           background-color: $color-blue;
+        }
+      }
+    }
+
+    tr {
+      &:not(:first-child) {
+        border-top-width: 0;
+      }
+
+      td {
+        transition: all 0.1s ease-in-out;
+
+        &.focus-toggle {
+          position: relative;
+          overflow: hidden;
+          width: 5px;
+          padding: 0;
+          margin: 0;
+
+          .focus-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 5px;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border-radius: unset;
+
+            &:hover,
+            &:focus,
+            &:active {
+              background-color: $color-blue;
+            }
+          }
+        }
+      }
+
+      &.queue-focus {
+        td {
+          background-color: $color-primary-alt-lightest;
         }
       }
     }
