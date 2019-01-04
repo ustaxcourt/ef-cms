@@ -5,3 +5,11 @@ restApiId=$(aws apigateway get-rest-apis --region="${region}" --query "items[?na
 mkdir -p coverage
 API_REGION=${region} API_STAGE=${slsStage} API_TARGET=${restApiId} ./node_modules/.bin/artillery run ./smokeTest.yml --output ./coverage/artillery_smoke_test.json
 ./node_modules/.bin/artillery report -o ./coverage/smokeTestReport.html ./coverage/artillery_smoke_test.json
+set +e
+output=$(grep -v '"errors": {}' ./coverage/artillery_smoke_test.json | grep errors)
+exitCode="$?"
+set -e
+if [ $exitCode -eq 0 ]; then
+  exit 1
+fi
+exit 0
