@@ -14,7 +14,9 @@ input[type='file'] {
   height: auto;
 }
 
-input[type='text'] {
+input[type='text'],
+textarea,
+select {
   margin: 0 0 2rem;
 }
 

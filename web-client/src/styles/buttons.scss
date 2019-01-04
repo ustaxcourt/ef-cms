@@ -1,6 +1,8 @@
 .usa-button {
   margin: 0 30px 30px 0;
+}
 
+button {
   svg {
     margin-right: 8px;
   }
@@ -35,4 +37,23 @@ button.tab-link {
 
 #file-a-petition .usa-button-active:disabled {
   background-color: $color-primary-darkest;
+}
+
+.toggle-button-wrapper {
+  button {
+    padding: 10px 15px;
+    margin: 0 2px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: $font-semibold;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  button.unselected {
+    background-color: transparent;
+    color: $color-blue;
+  }
 }
