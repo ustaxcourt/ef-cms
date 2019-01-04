@@ -84,14 +84,14 @@ h1[tabIndex='-1']:focus {
 }
 
 .work-queue-tab-container {
-  border: 1px solid $color-gray-light;
+  border: 1px solid $color-gray-lighter;
   background-color: $color-gray-lightest;
 }
 
 .work-queue-tab {
   display: inline-block;
   padding: 1rem 2rem;
-  border-right: 1px solid $color-gray-light;
+  border-right: 1px solid $color-gray-lighter;
   margin: 0;
   background-color: $color-white;
   box-shadow: 0 2px 0 $color-white;
@@ -104,23 +104,49 @@ table.work-queue {
   }
 
   tbody tr {
-    border-top: 1px solid $color-gray-light;
+    border-top: 1px solid $color-gray-lighter;
     td {
       transition: all 0.1s ease-in-out;
+      &.focus-toggle {
+        padding: 0;
+        margin: 0;
+        width: 5px;
+        position: relative;
+        overflow: hidden;
+        .focus-button {
+          width: 5px;
+          background-color: transparent;
+          border-radius: unset;
+          margin: 0;
+          padding: 0;
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          left: 0px;
+        }
+      }
     }
+    &.queue-focus {
+      td {
+        background-color: $color-primary-alt-lightest;
+      }
+    }
+
+    td.focus-toggle {
+      button.focus-button:hover,
+      button.focus-button:focus,
+      button.focus-button:active {
+        background-color: $color-blue;
+      }
+    }
+
     &:hover {
       cursor: pointer;
-      td {
-        box-shadow: inset 0px 2px 0px 0px #0071bc,
-          inset 0px -2px 0px 0px #0071bc;
-      }
-      td:first-child {
-        box-shadow: inset 2px 2px 0px 0px #0071bc,
-          inset 2px -2px 0px 0px #0071bc;
-      }
-      td:last-child {
-        box-shadow: inset -2px 2px 0px 0px #0071bc,
-          inset -2px -2px 0px 0px #0071bc;
+      td.focus-toggle {
+        button.focus-button {
+          background-color: $color-blue;
+        }
       }
     }
   }
@@ -132,6 +158,9 @@ table.work-queue {
     }
   }
 
+  thead {
+    border-bottom: 2px solid $color-gray-light;
+  }
   thead th {
     background-color: $color-white;
     font-weight: 600;
@@ -164,9 +193,9 @@ table.work-queue {
 
   width: 100%;
   border-top: none;
-  border-right: 1px solid $color-gray-light;
-  border-bottom: 1px solid $color-gray-light;
-  border-left: 1px solid $color-gray-light;
+  border-right: 1px solid $color-gray-lighter;
+  border-bottom: 1px solid $color-gray-lighter;
+  border-left: 1px solid $color-gray-lighter;
 }
 
 table.row-border-only {
