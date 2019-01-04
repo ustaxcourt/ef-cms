@@ -8,10 +8,6 @@ table.work-queue {
     border: none;
   }
 
-  tbody tr {
-    border-top: 1px solid $color-gray-light;
-  }
-
   td {
     font-size: 14px;
 
@@ -20,9 +16,72 @@ table.work-queue {
     }
   }
 
-  thead th {
-    background-color: $color-white;
-    font-weight: $font-semibold;
+  tr {
+    border-top: 1px solid $color-gray-lighter;
+  }
+
+  &#my-work-queue tbody {
+    &:hover {
+      cursor: pointer;
+
+      td.focus-toggle {
+        button.focus-button {
+          background-color: $color-blue;
+        }
+      }
+    }
+
+    tr {
+      &:not(:first-child) {
+        border-top-width: 0;
+      }
+
+      td {
+        transition: all 0.1s ease-in-out;
+
+        &.focus-toggle {
+          position: relative;
+          overflow: hidden;
+          width: 5px;
+          padding: 0;
+          margin: 0;
+
+          .focus-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 5px;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border-radius: unset;
+
+            &:hover,
+            &:focus,
+            &:active {
+              background-color: $color-blue;
+            }
+          }
+        }
+      }
+
+      &.queue-focus {
+        td {
+          background-color: $color-primary-alt-lightest;
+        }
+      }
+    }
+  }
+
+  thead {
+    border-bottom: 2px solid $color-gray-light;
+
+    th {
+      background-color: $color-white;
+      font-weight: $font-semibold;
+    }
   }
 
   .action-bar {
@@ -52,9 +111,9 @@ table.work-queue {
 
   width: 100%;
   border-top: none;
-  border-right: 1px solid $color-gray-light;
-  border-bottom: 1px solid $color-gray-light;
-  border-left: 1px solid $color-gray-light;
+  border-right: 1px solid $color-gray-lighter;
+  border-bottom: 1px solid $color-gray-lighter;
+  border-left: 1px solid $color-gray-lighter;
 }
 
 table.row-border-only {
