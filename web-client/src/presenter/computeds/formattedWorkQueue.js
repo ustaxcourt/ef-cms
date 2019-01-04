@@ -27,6 +27,9 @@ export const formatWorkItem = (workItem, selectedWorkItems) => {
     workItem => workItem.workItemId == result.workItemId,
   );
 
+  result.currentMessage = result.messages[0];
+  result.historyMessages = result.messages.slice(1);
+
   return result;
 };
 

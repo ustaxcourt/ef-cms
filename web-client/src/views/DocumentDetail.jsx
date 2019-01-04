@@ -79,21 +79,23 @@ class DocumentDetail extends React.Component {
                     <div className="mb-2">
                       <div className="mb-1">
                         <span className="label">To</span>{' '}
-                        {workItem.messages[0].sentTo}
+                        {workItem.currentMessage.sentTo}
                       </div>
 
                       <div className="mb-1">
                         <span className="label">From</span>{' '}
-                        {workItem.messages[0].sentBy}
+                        {workItem.currentMessage.sentBy}
                       </div>
 
                       <div>
                         <span className="label">Received</span>{' '}
-                        {workItem.messages[0].createdAtFormatted}
+                        {workItem.currentMessage.createdAtFormatted}
                       </div>
                     </div>
 
-                    <div className="mb-1">{workItem.messages[0].message}</div>
+                    <div className="mb-1">
+                      {workItem.currentMessage.message}
+                    </div>
                   </div>
 
                   <div className="usa-grid-full extra pt-1 pb-1 toggles">
@@ -195,9 +197,14 @@ class DocumentDetail extends React.Component {
                     </div>
                   )}
 
+                  {showAction('history', workItem.workItemId) &&
+                    !workItem.historyMessages.length && (
+                      <div>No additional messages are available.</div>
+                    )}
+
                   {showAction('history', workItem.workItemId) && (
                     <div className="card-body extra pb-4">
-                      {workItem.messages.map((message, mIdx) => (
+                      {workItem.historyMessages.map((message, mIdx) => (
                         <div key={mIdx} className="mb-2">
                           <div className="mb-1">
                             <span className="label">To</span> {message.sentTo}
