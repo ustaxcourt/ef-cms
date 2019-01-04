@@ -224,7 +224,11 @@ export default connect(
                       }
                     >
                       <td className="focus-toggle">
-                        <button className="focus-button" aria-hidden="true" />
+                        <button
+                          className="focus-button"
+                          tabIndex="-1"
+                          aria-disabled="true"
+                        />
                       </td>
                       <td colSpan="2" aria-hidden="true" />
                       <td
