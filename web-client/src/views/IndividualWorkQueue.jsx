@@ -42,6 +42,7 @@ export default connect(
                   className="focus-button"
                   aria-label="Expand message detail"
                   aria-expanded={item.isFocused}
+                  aria-controls={`detail-${item.workItemId}`}
                 />
               </td>
               <td>{item.docketNumber}</td>
@@ -74,6 +75,8 @@ export default connect(
                   colSpan="4"
                   className="message-detail"
                   aria-label="Message detail"
+                  aria-live="polite"
+                  id={`detail-${item.workItemId}`}
                 >
                   {item.currentMessage.message}
                 </td>

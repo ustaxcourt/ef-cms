@@ -90,9 +90,10 @@ export default connect(
               <td className="focus-toggle">
                 <button
                   className="focus-button"
-                  tabIndex="-1"
-                  aria-disabled="true"
-                />
+                  aria-label="Expand message detail"
+                  aria-expanded={item.isFocused}
+                  aria-controls={`detail-${item.workItemId}`}
+                />{' '}
               </td>
               <td>
                 <input
@@ -142,6 +143,8 @@ export default connect(
                   colSpan="4"
                   className="message-detail"
                   aria-label="Message detail"
+                  aria-live="polite"
+                  id={`detail-${item.workItemId}`}
                 >
                   {item.currentMessage.message}
                 </td>
