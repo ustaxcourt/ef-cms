@@ -4,8 +4,8 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
-import SuccessNotification from './SuccessNotification';
 import PartyInformation from './PartyInformation';
+import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
@@ -98,7 +98,7 @@ export default connect(
             </table>
           </div>
 
-          <nav className="horizontal-tabs">
+          <nav className="horizontal-tabs subsection">
             <ul role="tabslist">
               <li
                 role="presentation"
