@@ -1,7 +1,3 @@
-h1.captioned {
-  margin-bottom: 0;
-}
-
 .spinner {
   display: inline-block;
   width: 1rem;
@@ -29,6 +25,11 @@ h1.captioned {
   color: $color-blue;
 }
 
+legend {
+  margin-bottom: 0.5em;
+  font-size: 1em;
+}
+
 .action-flag {
   color: $color-red;
 }
@@ -40,37 +41,6 @@ h1.captioned {
 .label {
   margin-bottom: 0;
   font-weight: $font-bold;
-}
-
-button.tab-link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: $color-base;
-  cursor: pointer;
-  font-weight: normal;
-  text-decoration: none;
-}
-
-button.pdf-link,
-button.link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: $color-blue;
-  cursor: pointer;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: underline;
-}
-
-button.pdf-link:hover,
-button.link {
-  color: $color-blue;
-}
-
-h1[tabIndex='-1']:focus {
-  outline: none;
 }
 
 .forward-form {

@@ -1,6 +1,8 @@
 import { state } from 'cerebral';
 
 export default async ({ get, store, applicationContext, path, props }) => {
+  const completeWorkItemDate = new Date().toISOString();
+
   const caseDetail = get(state.caseDetail);
   let workItems = [];
   caseDetail.documents.forEach(
@@ -9,23 +11,30 @@ export default async ({ get, store, applicationContext, path, props }) => {
   const workItemToUpdate = workItems.find(
     workItem => workItem.workItemId === props.workItemId,
   );
-  const form = get(state.form)[props.workItemId];
+  const completeForm = get(state.completeForm);
+  const message =
+    (completeForm[props.workItemId] || {}).completeMessage ||
+    'work item completed';
 
-  workItemToUpdate.assigneeId = form.forwardRecipientId;
-  workItemToUpdate.assigneeName = 'Senior Attorney';
-  const message = form.forwardMessage;
+  workItemToUpdate.completedAt = completeWorkItemDate;
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
     {
       message,
+      sentBy: get(state.user.token),
       userId: get(state.user.token),
-      sentBy: get(state.user.name),
-      sentTo: 'Senior Attorney',
     },
   ];
+
+  if (!workItemToUpdate.assigneeId) {
+    workItemToUpdate.assigneeId = get(state.user.token);
+    workItemToUpdate.assigneeName = get(state.user.name);
+  }
+
   store.set(state.caseDetail, caseDetail);
 
   const useCases = applicationContext.getUseCases();
+
   await useCases.updateWorkItem({
     applicationContext,
     workItemToUpdate,

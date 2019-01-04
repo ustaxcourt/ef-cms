@@ -5,7 +5,7 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
-      .find(workItem => workItem.workItemId === test.workItemId);
+      .find(item => item.workItemId === test.stipulatedDecisionWorkItemId);
 
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
@@ -14,5 +14,14 @@ export default test => {
       sentBy: 'respondent',
       assigneeName: 'Test Seniorattorney',
     });
+    expect(workItem.messages).toMatchObject([
+      {
+        message:
+          'a Stipulated Decision filed by respondent is ready for review',
+      },
+      {
+        message: 'hello world',
+      },
+    ]);
   });
 };

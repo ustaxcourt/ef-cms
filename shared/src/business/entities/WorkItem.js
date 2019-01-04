@@ -59,6 +59,10 @@ joiValidationDecorator(
       .date()
       .iso()
       .required(),
+    completedAt: joi
+      .date()
+      .iso()
+      .optional(),
   }),
   function() {
     return Message.validateCollection(this.messages);
