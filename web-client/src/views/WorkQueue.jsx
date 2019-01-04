@@ -1,32 +1,15 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state, sequences } from 'cerebral';
+import SectionWorkQueue from './SectionWorkQueue';
+import IndividualWorkQueue from './IndividualWorkQueue';
 
 export default connect(
   {
-    assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    sectionWorkQueue: state.formattedSectionWorkQueue,
-    selectAssigneeSequence: sequences.selectAssigneeSequence,
-    selectedWorkItems: state.selectedWorkItems,
-    selectWorkItemSequence: sequences.selectWorkItemSequence,
-    setFocusedWorkItem: sequences.setFocusedWorkItem,
     switchWorkQueueSequence: sequences.switchWorkQueueSequence,
-    users: state.users,
-    workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  function WorkQueue({
-    assignSelectedWorkItemsSequence,
-    sectionWorkQueue,
-    selectAssigneeSequence,
-    selectedWorkItems,
-    selectWorkItemSequence,
-    setFocusedWorkItem,
-    switchWorkQueueSequence,
-    users,
-    workQueue,
-    workQueueHelper,
-  }) {
+  function WorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
@@ -75,174 +58,12 @@ export default connect(
         </div>
         {workQueueHelper.showSectionWorkQueue && (
           <div role="tabpanel">
-            <table
-              className="work-queue"
-              id="section-work-queue"
-              aria-describedby="tab-work-queue"
-            >
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th aria-label="Docket Number">Docket</th>
-                  <th>Received</th>
-                  <th>Document</th>
-                  <th>Status</th>
-                  <th>From</th>
-                  <th>To</th>
-                </tr>
-              </thead>
-              <tbody>
-                {workQueueHelper.showSendToBar && (
-                  <tr>
-                    <td colSpan="7" className="action-bar">
-                      <span className="selected-count">
-                        {selectedWorkItems.length} selected
-                      </span>
-                      <label htmlFor="options">Send to</label>
-                      <select
-                        onChange={event =>
-                          selectAssigneeSequence({
-                            assigneeId: event.target.value,
-                            assigneeName:
-                              event.target.options[event.target.selectedIndex]
-                                .text,
-                          })
-                        }
-                        name="options"
-                        id="options"
-                      >
-                        <option value>- Select -</option>
-                        {users.map(user => (
-                          <option key={user.userId} value={user.userId}>
-                            {user.name}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        onClick={() => assignSelectedWorkItemsSequence()}
-                        className="usa-button"
-                      >
-                        Send
-                      </button>
-                    </td>
-                  </tr>
-                )}
-                {sectionWorkQueue.map(item => (
-                  <tr key={item.workItemId}>
-                    <td>
-                      <input
-                        id={item.workItemId}
-                        type="checkbox"
-                        onChange={() =>
-                          selectWorkItemSequence({
-                            workItem: item,
-                          })
-                        }
-                        checked={item.selected}
-                        aria-label="Select work item"
-                      />
-                      <label
-                        htmlFor={item.workItemId}
-                        id={`label-${item.workItemId}`}
-                      />
-                    </td>
-                    <td>{item.docketNumber}</td>
-                    <td>{item.messages[0].createdAtFormatted}</td>
-                    <td>
-                      <a
-                        href={`/case-detail/${item.docketNumber}/documents/${
-                          item.document.documentId
-                        }`}
-                        className="case-link"
-                      >
-                        {item.document.documentType}
-                      </a>
-                    </td>
-                    <td>{item.caseStatus}</td>
-                    <td>{item.messages[0].sentBy}</td>
-                    <td>{item.assigneeName}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <SectionWorkQueue />
           </div>
         )}
         {workQueueHelper.showIndividualWorkQueue && (
           <div role="tabpanel">
-            <table
-              className="work-queue"
-              id="my-work-queue"
-              aria-describedby="tab-my-queue"
-            >
-              <thead>
-                <tr>
-                  <th colSpan="2" aria-label="Docket Number">
-                    Docket
-                  </th>
-                  <th>Received</th>
-                  <th>Document</th>
-                  <th>Status</th>
-                  <th>From</th>
-                  <th>To</th>
-                </tr>
-              </thead>
-              {workQueue.map(item => (
-                <tbody key={item.workItemId}>
-                  <tr
-                    onClick={() =>
-                      setFocusedWorkItem({ workItemId: item.workItemId })
-                    }
-                  >
-                    <td className="focus-toggle">
-                      <button
-                        className="focus-button"
-                        aria-label="Expand message detail"
-                        aria-expanded={item.isFocused}
-                      />
-                    </td>
-                    <td>{item.docketNumber}</td>
-                    <td>{item.messages[0].createdAtFormatted}</td>
-                    <td>
-                      <a
-                        href={`/case-detail/${item.docketNumber}/documents/${
-                          item.document.documentId
-                        }`}
-                        className="case-link"
-                      >
-                        {item.document.documentType}
-                      </a>
-                    </td>
-                    <td>{item.caseStatus}</td>
-                    <td>{item.messages[0].sentBy}</td>
-                    <td>{item.assigneeName}</td>
-                  </tr>
-                  {item.isFocused && (
-                    <tr
-                      className="queue-focus queue-message"
-                      onClick={() =>
-                        setFocusedWorkItem({ workItemId: item.workItemId })
-                      }
-                    >
-                      <td className="focus-toggle">
-                        <button
-                          className="focus-button"
-                          tabIndex="-1"
-                          aria-disabled="true"
-                        />
-                      </td>
-                      <td colSpan="2" aria-hidden="true" />
-                      <td
-                        colSpan="4"
-                        className="message-detail"
-                        aria-label="Message detail"
-                      >
-                        {item.messages[0].message}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              ))}
-            </table>
+            <IndividualWorkQueue />
           </div>
         )}
       </React.Fragment>
