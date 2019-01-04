@@ -41,7 +41,7 @@ export default connect(
                 />
               </td>
               <td>{item.docketNumber}</td>
-              <td>{item.messages[0].createdAtFormatted}</td>
+              <td>{item.currentMessage.createdAtFormatted}</td>
               <td>
                 <a
                   href={`/case-detail/${item.docketNumber}/documents/${
@@ -53,7 +53,7 @@ export default connect(
                 </a>
               </td>
               <td>{item.caseStatus}</td>
-              <td>{item.messages[0].sentBy}</td>
+              <td>{item.currentMessage.sentBy}</td>
               <td>{item.assigneeName}</td>
             </tr>
             {item.isFocused && (
@@ -76,7 +76,7 @@ export default connect(
                   className="message-detail"
                   aria-label="Message detail"
                 >
-                  {item.messages[0].message}
+                  {item.currentMessage.message}
                 </td>
               </tr>
             )}
