@@ -98,8 +98,15 @@ class DocumentDetail extends React.Component {
                     </div>
                   </div>
 
-                  <div className="usa-grid-full extra pt-1 pb-1 toggles">
+                  <div
+                    className="usa-grid-full extra pt-1 pb-1 toggles"
+                    role="tablist"
+                  >
                     <button
+                      role="tab"
+                      id="history-tab"
+                      aria-selected={showAction('history', workItem.workItemId)}
+                      aria-controls="history-card"
                       className={`usa-width-one-third toggle ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
@@ -115,6 +122,13 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
                     </button>
                     <button
+                      role="tab"
+                      id="complete-tab"
+                      aria-selected={showAction(
+                        'complete',
+                        workItem.workItemId,
+                      )}
+                      aria-controls="history-card"
                       className={`usa-width-one-third toggle ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
@@ -130,6 +144,10 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
                     </button>
                     <button
+                      role="tab"
+                      id="forward-tab"
+                      aria-selected={showAction('forward', workItem.workItemId)}
+                      aria-controls="forward-card"
                       data-workitemid={workItem.workItemId}
                       className={`usa-width-one-third send-to toggle ${
                         showAction('forward', workItem.workItemId)
@@ -148,7 +166,12 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
+                    <div
+                      id="complete-card"
+                      role="tabpanel"
+                      aria-labelledby="complete-tab"
+                      className="card-body extra pb-4"
+                    >
                       <form
                         id="complete-form"
                         role="form"
@@ -199,35 +222,53 @@ class DocumentDetail extends React.Component {
 
                   {showAction('history', workItem.workItemId) &&
                     !workItem.historyMessages.length && (
-                      <div>No additional messages are available.</div>
+                      <div
+                        id="history-card"
+                        role="tabpanel"
+                        aria-labelledby="history-tab"
+                      >
+                        No additional messages are available.
+                      </div>
                     )}
 
-                  {showAction('history', workItem.workItemId) && (
-                    <div className="card-body extra pb-4">
-                      {workItem.historyMessages.map((message, mIdx) => (
-                        <div key={mIdx} className="mb-2">
-                          <div className="mb-1">
-                            <span className="label">To</span> {message.sentTo}
-                          </div>
+                  {showAction('history', workItem.workItemId) &&
+                    workItem.historyMessages.length > 0 && (
+                      <div
+                        id="history-card"
+                        role="tabpanel"
+                        aria-labelledby="history-tab"
+                        className="card-body extra pb-4"
+                      >
+                        {workItem.historyMessages.map((message, mIdx) => (
+                          <div key={mIdx} className="mb-2">
+                            <div className="mb-1">
+                              <span className="label">To</span> {message.sentTo}
+                            </div>
 
-                          <div className="mb-1">
-                            <span className="label">From</span> {message.sentBy}
-                          </div>
+                            <div className="mb-1">
+                              <span className="label">From</span>{' '}
+                              {message.sentBy}
+                            </div>
 
-                          <div className="mb-1">
-                            <span className="label">Received</span>{' '}
-                            {message.createdAtFormatted}
-                          </div>
+                            <div className="mb-1">
+                              <span className="label">Received</span>{' '}
+                              {message.createdAtFormatted}
+                            </div>
 
-                          <div className="mb-1">{message.message}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                            <div className="mb-1">{message.message}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                   {showAction('forward', workItem.workItemId) && (
-                    <div className="card-body extra">
+                    <div
+                      id="forward-card"
+                      role="tabpanel"
+                      className="card-body extra"
+                    >
                       <form
+                        aria-labelledby="forward-tab"
                         data-workitemid={workItem.workItemId}
                         className="forward-form"
                         role="form"
