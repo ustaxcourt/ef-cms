@@ -71,6 +71,7 @@ joiValidationDecorator(
 
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...(this.messages || []), message];
+  return this;
 };
 
 WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName }) {
