@@ -20,7 +20,7 @@ table.work-queue {
     border-top: 1px solid $color-gray-lighter;
   }
 
-  &#my-work-queue tbody {
+  tbody:not(.action-bar) {
     &:hover {
       cursor: pointer;
 
@@ -67,7 +67,7 @@ table.work-queue {
         }
       }
 
-      &.queue-focus {
+      &.queue-message {
         td {
           background-color: $color-primary-alt-lightest;
         }

@@ -9,6 +9,7 @@ export default connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
+    setFocusedWorkItem: sequences.setFocusedWorkItem,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
@@ -18,6 +19,7 @@ export default connect(
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
+    setFocusedWorkItem,
     users,
     workQueueHelper,
   }) {
@@ -29,7 +31,7 @@ export default connect(
       >
         <thead>
           <tr>
-            <th>Select</th>
+            <th colSpan="2">Select</th>
             <th aria-label="Docket Number">Docket</th>
             <th>Received</th>
             <th>Document</th>
@@ -38,10 +40,10 @@ export default connect(
             <th>To</th>
           </tr>
         </thead>
-        <tbody>
-          {workQueueHelper.showSendToBar && (
+        {workQueueHelper.showSendToBar && (
+          <tbody className="action-bar">
             <tr>
-              <td colSpan="7" className="action-bar">
+              <td colSpan="8" className="action-bar">
                 <span className="selected-count">
                   {selectedWorkItems.length} selected
                 </span>
@@ -72,18 +74,36 @@ export default connect(
                 </button>
               </td>
             </tr>
-          )}
-          {sectionWorkQueue.map(item => (
-            <tr key={item.workItemId}>
+          </tbody>
+        )}
+        {sectionWorkQueue.map(item => (
+          <tbody
+            key={item.workItemId}
+            onClick={() =>
+              setFocusedWorkItem({
+                workItemId: item.workItemId,
+                queueType: 'sectionWorkQueue',
+              })
+            }
+          >
+            <tr>
+              <td className="focus-toggle">
+                <button
+                  className="focus-button"
+                  tabIndex="-1"
+                  aria-disabled="true"
+                />
+              </td>
               <td>
                 <input
                   id={item.workItemId}
                   type="checkbox"
-                  onChange={() =>
+                  onChange={e => {
                     selectWorkItemSequence({
                       workItem: item,
-                    })
-                  }
+                    });
+                    e.stopPropagation();
+                  }}
                   checked={item.selected}
                   aria-label="Select work item"
                 />
@@ -108,8 +128,27 @@ export default connect(
               <td>{item.currentMessage.sentBy}</td>
               <td>{item.assigneeName}</td>
             </tr>
-          ))}
-        </tbody>
+            {item.isFocused && (
+              <tr className="queue-focus queue-message">
+                <td className="focus-toggle">
+                  <button
+                    className="focus-button"
+                    tabIndex="-1"
+                    aria-disabled="true"
+                  />
+                </td>
+                <td colSpan="3" aria-hidden="true" />
+                <td
+                  colSpan="4"
+                  className="message-detail"
+                  aria-label="Message detail"
+                >
+                  {item.currentMessage.message}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        ))}
       </table>
     );
   },

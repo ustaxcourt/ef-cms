@@ -27,12 +27,16 @@ export default connect(
           </tr>
         </thead>
         {workQueue.map(item => (
-          <tbody key={item.workItemId}>
-            <tr
-              onClick={() =>
-                setFocusedWorkItem({ workItemId: item.workItemId })
-              }
-            >
+          <tbody
+            key={item.workItemId}
+            onClick={() =>
+              setFocusedWorkItem({
+                workItemId: item.workItemId,
+                queueType: 'workQueue',
+              })
+            }
+          >
+            <tr>
               <td className="focus-toggle">
                 <button
                   className="focus-button"
@@ -57,12 +61,7 @@ export default connect(
               <td>{item.assigneeName}</td>
             </tr>
             {item.isFocused && (
-              <tr
-                className="queue-focus queue-message"
-                onClick={() =>
-                  setFocusedWorkItem({ workItemId: item.workItemId })
-                }
-              >
+              <tr className="queue-message">
                 <td className="focus-toggle">
                   <button
                     className="focus-button"
