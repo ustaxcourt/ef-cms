@@ -25,7 +25,7 @@ export default test => {
       assigneeName: 'Senior Attorney',
     });
     const messages = _.orderBy(workItem.messages, 'createdAt', 'desc');
-    expect(messages.length).toEqual(2);
+    expect(messages.length).toEqual(3);
     expect(messages[0]).toMatchObject({
       message: 'hello world',
       userId: 'docketclerk',

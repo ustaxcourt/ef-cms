@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const WorkItem = require('../../entities/WorkItem');
+const Message = require('../../entities/Message');
 
 /**
  * getWorkItem
@@ -18,6 +19,8 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
     throw new UnauthorizedError(`Unauthorized to assign work item`);
   }
 
+  const user = applicationContext.user;
+
   const workItemEntities = await Promise.all(
     workItems.map(workItem => {
       return applicationContext
@@ -27,10 +30,20 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
           applicationContext,
         })
         .then(fullWorkItem =>
-          new WorkItem(fullWorkItem).assignToUser({
-            assigneeId: workItem.assigneeId,
-            assigneeName: workItem.assigneeName,
-          }),
+          new WorkItem(fullWorkItem)
+            .assignToUser({
+              assigneeId: workItem.assigneeId,
+              assigneeName: workItem.assigneeName,
+            })
+            .addMessage(
+              new Message({
+                message: `The work item was assigned.`,
+                sentBy: user.name,
+                userId: user.userId,
+                sentTo: workItem.assigneeName,
+                createdAt: new Date().toISOString(),
+              }),
+            ),
         );
     }),
   );
