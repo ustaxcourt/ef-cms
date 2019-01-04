@@ -73,7 +73,7 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 Cypress.Commands.add('login', (username, route) => {
   cy.visit('/log-in');
   cy.get('input#name').type(username);
-  cy.get('input[type="submit"]').click();
+  cy.get('button#log-in-button').click();
   cy.url().should('not.include', 'log-in');
   cy.showsErrorMessage(false);
   cy.wait(500);

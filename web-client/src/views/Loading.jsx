@@ -1,6 +1,6 @@
-import React from 'react';
-import { state } from 'cerebral';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
+import React from 'react';
 import spinner from '../images/spinner.svg';
 
 export default connect(
