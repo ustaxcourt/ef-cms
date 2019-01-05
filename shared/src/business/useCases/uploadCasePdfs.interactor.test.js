@@ -9,12 +9,7 @@ describe('uploadCasesPdfs', () => {
       getPersistenceGateway: () => {
         return {
           uploadPdfsForNewCase: () =>
-            Promise.resolve({
-              requestForPlaceOfTrialDocumentId:
-                'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              statementOfTaxpayerIdentificationNumberDocumentId:
-                'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            }),
+            Promise.resolve({}),
         };
       },
       environment: { stage: 'local' },
@@ -25,8 +20,6 @@ describe('uploadCasesPdfs', () => {
         fileHasUploaded: () => {},
         caseInitiator: {
           petitionFile: {},
-          requestForPlaceOfTrial: {},
-          statementOfTaxpayerIdentificationNumber: {},
         },
         applicationContext,
       });
@@ -43,10 +36,6 @@ describe('uploadCasesPdfs', () => {
           uploadPdfsForNewCase: () =>
             Promise.resolve({
               petitionDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              requestForPlaceOfTrialDocumentId:
-                'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              statementOfTaxpayerIdentificationNumberDocumentId:
-                'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             }),
         };
       },
@@ -56,10 +45,7 @@ describe('uploadCasesPdfs', () => {
     try {
       await uploadCasePdfs({
         fileHasUploaded: () => {},
-        caseInitiator: {
-          requestForPlaceOfTrial: 'not null',
-          statementOfTaxpayerIdentificationNumber: 'not null',
-        },
+        caseInitiator: {},
         applicationContext,
       });
     } catch (err) {
