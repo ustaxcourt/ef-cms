@@ -9,9 +9,10 @@ const uuidVersions = {
 };
 
 const Document = require('./Document');
-
+const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
+const PROCEDURE_TYPES = ['Small', 'Regular'];
 /**
  * Case
  * @param rawCase
@@ -77,6 +78,8 @@ joiValidationDecorator(
       .min(3)
       .required(),
     workItems: joi.array().optional(),
+    preferredTrialCity: joi.string().optional(),
+    procedureType: joi.string().optional(),
   }),
   function() {
     return (
@@ -145,12 +148,12 @@ Case.isValidCaseId = caseId =>
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,
   );
+
 /**
  * isValidDocketNumber
  * @param docketNumber
  * @returns {*|boolean}
  */
-
 Case.isValidDocketNumber = docketNumber => {
   return (
     docketNumber &&
@@ -159,6 +162,11 @@ Case.isValidDocketNumber = docketNumber => {
   );
 };
 
+/**
+ * stripLeadingZeros
+ * @param docketNumber
+ * @returns {string}
+ */
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${parseInt(number)}-${year}`;
@@ -175,6 +183,30 @@ Case.documentTypes = {
     'Statement of Taxpayer Identification Number',
   answer: 'Answer',
   stipulatedDecision: 'Stipulated Decision',
+};
+
+/**
+ * getProcedureTypes
+ * @returns {string[]}
+ */
+Case.getProcedureTypes = () => {
+  return PROCEDURE_TYPES;
+};
+
+/**
+ * getTrialCities
+ * @param procedureType
+ * @returns {*[]}
+ */
+Case.getTrialCities = procedureType => {
+  switch (procedureType) {
+    case 'Small':
+      return SMALL_TRIAL_CITIES;
+    case 'Regular':
+      return REGULAR_TRIAL_CITIES;
+    default:
+      return [...SMALL_TRIAL_CITIES, ...REGULAR_TRIAL_CITIES];
+  }
 };
 
 module.exports = Case;

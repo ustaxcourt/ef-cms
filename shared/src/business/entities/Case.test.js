@@ -198,4 +198,25 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('getProcedureTypes', () => {
+    it('returns the procedure types', () => {
+      const procedureTypes = Case.getProcedureTypes();
+      expect(procedureTypes).not.toBeNull();
+      expect(procedureTypes.length).toEqual(2);
+      expect(procedureTypes[0]).toEqual('Small');
+      expect(procedureTypes[1]).toEqual('Regular');
+    });
+  });
+
+  describe('getTrialCities', () => {
+    it('returns the trial cities by procedure type', () => {
+      const procedureTypes = Case.getProcedureTypes();
+      procedureTypes.forEach(procedureType => {
+        const trialCities = Case.getTrialCities(procedureType);
+        expect(trialCities).not.toBeNull();
+        expect(trialCities.length).toBeGreaterThan(1);
+      });
+    });
+  });
 });
