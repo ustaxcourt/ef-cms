@@ -5,14 +5,6 @@ export default (test, fakeFile) => {
       key: 'petitionFile',
       value: fakeFile,
     });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'requestForPlaceOfTrial',
-      value: fakeFile,
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'statementOfTaxpayerIdentificationNumber',
-      value: fakeFile,
-    });
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertSuccess')).toEqual({
       title: 'Your files were uploaded successfully.',

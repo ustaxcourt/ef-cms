@@ -7,16 +7,14 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const petitionDocumentTypes = [
-  'Petition',
-  'Request for Place of Trial',
-  'Statement of Taxpayer Identification Number',
-];
+const petitionDocumentTypes = ['Petition'];
 
 const documentTypes = [
   ...petitionDocumentTypes,
   'Answer',
   'Stipulated Decision',
+  'Request for Place of Trial',
+  'Statement of Taxpayer Identification Number',
 ];
 
 const WorkItem = require('./WorkItem');
