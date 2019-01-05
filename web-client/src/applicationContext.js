@@ -19,6 +19,9 @@ import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
+import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypes.interactor';
+import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -60,6 +63,9 @@ const applicationContext = {
       getCasesByStatus,
       getCasesByUser,
       getCasesForRespondent,
+      getCaseTypes,
+      getProcedureTypes,
+      getTrialCities,
       getUser,
       getUsersInSection,
       getWorkItem,

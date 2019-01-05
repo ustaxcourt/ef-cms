@@ -37,6 +37,9 @@ export default {
   workQueueToDisplay: 'individual',
   assigneeId: null,
   selectedWorkItems: [],
+  caseTypes: [],
+  procedureTypes: [],
+  trialCities: [],
   user: {
     userId: '',
     role: 'public',
