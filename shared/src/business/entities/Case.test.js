@@ -182,8 +182,29 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getCaseTypes', () => {
+    it('returns the case types', () => {
+      const caseTypes = Case.getCaseTypes();
+      expect(caseTypes).not.toBeNull();
+      expect(caseTypes.length).toEqual(12);
+    });
+  });
+
+  describe('attachRespondent', () => {
+    it('adds the user to the respondents', () => {
+      const caseToVerify = new Case({});
+      caseToVerify.attachRespondent({
+        user: {
+          userId: 'respondent',
+        },
+      });
+      expect(caseToVerify.respondent).not.toBeNull();
+      expect(caseToVerify.respondent.userId).toEqual('respondent');
+    });
+  });
+
   describe('addDocument', () => {
-    it('should attach the document to the case', () => {
+    it('attaches the document to the case', () => {
       const caseToVerify = new Case({});
       caseToVerify.addDocument({
         documentType: 'Answer',
