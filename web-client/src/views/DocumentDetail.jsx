@@ -88,8 +88,15 @@ class DocumentDetail extends React.Component {
                     <p>{workItem.currentMessage.message}</p>
                   </div>
 
-                  <div className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper">
+                  <div
+                    className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper"
+                    role="tablist"
+                  >
                     <button
+                      role="tab"
+                      id="history-tab"
+                      aria-selected={showAction('history', workItem.workItemId)}
+                      aria-controls="history-card"
                       className={`usa-width-one-third ${
                         showAction('history', workItem.workItemId)
                           ? 'selected'
@@ -105,6 +112,13 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="list-ul" size="sm" /> View History
                     </button>
                     <button
+                      role="tab"
+                      id="complete-tab"
+                      aria-selected={showAction(
+                        'complete',
+                        workItem.workItemId,
+                      )}
+                      aria-controls="history-card"
                       className={`usa-width-one-third ${
                         showAction('complete', workItem.workItemId)
                           ? 'selected'
@@ -120,6 +134,10 @@ class DocumentDetail extends React.Component {
                       <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
                     </button>
                     <button
+                      role="tab"
+                      id="forward-tab"
+                      aria-selected={showAction('forward', workItem.workItemId)}
+                      aria-controls="forward-card"
                       data-workitemid={workItem.workItemId}
                       className={`usa-width-one-third send-to ${
                         showAction('forward', workItem.workItemId)
@@ -138,7 +156,12 @@ class DocumentDetail extends React.Component {
                   </div>
 
                   {showAction('complete', workItem.workItemId) && (
-                    <div className="content-wrapper actions-wrapper">
+                    <div
+                      id="complete-card"
+                      role="tabpanel"
+                      aria-labelledby="complete-tab"
+                      className="content-wrapper actions-wrapper"
+                    >
                       <form
                         id="complete-form"
                         role="form"
@@ -189,34 +212,51 @@ class DocumentDetail extends React.Component {
 
                   {showAction('history', workItem.workItemId) &&
                     !workItem.historyMessages.length && (
-                      <p>No additional messages are available.</p>
+                      <div
+                        id="history-card"
+                        role="tabpanel"
+                        aria-labelledby="history-tab"
+                      >
+                        No additional messages are available.
+                      </div>
                     )}
 
-                  {showAction('history', workItem.workItemId) && (
-                    <div className="content-wrapper actions-wrapper">
-                      {workItem.historyMessages.map((message, mIdx) => (
-                        <div key={mIdx}>
-                          <p>
-                            <span className="label-inline">To</span>
-                            {message.sentTo}
-                          </p>
-                          <p>
-                            <span className="label-inline">From</span>
-                            {message.sentBy}
-                          </p>
-                          <p>
-                            <span className="label-inline">Received</span>
-                            {message.createdAtFormatted}
-                          </p>
-                          <p>{message.message}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {showAction('history', workItem.workItemId) &&
+                    workItem.historyMessages.length > 0 && (
+                      <div
+                        className="content-wrapper actions-wrapper"
+                        id="history-card"
+                        role="tabpanel"
+                        aria-labelledby="history-tab"
+                      >
+                        {workItem.historyMessages.map((message, mIdx) => (
+                          <div key={mIdx}>
+                            <p>
+                              <span className="label-inline">To</span>
+                              {message.sentTo}
+                            </p>
+                            <p>
+                              <span className="label-inline">From</span>
+                              {message.sentBy}
+                            </p>
+                            <p>
+                              <span className="label-inline">Received</span>
+                              {message.createdAtFormatted}
+                            </p>
+                            <p>{message.message}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                   {showAction('forward', workItem.workItemId) && (
-                    <div className="content-wrapper actions-wrapper">
+                    <div
+                      id="forward-card"
+                      role="tabpanel"
+                      className="content-wrapper actions-wrapper"
+                    >
                       <form
+                        aria-labelledby="forward-tab"
                         data-workitemid={workItem.workItemId}
                         className="forward-form"
                         role="form"
