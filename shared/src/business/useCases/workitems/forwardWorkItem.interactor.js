@@ -32,6 +32,7 @@ exports.forwardWorkItem = async ({
         .assignToUser({
           assigneeId: userToForwardTo.userId,
           assigneeName: userToForwardTo.name,
+          role: userToForwardTo.role,
         })
         .addMessage(
           new Message({
