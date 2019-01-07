@@ -109,7 +109,8 @@ class DocumentDetail extends React.Component {
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="list-ul" size="sm" /> View History
+                      <FontAwesomeIcon icon="list-ul" size="sm" />
+                      View History
                     </button>
                     <button
                       role="tab"
@@ -131,7 +132,8 @@ class DocumentDetail extends React.Component {
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="check-circle" size="sm" /> Complete
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      Complete
                     </button>
                     <button
                       role="tab"
@@ -151,7 +153,8 @@ class DocumentDetail extends React.Component {
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="share-square" size="sm" /> Send To
+                      <FontAwesomeIcon icon="share-square" size="sm" />
+                      Send To
                     </button>
                   </div>
 
@@ -192,7 +195,7 @@ class DocumentDetail extends React.Component {
                           }}
                         />
                         <button type="submit" className="usa-button">
-                          <span>Complete</span>
+                          Complete
                         </button>
                         <button
                           type="button"
@@ -230,7 +233,7 @@ class DocumentDetail extends React.Component {
                         aria-labelledby="history-tab"
                       >
                         {workItem.historyMessages.map((message, mIdx) => (
-                          <div key={mIdx}>
+                          <div className="history-message" key={mIdx}>
                             <p>
                               <span className="label-inline">To</span>
                               {message.sentTo}
@@ -244,6 +247,9 @@ class DocumentDetail extends React.Component {
                               {message.createdAtFormatted}
                             </p>
                             <p>{message.message}</p>
+                            {workItem.historyMessages.length - 1 !== mIdx && (
+                              <hr />
+                            )}
                           </div>
                         ))}
                       </div>
