@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 import { formatDocument } from './formattedCaseDetail';
+import { formatWorkItem } from './formattedWorkQueue';
 
 export const extractedDocument = get => {
   const caseDetail = get(state.caseDetail);
@@ -8,5 +9,9 @@ export const extractedDocument = get => {
     document => document.documentId === documentId,
   );
   if (!selectedDocument) return {};
-  return formatDocument(selectedDocument);
+  const formattedDocument = formatDocument(selectedDocument);
+  formattedDocument.workItems = (formattedDocument.workItems || [])
+    .filter(items => !items.completedAt)
+    .map(items => formatWorkItem(items));
+  return formattedDocument;
 };

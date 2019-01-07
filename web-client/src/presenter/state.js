@@ -5,7 +5,6 @@ import {
 
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { extractedDocument } from './computeds/extractDocument';
-import { extractedWorkItems } from './computeds/extractWorkItems';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { showAction } from './computeds/documentDetailHelper';
@@ -72,7 +71,6 @@ export default {
   completeForm: {},
   caseDetailHelper,
   extractedDocument,
-  extractedWorkItems,
   extractedPendingMessagesFromCaseDetail,
   formattedCaseDetail,
   formattedCases,
