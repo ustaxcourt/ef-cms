@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
-export const formatWorkItem = (workItem, selectedWorkItems) => {
+export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   const result = _.cloneDeep(workItem);
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
