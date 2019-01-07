@@ -45,16 +45,16 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
+          <h2>{document.documentType}</h2>
           <div className="usa-grid-full subsection">
-            <h2>{document.documentType}</h2>
-            <p>
+            <div className="usa-width-one-fourth">
               <span className="label-inline">Date filed</span>
               <span>{document.createdAtFormatted}</span>
-            </p>
-            <p>
+            </div>
+            <div className="usa-width-one-fourth">
               <span className="label-inline">Filed by</span>
               <span>{document.filedBy}</span>
-            </p>
+            </div>
           </div>
           <h3>Pending Messages</h3>
           <div className="usa-grid-full">
@@ -90,7 +90,7 @@ class DocumentDetail extends React.Component {
                       <p>{workItem.currentMessage.message}</p>
                     </div>
                     <div
-                      className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper"
+                      className="usa-grid-full content-wrapper toggle-button-wrapper actions-wrapper"
                       role="tablist"
                     >
                       <button
@@ -187,7 +187,7 @@ class DocumentDetail extends React.Component {
                           }}
                         >
                           <label htmlFor="complete-message">
-                            Add message (optional)
+                            Add Message (optional)
                           </label>
                           <textarea
                             name="completeMessage"
@@ -202,18 +202,6 @@ class DocumentDetail extends React.Component {
                           />
                           <button type="submit" className="usa-button">
                             <span>Complete</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="usa-button usa-button-secondary"
-                            onClick={() => {
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: null,
-                              });
-                            }}
-                          >
-                            Cancel
                           </button>
                         </form>
                       </div>
@@ -281,7 +269,7 @@ class DocumentDetail extends React.Component {
                             });
                           }}
                         >
-                          <label htmlFor="forward-recipient-id">Send to</label>
+                          <label htmlFor="forward-recipient-id">Send To</label>
                           <select
                             name="forwardRecipientId"
                             id="forward-recipient-id"
@@ -299,9 +287,7 @@ class DocumentDetail extends React.Component {
                               Senior Attorney
                             </option>
                           </select>
-                          <label htmlFor="forward-message">
-                            Add document message
-                          </label>
+                          <label htmlFor="forward-message">Add Message</label>
                           <textarea
                             aria-labelledby="message-label"
                             name="forwardMessage"
@@ -316,18 +302,6 @@ class DocumentDetail extends React.Component {
                           />
                           <button type="submit" className="usa-button">
                             Send
-                          </button>
-                          <button
-                            type="button"
-                            className="usa-button-secondary"
-                            onClick={() => {
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: null,
-                              });
-                            }}
-                          >
-                            Cancel
                           </button>
                         </form>
                       </div>
