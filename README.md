@@ -58,6 +58,12 @@ Install the following for best results:
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
 
+## Using the application with Internet Explorer 11
+
+If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at
+https://get.adobe.com/reader/
+Install as directed. This will permit PDF documents to be viewed in-browser with Internet Explorer 11.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
