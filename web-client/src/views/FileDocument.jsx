@@ -45,7 +45,7 @@ class FilePetition extends React.Component {
               });
             }}
           >
-            <option value>- Select -</option>
+            <option value="Select">- Select -</option>
             <option value="Answer">Answer</option>
             <option value="Stipulated Decision">Stipulated Decision</option>
           </select>
