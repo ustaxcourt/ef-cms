@@ -25,9 +25,10 @@ The end result of this is not a dev, staging, or production website, but is inst
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - [Create a token](https://sonarcloud.io/account/security) that Jenkins can use to interact with SonarCloud. (This will be referred to as `SONAR_TOKEN` when setting up Jenkins.)
-  - There are two sub-projects to the EF-CMS — the front-end (the UI) and the back-end (the API). Each is handled separately by Jenkins and SonarCloud.
+  - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by Jenkins and SonarCloud.
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the SHARED code. (This will be referred to as `SHARED_SONAR_TOKEN` when setting up Jenkins.)
 
 ## Setup Steps
 
