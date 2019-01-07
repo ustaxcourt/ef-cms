@@ -32,6 +32,7 @@ import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItems
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
+import clearDocumentSequence from './sequences/clearDocumentSequence';
 
 import state from './state';
 
@@ -42,6 +43,7 @@ export default {
   providers: {},
   sequences: {
     assignSelectedWorkItemsSequence,
+    clearDocumentSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
