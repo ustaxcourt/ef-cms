@@ -1,8 +1,9 @@
 const User = require('../entities/User');
+
 /**
- * getUser
- * @param userId
- * @returns {User}
+ * getUsersInSection
+ * @param section
+ * @returns {Promise<User[]>}
  */
 exports.getUsersInSection = async section => {
   if (section === 'docket') {
@@ -11,6 +12,11 @@ exports.getUsersInSection = async section => {
       new User({ userId: 'docketclerk1' }),
     ];
   } else {
-    return [];
+    //returns all internal court users
+    return [
+      new User({ userId: 'docketclerk' }),
+      new User({ userId: 'docketclerk1' }),
+      new User({ userId: 'seniorattorney' }),
+    ];
   }
 };
