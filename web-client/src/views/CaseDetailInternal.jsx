@@ -60,13 +60,12 @@ export default connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="mb-4">
-            <h3>Pending Messages</h3>
+          <div>
+            <h2>Pending Messages</h2>
             {extractedPendingMessages.length === 0 && (
               <p>No Pending Messages</p>
             )}
-
-            <table className="row-border-only">
+            <table className="row-border-only subsection">
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
@@ -98,14 +97,13 @@ export default connect(
                       <span className="label-inline">Received</span>
                       {workItem.messages[0].createdAtTimeFormatted}
                     </td>
-                    <td>{workItem.messages[0].createdAtTimeFormatted}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <nav className="horizontal-tabs subsection">
+          <nav className="horizontal-tabs">
             <ul role="tabslist">
               <li
                 role="presentation"
@@ -139,7 +137,7 @@ export default connect(
             </ul>
           </nav>
           {currentTab == 'Docket Record' && (
-            <div className="tab-content" role="tabpanel">
+            <div className="" role="tabpanel">
               {!helper.showIrsServedDate && (
                 <button
                   className="usa-button"
