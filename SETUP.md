@@ -63,6 +63,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
 - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
 - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+- `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
