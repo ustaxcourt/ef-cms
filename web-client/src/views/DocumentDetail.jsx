@@ -86,7 +86,7 @@ class DocumentDetail extends React.Component {
                       </p>
                       <p>
                         <span className="label-inline">Received</span>
-                        {workItem.currentMessage.createdAtFormatted}
+                        {workItem.currentMessage.createdAtTimeFormatted}
                       </p>
                       <p>{workItem.currentMessage.message}</p>
                     </div>
@@ -318,7 +318,7 @@ class DocumentDetail extends React.Component {
                             }}
                           />
                           <button type="submit" className="usa-button">
-                            Forward
+                            Send
                           </button>
                           <button
                             type="button"
