@@ -1,6 +1,5 @@
 const { assignWorkItems } = require('./assignWorkItems.interactor');
 const _ = require('lodash');
-const { DOCKET_SECTION } = require('../entities/WorkQueue');
 
 const MOCK_WORK_ITEM = {
   createdAt: '2018-12-27T18:06:02.971Z',
@@ -22,7 +21,7 @@ const MOCK_WORK_ITEM = {
       sentTo: null,
     },
   ],
-  section: DOCKET_SECTION,
+  section: 'docket',
   workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   assigneeId: null,
   docketNumber: '101-18',
@@ -75,6 +74,7 @@ describe('assignWorkItems', () => {
     const applicationContext = {
       user: {
         name: 'bob',
+        role: 'docketclerk',
       },
       getPersistenceGateway: () => {
         return {
