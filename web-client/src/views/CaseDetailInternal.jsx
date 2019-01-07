@@ -89,7 +89,7 @@ export default connect(
                       {workItem.messages[0].message}
                     </td>
                     <td>
-                      <b>Receieved</b>{' '}
+                      <b>Received</b>{' '}
                       {workItem.messages[0].createdAtTimeFormatted}
                     </td>
                   </tr>
