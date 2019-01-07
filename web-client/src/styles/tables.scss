@@ -1,5 +1,14 @@
 table {
+  width: 100%;
   margin: 0;
+
+  td {
+    vertical-align: top;
+  }
+
+  p {
+    margin-bottom: 4px;
+  }
 }
 
 table.work-queue {
@@ -146,8 +155,6 @@ table.responsive-table {
   .responsive-label {
     display: none;
   }
-
-  width: 100%;
 }
 
 @media only screen and (max-width: $small-screen) {
