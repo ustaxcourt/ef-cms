@@ -21,7 +21,6 @@ class DocumentDetail extends React.Component {
       updateCompleteFormValueSequence,
       updateForwardFormValueSequence,
     } = this.props;
-
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -90,7 +89,6 @@ class DocumentDetail extends React.Component {
                       </p>
                       <p>{workItem.currentMessage.message}</p>
                     </div>
-
                     <div
                       className="usa-grid-full content-wrapper actions-wrapper toggle-button-wrapper"
                       role="tablist"
@@ -115,8 +113,8 @@ class DocumentDetail extends React.Component {
                           })
                         }
                       >
-                        <FontAwesomeIcon icon="list-ul" size="sm" /> View
-                        History
+                        <FontAwesomeIcon icon="list-ul" size="sm" />
+                        View History
                       </button>
                       <button
                         role="tab"
@@ -138,7 +136,7 @@ class DocumentDetail extends React.Component {
                           })
                         }
                       >
-                        <FontAwesomeIcon icon="check-circle" size="sm" />{' '}
+                        <FontAwesomeIcon icon="check-circle" size="sm" />
                         Complete
                       </button>
                       <button
@@ -166,7 +164,6 @@ class DocumentDetail extends React.Component {
                         To
                       </button>
                     </div>
-
                     {showAction('complete', workItem.workItemId) && (
                       <div
                         id="complete-card"
@@ -221,7 +218,6 @@ class DocumentDetail extends React.Component {
                         </form>
                       </div>
                     )}
-
                     {showAction('history', workItem.workItemId) &&
                       !workItem.historyMessages.length && (
                         <div
@@ -232,7 +228,6 @@ class DocumentDetail extends React.Component {
                           No additional messages are available.
                         </div>
                       )}
-
                     {showAction('history', workItem.workItemId) &&
                       workItem.historyMessages.length > 0 && (
                         <div
@@ -256,11 +251,13 @@ class DocumentDetail extends React.Component {
                                 {message.createdAtFormatted}
                               </p>
                               <p>{message.message}</p>
+                              {workItem.historyMessages.length - 1 !== mIdx && (
+                                <hr aria-hidden="true" />
+                              )}
                             </div>
                           ))}
                         </div>
                       )}
-
                     {showAction('forward', workItem.workItemId) && (
                       <div
                         id="forward-card"
