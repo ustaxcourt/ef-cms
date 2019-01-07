@@ -94,6 +94,10 @@ export default connect(
                       </p>
                       <p>{workItem.messages[0].message}</p>
                     </td>
+                    <td>
+                      <span className="label-inline">Received</span>
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
                     <td>{workItem.messages[0].createdAtTimeFormatted}</td>
                   </tr>
                 ))}
