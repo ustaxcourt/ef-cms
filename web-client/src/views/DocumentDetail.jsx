@@ -263,10 +263,6 @@ class DocumentDetail extends React.Component {
                             submitForwardSequence({
                               workItemId: workItem.workItemId,
                             });
-                            setWorkItemActionSequence({
-                              workItemId: workItem.workItemId,
-                              action: null,
-                            });
                           }}
                         >
                           <label htmlFor="forward-recipient-id">Send To</label>
