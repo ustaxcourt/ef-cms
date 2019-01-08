@@ -2,36 +2,41 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
-# Building Everything
-If you'd like to run the same checks that run in Jenkins (except Sonarqube at the moment...) locally using docker containers, run the following:
+## Technical overview
+
+This is a React-based Javascript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`efcms-service/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via a Jenkins server, and [that process is documented in `SETUP.md`](SETUP.md).
+
+## Building everything
+
+To run the same checks that run in Jenkins (except SonarQube) locally, using Docker containers, run the following:
 
 `./build-all.sh`
 
-This will run the lint, shellcheck, audit, build, test, cypress, cerebral tests, pa11y, etc over all the components.
+This will run the lint, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-# Running / Verifing the Project via Docker
+## Running / verifing the project via Docker
 
-Assuming you have Docker installed, The following command will spin up a docker container with the UI, API, local S3, local Dynamo, etc all running inside it:
+Assuming you have Docker installed, the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
 `./docker-run.sh`
 
 You can access the UI at  http://localhost:1234
 You can access the API at http://localhost:3000
-You can access the dynamodb shell at http://localhost:8000/shell
-You can access the dynamodb-admin ui at http://localhost:8001
-You can access s3 local at http://localhost:9000
+You can access the DynamoDB shell at http://localhost:8000/shell
+You can access the DynamoDB admin UI at http://localhost:8001
+You can access S3 local at http://localhost:9000
 
 ## Running this project locally without Docker
 
-The EF-CMS is comprised of two components: the API and the UI. Each must be run in order to function.
+The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
 
-#### Prerequisites
-- node v8.10.0
+### Prerequisites
+- Node v8.10.0
 - npm 6.4.1
 
-#### Setup
+### Setup
 
-Both the web-client and efcms-service share code that exists in the shared directory; therefore, before you can run either, you need to run an npm install inside the shared directory.
+Both the web-client and efcms-service share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
 
 - `cd shared && npm i`
 - `cd ../web-client && npm i`
@@ -43,13 +48,13 @@ Both the web-client and efcms-service share code that exists in the shared direc
 #### Terminal B
 - `cd efcms-service && npm start`
 
-## CI/CD Setup
+### CI/CD Setup
 
-Please look at the [SETUP.md](SETUP.md).
+For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
-## Editor configuration
+### Editor configuration
 
-### Atom.io
+#### Atom.io
 
 Install the following for best results:
 
