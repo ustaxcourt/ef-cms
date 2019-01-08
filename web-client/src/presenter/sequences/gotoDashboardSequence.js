@@ -36,7 +36,6 @@ const goToDashboard = [
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     docketclerk: [
-      clearAlerts,
       getUsersInSection({ sectionType: 'docket' }),
       {
         error: [setAlertError],
