@@ -1,16 +1,22 @@
 const User = require('../entities/User');
+const { DOCKET_SECTION } = require('../entities/WorkQueue');
 /**
- * getUser
- * @param userId
- * @returns {User}
+ * getUsersInSection
+ * @param sectionType
+ * @returns {Promise<User[]>}
  */
-exports.getUsersInSection = async section => {
-  if (section === 'docket') {
+exports.getUsersInSection = async ({ sectionType }) => {
+  if (sectionType === DOCKET_SECTION) {
     return [
-      new User({ userId: 'docketclerk' }),
-      new User({ userId: 'docketclerk1' }),
+      new User({ userId: 'docketclerk' }).toRawObject(),
+      new User({ userId: 'docketclerk1' }).toRawObject(),
     ];
   } else {
-    return [];
+    //returns all internal court users
+    return [
+      new User({ userId: 'docketclerk' }).toRawObject(),
+      new User({ userId: 'docketclerk1' }).toRawObject(),
+      new User({ userId: 'seniorattorney' }).toRawObject(),
+    ];
   }
 };
