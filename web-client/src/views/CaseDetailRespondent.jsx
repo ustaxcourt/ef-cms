@@ -15,6 +15,7 @@ export default connect(
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    clearDocumentSequence: sequences.clearDocumentSequence,
   },
   function CaseDetail({
     baseUrl,
@@ -22,6 +23,7 @@ export default connect(
     currentTab,
     helper,
     updateCurrentTabSequence,
+    clearDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -85,9 +87,10 @@ export default connect(
               <button
                 id="button-file-document"
                 className="usa-button"
-                onClick={() =>
-                  updateCurrentTabSequence({ value: 'File Document' })
-                }
+                onClick={() => {
+                  clearDocumentSequence();
+                  updateCurrentTabSequence({ value: 'File Document' });
+                }}
               >
                 <FontAwesomeIcon icon="cloud-upload-alt" />
                 File Document

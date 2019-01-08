@@ -2,11 +2,42 @@
   border: 1px solid $color-gray-light;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
+  p {
+    margin-bottom: 5px;
+  }
+
   .content-wrapper {
-    padding: 1rem;
+    padding: 20px;
   }
 
   .actions-wrapper {
     background-color: $color-primary-alt-lightest;
+  }
+
+  .toggle-button-wrapper {
+    button {
+      width: auto;
+      padding: 10px 4px;
+      margin: 0 5px 0 0;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: $font-semibold;
+      text-decoration: underline;
+
+      svg {
+        margin-right: 5px;
+      }
+    }
+
+    button.unselected {
+      background-color: transparent;
+      color: $color-blue;
+    }
+  }
+
+  .usa-button,
+  .usa-button-secondary {
+    margin-top: 20px;
+    margin-bottom: 0;
   }
 }
