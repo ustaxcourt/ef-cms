@@ -77,6 +77,22 @@ exports.reassignWorkItem = async ({
     });
   }
 
+  if (existingWorkItem.section !== workItemToSave.section) {
+    await persistence.deleteMappingRecord({
+      applicationContext,
+      pkId: existingWorkItem.section,
+      skId: existingWorkItem.workItemId,
+      type: 'workItem',
+    });
+
+    await persistence.createMappingRecord({
+      applicationContext,
+      pkId: workItemToSave.section,
+      skId: workItemToSave.workItemId,
+      type: 'workItem',
+    });
+  }
+
   await persistence.createMappingRecord({
     applicationContext,
     pkId: workItemToSave.assigneeId,

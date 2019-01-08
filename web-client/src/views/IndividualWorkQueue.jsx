@@ -4,7 +4,7 @@ import { state, sequences } from 'cerebral';
 
 export default connect(
   {
-    setFocusedWorkItem: sequences.setFocusedWorkItem,
+    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
   function IndividualWorkQueue({ setFocusedWorkItem, workQueue }) {

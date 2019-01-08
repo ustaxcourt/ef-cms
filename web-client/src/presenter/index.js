@@ -26,7 +26,7 @@ import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
-import setFocusedWorkItem from './sequences/setFocusedWorkItem';
+import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
@@ -54,7 +54,7 @@ export default {
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
-    setFocusedWorkItem,
+    setFocusedWorkItemSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,

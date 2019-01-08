@@ -4,7 +4,6 @@ exports.GET_CASE = 'getCase';
 exports.WORKITEM = 'workItem';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.FILE_ANSWER = 'fileAnswer';
-exports.FILE_GENERIC_DOCUMENT = 'fileGenericDocument';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
 exports.PETITION = 'getPetitionOptions';

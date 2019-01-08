@@ -1,3 +1,14 @@
+const {
+  joiValidationDecorator,
+} = require('../../utilities/JoiValidationDecorator');
+const joi = require('joi-browser');
+
+joiValidationDecorator(
+  User,
+  joi.object().keys({
+    userId: joi.string().required(),
+  }),
+);
 /**
  * constructor
  * @param user
