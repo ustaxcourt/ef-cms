@@ -5,7 +5,7 @@ docker run --name "${CONTAINER_NAME}" -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -
 CODE="$?"
 set -e
 mkdir -p cypress
-docker cp "${CONTAINER_NAME}:/home/app/web-client/cypress/videos" cypress
-docker cp "${CONTAINER_NAME}:/home/app/web-client/cypress/screenshots" cypress
+docker cp "${CONTAINER_NAME}:/home/app/web-client/cypress/videos" cypress || true
+docker cp "${CONTAINER_NAME}:/home/app/web-client/cypress/screenshots" cypress || true
 docker rm "${CONTAINER_NAME}"
 exit "${CODE}"
