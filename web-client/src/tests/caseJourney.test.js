@@ -33,6 +33,7 @@ import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import dockerClerkViewsCaseDetail from './journey/dockerClerkViewsCaseDetail';
+import docketClerkViewsDashboardAfterForward from './journey/docketClerkViewsDashboardAfterForward';
 
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
@@ -102,6 +103,7 @@ describe('Case journey', async () => {
   docketClerkViewsDashboard(test);
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
+  docketClerkViewsDashboardAfterForward(test);
 
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);

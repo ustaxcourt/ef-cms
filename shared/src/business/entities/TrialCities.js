@@ -39,10 +39,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Connecticut',
     city: 'Hartford',
   },
-  {
-    state: 'Delaware',
-    city: '',
-  },
+  // {
+  //   state: 'Delaware',
+  //   city: '',
+  // },
   {
     state: 'District of Columbia',
     city: 'Washington',
@@ -83,10 +83,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Iowa',
     city: 'Des Moines',
   },
-  {
-    state: 'Kansas',
-    city: '',
-  },
+  // {
+  //   state: 'Kansas',
+  //   city: '',
+  // },
   {
     state: 'Kentucky',
     city: 'Louisville',
@@ -95,10 +95,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Louisiana',
     city: 'New Orleans',
   },
-  {
-    state: 'Maine',
-    city: 'NONE',
-  },
+  // {
+  //   state: 'Maine',
+  //   city: '',
+  // },
   {
     state: 'Maryland',
     city: 'Baltimore',
@@ -143,14 +143,14 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Nevada',
     city: 'Reno',
   },
-  {
-    state: 'New Hampshire',
-    city: '',
-  },
-  {
-    state: 'New Jersey',
-    city: '',
-  },
+  // {
+  //   state: 'New Hampshire',
+  //   city: '',
+  // },
+  // {
+  //   state: 'New Jersey',
+  //   city: '',
+  // },
   {
     state: 'New Mexico',
     city: 'Albuquerque',
@@ -167,10 +167,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'North Carolina',
     city: 'Winston-Salem',
   },
-  {
-    state: 'North Dakota',
-    city: '',
-  },
+  // {
+  //   state: 'North Dakota',
+  //   city: '',
+  // },
   {
     state: 'Ohio',
     city: 'Cincinnati',
@@ -199,18 +199,18 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Pennsylvania',
     city: 'Pittsburgh',
   },
-  {
-    state: 'Rhode Island',
-    city: '',
-  },
+  // {
+  //   state: 'Rhode Island',
+  //   city: '',
+  // },
   {
     state: 'South Carolina',
     city: 'Columbia',
   },
-  {
-    state: 'South Dakota',
-    city: 'NONE',
-  },
+  // {
+  //   state: 'South Dakota',
+  //   city: '',
+  // },
   {
     state: 'Tennessee',
     city: 'Knoxville',
@@ -247,10 +247,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Utah',
     city: 'Salt Lake City',
   },
-  {
-    state: 'Vermont',
-    city: 'NONE',
-  },
+  // {
+  //   state: 'Vermont',
+  //   city: '',
+  // },
   {
     state: 'Virginia',
     city: 'Richmond',
@@ -271,10 +271,10 @@ const REGULAR_TRIAL_CITIES = [
     state: 'Wisconsin',
     city: 'Milwaukee',
   },
-  {
-    state: 'Wyoming',
-    city: '',
-  },
+  // {
+  //   state: 'Wyoming',
+  //   city: '',
+  // },
 ];
 
 const SMALL_TRIAL_CITIES = [
@@ -322,10 +322,10 @@ const SMALL_TRIAL_CITIES = [
     state: 'Connecticut',
     city: 'Hartford',
   },
-  {
-    state: 'Delaware',
-    city: '',
-  },
+  // {
+  //   state: 'Delaware',
+  //   city: '',
+  // },
   {
     state: 'District of Columbia',
     city: 'Washington',
@@ -446,14 +446,14 @@ const SMALL_TRIAL_CITIES = [
     state: 'Nevada',
     city: 'Reno',
   },
-  {
-    state: 'New Hampshire',
-    city: '',
-  },
-  {
-    state: 'New Jersey',
-    city: '',
-  },
+  // {
+  //   state: 'New Hampshire',
+  //   city: '',
+  // },
+  // {
+  //   state: 'New Jersey',
+  //   city: '',
+  // },
   {
     state: 'New Mexico',
     city: 'Albuquerque',
@@ -510,10 +510,10 @@ const SMALL_TRIAL_CITIES = [
     state: 'Pennsylvania',
     city: 'Pittsburgh',
   },
-  {
-    state: 'Rhode Island',
-    city: '',
-  },
+  // {
+  //   state: 'Rhode Island',
+  //   city: '',
+  // },
   {
     state: 'South Carolina',
     city: 'Columbia',

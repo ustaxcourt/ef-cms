@@ -1,20 +1,22 @@
-const { getCaseTypes } = require('./getCaseTypes.interactor');
+const { getTrialCities } = require('./getTrialCities.interactor');
 
-describe('Get case types', () => {
+describe('Get trial cities', () => {
   beforeEach(() => {});
 
-  it('returns a collection of case types', async () => {
-    const caseTypes = await getCaseTypes({
+  it('returns a collection of trial cities', async () => {
+    const caseTypes = await getTrialCities({
       userId: 'taxpayer',
+      procedureType: 'Small',
     });
-    expect(caseTypes.length).toEqual(12);
+    expect(caseTypes.length).toEqual(74);
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
     let error;
     try {
-      await getCaseTypes({
+      await getTrialCities({
         userId: 'notataxpayer',
+        procedureType: 'Small',
       });
     } catch (err) {
       error = err;

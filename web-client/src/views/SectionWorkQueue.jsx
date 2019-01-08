@@ -9,7 +9,7 @@ export default connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
-    setFocusedWorkItem: sequences.setFocusedWorkItem,
+    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },

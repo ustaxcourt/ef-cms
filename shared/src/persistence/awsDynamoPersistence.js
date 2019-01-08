@@ -91,12 +91,14 @@ exports.getRecordViaMapping = getRecordViaMapping;
 exports.incrementCounter = ({ applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
+  const year = new Date().getFullYear().toString();
+
   return client.updateConsistent({
     applicationContext,
     TableName: TABLE,
     Key: {
-      pk: 'docketNumberCounter',
-      sk: 'docketNumberCounter', // TODO: set sk by the year, i.e. 2018
+      pk: `docketNumberCounter-${year}`,
+      sk: `docketNumberCounter-${year}`,
     },
     UpdateExpression: 'ADD #a :x',
     ExpressionAttributeNames: {

@@ -13,12 +13,14 @@ import { associateDocumentToCase } from '../../shared/src/proxies/associateDocum
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileGenericDocument } from '../../shared/src/business/useCases/fileGenericDocument.interactor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
+import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypes.interactor';
+import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -54,12 +56,14 @@ const applicationContext = {
       associateRespondentDocumentToCase,
       createCase,
       downloadDocumentFile,
-      fileGenericDocument,
       fileRespondentDocument,
       getCase,
       getCasesByStatus,
       getCasesByUser,
       getCasesForRespondent,
+      getCaseTypes,
+      getProcedureTypes,
+      getTrialCities,
       getUser,
       getUsersInSection,
       getWorkItem,
