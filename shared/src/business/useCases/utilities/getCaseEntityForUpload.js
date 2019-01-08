@@ -2,6 +2,7 @@ const Case = require('../../entities/Case');
 const Message = require('../../entities/Message');
 const WorkItem = require('../../entities/WorkItem');
 const Document = require('../../entities/Document');
+const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 
 exports.getCaseEntityForUpload = ({
   user,
@@ -28,7 +29,7 @@ exports.getCaseEntityForUpload = ({
     caseStatus: caseToUpdate.status,
     assigneeId: null,
     docketNumber: caseToUpdate.docketNumber,
-    section: 'docket',
+    section: DOCKET_SECTION,
     assigneeName: null,
   });
   delete workItem.createdAt; // persistence layer won't save the workItem unless createdAt is null.... this is bad design

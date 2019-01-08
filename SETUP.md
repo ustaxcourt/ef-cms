@@ -25,9 +25,10 @@ The end result of this is not a dev, staging, or production website, but is inst
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - [Create a token](https://sonarcloud.io/account/security) that Jenkins can use to interact with SonarCloud. (This will be referred to as `SONAR_TOKEN` when setting up Jenkins.)
-  - There are two sub-projects to the EF-CMS — the front-end (the UI) and the back-end (the API). Each is handled separately by Jenkins and SonarCloud.
+  - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by Jenkins and SonarCloud.
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
+  - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the SHARED code. (This will be referred to as `SHARED_SONAR_TOKEN` when setting up Jenkins.)
 
 ## Setup Steps
 
@@ -63,6 +64,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
 - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
 - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+- `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
