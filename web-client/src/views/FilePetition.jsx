@@ -9,6 +9,7 @@ export default connect(
     petition: state.petition,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
+    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     trialCities: state.trialCities,
     getTrialCities: sequences.getTrialCitiesSequence,
@@ -24,6 +25,7 @@ export default connect(
     getTrialCities,
     trialCities,
     updateFormValueSequence,
+    updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
