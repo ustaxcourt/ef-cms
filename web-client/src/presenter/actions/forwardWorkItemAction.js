@@ -26,5 +26,10 @@ export default async ({ get, store, applicationContext, path, props }) => {
   Object.assign(workItem, updatedWorkItem);
   store.set(state.caseDetail, caseDetail);
 
-  return path.success();
+  return path.success({
+    alertSuccess: {
+      title: `Message sent`,
+      message: `Your message has been sent.`,
+    },
+  });
 };
