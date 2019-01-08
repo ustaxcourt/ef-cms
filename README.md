@@ -2,14 +2,14 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
-# Building Everything
+## Building Everything
 To run the same checks that run in Jenkins (except SonarQube) locally, using Docker containers, run the following:
 
 `./build-all.sh`
 
 This will run the lint, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-# Running / Verifing the Project via Docker
+## Running / Verifing the Project via Docker
 
 Assuming you have Docker installed, the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
@@ -25,11 +25,11 @@ You can access S3 local at http://localhost:9000
 
 The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
 
-#### Prerequisites
+### Prerequisites
 - Node v8.10.0
 - npm 6.4.1
 
-#### Setup
+### Setup
 
 Both the web-client and efcms-service share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
 
@@ -43,13 +43,13 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 #### Terminal B
 - `cd efcms-service && npm start`
 
-## CI/CD Setup
+### CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
-## Editor configuration
+### Editor configuration
 
-### Atom.io
+#### Atom.io
 
 Install the following for best results:
 
