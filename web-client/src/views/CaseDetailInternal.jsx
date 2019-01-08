@@ -60,36 +60,41 @@ export default connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="mb-4">
-            <h3>Pending Messages</h3>
+          <div>
+            <h2>Pending Messages</h2>
             {extractedPendingMessages.length === 0 && (
-              <div>No Pending Messages</div>
+              <p>No Pending Messages</p>
             )}
-
-            <table className="responsive-table row-border-only">
+            <table className="row-border-only subsection">
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
                     <td className="responsive-title">
-                      <b>To</b> {workItem.assigneeName}
-                      <br />
-                      <b>From</b> {workItem.messages[0].sentBy}
+                      <p>
+                        <span className="label-inline">To</span>
+                        {workItem.assigneeName}
+                      </p>
+                      <p>
+                        <span className="label-inline">From</span>
+                        {workItem.messages[0].sentBy}
+                      </p>
                     </td>
                     <td>
-                      <a
-                        href={`/case-detail/${
-                          workItem.docketNumber
-                        }/documents/${workItem.document.documentId}`}
-                        className="case-link"
-                      >
-                        <FontAwesomeIcon icon="file-pdf" />
-                        {workItem.document.documentType}
-                      </a>
-                      <br />
-                      {workItem.messages[0].message}
+                      <p>
+                        <a
+                          href={`/case-detail/${
+                            workItem.docketNumber
+                          }/documents/${workItem.document.documentId}`}
+                          className="case-link"
+                        >
+                          <FontAwesomeIcon icon="file-pdf" />
+                          {workItem.document.documentType}
+                        </a>
+                      </p>
+                      <p>{workItem.messages[0].message}</p>
                     </td>
                     <td>
-                      <b>Receieved</b>{' '}
+                      <span className="label-inline">Received</span>
                       {workItem.messages[0].createdAtTimeFormatted}
                     </td>
                   </tr>
@@ -98,7 +103,7 @@ export default connect(
             </table>
           </div>
 
-          <nav className="horizontal-tabs subsection">
+          <nav className="horizontal-tabs">
             <ul role="tabslist">
               <li
                 role="presentation"
@@ -132,7 +137,7 @@ export default connect(
             </ul>
           </nav>
           {currentTab == 'Docket Record' && (
-            <div className="tab-content" role="tabpanel">
+            <div className="" role="tabpanel">
               {!helper.showIrsServedDate && (
                 <button
                   className="usa-button"

@@ -12,7 +12,6 @@ const Document = require('./Document');
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
-const PROCEDURE_TYPES = ['Small', 'Regular'];
 const CASE_TYPES = [
   { type: 'Deficiency', description: 'Notice of Deficiency' },
   {
@@ -64,6 +63,8 @@ const CASE_TYPES = [
       'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim (or Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement)',
   },
 ];
+
+const PROCEDURE_TYPES = ['Small', 'Regular'];
 
 /**
  * Case

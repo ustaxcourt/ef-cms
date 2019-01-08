@@ -26,12 +26,13 @@ import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
-import setFocusedWorkItem from './sequences/setFocusedWorkItem';
+import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
+import clearDocumentSequence from './sequences/clearDocumentSequence';
 
 import state from './state';
 
@@ -42,6 +43,7 @@ export default {
   providers: {},
   sequences: {
     assignSelectedWorkItemsSequence,
+    clearDocumentSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -52,7 +54,7 @@ export default {
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
-    setFocusedWorkItem,
+    setFocusedWorkItemSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,

@@ -13,7 +13,6 @@ import { associateDocumentToCase } from '../../shared/src/proxies/associateDocum
 import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileGenericDocument } from '../../shared/src/business/useCases/fileGenericDocument.interactor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
@@ -57,7 +56,6 @@ const applicationContext = {
       associateRespondentDocumentToCase,
       createCase,
       downloadDocumentFile,
-      fileGenericDocument,
       fileRespondentDocument,
       getCase,
       getCasesByStatus,

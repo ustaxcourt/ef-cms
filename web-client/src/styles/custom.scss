@@ -3,8 +3,8 @@ hr {
   height: 1px;
   padding: 0;
   border: 0;
-  border-top: 2px solid $color-gray-lightest;
-  margin: 2rem 0;
+  border-top: 1px solid $color-gray-light;
+  margin: 20px 0;
 }
 
 .case-status-label {
@@ -62,75 +62,5 @@ iframe {
 }
 
 .subsection {
-  margin-bottom: 2em;
-}
-
-.mb-4 {
-  margin-bottom: 40px;
-}
-
-.mb-1 {
-  margin-bottom: 10px;
-}
-
-.font-large {
-  font-size: 30px;
-}
-
-.font-medium {
-  font-size: 24px;
-}
-
-.mr-4 {
-  margin-right: 40px;
-}
-
-.mr-2 {
-  margin-right: 20px;
-}
-
-.mb-2 {
-  margin-bottom: 20px;
-}
-
-.toggles {
-  padding-right: 4px;
-  padding-left: 4px;
-}
-
-button.toggle {
-  padding: 0.5rem;
-  margin: 0;
-  margin: 0 0.2rem;
-  background-color: transparent;
-  color: $color-base;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 400;
-
-  svg {
-    margin-right: 0.1rem;
-  }
-}
-
-button.toggle:hover {
-  background-color: $color-blue;
-  color: $color-white;
-}
-
-button.toggle.selected {
-  background-color: $color-blue;
-  color: $color-white;
-}
-
-.extra {
-  background-color: $color-primary-alt-lightest;
-}
-
-.pt-1 {
-  padding-top: 10px;
-}
-
-.pb-1 {
-  padding-bottom: 10px;
+  margin-bottom: 50px;
 }
