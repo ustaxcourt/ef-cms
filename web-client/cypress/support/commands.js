@@ -45,12 +45,13 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
 
 Cypress.Commands.add('routeTo', route => {
   // hitchhike on an existing element as route trigger
-  cy.get('#extended-logo a')
-    .then($navLink => {
-      return $navLink.first().attr('href', route);
-    })
-    .click({ force: true });
+  cy.get('#extended-logo a').then($navLink => {
+    return $navLink.first().attr('href', route);
+  });
+  cy.wait(150);
+  cy.get('#extended-logo a').click({ force: true });
   cy.url().should('include', route);
+  cy.wait(500);
 });
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
