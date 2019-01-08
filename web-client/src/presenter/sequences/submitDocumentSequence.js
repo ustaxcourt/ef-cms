@@ -9,7 +9,6 @@ import setCase from '../actions/setCaseAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import fileRespondentDocument from '../actions/fileRespondentDocumentAction';
-import fileGenericDocument from '../actions/fileGenericDocumentAction';
 import getDocumentType from '../actions/getDocumentTypeAction';
 import validateDocument from '../actions/validateDocumentAction';
 
@@ -23,7 +22,6 @@ export default [
       {
         answer: [fileRespondentDocument],
         stipulatedDecision: [fileRespondentDocument],
-        generic: [fileGenericDocument],
       },
       getCase,
       setCase,
