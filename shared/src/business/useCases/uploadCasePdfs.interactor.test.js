@@ -8,8 +8,7 @@ describe('uploadCasesPdfs', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          uploadPdfsForNewCase: () =>
-            Promise.resolve({}),
+          uploadPdfsForNewCase: () => Promise.resolve({}),
         };
       },
       environment: { stage: 'local' },
