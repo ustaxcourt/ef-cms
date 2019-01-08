@@ -8,6 +8,7 @@ const uuidVersions = {
 };
 const uuid = require('uuid');
 const Message = require('./Message');
+const { getSectionForRole } = require('./WorkQueue');
 
 /**
  * constructor
@@ -36,6 +37,7 @@ joiValidationDecorator(
       .items(joi.object())
       .required(), // should be a Message entity at some point
     sentBy: joi.string().required(),
+    section: joi.string().required(),
     assigneeId: joi
       .string()
       .allow(null)
@@ -74,10 +76,11 @@ WorkItem.prototype.addMessage = function(message) {
   return this;
 };
 
-WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName }) {
+WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
+    section: getSectionForRole(role),
   });
   return this;
 };
