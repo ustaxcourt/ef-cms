@@ -88,7 +88,7 @@ pipeline {
           agent any
           steps {
             sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
-            archiveArtifacts artifacts: 'cypress'
+            archiveArtifacts artifacts: 'cypress/**/*.mp4'
           }
         }
       }
