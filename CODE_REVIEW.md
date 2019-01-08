@@ -81,7 +81,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] perform the most thorough testing in Chrome and Internet Explorer 11, on Windows 7 and 10
 		- [ ] test in Edge and Firefox
 		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all functionality will be necessary on these platforms
-	- [ ] use an automated audit tool for code quality and practices (recommended: Chrome Audit)
+	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility
 		- [ ] use an automated audit tool, such as Chrome Audit or aXe
@@ -99,9 +99,9 @@ We use this list when performing a code review to ensure that all tasks have bee
 - [ ] tests
 	- [ ] look at code coverage of tests in SonarCloud
 	- [ ] review all new tests for correctness, quality of naming
-	- [ ] determine what code isn’t tested, review that carefully
+	- [ ] determine what code isn’t tested, review that especially carefully
 - [ ] review documentation to ensure that it matches changes
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
-	- [ ] for comments that are more general, comment on the pull request itself
+	- [ ] for comments that are more general, attach the comment to a random line in `README.md` (as opposed to commenting on the pull request itself), to be able to use GitHub's ability to thread discussions on those comments
 - [ ] for each feature-level bug (i.e., it’s working as designed, but designed wrong), open a new issue and put it in the backlog
