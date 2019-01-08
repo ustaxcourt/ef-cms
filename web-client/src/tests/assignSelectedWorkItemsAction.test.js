@@ -1,20 +1,14 @@
-import { CerebralTest } from 'cerebral/test';
-
 import { runAction } from 'cerebral/test';
 
-import applicationContext from '../applicationContext';
 import presenter from '../presenter';
 
 import assignSelectedWorkItemsAction from '../presenter/actions/assignSelectedWorkItemsAction';
 
-let test;
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     assignWorkItems: () => null,
   }),
 };
-
-test = CerebralTest(presenter);
 
 describe('setPathAction', async () => {
   beforeEach(() => {

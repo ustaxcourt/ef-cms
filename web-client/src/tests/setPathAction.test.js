@@ -1,5 +1,3 @@
-import { CerebralTest } from 'cerebral/test';
-
 import { runAction } from 'cerebral/test';
 
 import applicationContext from '../applicationContext';
@@ -7,10 +5,7 @@ import presenter from '../presenter';
 
 import setPathAction from '../presenter/actions/setPathAction';
 
-let test;
 presenter.providers.applicationContext = applicationContext;
-
-test = CerebralTest(presenter);
 
 describe('setPathAction', async () => {
   beforeEach(() => {
