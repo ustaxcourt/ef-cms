@@ -20,6 +20,7 @@ class DocumentDetail extends React.Component {
       submitForwardSequence,
       updateCompleteFormValueSequence,
       updateForwardFormValueSequence,
+      users,
     } = this.props;
     return (
       <React.Fragment>
@@ -279,9 +280,11 @@ class DocumentDetail extends React.Component {
                             }}
                           >
                             <option value=""> -- Select -- </option>
-                            <option value="seniorattorney">
-                              Senior Attorney
-                            </option>
+                            {users.map(user => (
+                              <option key={user.userId} value={user.userId}>
+                                {user.name}
+                              </option>
+                            ))}
                           </select>
                           <label htmlFor="forward-message">Add Message</label>
                           <textarea
@@ -332,6 +335,7 @@ DocumentDetail.propTypes = {
   submitForwardSequence: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
+  users: PropTypes.array,
   workItemActions: PropTypes.object,
 };
 
@@ -348,6 +352,7 @@ export default connect(
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
+    users: state.internalUsers,
     workItemActions: state.workItemActions,
   },
   DocumentDetail,
