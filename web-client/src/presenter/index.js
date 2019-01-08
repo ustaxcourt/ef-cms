@@ -1,3 +1,4 @@
+import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
@@ -25,7 +26,7 @@ import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
-import setFocusedWorkItem from './sequences/setFocusedWorkItem';
+import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
@@ -43,6 +44,7 @@ export default {
   sequences: {
     assignSelectedWorkItemsSequence,
     clearDocumentSequence,
+    getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
@@ -52,7 +54,7 @@ export default {
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
-    setFocusedWorkItem,
+    setFocusedWorkItemSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,

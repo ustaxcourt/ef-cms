@@ -10,11 +10,21 @@ export default connect(
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    trialCities: state.trialCities,
+    getTrialCities: sequences.getTrialCitiesSequence,
+    procedureTypes: state.procedureTypes,
+    caseTypes: state.caseTypes,
   },
   function FilePetition({
+    caseTypes,
     petition,
+    procedureTypes,
     submitFilePetitionSequence,
     submitting,
+    getTrialCities,
+    trialCities,
+    updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
     return (
@@ -22,6 +32,102 @@ export default connect(
         <h1 tabIndex="-1" id="file-h1">
           File a petition
         </h1>
+        <h2 id="file-metadata">
+          Please provide the following requested information
+        </h2>
+        <p>* All are required.</p>
+        <form
+          id="file-petition-metadata"
+          role="form"
+          aria-labelledby="#file-metadata"
+          noValidate
+        >
+          <div role="list">
+            <div role="listitem" className="usa-form-group">
+              <label htmlFor="irsNoticeDate" className="">
+                1. Date of IRS Notice
+              </label>
+              <span>Date of the notice received from the IRS.</span>
+              <input
+                id="irsNoticeDate"
+                type="date"
+                name="irsNoticeDate"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+            <div role="listitem" className="usa-form-group">
+              <label htmlFor="case-type">2. Case type is</label>
+              <select
+                name="caseType"
+                id="case-type"
+                aria-labelledby="case-type"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value
+                  });
+                }}
+              >
+                <option value=""> -- Select -- </option>
+                {caseTypes.map(caseType => (
+                  <option key={caseType.type} value={caseType.type}>
+                    {caseType.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div role="listitem" className="usa-form-group">
+              <label htmlFor="procedure-type">3. Procedure type is</label>
+              <select
+                name="procedureType"
+                id="procedure-type"
+                aria-labelledby="procedure-type"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value
+                  });
+                  getTrialCities({
+                    procedureType: e.target.value,
+                  });
+                }}
+              >
+                <option value=""> -- Select -- </option>
+                {procedureTypes.map(procedureType => (
+                  <option key={procedureType} value={procedureType}>
+                    {procedureType}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div role="listitem" className="usa-form-group">
+              <label htmlFor="procedure-type">4. Preferred trial city is</label>
+              <select
+                name="procedureType"
+                id="procedure-type"
+                aria-labelledby="procedure-type"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value
+                  });
+                }}
+              >
+                <option value=""> -- Select -- </option>
+                {trialCities.map((trialCity, idx) => (
+                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
+                    {trialCity.city}, {trialCity.state}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </form>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
         <ErrorNotification />

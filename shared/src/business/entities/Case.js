@@ -266,7 +266,7 @@ Case.getTrialCities = procedureType => {
     case 'Regular':
       return REGULAR_TRIAL_CITIES;
     default:
-      return [...SMALL_TRIAL_CITIES, ...REGULAR_TRIAL_CITIES];
+      return REGULAR_TRIAL_CITIES;
   }
 };
 
