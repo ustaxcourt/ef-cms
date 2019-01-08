@@ -51,7 +51,6 @@ Cypress.Commands.add('routeTo', route => {
     })
     .click({ force: true });
   cy.url().should('include', route);
-  cy.wait(500);
 });
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
@@ -76,7 +75,6 @@ Cypress.Commands.add('login', (username, route) => {
   cy.get('button#log-in-button').click();
   cy.url().should('not.include', 'log-in');
   cy.showsErrorMessage(false);
-  cy.wait(500);
   if (route) {
     cy.routeTo(route);
   }
