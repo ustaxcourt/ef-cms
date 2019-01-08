@@ -37,7 +37,7 @@ const goToDashboard = [
     ],
     docketclerk: [
       clearAlerts,
-      getUsersInSection('docket'),
+      getUsersInSection({ sectionType: 'docket' }),
       {
         error: [setAlertError],
         success: [setUsers],

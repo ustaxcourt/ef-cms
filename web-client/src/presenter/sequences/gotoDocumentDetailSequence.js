@@ -18,7 +18,7 @@ export default [
   getCase,
   setCase,
   setBaseUrl,
-  getUsersInSection(),
+  getUsersInSection({}),
   {
     error: [setAlertError],
     success: [setInternalUsers],

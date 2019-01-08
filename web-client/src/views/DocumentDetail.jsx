@@ -339,7 +339,7 @@ DocumentDetail.propTypes = {
   submitForwardSequence: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
-  users: PropTypes.object,
+  users: PropTypes.array,
   workItemActions: PropTypes.object,
 };
 
