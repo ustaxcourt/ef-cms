@@ -1,18 +1,3 @@
-const { S3 } = require('aws-sdk');
-
-/**
- * getS3
- * @param region
- * @param s3Endpoint
- * @returns {S3}
- */
-const getS3 = ({ region, s3Endpoint }) => {
-  return new S3({
-    region,
-    s3ForcePathStyle: true,
-    endpoint: s3Endpoint,
-  });
-};
 /**
  * getUploadPolicy
  * @param applicationContext
@@ -20,9 +5,9 @@ const getS3 = ({ region, s3Endpoint }) => {
  */
 exports.getUploadPolicy = ({ applicationContext }) =>
   new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).createPresignedPost(
+    applicationContext.getStorageClient().createPresignedPost(
       {
-        Bucket: applicationContext.environment.documentsBucketName,
+        Bucket: applicationContext.getDocumentsBucketName(),
         Conditions: [
           ['starts-with', '$key', ''],
           ['starts-with', '$Content-Type', ''],

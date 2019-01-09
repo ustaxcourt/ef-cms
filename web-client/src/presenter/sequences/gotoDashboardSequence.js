@@ -2,17 +2,22 @@ import clearAlerts from '../actions/clearAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getCasesNew from '../actions/getCasesNewAction';
 import getUserRole from '../actions/getUserRoleAction';
+import getUsersInSection from '../actions/getUsersInSectionAction';
+import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
+import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
+import isLoggedIn from '../actions/isLoggedInAction';
+import navigateToLogin from '../actions/navigateToLoginAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
-import isLoggedIn from '../actions/isLoggedInAction';
 import setPath from '../actions/setPathAction';
-import navigateToLogin from '../actions/navigateToLoginAction';
+import setSectionWorkQueue from '../actions/setSectionWorkQueueAction';
+import setUsers from '../actions/setUsersAction';
+import setWorkItems from '../actions/setWorkItemsAction';
 
 const goToDashboard = [
   getUserRole,
   {
-    public: [setCurrentPage('DashboardPublic')],
     taxpayer: [
       getCasesByUser,
       {
@@ -30,7 +35,18 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardPetitionsClerk'),
     ],
-    docketclerk: [clearAlerts, setCurrentPage('DashboardDocketClerk')],
+    docketclerk: [
+      getUsersInSection({ sectionType: 'docket' }),
+      {
+        error: [setAlertError],
+        success: [setUsers],
+      },
+      getWorkItemsForSection('docket'),
+      setSectionWorkQueue,
+      getWorkItemsByUser,
+      setWorkItems,
+      setCurrentPage('DashboardDocketClerk'),
+    ],
     intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
       clearAlerts,
@@ -41,7 +57,12 @@ const goToDashboard = [
       },
       setCurrentPage('DashboardRespondent'),
     ],
-    seniorattorney: [clearAlerts, setCurrentPage('DashboardSeniorAttorney')],
+    seniorattorney: [
+      clearAlerts,
+      getWorkItemsByUser,
+      setWorkItems,
+      setCurrentPage('DashboardSeniorAttorney'),
+    ],
   },
 ];
 
