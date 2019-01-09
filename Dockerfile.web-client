@@ -34,7 +34,7 @@ RUN wget -q -O terraform_0.11.8_linux_amd64.zip https://releases.hashicorp.com/t
 
 RUN cp terraform /usr/local/bin/
 
-RUN curl --insecure -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip'
+RUN curl -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip'
 RUN mkdir sonar_scanner
 RUN unzip -d sonar_scanner sonar-scanner-cli-3.2.0.1227-linux.zip
 RUN mv sonar_scanner/* sonar_home
