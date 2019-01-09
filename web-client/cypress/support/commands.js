@@ -43,17 +43,6 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
   });
 });
 
-Cypress.Commands.add('routeTo', route => {
-  // hitchhike on an existing element as route trigger
-  cy.get('#extended-logo a').then($navLink => {
-    return $navLink.first().attr('href', route);
-  });
-  cy.wait(150);
-  cy.get('#extended-logo a').click({ force: true });
-  cy.url().should('include', route);
-  cy.wait(500);
-});
-
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
     cy.get('.usa-alert-error').should('exist');
@@ -70,15 +59,12 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   }
 });
 
-Cypress.Commands.add('login', (username, route) => {
-  cy.visit('/log-in');
-  cy.get('input#name').type(username);
-  cy.get('button#log-in-button').click();
-  cy.url().should('not.include', 'log-in');
+Cypress.Commands.add('login', (username, route = '/') => {
+  const url = `/log-in?token=${username}&path=${route}`;
+  cy.visit(url);
+  cy.url().should('include', route);
   cy.showsErrorMessage(false);
-  if (route) {
-    cy.routeTo(route);
-  }
+  cy.wait(500);
 });
 
 function b64toBlob(b64Data, contentType, sliceSize) {

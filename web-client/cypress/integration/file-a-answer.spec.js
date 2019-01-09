@@ -1,14 +1,10 @@
 describe('Filing an Answer', function() {
   let rowCount;
   const tableSelector = 'table#docket-record';
-  before(() => {
-    cy.login('respondent');
-  });
 
   describe('File Document Form ', () => {
     before(() => {
-      cy.get('#search-field').type('102-18');
-      cy.get('#search-input').submit();
+      cy.login('respondent', '/case-detail/102-18');
       cy.get(tableSelector)
         .find('tr')
         .then($trs => {
