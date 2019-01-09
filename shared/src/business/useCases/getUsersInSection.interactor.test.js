@@ -2,7 +2,9 @@ const { getUsersInSection } = require('./getUsersInSection.interactor');
 
 describe('Get users in section', () => {
   const applicationContext = {
-    user: { userId: 'docketclerk' },
+    getCurrentUser: () => {
+      return { userId: 'docketclerk' };
+    },
   };
 
   it('returns two docket clerks for the docket section', async () => {
