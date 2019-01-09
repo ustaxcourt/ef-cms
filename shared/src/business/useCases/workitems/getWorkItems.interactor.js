@@ -3,7 +3,6 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
 
 /**
  * getWorkItems
@@ -28,5 +27,5 @@ exports.getWorkItems = async ({ userId, applicationContext }) => {
     workItems = [];
   }
 
-  return WorkItem.validateRawCollection(workItems);
+  return workItems;
 };

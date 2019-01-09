@@ -1,8 +1,8 @@
 const { handle, getAuthHeader } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
- * updateCase
+ * updates a work item
  *
  * @param event
  * @returns {Promise<*|undefined>}
@@ -10,7 +10,9 @@ const applicationContext = require('../applicationContext');
 exports.put = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    return applicationContext.getUseCases().updateWorkItem({
+    const applicationContext = createApplicationContext({ userId });
+    return applicationContext.getUpdateWorkItemInteractor(event)({
+      ...JSON.parse(event.body),
       workItemId: event.pathParameters.workItemId,
       workItemToUpdate: JSON.parse(event.body),
       userId,

@@ -52,33 +52,6 @@ const createEFCMSTable = async () => {
     .promise();
 };
 
-const createDocumentsTable = async () => {
-  await deleteTable('efcms-documents-local');
-  console.log('Creating Documents Table');
-  return dynamo
-    .createTable({
-      TableName: 'efcms-documents-local',
-      KeySchema: [
-        {
-          AttributeName: 'documentId',
-          KeyType: 'HASH',
-        },
-      ],
-      AttributeDefinitions: [
-        {
-          AttributeName: 'documentId',
-          AttributeType: 'S',
-        },
-      ],
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 1,
-        WriteCapacityUnits: 1,
-      },
-    })
-    .promise();
-};
-
 (async () => {
-  await createDocumentsTable();
   await createEFCMSTable();
 })();

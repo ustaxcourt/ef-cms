@@ -1,22 +1,48 @@
 const client = require('../../dynamodbClientService');
 const { getWorkItemById } = require('./getWorkItemById');
 const { reassignWorkItem } = require('./syncWorkItems');
+const { stripInternalKeys } = require('../../awsDynamoPersistence');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   const existingWorkItem = await getWorkItemById({
-    workItemId: workItemToSave.workItemId,
     applicationContext,
+    workItemId: workItemToSave.workItemId,
   });
 
   if (existingWorkItem.assigneeId !== workItemToSave.assigneeId) {
     await reassignWorkItem({
+      applicationContext,
       existingWorkItem,
       workItemToSave,
-      applicationContext,
     });
   }
 
-  return client.put({
+  const caseToUpdate = await getCaseByCaseId({
+    applicationContext,
+    caseId: workItemToSave.caseId,
+  });
+
+  caseToUpdate.documents.forEach(document =>
+    document.workItems.forEach(workItem => {
+      if (workItem.workItemId === workItemToSave.workItemId) {
+        Object.assign(workItem, workItemToSave);
+      }
+    }),
+  );
+
+  await client.put({
+    applicationContext,
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: caseToUpdate.caseId,
+      sk: caseToUpdate.caseId,
+      ...caseToUpdate,
+    },
+  });
+
+  const workItem = await client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
@@ -24,4 +50,6 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
       ...workItemToSave,
     },
   });
+
+  return stripInternalKeys(workItem);
 };

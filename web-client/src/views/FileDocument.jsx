@@ -1,27 +1,32 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default connect(
-  {
-    document: state.document,
-    submitDocumentSequence: sequences.submitDocumentSequence,
-    submitting: state.submitting,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
-  },
-  function FilePetition({
-    document,
-    submitDocumentSequence,
-    submitting,
-    updateCurrentTabSequence,
-    updateDocumentValueSequence,
-  }) {
+class FilePetition extends React.Component {
+  componentDidMount() {
+    this.focusMain();
+  }
+  focusMain(e) {
+    e && e.preventDefault();
+    document.querySelector('#file-a-document-header').focus();
+    return false;
+  }
+  render() {
+    const document = this.props.document;
+    const submitDocumentSequence = this.props.submitDocumentSequence;
+    const submitting = this.props.submitting;
+    const updateCurrentTabSequence = this.props.updateCurrentTabSequence;
+    const updateDocumentValueSequence = this.props.updateDocumentValueSequence;
+
     return (
       <React.Fragment>
-        <h2>File a document</h2>
+        <h2 tabIndex="-1" id="file-a-document-header">
+          File a document
+        </h2>
         <form
           id="file-a-document"
+          aria-labelledby="file-a-document-header"
           role="form"
           noValidate
           onSubmit={e => {
@@ -40,7 +45,7 @@ export default connect(
               });
             }}
           >
-            <option value>- Select -</option>
+            <option value="Select">- Select -</option>
             <option value="Answer">Answer</option>
             <option value="Stipulated Decision">Stipulated Decision</option>
           </select>
@@ -78,5 +83,24 @@ export default connect(
         </form>
       </React.Fragment>
     );
+  }
+}
+
+FilePetition.propTypes = {
+  document: PropTypes.object,
+  submitDocumentSequence: PropTypes.func,
+  submitting: PropTypes.bool,
+  updateCurrentTabSequence: PropTypes.func,
+  updateDocumentValueSequence: PropTypes.func,
+};
+
+export default connect(
+  {
+    document: state.document,
+    submitDocumentSequence: sequences.submitDocumentSequence,
+    submitting: state.submitting,
+    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
   },
+  FilePetition,
 );

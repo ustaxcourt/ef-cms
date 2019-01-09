@@ -4,32 +4,33 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
-import openDocumentBlob from './openDocumentBlob';
-import SuccessNotification from './SuccessNotification';
 import PartyInformation from './PartyInformation';
+import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
+    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
     submitSendToIrsSequence: sequences.submitToIrsSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
+    baseUrl,
     caseDetail,
     currentTab,
+    extractedPendingMessages,
     helper,
     submitSendToIrsSequence,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
-    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -58,6 +59,50 @@ export default connect(
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
+
+          <div>
+            <h2>Pending Messages</h2>
+            {extractedPendingMessages.length === 0 && (
+              <p>No Pending Messages</p>
+            )}
+            <table className="row-border-only subsection">
+              <tbody>
+                {extractedPendingMessages.map((workItem, idx) => (
+                  <tr key={idx}>
+                    <td className="responsive-title">
+                      <p>
+                        <span className="label-inline">To</span>
+                        {workItem.assigneeName}
+                      </p>
+                      <p>
+                        <span className="label-inline">From</span>
+                        {workItem.messages[0].sentBy}
+                      </p>
+                    </td>
+                    <td>
+                      <p>
+                        <a
+                          href={`/case-detail/${
+                            workItem.docketNumber
+                          }/documents/${workItem.document.documentId}`}
+                          className="case-link"
+                        >
+                          <FontAwesomeIcon icon="file-pdf" />
+                          {workItem.document.documentType}
+                        </a>
+                      </p>
+                      <p>{workItem.messages[0].message}</p>
+                    </td>
+                    <td>
+                      <span className="label-inline">Received</span>
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <nav className="horizontal-tabs">
             <ul role="tabslist">
               <li
@@ -92,7 +137,7 @@ export default connect(
             </ul>
           </nav>
           {currentTab == 'Docket Record' && (
-            <div className="tab-content" role="tabpanel">
+            <div className="" role="tabpanel">
               {!helper.showIrsServedDate && (
                 <button
                   className="usa-button"
@@ -120,19 +165,17 @@ export default connect(
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
-                        <button
-                          className="pdf-link"
+                        <a
+                          href={`${baseUrl}/documents/${
+                            document.documentId
+                          }/documentDownloadUrl`}
+                          target="_blank"
+                          rel="noreferrer noopener"
                           aria-label="View PDF"
-                          onClick={() =>
-                            viewDocumentSequence({
-                              documentId: document.documentId,
-                              callback: openDocumentBlob,
-                            })
-                          }
                         >
                           <FontAwesomeIcon icon="file-pdf" />
                           {document.documentType}
-                        </button>
+                        </a>
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>

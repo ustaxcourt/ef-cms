@@ -22,11 +22,9 @@ function Case(rawCase) {
     this,
     rawCase,
     {
-      caseId: rawCase.caseId ? rawCase.caseId : uuid.v4(),
-      createdAt: rawCase.createdAt
-        ? rawCase.createdAt
-        : new Date().toISOString(),
-      status: rawCase.status ? rawCase.status : 'new',
+      caseId: rawCase.caseId || uuid.v4(),
+      createdAt: rawCase.createdAt || new Date().toISOString(),
+      status: rawCase.status || 'new',
     },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }
@@ -112,10 +110,9 @@ Case.prototype.attachRespondent = function({ user }) {
   this.respondent = respondent;
 };
 
-Case.prototype.attachWorkItems = function({ workItemsToAdd }) {
-  Object.assign(this, {
-    workItems: [...(this.workItems || []), ...workItemsToAdd],
-  });
+Case.prototype.addDocument = function(document) {
+  document.caseId = this.caseId;
+  this.documents = [...(this.documents || []), document];
 };
 
 /**

@@ -1,17 +1,17 @@
 const { handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
- * GET Pre-signed Policy URL API Lambda
+ * used for getting the download policy which is needed for users to download files directly from S3 via the UI
  *
- * @param event
- * @param context
- * @param callback
+ * @param {Object} event
+ * @returns {Promise<*|undefined>}
  */
 exports.get = event =>
-  handle(() =>
-    applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+  handle(() => {
+    const applicationContext = createApplicationContext();
+    return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,
-    }),
-  );
+    });
+  });
