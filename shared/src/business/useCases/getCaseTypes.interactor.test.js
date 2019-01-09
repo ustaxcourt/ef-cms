@@ -1,5 +1,18 @@
 const { getCaseTypes } = require('./getCaseTypes.interactor');
+const joi = require('joi-browser');
 
+const schema = joi.object().keys({
+  type: joi.string().required(),
+  description: joi.string().required(),
+});
+
+const validate = arrayToValidate => {
+  arrayToValidate.forEach(item => {
+    if (!joi.validate(item, schema)) {
+      throw new Error('invalid');
+    }
+  });
+};
 describe('Get case types', () => {
   beforeEach(() => {});
 
@@ -15,6 +28,7 @@ describe('Get case types', () => {
     let error;
     try {
       JSON.parse(JSON.stringify(caseTypes[0]));
+      validate(caseTypes);
     } catch (e) {
       error = e;
     }
