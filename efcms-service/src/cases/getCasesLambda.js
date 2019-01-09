@@ -1,18 +1,28 @@
 const { getAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
- * GET Cases API Lambda
+ * used for fetching all cases of a particular status, user role, etc
  *
- * @param event
- * @param context
- * @param callback
+ * @param {Object} event
+ * @returns {Promise<*|undefined>}
  */
-
 exports.get = event =>
   handle(() => {
     const status = (event.queryStringParameters || {}).status;
+    const documentId = (event.queryStringParameters || {}).documentId;
     const userId = getAuthHeader(event);
-    return applicationContext.getUseCases().getCases({ userId: userId, status: status, applicationContext});
+    const applicationContext = createApplicationContext({ userId });
+    const useCase = applicationContext.getInteractorForGettingCases({
+      userId,
+      documentId,
+      applicationContext,
+    });
+    return useCase({
+      documentId,
+      userId: userId,
+      status: status,
+      applicationContext,
+    });
   });

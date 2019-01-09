@@ -1,18 +1,3 @@
-const { S3 } = require('aws-sdk');
-
-/**
- * getS3
- * @param region
- * @param s3Endpoint
- * @returns {S3}
- */
-const getS3 = ({ region, s3Endpoint }) => {
-  return new S3({
-    region,
-    s3ForcePathStyle: true,
-    endpoint: s3Endpoint,
-  });
-};
 /**
  * getDownloadPolicyUrl
  * @param documentId
@@ -21,10 +6,10 @@ const getS3 = ({ region, s3Endpoint }) => {
  */
 exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
   return new Promise((resolve, reject) => {
-    getS3(applicationContext.environment).getSignedUrl(
+    applicationContext.getStorageClient().getSignedUrl(
       'getObject',
       {
-        Bucket: applicationContext.environment.documentsBucketName,
+        Bucket: applicationContext.getDocumentsBucketName(),
         Key: documentId,
         Expires: 120,
       },

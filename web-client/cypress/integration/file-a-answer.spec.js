@@ -1,52 +1,45 @@
-describe('File an Answer', function() {
+describe('Filing an Answer', function() {
   let rowCount;
-  before(() => {
-    cy.login('respondent');
-  });
+  const tableSelector = 'table#docket-record';
 
-  describe('Respondent dashboard view (should contain 1 item of 101-18)', () => {
-    it('finds footer element', () => {
-      cy.get('footer').should('exist');
-    });
-
-    it('case list is visible', () => {
-      cy.get('table')
+  describe('File Document Form ', () => {
+    before(() => {
+      cy.login('respondent', '/case-detail/102-18');
+      cy.get(tableSelector)
         .find('tr')
         .then($trs => {
           rowCount = $trs.length;
         });
-      cy.get('#search-field').type('102-18');
-      cy.get('#search-input button').click();
-    });
-  });
-
-  describe('file a document', () => {
-    before(() => {
-      cy.url().should('include', 'case-detail/102-18');
     });
 
     it('should have a file a document button', () => {
       cy.get('#button-file-document').click();
     });
 
-    it('select an answer type document', () => {
+    it('can select an answer type and document', () => {
       cy.get('#document-type').select('Answer');
-
       cy.upload_file('w3-dummy.pdf', '#file');
     });
 
-    it('upload the answer', () => {
+    it('can upload the answer with indication of success ', () => {
       cy.get('#file-a-document button[type="submit"]').click();
+      cy.showsSuccessMessage(true);
     });
 
-    it('go back to dashboard', () => {
-      cy.get('#queue-nav').click();
-    });
-
-    it('case list table reflects newly-added record', () => {
-      cy.get('table')
+    it('docket record table reflects newly-added record', () => {
+      cy.get(tableSelector)
         .find('tr')
         .should('have.length', rowCount + 1);
+      cy.get(tableSelector)
+        .find('a')
+        .should('contain', 'Answer');
+    });
+
+    it('reflects changes to 102-18 by showing it in respondent work queue', () => {
+      cy.get('#queue-nav').click();
+      cy.get('table#workQueue')
+        .find('a')
+        .should('contain', '102-18');
     });
   });
 });

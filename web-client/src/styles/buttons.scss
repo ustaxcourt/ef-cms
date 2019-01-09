@@ -1,0 +1,40 @@
+.usa-button {
+  margin: 0 30px 30px 0;
+}
+
+button {
+  svg {
+    margin-right: 8px;
+  }
+}
+
+button.pdf-link,
+button.link {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-blue;
+  cursor: pointer;
+  font-weight: normal;
+  text-align: left;
+  text-decoration: underline;
+}
+
+button.pdf-link:hover,
+button.link {
+  color: $color-blue;
+}
+
+button.tab-link {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-base;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: none;
+}
+
+#file-a-petition .usa-button-active:disabled {
+  background-color: $color-primary-darkest;
+}

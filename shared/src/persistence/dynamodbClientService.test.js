@@ -1,16 +1,17 @@
+const AWS = require('aws-sdk');
 const chai = require('chai');
 const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
-const AWS = require('aws-sdk');
+
+chai.use(require('chai-string'));
 
 const {
-  put,
-  query,
-  delete: deleteObj,
-  get,
   batchGet,
   batchWrite,
+  delete: deleteObj,
+  get,
+  put,
+  query,
   updateConsistent,
 } = require('./dynamodbClientService');
 
@@ -19,6 +20,12 @@ const MOCK_ITEM = {
 };
 
 let documentClientStub;
+
+const applicationContext = {
+  getDocumentClient: () => {
+    return documentClientStub;
+  },
+};
 
 describe('dynamodbClientService', function() {
   beforeEach(() => {
@@ -86,6 +93,7 @@ describe('dynamodbClientService', function() {
   describe('put', async () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
+        applicationContext,
         Item: MOCK_ITEM,
       });
       expect(result).to.deep.equal(MOCK_ITEM);
@@ -94,26 +102,31 @@ describe('dynamodbClientService', function() {
 
   describe('updateConsistent', async () => {
     it('should return the  same Item property passed in in the params', async () => {
-      const result = await updateConsistent({});
+      const result = await updateConsistent({ applicationContext });
       expect(result).to.deep.equal('123');
     });
   });
 
   describe('get', async () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await get({});
+      const result = await get({ applicationContext });
       expect(result).to.deep.equal(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
       documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
-      const result = await get({});
+      const result = await get({ applicationContext });
+      expect(result).to.be.undefined;
+    });
+    it('should return nothing if the promise is rejected', async () => {
+      documentClientStub.get.returns({ promise: () => Promise.reject({}) });
+      const result = await get({ applicationContext });
       expect(result).to.be.undefined;
     });
   });
 
   describe('query', async () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await query({});
+      const result = await query({ applicationContext });
       expect(result).to.deep.equal([MOCK_ITEM]);
     });
   });
@@ -121,6 +134,7 @@ describe('dynamodbClientService', function() {
   describe('batchGet', async () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
+        applicationContext,
         tableName: 'a',
         keys: [
           {
@@ -129,6 +143,14 @@ describe('dynamodbClientService', function() {
         ],
       });
       expect(result).to.deep.equal([MOCK_ITEM]);
+    });
+    it('should return empty array if no keys', async () => {
+      const result = await batchGet({
+        applicationContext,
+        tableName: 'a',
+        keys: [],
+      });
+      expect(result).to.deep.equal([]);
     });
   });
 
@@ -140,6 +162,7 @@ describe('dynamodbClientService', function() {
         ...MOCK_ITEM,
       };
       await batchWrite({
+        applicationContext,
         tableName: 'a',
         items: [item],
       });
@@ -165,6 +188,7 @@ describe('dynamodbClientService', function() {
   describe('delete', async () => {
     it('should try to delete using the key passed in', async () => {
       await deleteObj({
+        applicationContext,
         tableName: 'a',
         key: {
           pk: '123',

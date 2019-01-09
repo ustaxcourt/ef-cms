@@ -1,6 +1,12 @@
-$font-path: '../node_modules/uswds/dist/fonts';
-$image-path: '../node_modules/uswds/dist/img';
-
+@import './styles/variables.scss';
 @import '../node_modules/uswds/src/stylesheets/uswds.scss';
 @import './styles/overrides.scss';
+@import './styles/typography.scss';
+@import './styles/buttons.scss';
 @import './styles/custom.scss';
+@import './styles/tables.scss';
+@import './styles/forms.scss';
+@import './styles/progress.scss';
+@import './styles/tabs.scss';
+@import './styles/cards.scss';
+@import './styles/icons.scss';

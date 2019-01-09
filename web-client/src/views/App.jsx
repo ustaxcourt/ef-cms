@@ -1,7 +1,7 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
@@ -14,10 +14,10 @@ import DashboardPetitionsClerk from './DashboardPetitionsClerk';
 import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
 import DashboardSeniorAttorney from './DashboardSeniorAttorney';
+import DocumentDetail from './DocumentDetail';
 import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
-import IntakeClerkDashboard from './IntakeClerkDashboard';
 import Loading from './Loading';
 import LogIn from './LogIn';
 import StyleGuide from './StyleGuide';
@@ -33,10 +33,10 @@ const pages = {
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPublic,
-  DashboardSeniorAttorney,
   DashboardRespondent,
+  DashboardSeniorAttorney,
+  DocumentDetail,
   FilePetition,
-  IntakeClerkDashboard,
   Loading,
   LogIn,
   StyleGuide,

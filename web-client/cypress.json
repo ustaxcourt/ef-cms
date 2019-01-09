@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:1234",
+  "defaultCommandTimeout": 30000,
   "reporter": "spec",
   "defaultCommandTimeout": 30000,
   "reporterOptions": {

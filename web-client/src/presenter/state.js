@@ -3,7 +3,13 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
+import { extractedDocument } from './computeds/extractDocument';
+import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
+import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { showAction } from './computeds/documentDetailHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
+import workQueueHelper from './computeds/workQueueHelper';
 
 export default {
   path: '/',
@@ -21,26 +27,15 @@ export default {
   },
   petition: {},
   document: {},
+  documentId: null,
   form: {},
   searchTerm: '',
-  workQueue: [
-    {
-      docketNumber: '00101-18',
-      receivedDate: '12/15/2018 9:33am',
-      sentBy: 'Susie Smith',
-      message: 'This is a message',
-      documentType: 'Stipulated Decision',
-      trialDate: 'n/a',
-    },
-    {
-      docketNumber: '00101-18',
-      receivedDate: '12/15/2018 9:33am',
-      sentBy: 'Susie Smith',
-      message: 'This is a message',
-      documentType: 'Stipulated Decision',
-      trialDate: 'n/a',
-    },
-  ],
+  workQueue: [],
+  sectionWorkQueue: [],
+  users: [],
+  workQueueToDisplay: 'individual',
+  assigneeId: null,
+  selectedWorkItems: [],
   user: {
     userId: '',
     role: 'public',
@@ -72,7 +67,15 @@ export default {
   },
   caseDetail: {},
   cases: [],
+  workItemActions: {},
+  completeForm: {},
   caseDetailHelper,
+  extractedDocument,
+  extractedPendingMessagesFromCaseDetail,
   formattedCaseDetail,
   formattedCases,
+  formattedSectionWorkQueue,
+  formattedWorkQueue,
+  workQueueHelper,
+  showAction,
 };
