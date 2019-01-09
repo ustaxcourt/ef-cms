@@ -1,7 +1,7 @@
 export default section => async ({ applicationContext, path }) => {
   const users = await applicationContext
     .getUseCases()
-    .getUsersInSection({ sectionType: section });
+    .getUsersInSection({ section, applicationContext });
   return path.success({
     users,
   });
