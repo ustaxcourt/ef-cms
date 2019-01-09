@@ -44,10 +44,8 @@ describe('File a petition', function() {
     it('has three file inputs', () => {
       cy.get('form#file-a-petition')
         .find('input[type="file"]')
-        .should('have.length', 3);
+        .should('have.length', 1);
       cy.get('input#petition-file').should('exist');
-      cy.get('input#request-for-place-of-trial').should('exist');
-      cy.get('input#statement-of-taxpayer-id').should('exist');
       cy.contains('button[type="submit"]', 'Upload');
     });
 
@@ -61,24 +59,6 @@ describe('File a petition', function() {
 
       cy.get('form#file-a-petition')
         .find('label[for="petition-file"]')
-        .should('have.class', 'validated');
-
-      // select second file
-      cy.upload_file(
-        'w3-dummy.pdf',
-        'form#file-a-petition #request-for-place-of-trial',
-      );
-      cy.get('form#file-a-petition')
-        .find('label[for="request-for-place-of-trial"]')
-        .should('have.class', 'validated');
-
-      // select third file
-      cy.upload_file(
-        'w3-dummy.pdf',
-        'form#file-a-petition #statement-of-taxpayer-id',
-      );
-      cy.get('form#file-a-petition')
-        .find('label[for="statement-of-taxpayer-id"]')
         .should('have.class', 'validated');
     });
 
