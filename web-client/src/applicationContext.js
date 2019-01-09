@@ -20,6 +20,7 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
+import { getInternalUsers } from '../../shared/src/business/useCases/getInternalUsers.interactor';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
@@ -28,6 +29,15 @@ import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+
+let user;
+
+const getCurrentUser = () => {
+  return user;
+};
+const setCurrentUser = newUser => {
+  user = newUser;
+};
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -58,6 +68,7 @@ const applicationContext = {
       getCasesByStatus,
       getCasesByUser,
       getCasesForRespondent,
+      getInternalUsers,
       getUser,
       getUsersInSection,
       getWorkItem,
@@ -70,6 +81,8 @@ const applicationContext = {
       forwardWorkItem,
     };
   },
+  getCurrentUser,
+  setCurrentUser,
 };
 
 export default applicationContext;
