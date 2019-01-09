@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "post-install": "sed -i '' -e 's/http:/https:/g' package-lock.json"
+  }
+}
