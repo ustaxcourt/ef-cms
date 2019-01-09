@@ -91,8 +91,8 @@ pipeline {
           }
           post {
             always {
-              archiveArtifacts artifacts: 'cypress/**/*.mp4'
-              archiveArtifacts artifacts: 'cypress/**/*.png'
+              archiveArtifacts(artifacts: 'cypress/**/*.mp4', allowEmptyArchive: true)
+              archiveArtifacts(artifacts: 'cypress/**/*.png', allowEmptyArchive: true)
             }
           }
         }
