@@ -2,11 +2,11 @@ describe('File a petition', function() {
   let rowCount;
   let createdDocketNumber;
 
-  before(() => {
-    cy.login('taxpayer');
-  });
-
   describe('Dashboard view', () => {
+    before(() => {
+      cy.login('taxpayer');
+    });
+
     it('finds footer element', () => {
       cy.get('footer').should('exist');
     });
@@ -38,7 +38,7 @@ describe('File a petition', function() {
 
   describe('creation form', () => {
     before(() => {
-      cy.url().should('include', 'file-a-petition');
+      cy.login('taxpayer', 'file-a-petition');
     });
 
     it('has three file inputs', () => {
@@ -85,7 +85,8 @@ describe('File a petition', function() {
 
   describe('can view case detail', () => {
     before(() => {
-      cy.routeTo(`/case-detail/${createdDocketNumber}`);
+      cy.get('#search-field').type(createdDocketNumber);
+      cy.get('#search-input').submit();
       cy.url().should('include', 'case-detail');
     });
 
