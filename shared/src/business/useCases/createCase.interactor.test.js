@@ -53,6 +53,8 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: MOCK_CASE_ID,
       docketNumber: '101-18',
+      caseTitle:
+        'test taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       petitioners: [
         {
           address: '123',
@@ -68,9 +70,9 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -78,9 +80,9 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
         {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -88,9 +90,9 @@ describe('createCase', () => {
           createdAt: DATE,
           userId: 'taxpayer',
           filedBy: 'Petitioner test taxpayer',
-          validated: true,
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
+          workItems: [],
         },
       ],
       createdAt: DATE,
@@ -132,7 +134,7 @@ describe('createCase', () => {
     }
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {

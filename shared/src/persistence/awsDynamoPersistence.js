@@ -1,5 +1,4 @@
 const client = require('./dynamodbClientService');
-const { syncWorkItems } = require('./dynamo/workitems/syncWorkItems');
 
 const stripInternalKeys = items => {
   const strip = item => {
@@ -15,11 +14,13 @@ const stripInternalKeys = items => {
   }
   return items;
 };
+exports.stripInternalKeys = stripInternalKeys;
 
 const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const mapping = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -33,6 +34,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const ids = mapping.map(metadata => metadata.sk);
 
   const results = await client.batchGet({
+    applicationContext,
     tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
@@ -49,6 +51,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const [mapping] = await client.query({
+    applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -64,6 +67,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
   const sk = mapping.sk;
 
   const results = await client.get({
+    applicationContext,
     TableName: TABLE,
     Key: {
       pk: sk,
@@ -77,92 +81,6 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
 exports.getRecordViaMapping = getRecordViaMapping;
 
 /**
- * createCase
- * @param caseRecord
- * @param applicationContext
- * @returns {*}
- */
-exports.createCase = async ({ caseRecord, applicationContext }) => {
-  await client.batchWrite({
-    tableName: `efcms-${applicationContext.environment.stage}`,
-    items: [
-      {
-        pk: caseRecord.caseId,
-        sk: caseRecord.caseId,
-        ...caseRecord,
-      },
-      {
-        pk: `${caseRecord.docketNumber}|case`,
-        sk: caseRecord.caseId,
-      },
-      {
-        pk: 'new|case-status',
-        sk: caseRecord.caseId,
-      },
-      {
-        pk: `${caseRecord.userId}|case`,
-        sk: caseRecord.caseId,
-      },
-    ],
-  });
-  return caseRecord;
-};
-
-/**
- * createDocumentMetadata
- * @param documentToCreate
- * @param applicationContext
- * @returns {*}
- */
-exports.createDocumentMetadata = ({ documentToCreate, applicationContext }) => {
-  const entity = documentToCreate;
-  const key = 'documentId';
-  return client.put({
-    TableName: `efcms-documents-${applicationContext.environment.stage}`,
-    Item: entity,
-    ConditionExpression: `attribute_not_exists(#${key})`,
-    ExpressionAttributeNames: {
-      [`#${key}`]: `${key}`,
-    },
-  });
-};
-
-/**
- * getCaseByCaseId
- * @param caseId
- * @param applicationContext
- * @returns {*}
- */
-exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-  const results = await client.get({
-    TableName: TABLE,
-    Key: {
-      pk: caseId,
-      sk: caseId,
-    },
-  });
-  return stripInternalKeys(results);
-};
-
-/**
- * getCaseByDocketNumber
- * @param docketNumber
- * @param applicationContext
- * @returns {*}
- */
-exports.getCaseByDocketNumber = async ({
-  docketNumber,
-  applicationContext,
-}) => {
-  return getRecordViaMapping({
-    applicationContext,
-    key: docketNumber,
-    type: 'case',
-  });
-};
-
-/**
  * incrementCounter
  * @param applicationContext
  * @returns {*}
@@ -173,11 +91,14 @@ exports.getCaseByDocketNumber = async ({
 exports.incrementCounter = ({ applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
+  const year = new Date().getFullYear().toString();
+
   return client.updateConsistent({
+    applicationContext,
     TableName: TABLE,
     Key: {
-      pk: 'docketNumberCounter',
-      sk: 'docketNumberCounter', // TODO: set sk by the year, i.e. 2018
+      pk: `docketNumberCounter-${year}`,
+      sk: `docketNumberCounter-${year}`,
     },
     UpdateExpression: 'ADD #a :x',
     ExpressionAttributeNames: {
@@ -191,11 +112,12 @@ exports.incrementCounter = ({ applicationContext }) => {
 };
 
 const createRespondentCaseMapping = async ({
+  applicationContext,
   caseId,
   respondentId,
-  applicationContext,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${respondentId}|activeCase`,
@@ -204,13 +126,16 @@ const createRespondentCaseMapping = async ({
   });
 };
 
+exports.createRespondentCaseMapping = createRespondentCaseMapping;
+
 exports.deleteMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   await client.delete({
+    applicationContext,
     tableName: `efcms-${applicationContext.environment.stage}`,
     key: {
       pk: `${pkId}|${type}`,
@@ -220,12 +145,13 @@ exports.deleteMappingRecord = async ({
 };
 
 exports.createMappingRecord = async ({
+  applicationContext,
   pkId,
   skId,
   type,
-  applicationContext,
 }) => {
   return client.put({
+    applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${pkId}|${type}`,
@@ -234,109 +160,21 @@ exports.createMappingRecord = async ({
   });
 };
 
-/**
- * saveCase
- * @param caseToSave
- * @param applicationContext
- * @returns {*}
- */
-exports.saveCase = async ({ caseToSave, applicationContext }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-  const currentCaseState = await client.get({
-    TableName: TABLE,
-    Key: {
-      pk: caseToSave.caseId,
-      sk: caseToSave.caseId,
-    },
-  });
+const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
+  if (isAuthorizedForWorkItems) return casesToModify;
+  if (!casesToModify) return casesToModify;
 
-  const currentStatus = currentCaseState.status;
+  const strip = caseToModify => {
+    delete caseToModify.workItems;
+  };
 
-  if (!currentCaseState.respondent && caseToSave.respondent) {
-    await createRespondentCaseMapping({
-      caseId: caseToSave.caseId,
-      respondentId: caseToSave.respondent.respondentId,
-      applicationContext,
-    });
+  if (casesToModify.length) {
+    casesToModify.forEach(strip);
+    return casesToModify;
+  } else {
+    strip(casesToModify);
+    return casesToModify;
   }
-
-  await syncWorkItems({
-    applicationContext,
-    caseToSave,
-    currentCaseState,
-  });
-
-  // if a stipulated decision was uploaded, create a work item entry
-  if (currentStatus !== caseToSave.status) {
-    await client.delete({
-      tableName: TABLE,
-      key: {
-        pk: `${currentStatus}|case-status`,
-        sk: caseToSave.caseId,
-      },
-    });
-
-    await client.put({
-      TableName: TABLE,
-      Item: {
-        pk: `${caseToSave.status}|case-status`,
-        sk: caseToSave.caseId,
-      },
-    });
-  }
-
-  const results = await client.put({
-    TableName: TABLE,
-    Item: {
-      pk: caseToSave.caseId,
-      sk: caseToSave.caseId,
-      ...caseToSave,
-    },
-  });
-  return stripInternalKeys(results);
 };
 
-/**
- * getCasesByUser
- * @param userId
- * @param applicationContext
- * @returns {*}
- */
-exports.getCasesByUser = ({ userId, applicationContext }) => {
-  return getRecordsViaMapping({
-    applicationContext,
-    key: userId,
-    type: 'case',
-  });
-};
-
-/**
- * getCasesForRespondent
- * @param userId
- * @param applicationContext
- * @returns {*}
- */
-exports.getCasesForRespondent = async ({
-  respondentId,
-  applicationContext,
-}) => {
-  return getRecordsViaMapping({
-    applicationContext,
-    key: respondentId,
-    type: 'activeCase',
-  });
-};
-
-/**
- * getCasesByStatus
- * @param status
- * @param applicationContext
- * @returns {*}
- */
-exports.getCasesByStatus = async ({ status, applicationContext }) => {
-  return getRecordsViaMapping({
-    applicationContext,
-    key: status,
-    type: 'case-status',
-  });
-};
+exports.stripWorkItems = stripWorkItems;

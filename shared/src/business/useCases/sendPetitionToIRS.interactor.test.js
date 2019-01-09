@@ -121,7 +121,7 @@ describe('Send petition to IRS', () => {
   it('handles error from the irs gateway', async () => {
     caseRecord.documents = documents;
     let savedCaseRecord = Object.assign(caseRecord);
-    const stub = sinon.stub().throws(new Error('blech'));
+    const stub = sinon.stub().throws(new Error('test-error-string'));
     applicationContext = {
       getPersistenceGateway: () => {
         return {
@@ -147,11 +147,11 @@ describe('Send petition to IRS', () => {
     }
     assert.ok(error);
     expect(error.message).toContain(
-      'error sending c54ba5a9-b37b-479d-9201-067ec6e335ba to IRS: blech',
+      'error sending c54ba5a9-b37b-479d-9201-067ec6e335ba to IRS: test-error-string',
     );
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {

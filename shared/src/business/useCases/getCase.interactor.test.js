@@ -127,7 +127,7 @@ describe('Get case', () => {
     }
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
@@ -153,7 +153,7 @@ describe('Get case', () => {
     expect(error.message).toContain('The entity was invalid');
   });
 
-  it('throws an error is the entity returned from persistence is invalid', async () => {
+  it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {

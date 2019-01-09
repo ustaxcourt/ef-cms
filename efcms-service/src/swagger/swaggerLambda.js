@@ -1,10 +1,9 @@
 const swagger = require('../../swagger.json');
 /**
- * Swagger HTML Page Lambda
+ * Renders a simple HTML page that loads up the swagger-ui package and consumes the swagger.json file found at the root of this project.
  *
- * @param event
- * @param context
- * @param callback
+ * @param {Error} err
+ * @returns {Object} the api-gateway response object where body contains the HTML
  */
 exports.handler = async () => {
   const body = `<html>
@@ -28,7 +27,7 @@ exports.handler = async () => {
     body: body,
     headers: {
       'Content-Type': 'text/html',
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
-  }
+  };
 };

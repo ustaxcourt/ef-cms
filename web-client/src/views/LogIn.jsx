@@ -29,7 +29,7 @@ export default connect(
               id="name"
               type="text"
               name="name"
-              autoCapitalize="off"
+              autoCapitalize="none"
               value={form.name}
               onChange={e => {
                 updateFormValueSequence({
@@ -39,7 +39,9 @@ export default connect(
               }}
             />
           </div>
-          <input type="submit" value="Log in" />
+          <button id="log-in-button" className="usa-button" type="submit">
+            Log in
+          </button>
         </form>
       </section>
     );
