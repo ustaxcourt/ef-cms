@@ -13,11 +13,7 @@ export default async ({ applicationContext, get, store }) => {
     );
   };
 
-  const {
-    petitionDocumentId,
-    requestForPlaceOfTrialDocumentId,
-    statementOfTaxpayerIdentificationNumberDocumentId,
-  } = await useCases.uploadCasePdfs({
+  const { petitionDocumentId } = await useCases.uploadCasePdfs({
     applicationContext,
     caseInitiator,
     userId: user.userId,
@@ -26,17 +22,7 @@ export default async ({ applicationContext, get, store }) => {
 
   await useCases.createCase({
     applicationContext,
-    documents: [
-      { documentType: 'Petition', documentId: petitionDocumentId },
-      {
-        documentType: 'Request for Place of Trial',
-        documentId: requestForPlaceOfTrialDocumentId,
-      },
-      {
-        documentType: 'Statement of Taxpayer Identification Number',
-        documentId: statementOfTaxpayerIdentificationNumberDocumentId,
-      },
-    ],
+    documents: [{ documentType: 'Petition', documentId: petitionDocumentId }],
     userId: user.userId,
   });
 };

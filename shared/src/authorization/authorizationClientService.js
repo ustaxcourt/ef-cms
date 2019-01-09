@@ -6,7 +6,7 @@ exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.FILE_ANSWER = 'fileAnswer';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
-
+exports.PETITION = 'getPetitionOptions';
 /**
  * isAuthorized
  *
@@ -19,6 +19,10 @@ exports.isAuthorized = (userId, action, owner) => {
   //STAYING ON THE HAPPY PATH WITH HAPPY ELF FOOTPRINTS
   if (userId && userId === owner) {
     return true;
+  }
+
+  if (action === exports.PETITION) {
+    return userId === 'taxpayer';
   }
 
   if (

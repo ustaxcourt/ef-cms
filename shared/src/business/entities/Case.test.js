@@ -182,8 +182,29 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getCaseTypes', () => {
+    it('returns the case types', () => {
+      const caseTypes = Case.getCaseTypes();
+      expect(caseTypes).not.toBeNull();
+      expect(caseTypes.length).toEqual(12);
+    });
+  });
+
+  describe('attachRespondent', () => {
+    it('adds the user to the respondents', () => {
+      const caseToVerify = new Case({});
+      caseToVerify.attachRespondent({
+        user: {
+          userId: 'respondent',
+        },
+      });
+      expect(caseToVerify.respondent).not.toBeNull();
+      expect(caseToVerify.respondent.userId).toEqual('respondent');
+    });
+  });
+
   describe('addDocument', () => {
-    it('should attach the document to the case', () => {
+    it('attaches the document to the case', () => {
       const caseToVerify = new Case({});
       caseToVerify.addDocument({
         documentType: 'Answer',
@@ -195,6 +216,27 @@ describe('Case entity', () => {
         documentType: 'Answer',
         documentId: '123',
         userId: 'respondent',
+      });
+    });
+  });
+
+  describe('getProcedureTypes', () => {
+    it('returns the procedure types', () => {
+      const procedureTypes = Case.getProcedureTypes();
+      expect(procedureTypes).not.toBeNull();
+      expect(procedureTypes.length).toEqual(2);
+      expect(procedureTypes[0]).toEqual('Small');
+      expect(procedureTypes[1]).toEqual('Regular');
+    });
+  });
+
+  describe('getTrialCities', () => {
+    it('returns the trial cities by procedure type', () => {
+      const procedureTypes = Case.getProcedureTypes();
+      procedureTypes.forEach(procedureType => {
+        const trialCities = Case.getTrialCities(procedureType);
+        expect(trialCities).not.toBeNull();
+        expect(trialCities.length).toBeGreaterThan(1);
       });
     });
   });

@@ -1,3 +1,4 @@
+import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
@@ -43,6 +44,7 @@ export default {
   sequences: {
     assignSelectedWorkItemsSequence,
     clearDocumentSequence,
+    getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
