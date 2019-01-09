@@ -1,13 +1,10 @@
 describe('Filing an Answer', function() {
   let rowCount;
   const tableSelector = 'table#docket-record';
-  before(() => {
-    cy.login('respondent');
-  });
 
   describe('File Document Form ', () => {
     before(() => {
-      cy.routeTo('/case-detail/102-18');
+      cy.login('respondent', '/case-detail/102-18');
       cy.get(tableSelector)
         .find('tr')
         .then($trs => {
@@ -39,7 +36,7 @@ describe('Filing an Answer', function() {
     });
 
     it('reflects changes to 102-18 by showing it in respondent work queue', () => {
-      cy.routeTo('/');
+      cy.get('#queue-nav').click();
       cy.get('table#workQueue')
         .find('a')
         .should('contain', '102-18');
