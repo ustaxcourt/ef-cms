@@ -87,7 +87,13 @@ pipeline {
         stage('Cypress') {
           agent any
           steps {
-            sh "./docker-cypress.sh"
+            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
+          }
+          post {
+            always {
+              archiveArtifacts(artifacts: 'cypress/**/*.mp4', allowEmptyArchive: true)
+              archiveArtifacts(artifacts: 'cypress/**/*.png', allowEmptyArchive: true)
+            }
           }
         }
       }
