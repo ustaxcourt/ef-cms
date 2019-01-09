@@ -1,10 +1,8 @@
-import { state } from 'cerebral';
-
-export default async ({ applicationContext, get, path, props }) => {
+export default async ({ applicationContext, path, props }) => {
   const useCases = applicationContext.getUseCases();
   const trialCities = await useCases.getTrialCities({
-    userId: get(state.user.userId),
-    procedureType: props.procedureType,
+    procedureType: props.value,
+    applicationContext: applicationContext,
   });
   if (trialCities) {
     return path.success({ trialCities });
