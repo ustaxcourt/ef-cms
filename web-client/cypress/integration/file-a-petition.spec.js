@@ -105,7 +105,8 @@ describe('File a petition', function() {
 
   describe('can view case detail', () => {
     before(() => {
-      cy.routeTo(`/case-detail/${createdDocketNumber}`);
+      cy.get('#search-field').type(createdDocketNumber);
+      cy.get('#search-input').submit();
       cy.url().should('include', 'case-detail');
     });
 
