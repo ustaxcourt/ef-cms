@@ -237,7 +237,7 @@ class DocumentDetail extends React.Component {
                               </p>
                               <p>
                                 <span className="label-inline">Received</span>
-                                {message.createdAtFormatted}
+                                {message.createdAtTimeFormatted}
                               </p>
                               <p>{message.message}</p>
                               {workItem.historyMessages.length - 1 !== mIdx && (
