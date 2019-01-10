@@ -2,6 +2,7 @@ import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import ModalDialog from './ModalDialog';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -11,6 +12,7 @@ export default connect(
     getTrialCities: sequences.getTrialCitiesSequence,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
+    startACaseCancelSequence: sequences.startACaseCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     trialCities: state.trialCities,
@@ -22,6 +24,7 @@ export default connect(
     // getTrialCities,
     petition,
     procedureTypes,
+    startACaseCancelSequence,
     submitFilePetitionSequence,
     submitting,
     trialCities,
@@ -42,6 +45,7 @@ export default connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
+          <ModalDialog />
           <ErrorNotification />
           <div className="grey-container">
             <h2>Are you ready?</h2>
@@ -245,6 +249,16 @@ export default connect(
           >
             {submitting && <div className="spinner" />}
             Submit to U.S. Tax Court
+          </button>
+          <button
+            type="button"
+            className="usa-button-secondary"
+            onClick={() => {
+              startACaseCancelSequence();
+              return false;
+            }}
+          >
+            Cancel
           </button>
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">
