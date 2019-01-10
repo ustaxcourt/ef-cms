@@ -1,4 +1,5 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -6,62 +7,63 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
+    caseTypes: state.caseTypes,
+    getTrialCities: sequences.getTrialCitiesSequence,
     petition: state.petition,
+    procedureTypes: state.procedureTypes,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
-    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     trialCities: state.trialCities,
-    getTrialCities: sequences.getTrialCitiesSequence,
-    procedureTypes: state.procedureTypes,
-    caseTypes: state.caseTypes,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
   },
   function FilePetition({
     caseTypes,
+    getTrialCities,
     petition,
     procedureTypes,
     submitFilePetitionSequence,
     submitting,
-    getTrialCities,
     trialCities,
     updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
-        <h1 tabIndex="-1" id="file-h1">
-          File a petition
-        </h1>
-        <h2 id="file-metadata">
-          Please provide the following requested information
-        </h2>
-        <p>* All are required.</p>
         <form
-          id="file-petition-metadata"
           role="form"
-          aria-labelledby="#file-metadata"
+          aria-labelledby="start-case-header"
           noValidate
+          onSubmit={e => {
+            e.preventDefault();
+            submitFilePetitionSequence();
+          }}
         >
-          <div role="list">
-            <div role="listitem" className="usa-form-group">
-              <label htmlFor="irsNoticeDate" className="">
-                1. Date of IRS Notice
-              </label>
-              <span>Date of the notice received from the IRS.</span>
-              <input
-                id="irsNoticeDate"
-                type="date"
-                name="irsNoticeDate"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
-            <div role="listitem" className="usa-form-group">
-              <label htmlFor="case-type">2. Case type is</label>
+          <h1 tabIndex="-1" id="start-case-header">
+            Start a Case
+          </h1>
+          <ErrorNotification />
+          <p>* All fields required, unless marked as optional.</p>
+          <div className="grey-container">
+            <p>You’ll need the following information to begin a new case.</p>
+            <p>
+              <FontAwesomeIcon icon="file-pdf" />
+              Petition saved as a PDF
+            </p>
+            <p>
+              Use USTC Form 2 or a custom petition that complies with the
+              requirements of the Tax Court Rules of Practice and Proceedure
+            </p>
+            <p>
+              <FontAwesomeIcon icon="file-pdf" />
+              IRS Notice(s) saved as a single PDF
+            </p>
+            <p>Attach any notices you may have received from the IRS</p>
+          </div>
+          <h2>Did you receive a notice from the IRS?</h2>
+          <div className="blue-container">
+            <div className="usa-form-group">
+              <label htmlFor="case-type">Type of Notice</label>
               <select
                 name="caseType"
                 id="case-type"
@@ -69,11 +71,11 @@ export default connect(
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value
+                    value: e.target.value,
                   });
                 }}
               >
-                <option value=""> -- Select -- </option>
+                <option value="">-- Select --</option>
                 {caseTypes.map(caseType => (
                   <option key={caseType.type} value={caseType.type}>
                     {caseType.description}
@@ -81,75 +83,86 @@ export default connect(
                 ))}
               </select>
             </div>
-            <div role="listitem" className="usa-form-group">
-              <label htmlFor="procedure-type">3. Procedure type is</label>
-              <select
-                name="procedureType"
-                id="procedure-type"
-                aria-labelledby="procedure-type"
+            <fieldset>
+              <legend>Date of Notice</legend>
+              <span className="usa-form-hint" id="dateHint">
+                For example: 04 28 1986
+              </span>
+              <div className="usa-date-of-birth">
+                <div className="usa-form-group usa-form-group-month">
+                  <label htmlFor="date-of-notice-month">Month</label>
+                  <input
+                    className="usa-input-inline"
+                    aria-describedby="dateHint"
+                    id="date-of-notice-month"
+                    name=""
+                    type="number"
+                    min="1"
+                    max="12"
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-day">
+                  <label htmlFor="date-of-notice-day">Day</label>
+                  <input
+                    className="usa-input-inline"
+                    aria-describedby="dateHint"
+                    id="date-of-notice-day"
+                    name=""
+                    type="number"
+                    min="1"
+                    max="31"
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-year">
+                  <label htmlFor="date-of-notice-year">Year</label>
+                  <input
+                    className="usa-input-inline"
+                    aria-describedby="dateHint"
+                    id="date-of-notice-year"
+                    name=""
+                    type="number"
+                    min="1900"
+                    max="2000"
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <div className="usa-form-group">
+              <label
+                htmlFor="irs-notice-file"
+                className={petition.irsNoticeFile && 'validated'}
+              >
+                Upload your IRS Notice
+              </label>
+              <input
+                id="irs-notice-file"
+                type="file"
+                accept=".pdf"
+                name="petitionFile"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updatePetitionValueSequence({
                     key: e.target.name,
-                    value: e.target.value
-                  });
-                  getTrialCities({
-                    procedureType: e.target.value,
+                    value: e.target.files[0],
                   });
                 }}
-              >
-                <option value=""> -- Select -- </option>
-                {procedureTypes.map(procedureType => (
-                  <option key={procedureType} value={procedureType}>
-                    {procedureType}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div role="listitem" className="usa-form-group">
-              <label htmlFor="procedure-type">4. Preferred trial city is</label>
-              <select
-                name="procedureType"
-                id="procedure-type"
-                aria-labelledby="procedure-type"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value
-                  });
-                }}
-              >
-                <option value=""> -- Select -- </option>
-                {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
-                    {trialCity.city}, {trialCity.state}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
-        </form>
-        <h2>Please upload the following PDFs</h2>
-        <p>* All are required.</p>
-        <ErrorNotification />
-        <form
-          id="file-a-petition"
-          role="form"
-          aria-labelledby="#file-h1"
-          noValidate
-          onSubmit={e => {
-            e.preventDefault();
-            submitFilePetitionSequence();
-          }}
-        >
-          <div role="list">
-            <div role="listitem" className="usa-form-group">
+          <h2>Tell us about your petition.</h2>
+          <p>
+            You must file a petition to begin a Tax Court case. Please submit a
+            completed <a href="/">Form #2</a> or a custom petition that complies
+            with the requirements of the{' '}
+            <a href="/">Tax Court Rules of Practice and Procedure</a>.
+          </p>
+          <div className="blue-container">
+            <div className="usa-form-group">
               <label
                 htmlFor="petition-file"
                 className={petition.petitionFile && 'validated'}
               >
-                1. Petition file (form #2)
+                Upload your Petition
               </label>
-              <span>Contains details about your case</span>
               <input
                 id="petition-file"
                 type="file"
@@ -163,56 +176,83 @@ export default connect(
                 }}
               />
             </div>
-            <div role="listitem" className="usa-form-group">
-              <label
-                htmlFor="request-for-place-of-trial"
-                className={petition.requestForPlaceOfTrial && 'validated'}
-              >
-                2. Request for place of trial (form #5)
-              </label>
-              <span>To submit the city and state for your trial</span>
-              <input
-                id="request-for-place-of-trial"
-                type="file"
-                accept=".pdf"
-                name="requestForPlaceOfTrial"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
-              />
-            </div>
-            <div role="listitem" className="usa-form-group">
-              <label
-                htmlFor="statement-of-taxpayer-id"
-                className={
-                  petition.statementOfTaxpayerIdentificationNumber &&
-                  'validated'
-                }
-              >
-                3. Statement of Taxpayer Identification Number (form #4)
-              </label>
-              <span>
-                To submit your Taxpayer Identification Number (e.g., your Social
-                Security number, Employee Identification Number, etc.)
-              </span>
-              <input
-                id="statement-of-taxpayer-id"
-                type="file"
-                accept=".pdf"
-                name="statementOfTaxpayerIdentificationNumber"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
-              />
+            <h3>Who is filing this petition?</h3>
+            <div className="usa-form-group">
+              <input id="filing-myself" type="radio" name="" />
+              <label htmlFor="filing-myself">Myself</label>
             </div>
           </div>
-
+          <h2>How do you want this case to be handled?</h2>
+          <p>
+            Tax laws allow you to file your dispute as a “small case,” which
+            means it’s handled a bit differently than regular cases. You must
+            choose to have your case processed as a small case, and the Tax
+            Court must agree with your choice. Generally, the Tax Court will
+            agree with your request if you qualify for a small case.
+          </p>
+          <p>
+            How is a small case different than a regular case, and do I qualify?
+          </p>
+          <div className="blue-container">
+            <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+              <legend>Select Case Procedure</legend>
+              <ul className="usa-unstyled-list">
+                {procedureTypes.map(procedureType => (
+                  <li key={procedureType}>
+                    <input
+                      id={procedureType}
+                      type="radio"
+                      name="procedureType"
+                      value={procedureType}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        getTrialCities({
+                          procedureType: e.target.value,
+                        });
+                      }}
+                    />
+                    <label htmlFor={procedureType}>{procedureType}</label>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+            <div className="usa-form-group">
+              <label htmlFor="procedure-type">Select a Trial Location</label>
+              <span className="usa-form-hint">
+                Trial locations are unavailable in the following states: DE, KS,
+                ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next closest
+                location.
+              </span>
+              <select
+                name="procedureType"
+                id="procedure-type"
+                aria-labelledby="procedure-type"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              >
+                <option value="">-- Select --</option>
+                {trialCities.map((trialCity, idx) => (
+                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
+                    {trialCity.city}, {trialCity.state}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="usa-form-group">
+            <input id="signature" type="checkbox" name="signature" />
+            <label htmlFor="signature">
+              Checking this box acts as your digital signature, acknowledging
+              that you’ve verified all information is correct.
+            </label>
+          </div>
           <button
             type="submit"
             disabled={submitting}
@@ -220,15 +260,15 @@ export default connect(
             aria-disabled={submitting ? 'true' : 'false'}
           >
             {submitting && <div className="spinner" />}
-            <span>{submitting ? 'Uploading' : 'Upload'}</span>
+            Submit to U.S. Tax Court
           </button>
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">
-              <p>{3 - petition.uploadsFinished} of 3 remaining</p>
+              <p>{2 - petition.uploadsFinished} of 2 remaining</p>
               <div className="progress-container">
                 <div
                   className="progress-bar"
-                  style={{ width: (petition.uploadsFinished * 100) / 3 + '%' }}
+                  style={{ width: (petition.uploadsFinished * 100) / 2 + '%' }}
                 />
               </div>
             </div>
