@@ -3,16 +3,23 @@ export default test => {
     await test.runSequence('gotoStartCaseSequence');
     expect(test.getState('trialCities').length).toEqual(0);
     await test.runSequence('getTrialCitiesSequence', {
-      procedureType: 'small',
+      value: 'small',
     });
     expect(test.getState('trialCities').length).toBeGreaterThan(0);
     expect(test.getState('trialCities')[0].city).not.toBeNull();
-    test.setState('petition.preferredTrialCity', { state: 'XX', city: 'test' });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'preferredTrialCity',
+      value: 'Chattanooga, TN',
+    });
     await test.runSequence('getTrialCitiesSequence', {
-      procedureType: 'large',
+      value: 'large',
     });
     expect(test.getState('trialCities').length).toBeGreaterThan(0);
     expect(test.getState('trialCities')[0].city).not.toBeNull();
-    expect(test.getState('petition.preferredTrialCity')).toEqual('');
+    expect(test.getState('form.preferredTrialCity')).toEqual('');
+    await test.runSequence('updateFormValueSequence', {
+      key: 'preferredTrialCity',
+      value: 'Chattanooga, TN',
+    });
   });
 };

@@ -2,9 +2,10 @@ import { state } from 'cerebral';
 
 export default ({ applicationContext, path, get }) => {
   const petition = get(state.petition);
+  const form = get(state.form);
 
   const errors = applicationContext.getUseCases().validatePetition({
-    petition,
+    petition: { ...petition, ...form },
   });
 
   if (!errors) {

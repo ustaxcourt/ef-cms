@@ -19,13 +19,13 @@ export default connect(
   },
   function FilePetition({
     caseTypes,
-    // getTrialCities,
+    getTrialCities,
     petition,
     procedureTypes,
     submitFilePetitionSequence,
     submitting,
     trialCities,
-    // updateFormValueSequence,
+    updateFormValueSequence,
     // updatePetitionValueSequence,
   }) {
     return (
@@ -68,7 +68,12 @@ export default connect(
                 name="caseType"
                 id="case-type"
                 aria-labelledby="case-type"
-                onChange={() => {}}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
               >
                 <option value="">-- Select --</option>
                 {caseTypes.map(caseType => (
