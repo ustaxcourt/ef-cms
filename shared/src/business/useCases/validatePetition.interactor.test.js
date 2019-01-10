@@ -8,8 +8,6 @@ describe('validatePetition', () => {
     expect(errors).toEqual({
       caseType: '"caseType" is required',
       procedureType: '"procedureType" is required',
-      irsNoticeDate: '"irsNoticeDate" is required',
-      // irsNoticeFile: '"irsNoticeFile" is required',
       petitionFile: '"petitionFile" is required',
       preferredTrialCity: '"preferredTrialCity" is required',
     });
@@ -23,8 +21,6 @@ describe('validatePetition', () => {
     });
     expect(errors).toEqual({
       procedureType: '"procedureType" is required',
-      irsNoticeDate: '"irsNoticeDate" is required',
-      // irsNoticeFile: '"irsNoticeFile" is required',
       petitionFile: '"petitionFile" is required',
       preferredTrialCity: '"preferredTrialCity" is required',
     });
@@ -35,8 +31,6 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
-        irsNoticeDate: '01/01/1001',
-        // irsNoticeFile: new File([], 'noop.png'),
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
       },
