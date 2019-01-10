@@ -53,18 +53,16 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-screen {
-  .modal-dialog {
-    display: block;
-    width: 400px;
-    height: 191px;
-    padding: 3rem;
-    margin: auto;
-    margin-top: 200px;
-    background: $color-white;
+.modal-dialog {
+  display: block;
+  width: 400px;
+  height: 191px;
+  padding: 3rem;
+  margin: auto;
+  margin-top: 200px;
+  background: $color-white;
 
-    button {
-      width: 150px;
-    }
+  button {
+    width: 150px;
   }
 }
