@@ -20,5 +20,5 @@ export default [
     error: [setAlertError],
     success: [setProcedureTypes],
   },
-  setCurrentPage('FilePetition'),
+  setCurrentPage('StartCase'),
 ];
