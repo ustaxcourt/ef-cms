@@ -64,7 +64,7 @@ const CASE_TYPES = [
   },
   {
     type: 'Other',
-    description: 'Other notice not listed.',
+    description: 'Other',
   },
 ];
 
