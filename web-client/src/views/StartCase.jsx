@@ -19,14 +19,14 @@ export default connect(
   },
   function FilePetition({
     caseTypes,
-    getTrialCities,
+    // getTrialCities,
     petition,
     procedureTypes,
     submitFilePetitionSequence,
     submitting,
     trialCities,
-    updateFormValueSequence,
-    updatePetitionValueSequence,
+    // updateFormValueSequence,
+    // updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -68,12 +68,7 @@ export default connect(
                 name="caseType"
                 id="case-type"
                 aria-labelledby="case-type"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+                onChange={() => {}}
               >
                 <option value="">-- Select --</option>
                 {caseTypes.map(caseType => (
@@ -136,12 +131,7 @@ export default connect(
                 type="file"
                 accept=".pdf"
                 name="petitionFile"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
+                onChange={() => {}}
               />
             </div>
           </div>
@@ -165,12 +155,7 @@ export default connect(
                 type="file"
                 accept=".pdf"
                 name="petitionFile"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
+                onChange={() => {}}
               />
             </div>
             <h3>Who is filing this petition?</h3>
@@ -201,15 +186,7 @@ export default connect(
                       type="radio"
                       name="procedureType"
                       value={procedureType}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        getTrialCities({
-                          procedureType: e.target.value,
-                        });
-                      }}
+                      onChange={() => {}}
                     />
                     <label htmlFor={procedureType}>{procedureType}</label>
                   </li>
@@ -226,12 +203,7 @@ export default connect(
               <select
                 name="procedureType"
                 id="procedure-type"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+                onChange={() => {}}
               >
                 <option value="">-- Select --</option>
                 {trialCities.map((trialCity, idx) => (
