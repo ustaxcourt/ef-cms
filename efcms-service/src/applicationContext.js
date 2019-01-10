@@ -119,9 +119,7 @@ const {
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
-const {
-  PetitionWithoutFiles,
-} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
 const User = require('ef-cms-shared/src/business/entities/User');
 

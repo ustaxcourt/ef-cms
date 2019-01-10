@@ -14,16 +14,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {Promise<*|{caseId}>}
  */
 exports.createCase = async ({ petition, documents, applicationContext }) => {
-  // TODO: add auth
-  // TODO: make lambdas getCurrentUser match UI
-  const petitionEntity = new (applicationContext.getEntityConstructors()).Petition(
-    petition,
-  ).validate();
-
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user.userId, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const Petition = applicationContext.getEntityConstructors().Petition;
+  const petitionEntity = new Petition(petition).validate();
 
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {

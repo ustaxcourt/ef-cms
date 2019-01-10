@@ -53,11 +53,11 @@ describe('createCase', () => {
     };
 
     const createdCase = await createCase({
-      userId: 'taxpayer',
       petition: {
         caseType: 'other',
         procedureType: 'small',
         preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: DATE,
       },
       documents: documents,
       applicationContext,
@@ -117,6 +117,102 @@ describe('createCase', () => {
     expect(createdCase).toMatchObject(caseRecordSentToPersistence);
   });
 
+  it('should create a case entity without a irsNoticeDate and return it', async () => {
+    const createCaseStub = sinon
+      .stub()
+      .callsFake(({ caseRecord }) => caseRecord);
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          createCase: createCaseStub,
+        };
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
+      getUseCases: () => ({
+        getUser: () => ({
+          address: '123',
+          email: 'test@example.com',
+          name: 'test taxpayer',
+          phone: '(123) 456-7890',
+        }),
+      }),
+      environment: { stage: 'local' },
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
+      },
+    };
+
+    const createdCase = await createCase({
+      petition: {
+        caseType: 'other',
+        procedureType: 'small',
+        preferredTrialCity: 'Chattanooga, TN',
+      },
+      documents: documents,
+      applicationContext,
+    });
+
+    const expectedCaseRecordToPersist = {
+      caseId: MOCK_CASE_ID,
+      docketNumber: '101-18',
+      caseTitle:
+        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      petitioners: [
+        {
+          email: 'testtaxpayer@example.com',
+          name: 'Test Taxpayer',
+          phone: '111-111-1111',
+        },
+      ],
+      documents: [
+        {
+          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentType: 'Petition',
+          createdAt: DATE,
+          userId: 'taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
+          reviewDate: DATE,
+          reviewUser: 'petitionsclerk',
+          workItems: [],
+        },
+        {
+          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentType: 'Statement of Taxpayer Identification Number',
+          createdAt: DATE,
+          userId: 'taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
+          reviewDate: DATE,
+          reviewUser: 'petitionsclerk',
+          workItems: [],
+        },
+        {
+          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentType: 'Request for Place of Trial',
+          createdAt: DATE,
+          userId: 'taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
+          reviewDate: DATE,
+          reviewUser: 'petitionsclerk',
+          workItems: [],
+        },
+      ],
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'small',
+      createdAt: DATE,
+      status: 'new',
+      userId: 'taxpayer',
+    };
+    const caseRecordSentToPersistence = createCaseStub.getCall(0).args[0]
+      .caseRecord;
+    expect(createdCase).toMatchObject(expectedCaseRecordToPersist);
+    expect(createdCase).toMatchObject(caseRecordSentToPersistence);
+  });
+
   it('failure', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
@@ -127,6 +223,9 @@ describe('createCase', () => {
       getCurrentUser: () => {
         return new User({ userId: 'taxpayer' });
       },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getUseCases: () => ({
         getUser: () => ({
           name: 'john doe',
@@ -140,6 +239,12 @@ describe('createCase', () => {
     };
     try {
       await createCase({
+        petition: {
+          caseType: 'other',
+          procedureType: 'small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
         documents: documents,
         applicationContext,
       });
@@ -159,6 +264,9 @@ describe('createCase', () => {
             }),
         };
       },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getCurrentUser: () => {
         return new User({ userId: 'taxpayer' });
       },
@@ -175,6 +283,12 @@ describe('createCase', () => {
     let error;
     try {
       await createCase({
+        petition: {
+          caseType: 'other',
+          procedureType: 'small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
         documents,
         applicationContext,
       });
