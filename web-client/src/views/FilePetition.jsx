@@ -229,7 +229,6 @@ export default connect(
               <select
                 name="procedureType"
                 id="procedure-type"
-                aria-labelledby="procedure-type"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
