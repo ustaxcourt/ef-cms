@@ -7,6 +7,8 @@
 }
 
 .usa-form-hint {
+  display: inline-block;
+  margin-bottom: 10px;
   color: $color-gray-dark;
 }
 
@@ -30,4 +32,9 @@
 
 .usa-section {
   padding-top: 0;
+}
+
+.usa-unstyled-list li {
+  display: inline-block;
+  margin-right: 30px;
 }
