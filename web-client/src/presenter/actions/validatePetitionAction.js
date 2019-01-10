@@ -6,6 +6,7 @@ export default ({ applicationContext, path, get }) => {
 
   const errors = applicationContext.getUseCases().validatePetition({
     petition: { ...petition, ...form },
+    applicationContext,
   });
 
   if (!errors) {

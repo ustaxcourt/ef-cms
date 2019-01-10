@@ -33,6 +33,7 @@ import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkIte
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetition.interactor';
+import Petition from '../../shared/src/business/entities/Petition';
 
 let user;
 
@@ -51,6 +52,9 @@ const applicationContext = {
   getUniqueId: () => {
     return uuidv4();
   },
+  getEntityConstructors: () => ({
+    Petition,
+  }),
   getPersistenceGateway: () => {
     return {
       getDocument,

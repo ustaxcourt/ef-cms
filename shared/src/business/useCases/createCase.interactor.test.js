@@ -2,6 +2,7 @@ const { createCase } = require('./createCase.interactor');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const sinon = require('sinon');
 const uuid = require('uuid');
+const PetitionWithoutFiles = require('../entities/PetitionWithoutFiles');
 
 describe('createCase', () => {
   let applicationContext;
@@ -30,6 +31,9 @@ describe('createCase', () => {
           createCase: createCaseStub,
         };
       },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getUseCases: () => ({
         getUser: () => ({
           address: '123',
@@ -46,6 +50,11 @@ describe('createCase', () => {
 
     const createdCase = await createCase({
       userId: 'taxpayer',
+      petition: {
+        caseType: 'other',
+        procedureType: 'small',
+        preferredTrialCity: 'Chattanooga, TN',
+      },
       documents: documents,
       applicationContext,
     });
