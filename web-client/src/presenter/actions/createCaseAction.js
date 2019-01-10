@@ -22,7 +22,7 @@ export default async ({ applicationContext, get, store }) => {
 
   await useCases.createCase({
     applicationContext,
+    petition: get(state.form),
     documents: [{ documentType: 'Petition', documentId: petitionDocumentId }],
-    userId: user.userId,
   });
 };

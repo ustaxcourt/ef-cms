@@ -6,6 +6,7 @@ import presenter from '../presenter';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 
 import taxpayerLogin from './journey/taxpayerLogIn';
+import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
@@ -75,6 +76,7 @@ describe('Case journey', async () => {
 
   taxpayerLogin(test);
   taxpayerNavigatesToCreateCase(test);
+  taxpayerChoosesCaseType(test);
   taxpayerChoosesProcedureType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
