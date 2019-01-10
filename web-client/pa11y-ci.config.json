@@ -30,8 +30,7 @@
       "url": "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/102-18&info=can-input-pay-id",
       "actions": [
         "wait for #case-info-tab to be visible",
-        "click element #case-info-tab",
-        "wait for #paygov to be visible"
+        "click element #case-info-tab"
       ]
     },
 
