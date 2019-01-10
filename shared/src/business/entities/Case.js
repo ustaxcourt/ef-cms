@@ -132,7 +132,7 @@ joiValidationDecorator(
     petitioners: joi.array().optional(),
     documents: joi
       .array()
-      .min(3)
+      .min(1)
       .required(),
     workItems: joi.array().optional(),
     preferredTrialCity: joi.string().optional(),
@@ -235,7 +235,7 @@ Case.stripLeadingZeros = docketNumber => {
 
 /**
  * documentTypes
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string}}
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string, answer: string, stipulatedDecision: string}}
  */
 Case.documentTypes = {
   petitionFile: 'Petition',
