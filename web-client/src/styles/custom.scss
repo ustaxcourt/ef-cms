@@ -64,3 +64,23 @@ iframe {
 .subsection {
   margin-bottom: 50px;
 }
+
+.grey-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: $color-gray-lightest;
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.blue-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: $color-primary-alt-lightest;
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}

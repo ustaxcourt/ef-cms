@@ -13,11 +13,7 @@ export default connect(
         <h1 tabIndex="-1">Dashboard</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <a
-          className="usa-button"
-          href="/file-a-petition"
-          id="init-file-petition"
-        >
+        <a className="usa-button" href="/start-a-case" id="init-file-petition">
           Start a case
         </a>
         <CaseList />
