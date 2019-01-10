@@ -1,5 +1,13 @@
 const { getProcedureTypes } = require('./getProcedureTypes.interactor');
+const Case = require('../entities/Case');
 
+const validateProcedureTypes = procedureTypes => {
+  procedureTypes.forEach(procedureType => {
+    if (!Case.getProcedureTypes().includes(procedureType)) {
+      throw new Error('invalid procedure type');
+    }
+  });
+};
 describe('Get case procedure types', () => {
   beforeEach(() => {});
 
@@ -10,6 +18,13 @@ describe('Get case procedure types', () => {
     expect(procedureTypes.length).toEqual(2);
     expect(procedureTypes[0]).toEqual('Small');
     expect(procedureTypes[1]).toEqual('Regular');
+    let error;
+    try {
+      validateProcedureTypes(procedureTypes);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeUndefined();
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
