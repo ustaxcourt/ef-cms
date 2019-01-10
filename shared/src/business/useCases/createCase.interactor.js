@@ -8,7 +8,9 @@ const Case = require('../entities/Case');
  * @param applicationContext
  * @returns {Promise<*|{caseId}>}
  */
-exports.createCase = async ({ userId, documents, applicationContext }) => {
+exports.createCase = async ({ petition, documents, applicationContext }) => {
+  const userId = applicationContext.getCurrentUser().userId;
+
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,
@@ -27,6 +29,7 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
     .createCase({
       caseRecord: new Case({
         userId,
+        ...petition,
         petitioners: [
           {
             ...user,
