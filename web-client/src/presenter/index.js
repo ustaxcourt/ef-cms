@@ -1,11 +1,17 @@
+import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
+import clearDocumentSequence from './sequences/clearDocumentSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoFilePetitionSequence from './sequences/gotoFilePetitionSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
+import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import selectAssigneeSequence from './sequences/selectAssigneeSequence';
+import selectWorkItemSequence from './sequences/selectWorkItemSequence';
+import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
+import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -14,25 +20,19 @@ import submitLogInSequence from './sequences/submitLogInSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
 import submitToIrsSequence from './sequences/submitToIrsSequence';
 import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
+import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
 import updateCaseValueSequence from './sequences/updateCaseValueSequence';
+import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
 import updateCurrentTabSequence from './sequences/updateCurrentTabSequence';
 import updateDocumentValueSequence from './sequences/updateDocumentValueSequence';
 import updateFormValueSequence from './sequences/updateFormValueSequence';
+import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
-import selectAssigneeSequence from './sequences/selectAssigneeSequence';
-import selectWorkItemSequence from './sequences/selectWorkItemSequence';
-import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
-import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
-import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
-import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
-import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
-import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
-import clearDocumentSequence from './sequences/clearDocumentSequence';
 
 import state from './state';
 
@@ -48,13 +48,14 @@ export default {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
-    gotoFilePetitionSequence,
     gotoLogInSequence,
+    gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
+    setWorkItemActionSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
@@ -68,15 +69,14 @@ export default {
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
     updateCaseValueSequence,
+    updateCompleteFormValueSequence,
     updateCurrentTabSequence,
     updateDocumentValueSequence,
     updateFormValueSequence,
+    updateForwardFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
     viewDocumentSequence,
-    setWorkItemActionSequence,
-    updateForwardFormValueSequence,
-    updateCompleteFormValueSequence,
   },
   state,
 };

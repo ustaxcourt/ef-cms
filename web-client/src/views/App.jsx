@@ -15,11 +15,11 @@ import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
 import DashboardSeniorAttorney from './DashboardSeniorAttorney';
 import DocumentDetail from './DocumentDetail';
-import FilePetition from './FilePetition';
 import Footer from './Footer';
 import Header from './Header';
 import Loading from './Loading';
 import LogIn from './LogIn';
+import StartCase from './StartCase';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
 
@@ -36,9 +36,9 @@ const pages = {
   DashboardRespondent,
   DashboardSeniorAttorney,
   DocumentDetail,
-  FilePetition,
   Loading,
   LogIn,
+  StartCase,
   StyleGuide,
 };
 
