@@ -3,9 +3,11 @@ import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
 import presenter from '../presenter';
+import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 
@@ -72,6 +74,8 @@ describe('Case journey', async () => {
   });
 
   taxpayerLogin(test);
+  taxpayerNavigatesToCreateCase(test);
+  taxpayerChoosesProcedureType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
