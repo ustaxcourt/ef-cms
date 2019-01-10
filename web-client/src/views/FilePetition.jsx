@@ -14,6 +14,7 @@ export default connect(
     getTrialCitiesSequence: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
     caseTypes: state.caseTypes,
+    getTrialCityName: state.getTrialCityName,
   },
   function FilePetition({
     caseTypes,
@@ -24,6 +25,7 @@ export default connect(
     getTrialCitiesSequence,
     trialCities,
     updatePetitionValueSequence,
+    getTrialCityName,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -119,11 +121,8 @@ export default connect(
               >
                 <option value=""> -- Select -- </option>
                 {trialCities.map((trialCity, idx) => (
-                  <option
-                    key={idx}
-                    value={trialCity.city + ', ' + trialCity.state}
-                  >
-                    {trialCity.city}, {trialCity.state}
+                  <option key={idx} value={getTrialCityName(trialCity)}>
+                    {getTrialCityName(trialCity)}
                   </option>
                 ))}
               </select>

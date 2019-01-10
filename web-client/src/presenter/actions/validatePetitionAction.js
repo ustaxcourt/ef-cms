@@ -12,7 +12,7 @@ export default ({ applicationContext, path, get }) => {
   } else {
     return path.error({
       alertError: {
-        title: 'Fix the follow errors to submit your form.',
+        title: 'Fix the following errors to submit your form.',
         messages: Object.keys(errors).map(key => errors[key]),
       },
     });
