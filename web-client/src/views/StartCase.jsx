@@ -43,24 +43,20 @@ export default connect(
             Start a Case
           </h1>
           <ErrorNotification />
-          <p>* All fields required, unless marked as optional.</p>
           <div className="grey-container">
             <h2>Are you ready?</h2>
             <p>You’ll need the following information to begin a new case.</p>
-            <p>
-              <FontAwesomeIcon icon="file-pdf" size="2x" />
-              Petition saved as a PDF
-            </p>
+            <FontAwesomeIcon icon="file-pdf" size="2x" />
+            <span>Petition saved as a PDF</span>
             <p>
               Use USTC Form 2 or a custom petition that complies with the
               requirements of the Tax Court Rules of Practice and Proceedure
             </p>
-            <p>
-              <FontAwesomeIcon icon="file-pdf" size="2x" />
-              IRS Notice(s) saved as a single PDF
-            </p>
+            <FontAwesomeIcon icon="file-pdf" size="2x" />
+            <p>IRS Notice(s) saved as a single PDF</p>
             <p>Attach any notices you may have received from the IRS</p>
           </div>
+          <p className="required-statement">All fields required.</p>
           <h2>Did you receive a notice from the IRS?</h2>
           <div className="blue-container">
             <div className="usa-form-group">
