@@ -12,7 +12,7 @@ joiValidationDecorator(
   joi.object().keys({
     caseType: joi.string().required(),
     irsNoticeDate: joi.string().optional(),
-    // irsNoticeFile: joi.object().optional(),
+    irsNoticeFile: joi.object().optional(),
     petitionFile: joi.object().required(),
     procedureType: joi.string().required(),
     preferredTrialCity: joi.string().required(),

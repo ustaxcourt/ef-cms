@@ -36,7 +36,7 @@ class ErrorNotification extends React.Component {
               {alertError.messages && (
                 <ul>
                   {alertError.messages.map((message, idx) => (
-                    <ol key={idx}>- {message}</ol>
+                    <li key={idx}>{message}</li>
                   ))}
                 </ul>
               )}

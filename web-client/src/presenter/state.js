@@ -3,6 +3,8 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { getTrialCityName } from './computeds/formattedTrialCity';
+
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { extractedDocument } from './computeds/extractDocument';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
@@ -79,6 +81,7 @@ export default {
   formattedCases,
   formattedSectionWorkQueue,
   formattedWorkQueue,
+  getTrialCityName,
   workQueueHelper,
   showAction,
 };
