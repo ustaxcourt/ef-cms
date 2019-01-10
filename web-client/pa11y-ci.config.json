@@ -20,6 +20,7 @@
     "http://localhost:1234/",
     "http://localhost:1234/log-in",
     "http://localhost:1234/log-in?token=taxpayer&path=/",
+    "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case",
     "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
 
     "http://localhost:1234/log-in?token=petitionsclerk&path=/",
