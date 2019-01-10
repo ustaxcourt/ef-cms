@@ -1,10 +1,14 @@
 const Case = require('../entities/Case');
-const Petition = require('../entities/Case');
+const {
+  isAuthorized,
+  PETITION,
+} = require('../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * createCase
  *
- * @param userId
+ * @param petition
  * @param documents
  * @param applicationContext
  * @returns {Promise<*|{caseId}>}
@@ -16,7 +20,10 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     petition,
   ).validate();
 
-  const userId = applicationContext.getCurrentUser().userId;
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user.userId, PETITION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
@@ -24,10 +31,8 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     },
   );
 
-  const user = await applicationContext.getUseCases().getUser(userId);
-
   documents.forEach(document => {
-    document.userId = userId;
+    document.userId = user.userId;
     document.filedBy = `Petitioner ${user.name}`;
   });
 
@@ -35,11 +40,11 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     .getPersistenceGateway()
     .createCase({
       caseRecord: new Case({
-        userId,
+        userId: user.userId,
         ...petitionEntity.toRawObject(),
         petitioners: [
           {
-            ...user,
+            ...user.toRawObject(),
           },
         ],
         docketNumber,
