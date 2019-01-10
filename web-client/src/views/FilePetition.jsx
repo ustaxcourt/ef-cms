@@ -25,13 +25,14 @@ export default connect(
     getTrialCities,
     trialCities,
     updateFormValueSequence,
-    updatePetitionValueSequence
+    updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1" id="file-h1">
           File a petition
         </h1>
+        <ErrorNotification />
         <h2 id="file-metadata">
           Please provide the following requested information
         </h2>
@@ -69,7 +70,7 @@ export default connect(
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value
+                    value: e.target.value,
                   });
                 }}
               >
@@ -90,7 +91,7 @@ export default connect(
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value
+                    value: e.target.value,
                   });
                   getTrialCities({
                     procedureType: e.target.value,
@@ -106,15 +107,15 @@ export default connect(
               </select>
             </div>
             <div role="listitem" className="usa-form-group">
-              <label htmlFor="procedure-type">4. Preferred trial city is</label>
+              <label htmlFor="trial-location">4. Preferred trial city is</label>
               <select
-                name="procedureType"
-                id="procedure-type"
-                aria-labelledby="procedure-type"
+                name="trialLocation"
+                id="trial-location"
+                aria-labelledby="trial-location"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value
+                    value: e.target.value,
                   });
                 }}
               >
@@ -130,7 +131,6 @@ export default connect(
         </form>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
-        <ErrorNotification />
         <form
           id="file-a-petition"
           role="form"
