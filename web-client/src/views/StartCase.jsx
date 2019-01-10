@@ -85,15 +85,12 @@ export default connect(
             </div>
             <fieldset>
               <legend>Date of Notice</legend>
-              <span className="usa-form-hint" id="dateHint">
-                For example: 04 28 1986
-              </span>
               <div className="usa-date-of-birth">
                 <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month">Month</label>
+                  <label htmlFor="date-of-notice-month">MM</label>
                   <input
                     className="usa-input-inline"
-                    aria-describedby="dateHint"
+                    aria-label="month"
                     id="date-of-notice-month"
                     name=""
                     type="number"
@@ -102,10 +99,10 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day">Day</label>
+                  <label htmlFor="date-of-notice-day">DD</label>
                   <input
                     className="usa-input-inline"
-                    aria-describedby="dateHint"
+                    aria-label="day"
                     id="date-of-notice-day"
                     name=""
                     type="number"
@@ -114,10 +111,10 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year">Year</label>
+                  <label htmlFor="date-of-notice-year">YYYY</label>
                   <input
                     className="usa-input-inline"
-                    aria-describedby="dateHint"
+                    aria-label="year"
                     id="date-of-notice-year"
                     name=""
                     type="number"
