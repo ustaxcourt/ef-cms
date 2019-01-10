@@ -119,6 +119,10 @@ const {
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
+const {
+  PetitionWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+
 const User = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
@@ -154,6 +158,9 @@ module.exports = ({ userId } = {}) => {
     getUniqueId: () => {
       return uuidv4();
     },
+    getEntityConstructors: () => ({
+      Petition: PetitionWithoutFiles,
+    }),
     getPersistenceGateway: () => {
       return {
         incrementCounter,

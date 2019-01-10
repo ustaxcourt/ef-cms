@@ -1,4 +1,5 @@
 const Case = require('../entities/Case');
+const Petition = require('../entities/Case');
 
 /**
  * createCase
@@ -9,6 +10,12 @@ const Case = require('../entities/Case');
  * @returns {Promise<*|{caseId}>}
  */
 exports.createCase = async ({ petition, documents, applicationContext }) => {
+  // TODO: add auth
+  // TODO: make lambdas getCurrentUser match UI
+  const petitionEntity = new (applicationContext.getEntityConstructors()).Petition(
+    petition,
+  ).validate();
+
   const userId = applicationContext.getCurrentUser().userId;
 
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
@@ -29,7 +36,7 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     .createCase({
       caseRecord: new Case({
         userId,
-        ...petition,
+        ...petitionEntity.toRawObject(),
         petitioners: [
           {
             ...user,
