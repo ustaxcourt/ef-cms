@@ -2,6 +2,7 @@ const { createCase } = require('./createCase.interactor');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const sinon = require('sinon');
 const uuid = require('uuid');
+const User = require('../entities/User');
 const PetitionWithoutFiles = require('../entities/PetitionWithoutFiles');
 
 describe('createCase', () => {
@@ -34,6 +35,9 @@ describe('createCase', () => {
       getEntityConstructors: () => ({
         Petition: PetitionWithoutFiles,
       }),
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
       getUseCases: () => ({
         getUser: () => ({
           address: '123',
@@ -63,13 +67,12 @@ describe('createCase', () => {
       caseId: MOCK_CASE_ID,
       docketNumber: '101-18',
       caseTitle:
-        'test taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       petitioners: [
         {
-          address: '123',
-          email: 'test@example.com',
-          name: 'test taxpayer',
-          phone: '(123) 456-7890',
+          email: 'testtaxpayer@example.com',
+          name: 'Test Taxpayer',
+          phone: '111-111-1111',
         },
       ],
       documents: [
@@ -78,7 +81,7 @@ describe('createCase', () => {
           documentType: 'Petition',
           createdAt: DATE,
           userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -88,7 +91,7 @@ describe('createCase', () => {
           documentType: 'Statement of Taxpayer Identification Number',
           createdAt: DATE,
           userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -98,7 +101,7 @@ describe('createCase', () => {
           documentType: 'Request for Place of Trial',
           createdAt: DATE,
           userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
+          filedBy: 'Petitioner Test Taxpayer',
           reviewDate: DATE,
           reviewUser: 'petitionsclerk',
           workItems: [],
@@ -110,8 +113,8 @@ describe('createCase', () => {
     };
     const caseRecordSentToPersistence = createCaseStub.getCall(0).args[0]
       .caseRecord;
-    expect(createdCase).toEqual(expectedCaseRecordToPersist);
-    expect(createdCase).toEqual(caseRecordSentToPersistence);
+    expect(createdCase).toMatchObject(expectedCaseRecordToPersist);
+    expect(createdCase).toMatchObject(caseRecordSentToPersistence);
   });
 
   it('failure', async () => {
@@ -120,6 +123,9 @@ describe('createCase', () => {
         return {
           createCase: () => Promise.reject(new Error('problem')),
         };
+      },
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -134,7 +140,6 @@ describe('createCase', () => {
     };
     try {
       await createCase({
-        userId: 'petitionsclerk',
         documents: documents,
         applicationContext,
       });
@@ -154,6 +159,9 @@ describe('createCase', () => {
             }),
         };
       },
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
       getUseCases: () => ({
         getUser: () => ({
           name: 'john doe',
@@ -167,7 +175,6 @@ describe('createCase', () => {
     let error;
     try {
       await createCase({
-        userId: 'taxpayer',
         documents,
         applicationContext,
       });
@@ -175,5 +182,22 @@ describe('createCase', () => {
       error = err;
     }
     expect(error.message).toContain('The entity was invalid');
+  });
+  it('throws an error if the user is not valid or authorized', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({ userId: 'docketclerk' });
+      },
+    };
+    let error;
+    try {
+      await createCase({
+        documents,
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized');
   });
 });
