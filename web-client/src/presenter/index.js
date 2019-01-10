@@ -12,6 +12,8 @@ import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
+import startACaseCancelSequence from './sequences/startACaseCancelSequence';
+import startACaseConfirmSequence from './sequences/startACaseConfirmSequence';
 import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -56,6 +58,8 @@ export default {
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
     setWorkItemActionSequence,
+    startACaseCancelSequence,
+    startACaseConfirmSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
