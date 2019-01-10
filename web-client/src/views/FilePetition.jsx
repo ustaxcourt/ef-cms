@@ -121,7 +121,10 @@ export default connect(
               >
                 <option value=""> -- Select -- </option>
                 {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
+                  <option
+                    key={idx}
+                    value={trialCity.city + ', ' + trialCity.state}
+                  >
                     {trialCity.city}, {trialCity.state}
                   </option>
                 ))}
