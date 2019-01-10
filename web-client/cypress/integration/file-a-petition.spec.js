@@ -41,7 +41,14 @@ describe('File a petition', function() {
       cy.login('taxpayer', 'file-a-petition');
     });
 
-    it('has three file inputs', () => {
+    it('fills in the fields', () => {
+      cy.get('#irsNoticeDate').type('1999-12-31');
+      cy.get('#case-type').select('Deficiency');
+      cy.get('#procedure-type').select('Small');
+      cy.get('#preferred-trial-city').select('Birmingham, Alabama');
+    });
+
+    it('has one file inputs', () => {
       cy.get('form#file-a-petition')
         .find('input[type="file"]')
         .should('have.length', 1);

@@ -14,6 +14,7 @@ export default connect(
     getTrialCitiesSequence: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
     caseTypes: state.caseTypes,
+    getTrialCityName: state.getTrialCityName,
   },
   function FilePetition({
     caseTypes,
@@ -23,13 +24,15 @@ export default connect(
     submitting,
     getTrialCitiesSequence,
     trialCities,
-    updatePetitionValueSequence
+    updatePetitionValueSequence,
+    getTrialCityName,
   }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1" id="file-h1">
           File a petition
         </h1>
+        <ErrorNotification />
         <h2 id="file-metadata">
           Please provide the following requested information
         </h2>
@@ -118,8 +121,8 @@ export default connect(
               >
                 <option value=""> -- Select -- </option>
                 {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
-                    {trialCity.city}, {trialCity.state}
+                  <option key={idx} value={getTrialCityName(trialCity)}>
+                    {getTrialCityName(trialCity)}
                   </option>
                 ))}
               </select>
@@ -128,7 +131,6 @@ export default connect(
         </form>
         <h2>Please upload the following PDFs</h2>
         <p>* All are required.</p>
-        <ErrorNotification />
         <form
           id="file-a-petition"
           role="form"

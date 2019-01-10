@@ -32,6 +32,7 @@ import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+import { validatePetition } from '../../shared/src/business/useCases/validatePetition.interactor';
 
 let user;
 
@@ -85,6 +86,7 @@ const applicationContext = {
       updateWorkItem,
       uploadCasePdfs,
       forwardWorkItem,
+      validatePetition,
     };
   },
   getCurrentUser,
