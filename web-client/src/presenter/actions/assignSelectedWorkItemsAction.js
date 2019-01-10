@@ -15,7 +15,6 @@ export default async ({ applicationContext, get, store }) => {
       assigneeId,
       assigneeName,
     })),
-    userId,
   });
 
   store.set(

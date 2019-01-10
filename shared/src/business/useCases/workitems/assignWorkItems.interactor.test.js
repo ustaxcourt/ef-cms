@@ -1,5 +1,6 @@
 const { assignWorkItems } = require('./assignWorkItems.interactor');
 const _ = require('lodash');
+const User = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
   createdAt: '2018-12-27T18:06:02.971Z',
@@ -72,9 +73,8 @@ describe('assignWorkItems', () => {
 
   it('be successful when all validation passed', async () => {
     const applicationContext = {
-      user: {
-        name: 'bob',
-        role: 'docketclerk',
+      getCurrentUser: () => {
+        return new User({ userId: 'docketclerk' });
       },
       getPersistenceGateway: () => {
         return {

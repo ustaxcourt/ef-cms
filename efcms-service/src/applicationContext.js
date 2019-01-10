@@ -128,11 +128,17 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
 };
+let user;
+const getCurrentUser = () => {
+  return user;
+};
+const setCurrentUser = newUser => {
+  user = newUser;
+};
 
 module.exports = ({ userId } = {}) => {
-  let user;
   if (userId) {
-    user = new User({ userId });
+    setCurrentUser(new User({ userId }));
   }
   return {
     getStorageClient: () => {
@@ -188,7 +194,7 @@ module.exports = ({ userId } = {}) => {
       s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
       documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
     },
-    user,
+    getCurrentUser,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
     getUseCases: () => {
