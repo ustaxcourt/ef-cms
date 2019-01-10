@@ -173,9 +173,26 @@ export default connect(
             Court must agree with your choice. Generally, the Tax Court will
             agree with your request if you qualify for a small case.
           </p>
-          <p>
-            How is a small case different than a regular case, and do I qualify?
-          </p>
+          <ul className="usa-accordion">
+            <li>
+              <button
+                type="button"
+                className="usa-accordion-button"
+                aria-expanded="true"
+                aria-controls="a1"
+              >
+                How is a small case different than a regular case, and do I
+                qualify?
+              </button>
+              <div
+                id="a1"
+                className="usa-accordion-content"
+                aria-hidden="false"
+              >
+                TODO: Add infographic
+              </div>
+            </li>
+          </ul>
           <div className="blue-container">
             <div className="usa-form-group">
               <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
