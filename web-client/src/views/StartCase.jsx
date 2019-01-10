@@ -45,9 +45,10 @@ export default connect(
           <ErrorNotification />
           <p>* All fields required, unless marked as optional.</p>
           <div className="grey-container">
+            <h2>Are you ready?</h2>
             <p>You’ll need the following information to begin a new case.</p>
             <p>
-              <FontAwesomeIcon icon="file-pdf" />
+              <FontAwesomeIcon icon="file-pdf" size="2x" />
               Petition saved as a PDF
             </p>
             <p>
@@ -55,7 +56,7 @@ export default connect(
               requirements of the Tax Court Rules of Practice and Proceedure
             </p>
             <p>
-              <FontAwesomeIcon icon="file-pdf" />
+              <FontAwesomeIcon icon="file-pdf" size="2x" />
               IRS Notice(s) saved as a single PDF
             </p>
             <p>Attach any notices you may have received from the IRS</p>
@@ -177,27 +178,46 @@ export default connect(
             Court must agree with your choice. Generally, the Tax Court will
             agree with your request if you qualify for a small case.
           </p>
-          <p>
-            How is a small case different than a regular case, and do I qualify?
-          </p>
+          <ul className="usa-accordion">
+            <li>
+              <button
+                type="button"
+                className="usa-accordion-button"
+                aria-expanded="true"
+                aria-controls="a1"
+              >
+                How is a small case different than a regular case, and do I
+                qualify?
+              </button>
+              <div
+                id="a1"
+                className="usa-accordion-content"
+                aria-hidden="false"
+              >
+                TODO: Add infographic
+              </div>
+            </li>
+          </ul>
           <div className="blue-container">
-            <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
-              <legend>Select Case Procedure</legend>
-              <ul className="usa-unstyled-list">
-                {procedureTypes.map(procedureType => (
-                  <li key={procedureType}>
-                    <input
-                      id={procedureType}
-                      type="radio"
-                      name="procedureType"
-                      value={procedureType}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor={procedureType}>{procedureType}</label>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
+            <div className="usa-form-group">
+              <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+                <legend>Select Case Procedure</legend>
+                <ul className="usa-unstyled-list">
+                  {procedureTypes.map(procedureType => (
+                    <li key={procedureType}>
+                      <input
+                        id={procedureType}
+                        type="radio"
+                        name="procedureType"
+                        value={procedureType}
+                        onChange={() => {}}
+                      />
+                      <label htmlFor={procedureType}>{procedureType}</label>
+                    </li>
+                  ))}
+                </ul>
+              </fieldset>
+            </div>
             <div className="usa-form-group">
               <label htmlFor="procedure-type">Select a Trial Location</label>
               <span className="usa-form-hint">
