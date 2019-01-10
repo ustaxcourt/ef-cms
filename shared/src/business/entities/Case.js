@@ -62,6 +62,10 @@ const CASE_TYPES = [
     description:
       'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim (or Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement)',
   },
+  {
+    type: 'Other',
+    description: 'Other',
+  },
 ];
 
 const PROCEDURE_TYPES = ['Small', 'Regular'];
