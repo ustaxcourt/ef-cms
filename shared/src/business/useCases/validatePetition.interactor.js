@@ -1,5 +1,3 @@
-const Petition = require('../entities/Petition');
-
 /**
  * validatePetition
  * @param applicationContext
@@ -8,8 +6,10 @@ const Petition = require('../entities/Petition');
  * @param fileHasUploaded
  * @returns {Promise<{petitionFileId}>}
  */
-exports.validatePetition = ({ petition }) => {
-  const { error } = new Petition(petition).getValidationErrors();
+exports.validatePetition = ({ petition, applicationContext }) => {
+  const { error } = new (applicationContext.getEntityConstructors()).Petition(
+    petition,
+  ).getValidationErrors();
   if (!error) return null;
   const errors = {};
   error.details.forEach(detail => {

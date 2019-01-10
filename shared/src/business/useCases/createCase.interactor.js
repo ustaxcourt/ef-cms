@@ -14,6 +14,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {Promise<*|{caseId}>}
  */
 exports.createCase = async ({ petition, documents, applicationContext }) => {
+  // TODO: add auth
+  // TODO: make lambdas getCurrentUser match UI
+  const petitionEntity = new (applicationContext.getEntityConstructors()).Petition(
+    petition,
+  ).validate();
+
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user.userId, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
@@ -35,7 +41,7 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     .createCase({
       caseRecord: new Case({
         userId: user.userId,
-        ...petition,
+        ...petitionEntity.toRawObject(),
         petitioners: [
           {
             ...user.toRawObject(),
