@@ -25,6 +25,13 @@ export default {
   mobileMenu: {
     isVisible: false,
   },
+  showModal: false,
+  modal: {
+    title: 'Are you sure you want to cancel?',
+    message: 'If you cancel, your form selections will be lost.',
+    confirmLabel: 'Yes, cancel',
+    cancelLabel: 'No, continue',
+  },
   paymentInfo: {
     showDetails: false,
   },
