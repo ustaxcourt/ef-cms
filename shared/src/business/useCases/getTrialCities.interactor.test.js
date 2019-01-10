@@ -15,12 +15,15 @@ const validateTrialCities = trialCities => {
 };
 
 describe('Get trial cities', () => {
-  beforeEach(() => {});
-
   it('returns a collection of trial cities', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return { userId: 'taxpayer' };
+      },
+    };
     const trialCities = await getTrialCities({
-      userId: 'taxpayer',
       procedureType: 'Small',
+      applicationContext: applicationContext,
     });
     expect(trialCities.length).toEqual(74);
     let error;
@@ -34,11 +37,17 @@ describe('Get trial cities', () => {
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return { userId: 'nottaxpayer' };
+      },
+    };
+
     let error;
     try {
       await getTrialCities({
-        userId: 'notataxpayer',
         procedureType: 'Small',
+        applicationContext: applicationContext,
       });
     } catch (err) {
       error = err;

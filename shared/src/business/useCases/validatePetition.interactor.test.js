@@ -1,9 +1,9 @@
-const { validatePetitionForm } = require('./validatePetitionForm.interactor');
+const { validatePetition } = require('./validatePetition.interactor');
 
-describe('validatePetitionForm', () => {
+describe('validatePetition', () => {
   it('returns the expected errors object', () => {
-    const errors = validatePetitionForm({
-      petitionForm: {},
+    const errors = validatePetition({
+      petition: {},
     });
     expect(errors).toEqual({
       caseType: '"caseType" is required',
@@ -11,13 +11,13 @@ describe('validatePetitionForm', () => {
       irsNoticeDate: '"irsNoticeDate" is required',
       // irsNoticeFile: '"irsNoticeFile" is required',
       petitionFile: '"petitionFile" is required',
-      trialLocation: '"trialLocation" is required',
+      preferredTrialCity: '"preferredTrialCity" is required',
     });
   });
 
   it('returns the expected errors object', () => {
-    const errors = validatePetitionForm({
-      petitionForm: {
+    const errors = validatePetition({
+      petition: {
         caseType: 'defined',
       },
     });
@@ -26,19 +26,19 @@ describe('validatePetitionForm', () => {
       irsNoticeDate: '"irsNoticeDate" is required',
       // irsNoticeFile: '"irsNoticeFile" is required',
       petitionFile: '"petitionFile" is required',
-      trialLocation: '"trialLocation" is required',
+      preferredTrialCity: '"preferredTrialCity" is required',
     });
   });
 
   it('returns the expected errors object', () => {
-    const errors = validatePetitionForm({
-      petitionForm: {
+    const errors = validatePetition({
+      petition: {
         caseType: 'defined',
         procedureType: 'defined',
         irsNoticeDate: '01/01/1001',
         // irsNoticeFile: new File([], 'noop.png'),
         petitionFile: new File([], 'test.png'),
-        trialLocation: 'defined',
+        preferredTrialCity: 'defined',
       },
     });
     expect(errors).toEqual(null);
