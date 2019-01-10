@@ -86,8 +86,12 @@ iframe {
 }
 
 .are-you-ready {
-  svg {
+  .icon-wrapper {
     float: left;
+  }
+
+  .upload-description {
+    margin: 0 0 10px 10px;
   }
 }
 
