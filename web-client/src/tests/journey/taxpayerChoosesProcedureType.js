@@ -1,6 +1,6 @@
 export default test => {
   it('taxpayer chooses the procedure types to get the trial cities', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
+    await test.runSequence('gotoStartCaseSequence');
     expect(test.getState('trialCities').length).toEqual(0);
     await test.runSequence('getTrialCitiesSequence', {
       procedureType: 'small',
