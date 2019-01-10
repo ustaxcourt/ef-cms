@@ -1,25 +1,12 @@
 export default (test, fakeFile) => {
   return it('Taxpayer creates a new case', async () => {
-    await test.runSequence('gotoStartCaseSequence');
     await test.runSequence('updatePetitionValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'caseType',
-      value: 'noticeOfDeficiency',
-    });
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsNoticeDate',
-      value: '01/01/1990',
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'procedureType',
-      value: 'small',
-    });
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'preferredTrialCity',
-      value: 'Chattanooga, TN',
+      value: '01/01/2000',
     });
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertSuccess')).toEqual({

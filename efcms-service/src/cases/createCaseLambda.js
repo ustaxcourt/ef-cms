@@ -13,8 +13,7 @@ exports.create = event =>
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
     return applicationContext.getUseCases().createCase({
-      userId,
-      documents: JSON.parse(event.body).documents,
+      ...JSON.parse(event.body),
       applicationContext,
     });
   });

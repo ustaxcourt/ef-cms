@@ -5,8 +5,8 @@ import setAlertError from '../actions/setAlertErrorAction';
 import setTrialCities from '../actions/setTrialCitiesAction';
 
 export default [
-  set(state.petition.procedureType, props.value),
-  set(state.petition.preferredTrialCity, ''),
+  set(state.form.procedureType, props.value),
+  set(state.form.preferredTrialCity, ''),
   getTrialCities,
   {
     error: [setAlertError],
