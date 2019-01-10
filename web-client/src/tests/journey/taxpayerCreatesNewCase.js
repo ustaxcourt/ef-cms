@@ -1,6 +1,6 @@
 export default (test, fakeFile) => {
   return it('Taxpayer creates a new case', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
+    await test.runSequence('gotoStartCaseSequence');
     await test.runSequence('updatePetitionValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
