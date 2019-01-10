@@ -24,6 +24,5 @@ export default async ({ applicationContext, get, store }) => {
     applicationContext,
     petition: get(state.form),
     documents: [{ documentType: 'Petition', documentId: petitionDocumentId }],
-    userId: user.userId,
   });
 };

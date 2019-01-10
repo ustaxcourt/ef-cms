@@ -14,12 +14,11 @@ const Message = require('../../entities/Message');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
-  if (!isAuthorized(userId, WORKITEM)) {
+exports.assignWorkItems = async ({ workItems, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user.userId, WORKITEM)) {
     throw new UnauthorizedError(`Unauthorized to assign work item`);
   }
-
-  const user = applicationContext.user;
 
   const workItemEntities = await Promise.all(
     workItems.map(workItem => {
