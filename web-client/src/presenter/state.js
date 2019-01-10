@@ -11,6 +11,7 @@ import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { showAction } from './computeds/documentDetailHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
+import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
 
 export default {
@@ -74,6 +75,7 @@ export default {
   cases: [],
   workItemActions: {},
   completeForm: {},
+
   caseDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
@@ -82,6 +84,7 @@ export default {
   formattedSectionWorkQueue,
   formattedWorkQueue,
   getTrialCityName,
-  workQueueHelper,
   showAction,
+  startCaseHelper,
+  workQueueHelper,
 };
