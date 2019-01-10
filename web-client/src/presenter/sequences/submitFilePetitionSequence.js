@@ -6,10 +6,10 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import validatePetitionForm from '../actions/validatePetitionFormAction';
+import validatePetition from '../actions/validatePetitionAction';
 
 export default [
-  validatePetitionForm,
+  validatePetition,
   {
     success: [
       setFormSubmitting,

@@ -10,9 +10,8 @@ export default connect(
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     trialCities: state.trialCities,
-    getTrialCities: sequences.getTrialCitiesSequence,
+    getTrialCitiesSequence: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
     caseTypes: state.caseTypes,
   },
@@ -22,9 +21,8 @@ export default connect(
     procedureTypes,
     submitFilePetitionSequence,
     submitting,
-    getTrialCities,
+    getTrialCitiesSequence,
     trialCities,
-    updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
     return (
@@ -54,7 +52,7 @@ export default connect(
                 type="date"
                 name="irsNoticeDate"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updatePetitionValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -68,7 +66,7 @@ export default connect(
                 id="case-type"
                 aria-labelledby="case-type"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updatePetitionValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -89,12 +87,9 @@ export default connect(
                 id="procedure-type"
                 aria-labelledby="procedure-type"
                 onChange={e => {
-                  updateFormValueSequence({
+                  getTrialCitiesSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  });
-                  getTrialCities({
-                    procedureType: e.target.value,
                   });
                 }}
               >
@@ -107,17 +102,20 @@ export default connect(
               </select>
             </div>
             <div role="listitem" className="usa-form-group">
-              <label htmlFor="trial-location">4. Preferred trial city is</label>
+              <label htmlFor="preferred-trial-city">
+                4. Preferred trial city is
+              </label>
               <select
-                name="trialLocation"
-                id="trial-location"
-                aria-labelledby="trial-location"
+                name="preferredTrialCity"
+                id="preferred-trial-city"
+                aria-labelledby="preferred-trial-city"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updatePetitionValueSequence({
                     key: e.target.name,
-                    value: e.target.value,
+                    value: e.target.value || null,
                   });
                 }}
+                value={petition.preferredTrialCity || ''}
               >
                 <option value=""> -- Select -- </option>
                 {trialCities.map((trialCity, idx) => (
