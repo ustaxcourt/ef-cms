@@ -119,7 +119,7 @@ export default connect(
                     name=""
                     type="number"
                     min="1900"
-                    max="2000"
+                    max="2100"
                   />
                 </div>
               </div>
