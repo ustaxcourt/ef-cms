@@ -30,7 +30,16 @@ class ErrorNotification extends React.Component {
           >
             <div className="usa-alert-body">
               <h3 className="usa-alert-heading">{alertError.title}</h3>
-              <p className="usa-alert-text">{alertError.message}</p>
+              {alertError.message && (
+                <p className="usa-alert-text">{alertError.message}</p>
+              )}
+              {alertError.messages && (
+                <ul>
+                  {alertError.messages.map((message, idx) => (
+                    <li key={idx}>{message}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         )}

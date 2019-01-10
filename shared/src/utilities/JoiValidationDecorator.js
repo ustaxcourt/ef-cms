@@ -39,6 +39,13 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
+  entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
+    return joi.validate(this, schema, {
+      allowUnknown: true,
+      abortEarly: false,
+    });
+  };
+
   entityConstructor.prototype.validateWithError = function validate(error) {
     if (!this.isValid()) {
       error.message = `${error.message} ${this.getValidationError()}`;

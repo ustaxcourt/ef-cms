@@ -20,7 +20,7 @@ describe('Get case types', () => {
     const caseTypes = await getCaseTypes({
       userId: 'taxpayer',
     });
-    expect(caseTypes.length).toEqual(12);
+    expect(caseTypes.length).toBeGreaterThan(0);
     expect(caseTypes[0].type).not.toBeUndefined();
     expect(caseTypes[0].description).not.toBeUndefined();
     expect(typeof caseTypes[0].type).toEqual('string');
