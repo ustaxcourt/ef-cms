@@ -45,7 +45,7 @@ describe('File a petition', function() {
       cy.get('#irsNoticeDate').type('1999-12-31');
       cy.get('#case-type').select('Deficiency');
       cy.get('#procedure-type').select('Small');
-      cy.get('#trial-location').select('Birmingham, Alabama');
+      cy.get('#preferred-trial-city').select('Birmingham, Alabama');
     });
 
     it('has one file inputs', () => {
