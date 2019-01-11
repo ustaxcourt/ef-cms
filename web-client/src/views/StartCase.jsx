@@ -107,10 +107,16 @@ export default connect(
                     className="usa-input-inline"
                     aria-label="month"
                     id="date-of-notice-month"
-                    name=""
+                    name="month"
                     type="number"
                     min="1"
                     max="12"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
@@ -119,10 +125,16 @@ export default connect(
                     className="usa-input-inline"
                     aria-label="day"
                     id="date-of-notice-day"
-                    name=""
+                    name="day"
                     type="number"
                     min="1"
                     max="31"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
@@ -131,10 +143,16 @@ export default connect(
                     className="usa-input-inline"
                     aria-label="year"
                     id="date-of-notice-year"
-                    name=""
+                    name="year"
                     type="number"
                     min="1900"
                     max="2100"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
               </div>

@@ -20,6 +20,11 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .required(),
+    irsNoticeFileId: joi
+      .string()
+      .uuid(uuidVersions)
+      .allow(null)
+      .optional(),
   }),
 );
 
