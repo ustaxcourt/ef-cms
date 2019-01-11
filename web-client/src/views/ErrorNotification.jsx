@@ -40,6 +40,9 @@ class ErrorNotification extends React.Component {
                   ))}
                 </ul>
               )}
+              {!alertError.messages && !alertError.message && (
+                <div className="alert-blank-message" />
+              )}
             </div>
           </div>
         )}
