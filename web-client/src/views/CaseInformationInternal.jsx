@@ -17,13 +17,13 @@ export default connect(
             <div className="usa-grid-full">
               <div className="usa-width-one-third">
                 <p className="label">Notice/Case Type</p>
-                <p>Notice of Deficiency</p>
+                <p>{caseDetail.caseType}</p>
                 <p className="label">IRS Notice Date</p>
-                <p>12/22/2018</p>
+                <p>{caseDetail.irsNoticeDateFormatted}</p>
               </div>
               <div className="usa-width-one-third">
                 <p className="label">Case Procedure</p>
-                <p>Regular Tax case</p>
+                <p>{caseDetail.procedureType}</p>
               </div>
               <div className="usa-width-one-third">
                 {helper.showPaymentRecord && (
@@ -40,7 +40,7 @@ export default connect(
             <div className="usa-grid-full">
               <div className="usa-width-one-half">
                 <p className="label">Place of Trial</p>
-                <p>Los Angeles, CA</p>
+                <p>{caseDetail.preferredTrialCity}</p>
                 <p className="label">Assigned Judge</p>
                 <p>Not assigned</p>
               </div>
