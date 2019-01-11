@@ -9,11 +9,11 @@ import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import validatePetition from '../actions/validatePetitionAction';
 
 export default [
+  clearAlerts,
   validatePetition,
   {
     success: [
       setFormSubmitting,
-      clearAlerts,
       createCase,
       unsetFormSubmitting,
       getCreateCaseAlertSuccess,

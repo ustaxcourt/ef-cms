@@ -18,7 +18,7 @@ joiValidationDecorator(
     irsNoticeDate: joi
       .date()
       .iso()
-      .optional(),
+      .required(),
     procedureType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
   }),
