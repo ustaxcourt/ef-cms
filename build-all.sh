@@ -41,4 +41,4 @@ popd
 # integration tests
 ./docker-pa11y.sh
 ./docker-cerebral.sh
-./docker-cypress.sh
+CONTAINER_NAME=cypress ./docker-cypress.sh
