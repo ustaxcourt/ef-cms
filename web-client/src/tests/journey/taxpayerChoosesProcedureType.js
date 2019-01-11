@@ -11,7 +11,7 @@ export default test => {
     expect(helper.trialCities).toEqual([]);
     expect(helper.trialCities.length).toEqual(0);
     await test.runSequence('getTrialCitiesSequence', {
-      value: 'small',
+      value: 'Small',
     });
     helper = runCompute(startCaseHelper, {
       state: test.getState(),
@@ -25,7 +25,7 @@ export default test => {
       value: 'Chattanooga, TN',
     });
     await test.runSequence('getTrialCitiesSequence', {
-      value: 'large',
+      value: 'Regular',
     });
     helper = runCompute(startCaseHelper, {
       state: test.getState(),

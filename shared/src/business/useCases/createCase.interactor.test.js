@@ -55,7 +55,7 @@ describe('createCase', () => {
     const createdCase = await createCase({
       petition: {
         caseType: 'other',
-        procedureType: 'small',
+        procedureType: 'Small',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
@@ -151,7 +151,7 @@ describe('createCase', () => {
     const createdCase = await createCase({
       petition: {
         caseType: 'other',
-        procedureType: 'small',
+        procedureType: 'Small',
         preferredTrialCity: 'Chattanooga, TN',
       },
       documents: documents,
@@ -203,7 +203,7 @@ describe('createCase', () => {
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
-      procedureType: 'small',
+      procedureType: 'Small',
       createdAt: DATE,
       status: 'new',
       userId: 'taxpayer',
@@ -242,7 +242,7 @@ describe('createCase', () => {
       await createCase({
         petition: {
           caseType: 'other',
-          procedureType: 'small',
+          procedureType: 'Small',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
@@ -286,7 +286,7 @@ describe('createCase', () => {
       await createCase({
         petition: {
           caseType: 'other',
-          procedureType: 'small',
+          procedureType: 'Small',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
