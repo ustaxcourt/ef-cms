@@ -8,5 +8,6 @@ export default get => {
     showPetitionFileValid: !!form, // TODO: derive from state
     uploadsFinished: 0, // TODO: derive from state
     uploadPercentage: 0, // TODO: derive from state
+    trialCities: form.trialCities || [],
   };
 };

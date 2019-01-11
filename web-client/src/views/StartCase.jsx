@@ -16,12 +16,11 @@ export default connect(
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
-    trialCities: state.trialCities,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     getTrialCityName: state.getTrialCityName,
   },
-  function FilePetition({
+  function StartCase({
     caseTypes,
     getTrialCities,
     getTrialCityName,
@@ -31,7 +30,6 @@ export default connect(
     startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
-    trialCities,
     updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
@@ -268,7 +266,7 @@ export default connect(
                 value={form.preferredTrialCity || ''}
               >
                 <option value="">-- Select --</option>
-                {trialCities.map((trialCity, idx) => (
+                {(form.trialCities || []).map((trialCity, idx) => (
                   <option key={idx} value={getTrialCityName(trialCity)}>
                     {getTrialCityName(trialCity)}
                   </option>
