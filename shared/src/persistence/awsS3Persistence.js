@@ -76,15 +76,26 @@ exports.uploadPdfsForNewCase = async ({
   fileHasUploaded,
 }) => {
   const policy = await getUploadPolicy({ applicationContext });
-
+  let irsNoticeFileId = null;
   const petitionDocumentId = await exports.uploadPdf({
     applicationContext,
     policy,
     file: caseInitiator.petitionFile,
   });
+
+  if (caseInitiator.irsNoticeFile) {
+    irsNoticeFileId = await exports.uploadPdf({
+      applicationContext,
+      policy,
+      file: caseInitiator.irsNoticeFile,
+    });
+    fileHasUploaded();
+  }
+
   fileHasUploaded();
 
   return {
     petitionDocumentId,
+    irsNoticeFileId,
   };
 };

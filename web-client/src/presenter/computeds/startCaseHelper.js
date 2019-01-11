@@ -8,5 +8,9 @@ export default get => {
     showPetitionFileValid: !!form, // TODO: derive from state
     uploadsFinished: 0, // TODO: derive from state
     uploadPercentage: 0, // TODO: derive from state
+    irsNoticeDate:
+      form.year && form.month && form.day
+        ? `${form.year}-${form.month}-${form.day}`
+        : null,
   };
 };
