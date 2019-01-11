@@ -20,6 +20,18 @@ export default (test, fakeFile) => {
       key: 'year',
       value: '2001',
     });
+    // try without checking the signature
+    await test.runSequence('submitFilePetitionSequence');
+    expect(test.getState('alertError')).toEqual({
+      title: 'You must review the form before submitting.',
+      message: 'Fix the following errors to submit your form.',
+    });
+
+    // click the signature and try again
+    await test.runSequence('updateFormValueSequence', {
+      key: 'signature',
+      value: true,
+    });
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertSuccess')).toEqual({
       title: 'Your files were uploaded successfully.',

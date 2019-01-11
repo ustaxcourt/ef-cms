@@ -295,7 +295,17 @@ export default connect(
             </div>
           </div>
           <div className="usa-form-group">
-            <input id="signature" type="checkbox" name="signature" />
+            <input
+              id="signature"
+              type="checkbox"
+              name="signature"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: event.target.checked ? true : undefined,
+                });
+              }}
+            />
             <label htmlFor="signature">
               Checking this box acts as your digital signature, acknowledging
               that you’ve verified all information is correct.
