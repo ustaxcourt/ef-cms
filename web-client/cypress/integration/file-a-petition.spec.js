@@ -109,7 +109,7 @@ describe('File a petition', function() {
       });
       cy.get('.usa-alert-success', { timeout: 10000 }).should(
         'contain',
-        'uploaded successfully',
+        'successfully submitted',
       );
     });
     it('case list table reflects newly-added record', () => {
