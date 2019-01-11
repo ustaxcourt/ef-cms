@@ -4,14 +4,26 @@ export default (test, fakeFile) => {
       key: 'petitionFile',
       value: fakeFile,
     });
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'irsNoticeFile',
+      value: fakeFile,
+    });
     await test.runSequence('updateFormValueSequence', {
-      key: 'irsNoticeDate',
-      value: '01/01/2000',
+      key: 'month',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'day',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'year',
+      value: '2001',
     });
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your files were uploaded successfully.',
-      message: 'Your case has now been created.',
+      title: 'Your petition has been successfully submitted.',
+      message: 'You can access your case at any time from the case list below.',
     });
   });
 };

@@ -1,7 +1,7 @@
 import applicationContext from '../../applicationContext';
 
 export default (test, token = 'docketclerk') => {
-  return it('the docketclerk logs in', async () => {
+  it('the docketclerk logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
       value: token,
