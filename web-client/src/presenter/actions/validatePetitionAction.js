@@ -6,7 +6,9 @@ export default ({ applicationContext, path, get }) => {
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: get(state.startCaseHelper.irsNoticeDate),
+      irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
+        state.form.day,
+      )}`,
     },
     ['year', 'month', 'day'],
   );
