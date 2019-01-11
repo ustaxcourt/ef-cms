@@ -53,6 +53,22 @@ describe('File a petition', function() {
         .select('Notice of Deficiency');
     });
 
+    it('fills in the date', () => {
+      cy.get('#date-of-notice-month')
+        .scrollIntoView()
+        .type('01');
+      cy.get('#date-of-notice-day')
+        .scrollIntoView()
+        .type('19');
+      cy.get('#date-of-notice-year')
+        .scrollIntoView()
+        .type('1999');
+    });
+
+    it('uploads IRS notice file', () => {
+      cy.upload_file('w3-dummy.pdf', 'form #irs-notice-file');
+    });
+
     it('click the small radio button', () => {
       cy.get('#radios').scrollIntoView();
       cy.get('#radios label')
@@ -93,7 +109,7 @@ describe('File a petition', function() {
       });
       cy.get('.usa-alert-success', { timeout: 10000 }).should(
         'contain',
-        'uploaded successfully',
+        'successfully submitted',
       );
     });
     it('case list table reflects newly-added record', () => {
