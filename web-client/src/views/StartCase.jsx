@@ -19,10 +19,12 @@ export default connect(
     trialCities: state.trialCities,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    getTrialCityName: state.getTrialCityName,
   },
   function FilePetition({
     caseTypes,
     getTrialCities,
+    getTrialCityName,
     form,
     petition,
     procedureTypes,
@@ -219,6 +221,7 @@ export default connect(
                     <li key={procedureType}>
                       <input
                         id={procedureType}
+                        data-type={procedureType}
                         type="radio"
                         name="procedureType"
                         value={procedureType}
@@ -256,8 +259,8 @@ export default connect(
               >
                 <option value="">-- Select --</option>
                 {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
-                    {trialCity.city}, {trialCity.state}
+                  <option key={idx} value={getTrialCityName(trialCity)}>
+                    {getTrialCityName(trialCity)}
                   </option>
                 ))}
               </select>
@@ -271,6 +274,7 @@ export default connect(
             </label>
           </div>
           <button
+            id="submit-case"
             type="submit"
             disabled={submitting}
             className={submitting ? 'usa-button-active' : 'usa-button'}
