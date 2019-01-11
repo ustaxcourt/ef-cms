@@ -104,7 +104,6 @@ describe('File a petition', function() {
         .click();
       cy.wait('@postCase');
       cy.get('@postCase').should(xhr => {
-        console.log('xhr.responseBody', xhr.responseBody);
         expect(xhr.responseBody).to.have.property('docketNumber');
         createdDocketNumber = xhr.responseBody.docketNumber;
       });
