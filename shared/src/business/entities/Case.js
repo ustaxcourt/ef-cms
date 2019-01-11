@@ -248,6 +248,7 @@ Case.documentTypes = {
     'Statement of Taxpayer Identification Number',
   answer: 'Answer',
   stipulatedDecision: 'Stipulated Decision',
+  irsNotice: 'IRS Notice',
 };
 
 /**

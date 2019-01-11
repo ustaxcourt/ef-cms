@@ -15,6 +15,7 @@ const documentTypes = [
   'Stipulated Decision',
   'Request for Place of Trial',
   'Statement of Taxpayer Identification Number',
+  'IRS Notice',
 ];
 
 const WorkItem = require('./WorkItem');
