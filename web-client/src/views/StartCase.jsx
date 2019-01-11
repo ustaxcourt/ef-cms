@@ -13,7 +13,7 @@ export default connect(
     form: state.form,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
-    startACaseCancelSequence: sequences.startACaseCancelSequence,
+    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     trialCities: state.trialCities,
@@ -28,7 +28,7 @@ export default connect(
     form,
     petition,
     procedureTypes,
-    startACaseCancelSequence,
+    startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
     trialCities,
@@ -297,7 +297,7 @@ export default connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseCancelSequence();
+              startACaseToggleCancelSequence();
               return false;
             }}
           >
