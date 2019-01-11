@@ -4,12 +4,16 @@
 
 .usa-form-group {
   margin-bottom: 30px;
+
+  label {
+    margin: 0 0 10px;
+  }
 }
 
 .usa-form-hint {
   display: inline-block;
-  margin-bottom: 10px;
-  color: $color-gray-dark;
+  margin-bottom: 5px;
+  color: $color-gray;
 }
 
 .usa-header .usa-nav-secondary .usa-search {
