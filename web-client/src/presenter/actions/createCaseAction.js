@@ -13,16 +13,37 @@ export default async ({ applicationContext, get, store }) => {
     );
   };
 
-  const { petitionDocumentId } = await useCases.uploadCasePdfs({
-    applicationContext,
-    caseInitiator,
-    userId: user.userId,
-    fileHasUploaded,
-  });
+  const { petitionDocumentId, irsNoticeFileId } = await useCases.uploadCasePdfs(
+    {
+      applicationContext,
+      caseInitiator,
+      userId: user.userId,
+      fileHasUploaded,
+    },
+  );
+
+  const documents = [
+    { documentType: 'Petition', documentId: petitionDocumentId },
+  ];
+
+  if (irsNoticeFileId) {
+    documents.push({
+      documentType: 'IRS Notice',
+      documentId: irsNoticeFileId,
+    });
+  }
+
+  const form = omit(
+    {
+      ...get(state.form),
+      irsNoticeDate: get(state.startCaseHelper.irsNoticeDate),
+    },
+    ['year', 'month', 'day'],
+  );
 
   await useCases.createCase({
     applicationContext,
-    petition: get(state.form),
-    documents: [{ documentType: 'Petition', documentId: petitionDocumentId }],
+    petition: form,
+    documents,
   });
 };

@@ -1,4 +1,5 @@
 import clearAlerts from '../actions/clearAlertsAction';
+import clearForm from '../actions/clearFormAction';
 import clearPetition from '../actions/clearPetitionAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
@@ -10,6 +11,7 @@ import setProcedureTypes from '../actions/setProcedureTypesAction';
 export default [
   clearAlerts,
   clearPetition,
+  clearForm,
   getCaseTypes,
   {
     error: [setAlertError],

@@ -8,7 +8,6 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const Document = require('./Document');
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -76,6 +75,7 @@ const PROCEDURE_TYPES = ['Small', 'Regular'];
  * @constructor
  */
 function Case(rawCase) {
+  const Document = require('./Document');
   Object.assign(
     this,
     rawCase,
@@ -143,6 +143,7 @@ joiValidationDecorator(
     procedureType: joi.string().optional(),
   }),
   function() {
+    const Document = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents)
@@ -151,6 +152,8 @@ joiValidationDecorator(
 );
 
 Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
+  const Document = require('./Document');
+
   const documentMetadata = {
     documentType,
     documentId,
@@ -183,6 +186,8 @@ Case.prototype.addDocument = function(document) {
  * markAsSentToIrs
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
+  const Document = require('./Document');
+
   this.irsSendDate = sendDate;
   this.status = 'general';
   this.documents.forEach(document => {
@@ -248,6 +253,11 @@ Case.documentTypes = {
     'Statement of Taxpayer Identification Number',
   answer: 'Answer',
   stipulatedDecision: 'Stipulated Decision',
+  irsNotice: 'IRS Notice',
+};
+
+Case.getDocumentTypes = () => {
+  return Object.keys(Case.documentTypes).map(key => Case.documentTypes[key]);
 };
 
 /**
