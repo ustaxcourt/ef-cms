@@ -35,7 +35,7 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('submitFilePetitionSequence');
 
-    expect(test.getState('alertError.messages')).toEqual([]);
+    expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({
       title: 'Your petition has been successfully submitted.',
