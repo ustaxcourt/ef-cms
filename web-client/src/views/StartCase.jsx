@@ -207,10 +207,7 @@ export default connect(
               />
             </div>
             <h3>Who is filing this petition?</h3>
-            <div className="usa-form-group">
-              <input id="filing-myself" type="radio" name="" />
-              <label htmlFor="filing-myself">Myself</label>
-            </div>
+            <p>Myself</p>
           </div>
           <h2>How do you want this case to be handled?</h2>
           <p>
