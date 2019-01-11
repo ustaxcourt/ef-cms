@@ -21,8 +21,7 @@ export default ({ applicationContext, path, get }) => {
   } else {
     return path.error({
       alertError: {
-        title: 'Fix the following errors to submit your form.',
-        messages: Object.keys(errors).map(key => errors[key]),
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
     });
   }
