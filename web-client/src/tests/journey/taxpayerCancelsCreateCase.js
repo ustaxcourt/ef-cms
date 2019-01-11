@@ -36,5 +36,6 @@ export default test => {
     await test.runSequence('startACaseToggleCancelSequence');
     await test.runSequence('startACaseConfirmCancelSequence');
     expect(test.getState('showModal')).toBeFalsy();
+    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
   });
 };
