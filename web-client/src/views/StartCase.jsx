@@ -10,6 +10,7 @@ export default connect(
   {
     caseTypes: state.caseTypes,
     getTrialCities: sequences.getTrialCitiesSequence,
+    form: state.form,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
     startACaseCancelSequence: sequences.startACaseCancelSequence,
@@ -18,10 +19,13 @@ export default connect(
     trialCities: state.trialCities,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    getTrialCityName: state.getTrialCityName,
   },
   function FilePetition({
     caseTypes,
     getTrialCities,
+    getTrialCityName,
+    form,
     petition,
     procedureTypes,
     startACaseCancelSequence,
@@ -29,7 +33,7 @@ export default connect(
     submitting,
     trialCities,
     updateFormValueSequence,
-    // updatePetitionValueSequence,
+    updatePetitionValueSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -146,8 +150,13 @@ export default connect(
                 id="irs-notice-file"
                 type="file"
                 accept=".pdf"
-                name="petitionFile"
-                onChange={() => {}}
+                name="irsNoticeFile"
+                onChange={e => {
+                  updatePetitionValueSequence({
+                    key: e.target.name,
+                    value: e.target.files[0],
+                  });
+                }}
               />
             </div>
           </div>
@@ -171,7 +180,12 @@ export default connect(
                 type="file"
                 accept=".pdf"
                 name="petitionFile"
-                onChange={() => {}}
+                onChange={e => {
+                  updatePetitionValueSequence({
+                    key: e.target.name,
+                    value: e.target.files[0],
+                  });
+                }}
               />
             </div>
             <h3>Who is filing this petition?</h3>
@@ -217,10 +231,15 @@ export default connect(
                     <li key={procedureType}>
                       <input
                         id={procedureType}
+                        data-type={procedureType}
                         type="radio"
                         name="procedureType"
                         value={procedureType}
-                        onChange={() => {}}
+                        onChange={e => {
+                          getTrialCities({
+                            value: e.currentTarget.value,
+                          });
+                        }}
                       />
                       <label htmlFor={procedureType}>{procedureType}</label>
                     </li>
@@ -229,21 +248,29 @@ export default connect(
               </fieldset>
             </div>
             <div className="usa-form-group">
-              <label htmlFor="procedure-type">Select a Trial Location</label>
+              <label htmlFor="preferred-trial-city">
+                Select a Trial Location
+              </label>
               <span className="usa-form-hint">
                 Trial locations are unavailable in the following states: DE, KS,
                 ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next closest
                 location.
               </span>
               <select
-                name="procedureType"
-                id="procedure-type"
-                onChange={() => {}}
+                name="preferredTrialCity"
+                id="preferred-trial-city"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value || null,
+                  });
+                }}
+                value={form.preferredTrialCity || ''}
               >
                 <option value="">-- Select --</option>
                 {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value="{trialCity.city}, {trialCity.state}">
-                    {trialCity.city}, {trialCity.state}
+                  <option key={idx} value={getTrialCityName(trialCity)}>
+                    {getTrialCityName(trialCity)}
                   </option>
                 ))}
               </select>
@@ -257,6 +284,7 @@ export default connect(
             </label>
           </div>
           <button
+            id="submit-case"
             type="submit"
             disabled={submitting}
             className={submitting ? 'usa-button-active' : 'usa-button'}
