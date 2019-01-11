@@ -13,6 +13,7 @@ import { showAction } from './computeds/documentDetailHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
 import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
+import alertHelper from './computeds/alertHelper';
 
 export default {
   path: '/',
@@ -93,4 +94,5 @@ export default {
   showAction,
   startCaseHelper,
   workQueueHelper,
+  alertHelper,
 };
