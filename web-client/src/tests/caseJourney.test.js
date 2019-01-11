@@ -78,8 +78,8 @@ describe('Case journey', async () => {
   taxpayerLogin(test);
   taxpayerCancelsCreateCase(test);
   taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesCaseType(test);
   taxpayerChoosesProcedureType(test);
+  taxpayerChoosesCaseType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
