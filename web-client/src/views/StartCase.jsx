@@ -14,15 +14,14 @@ export default connect(
     form: state.form,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
-    startACaseCancelSequence: sequences.startACaseCancelSequence,
+    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
-    trialCities: state.trialCities,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     getTrialCityName: state.getTrialCityName,
   },
-  function FilePetition({
+  function StartCase({
     caseTypes,
     getTrialCities,
     getTrialCityName,
@@ -30,10 +29,9 @@ export default connect(
     startCaseHelper,
     petition,
     procedureTypes,
-    startACaseCancelSequence,
+    startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
-    trialCities,
     updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
@@ -328,7 +326,7 @@ export default connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseCancelSequence();
+              startACaseToggleCancelSequence();
               return false;
             }}
           >

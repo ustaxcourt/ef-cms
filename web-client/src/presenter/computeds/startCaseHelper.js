@@ -19,6 +19,7 @@ export default get => {
     uploadsFinished: 0, // TODO: derive from state
     uploadPercentage: 0, // TODO: derive from state
     trialCitiesByState: states,
+    trialCities: form.trialCities || [],
     irsNoticeDate:
       form.year && form.month && form.day
         ? `${form.year}-${form.month}-${form.day}`
