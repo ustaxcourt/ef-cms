@@ -23,8 +23,7 @@ export default (test, fakeFile) => {
     // try without checking the signature
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertError')).toEqual({
-      title: 'You must review the form before submitting.',
-      message: 'Fix the following errors to submit your form.',
+      title: 'Errors were found. Please correct your form and resubmit.',
     });
 
     // click the signature and try again
