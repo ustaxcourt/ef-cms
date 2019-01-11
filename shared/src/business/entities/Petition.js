@@ -20,7 +20,10 @@ joiValidationDecorator(
   Petition,
   joi.object().keys({
     caseType: joi.string().required(),
-    irsNoticeDate: joi.string().required(),
+    irsNoticeDate: joi
+      .date()
+      .iso()
+      .required(),
     irsNoticeFile: joi.object().required(),
     petitionFile: joi.object().required(),
     procedureType: joi.string().required(),
