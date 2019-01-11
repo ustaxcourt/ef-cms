@@ -1,5 +1,6 @@
 const { validatePetition } = require('./validatePetition.interactor');
 const Petition = require('../entities/Petition');
+const { omit } = require('lodash');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
@@ -11,14 +12,7 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual({
-      caseType: 'Case Type is a required field.',
-      irsNoticeDate: 'IRS Notice Date is a required field.',
-      irsNoticeFile: 'The IRS Notice file was not selected.',
-      petitionFile: 'The Petition file was not selected.',
-      preferredTrialCity: 'Preferred Trial City is a required field.',
-      procedureType: 'Procedure Type is a required field.',
-    });
+    expect(errors).toEqual(Petition.errorToMessageMap);
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -32,13 +26,7 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual({
-      irsNoticeDate: 'IRS Notice Date is a required field.',
-      irsNoticeFile: 'The IRS Notice file was not selected.',
-      petitionFile: 'The Petition file was not selected.',
-      preferredTrialCity: 'Preferred Trial City is a required field.',
-      procedureType: 'Procedure Type is a required field.',
-    });
+    expect(errors).toEqual(omit(Petition.errorToMessageMap, ['caseType']));
   });
 
   it('returns the expected errors object', () => {
