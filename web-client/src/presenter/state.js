@@ -48,7 +48,6 @@ export default {
   selectedWorkItems: [],
   caseTypes: [],
   procedureTypes: [],
-  trialCities: [],
   user: {
     userId: '',
     role: 'public',
