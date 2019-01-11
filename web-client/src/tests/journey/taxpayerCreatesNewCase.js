@@ -25,14 +25,15 @@ export default (test, fakeFile) => {
 
     await test.runSequence('submitFilePetitionSequence');
 
-    expect(test.getState('alertError.messages.0')).toEqual(
-      'IRS Notice Date is a required field.',
+    expect(test.getState('alertError.title')).toEqual(
+      'Errors were found. Please correct your form and resubmit.',
     );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'day',
       value: '01',
     });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError')).toEqual(null);

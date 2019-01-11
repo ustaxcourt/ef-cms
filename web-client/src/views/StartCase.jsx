@@ -9,10 +9,10 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     caseTypes: state.caseTypes,
+    startCaseHelper: state.startCaseHelper,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
     getTrialCityName: state.getTrialCityName,
-    helper: state.startCaseHelper,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
@@ -26,7 +26,7 @@ export default connect(
     form,
     getTrialCities,
     getTrialCityName,
-    helper,
+    startCaseHelper,
     petition,
     procedureTypes,
     startACaseToggleCancelSequence,
@@ -164,6 +164,9 @@ export default connect(
               >
                 Upload your IRS Notice
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="irs-notice-file"
                 type="file"
@@ -193,6 +196,9 @@ export default connect(
               >
                 Upload your Petition
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="petition-file"
                 type="file"
@@ -267,13 +273,13 @@ export default connect(
                 Select a Trial Location
               </label>
               <span className="usa-form-hint">
-                {helper.showSmallTrialCitiesHint && (
+                {startCaseHelper.showSmallTrialCitiesHint && (
                   <React.Fragment>
                     Trial locations are unavailable in the following states: DE,
                     NH, NJ, RI. Please select the next closest location.
                   </React.Fragment>
                 )}
-                {helper.showRegularTrialCitiesHint && (
+                {startCaseHelper.showRegularTrialCitiesHint && (
                   <React.Fragment>
                     Trial locations are unavailable in the following states: DE,
                     KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next
@@ -293,11 +299,22 @@ export default connect(
                 value={form.preferredTrialCity || ''}
               >
                 <option value="">-- Select --</option>
-                {(form.trialCities || []).map((trialCity, idx) => (
-                  <option key={idx} value={getTrialCityName(trialCity)}>
-                    {getTrialCityName(trialCity)}
-                  </option>
-                ))}
+                {Object.keys(startCaseHelper.trialCitiesByState).map(
+                  (state, idx) => (
+                    <optgroup key={idx} label={state}>
+                      {startCaseHelper.trialCitiesByState[state].map(
+                        (trialCity, cityIdx) => (
+                          <option
+                            key={cityIdx}
+                            value={getTrialCityName(trialCity)}
+                          >
+                            {getTrialCityName(trialCity)}
+                          </option>
+                        ),
+                      )}
+                    </optgroup>
+                  ),
+                )}
               </select>
             </div>
           </div>
