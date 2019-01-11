@@ -9,6 +9,7 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     caseTypes: state.caseTypes,
+    startCaseHelper: state.startCaseHelper,
     getTrialCities: sequences.getTrialCitiesSequence,
     form: state.form,
     petition: state.petition,
@@ -25,6 +26,7 @@ export default connect(
     getTrialCities,
     getTrialCityName,
     form,
+    startCaseHelper,
     petition,
     procedureTypes,
     startACaseToggleCancelSequence,
@@ -290,11 +292,22 @@ export default connect(
                 value={form.preferredTrialCity || ''}
               >
                 <option value="">-- Select --</option>
-                {(form.trialCities || []).map((trialCity, idx) => (
-                  <option key={idx} value={getTrialCityName(trialCity)}>
-                    {getTrialCityName(trialCity)}
-                  </option>
-                ))}
+                {Object.keys(startCaseHelper.trialCitiesByState).map(
+                  (state, idx) => (
+                    <optgroup key={idx} label={state}>
+                      {startCaseHelper.trialCitiesByState[state].map(
+                        (trialCity, cityIdx) => (
+                          <option
+                            key={cityIdx}
+                            value={getTrialCityName(trialCity)}
+                          >
+                            {getTrialCityName(trialCity)}
+                          </option>
+                        ),
+                      )}
+                    </optgroup>
+                  ),
+                )}
               </select>
             </div>
           </div>
