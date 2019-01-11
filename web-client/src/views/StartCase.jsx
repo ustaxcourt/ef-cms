@@ -164,6 +164,9 @@ export default connect(
               >
                 Upload your IRS Notice
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="irs-notice-file"
                 type="file"
@@ -193,6 +196,9 @@ export default connect(
               >
                 Upload your Petition
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="petition-file"
                 type="file"
