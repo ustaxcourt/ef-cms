@@ -6,8 +6,8 @@ export default connect(
   {
     modal: state.modal,
     showModal: state.showModal,
-    clickCancelSequence: sequences.startACaseCancelSequence,
-    clickConfirmSequence: sequences.startACaseConfirmSequence,
+    clickCancelSequence: sequences.startACaseToggleCancelSequence,
+    clickConfirmSequence: sequences.startACaseConfirmCancelSequence,
   },
   function ModalDialog({
     modal,
