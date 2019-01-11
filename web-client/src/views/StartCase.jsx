@@ -9,29 +9,29 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     caseTypes: state.caseTypes,
+    startCaseHelper: state.startCaseHelper,
     getTrialCities: sequences.getTrialCitiesSequence,
     form: state.form,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
-    startACaseCancelSequence: sequences.startACaseCancelSequence,
+    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
-    trialCities: state.trialCities,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     getTrialCityName: state.getTrialCityName,
   },
-  function FilePetition({
+  function StartCase({
     caseTypes,
     getTrialCities,
     getTrialCityName,
     form,
+    startCaseHelper,
     petition,
     procedureTypes,
-    startACaseCancelSequence,
+    startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
-    trialCities,
     updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
@@ -164,6 +164,9 @@ export default connect(
               >
                 Upload your IRS Notice
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="irs-notice-file"
                 type="file"
@@ -193,6 +196,9 @@ export default connect(
               >
                 Upload your Petition
               </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf).
+              </span>
               <input
                 id="petition-file"
                 type="file"
@@ -286,11 +292,22 @@ export default connect(
                 value={form.preferredTrialCity || ''}
               >
                 <option value="">-- Select --</option>
-                {trialCities.map((trialCity, idx) => (
-                  <option key={idx} value={getTrialCityName(trialCity)}>
-                    {getTrialCityName(trialCity)}
-                  </option>
-                ))}
+                {Object.keys(startCaseHelper.trialCitiesByState).map(
+                  (state, idx) => (
+                    <optgroup key={idx} label={state}>
+                      {startCaseHelper.trialCitiesByState[state].map(
+                        (trialCity, cityIdx) => (
+                          <option
+                            key={cityIdx}
+                            value={getTrialCityName(trialCity)}
+                          >
+                            {getTrialCityName(trialCity)}
+                          </option>
+                        ),
+                      )}
+                    </optgroup>
+                  ),
+                )}
               </select>
             </div>
           </div>
@@ -325,7 +342,7 @@ export default connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseCancelSequence();
+              startACaseToggleCancelSequence();
               return false;
             }}
           >

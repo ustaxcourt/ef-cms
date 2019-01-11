@@ -33,8 +33,8 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your files were uploaded successfully.',
-      message: 'Your case has now been created.',
+      title: 'Your petition has been successfully submitted.',
+      message: 'You can access your case at any time from the case list below.',
     });
   });
 };
