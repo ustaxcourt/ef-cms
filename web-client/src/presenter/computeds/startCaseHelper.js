@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export default get => {
   const form = get(state.form);
-  const trialCities = get(state.trialCities);
+  const trialCities = get(state.form.trialCities) || [];
 
   const states = {};
   trialCities.forEach(
