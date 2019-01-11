@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
 export default ({ store, props }) => {
-  store.set(state.trialCities, props.trialCities);
+  store.set(state.form.trialCities, props.trialCities);
 };
