@@ -40,10 +40,16 @@ exports.joiValidationDecorator = function(
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    return joi.validate(this, schema, {
+    const { error } = joi.validate(this, schema, {
       allowUnknown: true,
       abortEarly: false,
     });
+    if (!error) return null;
+    const errors = {};
+    error.details.forEach(detail => {
+      errors[detail.context.key] = detail.message;
+    });
+    return errors;
   };
 
   entityConstructor.prototype.validateWithError = function validate(error) {
