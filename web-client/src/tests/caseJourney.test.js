@@ -58,6 +58,10 @@ presenter.providers.router = {
         docketNumber: test.docketNumber,
       });
     }
+
+    if (url === '/') {
+      await test.runSequence('gotoDashboardSequence');
+    }
   },
 };
 
