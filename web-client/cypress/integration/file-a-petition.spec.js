@@ -96,6 +96,20 @@ describe('File a petition', function() {
         .should('have.class', 'validated');
     });
 
+    it('tries to submit the form without clicking the signature', () => {
+      cy.get('form button#submit-case')
+        .scrollIntoView()
+        .click();
+      cy.get('.usa-alert.usa-alert-error').should('exist');
+    });
+
+    it('check the signature', () => {
+      // why do we click the label instead of the input?  Because a click() or check() on the input doesn't work for some reason.... ಠ_ಠ
+      cy.get('#signature + label')
+        .scrollIntoView()
+        .click();
+    });
+
     it('submits forms and shows a success message', () => {
       cy.server();
       cy.route('POST', '*/cases').as('postCase');
