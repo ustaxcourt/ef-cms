@@ -3,13 +3,13 @@ import { state } from 'cerebral';
 export default get => {
   const form = get(state.form);
   const trialCities = get(state.form.trialCities) || [];
-
+  const getTrialCityName = get(state.getTrialCityName);
   const states = {};
   trialCities.forEach(
     trialCity =>
       (states[trialCity.state] = [
         ...(states[trialCity.state] || []),
-        trialCity,
+        getTrialCityName(trialCity),
       ]),
   );
 
