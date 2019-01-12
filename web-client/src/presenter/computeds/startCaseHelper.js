@@ -20,9 +20,7 @@ export default get => {
     uploadPercentage: 0, // TODO: derive from state
     trialCitiesByState: states,
     trialCities: form.trialCities || [],
-    irsNoticeDate:
-      form.year && form.month && form.day
-        ? `${form.year}-${form.month}-${form.day}`
-        : null,
+    showRegularTrialCitiesHint: form.procedureType == 'Regular',
+    showSmallTrialCitiesHint: form.procedureType === 'Small',
   };
 };
