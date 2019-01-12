@@ -304,11 +304,8 @@ export default connect(
                     <optgroup key={idx} label={state}>
                       {startCaseHelper.trialCitiesByState[state].map(
                         (trialCity, cityIdx) => (
-                          <option
-                            key={cityIdx}
-                            value={getTrialCityName(trialCity)}
-                          >
-                            {getTrialCityName(trialCity)}
+                          <option key={cityIdx} value={trialCity}>
+                            {trialCity}
                           </option>
                         ),
                       )}
