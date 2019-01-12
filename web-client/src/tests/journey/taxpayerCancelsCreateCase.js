@@ -14,7 +14,7 @@ export default test => {
     expect(test.getState('showModal')).toBeFalsy();
     expect(test.getState('form')).toEqual({});
     await test.runSequence('getTrialCitiesSequence', {
-      value: 'large',
+      value: 'Regular',
     });
 
     helper = runCompute(startCaseHelper, {
