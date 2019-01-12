@@ -14,6 +14,7 @@ Petition.errorToMessageMap = {
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
+  signature: 'You must review the form before submitting.',
 };
 
 joiValidationDecorator(
@@ -28,6 +29,7 @@ joiValidationDecorator(
     petitionFile: joi.object().required(),
     procedureType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
+    signature: joi.boolean().required(),
   }),
 );
 
