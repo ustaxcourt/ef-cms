@@ -10,8 +10,9 @@ export default connect(
   {
     caseTypes: state.caseTypes,
     startCaseHelper: state.startCaseHelper,
-    getTrialCities: sequences.getTrialCitiesSequence,
     form: state.form,
+    getTrialCities: sequences.getTrialCitiesSequence,
+    getTrialCityName: state.getTrialCityName,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
@@ -19,13 +20,12 @@ export default connect(
     submitting: state.submitting,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
-    getTrialCityName: state.getTrialCityName,
   },
   function StartCase({
     caseTypes,
+    form,
     getTrialCities,
     getTrialCityName,
-    form,
     startCaseHelper,
     petition,
     procedureTypes,
@@ -213,10 +213,7 @@ export default connect(
               />
             </div>
             <h3>Who is filing this petition?</h3>
-            <div className="usa-form-group">
-              <input id="filing-myself" type="radio" name="" />
-              <label htmlFor="filing-myself">Myself</label>
-            </div>
+            <p>Myself</p>
           </div>
           <h2>How do you want this case to be handled?</h2>
           <p>
@@ -276,9 +273,19 @@ export default connect(
                 Select a Trial Location
               </label>
               <span className="usa-form-hint">
-                Trial locations are unavailable in the following states: DE, KS,
-                ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next closest
-                location.
+                {startCaseHelper.showSmallTrialCitiesHint && (
+                  <React.Fragment>
+                    Trial locations are unavailable in the following states: DE,
+                    NH, NJ, RI. Please select the next closest location.
+                  </React.Fragment>
+                )}
+                {startCaseHelper.showRegularTrialCitiesHint && (
+                  <React.Fragment>
+                    Trial locations are unavailable in the following states: DE,
+                    KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next
+                    closest location.
+                  </React.Fragment>
+                )}
               </span>
               <select
                 name="preferredTrialCity"
