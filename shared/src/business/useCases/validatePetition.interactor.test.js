@@ -38,6 +38,7 @@ describe('validatePetition', () => {
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
         irsNoticeFile: new File([], 'test.png'),
+        signature: true,
       },
       applicationContext: {
         getEntityConstructors: () => ({

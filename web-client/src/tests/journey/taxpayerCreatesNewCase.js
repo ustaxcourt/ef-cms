@@ -23,6 +23,18 @@ export default (test, fakeFile) => {
       value: '2001',
     });
 
+    // try without checking the signature
+    await test.runSequence('submitFilePetitionSequence');
+    expect(test.getState('alertError')).toEqual({
+      title: 'Errors were found. Please correct your form and resubmit.',
+    });
+
+    // click the signature and try again
+    await test.runSequence('updateFormValueSequence', {
+      key: 'signature',
+      value: true,
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError.title')).toEqual(
