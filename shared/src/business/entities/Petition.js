@@ -23,6 +23,7 @@ joiValidationDecorator(
     caseType: joi.string().required(),
     irsNoticeDate: joi
       .date()
+      .max('now')
       .iso()
       .required(),
     irsNoticeFile: joi.object().required(),

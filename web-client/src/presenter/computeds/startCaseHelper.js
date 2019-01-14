@@ -20,7 +20,7 @@ export default get => {
     uploadPercentage: 0, // TODO: derive from state
     trialCitiesByState: states,
     trialCities: form.trialCities || [],
-    showRegularTrialCitiesHint: form.procedureType == 'Regular',
+    showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSmallTrialCitiesHint: form.procedureType === 'Small',
   };
 };

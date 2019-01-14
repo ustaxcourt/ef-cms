@@ -323,7 +323,7 @@ export default connect(
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
-                  value: event.target.checked ? true : undefined,
+                  value: e.target.checked ? true : undefined,
                 });
               }}
             />
