@@ -6,8 +6,7 @@ describe('start a case computed', () => {
   it('sets showIrsNoticeFileValid false when the irsNoticeFile is not added to the petition', () => {
     const result = runCompute(startCaseHelper, {
       state: {
-        petition: {
-        },
+        petition: {},
         form: {},
       },
     });
