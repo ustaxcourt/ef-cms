@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import ModalDialog from './ModalDialog';
+import CaseDifferenceExplained from './views/CaseDifferenceExplained';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -239,7 +240,7 @@ export default connect(
                 className="usa-accordion-content"
                 aria-hidden="false"
               >
-                TODO: Add infographic
+                <CaseDifferenceExplained />
               </div>
             </li>
           </ul>
