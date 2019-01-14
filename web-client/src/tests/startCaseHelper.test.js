@@ -58,7 +58,7 @@ describe('start a case computed', () => {
         form: {},
       },
     });
-    expect(result.uploadsFinished).toEqual(1);
+    expect(result.uploadsRemaining).toEqual(1);
   });
 
   it('sets uploadPercentage for partial completion', () => {
