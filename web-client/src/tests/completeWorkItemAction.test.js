@@ -15,7 +15,7 @@ presenter.providers.applicationContext = {
 presenter.providers.path = {
   success() {},
   error() {},
-}
+};
 
 describe('completeWorkItem', async () => {
   it('should attach an assignee id if one does not already exist', async () => {
@@ -34,11 +34,11 @@ describe('completeWorkItem', async () => {
                 {
                   workItemId: 'abc',
                   messages: [],
-                }
-              ]
-            }
-          ]
-        }
+                },
+              ],
+            },
+          ],
+        },
       },
       props: {
         workItemId: 'abc',
@@ -47,9 +47,11 @@ describe('completeWorkItem', async () => {
         presenter,
       },
     });
-    expect(result.state.caseDetail.documents[0].workItems).toMatchObject([{
-      assigneeId: "docketclerk", 
-      assigneeName: "Docket Clerk"
-    }])
+    expect(result.state.caseDetail.documents[0].workItems).toMatchObject([
+      {
+        assigneeId: 'docketclerk',
+        assigneeName: 'Docket Clerk',
+      },
+    ]);
   });
 });

@@ -8,7 +8,7 @@ describe('alertHelper', () => {
       state: {
         alertError: {
           message: 'abc',
-        }
+        },
       },
     });
     expect(result).toMatchObject({
@@ -22,8 +22,7 @@ describe('alertHelper', () => {
   it('no messages', async () => {
     const result = await runCompute(alertHelper, {
       state: {
-        alertError: {
-        }
+        alertError: {},
       },
     });
     expect(result).toMatchObject({

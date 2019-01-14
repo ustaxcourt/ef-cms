@@ -20,8 +20,8 @@ describe('getTrialCities', async () => {
     presenter.providers.path = {
       success() {},
       error: errorSpy,
-    }
-  })
+    };
+  });
 
   it('should invoke the error path when no trial cities are returned', async () => {
     await runAction(getTrialCities, {

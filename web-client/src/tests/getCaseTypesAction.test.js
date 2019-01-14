@@ -15,7 +15,7 @@ presenter.providers.applicationContext = {
 presenter.providers.path = {
   success() {},
   error() {},
-}
+};
 
 describe('getCaseTypesAction', async () => {
   it('should take the error path if the getCaseTypes fails', async () => {

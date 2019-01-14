@@ -20,8 +20,8 @@ describe('getInternalUsers', async () => {
     presenter.providers.path = {
       success() {},
       error: errorSpy,
-    }
-  })
+    };
+  });
 
   it('should invoke the error path when no users are returned', async () => {
     await runAction(getInternalUsers, {

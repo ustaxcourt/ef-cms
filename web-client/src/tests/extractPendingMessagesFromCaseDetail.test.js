@@ -7,10 +7,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
     const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {
-          documents: [
-            {
-            }
-          ],
+          documents: [{}],
         },
       },
     });
