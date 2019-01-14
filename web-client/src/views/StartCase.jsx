@@ -366,7 +366,7 @@ export default connect(
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">
               <p>
-                {startCaseHelper.uploadsFinished} of{' '}
+                {startCaseHelper.uploadsRemaining} of{' '}
                 {startCaseHelper.numberOfUploadFiles} remaining
               </p>
               <div className="progress-container">
