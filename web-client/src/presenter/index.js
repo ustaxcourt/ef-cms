@@ -23,6 +23,7 @@ import submitSearchSequence from './sequences/submitSearchSequence';
 import submitToIrsSequence from './sequences/submitToIrsSequence';
 import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
+import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
@@ -69,6 +70,7 @@ export default {
     submitToIrsSequence,
     submitUpdateCaseSequence,
     switchWorkQueueSequence,
+    toggleCaseDifferenceSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
