@@ -29,7 +29,7 @@ export default connect(
                 {helper.showPaymentRecord && (
                   <React.Fragment>
                     <p className="label">Petition Fee Paid</p>
-                    <p>{caseDetail.payGovId}</p>
+                    <p id="pay-gov-id-display">{caseDetail.payGovId}</p>
                   </React.Fragment>
                 )}{' '}
               </div>
