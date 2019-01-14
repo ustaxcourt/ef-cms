@@ -182,7 +182,7 @@ export default connect(
                     <tr key={idx}>
                       <td className="responsive-title">
                         <span className="responsive-label">Activity date</span>
-                        {moment(document.createdAt).format('l')}
+                        {moment(document.createdAt).format('L')}
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
@@ -218,7 +218,7 @@ export default connect(
                   ))}
                   {caseDetail.payGovId && (
                     <tr>
-                      <td>{moment(caseDetail.payGovDate).format('l')}</td>
+                      <td>{moment(caseDetail.payGovDate).format('L')}</td>
                       <td>Filing fee paid</td>
                       <td />
                       <td />
