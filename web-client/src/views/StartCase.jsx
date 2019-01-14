@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import ModalDialog from './ModalDialog';
-import CaseDifferenceExplained from './views/CaseDifferenceExplained';
+import CaseDifferenceExplained from './CaseDifferenceExplained';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -19,6 +19,7 @@ export default connect(
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
+    toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
   },
@@ -33,6 +34,7 @@ export default connect(
     startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
+    toggleCaseDifferenceSequence,
     updateFormValueSequence,
     updatePetitionValueSequence,
   }) {
@@ -224,26 +226,32 @@ export default connect(
             Court must agree with your choice. Generally, the Tax Court will
             agree with your request if you qualify for a small case.
           </p>
-          <ul className="usa-accordion">
-            <li>
-              <button
-                type="button"
-                className="usa-accordion-button"
-                aria-expanded="true"
-                aria-controls="a1"
-              >
+          <div className="usa-accordion start-a-case">
+            <button
+              type="button"
+              className="usa-accordion-button"
+              aria-expanded={form.showCaseDifference === true}
+              aria-controls="case-difference-container"
+              onClick={() => toggleCaseDifferenceSequence()}
+            >
+              <span className="usa-banner-button-text">
                 How is a small case different than a regular case, and do I
                 qualify?
-              </button>
-              <div
-                id="a1"
-                className="usa-accordion-content"
-                aria-hidden="false"
-              >
-                <CaseDifferenceExplained />
-              </div>
-            </li>
-          </ul>
+                {form.showCaseDifference ? (
+                  <FontAwesomeIcon icon="caret-up" />
+                ) : (
+                  <FontAwesomeIcon icon="caret-down" />
+                )}
+              </span>
+            </button>
+            <div
+              id="case-difference-container"
+              className="usa-accordion-content"
+              aria-hidden={form.showCaseDifference !== true}
+            >
+              <CaseDifferenceExplained />
+            </div>
+          </div>
           <div className="blue-container">
             <div className="usa-form-group">
               <fieldset id="radios" className="usa-fieldset-inputs usa-sans">

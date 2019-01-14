@@ -11,6 +11,19 @@ table {
   }
 }
 
+table.small-case-qualifications-table {
+  margin-bottom: 2rem;
+
+  th,
+  td {
+    border: 1px solid $color-gray-light;
+  }
+
+  thead th {
+    background-color: $color-primary-alt-lightest;
+  }
+}
+
 table.work-queue {
   td,
   th {
