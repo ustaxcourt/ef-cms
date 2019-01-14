@@ -282,52 +282,54 @@ export default connect(
                 </ul>
               </fieldset>
             </div>
-            <div className="usa-form-group">
-              <label htmlFor="preferred-trial-city">
-                Select a Trial Location
-              </label>
-              <span className="usa-form-hint">
-                {startCaseHelper.showSmallTrialCitiesHint && (
-                  <React.Fragment>
-                    Trial locations are unavailable in the following states: DE,
-                    NH, NJ, RI. Please select the next closest location.
-                  </React.Fragment>
-                )}
-                {startCaseHelper.showRegularTrialCitiesHint && (
-                  <React.Fragment>
-                    Trial locations are unavailable in the following states: DE,
-                    KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next
-                    closest location.
-                  </React.Fragment>
-                )}
-              </span>
-              <select
-                name="preferredTrialCity"
-                id="preferred-trial-city"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value || null,
-                  });
-                }}
-                value={form.preferredTrialCity || ''}
-              >
-                <option value="">-- Select --</option>
-                {Object.keys(startCaseHelper.trialCitiesByState).map(
-                  (state, idx) => (
-                    <optgroup key={idx} label={state}>
-                      {startCaseHelper.trialCitiesByState[state].map(
-                        (trialCity, cityIdx) => (
-                          <option key={cityIdx} value={trialCity}>
-                            {trialCity}
-                          </option>
-                        ),
-                      )}
-                    </optgroup>
-                  ),
-                )}
-              </select>
-            </div>
+            {startCaseHelper.showSelectTrial && (
+              <div className="usa-form-group">
+                <label htmlFor="preferred-trial-city">
+                  Select a Trial Location
+                </label>
+                <span className="usa-form-hint">
+                  {startCaseHelper.showSmallTrialCitiesHint && (
+                    <React.Fragment>
+                      Trial locations are unavailable in the following states:
+                      DE, NH, NJ, RI. Please select the next closest location.
+                    </React.Fragment>
+                  )}
+                  {startCaseHelper.showRegularTrialCitiesHint && (
+                    <React.Fragment>
+                      Trial locations are unavailable in the following states:
+                      DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the
+                      next closest location.
+                    </React.Fragment>
+                  )}
+                </span>
+                <select
+                  name="preferredTrialCity"
+                  id="preferred-trial-city"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value || null,
+                    });
+                  }}
+                  value={form.preferredTrialCity || ''}
+                >
+                  <option value="">-- Select --</option>
+                  {Object.keys(startCaseHelper.trialCitiesByState).map(
+                    (state, idx) => (
+                      <optgroup key={idx} label={state}>
+                        {startCaseHelper.trialCitiesByState[state].map(
+                          (trialCity, cityIdx) => (
+                            <option key={cityIdx} value={trialCity}>
+                              {trialCity}
+                            </option>
+                          ),
+                        )}
+                      </optgroup>
+                    ),
+                  )}
+                </select>
+              </div>
+            )}
           </div>
           <div className="blue-container">
             <div className="usa-form-group">
