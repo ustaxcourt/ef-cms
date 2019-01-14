@@ -42,3 +42,10 @@
   display: inline-block;
   margin-right: 30px;
 }
+
+.usa-date-of-birth {
+  label {
+    margin: 0 0 10px;
+    font-weight: $font-normal;
+  }
+}
