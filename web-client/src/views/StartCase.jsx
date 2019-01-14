@@ -55,30 +55,35 @@ export default connect(
           <div className="grey-container are-you-ready">
             <h2>Are you ready?</h2>
             <p>You’ll need the following information to begin a new case.</p>
-            <div className="upload-description">
+            <div>
               <div className="icon-wrapper">
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
               </div>
-              <p className="label-inline">Petition saved as a PDF</p>
-              <p>
-                Use{' '}
-                <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
-                  USTC Form 2
-                </a>{' '}
-                or a custom petition that complies with the requirements of the{' '}
-                <a href="https://www.ustaxcourt.gov/rules.htm">
-                  Tax Court Rules of Practice and Procedure
-                </a>
-              </p>
+              <div className="upload-description">
+                <p className="label-inline">Petition saved as a PDF</p>
+                <p>
+                  Use{' '}
+                  <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
+                    USTC Form 2
+                  </a>{' '}
+                  or a custom petition that complies with the requirements of
+                  the{' '}
+                  <a href="https://www.ustaxcourt.gov/rules.htm">
+                    Tax Court Rules of Practice and Procedure
+                  </a>
+                </p>
+              </div>
             </div>
-            <div className="upload-description">
+            <div>
               <div className="icon-wrapper">
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
               </div>
-              <p className="label-inline">
-                IRS Notice(s) saved as a single PDF
-              </p>
-              <p>Attach any notices you may have received from the IRS</p>
+              <div className="upload-description">
+                <p className="label-inline">
+                  IRS Notice(s) saved as a single PDF
+                </p>
+                <p>Attach any notices you may have received from the IRS</p>
+              </div>
             </div>
           </div>
           <p className="required-statement">All fields required.</p>
@@ -286,69 +291,74 @@ export default connect(
                 </ul>
               </fieldset>
             </div>
+            {startCaseHelper.showSelectTrial && (
+              <div className="usa-form-group">
+                <label htmlFor="preferred-trial-city">
+                  Select a Trial Location
+                </label>
+                <span className="usa-form-hint">
+                  {startCaseHelper.showSmallTrialCitiesHint && (
+                    <React.Fragment>
+                      Trial locations are unavailable in the following states:
+                      DE, NH, NJ, RI. Please select the next closest location.
+                    </React.Fragment>
+                  )}
+                  {startCaseHelper.showRegularTrialCitiesHint && (
+                    <React.Fragment>
+                      Trial locations are unavailable in the following states:
+                      DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the
+                      next closest location.
+                    </React.Fragment>
+                  )}
+                </span>
+                <select
+                  name="preferredTrialCity"
+                  id="preferred-trial-city"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value || null,
+                    });
+                  }}
+                  value={form.preferredTrialCity || ''}
+                >
+                  <option value="">-- Select --</option>
+                  {Object.keys(startCaseHelper.trialCitiesByState).map(
+                    (state, idx) => (
+                      <optgroup key={idx} label={state}>
+                        {startCaseHelper.trialCitiesByState[state].map(
+                          (trialCity, cityIdx) => (
+                            <option key={cityIdx} value={trialCity}>
+                              {trialCity}
+                            </option>
+                          ),
+                        )}
+                      </optgroup>
+                    ),
+                  )}
+                </select>
+              </div>
+            )}
+          </div>
+          <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="preferred-trial-city">
-                Select a Trial Location
-              </label>
-              <span className="usa-form-hint">
-                {startCaseHelper.showSmallTrialCitiesHint && (
-                  <React.Fragment>
-                    Trial locations are unavailable in the following states: DE,
-                    NH, NJ, RI. Please select the next closest location.
-                  </React.Fragment>
-                )}
-                {startCaseHelper.showRegularTrialCitiesHint && (
-                  <React.Fragment>
-                    Trial locations are unavailable in the following states: DE,
-                    KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next
-                    closest location.
-                  </React.Fragment>
-                )}
-              </span>
-              <select
-                name="preferredTrialCity"
-                id="preferred-trial-city"
+              <legend>Review and Sign</legend>
+              <input
+                id="signature"
+                type="checkbox"
+                name="signature"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value || null,
+                    value: e.target.checked ? true : undefined,
                   });
                 }}
-                value={form.preferredTrialCity || ''}
-              >
-                <option value="">-- Select --</option>
-                {Object.keys(startCaseHelper.trialCitiesByState).map(
-                  (state, idx) => (
-                    <optgroup key={idx} label={state}>
-                      {startCaseHelper.trialCitiesByState[state].map(
-                        (trialCity, cityIdx) => (
-                          <option key={cityIdx} value={trialCity}>
-                            {trialCity}
-                          </option>
-                        ),
-                      )}
-                    </optgroup>
-                  ),
-                )}
-              </select>
+              />
+              <label htmlFor="signature">
+                Checking this box acts as your digital signature, acknowledging
+                that you’ve verified all information is correct.
+              </label>
             </div>
-          </div>
-          <div className="usa-form-group">
-            <input
-              id="signature"
-              type="checkbox"
-              name="signature"
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked ? true : undefined,
-                });
-              }}
-            />
-            <label htmlFor="signature">
-              Checking this box acts as your digital signature, acknowledging
-              that you’ve verified all information is correct.
-            </label>
           </div>
           <button
             id="submit-case"
