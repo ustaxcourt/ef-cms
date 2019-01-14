@@ -52,30 +52,35 @@ export default connect(
           <div className="grey-container are-you-ready">
             <h2>Are you ready?</h2>
             <p>You’ll need the following information to begin a new case.</p>
-            <div className="upload-description">
+            <div>
               <div className="icon-wrapper">
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
               </div>
-              <p className="label-inline">Petition saved as a PDF</p>
-              <p>
-                Use{' '}
-                <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
-                  USTC Form 2
-                </a>{' '}
-                or a custom petition that complies with the requirements of the{' '}
-                <a href="https://www.ustaxcourt.gov/rules.htm">
-                  Tax Court Rules of Practice and Procedure
-                </a>
-              </p>
+              <div className="upload-description">
+                <p className="label-inline">Petition saved as a PDF</p>
+                <p>
+                  Use{' '}
+                  <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
+                    USTC Form 2
+                  </a>{' '}
+                  or a custom petition that complies with the requirements of
+                  the{' '}
+                  <a href="https://www.ustaxcourt.gov/rules.htm">
+                    Tax Court Rules of Practice and Procedure
+                  </a>
+                </p>
+              </div>
             </div>
-            <div className="upload-description">
+            <div>
               <div className="icon-wrapper">
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
               </div>
-              <p className="label-inline">
-                IRS Notice(s) saved as a single PDF
-              </p>
-              <p>Attach any notices you may have received from the IRS</p>
+              <div className="upload-description">
+                <p className="label-inline">
+                  IRS Notice(s) saved as a single PDF
+                </p>
+                <p>Attach any notices you may have received from the IRS</p>
+              </div>
             </div>
           </div>
           <p className="required-statement">All fields required.</p>
