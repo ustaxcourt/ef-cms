@@ -17,7 +17,7 @@ export default connect(
         </p>
         <table
           aria-labelledby="small-case-qualifications"
-          className="small-case-qualifications-table"
+          className="responsive-table small-case-qualifications-table"
         >
           <thead>
             <tr>
@@ -29,10 +29,22 @@ export default connect(
           </thead>
           <tbody>
             <tr>
-              <td>&lt; $50,000 for each year</td>
-              <td>&lt; $50,000 for all years</td>
-              <td>&lt; $50,000 for all years</td>
-              <td>&lt; $50,000 for any calendar quarter</td>
+              <td>
+                <span className="responsive-label">Deficiency</span>
+                &lt; $50,000 for each year
+              </td>
+              <td>
+                <span className="responsive-label">Collection</span>
+                &lt; $50,000 for all years
+              </td>
+              <td>
+                <span className="responsive-label">Spousal Relief</span>
+                &lt; $50,000 for all years
+              </td>
+              <td>
+                <span className="responsive-label">Worker Classification</span>
+                &lt; $50,000 for any calendar quarter
+              </td>
             </tr>
           </tbody>
         </table>
