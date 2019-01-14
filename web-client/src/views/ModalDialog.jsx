@@ -22,7 +22,7 @@ export default connect(
             className={`modal-dialog ${modal.classNames}`}
             aria-live="assertive"
           >
-            <h3>{modal.title}</h3>
+            <h3 tabIndex="-1">{modal.title}</h3>
             <p>{modal.message}</p>
             <button
               type="button"
