@@ -201,6 +201,17 @@ export default connect(
                       <td />
                     </tr>
                   )}
+                  {helper.showPreferredTrialCity && (
+                    <tr>
+                      <td>{caseDetail.createdAtFormatted}</td>
+                      <td>
+                        Request for Place of Trial at{' '}
+                        {caseDetail.preferredTrialCity}
+                      </td>
+                      <td />
+                      <td />
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
