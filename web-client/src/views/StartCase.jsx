@@ -203,7 +203,7 @@ export default connect(
             <div className="usa-form-group">
               <label
                 htmlFor="petition-file"
-                className={startCaseHelper.showPetitionFileValid}
+                className={startCaseHelper.showPetitionFileValid && 'validated'}
               >
                 Upload your Petition
               </label>
