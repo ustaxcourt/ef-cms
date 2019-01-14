@@ -22,7 +22,7 @@ export default get => {
   return {
     showIrsNoticeFileValid: petition.irsNoticeFile,
     showPetitionFileValid: petition.petitionFile,
-    uploadsFinished: numberOfUploadFiles - petition.uploadsFinished,
+    uploadsRemaining: numberOfUploadFiles - petition.uploadsFinished,
     uploadPercentage: (petition.uploadsFinished * 100) / numberOfUploadFiles,
     trialCitiesByState: states,
     trialCities: form.trialCities || [],
