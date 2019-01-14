@@ -17,6 +17,7 @@ joiValidationDecorator(
     caseType: joi.string().required(),
     irsNoticeDate: joi
       .date()
+      .max('now')
       .iso()
       .optional(),
     procedureType: joi.string().required(),

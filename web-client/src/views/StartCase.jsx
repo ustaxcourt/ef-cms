@@ -13,7 +13,6 @@ export default connect(
     startCaseHelper: state.startCaseHelper,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
-    getTrialCityName: state.getTrialCityName,
     petition: state.petition,
     procedureTypes: state.procedureTypes,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
@@ -27,7 +26,6 @@ export default connect(
     caseTypes,
     form,
     getTrialCities,
-    getTrialCityName,
     startCaseHelper,
     petition,
     procedureTypes,
@@ -63,8 +61,14 @@ export default connect(
               </div>
               <p className="label-inline">Petition saved as a PDF</p>
               <p>
-                Use USTC Form 2 or a custom petition that complies with the
-                requirements of the Tax Court Rules of Practice and Proceedure
+                Use{' '}
+                <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
+                  USTC Form 2
+                </a>{' '}
+                or a custom petition that complies with the requirements of the{' '}
+                <a href="https://www.ustaxcourt.gov/rules.htm">
+                  Tax Court Rules of Practice and Procedure
+                </a>
               </p>
             </div>
             <div className="upload-description">
@@ -187,9 +191,14 @@ export default connect(
           <h2>Tell us about your petition.</h2>
           <p>
             You must file a petition to begin a Tax Court case. Please submit a
-            completed <a href="/">Form #2</a> or a custom petition that complies
-            with the requirements of the{' '}
-            <a href="/">Tax Court Rules of Practice and Procedure</a>.
+            completed{' '}
+            <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
+              USTC Form 2
+            </a>{' '}
+            or a custom petition that complies with the requirements of the{' '}
+            <a href="https://www.ustaxcourt.gov/rules.htm">
+              Tax Court Rules of Practice and Procedure
+            </a>
           </p>
           <div className="blue-container">
             <div className="usa-form-group">
@@ -332,7 +341,7 @@ export default connect(
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
-                  value: event.target.checked ? true : undefined,
+                  value: e.target.checked ? true : undefined,
                 });
               }}
             />
