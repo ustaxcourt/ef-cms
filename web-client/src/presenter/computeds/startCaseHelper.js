@@ -14,16 +14,16 @@ export default get => {
       ]),
   );
 
-  let numUploadFiles = 1;
+  let numberOfUploadFiles = 1;
   if (petition.irsNoticeFile) {
-    numUploadFiles = 2;
+    numberOfUploadFiles = 2;
   }
 
   return {
     showIrsNoticeFileValid: petition.irsNoticeFile,
     showPetitionFileValid: petition.petitionFile,
-    uploadsFinished: numUploadFiles - petition.uploadsFinished,
-    uploadPercentage: (petition.uploadsFinished * 100) / 2,
+    uploadsFinished: numberOfUploadFiles - petition.uploadsFinished,
+    uploadPercentage: (petition.uploadsFinished * 100) / numberOfUploadFiles,
     trialCitiesByState: states,
     trialCities: form.trialCities || [],
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
