@@ -164,7 +164,9 @@ export default connect(
             <div className="usa-form-group">
               <label
                 htmlFor="irs-notice-file"
-                className={petition.irsNoticeFile && 'validated'}
+                className={
+                  startCaseHelper.showIrsNoticeFileValid && 'validated'
+                }
               >
                 Upload your IRS Notice
               </label>
@@ -201,7 +203,7 @@ export default connect(
             <div className="usa-form-group">
               <label
                 htmlFor="petition-file"
-                className={petition.petitionFile && 'validated'}
+                className={startCaseHelper.showPetitionFileValid}
               >
                 Upload your Petition
               </label>
@@ -363,11 +365,11 @@ export default connect(
           </button>
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">
-              <p>{2 - petition.uploadsFinished} of 2 remaining</p>
+              <p>{startCaseHelper.uploadsFinished} of 2 remaining</p>
               <div className="progress-container">
                 <div
                   className="progress-bar"
-                  style={{ width: (petition.uploadsFinished * 100) / 2 + '%' }}
+                  style={{ width: startCaseHelper.uploadPercentage + '%' }}
                 />
               </div>
             </div>

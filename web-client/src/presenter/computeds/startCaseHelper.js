@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export default get => {
   const form = get(state.form);
+  const petition = get(state.petition);
   const trialCities = get(state.form.trialCities) || [];
   const getTrialCityName = get(state.getTrialCityName);
   const states = {};
@@ -13,11 +14,16 @@ export default get => {
       ]),
   );
 
+  let numUploadFiles = 1;
+  if (petition.irsNoticeFile) {
+    numUploadFiles = 2;
+  }
+
   return {
-    showIrsNoticeFileValid: !!form, // TODO: derive from state
-    showPetitionFileValid: !!form, // TODO: derive from state
-    uploadsFinished: 0, // TODO: derive from state
-    uploadPercentage: 0, // TODO: derive from state
+    showIrsNoticeFileValid: petition.irsNoticeFile,
+    showPetitionFileValid: petition.petitionFile,
+    uploadsFinished: numUploadFiles - petition.uploadsFinished,
+    uploadPercentage: (petition.uploadsFinished * 100) / 2,
     trialCitiesByState: states,
     trialCities: form.trialCities || [],
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
