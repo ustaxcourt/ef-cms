@@ -28,5 +28,6 @@ export default get => {
     trialCities: form.trialCities || [],
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSmallTrialCitiesHint: form.procedureType === 'Small',
+    numberOfUploadFiles: numberOfUploadFiles,
   };
 };
