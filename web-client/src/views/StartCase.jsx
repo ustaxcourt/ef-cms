@@ -365,7 +365,10 @@ export default connect(
           </button>
           {submitting && (
             <div aria-live="assertive" aria-atomic="true">
-              <p>{startCaseHelper.uploadsFinished} of 2 remaining</p>
+              <p>
+                {startCaseHelper.uploadsFinished} of{' '}
+                {startCaseHelper.numberOfUploadFiles} remaining
+              </p>
               <div className="progress-container">
                 <div
                   className="progress-bar"
