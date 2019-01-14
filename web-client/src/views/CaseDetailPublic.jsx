@@ -18,7 +18,7 @@ export default connect(
         </div>
         <section className="usa-section usa-grid">
           <h1 className="captioned" tabIndex="-1">
-            Docket number: {caseDetail.docketNumber}
+            Docket Number: {caseDetail.docketNumber}
           </h1>
           <p>Petitioner v. Commissioner of Internal Revenue, Respondent</p>
         </section>
