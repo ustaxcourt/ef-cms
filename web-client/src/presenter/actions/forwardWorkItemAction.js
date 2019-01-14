@@ -19,7 +19,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
   // update the local state to have the updated work item returned from the backend
   const caseDetail = get(state.caseDetail);
   const workItems = caseDetail.documents.reduce(
-    (acc, cur) => [...acc, ...(cur.workItems || [])],
+    (items, document) => [...items, ...document.workItems],
     [],
   );
   const workItem = workItems.find(item => item.workItemId === workItemId);
