@@ -9,16 +9,16 @@ describe('getDocumentType', async () => {
   beforeEach(() => {
     spy = sinon.spy();
     presenter.providers.path = {
-      generic: spy
+      generic: spy,
     };
   });
 
   it('should invoke the error function when no document types returned', async () => {
-    const result = await runAction(getDocumentType, {
+    await runAction(getDocumentType, {
       state: {
         document: {
           documentType: 'other',
-        }
+        },
       },
       modules: {
         presenter,

@@ -18,8 +18,7 @@ describe('extractedDocument', () => {
   it('should return an empty object if no document was found', async () => {
     const result = await runCompute(extractedDocument, {
       state: {
-        caseDetail: {
-        },
+        caseDetail: {},
         documentId: 'abc',
       },
     });
@@ -33,8 +32,8 @@ describe('extractedDocument', () => {
           documents: [
             {
               documentId: 'abc',
-            }
-          ]
+            },
+          ],
         },
         documentId: 'abc',
       },
