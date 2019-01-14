@@ -14,6 +14,11 @@ export default ({ applicationContext, path, get }) => {
     ['year', 'month', 'day'],
   );
 
+  form.irsNoticeDate = form.irsNoticeDate
+    .split('-')
+    .map(segment => (segment = segment.padStart(2, '0')))
+    .join('-');
+
   const errors = applicationContext.getUseCases().validatePetition({
     petition: { ...petition, ...form },
     applicationContext,
