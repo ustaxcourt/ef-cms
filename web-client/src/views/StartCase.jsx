@@ -106,7 +106,12 @@ export default connect(
               <legend>Date of Notice</legend>
               <div className="usa-date-of-birth">
                 <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month">MM</label>
+                  <label
+                    htmlFor="date-of-notice-month"
+                    aria-label="month, two digits"
+                  >
+                    MM
+                  </label>
                   <input
                     className="usa-input-inline"
                     aria-label="month"
@@ -124,7 +129,12 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day">DD</label>
+                  <label
+                    htmlFor="date-of-notice-day"
+                    aria-label="day of month, two digits"
+                  >
+                    DD
+                  </label>
                   <input
                     className="usa-input-inline"
                     aria-label="day"
@@ -142,7 +152,12 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year">YYYY</label>
+                  <label
+                    htmlFor="date-of-notice-year"
+                    aria-label="year, four digits"
+                  >
+                    YYYY
+                  </label>
                   <input
                     className="usa-input-inline"
                     aria-label="year"
