@@ -36,7 +36,7 @@ describe('fileRespondentDocument', () => {
         saveCase: async () => null,
       }),
       getUseCases: () => ({
-        associateRespondentDocumentToCase: () => null,
+        createDocument: () => null,
       }),
       environment: { stage: 'local' },
     };
@@ -62,7 +62,7 @@ describe('fileRespondentDocument', () => {
         saveCase: async () => null,
       }),
       getUseCases: () => ({
-        associateRespondentDocumentToCase: () => null,
+        createDocument: () => null,
       }),
       environment: { stage: 'local' },
     };
