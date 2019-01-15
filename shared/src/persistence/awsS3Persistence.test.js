@@ -128,13 +128,11 @@ describe('uploadPdfsForNewCase', () => {
       applicationContext,
       caseInitiator: {
         petitionFile: new File([], '1'),
-        irsNoticeFile: new File([], '2'),
       },
       fileHasUploaded: fileHasUploadedSpy,
     });
-    expect(fileHasUploadedSpy.getCalls().length).toEqual(2);
+    expect(fileHasUploadedSpy.getCalls().length).toEqual(1);
     expect(result).toEqual({
-      irsNoticeFileId: '123',
       petitionDocumentId: '123',
     });
   });
