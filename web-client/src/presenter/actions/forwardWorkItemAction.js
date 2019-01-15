@@ -28,8 +28,8 @@ export default async ({ get, store, applicationContext, path, props }) => {
 
     return path.success({
       alertSuccess: {
-        title: `Message sent`,
-        message: `Your message has been sent.`,
+        title: 'Message sent',
+        message: 'Your message has been sent.',
       },
     });
   } catch (error) {

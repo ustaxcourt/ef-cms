@@ -56,7 +56,7 @@ describe('createCase', () => {
 
   it('should persist a user id to case mappipng record as an item', async () => {
     expect(items).to.deep.include({
-      pk: `new|case-status`,
+      pk: 'new|case-status',
       sk: CASE_ID,
     });
   });

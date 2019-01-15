@@ -16,7 +16,7 @@ exports.fileDocument = async ({
   //validate the pdf
   if (!documents.length || documents.length > 1) {
     throw new UnprocessableEntityError(
-      `document cannot be null or invalid or more than one`,
+      'document cannot be null or invalid or more than one',
     );
   }
 
