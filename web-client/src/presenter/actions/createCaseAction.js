@@ -26,12 +26,10 @@ export default async ({ applicationContext, get, store }) => {
     { documentType: 'Petition', documentId: petitionDocumentId },
   ];
 
-  if (irsNoticeFileId) {
-    documents.push({
-      documentType: 'IRS Notice',
-      documentId: irsNoticeFileId,
-    });
-  }
+  documents.push({
+    documentType: 'IRS Notice',
+    documentId: irsNoticeFileId,
+  });
 
   const form = omit(
     {
