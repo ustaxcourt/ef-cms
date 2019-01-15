@@ -13,8 +13,8 @@ export default connect(
     startCaseHelper: state.startCaseHelper,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
-    petition: state.petition,
     procedureTypes: state.procedureTypes,
+    showModal: state.showModal,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
@@ -26,9 +26,9 @@ export default connect(
     caseTypes,
     form,
     getTrialCities,
-    startCaseHelper,
-    petition,
     procedureTypes,
+    startCaseHelper,
+    showModal,
     startACaseToggleCancelSequence,
     submitFilePetitionSequence,
     submitting,
@@ -50,7 +50,7 @@ export default connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          <ModalDialog />
+          {showModal && <ModalDialog />}
           <ErrorNotification />
           <div className="grey-container are-you-ready">
             <h2>Are you ready?</h2>
