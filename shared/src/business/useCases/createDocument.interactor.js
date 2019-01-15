@@ -32,6 +32,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
     caseStatus: caseToUpdate.status,
     assigneeId: null,
     docketNumber: caseToUpdate.docketNumber,
+    docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
     section: DOCKET_SECTION,
     assigneeName: null,
   });
