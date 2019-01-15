@@ -89,6 +89,7 @@ h1[tabIndex='-1']:focus {
 }
 
 p {
+  max-width: 700px;
   margin-top: 0;
   margin-bottom: 20px;
   font-weight: $font-regular;
