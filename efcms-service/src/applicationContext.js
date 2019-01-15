@@ -95,11 +95,8 @@ const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
-  associateRespondentDocumentToCase,
-} = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentDocumentToCase.interactor');
-const {
-  associateDocumentToCase,
-} = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
+  createDocument,
+} = require('ef-cms-shared/src/business/useCases/createDocument.interactor');
 const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
@@ -217,8 +214,7 @@ module.exports = ({ userId } = {}) => {
         getWorkItem,
         getWorkItems,
         updateWorkItem,
-        associateDocumentToCase,
-        associateRespondentDocumentToCase,
+        createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         assignWorkItems: assignWorkItemsUC,
       };
@@ -227,10 +223,6 @@ module.exports = ({ userId } = {}) => {
       const interactorName =
         (event.queryStringParameters || {}).interactorName || 'updateCase';
       switch (interactorName) {
-      case 'associateRespondentDocumentToCase':
-        return associateRespondentDocumentToCase;
-      case 'associateDocumentToCase':
-        return associateDocumentToCase;
       default:
         return updateCase;
       }

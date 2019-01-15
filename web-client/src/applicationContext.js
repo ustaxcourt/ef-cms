@@ -9,8 +9,6 @@ const {
 } = require('../../shared/src/persistence/awsS3Persistence');
 
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
-import { associateDocumentToCase } from '../../shared/src/proxies/associateDocumentToCaseProxy';
-import { associateRespondentDocumentToCase } from '../../shared/src/proxies/respondent/associateRespondentDocumentToCaseProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
@@ -33,6 +31,8 @@ import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkIte
 import { uploadCasePdfs } from '../../shared/src/business/useCases/uploadCasePdfs.interactor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetition.interactor';
+import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
+
 import Petition from '../../shared/src/business/entities/Petition';
 
 let user;
@@ -67,11 +67,11 @@ const applicationContext = {
   getUseCases: () => {
     return {
       assignWorkItems,
-      associateDocumentToCase,
-      associateRespondentDocumentToCase,
+      createDocument,
       createCase,
       downloadDocumentFile,
       fileRespondentDocument,
+      forwardWorkItem,
       getCase,
       getCasesByStatus,
       getCasesByUser,
@@ -89,7 +89,6 @@ const applicationContext = {
       updateCase,
       updateWorkItem,
       uploadCasePdfs,
-      forwardWorkItem,
       validatePetition,
     };
   },
