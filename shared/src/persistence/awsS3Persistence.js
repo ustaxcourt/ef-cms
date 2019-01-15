@@ -29,7 +29,6 @@ exports.uploadPdf = async ({ applicationContext, policy, file }) => {
 };
 
 const getUploadPolicy = async ({ applicationContext }) => {
-  console.log('here');
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/documents/uploadPolicy`);
