@@ -38,7 +38,6 @@ describe('validatePetition', () => {
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
-        irsNoticeFile: new File([], 'test.png'),
         signature: true,
       },
       applicationContext: {
@@ -60,7 +59,6 @@ describe('validatePetition', () => {
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: futureDate.toDate().toISOString(),
-        irsNoticeFile: new File([], 'test.png'),
         signature: true,
       },
       applicationContext: {

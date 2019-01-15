@@ -65,10 +65,6 @@ describe('File a petition', function() {
         .type('1999');
     });
 
-    it('uploads IRS notice file', () => {
-      cy.upload_file('w3-dummy.pdf', 'form #irs-notice-file');
-    });
-
     it('click the small radio button', () => {
       cy.get('#radios').scrollIntoView();
       cy.get('#radios label')

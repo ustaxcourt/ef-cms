@@ -7,21 +7,6 @@
   background-size: contain;
 }
 
-.progress-container {
-  max-width: 50rem;
-  height: 2rem;
-  border: 1px solid black;
-  background-color: transparent;
-  transition: all 2s;
-}
-
-.progress-bar {
-  max-width: 100%;
-  height: 100%;
-  background-color: $color-primary-darkest;
-  transition: all 2s;
-}
-
 .progress-indicator {
   .spinner {
     display: block;

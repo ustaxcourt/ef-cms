@@ -14,21 +14,12 @@ export default get => {
       ]),
   );
 
-  let numberOfUploadFiles = 1;
-  if (petition.irsNoticeFile) {
-    numberOfUploadFiles = 2;
-  }
-
   return {
-    showIrsNoticeFileValid: petition.irsNoticeFile,
     showPetitionFileValid: petition.petitionFile,
-    uploadsRemaining: numberOfUploadFiles - petition.uploadsFinished,
-    uploadPercentage: (petition.uploadsFinished * 100) / numberOfUploadFiles,
-    trialCitiesByState: states,
-    trialCities: form.trialCities || [],
-    showSelectTrial: !!form.procedureType,
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
+    showSelectTrial: !!form.procedureType,
     showSmallTrialCitiesHint: form.procedureType === 'Small',
-    numberOfUploadFiles: numberOfUploadFiles,
+    trialCities: form.trialCities || [],
+    trialCitiesByState: states,
   };
 };

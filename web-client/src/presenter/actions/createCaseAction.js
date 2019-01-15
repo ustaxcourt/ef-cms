@@ -13,23 +13,16 @@ export default async ({ applicationContext, get, store }) => {
     );
   };
 
-  const { petitionDocumentId, irsNoticeFileId } = await useCases.uploadCasePdfs(
-    {
-      applicationContext,
-      caseInitiator,
-      userId: user.userId,
-      fileHasUploaded,
-    },
-  );
+  const { petitionDocumentId } = await useCases.uploadCasePdfs({
+    applicationContext,
+    caseInitiator,
+    userId: user.userId,
+    fileHasUploaded,
+  });
 
   const documents = [
     { documentType: 'Petition', documentId: petitionDocumentId },
   ];
-
-  documents.push({
-    documentType: 'IRS Notice',
-    documentId: irsNoticeFileId,
-  });
 
   const form = omit(
     {
