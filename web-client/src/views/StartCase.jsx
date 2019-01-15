@@ -186,31 +186,6 @@ export default connect(
                 </div>
               </div>
             </fieldset>
-            <div className="usa-form-group">
-              <label
-                htmlFor="irs-notice-file"
-                className={
-                  startCaseHelper.showIrsNoticeFileValid && 'validated'
-                }
-              >
-                Upload your IRS Notice
-              </label>
-              <span className="usa-form-hint">
-                File must be in PDF format (.pdf).
-              </span>
-              <input
-                id="irs-notice-file"
-                type="file"
-                accept=".pdf"
-                name="irsNoticeFile"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
-              />
-            </div>
           </div>
           <h2>Tell us about your petition.</h2>
           <p>
@@ -407,20 +382,7 @@ export default connect(
           >
             Cancel
           </button>
-          {submitting && (
-            <div aria-live="assertive" aria-atomic="true">
-              <p>
-                {startCaseHelper.uploadsRemaining} of{' '}
-                {startCaseHelper.numberOfUploadFiles} remaining
-              </p>
-              <div className="progress-container">
-                <div
-                  className="progress-bar"
-                  style={{ width: startCaseHelper.uploadPercentage + '%' }}
-                />
-              </div>
-            </div>
-          )}
+          
         </form>
       </section>
     );
