@@ -16,7 +16,6 @@ joiValidationDecorator(
   CaseInitiator,
   joi.object().keys({
     petitionFile: joi.object().required(),
-    irsNoticeFile: joi.object().optional(),
   }),
 );
 

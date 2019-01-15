@@ -5,11 +5,6 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'irsNoticeFile',
-      value: fakeFile,
-    });
-
     await test.runSequence('updateFormValueSequence', {
       key: 'month',
       value: '01',
