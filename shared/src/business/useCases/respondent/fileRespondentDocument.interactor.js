@@ -22,10 +22,12 @@ exports.fileRespondentDocument = async ({
       document,
     });
 
-  await applicationContext.getUseCases().associateRespondentDocumentToCase({
+  await applicationContext.getUseCases().createDocument({
     userId,
-    documentType,
-    documentId,
+    document: {
+      documentType,
+      documentId,
+    },
     caseId: caseToUpdate.caseId,
     applicationContext,
   });
