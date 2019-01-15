@@ -11,11 +11,6 @@ class ModalDialog extends React.Component {
 
   keydownTriggered(event) {
     if (event.keyCode === 27) {
-      this.escapeKeyCaptured();
-    }
-  }
-  escapeKeyCaptured() {
-    if (this.props.showModal) {
       this.props.clickCancelSequence();
     }
   }
@@ -32,7 +27,7 @@ class ModalDialog extends React.Component {
 
   focusModal() {
     const modalHeader = document.querySelector('.modal-dialog h3');
-    modalHeader && modalHeader.focus();
+    modalHeader.focus();
   }
 
   render() {
@@ -44,7 +39,6 @@ class ModalDialog extends React.Component {
     } = this.props;
 
     return (
-      showModal && (
         <div className="modal-screen">
           <div
             className={`modal-dialog ${modal.classNames}`}
@@ -68,7 +62,6 @@ class ModalDialog extends React.Component {
             </button>
           </div>
         </div>
-      )
     );
   }
 }
