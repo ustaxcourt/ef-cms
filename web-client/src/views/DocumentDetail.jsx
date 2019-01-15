@@ -211,6 +211,7 @@ class DocumentDetail extends React.Component {
                       !workItem.historyMessages.length && (
                         <div
                           id="history-card"
+                          className="content-wrapper"
                           role="tabpanel"
                           aria-labelledby="history-tab"
                         >
