@@ -16,7 +16,7 @@ exports.forwardWorkItem = async ({
   const user = applicationContext.user;
 
   if (!isAuthorized(user.userId, WORKITEM)) {
-    throw new UnauthorizedError(`Unauthorized to assign work item`);
+    throw new UnauthorizedError('Unauthorized for assign work item');
   }
 
   const userToForwardTo = new User({ userId: assigneeId });
