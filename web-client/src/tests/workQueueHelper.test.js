@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import workQueueHelper from '../presenter/computeds/workQueueHelper';
 
 describe('workQueueHelper', () => {
-  it('returns the expected state', async () => {
+  it('returns the expected state when set', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
         selectedWorkItems: [true],
@@ -17,7 +17,7 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('returns the expected state', async () => {
+  it('returns the expected state when not set', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
         selectedWorkItems: [],
