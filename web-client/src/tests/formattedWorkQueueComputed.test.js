@@ -2,6 +2,69 @@ import { runCompute } from 'cerebral/test';
 
 import { formattedWorkQueue } from '../presenter/computeds/formattedWorkQueue';
 
+const FORMATTED_WORK_ITEM = {
+  assigneeId: null,
+  assigneeName: 'Unassigned',
+  caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+  caseStatus: 'General Docket',
+  createdAt: '2018-12-27T18:05:54.166Z',
+  createdAtFormatted: '12/27/2018',
+  currentMessage: {
+    createdAt: '2018-12-27T18:05:54.164Z',
+    createdAtFormatted: '12/27/2018',
+    createdAtTimeFormatted: '12/27/2018 12:05 pm',
+    message: 'a Answer filed by respondent is ready for review',
+    messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+    sentBy: 'Test Respondent',
+    sentTo: 'Unassigned',
+    userId: 'respondent',
+  },
+  docketNumber: '101-18',
+  document: {
+    createdAt: '2018-12-27T18:05:54.164Z',
+    documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+    documentType: 'Answer',
+  },
+  historyMessages: [
+    {
+      createdAt: '2018-12-27T18:05:54.164Z',
+      createdAtFormatted: '12/27/2018',
+      createdAtTimeFormatted: '12/27/2018 12:05 pm',
+      message: 'a message',
+      messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+      sentBy: 'Test Docketclerk',
+      sentTo: 'Unassigned',
+      userId: 'docketclerk',
+    },
+  ],
+  messages: [
+    {
+      createdAt: '2018-12-27T18:05:54.164Z',
+      createdAtFormatted: '12/27/2018',
+      createdAtTimeFormatted: '12/27/2018 12:05 pm',
+      message: 'a Answer filed by respondent is ready for review',
+      messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+      sentBy: 'Test Respondent',
+      sentTo: 'Unassigned',
+      userId: 'respondent',
+    },
+    {
+      createdAt: '2018-12-27T18:05:54.164Z',
+      createdAtFormatted: '12/27/2018',
+      createdAtTimeFormatted: '12/27/2018 12:05 pm',
+      message: 'a message',
+      messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+      sentBy: 'Test Docketclerk',
+      sentTo: 'Unassigned',
+      userId: 'docketclerk',
+    },
+  ],
+  section: 'docket',
+  selected: false,
+  sentBy: 'respondent',
+  updatedAt: '2018-12-27T18:05:54.164Z',
+  workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
+};
 describe('formatted work queue computed', () => {
   const workItem = {
     createdAt: '2018-12-27T18:05:54.166Z',
@@ -48,9 +111,7 @@ describe('formatted work queue computed', () => {
   });
 
   it('formats the workitems', () => {
-    expect(result[0].currentMessage.messageId).toEqual(
-      '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-    );
+    expect(result[0]).toMatchObject(FORMATTED_WORK_ITEM);
   });
 
   it('adds a currentMessage', () => {
