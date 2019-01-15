@@ -89,7 +89,7 @@ export default connect(
           <h2>Tell us about your case.</h2>
           <p>
             You must file a petition to begin a Tax Court case. If you have
-            recieved a notice from the IRS, you should include that as part of
+            received a notice from the IRS, you should include that as part of
             your petition.
           </p>
           <div className="blue-container">
