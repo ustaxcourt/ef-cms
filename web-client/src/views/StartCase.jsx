@@ -111,15 +111,18 @@ export default connect(
               </select>
             </div>
             <fieldset>
-              <legend>Date of Notice</legend>
+              <legend id="date-of-notice-legend">Date of Notice</legend>
               <div className="usa-date-of-birth">
                 <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month">MM</label>
+                  <label htmlFor="date-of-notice-month" aria-hidden="true">
+                    MM
+                  </label>
                   <input
                     className="usa-input-inline"
-                    aria-label="month"
+                    aria-describedby="date-of-notice-legend"
                     id="date-of-notice-month"
                     name="month"
+                    aria-label="month, two digits"
                     type="number"
                     min="1"
                     max="12"
@@ -132,10 +135,13 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day">DD</label>
+                  <label htmlFor="date-of-notice-day" aria-hidden="true">
+                    DD
+                  </label>
                   <input
                     className="usa-input-inline"
-                    aria-label="day"
+                    aria-describedby="date-of-notice-legend"
+                    aria-label="day, two digits"
                     id="date-of-notice-day"
                     name="day"
                     type="number"
@@ -150,10 +156,13 @@ export default connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year">YYYY</label>
+                  <label htmlFor="date-of-notice-year" aria-hidden="true">
+                    YYYY
+                  </label>
                   <input
                     className="usa-input-inline"
-                    aria-label="year"
+                    aria-describedby="date-of-notice-legend"
+                    aria-label="year, four digits"
                     id="date-of-notice-year"
                     name="year"
                     type="number"
@@ -246,7 +255,7 @@ export default connect(
             <button
               type="button"
               className="usa-accordion-button"
-              aria-expanded={form.showCaseDifference === true}
+              aria-expanded={!!form.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
             >
@@ -263,7 +272,7 @@ export default connect(
             <div
               id="case-difference-container"
               className="usa-accordion-content"
-              aria-hidden={form.showCaseDifference !== true}
+              aria-hidden={!form.showCaseDifference}
             >
               <CaseDifferenceExplained />
             </div>
