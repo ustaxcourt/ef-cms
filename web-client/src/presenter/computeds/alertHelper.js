@@ -5,8 +5,8 @@ export default get => {
 
   return {
     showErrorAlert: alertError !== null,
-    showSingleMessage: alertError && alertError.message,
-    showMultipleMessages: alertError && alertError.messages,
+    showSingleMessage: alertError && !!alertError.message,
+    showMultipleMessages: alertError && !!alertError.messages,
     showNoMessage: alertError && !alertError.message && !alertError.messages,
   };
 };
