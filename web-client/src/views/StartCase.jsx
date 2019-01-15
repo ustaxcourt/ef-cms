@@ -10,12 +10,12 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     caseTypes: state.caseTypes,
-    startCaseHelper: state.startCaseHelper,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
     showModal: state.showModal,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
+    startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
@@ -27,9 +27,9 @@ export default connect(
     form,
     getTrialCities,
     procedureTypes,
-    startCaseHelper,
     showModal,
     startACaseToggleCancelSequence,
+    startCaseHelper,
     submitFilePetitionSequence,
     submitting,
     toggleCaseDifferenceSequence,
@@ -60,44 +60,43 @@ export default connect(
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
               </div>
               <div className="upload-description">
-                <p className="label-inline">Petition saved as a PDF</p>
-                <p>
-                  Use{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    USTC Form 2
-                  </a>{' '}
-                  or a custom petition that complies with the requirements of
-                  the{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/rules.htm"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Tax Court Rules of Practice and Procedure
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div>
-              <div className="icon-wrapper">
-                <FontAwesomeIcon icon="file-pdf" size="2x" />
-              </div>
-              <div className="upload-description">
-                <p className="label-inline">
-                  IRS Notice(s) saved as a single PDF
-                </p>
-                <p>Attach any notices you may have received from the IRS</p>
+                <h3>Petition</h3>
+                <ol>
+                  <li>
+                    <a
+                      href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      USTC Form 2
+                    </a>{' '}
+                    or a custom petition that complies with the requirements of
+                    the{' '}
+                    <a
+                      href="https://www.ustaxcourt.gov/rules.htm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Tax Court Rules of Practice and Procedure
+                    </a>
+                  </li>
+                  <li>Any IRS notices you may have received</li>
+                </ol>
               </div>
             </div>
           </div>
           <p className="required-statement">All fields required.</p>
-          <h2>Did you receive a notice from the IRS?</h2>
+          <h2>Tell us about your case.</h2>
+          <p>
+            You must file a petition to begin a Tax Court case. If you have
+            recieved a notice from the IRS, you should include that as part of
+            your petition.
+          </p>
           <div className="blue-container">
             <div className="usa-form-group">
+              <h3>Who is filing this petition?</h3>
+              <p>Myself</p>
+              <h3>Did you receive a notice from the IRS?</h3>
               <label htmlFor="case-type">Type of Notice</label>
               <select
                 name="caseType"
@@ -186,28 +185,6 @@ export default connect(
                 </div>
               </div>
             </fieldset>
-          </div>
-          <h2>Tell us about your petition.</h2>
-          <p>
-            You must file a petition to begin a Tax Court case. Please submit a
-            completed{' '}
-            <a
-              href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              USTC Form 2
-            </a>{' '}
-            or a custom petition that complies with the requirements of the{' '}
-            <a
-              href="https://www.ustaxcourt.gov/rules.htm"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Tax Court Rules of Practice and Procedure
-            </a>
-          </p>
-          <div className="blue-container">
             <div className="usa-form-group">
               <label
                 htmlFor="petition-file"
@@ -231,8 +208,6 @@ export default connect(
                 }}
               />
             </div>
-            <h3>Who is filing this petition?</h3>
-            <p>Myself</p>
           </div>
           <h2>How do you want this case to be handled?</h2>
           <p>
@@ -382,7 +357,6 @@ export default connect(
           >
             Cancel
           </button>
-          
         </form>
       </section>
     );
