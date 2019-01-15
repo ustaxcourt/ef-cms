@@ -1,19 +1,84 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export default function StyleGuide() {
   return (
     <React.Fragment>
       <section className="usa-section usa-grid">
-        <h2>Style Guide</h2>
-        <h1>h1 tag</h1>
-        <h2>h2 tag</h2>
-        <h3>h3 tag</h3>
-        <h4>h4 tag</h4>
-        <h5>h5 tag</h5>
-        <h6>h6 tag uses text-transform:uppercase</h6>
-        <p>This is a paragraph tag</p>
-
-        <h6>Primary buttons</h6>
+        <div className="subsection">
+          <h1>Typography</h1>
+          <hr />
+          <h1 className="display-1">Display 1</h1>
+          <h1>Heading 1</h1>
+          <h2>Heading 2</h2>
+          <h3>Heading 3</h3>
+          <h4>Heading 4</h4>
+          <h5>Heading 5</h5>
+          <h6>Heading 6</h6>
+          <p className="lead">Lead paragraph</p>
+          <p>
+            Body copy. A series of sentences together which make a paragraph.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam a
+            nulla sit amet ex facilisis ultricies. Aliquam erat volutpat. Ut
+            congue augue mauris, id fermentum magna condimentum eu. Aliquam eget
+            augue lacus. Fusce eu urna eros. Sed ornare sed ex non aliquam.
+            Praesent vitae rutrum risus. Nam nibh lorem, laoreet sed magna et,
+            aliquet tristique enim.
+          </p>
+          <p>
+            <a href="#a" name="a">
+              This
+            </a>{' '}
+            is a text link on a light background.
+          </p>
+          <p>
+            <a className="usa-color-text-visited" href="#b" name="b">
+              This
+            </a>{' '}
+            is a visited link.
+          </p>
+          <p>
+            This is a link that goes to an{' '}
+            <a
+              className="usa-external_link"
+              href="https://media.giphy.com/media/8sgNa77Dvj7tC/giphy.gif"
+            >
+              external website
+            </a>
+            .
+          </p>
+          <div className="usa-background-dark" style={{ padding: '1em' }}>
+            <p>
+              <a href="#c" name="c">
+                This
+              </a>{' '}
+              is a text link on a dark background.
+            </p>
+          </div>
+        </div>
+        <div className="usa-section usa-grid">
+          <div className="usa-width-one-third">
+            <h6 className="usa-heading-alt">Unordered list</h6>
+            <ul>
+              <li>Unordered list item</li>
+              <li>Unordered list item</li>
+              <li>Unordered list item</li>
+            </ul>
+          </div>
+          <div className="usa-width-one-third">
+            <h6 className="usa-heading-alt mt0">Ordered list</h6>
+            <ol>
+              <li>Ordered list item</li>
+              <li>Ordered list item</li>
+              <li>Ordered list item</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      <section className="usa-section usa-grid">
+        <h1>Buttons</h1>
+        <hr />
+        <h2>Primary buttons</h2>
         <button className="usa-button">Default</button>
         <button className="usa-button usa-button-hover">Hover</button>
         <button className="usa-button usa-button-active">Active</button>
@@ -21,20 +86,170 @@ export default function StyleGuide() {
         <button className="usa-button" disabled>
           Disabled
         </button>
-
-        <h6>Secondary buttons</h6>
-        <button className="usa-button-secondary">Default</button>
-        <button className="usa-button-secondary usa-button-hover">Hover</button>
-        <button className="usa-button-secondary usa-button-active">
+        <h2>Secondary buttons</h2>
+        <button className="usa-button usa-button-secondary">Default</button>
+        <button className="usa-button usa-button-secondary usa-button-hover">
+          Hover
+        </button>
+        <button className="usa-button usa-button-secondary usa-button-active">
           Active
         </button>
-        <button className="usa-button-secondary usa-focus">Focus</button>
-        <button className="usa-button-secondary" disabled>
+        <button className="usa-button usa-button-secondary usa-focus">
+          Focus
+        </button>
+        <button className="usa-button usa-button-secondary" disabled>
           Disabled
         </button>
+        <h2>Icon button</h2>
+        <button className="usa-button">
+          <FontAwesomeIcon icon="check-circle" size="sm" />
+          Icon
+        </button>
+        <h2>Big button</h2>
+        <button className="usa-button usa-button-big">Default</button>
+      </section>
 
-        <h6>Big button</h6>
-        <button className="usa-button-big">Default</button>
+      <section className="usa-section usa-grid">
+        <h1>Tabs</h1>
+        <hr />
+        <h2>Primary Tabs</h2>
+        <div className="horizontal-tabs subsection">
+          <ul role="tablist">
+            <li className="active">
+              <button role="tab" className="tab-link" aria-selected={true}>
+                My Queue
+              </button>
+            </li>
+            <li>
+              <button role="tab" className="tab-link" aria-selected={false}>
+                Section Queue
+              </button>
+            </li>
+          </ul>
+        </div>
+        <h2>Secondary Tabs</h2>
+        <div className="work-queue-tab-container">
+          <h3 className="work-queue-tab">Inbox</h3>
+        </div>
+      </section>
+
+      <section className="usa-section usa-grid">
+        <h1>Tables</h1>
+        <hr />
+        <h2>Responsive Table</h2>
+        <table className="responsive-table">
+          <thead>
+            <tr>
+              <th>Docket number</th>
+              <th>Date filed</th>
+              <th>Petitioner name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span className="responsive-label">Docket number</span>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span className="responsive-label">Date filed</span>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span className="responsive-label">Petitioner name</span>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Work Queue Table</h2>
+        <table className="work-queue">
+          <thead>
+            <tr>
+              <th>Docket number</th>
+              <th>Date filed</th>
+              <th>Petitioner name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Docket number</span>
+              </td>
+              <td>
+                <span>Date filed</span>
+              </td>
+              <td>
+                <span>Petitioner name</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section className="usa-section usa-grid">
+        <h1>Cards</h1>
+        <div className="card">
+          <div className="content-wrapper">
+            <span className="label-inline">Label</span>
+            <span>Value</span>
+          </div>
+          <div className="actions-wrapper">
+            <div className="content-wrapper">
+              <span>Buttons</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="usa-section usa-grid">
@@ -95,64 +310,6 @@ export default function StyleGuide() {
           Entrance to Great Smoky Mountains National Park is free. The park is
           one of the few national parks where no entrance fees are charged.
         </p>
-      </section>
-      <section className="usa-section usa-grid">
-        <h2>Links</h2>
-        <p>
-          <a href="#a" name="a">
-            This
-          </a>{' '}
-          is a text link on a light background.
-        </p>
-
-        <p>
-          <a className="usa-color-text-visited" href="#b" name="b">
-            This
-          </a>{' '}
-          is a visited link.
-        </p>
-
-        <p>
-          This is a link that goes to an{' '}
-          <a
-            className="usa-external_link"
-            href="https://media.giphy.com/media/8sgNa77Dvj7tC/giphy.gif"
-          >
-            external website
-          </a>
-          .
-        </p>
-
-        <div className="usa-background-dark">
-          <p>
-            <a href="#c" name="c">
-              This
-            </a>{' '}
-            is a text link on a dark background.
-          </p>
-        </div>
-      </section>
-      <section className="usa-section usa-grid">
-        <h2>Lists</h2>
-        <div className="usa-width-one-third">
-          <h6 className="usa-heading-alt">Unordered list</h6>
-
-          <ul>
-            <li>Unordered list item</li>
-            <li>Unordered list item</li>
-            <li>Unordered list item</li>
-          </ul>
-        </div>
-
-        <div className="usa-width-one-third">
-          <h6 className="usa-heading-alt mt0">Ordered list</h6>
-
-          <ol>
-            <li>Ordered list item</li>
-            <li>Ordered list item</li>
-            <li>Ordered list item</li>
-          </ol>
-        </div>
       </section>
 
       <section className="usa-section usa-grid">

@@ -5,26 +5,25 @@ import moment from 'moment';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
-import openDocumentBlob from './openDocumentBlob';
 import SuccessNotification from './SuccessNotification';
 import PartyInformation from './PartyInformation';
 
 export default connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    viewDocumentSequence: sequences.viewDocumentSequence,
   },
   function CaseDetail({
+    baseUrl,
     caseDetail,
     currentTab,
     showDetails,
     togglePaymentDetailsSequence,
     updateCurrentTabSequence,
-    viewDocumentSequence,
   }) {
     return (
       <React.Fragment>
@@ -42,7 +41,7 @@ export default connect(
             {caseDetail.petitioners[0].name} Petitioner v. Commissioner of
             Internal Revenue, Respondent
           </p>
-          <hr />
+          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
           {!caseDetail.payGovId && (
@@ -126,7 +125,7 @@ export default connect(
               </ul>
             </div>
           )}
-          <nav className="horizontal-tabs">
+          <nav className="horizontal-tabs subsection">
             <ul role="tabslist">
               <li
                 role="presentation"
@@ -136,6 +135,7 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   id="tab-docket-record"
+                  aria-selected={currentTab === 'Docket Record'}
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Docket Record' })
                   }
@@ -148,6 +148,7 @@ export default connect(
                   role="tab"
                   className="tab-link"
                   id="tab-case-info"
+                  aria-selected={currentTab === 'Case Information'}
                   onClick={() =>
                     updateCurrentTabSequence({ value: 'Case Information' })
                   }
@@ -175,40 +176,40 @@ export default connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {caseDetail.documents.map((item, idx) => (
+                  {caseDetail.documents.map((document, idx) => (
                     <tr key={idx}>
                       <td className="responsive-title">
                         <span className="responsive-label">Activity date</span>
-                        {moment(item.createdAt).format('l')}
+                        {moment(document.createdAt).format('l')}
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
-                        <button
-                          className="pdf-link"
+                        <a
+                          href={`${baseUrl}/documents/${
+                            document.documentId
+                          }/documentDownloadUrl`}
+                          target="_blank"
+                          rel="noreferrer noopener"
                           aria-label="View PDF"
-                          onClick={() => {
-                            viewDocumentSequence({
-                              documentId: item.documentId,
-                              callback: openDocumentBlob,
-                            });
-                          }}
                         >
                           <FontAwesomeIcon icon="file-pdf" />
-                          {item.documentType}
-                        </button>
+                          {document.documentType}
+                        </a>
                       </td>
                       <td>
                         <span className="responsive-label">Filed by</span>
-                        {item.filedBy}
+                        {document.filedBy}
                       </td>
                       <td>
                         <span className="responsive-label">Status</span>
-                        {item.isStatusServed && (
+                        {document.isStatusServed && (
                           <span>
                             R served on {moment(caseDetail.irsDate).format('L')}
                           </span>
                         )}
-                        {!caseDetail.irsSendDate && <span>{item.status}</span>}
+                        {!caseDetail.irsSendDate && (
+                          <span>{document.status}</span>
+                        )}
                       </td>
                       <td />
                     </tr>

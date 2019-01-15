@@ -39,7 +39,9 @@ export default connect(
               }}
             />
           </div>
-          <input type="submit" value="Log in" />
+          <button id="log-in-button" className="usa-button" type="submit">
+            Log in
+          </button>
         </form>
       </section>
     );

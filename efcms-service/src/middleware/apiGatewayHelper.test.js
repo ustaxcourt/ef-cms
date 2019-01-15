@@ -1,4 +1,4 @@
-const { handle, getAuthHeader } = require('./apiGatewayHelper');
+const { redirect, handle, getAuthHeader } = require('./apiGatewayHelper');
 const expect = require('chai').expect;
 const {
   UnauthorizedError,
@@ -97,5 +97,28 @@ describe('getAuthHeader', () => {
       error = err;
     }
     expect(error).to.not.be.undefined;
+  });
+});
+
+describe('redirect', () => {
+  it('should return a redirect status in the header', async () => {
+    const response = await redirect(async () => ({ url: 'example.com' }));
+    expect(response).to.deep.equal({
+      statusCode: 302,
+      headers: {
+        Location: 'example.com',
+      },
+    });
+  });
+
+  it('should return error object on errors', async () => {
+    const response = await redirect(async () => {
+      throw new Error('an error');
+    });
+    expect(response).to.deep.equal({
+      statusCode: '400',
+      body: JSON.stringify('an error'),
+      headers: EXPECTED_HEADERS,
+    });
   });
 });

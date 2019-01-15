@@ -1,61 +1,71 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
+import SectionWorkQueue from './SectionWorkQueue';
+import IndividualWorkQueue from './IndividualWorkQueue';
 
-/**
- * Footer
- */
 export default connect(
   {
-    workQueue: state.workQueue,
+    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    workQueueHelper: state.workQueueHelper,
   },
-  function WorkQueue({ workQueue }) {
+  function WorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
-        <table className="responsive-table work-queue" id="work-queue">
-          <thead>
-            <tr>
-              <th />
-              <th>Message</th>
-              <th>Trial Date</th>
-              <th>Sent by</th>
-              <th>Received</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workQueue.map(item => (
-              <tr key={item.docketNumber}>
-                <td className="responsive-title">
-                  <span className="responsive-label">Docket number</span>
-                  {item.docketNumber}
-                </td>
-                <td>
-                  <span className="responsive-label">Message</span>
-                  <a
-                    href={'/case-detail/' + item.docketNumber}
-                    className="case-link"
-                  >
-                    {item.documentType}
-                  </a>
-                  {item.message}
-                </td>
-                <td>
-                  <span className="responsive-label">Trial Date</span>
-                  {item.receivedDate}
-                </td>
-                <td>
-                  <span className="responsive-label">Sent By</span>
-                  {item.sentBy}
-                </td>
-                <td>
-                  <span className="responsive-label">Received</span>
-                  {item.receivedDate}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <nav className="horizontal-tabs subsection">
+          <ul role="tablist">
+            <li
+              className={
+                workQueueHelper.showIndividualWorkQueue ? 'active' : ''
+              }
+            >
+              <button
+                role="tab"
+                className="tab-link"
+                id="tab-my-queue"
+                aria-selected={workQueueHelper.showIndividualWorkQueue}
+                onClick={() =>
+                  switchWorkQueueSequence({
+                    workQueueToDisplay: 'individual',
+                  })
+                }
+              >
+                My Queue
+              </button>
+            </li>
+            <li
+              className={workQueueHelper.showSectionWorkQueue ? 'active' : ''}
+            >
+              <button
+                role="tab"
+                className="tab-link"
+                id="tab-work-queue"
+                aria-selected={workQueueHelper.showSectionWorkQueue}
+                onClick={() =>
+                  switchWorkQueueSequence({
+                    workQueueToDisplay: 'section',
+                  })
+                }
+              >
+                Section Queue
+              </button>
+            </li>
+          </ul>
+        </nav>
+        <div className="work-queue-tab-container">
+          <h3 className="work-queue-tab">Inbox</h3>
+        </div>
+        {workQueueHelper.showSectionWorkQueue && (
+          <div role="tabpanel">
+            <SectionWorkQueue />
+          </div>
+        )}
+        {workQueueHelper.showIndividualWorkQueue && (
+          <div role="tabpanel">
+            <IndividualWorkQueue />
+          </div>
+        )}
       </React.Fragment>
     );
   },

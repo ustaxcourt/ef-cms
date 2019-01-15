@@ -1,16 +1,20 @@
 const { getAuthHeader, handle } = require('../middleware/apiGatewayHelper');
-const applicationContext = require('../applicationContext');
+const createApplicationContext = require('../applicationContext');
 
 /**
- * GET WorkItems API Lambda
+ * returns all work items associated with a user
  *
  * @param event
- * @param context
- * @param callback
+ * @returns {Promise<*|undefined>}
  */
-
 exports.get = event =>
   handle(() => {
     const userId = getAuthHeader(event);
-    return applicationContext.getUseCases().getWorkItems({ userId: userId, applicationContext});
+    const applicationContext = createApplicationContext({ userId });
+    const section = (event.queryStringParameters || {}).section;
+    return applicationContext.getWorkItemsInteractor(event)({
+      userId: userId,
+      section,
+      applicationContext,
+    });
   });

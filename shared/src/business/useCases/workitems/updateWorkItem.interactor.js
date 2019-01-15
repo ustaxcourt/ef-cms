@@ -1,4 +1,5 @@
 const WorkItem = require('../../entities/WorkItem');
+const User = require('../../entities/User');
 const {
   isAuthorized,
   WORKITEM,
@@ -31,7 +32,12 @@ exports.updateWorkItem = async ({
     throw new UnprocessableEntityError();
   }
 
-  const updatedWorkItem = new WorkItem(workItemToUpdate).validate().toJSON();
+  const user = new User({ userId: workItemToUpdate.assigneeId });
+  workItemToUpdate.assigneeName = user.name;
+
+  const updatedWorkItem = new WorkItem(workItemToUpdate)
+    .validate()
+    .toRawObject();
 
   const caseAfterUpdate = await applicationContext
     .getPersistenceGateway()
@@ -40,5 +46,5 @@ exports.updateWorkItem = async ({
       applicationContext,
     });
 
-  return new WorkItem(caseAfterUpdate).validate().toJSON();
+  return new WorkItem(caseAfterUpdate).validate().toRawObject();
 };

@@ -34,11 +34,14 @@ exports.createCase = async ({ userId, documents, applicationContext }) => {
         ],
         docketNumber,
         documents,
+        caseTitle: `${
+          user.name
+        }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
       })
         .validate()
-        .toJSON(),
+        .toRawObject(),
       applicationContext,
     });
 
-  return new Case(createdCase).validate().toJSON();
+  return new Case(createdCase).validate().toRawObject();
 };
