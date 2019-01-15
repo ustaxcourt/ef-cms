@@ -24,43 +24,4 @@ describe('start a case computed', () => {
     });
     expect(result.showPetitionFileValid).toBeTruthy();
   });
-
-  it('sets uploadsFinished', () => {
-    const result = runCompute(startCaseHelper, {
-      state: {
-        petition: {
-          petitionFile: true,
-          uploadsFinished: 1,
-        },
-        form: {},
-      },
-    });
-    expect(result.uploadsRemaining).toEqual(1);
-  });
-
-  it('sets uploadPercentage for partial completion', () => {
-    const result = runCompute(startCaseHelper, {
-      state: {
-        petition: {
-          petitionFile: true,
-          uploadsFinished: 1,
-        },
-        form: {},
-      },
-    });
-    expect(result.uploadPercentage).toEqual(50);
-  });
-
-  it('sets uploadPercentage for full completion', () => {
-    const result = runCompute(startCaseHelper, {
-      state: {
-        petition: {
-          petitionFile: true,
-          uploadsFinished: 2,
-        },
-        form: {},
-      },
-    });
-    expect(result.uploadPercentage).toEqual(100);
-  });
 });
