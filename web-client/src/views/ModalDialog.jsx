@@ -1,20 +1,48 @@
 import { connect } from '@cerebral/react';
 import { state, sequences } from 'cerebral';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default connect(
-  {
-    modal: state.modal,
-    showModal: state.showModal,
-    clickCancelSequence: sequences.startACaseToggleCancelSequence,
-    clickConfirmSequence: sequences.startACaseConfirmCancelSequence,
-  },
-  function ModalDialog({
-    modal,
-    showModal,
-    clickConfirmSequence,
-    clickCancelSequence,
-  }) {
+class ModalDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.keydownTriggered = this.keydownTriggered.bind(this);
+  }
+
+  keydownTriggered(event) {
+    if (event.keyCode === 27) {
+      this.escapeKeyCaptured();
+    }
+  }
+  escapeKeyCaptured() {
+    if (this.props.showModal) {
+      this.props.clickCancelSequence();
+    }
+  }
+  componentDidMount() {
+    document.addEventListener('keydown', this.keydownTriggered, false);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.keydownTriggered, false);
+  }
+
+  componentDidUpdate() {
+    this.focusModal();
+  }
+
+  focusModal() {
+    const modalHeader = document.querySelector('.modal-dialog h3');
+    modalHeader && modalHeader.focus();
+  }
+
+  render() {
+    const {
+      modal,
+      showModal,
+      clickConfirmSequence,
+      clickCancelSequence,
+    } = this.props;
+
     return (
       showModal && (
         <div className="modal-screen">
@@ -22,7 +50,7 @@ export default connect(
             className={`modal-dialog ${modal.classNames}`}
             aria-live="assertive"
           >
-            <h3>{modal.title}</h3>
+            <h3 tabIndex="-1">{modal.title}</h3>
             <p>{modal.message}</p>
             <button
               type="button"
@@ -42,5 +70,22 @@ export default connect(
         </div>
       )
     );
+  }
+}
+
+ModalDialog.propTypes = {
+  modal: PropTypes.object,
+  showModal: PropTypes.bool,
+  clickCancelSequence: PropTypes.func,
+  clickConfirmSequence: PropTypes.func,
+};
+
+export default connect(
+  {
+    modal: state.modal,
+    showModal: state.showModal,
+    clickCancelSequence: sequences.startACaseToggleCancelSequence,
+    clickConfirmSequence: sequences.startACaseConfirmCancelSequence,
   },
+  ModalDialog,
 );
