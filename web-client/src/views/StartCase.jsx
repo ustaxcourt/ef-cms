@@ -207,11 +207,19 @@ export default connect(
           <p>
             You must file a petition to begin a Tax Court case. Please submit a
             completed{' '}
-            <a href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf">
+            <a
+              href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               USTC Form 2
             </a>{' '}
             or a custom petition that complies with the requirements of the{' '}
-            <a href="https://www.ustaxcourt.gov/rules.htm">
+            <a
+              href="https://www.ustaxcourt.gov/rules.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Tax Court Rules of Practice and Procedure
             </a>
           </p>
