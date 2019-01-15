@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import moment from 'moment';
 import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
@@ -182,7 +181,7 @@ export default connect(
                     <tr key={idx}>
                       <td className="responsive-title">
                         <span className="responsive-label">Activity date</span>
-                        {moment(document.createdAt).format('L')}
+                        {document.createdAtFormatted}
                       </td>
                       <td>
                         <span className="responsive-label">Title</span>
@@ -206,7 +205,7 @@ export default connect(
                         <span className="responsive-label">Status</span>
                         {document.isStatusServed && (
                           <span>
-                            R served on {moment(caseDetail.irsDate).format('L')}
+                            R served on {caseDetail.irsDateFormatted}
                           </span>
                         )}
                         {!caseDetail.irsSendDate && (
@@ -218,7 +217,7 @@ export default connect(
                   ))}
                   {caseDetail.payGovId && (
                     <tr>
-                      <td>{moment(caseDetail.payGovDate).format('L')}</td>
+                      <td>{caseDetail.payGovDateFormatted}</td>
                       <td>Filing fee paid</td>
                       <td />
                       <td />
