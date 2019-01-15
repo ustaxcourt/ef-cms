@@ -23,6 +23,10 @@
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/proxies/**/*.js"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 90,
