@@ -1,18 +1,20 @@
+import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { connect } from '@cerebral/react';
 class ErrorNotification extends React.Component {
   componentDidUpdate() {
     this.focusNotification();
   }
+
   focusNotification() {
     const notification = this.notificationRef.current;
     if (notification) {
       notification.scrollIntoView();
     }
   }
+
   render() {
     const alertError = this.props.alertError;
     this.notificationRef = React.createRef();

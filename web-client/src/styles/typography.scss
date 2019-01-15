@@ -1,0 +1,91 @@
+.display-1 {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h1,
+.heading-1 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 32px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h2,
+.heading-2 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 24px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h3,
+.heading-3 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 20px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h4,
+.heading-4 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 17px;
+  font-weight: $font-semibold;
+  line-height: 1.3em;
+}
+
+h5,
+.heading-5 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 17px;
+  font-weight: $font-semibold;
+  line-height: 1.3em;
+}
+
+h6,
+.heading-6 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 13px;
+  font-weight: $font-semibold;
+  line-height: 1.3em;
+  text-transform: uppercase;
+}
+
+.captioned {
+  margin-bottom: 0;
+}
+
+h1[tabIndex='-1']:focus {
+  outline: none;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: $font-regular;
+  line-height: 1.45em;
+}
+
+p.lead {
+  font-family: $font-serif;
+  font-size: 20px;
+  font-weight: $font-regular;
+  line-height: 1.7em;
+}

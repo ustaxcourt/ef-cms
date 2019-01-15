@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 /**
  * createCaseProxy
  *
@@ -10,7 +8,7 @@ const axios = require('axios');
  */
 exports.createCase = async ({ userId, documents, applicationContext }) => {
   const userToken = userId; // TODO temp until jwt
-  const response = await axios.post(
+  const response = await applicationContext.getHttpClient().post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
       documents,

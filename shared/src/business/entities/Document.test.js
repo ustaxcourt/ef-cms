@@ -1,6 +1,8 @@
 const assert = require('assert');
 
 const Document = require('./Document');
+const WorkItem = require('./WorkItem');
+const Message = require('./Message');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
@@ -26,6 +28,29 @@ describe('Document entity', () => {
       const myDoc = new Document({
         documentType: 'Petition',
       });
+      assert.ok(!myDoc.isValid());
+    });
+
+    it('addWorkItem', () => {
+      const myDoc = new Document(A_VALID_DOCUMENT);
+      const workItem = new WorkItem({
+        sentBy: 'bob',
+        assigneeId: 'bob',
+        docketNumber: '101-18',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        assigneeName: 'bob',
+        caseTitle: 'testing',
+        caseStatus: 'new',
+        document: {},
+      });
+      const message = new Message({
+        messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        message: 'hello world',
+        userId: '123',
+        sentBy: 'gg',
+      });
+      workItem.addMessage(message);
+      myDoc.addWorkItem(new WorkItem({}));
       assert.ok(!myDoc.isValid());
     });
   });

@@ -8,6 +8,7 @@ module.exports = {
   ],
   plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
   rules: {
+    quotes: ['error', 'single'],
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'error',
     'arrow-parens': ['error', 'as-needed'],
@@ -43,11 +44,8 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 9,
     sourceType: 'module',
-    jsx: true,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+    jsx: true
   },
 };

@@ -1,50 +1,17 @@
-input[type='file'] {
-  height: auto;
+.usa-header {
+  margin-bottom: 3rem;
+}
+
+.usa-form-group {
+  margin-bottom: 30px;
 }
 
 .usa-header .usa-nav-secondary .usa-search {
   margin-top: -0.6rem;
 }
 
-input[type='text'] {
-  margin: 0 0 2rem;
-}
-
-label {
-  margin-bottom: 0.5em;
-  font-weight: 700;
-}
-
-#file-a-petition .usa-button-active:disabled {
-  background-color: $color-primary-darkest;
-}
-
 .usa-alert {
   margin-bottom: 2rem;
-}
-
-h1 {
-  font-size: 32px;
-}
-
-h2 {
-  margin-bottom: 0;
-  font-size: 26px;
-}
-
-legend {
-  margin-bottom: 0.5em;
-  font-size: 1em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-top: 0;
 }
 
 .usa-nav-secondary-links li:not(:last-child)::after {
@@ -59,21 +26,4 @@ p {
 
 .usa-section {
   padding-top: 0;
-}
-
-hr {
-  display: block;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  border-top: 2px solid $color-gray-lightest;
-  margin: 2rem 0;
-}
-
-table {
-  margin: 0;
-}
-
-.usa-button {
-  margin: 0 2rem 2rem 0;
 }

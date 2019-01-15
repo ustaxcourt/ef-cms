@@ -2,6 +2,7 @@ module.exports = {
   extends: ['prettier', 'eslint:recommended', 'plugin:security/recommended'],
   plugins: ['prettier', 'security'],
   rules: {
+    quotes: ['error', 'single'],
     'arrow-parens': ['error', 'as-needed'],
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-useless-escape': 'off',
@@ -15,9 +16,6 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    ecmaVersion: 8,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+    ecmaVersion: 9
   },
 };
