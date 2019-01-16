@@ -54,7 +54,10 @@ export default connect(
           <ErrorNotification />
           <div className="grey-container are-you-ready">
             <h2>Are you ready?</h2>
-            <p>You’ll need the following information to begin a new case.</p>
+            <p>
+              You will need to upload a PDF of your petition. Your petition
+              should include the following:
+            </p>
             <div>
               <div className="icon-wrapper">
                 <FontAwesomeIcon icon="file-pdf" size="2x" />
