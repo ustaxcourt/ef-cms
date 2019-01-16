@@ -26,6 +26,14 @@ describe('setCaseIdFromSearchAction', async () => {
     });
     expect(state.caseId).toEqual('101-18');
   });
+  it('matches a docket number with R suffix', async () => {
+    const { state } = await runAction(setCaseIdFromSearchAction, {
+      state: {
+        searchTerm: '101-18R',
+      },
+    });
+    expect(state.caseId).toEqual('101-18');
+  });
   it('matches a docket number with P suffix', async () => {
     const { state } = await runAction(setCaseIdFromSearchAction, {
       state: {
