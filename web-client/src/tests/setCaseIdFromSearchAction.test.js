@@ -1,6 +1,4 @@
 import { runAction } from 'cerebral/test';
-import { state } from 'cerebral';
-import presenter from '../presenter';
 import setCaseIdFromSearchAction from '../presenter/actions/setCaseIdFromSearchAction';
 
 describe('setCaseIdFromSearchAction', async () => {
