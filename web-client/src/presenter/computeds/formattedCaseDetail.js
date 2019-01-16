@@ -23,9 +23,9 @@ const formatCase = caseDetail => {
   result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix
-  }`;
+  result.docketNumberWithSuffix = `${
+    result.docketNumber
+  }${result.docketNumberSuffix || ''}`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? moment(result.irsNoticeDate).format('L')
