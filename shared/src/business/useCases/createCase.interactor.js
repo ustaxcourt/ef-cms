@@ -79,12 +79,10 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     caseToAdd.addDocument(documentEntity);
   });
 
-  const createdCase = await applicationContext
-    .getPersistenceGateway()
-    .saveCase({
-      caseToSave: caseToAdd.validate().toRawObject(),
-      applicationContext,
-    });
+  await applicationContext.getPersistenceGateway().saveCase({
+    caseToSave: caseToAdd.validate().toRawObject(),
+    applicationContext,
+  });
 
-  return new Case(createdCase).validate().toRawObject();
+  return new Case(caseToAdd).validate().toRawObject();
 };

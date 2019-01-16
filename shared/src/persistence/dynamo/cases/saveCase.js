@@ -44,7 +44,11 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
 
   const currentStatus = (currentCaseState || {}).status;
 
-  if (!currentCaseState.respondent && caseToSave.respondent) {
+  if (
+    currentCaseState &&
+    !currentCaseState.respondent &&
+    caseToSave.respondent
+  ) {
     await createRespondentCaseMapping({
       applicationContext,
       caseId: caseToSave.caseId,
