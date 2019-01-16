@@ -4,6 +4,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const WorkItemWithCaseInfo = require('./WorkItemWithCaseInfo');
+
 /**
  * getWorkItems
  *
@@ -20,16 +22,18 @@ exports.getWorkItemsBySection = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let workItems = await applicationContext
+  let workItemsWithCaseInfo = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsBySection({
       section,
       applicationContext,
     });
 
-  if (!workItems) {
-    workItems = [];
+  if (!workItemsWithCaseInfo) {
+    workItemsWithCaseInfo = [];
   }
 
-  return workItems;
+  WorkItemWithCaseInfo.validateRawCollection(workItemsWithCaseInfo);
+
+  return workItemsWithCaseInfo;
 };

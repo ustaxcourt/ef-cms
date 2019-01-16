@@ -1,21 +1,20 @@
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
 const uuid = require('uuid');
-const Message = require('./Message');
-const { getSectionForRole } = require('./WorkQueue');
+const Message = require('../../entities/Message');
 
 /**
  * constructor
  * @param rawWorkItem
  * @constructor
  */
-function WorkItem(rawWorkItem) {
+function WorkItemWithCaseInfo(rawWorkItem) {
   Object.assign(this, rawWorkItem, {
     workItemId: rawWorkItem.workItemId || uuid.v4(),
     createdAt: rawWorkItem.createdAt || new Date().toISOString(),
@@ -26,7 +25,7 @@ function WorkItem(rawWorkItem) {
 }
 
 joiValidationDecorator(
-  WorkItem,
+  WorkItemWithCaseInfo,
   joi.object().keys({
     workItemId: joi
       .string()
@@ -43,6 +42,11 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     assigneeName: joi
+      .string()
+      .allow(null)
+      .optional(),
+    docketNumber: joi.string().required(),
+    docketNumberSuffix: joi
       .string()
       .allow(null)
       .optional(),
@@ -70,18 +74,4 @@ joiValidationDecorator(
   },
 );
 
-WorkItem.prototype.addMessage = function(message) {
-  this.messages = [...(this.messages || []), message];
-  return this;
-};
-
-WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
-  Object.assign(this, {
-    assigneeId,
-    assigneeName,
-    section: getSectionForRole(role),
-  });
-  return this;
-};
-
-module.exports = WorkItem;
+module.exports = WorkItemWithCaseInfo;
