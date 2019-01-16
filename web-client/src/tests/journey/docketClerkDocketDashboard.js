@@ -26,6 +26,9 @@ export default test => {
       state: test.getState(),
     });
     expect(formatted[0].createdAtFormatted).toBeDefined();
+    expect(formatted[0].docketNumberWithSuffix).toEqual(
+      `${test.docketNumber}W`,
+    );
     expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
   });
 };

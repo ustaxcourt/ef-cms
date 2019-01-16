@@ -45,7 +45,7 @@ export default connect(
                   aria-controls={`detail-${item.workItemId}`}
                 />
               </td>
-              <td>{item.docketNumber}</td>
+              <td>{item.docketNumberWithSuffix}</td>
               <td>{item.currentMessage.createdAtFormatted}</td>
               <td>
                 <a

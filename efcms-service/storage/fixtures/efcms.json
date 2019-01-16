@@ -52,6 +52,9 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
+    "docketNumberSuffix": "SL",
+    "procedureType": "small",
+    "caseType": "CDP (Lien/Levy)",
     "status": "new"
   },
   {
@@ -84,6 +87,7 @@
     ],
     "pk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:06:02.968Z"
   },
   {
@@ -155,6 +159,7 @@
             "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
             "assigneeId": "docketclerk",
             "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:05:54.164Z"
           }
@@ -191,6 +196,7 @@
             "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
             "assigneeId": null,
             "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:06:02.968Z"
           }
@@ -220,6 +226,8 @@
     "irsSendDate": "2018-12-27T17:27:11.113Z",
     "createdAt": "2018-12-27T17:26:36.948Z",
     "payGovId": "1234",
+    "procedureType": "Small",
+    "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
@@ -239,6 +247,7 @@
       }
     ],
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "status": "general"
   },
   {
@@ -267,6 +276,7 @@
     ],
     "pk": "af60fe99-37dc-435c-9bdf-24be67769344",
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:05:54.164Z"
   },
   {
@@ -317,6 +327,8 @@
         "workItems": []
       }
     ],
+    "procedureType": "regular",
+    "caseType": "Exempt Organization",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
@@ -338,6 +350,7 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "103-18",
+    "docketNumberSuffix": "X",
     "status": "new"
   },
   {
