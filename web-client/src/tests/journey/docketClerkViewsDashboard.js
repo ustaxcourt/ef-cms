@@ -7,6 +7,7 @@ export default test => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
+    expect(test.getState('sectionWorkQueue').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
       .find(workItem => workItem.docketNumber === test.docketNumber);
