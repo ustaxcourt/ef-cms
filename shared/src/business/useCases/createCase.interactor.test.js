@@ -29,7 +29,7 @@ describe('createCase', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: createCaseStub,
+          saveCase: createCaseStub,
         };
       },
       getEntityConstructors: () => ({
@@ -125,7 +125,7 @@ describe('createCase', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: createCaseStub,
+          saveCase: createCaseStub,
         };
       },
       getEntityConstructors: () => ({
@@ -218,7 +218,7 @@ describe('createCase', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: () => Promise.reject(new Error('problem')),
+          saveCase: () => Promise.reject(new Error('problem')),
         };
       },
       getCurrentUser: () => {
@@ -258,7 +258,7 @@ describe('createCase', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: () =>
+          saveCase: () =>
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -296,7 +296,7 @@ describe('createCase', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain('The Case entity was invalid ValidationError: child \"documents\" fails because [\"documents\" must contain at least 1 items]');
   });
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
