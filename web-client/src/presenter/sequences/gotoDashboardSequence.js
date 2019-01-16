@@ -28,11 +28,10 @@ const goToDashboard = [
     ],
     petitionsclerk: [
       clearAlerts,
-      getCasesNew,
-      {
-        error: [setAlertError],
-        success: [setCases],
-      },
+      getWorkItemsForSection('petition'),
+      setSectionWorkQueue,
+      getWorkItemsByUser,
+      setWorkItems,
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     docketclerk: [
