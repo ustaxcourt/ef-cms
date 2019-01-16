@@ -11,7 +11,7 @@ describe('getWorkItem', () => {
     sentBy: 'docketclerk',
     section: 'docket',
     docketNumber: '101-18',
-    docketNumberWithSuffix: '101-18S',
+    docketNumberSuffix: 'S',
     document: {
       sentBy: 'taxyaper',
     },
@@ -72,7 +72,7 @@ describe('getWorkItem', () => {
     expect(result).toMatchObject({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
-      docketNumberWithSuffix: '101-18S',
+      docketNumberSuffix: 'S',
       document: { sentBy: 'taxyaper' },
       messages: [],
       section: 'docket',

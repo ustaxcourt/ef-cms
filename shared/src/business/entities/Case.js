@@ -86,9 +86,7 @@ function Case(rawCase) {
       status: rawCase.status || 'new',
     },
     {
-      docketNumberWithSuffix: `${rawCase.docketNumber}${getDocketNumberSuffix(
-        rawCase,
-      )}`,
+      docketNumberSuffix: getDocketNumberSuffix(rawCase),
     },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }
@@ -122,7 +120,7 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    docketNumberWithSuffix: joi.string().required(),
+    docketNumberSuffix: joi.string().required(),
     respondent: joi.object().optional(),
     irsNoticeDate: joi
       .date()
