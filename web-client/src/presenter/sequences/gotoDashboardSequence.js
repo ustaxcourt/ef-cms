@@ -27,6 +27,8 @@ const goToDashboard = [
     ],
     petitionsclerk: [
       clearAlerts,
+      getUsersInSection({ sectionType: 'petition' }),
+      setUsers,
       getWorkItemsForSection('petition'),
       setSectionWorkQueue,
       getWorkItemsByUser,
