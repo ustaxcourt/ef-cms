@@ -1,3 +1,9 @@
+/**
+ * a function used for getting the suffix associated with a caseType and procedureType
+ *
+ * @param caseType the type of the case
+ * @param procedureType the procedureType (small or regular)
+ */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
   switch (caseType.toLowerCase()) {
     case 'whistleblower':
