@@ -6,6 +6,12 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 
 This is a React-based Javascript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`efcms-service/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via a Jenkins server, and [that process is documented in `SETUP.md`](SETUP.md).
 
+## Documentation
+* There is a style guide available at http://localhost:1234/style-guide.
+* The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
+* The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
+* The deployment process is documented in [`SETUP.md`](SETUP.md).
+
 ## Building everything
 
 To run the same checks that run in Jenkins (except SonarQube) locally, using Docker containers, run the following:
