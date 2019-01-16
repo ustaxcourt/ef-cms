@@ -1,1 +1,381 @@
-[]
+[
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "101-18|case"
+  },
+  {
+    "createdAt": "2018-12-27T18:22:57.418Z",
+    "documents": [
+      {
+        "createdAt": "2018-12-27T18:22:57.418Z",
+        "documentId": "61e96924-ce65-49f4-bebf-780bfc148520",
+        "documentType": "Petition",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      },
+      {
+        "createdAt": "2018-12-27T18:22:57.418Z",
+        "documentId": "e9b4aa68-3663-4e86-8bd3-bde38af06983",
+        "documentType": "Request for Place of Trial",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      },
+      {
+        "createdAt": "2018-12-27T18:22:57.418Z",
+        "documentId": "0b80ce52-89fb-4a53-b72d-121187f6b77c",
+        "documentType": "Statement of Taxpayer Identification Number",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      }
+    ],
+    "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "taxpayer",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "userId": "taxpayer",
+    "docketNumber": "102-18",
+    "docketNumberSuffix": "SL",
+    "procedureType": "small",
+    "caseType": "CDP (Lien/Levy)",
+    "status": "new"
+  },
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "b6238482-5f0e-48a8-bb8e-da2957074a08|case"
+  },
+  {
+    "caseStatus": "general",
+    "document": {
+      "documentType": "Stipulated Decision",
+      "createdAt": "2018-12-27T18:06:02.968Z",
+      "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08"
+    },
+    "section": "docket",
+    "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+    "assigneeId": null,
+    "sentBy": "respondent",
+    "createdAt": "2018-12-27T18:06:02.971Z",
+    "assigneeName": null,
+    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+    "messages": [
+      {
+        "createdAt": "2018-12-27T18:06:02.968Z",
+        "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
+        "message": "a Stipulated Decision filed by respondent is ready for review",
+        "userId": "respondent",
+        "sentBy": "Test Respondent"
+      }
+    ],
+    "pk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+    "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
+    "updatedAt": "2018-12-27T18:06:02.968Z"
+  },
+  {
+    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "pk": "taxpayer|case"
+  },
+  {
+    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "pk": "taxpayer|case"
+  },
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "taxpayer|case"
+  },
+  {
+    "documents": [
+      {
+        "createdAt": "2018-12-27T17:26:36.948Z",
+        "documentType": "Petition",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": [],
+        "documentId": "36bf0a37-6d75-4ea5-85ee-eea07bf9ed99",
+        "userId": "taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-27T17:26:36.948Z",
+        "documentType": "Request for Place of Trial",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": [],
+        "documentId": "d4b00ffe-a36d-4452-b696-7f21bcb0dff1",
+        "userId": "taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-27T17:26:36.948Z",
+        "documentType": "Statement of Taxpayer Identification Number",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": [],
+        "documentId": "204b7563-05e0-42df-b1c5-e77edec2e11e",
+        "userId": "taxpayer",
+        "status": "served"
+      },
+      {
+        "createdAt": "2018-12-27T18:05:54.166Z",
+        "documentType": "Answer",
+        "filedBy": "Test Respondent",
+        "workItems": [
+          {
+            "createdAt": "2018-12-27T18:05:54.166Z",
+            "assigneeName": "Test Docketclerk",
+            "caseStatus": "general",
+            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+            "document": {
+              "documentType": "Answer",
+              "createdAt": "2018-12-27T18:05:54.164Z",
+              "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
+            },
+            "messages": [
+              {
+                "createdAt": "2018-12-27T18:05:54.164Z",
+                "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
+                "message": "a Answer filed by respondent is ready for review",
+                "userId": "respondent",
+                "sentBy": "Test Respondent"
+              }
+            ],
+            "section": "docket",
+            "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
+            "assigneeId": "docketclerk",
+            "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
+            "sentBy": "respondent",
+            "updatedAt": "2018-12-27T18:05:54.164Z"
+          }
+        ],
+        "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+        "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+        "userId": "respondent"
+      },
+      {
+        "createdAt": "2018-12-27T18:06:02.971Z",
+        "documentType": "Stipulated Decision",
+        "filedBy": "Test Respondent",
+        "workItems": [
+          {
+            "createdAt": "2018-12-27T18:06:02.971Z",
+            "assigneeName": null,
+            "caseStatus": "general",
+            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+            "document": {
+              "documentType": "Stipulated Decision",
+              "createdAt": "2018-12-27T18:06:02.968Z",
+              "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08"
+            },
+            "messages": [
+              {
+                "createdAt": "2018-12-27T18:06:02.968Z",
+                "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
+                "message": "a Stipulated Decision filed by respondent is ready for review",
+                "userId": "respondent",
+                "sentBy": "Test Respondent"
+              }
+            ],
+            "section": "docket",
+            "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+            "assigneeId": null,
+            "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
+            "sentBy": "respondent",
+            "updatedAt": "2018-12-27T18:06:02.968Z"
+          }
+        ],
+        "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+        "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08",
+        "userId": "respondent"
+      }
+    ],
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "respondent": {
+      "zip": "37208",
+      "role": "respondent",
+      "city": "Orlando",
+      "userId": "respondent",
+      "respondentId": "respondent",
+      "token": "respondent",
+      "barNumber": "12345",
+      "phone": "111-111-1111",
+      "name": "Test Respondent",
+      "addressLine1": "111 Orange St.",
+      "addressLine2": "Building 2",
+      "state": "FL",
+      "email": "testrespondent@example.com"
+    },
+    "userId": "taxpayer",
+    "irsSendDate": "2018-12-27T17:27:11.113Z",
+    "createdAt": "2018-12-27T17:26:36.948Z",
+    "payGovId": "1234",
+    "procedureType": "Small",
+    "caseType": "Whistleblower",
+    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "taxpayer",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
+    "status": "general"
+  },
+  {
+    "caseStatus": "general",
+    "document": {
+      "documentType": "Answer",
+      "createdAt": "2018-12-27T18:05:54.164Z",
+      "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
+    },
+    "section": "docket",
+    "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
+    "assigneeId": "docketclerk",
+    "sentBy": "respondent",
+    "createdAt": "2018-12-27T18:05:54.166Z",
+    "assigneeName": "Test Docketclerk",
+    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
+    "messages": [
+      {
+        "createdAt": "2018-12-27T18:05:54.164Z",
+        "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
+        "message": "a Answer filed by respondent is ready for review",
+        "userId": "respondent",
+        "sentBy": "Test Respondent"
+      }
+    ],
+    "pk": "af60fe99-37dc-435c-9bdf-24be67769344",
+    "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
+    "updatedAt": "2018-12-27T18:05:54.164Z"
+  },
+  {
+    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
+    "pk": "docketclerk|workItem"
+  },
+  {
+    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "pk": "103-18|case"
+  },
+  {
+    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "pk": "new|case-status"
+  },
+  {
+    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "pk": "new|case-status"
+  },
+  {
+    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "pk": "102-18|case"
+  },
+  {
+    "createdAt": "2018-12-27T18:23:07.975Z",
+    "documents": [
+      {
+        "createdAt": "2018-12-27T18:23:07.975Z",
+        "documentId": "c36354f7-696e-4e61-b8cb-177cec967d2d",
+        "documentType": "Petition",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      },
+      {
+        "createdAt": "2018-12-27T18:23:07.975Z",
+        "documentId": "d9ed9986-47b1-43c4-9d77-3f74fd14cd51",
+        "documentType": "Request for Place of Trial",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      },
+      {
+        "createdAt": "2018-12-27T18:23:07.975Z",
+        "documentId": "7cb442cc-bda5-4c5d-8f92-668229fbd8f8",
+        "documentType": "Statement of Taxpayer Identification Number",
+        "userId": "taxpayer",
+        "filedBy": "Petitioner Test Taxpayer",
+        "workItems": []
+      }
+    ],
+    "procedureType": "regular",
+    "caseType": "Exempt Organization",
+    "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "taxpayer",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "userId": "taxpayer",
+    "docketNumber": "103-18",
+    "docketNumberSuffix": "X",
+    "status": "new"
+  },
+  {
+    "sk": "docketNumberCounter",
+    "id": 3,
+    "pk": "docketNumberCounter"
+  },
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "general|case-status"
+  },
+  {
+    "sk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+    "pk": "docket|workItem"
+  },
+  {
+    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
+    "pk": "docket|workItem"
+  },
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "respondent|activeCase"
+  },
+  {
+    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "pk": "8eef49b4-9d40-4773-84ab-49e1e59e49cd|case"
+  }
+]
