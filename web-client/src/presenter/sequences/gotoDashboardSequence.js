@@ -1,6 +1,5 @@
 import clearAlerts from '../actions/clearAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
-import getCasesNew from '../actions/getCasesNewAction';
 import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
 import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
