@@ -90,5 +90,4 @@ describe('setCaseIdFromSearchAction', async () => {
     });
     expect(state.caseId).toEqual('101-18');
   });
-
 });
