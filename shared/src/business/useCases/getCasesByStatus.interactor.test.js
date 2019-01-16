@@ -47,7 +47,9 @@ describe('getCasesByStatus', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The Case entity was invalid ValidationError: child \"documents\" fails because [\"documents\" must contain at least 1 items]');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 
   it('throws an error if the user is unauthorized', async () => {
