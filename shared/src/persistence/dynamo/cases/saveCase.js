@@ -2,6 +2,7 @@ const {
   createRespondentCaseMapping,
   stripInternalKeys,
   stripWorkItems,
+  createMappingRecord,
 } = require('../../awsDynamoPersistence');
 const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
@@ -25,7 +26,23 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     },
   });
 
-  const currentStatus = currentCaseState.status;
+  if (!currentCaseState) {
+    await createMappingRecord({
+      pkId: caseToSave.userId,
+      skId: caseToSave.caseId,
+      type: 'case',
+      applicationContext,
+    });
+
+    await createMappingRecord({
+      pkId: caseToSave.docketNumber,
+      skId: caseToSave.caseId,
+      type: 'case',
+      applicationContext,
+    });
+  }
+
+  const currentStatus = (currentCaseState || {}).status;
 
   if (!currentCaseState.respondent && caseToSave.respondent) {
     await createRespondentCaseMapping({
@@ -47,16 +64,17 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     currentCaseState,
   });
 
-  // if a stipulated decision was uploaded, create a work item entry
   if (currentStatus !== caseToSave.status) {
-    await client.delete({
-      applicationContext,
-      tableName: TABLE,
-      key: {
-        pk: `${currentStatus}|case-status`,
-        sk: caseToSave.caseId,
-      },
-    });
+    if (currentStatus) {
+      await client.delete({
+        applicationContext,
+        tableName: TABLE,
+        key: {
+          pk: `${currentStatus}|case-status`,
+          sk: caseToSave.caseId,
+        },
+      });
+    }
 
     await client.put({
       applicationContext,
