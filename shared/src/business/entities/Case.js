@@ -120,8 +120,14 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    docketNumberSuffix: joi.string().required(),
-    respondent: joi.object().optional(),
+    docketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
+    respondent: joi
+      .object()
+      .allow(null)
+      .optional(),
     irsNoticeDate: joi
       .date()
       .iso()

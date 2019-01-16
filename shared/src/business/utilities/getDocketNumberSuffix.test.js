@@ -70,4 +70,14 @@ describe('getDocketNumberSuffix', () => {
 
     expect(suffix).toEqual('S');
   });
+
+  it('returns null for other instance', () => {
+    const suffix = getDocketNumberSuffix({
+      docketNumber: '101-18',
+      caseType: 'Something New',
+      procedureType: 'regular',
+    });
+
+    expect(suffix).toEqual(null);
+  });
 });
