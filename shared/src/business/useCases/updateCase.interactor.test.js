@@ -51,7 +51,7 @@ describe('updateCase', () => {
       error = err;
     }
     expect(error).not.toBeNull;
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain('The Case entity was invalid ValidationError: child \"documents\" fails because [\"documents\" must contain at least 1 items]');
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
@@ -75,7 +75,7 @@ describe('updateCase', () => {
       error = err;
     }
     expect(error).not.toBeNull();
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain('The Case entity was invalid ValidationError: child \"documents\" fails because [\"documents\" must contain at least 1 items]');
   });
 
   it('should update a case', async () => {
