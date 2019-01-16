@@ -23,6 +23,10 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
 
+  result.docketNumberWithSuffix = `${
+    result.docketNumber
+  }${result.docketNumberSuffix || ''}`;
+
   result.selected = !!selectedWorkItems.find(
     workItem => workItem.workItemId == result.workItemId,
   );

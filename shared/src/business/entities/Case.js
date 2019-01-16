@@ -3,6 +3,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
+const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -84,6 +85,9 @@ function Case(rawCase) {
       createdAt: rawCase.createdAt || new Date().toISOString(),
       status: rawCase.status || 'new',
     },
+    {
+      docketNumberSuffix: getDocketNumberSuffix(rawCase),
+    },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }
       : null,
@@ -107,6 +111,7 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
+    caseType: joi.string().optional(),
     createdAt: joi
       .date()
       .iso()
@@ -115,7 +120,14 @@ joiValidationDecorator(
       .string()
       .regex(docketNumberMatcher)
       .required(),
-    respondent: joi.object().optional(),
+    docketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
+    respondent: joi
+      .object()
+      .allow(null)
+      .optional(),
     irsNoticeDate: joi
       .date()
       .iso()
