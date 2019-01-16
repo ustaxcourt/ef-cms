@@ -31,7 +31,7 @@ export default async ({ applicationContext, get, store }) => {
         state.form.day,
       )}`,
     },
-    ['year', 'month', 'day'],
+    ['year', 'month', 'day', 'trialCities', 'signature'],
   );
 
   await useCases.createCase({
