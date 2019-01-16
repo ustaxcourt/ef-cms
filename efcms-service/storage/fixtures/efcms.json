@@ -52,7 +52,7 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
-    "docketNumberWithSuffix": "102-18SL",
+    "docketNumberSuffix": "SL",
     "procedureType": "small",
     "caseType": "CDP (Lien/Levy)",
     "status": "new"
@@ -87,7 +87,7 @@
     ],
     "pk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
     "docketNumber": "101-18",
-    "docketNumberWithSuffix": "101-18W",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:06:02.968Z"
   },
   {
@@ -159,7 +159,7 @@
             "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
             "assigneeId": "docketclerk",
             "docketNumber": "101-18",
-            "docketNumberWithSuffix": "101-18W",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:05:54.164Z"
           }
@@ -196,7 +196,7 @@
             "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
             "assigneeId": null,
             "docketNumber": "101-18",
-            "docketNumberWithSuffix": "101-18W",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:06:02.968Z"
           }
@@ -247,7 +247,7 @@
       }
     ],
     "docketNumber": "101-18",
-    "docketNumberWithSuffix": "101-18W",
+    "docketNumberSuffix": "W",
     "status": "general"
   },
   {
@@ -276,7 +276,7 @@
     ],
     "pk": "af60fe99-37dc-435c-9bdf-24be67769344",
     "docketNumber": "101-18",
-    "docketNumberWithSuffix": "101-18W",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:05:54.164Z"
   },
   {
@@ -350,7 +350,7 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "103-18",
-    "docketNumberWithSuffix": "103-18X",
+    "docketNumberSuffix": "X",
     "status": "new"
   },
   {

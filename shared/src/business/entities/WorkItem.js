@@ -47,7 +47,7 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     docketNumber: joi.string().required(),
-    docketNumberWithSuffix: joi.string().required(),
+    docketNumberSuffix: joi.string().required(),
     caseId: joi
       .string()
       .uuid(uuidVersions)
