@@ -11,6 +11,6 @@ exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
     case 'cdp (lien/levy)':
       return procedureType.toLowerCase() === 'small' ? 'SL' : 'L';
     default:
-      return procedureType.toLowerCase() === 'small' ? 'S' : '';
+      return procedureType.toLowerCase() === 'small' ? 'S' : null;
   }
 };
