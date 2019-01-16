@@ -118,7 +118,7 @@ export default connect(
                   id={`label-${item.workItemId}`}
                 />
               </td>
-              <td>{item.docketNumber}</td>
+              <td>{item.docketNumberWithSuffix}</td>
               <td>{item.currentMessage.createdAtFormatted}</td>
               <td>
                 <a
