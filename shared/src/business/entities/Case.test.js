@@ -1,14 +1,12 @@
 const assert = require('assert');
 
 const Case = require('./Case');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const A_VALID_CASE = require('../../test/mockCase').MOCK_CASE;
+
 const DATE = '2018-12-17T15:33:23.492Z';
 const sinon = require('sinon');
 
-const A_VALID_CASE = {
-  docketNumber: '101-18',
-  documents: MOCK_DOCUMENTS,
-};
+// const A_VALID_CASE = MOCK_CASE;
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -18,33 +16,19 @@ describe('Case entity', () => {
     });
 
     it('Creates a valid case from an already existing case json', () => {
-      const previouslyCreatedCase = {
-        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
-        createdAt: '2018-11-21T20:58:28.192Z',
-        status: 'new',
-        docketNumber: '101-18',
-        documents: A_VALID_CASE.documents,
-      };
-      const myCase = new Case(previouslyCreatedCase);
+      const myCase = new Case(A_VALID_CASE);
       assert.ok(myCase.isValid());
     });
 
     it('adds a paygov date to an already existing case json', () => {
-      const previouslyCreatedCase = {
-        caseId: '241edd00-1d94-40cd-9374-8d1bc7ae6d7b',
-        createdAt: '2018-11-21T20:58:28.192Z',
-        status: 'new',
-        documents: A_VALID_CASE.documents,
-        payGovId: '1234',
-        docketNumber: '101-18',
-      };
-      const myCase = new Case(previouslyCreatedCase);
+      const myCase = new Case({ payGovId: '1234', ...A_VALID_CASE });
       assert.ok(myCase.isValid());
       assert.ok(myCase.payGovDate);
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with a document', () => {
       const myCase = new Case({
+        petitioners: [{ name: 'Test Taxpayer' }],
         documents: [
           {
             documentId: '123',
@@ -55,15 +39,22 @@ describe('Case entity', () => {
       assert.ok(!myCase.isValid());
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with no documents', () => {
       const myCase = new Case({
         documents: [],
       });
       assert.ok(!myCase.isValid());
     });
 
-    it('Creates an invalid case', () => {
+    it('Creates an invalid case with empty object', () => {
       const myCase = new Case({});
+      assert.ok(!myCase.isValid());
+    });
+
+    it('Creates an invalid case with no petitioners', () => {
+      const myCase = new Case({
+        petitioners: [],
+      });
       assert.ok(!myCase.isValid());
     });
   });

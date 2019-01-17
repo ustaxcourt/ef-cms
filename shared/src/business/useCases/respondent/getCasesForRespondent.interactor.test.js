@@ -1,31 +1,11 @@
 const { getCasesForRespondent } = require('./getCasesForRespondent.interactor');
 const { omit } = require('lodash');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('Send petition to IRS', () => {
   let applicationContext;
 
-  let documents = [
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-    {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentType: 'stin',
-    },
-  ];
-
-  let caseRecord = {
-    userId: 'userId',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    docketNumber: '45678-18',
-    documents,
-    createdAt: '',
-  };
+  let caseRecord = MOCK_CASE;
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {

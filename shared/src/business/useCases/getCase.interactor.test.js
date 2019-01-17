@@ -1,9 +1,10 @@
 const assert = require('assert');
 const { getCase } = require('./getCase.interactor');
 const sinon = require('sinon');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const { MOCK_CASE } = require('../../test/mockCase');
 
-const documents = MOCK_DOCUMENTS;
+const documents = MOCK_CASE.documents;
+const mockCase = MOCK_CASE;
 
 describe('Get case', () => {
   let applicationContext;
@@ -14,12 +15,7 @@ describe('Get case', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () =>
-            Promise.resolve({
-              docketNumber: '101-18',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              documents,
-            }),
+          getCaseByCaseId: () => Promise.resolve(mockCase),
         };
       },
       environment: { stage: 'local' },
@@ -45,6 +41,7 @@ describe('Get case', () => {
       await getCase({
         userId: 'petitionsclerk',
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (error) {
@@ -56,11 +53,7 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
-    const getCaseByDocketNumberStub = sinon.stub().resolves({
-      docketNumber: '00101-00',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documents,
-    });
+    const getCaseByDocketNumberStub = sinon.stub().resolves(mockCase);
     applicationContext = {
       getPersistenceGateway: () => ({
         getCaseByDocketNumber: getCaseByDocketNumberStub,
@@ -86,6 +79,7 @@ describe('Get case', () => {
           Promise.resolve({
             docketNumber: '00101-00',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            petitioners: [{ name: 'Test Taxpayer' }],
             documents,
           }),
       }),
@@ -110,6 +104,7 @@ describe('Get case', () => {
             {
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
               documents,
             },
           ]),
@@ -135,6 +130,7 @@ describe('Get case', () => {
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
             }),
         };
       },
@@ -163,6 +159,7 @@ describe('Get case', () => {
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
             }),
         };
       },
