@@ -16,6 +16,7 @@ import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
+import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -91,6 +92,7 @@ describe('Case journey', async () => {
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsDashboard(test);
+  petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkRecordsPayGovId(test);
   petitionsClerkSubmitsCaseToIrs(test);

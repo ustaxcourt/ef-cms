@@ -1,3 +1,5 @@
+const { getSectionForRole } = require('./WorkQueue');
+
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -56,6 +58,7 @@ function User(user) {
       zip: '37208',
       phone: '111-111-1111',
     });
+    this.section = getSectionForRole(role);
   } else {
     throw new Error('invalid user');
   }

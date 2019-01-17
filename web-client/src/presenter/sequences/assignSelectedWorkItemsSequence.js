@@ -6,7 +6,7 @@ import setWorkItems from '../actions/setWorkItemsAction';
 
 export default [
   assignSelectedWorkItemsAction,
-  getWorkItemsForSection('docket'),
+  getWorkItemsForSection,
   setSectionWorkQueue,
   getWorkItemsByUser,
   setWorkItems,
