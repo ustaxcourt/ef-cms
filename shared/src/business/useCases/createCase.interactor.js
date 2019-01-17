@@ -1,10 +1,14 @@
 const Case = require('../entities/Case');
+const WorkItem = require('../entities/WorkItem');
+const Document = require('../entities/Document');
+const Message = require('../entities/Message');
+
 const {
   isAuthorized,
   PETITION,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
-
+const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 /**
  * createCase
  *
@@ -27,32 +31,58 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     },
   );
 
-  documents.forEach(document => {
-    document.userId = user.userId;
-    document.filedBy = `Petitioner ${user.name}`;
+  const caseToAdd = new Case({
+    userId: user.userId,
+    ...petitionEntity.toRawObject(),
+    petitioners: [
+      {
+        ...user.toRawObject(),
+      },
+    ],
+    docketNumber,
+    caseTitle: `${
+      user.name
+    }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
   });
 
-  const createdCase = await applicationContext
-    .getPersistenceGateway()
-    .createCase({
-      caseRecord: new Case({
-        userId: user.userId,
-        ...petitionEntity.toRawObject(),
-        petitioners: [
-          {
-            ...user.toRawObject(),
-          },
-        ],
-        docketNumber,
-        documents,
-        caseTitle: `${
-          user.name
-        }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
-      })
-        .validate()
-        .toRawObject(),
-      applicationContext,
+  documents.forEach(document => {
+    const documentEntity = new Document({
+      ...document,
+      userId: user.userId,
+      filedBy: `Petitioner ${user.name}`,
     });
 
-  return new Case(createdCase).validate().toRawObject();
+    const workItemEntity = new WorkItem({
+      sentBy: user.userId,
+      caseId: caseToAdd.caseId,
+      document: {
+        ...document,
+        createdAt: documentEntity.createdAt,
+      },
+      caseStatus: caseToAdd.status,
+      assigneeId: null,
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      section: PETITIONS_SECTION,
+      assigneeName: null,
+    });
+    workItemEntity.addMessage(
+      new Message({
+        message: `a ${document.documentType} filed by ${
+          user.role
+        } is ready for review`,
+        sentBy: user.name,
+        createdAt: new Date().toISOString(),
+      }),
+    );
+    documentEntity.addWorkItem(workItemEntity);
+    caseToAdd.addDocument(documentEntity);
+  });
+
+  await applicationContext.getPersistenceGateway().saveCase({
+    caseToSave: caseToAdd.validate().toRawObject(),
+    applicationContext,
+  });
+
+  return new Case(caseToAdd).validate().toRawObject();
 };
