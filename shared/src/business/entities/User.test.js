@@ -3,18 +3,25 @@ const assert = require('assert');
 const User = require('./User');
 
 describe('User entity', () => {
-  it('Assigns the expected section to the user', () => {
+  it('Assigns the expected petitions section to the user', () => {
     const user = new User({
-      userId: 'taxpayer',
+      userId: 'petitionsclerk',
     });
     expect(user.section).toEqual('petitions');
   });
 
-  it('Assigns the expected section to the user', () => {
+  it('Assigns the expected docket section to the user', () => {
     const user = new User({
       userId: 'docketclerk',
     });
     expect(user.section).toEqual('docket');
+  });
+
+  it('Assigns the expected seniorattorney section to the user', () => {
+    const user = new User({
+      userId: 'seniorattorney',
+    });
+    expect(user.section).toEqual('seniorattorney');
   });
 
   it('Creates a valid taxpayer user', () => {
