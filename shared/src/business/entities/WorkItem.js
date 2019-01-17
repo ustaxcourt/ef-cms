@@ -25,6 +25,8 @@ function WorkItem(rawWorkItem) {
   this.messages = (this.messages || []).map(message => new Message(message));
 }
 
+WorkItem.name = 'WorkItem';
+
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
