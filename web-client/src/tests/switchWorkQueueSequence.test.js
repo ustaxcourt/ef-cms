@@ -9,10 +9,6 @@ presenter.providers.applicationContext = applicationContext;
 test = CerebralTest(presenter);
 
 describe('switchWorkQueueSequence', async () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   it('should set the workQueueToDisplay to match the props passed in', async () => {
     test.setState('workQueueToDisplay', null);
     await test.runSequence('switchWorkQueueSequence', {

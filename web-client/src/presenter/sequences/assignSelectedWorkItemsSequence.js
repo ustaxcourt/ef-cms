@@ -6,7 +6,7 @@ import setWorkItems from '../actions/setWorkItemsAction';
 
 export default [
   assignSelectedWorkItemsAction,
-  getWorkItemsForSection('docket'), // TODO: this needs to change based on the user role / section
+  getWorkItemsForSection,
   setSectionWorkQueue,
   getWorkItemsByUser,
   setWorkItems,
