@@ -102,11 +102,11 @@ describe('getAuthHeader', () => {
 
 describe('redirect', () => {
   it('should return a redirect status in the header', async () => {
-    const response = await redirect(async () => ({ url: 'testing.com' }));
+    const response = await redirect(async () => ({ url: 'example.com' }));
     expect(response).to.deep.equal({
       statusCode: 302,
       headers: {
-        Location: 'testing.com',
+        Location: 'example.com',
       },
     });
   });
