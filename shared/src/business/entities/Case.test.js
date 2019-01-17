@@ -225,8 +225,8 @@ describe('Case entity', () => {
       const procedureTypes = Case.getProcedureTypes();
       expect(procedureTypes).not.toBeNull();
       expect(procedureTypes.length).toEqual(2);
-      expect(procedureTypes[0]).toEqual('Small');
-      expect(procedureTypes[1]).toEqual('Regular');
+      expect(procedureTypes[0]).toEqual('Regular');
+      expect(procedureTypes[1]).toEqual('Small');
     });
   });
 
