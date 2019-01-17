@@ -15,10 +15,15 @@ export default [
     success: [
       setFormSubmitting,
       createCase,
+      {
+        success: [
+          getCreateCaseAlertSuccess,
+          setAlertSuccess,
+          navigateToDashboard,
+        ],
+        error: [setAlertError],
+      },
       unsetFormSubmitting,
-      getCreateCaseAlertSuccess,
-      setAlertSuccess,
-      navigateToDashboard,
     ],
     error: [setAlertError],
   },

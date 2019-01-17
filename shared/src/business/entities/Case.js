@@ -100,6 +100,8 @@ function Case(rawCase) {
   }
 }
 
+Case.name = 'Case';
+
 joiValidationDecorator(
   Case,
   joi.object().keys({
