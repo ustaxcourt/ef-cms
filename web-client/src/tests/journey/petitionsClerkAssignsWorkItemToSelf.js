@@ -3,7 +3,9 @@ export default test => {
     // find the work item that is part of an Petition upload
     const sectionWorkItems = test.getState('sectionWorkQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
-      item => item.document.documentType === 'Petition' && item.docketNumber === test.docketNumber,
+      item =>
+        item.document.documentType === 'Petition' &&
+        item.docketNumber === test.docketNumber,
     ).workItemId;
 
     // verify that there is an unassigned work item in the section queue; we will assign it
