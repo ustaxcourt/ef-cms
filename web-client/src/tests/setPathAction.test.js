@@ -8,10 +8,6 @@ import setPathAction from '../presenter/actions/setPathAction';
 presenter.providers.applicationContext = applicationContext;
 
 describe('setPathAction', async () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   it('does not changes the existing path if props.path is not set', async () => {
     const result = await runAction(setPathAction, {
       state: {

@@ -56,4 +56,7 @@ export default async ({ applicationContext, get, store }) => {
 
   store.set(state.workQueue, filteredWorkQueue);
   store.set(state.selectedWorkItems, []);
+
+  store.set(state.assigneeId, null);
+  store.set(state.assigneeName, null);
 };

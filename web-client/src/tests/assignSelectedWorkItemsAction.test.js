@@ -11,10 +11,6 @@ presenter.providers.applicationContext = {
 };
 
 describe('setPathAction', async () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   it('updates only the section queue items to have the new assignee informaion', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       state: {
