@@ -27,6 +27,8 @@ function Document(rawDocument) {
   );
 }
 
+Document.name = 'Document';
+
 Document.prototype.isPetitionDocument = function() {
   return petitionDocumentTypes.includes(this.documentType);
 };
