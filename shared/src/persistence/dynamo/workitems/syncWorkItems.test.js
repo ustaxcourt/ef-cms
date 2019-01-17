@@ -27,7 +27,7 @@ describe('syncWorkItems', function() {
     sync.reassignWorkItem.restore();
   });
 
-  it('should create a new work item record for the work item and the mapping record for the assignee when a new work item is found in a document', async () => {
+  it('creates a new work item record for the work item and the mapping record for the assignee when a new work item is added to a case', async () => {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
@@ -49,7 +49,7 @@ describe('syncWorkItems', function() {
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
   });
 
-  it('should create a new work item record for the work item and the mapping record for the assignee when a new work item is found in a document', async () => {
+  it('should create a new work item record for the work item and the mapping record for the assignee when a new work item is added to a document', async () => {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
@@ -81,7 +81,7 @@ describe('syncWorkItems', function() {
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
   });
 
-  it('should create a new work item record for the work item and the mapping record for the assignee when a new work item is found in a document', async () => {
+  it('reassigns the work item from one user to another', async () => {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
