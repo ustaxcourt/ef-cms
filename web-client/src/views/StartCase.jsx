@@ -88,18 +88,14 @@ export default connect(
               </div>
             </div>
           </div>
-          <p className="required-statement">All fields required.</p>
-          <h2>Tell us about your case.</h2>
-          <p>
-            You must file a petition to begin a Tax Court case. If you have
-            received a notice from the IRS, you should include that as part of
-            your petition.
-          </p>
+          <p className="required-statement">All fields required</p>
+          <h2>Tell Us About Your Case</h2>
+          <p>You must file a petition to begin a Tax Court case.</p>
           <div className="blue-container">
             <div className="usa-form-group">
-              <h3>Who is filing this petition?</h3>
+              <h3>Who is Filing This Case?</h3>
               <p>Myself</p>
-              <h3>Did you receive a notice from the IRS?</h3>
+              <h3>IRS Notice</h3>
               <label htmlFor="case-type">Type of Notice</label>
               <select
                 name="caseType"
@@ -211,14 +207,21 @@ export default connect(
                 }}
               />
             </div>
+            <div className="alert-dark">
+              <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
+              <span>
+                This should include your petition form and any IRS notice(s) you
+                received.
+              </span>
+            </div>
           </div>
-          <h2>How do you want this case to be handled?</h2>
+          <h2>How Do You Want This Case Handled?</h2>
           <p>
-            Tax laws allow you to file your dispute as a “small case,” which
-            means it’s handled a bit differently than regular cases. You must
-            choose to have your case processed as a small case, and the Tax
-            Court must agree with your choice. Generally, the Tax Court will
-            agree with your request if you qualify for a small case.
+            Tax laws allow you to file your case as a “small case,” which means
+            it’s handled a bit differently than a regular case. If you choose to
+            have your case processed as a small case, the Tax Court must approve
+            your choice. Generally, the Tax Court will agree with your request
+            if you qualify.
           </p>
           <div className="usa-accordion start-a-case">
             <button
@@ -265,7 +268,9 @@ export default connect(
                           });
                         }}
                       />
-                      <label htmlFor={procedureType}>{procedureType}</label>
+                      <label htmlFor={procedureType}>
+                        {procedureType} case
+                      </label>
                     </li>
                   ))}
                 </ul>
@@ -320,6 +325,11 @@ export default connect(
               </div>
             )}
           </div>
+          <h2>Review Your Information</h2>
+          <p>
+            You can’t edit your case once you submit it. Please make sure all
+            your information appears the way you want it to.
+          </p>
           <div className="blue-container">
             <div className="usa-form-group">
               <legend>Review and Sign</legend>
