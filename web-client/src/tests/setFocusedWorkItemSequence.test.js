@@ -27,7 +27,7 @@ describe('setFocusedWorkItemSequence', async () => {
     ]);
   });
 
-  it("should set the workItem's isFocused to false when called if the work item is already focused", async () => {
+  it('should set the workItems isFocused to false when called if the work item is already focused', async () => {
     test.setState('workQueue', [
       {
         workItemId: 'abc',

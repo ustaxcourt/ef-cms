@@ -18,7 +18,7 @@ const { capitalize } = require('lodash');
 exports.assignWorkItems = async ({ workItems, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user.userId, WORKITEM)) {
-    throw new UnauthorizedError(`Unauthorized to assign work item`);
+    throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
   const workItemEntities = await Promise.all(
