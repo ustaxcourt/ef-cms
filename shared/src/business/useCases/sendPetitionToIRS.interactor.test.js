@@ -3,20 +3,12 @@ const sinon = require('sinon');
 const { sendPetitionToIRS } = require('./sendPetitionToIRS.interactor');
 const { getCase } = require('./getCase.interactor');
 const { omit } = require('lodash');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('Send petition to IRS', () => {
   let applicationContext;
 
-  let documents = MOCK_DOCUMENTS;
-
-  let caseRecord = {
-    userId: 'userId',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    docketNumber: '45678-18',
-    documents,
-    createdAt: '',
-  };
+  let caseRecord = MOCK_CASE;
 
   applicationContext = {
     getPersistenceGateway: () => {
@@ -61,9 +53,6 @@ describe('Send petition to IRS', () => {
   });
 
   it('case not found if caseId does not exist', async () => {
-    caseRecord.documents = documents;
-    // const date = '2018-12-04T18:27:13.370Z';
-    // const stub = sinon.stub().resolves(date);
     applicationContext = {
       getPersistenceGateway: () => {
         return {
@@ -90,7 +79,6 @@ describe('Send petition to IRS', () => {
   });
 
   it('calls the irs gateway', async () => {
-    caseRecord.documents = documents;
     let savedCaseRecord = Object.assign(caseRecord);
     const date = '2018-12-04T18:27:13.370Z';
     const stub = sinon.stub().resolves(date);
@@ -119,7 +107,6 @@ describe('Send petition to IRS', () => {
   });
 
   it('handles error from the irs gateway', async () => {
-    caseRecord.documents = documents;
     let savedCaseRecord = Object.assign(caseRecord);
     const stub = sinon.stub().throws(new Error('test-error-string'));
     applicationContext = {
