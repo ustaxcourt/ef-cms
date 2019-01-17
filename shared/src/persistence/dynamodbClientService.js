@@ -109,7 +109,8 @@ exports.batchWrite = ({ applicationContext, tableName, items }) => {
         [tableName]: items.map(item => ({
           PutRequest: {
             Item: item,
-            ConditionExpression: `attribute_not_exists(#pk) and attribute_not_exists(#sk)`,
+            ConditionExpression:
+              'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
             ExpressionAttributeNames: {
               '#pk': item.pk,
               '#sk': item.sk,
