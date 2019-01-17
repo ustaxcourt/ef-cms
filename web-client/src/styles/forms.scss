@@ -6,6 +6,10 @@ label {
   line-height: 1.45em;
 }
 
+label.with-hint {
+  margin-bottom: 5px;
+}
+
 legend {
   margin-bottom: 12px;
   font-size: 17px;
@@ -21,7 +25,8 @@ input[type='number'],
 input[type='text'],
 textarea,
 select {
-  padding: 0;
+  padding-top: 0;
+  padding-bottom: 0;
   margin: 0 0 2rem;
 }
 
