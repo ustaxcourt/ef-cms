@@ -9,7 +9,7 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     expect(test.getState('sectionWorkQueue').length).toBeGreaterThan(0);
     expect(test.getState('users').length).toBeGreaterThan(0);
-    expect(test.getState('workQueueToDisplay')).toEqual('individual');
+    expect(test.getState('workQueueToDisplay')).toEqual('section');
     await test.runSequence('switchWorkQueueSequence', {
       workQueueToDisplay: 'section',
     });

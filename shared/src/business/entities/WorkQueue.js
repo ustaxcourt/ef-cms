@@ -11,5 +11,7 @@ exports.getSectionForRole = role => {
     return exports.DOCKET_SECTION;
   } else if (role === 'seniorattorney') {
     return exports.SENIOR_ATTORNEY_SECTION;
+  } else if (role === 'petitionsclerk') {
+    return exports.PETITIONS_SECTION;
   }
 };
