@@ -16,7 +16,7 @@ export default test => {
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual('new');
     expect(workItem.messages[0].message).toEqual(
-      'a Petition filed by taxpayer is ready for review',
+      'A Petition filed by Petitioner is ready for review.',
     );
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;

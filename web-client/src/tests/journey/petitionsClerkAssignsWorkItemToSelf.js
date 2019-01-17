@@ -72,7 +72,7 @@ export default test => {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'The work item was assigned.',
+      'A Petition filed by Petitioner is ready for review.',
     );
   });
 };

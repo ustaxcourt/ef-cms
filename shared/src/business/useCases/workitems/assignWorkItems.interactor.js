@@ -5,6 +5,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 const WorkItem = require('../../entities/WorkItem');
 const Message = require('../../entities/Message');
+const { capitalize } = require('lodash');
 
 /**
  * getWorkItem
@@ -37,7 +38,11 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
             })
             .addMessage(
               new Message({
-                message: 'The work item was assigned.',
+                message: `A ${
+                  fullWorkItem.document.documentType
+                } filed by ${capitalize(
+                  fullWorkItem.document.filedBy,
+                )} is ready for review.`,
                 sentBy: user.name,
                 userId: user.userId,
                 sentTo: workItem.assigneeName,
