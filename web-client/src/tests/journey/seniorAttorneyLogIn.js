@@ -1,10 +1,9 @@
 export default test => {
   return it('the seniorattorney logs in', async () => {
-    test.setState('user', {
-      name: 'Senior Attorney',
-      role: 'seniorattorney',
-      token: 'seniorattorney',
-      userId: 'seniorattorney',
+    await test.runSequence('updateFormValueSequence', {
+      key: 'name',
+      value: 'seniorattorney',
     });
+    await test.runSequence('submitLogInSequence');
   });
 };

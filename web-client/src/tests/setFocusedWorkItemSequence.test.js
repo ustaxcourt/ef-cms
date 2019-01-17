@@ -9,10 +9,6 @@ presenter.providers.applicationContext = applicationContext;
 test = CerebralTest(presenter);
 
 describe('setFocusedWorkItemSequence', async () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   it('should set the workItem to isFocused true when called', async () => {
     test.setState('workQueue', [
       {

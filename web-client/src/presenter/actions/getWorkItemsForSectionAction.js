@@ -1,14 +1,11 @@
-import { state } from 'cerebral';
-
-export default section => {
-  return async ({ applicationContext, get }) => {
-    const useCases = applicationContext.getUseCases();
-    const userId = get(state.user.userId);
-    let sectionWorkItems = await useCases.getWorkItemsBySection({
+export default async ({ applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+  let sectionWorkItems = await applicationContext
+    .getUseCases()
+    .getWorkItemsBySection({
       applicationContext,
-      section,
-      userId,
+      section: user.section,
+      userId: user.userId,
     });
-    return { sectionWorkItems };
-  };
+  return { sectionWorkItems };
 };
