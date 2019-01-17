@@ -140,7 +140,7 @@ iframe {
     border-radius: 30px;
     color: $color-white;
     font-size: 20px;
-    font-weight: $font-bold;
+    font-weight: $font-semibold;
     line-height: 30px;
     text-align: center;
   }
@@ -172,8 +172,8 @@ iframe {
 
 .alert-dark {
   padding: 10px;
-  border-left: 5px solid $color-primary-alt;
-  background: $color-primary-darker;
+  border-left: 5px solid $color-primary-alt-dark;
+  background: $color-primary-alt-darkest;
   color: $color-white;
 
   svg {

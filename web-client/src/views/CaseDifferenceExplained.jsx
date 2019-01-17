@@ -9,7 +9,7 @@ export default connect(
     return (
       <div className="subsection case-difference">
         <h3 id="small-case-qualifications">
-          Do I qualify for a small tax case procedure?
+          Do I Qualify for a Small Tax Case Procedure?
         </h3>
         <p>
           Small cases must adhere to the following dollar limits depending on
@@ -49,7 +49,7 @@ export default connect(
           </tbody>
         </table>
 
-        <h3>If you file as a small tax case, you’ll have:</h3>
+        <h3>If You File as a Small Tax Case, You’ll Have:</h3>
         <div role="list" className="small-case-features usa-grid-full">
           <div role="listitem" className="usa-width-one-fourth feature">
             <h4>More Location Options</h4>
@@ -70,7 +70,6 @@ export default connect(
           </div>
           <div role="listitem" className="usa-width-one-fourth feature warning">
             <h4>
-              {' '}
               <FontAwesomeIcon icon="exclamation-triangle" />
               No Appeals Process
             </h4>

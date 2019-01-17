@@ -55,13 +55,32 @@ export default connect(
           <div className="grey-container">
             <div className="usa-grid-full">
               <h2>Before You Get Started...</h2>
+              <p>
+                There are a few things you need to do before you can submit your
+                case.
+              </p>
               <div className="usa-width-one-third create-case-step">
                 <span className="step-count">1</span>
                 <h3>Fill out a petition form</h3>
                 <p>
-                  Use USTC Form 2 or a custom petition format that complies with
-                  the requirements of the Tax Court Rules of Practice and
-                  Procedure.
+                  Use{' '}
+                  <a
+                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    USTC Form 2
+                  </a>{' '}
+                  or a custom petition format that complies with the
+                  requirements of the{' '}
+                  <a
+                    href="https://www.ustaxcourt.gov/rules.htm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Tax Court Rules of Practice and Procedure
+                  </a>
+                  .
                 </p>
               </div>
               <div className="usa-width-one-third create-case-step">
@@ -78,8 +97,8 @@ export default connect(
                 <h3>Create your Petition as a single PDF</h3>
                 <p>
                   Scan your petition form and IRS notices into one Petition PDF
-                  or combine them digitally. Learn how to merge files into one
-                  PDF.
+                  or combine them digitally. Learn{' '}
+                  <a href="/">how to merge files into one PDF</a>.
                 </p>
               </div>
             </div>
