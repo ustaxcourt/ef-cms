@@ -17,7 +17,7 @@ const Message = require('../../entities/Message');
 exports.assignWorkItems = async ({ workItems, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user.userId, WORKITEM)) {
-    throw new UnauthorizedError(`Unauthorized to assign work item`);
+    throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
   const workItemEntities = await Promise.all(
@@ -37,7 +37,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
             })
             .addMessage(
               new Message({
-                message: `The work item was assigned.`,
+                message: 'The work item was assigned.',
                 sentBy: user.name,
                 userId: user.userId,
                 sentTo: workItem.assigneeName,

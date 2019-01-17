@@ -62,4 +62,7 @@ RUN cd /home/app/web-client && npm i
 
 COPY . /home/app
 
+RUN mkdir -p /home/app/web-client/cypress/screenshots
+RUN mkdir -p /home/app/web-client/cypress/videos
+
 CMD echo "please overwrite this command"
