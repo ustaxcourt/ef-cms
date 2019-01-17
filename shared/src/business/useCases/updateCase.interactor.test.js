@@ -8,6 +8,7 @@ const MOCK_CASE = {
   docketNumber: '56789-18',
   status: 'new',
   createdAt: new Date().toISOString(),
+  petitioners: [{ name: 'Test Taxpayer' }],
   documents: [
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -45,6 +46,7 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         userId: 'petitionsclerk',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {
@@ -71,6 +73,7 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'documents'),
         userId: 'petitionsclerk',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {
@@ -99,6 +102,7 @@ describe('updateCase', () => {
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
+      petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
 
@@ -129,6 +133,7 @@ describe('updateCase', () => {
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
+      petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
 
@@ -152,6 +157,7 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         userId: 'someuser',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {
