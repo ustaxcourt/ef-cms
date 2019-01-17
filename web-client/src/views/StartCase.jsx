@@ -52,54 +52,65 @@ export default connect(
           </h1>
           {showModal && <ModalDialog />}
           <ErrorNotification />
-          <div className="grey-container are-you-ready">
-            <h2>Are you ready?</h2>
-            <p>
-              You will need to upload a PDF of your petition. Your petition
-              should include the following:
-            </p>
-            <div>
-              <div className="icon-wrapper">
-                <FontAwesomeIcon icon="file-pdf" size="2x" />
+          <div className="grey-container">
+            <div className="usa-grid-full">
+              <h2>Before You Get Started...</h2>
+              <p>
+                There are a few things you need to do before you can submit your
+                case.
+              </p>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">1</span>
+                <h3>Fill out a petition form</h3>
+                <p>
+                  Use{' '}
+                  <a
+                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    USTC Form 2
+                  </a>{' '}
+                  or a custom petition format that complies with the
+                  requirements of the{' '}
+                  <a
+                    href="https://www.ustaxcourt.gov/rules.htm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Tax Court Rules of Practice and Procedure
+                  </a>
+                  .
+                </p>
               </div>
-              <div className="upload-description">
-                <h3>Petition</h3>
-                <ol>
-                  <li>
-                    <a
-                      href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      USTC Form 2
-                    </a>{' '}
-                    or a custom petition that complies with the requirements of
-                    the{' '}
-                    <a
-                      href="https://www.ustaxcourt.gov/rules.htm"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Tax Court Rules of Practice and Procedure
-                    </a>
-                  </li>
-                  <li>Any IRS notices you may have received</li>
-                </ol>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">2</span>
+                <h3>Gather any IRS notice(s) you’ve received</h3>
+                <p>
+                  If you’ve received an IRS notice, such as a Notice of
+                  Deficiency or Notice of Determination, you’ll need to include
+                  those in your Petition.
+                </p>
+              </div>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">3</span>
+                <h3>Create your Petition as a single PDF</h3>
+                <p>
+                  Scan your petition form and IRS notices into one Petition PDF
+                  or combine them digitally. Learn{' '}
+                  <a href="/">how to merge files into one PDF</a>.
+                </p>
               </div>
             </div>
           </div>
-          <p className="required-statement">All fields required.</p>
-          <h2>Tell us about your case.</h2>
-          <p>
-            You must file a petition to begin a Tax Court case. If you have
-            received a notice from the IRS, you should include that as part of
-            your petition.
-          </p>
+          <p className="required-statement">All fields required</p>
+          <h2>Tell Us About Your Case</h2>
+          <p>You must file a Petition to begin a Tax Court case.</p>
           <div className="blue-container">
             <div className="usa-form-group">
-              <h3>Who is filing this petition?</h3>
+              <h3>Who is Filing This Case?</h3>
               <p>Myself</p>
-              <h3>Did you receive a notice from the IRS?</h3>
+              <h3>IRS Notice</h3>
               <label htmlFor="case-type">Type of Notice</label>
               <select
                 name="caseType"
@@ -188,37 +199,53 @@ export default connect(
                 </div>
               </div>
             </fieldset>
-            <div className="usa-form-group">
-              <label
-                htmlFor="petition-file"
-                className={startCaseHelper.showPetitionFileValid && 'validated'}
-              >
-                Upload your Petition
-              </label>
-              <span className="usa-form-hint">
-                File must be in PDF format (.pdf).
-              </span>
-              <input
-                id="petition-file"
-                type="file"
-                accept=".pdf"
-                name="petitionFile"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
-              />
+            <div className="usa-grid-full">
+              <div className="usa-width-one-third">
+                <div className="usa-form-group">
+                  <label
+                    htmlFor="petition-file"
+                    className={
+                      'with-hint ' +
+                      (startCaseHelper.showPetitionFileValid ? 'validated' : '')
+                    }
+                  >
+                    Upload Your Petition
+                  </label>
+                  <span className="usa-form-hint">
+                    File must be in PDF format (.pdf)
+                  </span>
+                  <input
+                    id="petition-file"
+                    type="file"
+                    accept=".pdf"
+                    name="petitionFile"
+                    onChange={e => {
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="usa-width-two-thirds">
+                <div className="alert-dark">
+                  <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
+                  <span>
+                    This should include your petition form and any IRS notice(s)
+                    you received.
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-          <h2>How do you want this case to be handled?</h2>
+          <h2>How Do You Want This Case Handled?</h2>
           <p>
-            Tax laws allow you to file your dispute as a “small case,” which
-            means it’s handled a bit differently than regular cases. You must
-            choose to have your case processed as a small case, and the Tax
-            Court must agree with your choice. Generally, the Tax Court will
-            agree with your request if you qualify for a small case.
+            Tax laws allow you to file your case as a “small case,” which means
+            it’s handled a bit differently than a regular case. If you choose to
+            have your case processed as a small case, the Tax Court must approve
+            your choice. Generally, the Tax Court will agree with your request
+            if you qualify.
           </p>
           <div className="usa-accordion start-a-case">
             <button
@@ -265,7 +292,9 @@ export default connect(
                           });
                         }}
                       />
-                      <label htmlFor={procedureType}>{procedureType}</label>
+                      <label htmlFor={procedureType}>
+                        {procedureType} case
+                      </label>
                     </li>
                   ))}
                 </ul>
@@ -273,7 +302,7 @@ export default connect(
             </div>
             {startCaseHelper.showSelectTrial && (
               <div className="usa-form-group">
-                <label htmlFor="preferred-trial-city">
+                <label htmlFor="preferred-trial-city" className="with-hint">
                   Select a Trial Location
                 </label>
                 <span className="usa-form-hint">
@@ -320,6 +349,11 @@ export default connect(
               </div>
             )}
           </div>
+          <h2>Review Your Information</h2>
+          <p>
+            You can’t edit your case once you submit it. Please make sure all
+            your information appears the way you want it to.
+          </p>
           <div className="blue-container">
             <div className="usa-form-group">
               <legend>Review and Sign</legend>
