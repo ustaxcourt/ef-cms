@@ -34,6 +34,7 @@ describe('getCasesByDocumentId', () => {
             {
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               docketNumber: '101-18',
+              petitioners: [{ name: 'Test Taxpayer' }],
               documents: [
                 {
                   documentType: 'Answer',
@@ -57,6 +58,7 @@ describe('getCasesByDocumentId', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
+        petitioners: [{ name: 'Test Taxpayer' }],
         documents: [
           {
             documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
