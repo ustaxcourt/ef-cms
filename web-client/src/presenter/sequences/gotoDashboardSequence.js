@@ -29,7 +29,7 @@ const goToDashboard = [
       clearAlerts,
       getUsersInSection({ sectionType: 'petitions' }),
       setUsers,
-      getWorkItemsForSection('petitions'),
+      getWorkItemsForSection,
       setSectionWorkQueue,
       getWorkItemsByUser,
       setWorkItems,
@@ -38,7 +38,7 @@ const goToDashboard = [
     docketclerk: [
       getUsersInSection({ sectionType: 'docket' }),
       setUsers,
-      getWorkItemsForSection('docket'),
+      getWorkItemsForSection,
       setSectionWorkQueue,
       getWorkItemsByUser,
       setWorkItems,
