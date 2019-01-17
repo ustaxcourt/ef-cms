@@ -8,6 +8,7 @@ const MOCK_CASE = {
   userId: 'userId',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '56789-18',
+  petitioners: [{ name: 'Test Taxpayer' }],
   status: 'new',
   createdAt: new Date().toISOString(),
   documents: [],
