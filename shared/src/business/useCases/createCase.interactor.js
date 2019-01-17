@@ -40,9 +40,6 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
       },
     ],
     docketNumber,
-    caseTitle: `${
-      user.name
-    }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
   });
 
   documents.forEach(document => {

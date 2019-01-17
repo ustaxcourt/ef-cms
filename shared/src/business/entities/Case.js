@@ -84,6 +84,12 @@ function Case(rawCase) {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
       status: rawCase.status || 'new',
+      caseTitle:
+        rawCase.petitioners && rawCase.petitioners.length
+          ? `${
+              rawCase.petitioners[0].name
+            }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`
+          : '',
     },
     {
       docketNumberSuffix: getDocketNumberSuffix(rawCase),
@@ -113,6 +119,7 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
+    caseTitle: joi.string().required(),
     caseType: joi.string().optional(),
     createdAt: joi
       .date()
