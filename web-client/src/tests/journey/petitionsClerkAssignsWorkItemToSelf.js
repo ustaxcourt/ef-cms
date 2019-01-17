@@ -1,3 +1,7 @@
+import { runCompute } from 'cerebral/test';
+
+import { formattedWorkQueue } from '../../presenter/computeds/formattedWorkQueue';
+
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
     // find the work item that is part of an Petition upload
@@ -64,5 +68,11 @@ export default test => {
       assigneeId: 'petitionsclerk',
       section: 'petitions',
     });
+    const formattedWorkItem = runCompute(formattedWorkQueue, {
+      state: test.getState(),
+    }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
+    expect(formattedWorkItem.currentMessage.message).toEqual(
+      'The work item was assigned.',
+    );
   });
 };
