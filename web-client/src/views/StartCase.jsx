@@ -205,7 +205,8 @@ export default connect(
                   <label
                     htmlFor="petition-file"
                     className={
-                      startCaseHelper.showPetitionFileValid && 'validated'
+                      'with-hint ' +
+                      (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                     }
                   >
                     Upload Your Petition
@@ -301,7 +302,7 @@ export default connect(
             </div>
             {startCaseHelper.showSelectTrial && (
               <div className="usa-form-group">
-                <label htmlFor="preferred-trial-city">
+                <label htmlFor="preferred-trial-city" className="with-hint">
                   Select a Trial Location
                 </label>
                 <span className="usa-form-hint">
