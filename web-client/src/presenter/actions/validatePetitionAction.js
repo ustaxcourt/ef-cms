@@ -11,7 +11,7 @@ export default ({ applicationContext, path, get }) => {
         state.form.day,
       )}`,
     },
-    ['year', 'month', 'day'],
+    ['year', 'month', 'day', 'trialCities'],
   );
 
   form.irsNoticeDate = form.irsNoticeDate
