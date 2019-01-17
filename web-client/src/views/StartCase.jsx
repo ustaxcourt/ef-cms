@@ -52,45 +52,41 @@ export default connect(
           </h1>
           {showModal && <ModalDialog />}
           <ErrorNotification />
-          <div className="grey-container are-you-ready">
-            <h2>Are you ready?</h2>
-            <p>
-              You will need to upload a PDF of your petition. Your petition
-              should include the following:
-            </p>
-            <div>
-              <div className="icon-wrapper">
-                <FontAwesomeIcon icon="file-pdf" size="2x" />
+          <div className="grey-container">
+            <div className="usa-grid-full">
+              <h2>Before You Get Started...</h2>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">1</span>
+                <h3>Fill out a petition form</h3>
+                <p>
+                  Use USTC Form 2 or a custom petition format that complies with
+                  the requirements of the Tax Court Rules of Practice and
+                  Procedure.
+                </p>
               </div>
-              <div className="upload-description">
-                <h3>Petition</h3>
-                <ol>
-                  <li>
-                    <a
-                      href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      USTC Form 2
-                    </a>{' '}
-                    or a custom petition that complies with the requirements of
-                    the{' '}
-                    <a
-                      href="https://www.ustaxcourt.gov/rules.htm"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Tax Court Rules of Practice and Procedure
-                    </a>
-                  </li>
-                  <li>Any IRS notices you may have received</li>
-                </ol>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">2</span>
+                <h3>Gather any IRS notice(s) you’ve received</h3>
+                <p>
+                  If you’ve received an IRS notice, such as a Notice of
+                  Deficiency or Notice of Determination, you’ll need to include
+                  those in your Petition.
+                </p>
+              </div>
+              <div className="usa-width-one-third create-case-step">
+                <span className="step-count">3</span>
+                <h3>Create your Petition as a single PDF</h3>
+                <p>
+                  Scan your petition form and IRS notices into one Petition PDF
+                  or combine them digitally. Learn how to merge files into one
+                  PDF.
+                </p>
               </div>
             </div>
           </div>
           <p className="required-statement">All fields required</p>
           <h2>Tell Us About Your Case</h2>
-          <p>You must file a petition to begin a Tax Court case.</p>
+          <p>You must file a Petition to begin a Tax Court case.</p>
           <div className="blue-container">
             <div className="usa-form-group">
               <h3>Who is Filing This Case?</h3>
@@ -193,10 +189,10 @@ export default connect(
                       startCaseHelper.showPetitionFileValid && 'validated'
                     }
                   >
-                    Upload your Petition
+                    Upload Your Petition
                   </label>
                   <span className="usa-form-hint">
-                    File must be in PDF format (.pdf).
+                    File must be in PDF format (.pdf)
                   </span>
                   <input
                     id="petition-file"
