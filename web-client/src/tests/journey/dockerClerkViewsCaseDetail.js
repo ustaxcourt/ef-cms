@@ -13,22 +13,33 @@ export default test => {
       }),
     ).toMatchObject([
       {
-        assigneeId: null,
-        assigneeName: 'Unassigned',
+        assigneeId: 'petitionsclerk',
+        assigneeName: 'Test Petitionsclerk',
         caseStatus: 'new',
         currentMessage: {
-          message: 'a Petition filed by taxpayer is ready for review',
-          sentBy: 'Test Taxpayer',
-          sentTo: 'Unassigned',
+          message: 'The work item was assigned.',
+          sentBy: 'Test Petitionsclerk',
+          sentTo: 'Test Petitionsclerk',
+          userId: 'petitionsclerk',
         },
-        docketNumber: test.docketNumber,
         docketNumberSuffix: 'W',
-        docketNumberWithSuffix: `${test.docketNumber}W`,
         document: {
           documentType: 'Petition',
         },
-        historyMessages: [],
+        historyMessages: [
+          {
+            message: 'a Petition filed by taxpayer is ready for review',
+            sentBy: 'Test Taxpayer',
+            sentTo: 'Unassigned',
+          },
+        ],
         messages: [
+          {
+            message: 'The work item was assigned.',
+            sentBy: 'Test Petitionsclerk',
+            sentTo: 'Test Petitionsclerk',
+            userId: 'petitionsclerk',
+          },
           {
             message: 'a Petition filed by taxpayer is ready for review',
             sentBy: 'Test Taxpayer',
@@ -49,9 +60,7 @@ export default test => {
           sentTo: 'Unassigned',
           userId: 'respondent',
         },
-        docketNumber: test.docketNumber,
         docketNumberSuffix: 'W',
-        docketNumberWithSuffix: `${test.docketNumber}W`,
         document: {
           documentType: 'Answer',
         },
@@ -79,9 +88,7 @@ export default test => {
           sentTo: 'Unassigned',
           userId: 'respondent',
         },
-        docketNumber: test.docketNumber,
         docketNumberSuffix: 'W',
-        docketNumberWithSuffix: `${test.docketNumber}W`,
         document: {
           documentType: 'Stipulated Decision',
         },

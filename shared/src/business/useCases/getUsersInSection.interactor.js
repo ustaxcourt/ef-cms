@@ -21,17 +21,15 @@ exports.getUsersInSection = async ({ section, applicationContext }) => {
 
   let result;
 
-  switch(section.sectionType) {
-    case DOCKET_SECTION: 
+  switch (section.sectionType) {
+    case DOCKET_SECTION:
       result = [
         new User({ userId: 'docketclerk' }).toRawObject(),
         new User({ userId: 'docketclerk1' }).toRawObject(),
       ];
       break;
     case PETITIONS_SECTION:
-      result = [
-        new User({ userId: 'petitionsclerk' }).toRawObject(),
-      ]
+      result = [new User({ userId: 'petitionsclerk' }).toRawObject()];
       break;
     default:
       throw new Error('Invalid section provided');
