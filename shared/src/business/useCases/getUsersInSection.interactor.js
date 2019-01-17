@@ -29,7 +29,10 @@ exports.getUsersInSection = async ({ section, applicationContext }) => {
       ];
       break;
     case PETITIONS_SECTION:
-      result = [new User({ userId: 'petitionsclerk' }).toRawObject()];
+      result = [
+        new User({ userId: 'petitionsclerk' }).toRawObject(),
+        new User({ userId: 'petitionsclerk1' }).toRawObject(),
+      ];
       break;
     default:
       throw new Error('Invalid section provided');

@@ -10,101 +10,27 @@ export default test => {
     expect(
       runCompute(extractedPendingMessagesFromCaseDetail, {
         state: test.getState(),
-      }),
+      }).map(message => ({
+        message: message.currentMessage.message,
+        sentBy: message.currentMessage.sentBy,
+        assigneeId: message.assigneeId,
+      })),
     ).toMatchObject([
       {
-        assigneeId: 'petitionsclerk',
-        assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'new',
-        currentMessage: {
-          message: 'The work item was assigned.',
-          sentBy: 'Test Petitionsclerk',
-          sentTo: 'Test Petitionsclerk',
-          userId: 'petitionsclerk',
-        },
-        docketNumberSuffix: 'W',
-        document: {
-          documentType: 'Petition',
-        },
-        historyMessages: [
-          {
-            message: 'a Petition filed by taxpayer is ready for review',
-            sentBy: 'Test Taxpayer',
-            sentTo: 'Unassigned',
-          },
-        ],
-        messages: [
-          {
-            message: 'The work item was assigned.',
-            sentBy: 'Test Petitionsclerk',
-            sentTo: 'Test Petitionsclerk',
-            userId: 'petitionsclerk',
-          },
-          {
-            message: 'a Petition filed by taxpayer is ready for review',
-            sentBy: 'Test Taxpayer',
-            sentTo: 'Unassigned',
-          },
-        ],
-        section: 'petitions',
-        selected: false,
-        sentBy: 'taxpayer',
+        assigneeId: 'petitionsclerk1',
+        message: 'The work item was assigned.',
+        sentBy: 'Test Petitionsclerk',
       },
       {
         assigneeId: null,
-        assigneeName: 'Unassigned',
-        caseStatus: 'General Docket',
-        currentMessage: {
-          message: 'a Answer filed by respondent is ready for review',
-          sentBy: 'Test Respondent',
-          sentTo: 'Unassigned',
-          userId: 'respondent',
-        },
-        docketNumberSuffix: 'W',
-        document: {
-          documentType: 'Answer',
-        },
-        historyMessages: [],
-        messages: [
-          {
-            message: 'a Answer filed by respondent is ready for review',
-            sentBy: 'Test Respondent',
-            sentTo: 'Unassigned',
-            userId: 'respondent',
-          },
-        ],
-        section: 'docket',
-        selected: false,
-        sentBy: 'respondent',
+        message: 'a Answer filed by respondent is ready for review',
+        sentBy: 'Test Respondent',
       },
       {
         assigneeId: null,
-        assigneeName: 'Unassigned',
-        caseStatus: 'General Docket',
-        currentMessage: {
-          message:
-            'a Stipulated Decision filed by respondent is ready for review',
-          sentBy: 'Test Respondent',
-          sentTo: 'Unassigned',
-          userId: 'respondent',
-        },
-        docketNumberSuffix: 'W',
-        document: {
-          documentType: 'Stipulated Decision',
-        },
-        historyMessages: [],
-        messages: [
-          {
-            message:
-              'a Stipulated Decision filed by respondent is ready for review',
-            sentBy: 'Test Respondent',
-            sentTo: 'Unassigned',
-            userId: 'respondent',
-          },
-        ],
-        section: 'docket',
-        selected: false,
-        sentBy: 'respondent',
+        message:
+          'a Stipulated Decision filed by respondent is ready for review',
+        sentBy: 'Test Respondent',
       },
     ]);
   });
