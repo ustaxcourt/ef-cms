@@ -16,7 +16,7 @@ exports.getInteractorForGettingCases = ({ documentId, userId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
   switch (user.role) {
-    case 'taxpayer':
+    case 'petitioner':
       return getCasesByUser;
     case 'respondent':
       return getCasesForRespondent;

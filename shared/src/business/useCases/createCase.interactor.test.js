@@ -75,7 +75,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Petition',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -100,7 +100,8 @@ describe('createCase', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'a Petition filed by taxpayer is ready for review',
+                  message:
+                    'A Petition filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -117,7 +118,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Statement of Taxpayer Identification Number',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -143,7 +144,7 @@ describe('createCase', () => {
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   message:
-                    'a Statement of Taxpayer Identification Number filed by taxpayer is ready for review',
+                    'A Statement of Taxpayer Identification Number filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -160,7 +161,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Request for Place of Trial',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -186,7 +187,7 @@ describe('createCase', () => {
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   message:
-                    'a Request for Place of Trial filed by taxpayer is ready for review',
+                    'A Request for Place of Trial filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -209,7 +210,7 @@ describe('createCase', () => {
           email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
           phone: '111-111-1111',
-          role: 'taxpayer',
+          role: 'petitioner',
           state: 'FL',
           token: 'taxpayer',
           userId: 'taxpayer',
@@ -279,7 +280,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Petition',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -304,7 +305,8 @@ describe('createCase', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'a Petition filed by taxpayer is ready for review',
+                  message:
+                    'A Petition filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -321,7 +323,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Statement of Taxpayer Identification Number',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -347,7 +349,7 @@ describe('createCase', () => {
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   message:
-                    'a Statement of Taxpayer Identification Number filed by taxpayer is ready for review',
+                    'A Statement of Taxpayer Identification Number filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -364,7 +366,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Request for Place of Trial',
-          filedBy: 'Petitioner Test Taxpayer',
+          filedBy: 'Petitioner',
           reviewDate: '2018-11-21T20:49:28.192Z',
           reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
@@ -390,7 +392,7 @@ describe('createCase', () => {
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   message:
-                    'a Request for Place of Trial filed by taxpayer is ready for review',
+                    'A Request for Place of Trial filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -413,7 +415,7 @@ describe('createCase', () => {
           email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
           phone: '111-111-1111',
-          role: 'taxpayer',
+          role: 'petitioner',
           state: 'FL',
           token: 'taxpayer',
           userId: 'taxpayer',

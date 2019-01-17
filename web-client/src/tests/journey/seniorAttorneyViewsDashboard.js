@@ -17,10 +17,11 @@ export default test => {
     expect(workItem.messages).toMatchObject([
       {
         message:
-          'a Stipulated Decision filed by respondent is ready for review',
+          'A Stipulated Decision filed by Respondent is ready for review.',
       },
       {
-        message: 'The work item was assigned.',
+        message:
+          'A Stipulated Decision filed by Respondent is ready for review.',
       },
       {
         message: 'hello world',
