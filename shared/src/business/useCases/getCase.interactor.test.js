@@ -150,7 +150,9 @@ describe('Get case', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
@@ -176,6 +178,8 @@ describe('Get case', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 });
