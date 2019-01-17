@@ -1,9 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
-import { formattedWorkQueue } from '../../presenter/computeds/formattedWorkQueue';
-
 export default test => {
-  return it('Petitions clerk assigns work item to self', async () => {
+  return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
     const sectionWorkItems = test.getState('sectionWorkQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -13,33 +9,29 @@ export default test => {
     ).workItemId;
 
     // verify that there is an unassigned work item in the section queue; we will assign it
-    const unassignedWorkItem = test
+    const workItemToReassign = test
       .getState('sectionWorkQueue')
       .find(
         workItem =>
-          !workItem.assigneeId &&
           workItem.docketNumber === test.docketNumber &&
           workItem.workItemId === test.petitionWorkItemId,
       );
-    expect(unassignedWorkItem).toBeDefined();
+    expect(workItemToReassign).toBeDefined();
     expect(test.getState('selectedWorkItems').length).toEqual(0);
 
     // select that work item
     await test.runSequence('selectWorkItemSequence', {
-      workItem: unassignedWorkItem,
+      workItem: workItemToReassign,
     });
     const selectedWorkItems = test.getState('selectedWorkItems');
     expect(selectedWorkItems.length).toEqual(1);
     test.selectedWorkItem = selectedWorkItems[0];
-    expect(unassignedWorkItem).toMatchObject({
-      assigneeId: null,
-    });
 
     // select an assignee
     expect(test.getState('assigneeId')).toBeNull();
     await test.runSequence('selectAssigneeSequence', {
-      assigneeId: 'petitionsclerk',
-      assigneeName: 'Test Petitionsclerk',
+      assigneeId: 'petitionsclerk1',
+      assigneeName: 'Test Petitionsclerk1',
     });
     expect(test.getState('assigneeId')).toBeDefined();
 
@@ -55,24 +47,15 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(assignedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
+      assigneeId: 'petitionsclerk1',
       section: 'petitions',
     });
 
-    // the work item should appear in the individual work queue
+    // the work item should be removed from the individual work queue
     const workQueue = test.getState('workQueue');
     const movedWorkItem = workQueue.find(
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
-    expect(movedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
-      section: 'petitions',
-    });
-    const formattedWorkItem = runCompute(formattedWorkQueue, {
-      state: test.getState(),
-    }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
-    expect(formattedWorkItem.currentMessage.message).toEqual(
-      'The work item was assigned.',
-    );
+    expect(movedWorkItem).toBeUndefined();
   });
 };
