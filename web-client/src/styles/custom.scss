@@ -103,11 +103,18 @@ iframe {
     background: none;
     color: $color-primary;
     font-weight: inherit;
-    text-decoration: underline;
 
     .svg-inline--fa {
       margin-left: 0.5rem;
     }
+  }
+
+  .usa-accordion-button:hover {
+    color: $color-primary-darker;
+  }
+
+  .usa-accordion-button:focus {
+    outline: none;
   }
 
   .usa-accordion-content {
