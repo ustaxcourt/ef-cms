@@ -184,35 +184,43 @@ export default connect(
                 </div>
               </div>
             </fieldset>
-            <div className="usa-form-group">
-              <label
-                htmlFor="petition-file"
-                className={startCaseHelper.showPetitionFileValid && 'validated'}
-              >
-                Upload your Petition
-              </label>
-              <span className="usa-form-hint">
-                File must be in PDF format (.pdf).
-              </span>
-              <input
-                id="petition-file"
-                type="file"
-                accept=".pdf"
-                name="petitionFile"
-                onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                }}
-              />
-            </div>
-            <div className="alert-dark">
-              <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
-              <span>
-                This should include your petition form and any IRS notice(s) you
-                received.
-              </span>
+            <div className="usa-grid-full">
+              <div className="usa-width-one-third">
+                <div className="usa-form-group">
+                  <label
+                    htmlFor="petition-file"
+                    className={
+                      startCaseHelper.showPetitionFileValid && 'validated'
+                    }
+                  >
+                    Upload your Petition
+                  </label>
+                  <span className="usa-form-hint">
+                    File must be in PDF format (.pdf).
+                  </span>
+                  <input
+                    id="petition-file"
+                    type="file"
+                    accept=".pdf"
+                    name="petitionFile"
+                    onChange={e => {
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="usa-width-two-thirds">
+                <div className="alert-dark">
+                  <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
+                  <span>
+                    This should include your petition form and any IRS notice(s)
+                    you received.
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           <h2>How Do You Want This Case Handled?</h2>
