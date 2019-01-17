@@ -85,20 +85,6 @@ iframe {
   }
 }
 
-.are-you-ready {
-  .icon-wrapper {
-    display: inline-block;
-    padding: 6px 0 0 20px;
-    vertical-align: top;
-  }
-
-  .upload-description {
-    display: inline-block;
-    max-width: 70%;
-    margin: 0 0 10px 10px;
-  }
-}
-
 .alert-blank-message {
   height: 24px;
 }
@@ -129,6 +115,27 @@ iframe {
     box-shadow:
       0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.create-case-step {
+  position: relative;
+  height: 100%;
+  padding-left: 40px;
+
+  .step-count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    background: $color-primary-darker;
+    border-radius: 30px;
+    color: $color-white;
+    font-size: 20px;
+    font-weight: $font-bold;
+    line-height: 30px;
+    text-align: center;
   }
 }
 
