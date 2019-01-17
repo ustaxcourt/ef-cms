@@ -68,7 +68,8 @@ const CASE_TYPES = [
   },
 ];
 
-const PROCEDURE_TYPES = ['Small', 'Regular'];
+// This is the order that they appear in the UI
+const PROCEDURE_TYPES = ['Regular', 'Small'];
 
 /**
  * Case

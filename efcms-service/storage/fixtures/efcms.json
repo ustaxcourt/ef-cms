@@ -253,6 +253,35 @@
   {
     "caseStatus": "general",
     "document": {
+      "documentType": "Petition",
+      "createdAt": "2018-12-27T18:05:54.164Z",
+      "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
+    },
+    "section": "docket",
+    "workItemId": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "assigneeId": "docketclerk",
+    "sentBy": "respondent",
+    "createdAt": "2018-12-27T18:05:54.166Z",
+    "assigneeName": "Test Docketclerk",
+    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "messages": [
+      {
+        "createdAt": "2018-12-27T18:05:54.164Z",
+        "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
+        "message": "a Petition filed by taxpayer is ready for review",
+        "userId": "taxpayer",
+        "sentBy": "Test Taxpayer"
+      }
+    ],
+    "pk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "docketNumber": "102-18",
+    "docketNumberSuffix": "SL",
+    "updatedAt": "2018-12-27T18:05:54.164Z"
+  },
+  {
+    "caseStatus": "general",
+    "document": {
       "documentType": "Answer",
       "createdAt": "2018-12-27T18:05:54.164Z",
       "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
@@ -369,6 +398,10 @@
   {
     "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
     "pk": "docket|workItem"
+  },
+  {
+    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "pk": "petitions|workItem"
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",

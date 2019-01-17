@@ -16,9 +16,12 @@ import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
+import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
+import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -91,6 +94,10 @@ describe('Case journey', async () => {
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsDashboard(test);
+  petitionsClerkAssignsWorkItemToSelf(test);
+  petitionsClerkAssignsWorkItemToOther(test);
+  petitionsClerkLogIn(test, 'petitionsclerk1');
+  petitionsClerkViewsDashboardAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkRecordsPayGovId(test);
   petitionsClerkSubmitsCaseToIrs(test);
