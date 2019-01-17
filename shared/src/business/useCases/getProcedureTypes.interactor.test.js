@@ -16,8 +16,8 @@ describe('Get case procedure types', () => {
       userId: 'taxpayer',
     });
     expect(procedureTypes.length).toEqual(2);
-    expect(procedureTypes[0]).toEqual('Small');
-    expect(procedureTypes[1]).toEqual('Regular');
+    expect(procedureTypes[0]).toEqual('Regular');
+    expect(procedureTypes[1]).toEqual('Small');
     let error;
     try {
       validateProcedureTypes(procedureTypes);

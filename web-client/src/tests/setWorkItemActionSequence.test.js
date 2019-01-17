@@ -9,10 +9,6 @@ presenter.providers.applicationContext = applicationContext;
 test = CerebralTest(presenter);
 
 describe('setWorkItemActionSequence', async () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-  });
-
   it('should set the key of the workItemsAction if not already set', async () => {
     test.setState('workItemActions', {});
     await test.runSequence('setWorkItemActionSequence', {

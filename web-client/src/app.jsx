@@ -1,4 +1,5 @@
 import {
+  faArrowAltCircleLeft,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -26,6 +27,7 @@ import presenter from './presenter';
 const app = {
   initialize: (applicationContext, debugTools) => {
     library.add(
+      faArrowAltCircleLeft,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
