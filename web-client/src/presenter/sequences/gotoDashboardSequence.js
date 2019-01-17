@@ -17,7 +17,7 @@ import setWorkItems from '../actions/setWorkItemsAction';
 const goToDashboard = [
   getUserRole,
   {
-    taxpayer: [
+    petitioner: [
       getCasesByUser,
       {
         error: [setAlertError],
