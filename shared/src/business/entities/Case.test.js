@@ -55,6 +55,39 @@ describe('Case entity', () => {
       });
       assert.ok(!myCase.isValid());
     });
+
+    it('creates a case with year amounts', () => {
+      const myCase = new Case({
+        petitioners: [],
+        yearAmounts: [
+          { year: '2000', amount: '34.50' },
+          { year: '2001', amount: '34.50' },
+        ],
+      });
+      assert.ok(!myCase.isValid());
+    });
+
+    it('will not allow year amounts with duplicate years', () => {
+      let error;
+      try {
+        new Case({
+          petitioners: [],
+          yearAmounts: [
+            {
+              year: '2000',
+              amount: '34.50',
+            },
+            {
+              year: '2000',
+              amount: '34.50',
+            },
+          ],
+        });
+      } catch (e) {
+        error = e;
+      }
+      assert.ok(error !== null);
+    });
   });
 
   describe('validate', () => {

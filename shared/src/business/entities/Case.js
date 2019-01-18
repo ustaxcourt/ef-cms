@@ -3,7 +3,10 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
+const { uniq } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
+
+const YearAmount = require('./YearAmount');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -100,6 +103,10 @@ function Case(rawCase) {
       : null,
   );
 
+  this.yearAmounts = (this.yearAmounts || []).map(
+    yearAmount => new YearAmount(yearAmount),
+  );
+
   if (this.documents && Array.isArray(this.documents)) {
     this.documents = this.documents.map(document => new Document(document));
   } else {
@@ -163,12 +170,15 @@ joiValidationDecorator(
     workItems: joi.array().optional(),
     preferredTrialCity: joi.string().optional(),
     procedureType: joi.string().optional(),
+    yearAmounts: joi.array().optional(),
   }),
   function() {
     const Document = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
-      Document.validateCollection(this.documents)
+      Document.validateCollection(this.documents) &&
+      YearAmount.validateCollection(this.yearAmounts) &&
+      uniq(this.yearAmounts).length === this.yearAmounts.length
     );
   },
 );
