@@ -34,6 +34,20 @@ button.tab-link {
   font-weight: normal;
   text-decoration: none;
 }
+button.text-style {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-blue;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: none;
+  &:hover,
+  &:active {
+    background: inherit;
+    color: inherit;
+  }
+}
 
 #file-a-petition .usa-button-active:disabled {
   background-color: $color-primary-darkest;

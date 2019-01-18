@@ -40,14 +40,23 @@
 
 .modal-dialog {
   display: block;
-  width: 400px;
-  height: 191px;
-  padding: 3rem;
+  width: 500px;
+  min-height: 145px;
+  padding: 3rem 3rem 0;
   margin: auto;
-  margin-top: 200px;
   background: $color-white;
+  position: relative;
+  top: 25%;
+  border-top: 10px solid $color-gold;
 
-  button {
-    width: 150px;
+  .modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .usa-button,
+  .usa-button-secondary {
+    min-width: 150px;
   }
 }
