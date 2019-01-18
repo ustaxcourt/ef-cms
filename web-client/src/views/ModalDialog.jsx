@@ -1,17 +1,27 @@
-import { connect } from '@cerebral/react';
-import { state, sequences } from 'cerebral';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class ModalDialog extends React.Component {
   constructor(props) {
     super(props);
+    this.modal = {};
     this.keydownTriggered = this.keydownTriggered.bind(this);
+    this.runCancelSequence = this.runCancelSequence.bind(this);
+    this.runConfirmSequence = this.runConfirmSequence.bind(this);
   }
 
+  runCancelSequence(event) {
+    event.stopPropagation();
+    this.props.cancelSequence.call();
+  }
+  runConfirmSequence(event) {
+    event.stopPropagation();
+    this.props.confirmSequence.call();
+  }
   keydownTriggered(event) {
     if (event.keyCode === 27) {
-      this.props.clickCancelSequence();
+      return this.runCancelSequence(event);
     }
   }
   componentDidMount() {
@@ -26,59 +36,56 @@ class ModalDialog extends React.Component {
   }
 
   focusModal() {
-    const modalHeader = document.querySelector('.modal-dialog h3');
+    const modalHeader = document.querySelector('.modal-dialog .title');
     modalHeader.focus();
   }
 
   render() {
-    const {
-      modal,
-      showModal,
-      clickConfirmSequence,
-      clickCancelSequence,
-    } = this.props;
+    const { modal } = this;
 
     return (
-        <div className="modal-screen">
-          <div
-            className={`modal-dialog ${modal.classNames}`}
-            aria-live="assertive"
+      <div className="modal-screen" onClick={this.runCancelSequence}>
+        <div
+          className={`modal-dialog ${modal.classNames}`}
+          aria-live="assertive"
+          role="alertdialog"
+          onClick={event => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="modal-close-button text-style"
+            onClick={this.runCancelSequence}
           >
-            <h3 tabIndex="-1">{modal.title}</h3>
-            <p>{modal.message}</p>
-            <button
-              type="button"
-              onClick={() => clickConfirmSequence.call()}
-              className="usa-button"
-            >
-              {modal.confirmLabel}
-            </button>
-            <button
-              type="button"
-              onClick={() => clickCancelSequence.call()}
-              className="usa-button-secondary"
-            >
-              {modal.cancelLabel}
-            </button>
-          </div>
+            Close <FontAwesomeIcon icon="times-circle" />
+          </button>
+          <h3 tabIndex="-1" className="title">
+            {modal.title}
+          </h3>
+          <p>{modal.message}</p>
+          <button
+            type="button"
+            onClick={this.runConfirmSequence}
+            className="usa-button"
+          >
+            {modal.confirmLabel}
+          </button>
+          <button
+            type="button"
+            onClick={this.runCancelSequence}
+            className="usa-button-secondary"
+          >
+            {modal.cancelLabel}
+          </button>
         </div>
+      </div>
     );
   }
 }
 
 ModalDialog.propTypes = {
   modal: PropTypes.object,
-  showModal: PropTypes.bool,
-  clickCancelSequence: PropTypes.func,
-  clickConfirmSequence: PropTypes.func,
+  cancelSequence: PropTypes.func,
+  confirmSequence: PropTypes.func,
 };
 
-export default connect(
-  {
-    modal: state.modal,
-    showModal: state.showModal,
-    clickCancelSequence: sequences.startACaseToggleCancelSequence,
-    clickConfirmSequence: sequences.startACaseConfirmCancelSequence,
-  },
-  ModalDialog,
-);
+export default ModalDialog;
