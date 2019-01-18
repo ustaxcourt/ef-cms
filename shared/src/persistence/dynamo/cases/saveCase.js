@@ -9,6 +9,41 @@ const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
 
 const client = require('../../dynamodbClientService');
 
+exports.saveVersionedCase = async ({
+  existingVersion,
+  caseToSave,
+  applicationContext,
+}) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
+  // used for associating a case to the latest version
+  const currentVersion = existingVersion;
+  const nextVersionToSave = parseInt(currentVersion || '0') + 1;
+
+  // update the current history
+  await client.put({
+    applicationContext,
+    TableName: TABLE,
+    Item: {
+      pk: caseToSave.caseId,
+      sk: '0',
+      ...caseToSave,
+      currentVersion: `${nextVersionToSave}`,
+    },
+  });
+
+  // add a history entry
+  return await client.put({
+    applicationContext,
+    TableName: TABLE,
+    Item: {
+      pk: caseToSave.caseId,
+      sk: `${nextVersionToSave}`,
+      ...caseToSave,
+      currentVersion: `${nextVersionToSave}`,
+    },
+  });
+};
 /**
  * saveCase
  * @param caseToSave
@@ -90,32 +125,10 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
   }
 
-  // used for associating a case to the latest version
-  const currentVersion = (currentCaseState || {}).currentVersion;
-  const nextVersionToSave = parseInt(currentVersion || '0') + 1;
-
-  // update the current history
-  const results = await client.put({
+  const results = await exports.saveVersionedCase({
+    caseToSave,
+    existingVersion: (currentCaseState || {}).currentVersion,
     applicationContext,
-    TableName: TABLE,
-    Item: {
-      pk: caseToSave.caseId,
-      sk: '0',
-      ...caseToSave,
-      currentVersion: `${nextVersionToSave}`,
-    },
-  });
-
-  // add a history entry
-  await client.put({
-    applicationContext,
-    TableName: TABLE,
-    Item: {
-      pk: caseToSave.caseId,
-      sk: `${nextVersionToSave}`,
-      ...caseToSave,
-      currentVersion: `${nextVersionToSave}`,
-    },
   });
 
   return stripWorkItems(

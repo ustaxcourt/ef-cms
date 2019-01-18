@@ -4,7 +4,6 @@ const stripInternalKeys = items => {
   const strip = item => {
     delete item.sk;
     delete item.pk;
-    delete item.currentVersion;
   };
   if (!items) {
     return null;
