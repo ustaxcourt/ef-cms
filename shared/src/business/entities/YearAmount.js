@@ -5,7 +5,7 @@ const joi = require('joi-browser');
 
 function YearAmount(yearAmount) {
   Object.assign(this, yearAmount);
-};
+}
 
 joiValidationDecorator(
   YearAmount,
