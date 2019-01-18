@@ -20,7 +20,21 @@
     "http://localhost:1234/",
     "http://localhost:1234/log-in",
     "http://localhost:1234/log-in?token=taxpayer&path=/",
+
     "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case",
+    {
+      "notes": "expose all hidden elements on start-a-case",
+      "url": "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
+      "actions": [
+        "wait for button.case-difference to be visible",
+        "click element button.case-difference",
+        "wait for #case-difference-container to be visible",
+        "wait for label#proc-type-0 to be visible",
+        "click element label#proc-type-0",
+        "wait for #preferred-trial-city to be visible"
+      ]
+    },
+
     "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
 
     "http://localhost:1234/log-in?token=petitionsclerk&path=/",
