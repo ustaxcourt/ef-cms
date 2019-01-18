@@ -14,6 +14,7 @@ exports.getCasesByStatus = async ({ status, applicationContext }) => {
     applicationContext,
     key: status,
     type: 'case-status',
+    isVersioned: true,
   });
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
 };
