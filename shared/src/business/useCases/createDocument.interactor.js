@@ -3,6 +3,7 @@ const WorkItem = require('../entities/WorkItem');
 const Message = require('../entities/Message');
 const Document = require('../entities/Document');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
+const { capitalize } = require('lodash');
 
 exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const user = applicationContext.getCurrentUser();
@@ -10,7 +11,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const documentEntity = new Document({
     userId: user.userId,
     ...document,
-    filedBy: user.name,
+    filedBy: user.role,
   });
 
   const caseToUpdate = await applicationContext
@@ -26,7 +27,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
     sentBy: user.userId,
     caseId: caseId,
     document: {
-      ...document,
+      ...documentEntity.toRawObject(),
       createdAt: documentEntity.createdAt,
     },
     caseStatus: caseToUpdate.status,
@@ -38,9 +39,9 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   });
 
   const message = new Message({
-    message: `a ${document.documentType} filed by ${
-      user.role
-    } is ready for review`,
+    message: `A ${document.documentType} filed by ${capitalize(
+      user.role,
+    )} is ready for review.`,
     sentBy: user.name,
     userId: user.userId,
     createdAt: new Date().toISOString(),

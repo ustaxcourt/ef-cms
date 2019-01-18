@@ -3,6 +3,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
+ *
  * used for fetching all cases of a particular status, user role, etc
  *
  * @param {Object} event

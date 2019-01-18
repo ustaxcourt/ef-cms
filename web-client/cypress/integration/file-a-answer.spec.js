@@ -21,7 +21,7 @@ describe('Filing an Answer', function() {
       cy.upload_file('w3-dummy.pdf', '#file');
     });
 
-    it('can upload the answer with indication of success ', () => {
+    it('can upload the answer with indication of success', () => {
       cy.get('#file-a-document button[type="submit"]').click();
       cy.showsSuccessMessage(true);
     });

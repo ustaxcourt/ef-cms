@@ -8,6 +8,7 @@ module.exports = {
   ],
   plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
   rules: {
+    quotes: ['error', 'single'],
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'error',
     'arrow-parens': ['error', 'as-needed'],
