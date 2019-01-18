@@ -181,6 +181,17 @@ joiValidationDecorator(
       uniq(this.yearAmounts).length === this.yearAmounts.length
     );
   },
+  {
+    caseTitle: 'required',
+    docketNumber: 'required',
+    documents: 'required',
+    caseType: 'Case Type is a required field.',
+    irsNoticeDate: 'IRS Notice Date is a required field.',
+    procedureType: 'Procedure Type is a required field.',
+    preferredTrialCity: 'Preferred Trial City is a required field.',
+    yearAmounts: 'A valid year and amount need to be provided.',
+    payGovId: 'Fee Payment Id must be in a valid format',
+  },
 );
 
 Case.prototype.attachDocument = function({ documentType, documentId, userId }) {

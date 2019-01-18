@@ -20,6 +20,7 @@ exports.joiValidationDecorator = function(
   entityConstructor,
   schema,
   customValidate,
+  errorToMessageMap,
 ) {
   entityConstructor.prototype.isValid = function isValid() {
     return (
@@ -41,6 +42,15 @@ exports.joiValidationDecorator = function(
     }
     return this;
   };
+
+  entityConstructor.prototype.getFormattedValidationErrors = function getFormattedValidationErrors() {
+    const errors = this.getValidationErrors();
+    if (!errors) return null;
+    for (let key of Object.keys(errors)) {
+      errors[key] = errorToMessageMap[key];
+    }
+    return errors;
+  }
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
     const { error } = joi.validate(this, schema, {
