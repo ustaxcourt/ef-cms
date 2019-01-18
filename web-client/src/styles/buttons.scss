@@ -34,6 +34,7 @@ button.tab-link {
   font-weight: normal;
   text-decoration: none;
 }
+
 button.text-style {
   padding: 0;
   margin: 0;
@@ -42,6 +43,7 @@ button.text-style {
   cursor: pointer;
   font-weight: normal;
   text-decoration: none;
+
   &:hover,
   &:active {
     background: inherit;

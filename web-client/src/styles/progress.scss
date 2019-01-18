@@ -39,15 +39,15 @@
 }
 
 .modal-dialog {
+  position: relative;
+  top: 25%;
   display: block;
   width: 500px;
   min-height: 145px;
   padding: 3rem 3rem 0;
+  border-top: 10px solid $color-gold;
   margin: auto;
   background: $color-white;
-  position: relative;
-  top: 25%;
-  border-top: 10px solid $color-gold;
 
   .modal-close-button {
     position: absolute;
