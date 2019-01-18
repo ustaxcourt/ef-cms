@@ -31,6 +31,8 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     }),
   );
 
+  // TODO: call a single place where we save / update a case instead of this
+  // should call saveCase on persistence instead?
   await client.put({
     applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
