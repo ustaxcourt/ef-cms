@@ -54,52 +54,63 @@ export default connect(
           <ErrorNotification />
           <div className="grey-container">
             <div className="usa-grid-full">
-              <h2>Before You Get Started...</h2>
+              <h2 id="get-started">Before You Get Started...</h2>
               <p>
                 There are a few things you need to do before you can submit your
                 case.
               </p>
-              <div className="usa-width-one-third create-case-step">
-                <span className="step-count">1</span>
-                <h3>Fill out a petition form</h3>
-                <p>
-                  Use{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    USTC Form 2
-                  </a>{' '}
-                  or a custom petition format that complies with the
-                  requirements of the{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/rules.htm"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Tax Court Rules of Practice and Procedure
-                  </a>
-                  .
-                </p>
-              </div>
-              <div className="usa-width-one-third create-case-step">
-                <span className="step-count">2</span>
-                <h3>Gather any IRS notice(s) you’ve received</h3>
-                <p>
-                  If you’ve received an IRS notice, such as a Notice of
-                  Deficiency or Notice of Determination, you’ll need to include
-                  those in your Petition.
-                </p>
-              </div>
-              <div className="usa-width-one-third create-case-step">
-                <span className="step-count">3</span>
-                <h3>Create your Petition as a single PDF</h3>
-                <p>
-                  Scan your petition form and IRS notices into one Petition PDF
-                  or combine them digitally. Learn{' '}
-                  <a href="/">how to merge files into one PDF</a>.
-                </p>
+              <div role="list" aria-describedby="get-started">
+                <div
+                  className="usa-width-one-third create-case-step"
+                  role="listitem"
+                >
+                  <span className="step-count">1</span>
+                  <h3>Fill out a petition form</h3>
+                  <p>
+                    Use{' '}
+                    <a
+                      href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      USTC Form 2
+                    </a>{' '}
+                    or a custom petition format that complies with the
+                    requirements of the{' '}
+                    <a
+                      href="https://www.ustaxcourt.gov/rules.htm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Tax Court Rules of Practice and Procedure
+                    </a>
+                    .
+                  </p>
+                </div>
+                <div
+                  className="usa-width-one-third create-case-step"
+                  role="listitem"
+                >
+                  <span className="step-count">2</span>
+                  <h3>Gather any IRS notice(s) you’ve received</h3>
+                  <p>
+                    If you’ve received an IRS notice, such as a Notice of
+                    Deficiency or Notice of Determination, you’ll need to
+                    include those in your Petition.
+                  </p>
+                </div>
+                <div
+                  className="usa-width-one-third create-case-step"
+                  role="listitem"
+                >
+                  <span className="step-count">3</span>
+                  <h3>Create your Petition as a single PDF</h3>
+                  <p>
+                    Scan your petition form and IRS notices into one Petition
+                    PDF or combine them digitally. Learn{' '}
+                    <a href="/">how to merge files into one PDF</a>.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -218,6 +229,7 @@ export default connect(
                     id="petition-file"
                     type="file"
                     accept=".pdf"
+                    aria-describedby="petition-hint"
                     name="petitionFile"
                     onChange={e => {
                       updatePetitionValueSequence({
@@ -229,11 +241,11 @@ export default connect(
                 </div>
               </div>
               <div className="usa-width-two-thirds">
-                <div className="alert-dark">
+                <div className="alert-dark" id="petition-hint">
                   <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
                   <span>
-                    This should include your petition form and any IRS notice(s)
-                    you received.
+                    This should include your petition form and any IRS notice
+                    <span aria-hidden="true">(s)</span> you received.
                   </span>
                 </div>
               </div>
@@ -250,7 +262,7 @@ export default connect(
           <div className="usa-accordion start-a-case">
             <button
               type="button"
-              className="usa-accordion-button"
+              className="usa-accordion-button case-difference"
               aria-expanded={!!form.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
@@ -278,7 +290,7 @@ export default connect(
               <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
                 <legend>Select Case Procedure</legend>
                 <ul className="usa-unstyled-list">
-                  {procedureTypes.map(procedureType => (
+                  {procedureTypes.map((procedureType, idx) => (
                     <li key={procedureType}>
                       <input
                         id={procedureType}
@@ -292,7 +304,7 @@ export default connect(
                           });
                         }}
                       />
-                      <label htmlFor={procedureType}>
+                      <label id={`proc-type-${idx}`} htmlFor={procedureType}>
                         {procedureType} case
                       </label>
                     </li>
