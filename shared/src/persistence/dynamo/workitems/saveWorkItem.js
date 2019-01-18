@@ -3,6 +3,7 @@ const { getWorkItemById } = require('./getWorkItemById');
 const { reassignWorkItem } = require('./syncWorkItems');
 const { stripInternalKeys } = require('../../awsDynamoPersistence');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { saveVersionedCase } = require('../cases/saveCase');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   const existingWorkItem = await getWorkItemById({
@@ -31,16 +32,10 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     }),
   );
 
-  // TODO: call a single place where we save / update a case instead of this
-  // should call saveCase on persistence instead?
-  await client.put({
+  await saveVersionedCase({
+    existingVersion: (caseToUpdate || {}).currentVersion,
+    caseToSave: caseToUpdate,
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
-    Item: {
-      pk: caseToUpdate.caseId,
-      sk: caseToUpdate.caseId,
-      ...caseToUpdate,
-    },
   });
 
   const workItem = await client.put({
