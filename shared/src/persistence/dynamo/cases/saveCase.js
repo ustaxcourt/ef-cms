@@ -22,7 +22,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     TableName: TABLE,
     Key: {
       pk: caseToSave.caseId,
-      sk: caseToSave.caseId,
+      sk: '0',
     },
   });
 
@@ -90,13 +90,31 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     });
   }
 
+  // used for associating a case to the latest version
+  const currentVersion = (currentCaseState || {}).currentVersion;
+  const nextVersionToSave = parseInt(currentVersion || '0') + 1;
+
+  // update the current history
   const results = await client.put({
     applicationContext,
     TableName: TABLE,
     Item: {
       pk: caseToSave.caseId,
-      sk: caseToSave.caseId,
+      sk: '0',
       ...caseToSave,
+      currentVersion: `${nextVersionToSave}`,
+    },
+  });
+
+  // add a history entry
+  await client.put({
+    applicationContext,
+    TableName: TABLE,
+    Item: {
+      pk: caseToSave.caseId,
+      sk: `${nextVersionToSave}`,
+      ...caseToSave,
+      currentVersion: `${nextVersionToSave}`,
     },
   });
 

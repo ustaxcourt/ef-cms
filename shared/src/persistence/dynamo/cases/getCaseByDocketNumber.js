@@ -18,6 +18,7 @@ exports.getCaseByDocketNumber = async ({
     applicationContext,
     key: docketNumber,
     type: 'case',
+    isVersioned: true,
   });
 
   return stripWorkItems(
