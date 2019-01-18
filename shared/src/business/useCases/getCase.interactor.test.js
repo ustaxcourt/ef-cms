@@ -4,7 +4,6 @@ const sinon = require('sinon');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 const documents = MOCK_CASE.documents;
-const mockCase = MOCK_CASE;
 
 describe('Get case', () => {
   let applicationContext;
@@ -15,7 +14,7 @@ describe('Get case', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
       environment: { stage: 'local' },
@@ -53,7 +52,7 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
-    const getCaseByDocketNumberStub = sinon.stub().resolves(mockCase);
+    const getCaseByDocketNumberStub = sinon.stub().resolves(MOCK_CASE);
     applicationContext = {
       getPersistenceGateway: () => ({
         getCaseByDocketNumber: getCaseByDocketNumberStub,

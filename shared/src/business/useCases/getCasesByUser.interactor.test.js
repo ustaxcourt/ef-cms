@@ -5,14 +5,11 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('Send petition to IRS', () => {
   let applicationContext;
 
-  let caseRecord = MOCK_CASE;
-
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCasesByUser: () =>
-            Promise.resolve([omit(caseRecord, 'documents')]),
+          getCasesByUser: () => Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
       environment: { stage: 'local' },

@@ -1,27 +1,25 @@
 const assert = require('assert');
 
 const Case = require('./Case');
-const A_VALID_CASE = require('../../test/mockCase').MOCK_CASE;
+const { MOCK_CASE } = require('../../test/mockCase');
 
 const DATE = '2018-12-17T15:33:23.492Z';
 const sinon = require('sinon');
 
-// const A_VALID_CASE = MOCK_CASE;
-
 describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
-      const myCase = new Case(A_VALID_CASE);
+      const myCase = new Case(MOCK_CASE);
       assert.ok(myCase.isValid());
     });
 
     it('Creates a valid case from an already existing case json', () => {
-      const myCase = new Case(A_VALID_CASE);
+      const myCase = new Case(MOCK_CASE);
       assert.ok(myCase.isValid());
     });
 
     it('adds a paygov date to an already existing case json', () => {
-      const myCase = new Case({ payGovId: '1234', ...A_VALID_CASE });
+      const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
       assert.ok(myCase.isValid());
       assert.ok(myCase.payGovDate);
     });
@@ -63,7 +61,7 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       let error = null;
       try {
-        new Case(A_VALID_CASE).validate();
+        new Case(MOCK_CASE).validate();
       } catch (err) {
         error = err;
       }
@@ -106,7 +104,7 @@ describe('Case entity', () => {
 
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
     });
@@ -114,7 +112,7 @@ describe('Case entity', () => {
 
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
     });
@@ -135,7 +133,7 @@ describe('Case entity', () => {
 
     it('doesnt passes back an error passed in if valid', () => {
       let error = null;
-      const caseRecord = new Case(A_VALID_CASE);
+      const caseRecord = new Case(MOCK_CASE);
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
