@@ -8,13 +8,11 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('Send petition to IRS', () => {
   let applicationContext;
 
-  let caseRecord = MOCK_CASE;
-
   applicationContext = {
     getPersistenceGateway: () => {
       return {
-        getCaseByCaseId: () => Promise.resolve(caseRecord),
-        saveCase: () => Promise.resolve(caseRecord),
+        getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+        saveCase: () => Promise.resolve(MOCK_CASE),
       };
     },
     environment: { stage: 'local' },
@@ -79,13 +77,13 @@ describe('Send petition to IRS', () => {
   });
 
   it('calls the irs gateway', async () => {
-    let savedCaseRecord = Object.assign(caseRecord);
+    let savedCaseRecord = Object.assign(MOCK_CASE);
     const date = '2018-12-04T18:27:13.370Z';
     const stub = sinon.stub().resolves(date);
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(caseRecord),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           saveCase: () => Promise.resolve(savedCaseRecord),
         };
       },
@@ -107,12 +105,12 @@ describe('Send petition to IRS', () => {
   });
 
   it('handles error from the irs gateway', async () => {
-    let savedCaseRecord = Object.assign(caseRecord);
+    let savedCaseRecord = Object.assign(MOCK_CASE);
     const stub = sinon.stub().throws(new Error('test-error-string'));
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(caseRecord),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           saveCase: () => Promise.resolve(savedCaseRecord),
         };
       },
@@ -142,7 +140,7 @@ describe('Send petition to IRS', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(omit(caseRecord, 'documents')),
+          getCaseByCaseId: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
         };
       },
       environment: { stage: 'local' },
@@ -170,7 +168,7 @@ describe('Send petition to IRS', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(caseRecord),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
       environment: { stage: 'local' },
