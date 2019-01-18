@@ -32,7 +32,7 @@
       }
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "petitioners": [
@@ -229,7 +229,7 @@
     "procedureType": "Small",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "0",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "petitioners": [
       {
@@ -359,7 +359,7 @@
     "procedureType": "regular",
     "caseType": "Exempt Organization",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "petitioners": [
