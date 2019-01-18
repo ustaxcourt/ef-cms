@@ -20,7 +20,7 @@ function User(user) {
   Object.assign(this, user);
 
   const validRoles = [
-    'taxpayer',
+    'petitioner',
     'petitionsclerk',
     'intakeclerk',
     'respondent',
@@ -37,6 +37,9 @@ function User(user) {
     /petitionsclerk(\d{1,2})?$/.test(role)
   ) {
     role = 'petitionsclerk';
+  }
+  if (role.indexOf('taxpayer') > -1) {
+    role = 'petitioner';
   }
 
   if (validRoles.includes(role)) {

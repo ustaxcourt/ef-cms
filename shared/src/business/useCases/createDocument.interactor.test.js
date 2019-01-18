@@ -8,6 +8,7 @@ const MOCK_CASE = {
   userId: 'userId',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '56789-18',
+  petitioners: [{ name: 'Test Taxpayer' }],
   status: 'new',
   createdAt: new Date().toISOString(),
   documents: [],
@@ -67,7 +68,7 @@ describe('createDocument', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
-          filedBy: 'Test Respondent',
+          filedBy: 'respondent',
           userId: 'respondent',
           workItems: [
             {
@@ -86,7 +87,7 @@ describe('createDocument', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'a Answer filed by respondent is ready for review',
+                  message: 'A Answer filed by Respondent is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Respondent',
                   userId: 'respondent',
@@ -138,7 +139,7 @@ describe('createDocument', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
-          filedBy: 'Test Taxpayer',
+          filedBy: 'petitioner',
           userId: 'taxpayer',
           workItems: [
             {
@@ -157,7 +158,7 @@ describe('createDocument', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'a Answer filed by taxpayer is ready for review',
+                  message: 'A Answer filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                   userId: 'taxpayer',

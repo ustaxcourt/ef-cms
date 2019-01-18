@@ -2,6 +2,7 @@ const Case = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const Document = require('../entities/Document');
 const Message = require('../entities/Message');
+const { capitalize } = require('lodash');
 
 const {
   isAuthorized,
@@ -40,23 +41,20 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
       },
     ],
     docketNumber,
-    caseTitle: `${
-      user.name
-    }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`,
   });
 
   documents.forEach(document => {
     const documentEntity = new Document({
       ...document,
       userId: user.userId,
-      filedBy: `Petitioner ${user.name}`,
+      filedBy: 'Petitioner',
     });
 
     const workItemEntity = new WorkItem({
       sentBy: user.userId,
       caseId: caseToAdd.caseId,
       document: {
-        ...document,
+        ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
       caseStatus: caseToAdd.status,
@@ -68,9 +66,9 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     });
     workItemEntity.addMessage(
       new Message({
-        message: `a ${document.documentType} filed by ${
-          user.role
-        } is ready for review`,
+        message: `A ${document.documentType} filed by ${capitalize(
+          user.role,
+        )} is ready for review.`,
         sentBy: user.name,
         createdAt: new Date().toISOString(),
       }),

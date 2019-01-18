@@ -39,7 +39,7 @@ describe('createCase', () => {
     client.batchWrite.restore();
   });
 
-  it('should persist a docket number mapping record as an item', async () => {
+  it('persists the case record', async () => {
     expect(items).to.deep.include({
       pk: CASE_ID,
       sk: CASE_ID,
@@ -47,21 +47,21 @@ describe('createCase', () => {
     });
   });
 
-  it('should persist a new status mapping record as an item', async () => {
+  it('associates a docket number to a case id', async () => {
     expect(items).to.deep.include({
       pk: `${DOCKET_NUMBER}|case`,
       sk: CASE_ID,
     });
   });
 
-  it('should persist a user id to case mappipng record as an item', async () => {
+  it('associates a new status to a case', async () => {
     expect(items).to.deep.include({
-      pk: `new|case-status`,
+      pk: 'new|case-status',
       sk: CASE_ID,
     });
   });
 
-  it('should persist a case record as an item', async () => {
+  it('associates a user to a case', async () => {
     expect(items).to.deep.include({
       pk: `${USER_ID}|case`,
       sk: CASE_ID,

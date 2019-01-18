@@ -18,18 +18,18 @@ export default test => {
     ).toMatchObject([
       {
         assigneeId: 'petitionsclerk1',
-        message: 'The work item was assigned.',
+        message: 'A Petition filed by Petitioner is ready for review.',
         sentBy: 'Test Petitionsclerk',
       },
       {
         assigneeId: null,
-        message: 'a Answer filed by respondent is ready for review',
+        message: 'A Answer filed by Respondent is ready for review.',
         sentBy: 'Test Respondent',
       },
       {
         assigneeId: null,
         message:
-          'a Stipulated Decision filed by respondent is ready for review',
+          'A Stipulated Decision filed by Respondent is ready for review.',
         sentBy: 'Test Respondent',
       },
     ]);
