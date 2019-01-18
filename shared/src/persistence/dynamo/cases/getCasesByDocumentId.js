@@ -15,6 +15,7 @@ exports.getCasesByDocumentId = async ({ documentId, applicationContext }) => {
     applicationContext,
     key: documentId,
     type: 'case',
+    isVersioned: true,
   });
   return stripWorkItems(
     stripInternalKeys(cases),

@@ -8,6 +8,7 @@ exports.getCasesByUser = async ({ userId, applicationContext }) => {
     applicationContext,
     key: userId,
     type: 'case',
+    isVersioned: true,
   });
   return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
 };
