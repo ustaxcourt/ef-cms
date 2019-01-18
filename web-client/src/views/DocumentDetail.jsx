@@ -6,6 +6,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
+import PetitionEdit from './PetitionEdit';
 
 class DocumentDetail extends React.Component {
   render() {
@@ -32,7 +33,9 @@ class DocumentDetail extends React.Component {
         </div>
         <section className="usa-section usa-grid">
           <h1 className="captioned" tabIndex="-1">
-            Docket Number: {caseDetail.docketNumberWithSuffix}
+            <a href={'/case-detail/' + caseDetail.docketNumber}>
+              Docket Number: {caseDetail.docketNumberWithSuffix}
+            </a>
           </h1>
           <p>{caseDetail.caseTitle}</p>
           <p>
@@ -59,7 +62,8 @@ class DocumentDetail extends React.Component {
           </div>
           <h3>Pending Messages</h3>
           <div className="usa-grid-full">
-            <div className="usa-width-one-half">
+            <div className="usa-width-one-third">
+              <PetitionEdit />
               {(!document ||
                 !document.workItems ||
                 !document.workItems.length) && (
@@ -309,7 +313,7 @@ class DocumentDetail extends React.Component {
                   </div>
                 ))}
             </div>
-            <div className="usa-width-one-half">
+            <div className="usa-width-two-thirds">
               <iframe
                 title={`Document type: ${document.documentType}`}
                 src={`${baseUrl}/documents/${
