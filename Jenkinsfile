@@ -70,31 +70,27 @@ pipeline {
         }
       }
     }
-    stage('Tests') {
-      parallel {
-        stage('Pa11y') {
-          agent any
-          steps {
-            sh "./docker-pa11y.sh"
-          }
-        }
-        stage('Cerebral Tests') {
-          agent any
-          steps {
-            sh "./docker-cerebral.sh"
-          }
-        }
-        stage('Cypress') {
-          agent any
-          steps {
-            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
-          }
-          post {
-            always {
-              archiveArtifacts(artifacts: 'cypress/**/*.mp4', allowEmptyArchive: true)
-              archiveArtifacts(artifacts: 'cypress/**/*.png', allowEmptyArchive: true)
-            }
-          }
+    stage('Pa11y') {
+      agent any
+      steps {
+        sh "./docker-pa11y.sh"
+      }
+    }
+    stage('Cerebral Tests') {
+      agent any
+      steps {
+        sh "./docker-cerebral.sh"
+      }
+    }
+    stage('Cypress') {
+      agent any
+      steps {
+        sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
+      }
+      post {
+        always {
+          archiveArtifacts(artifacts: 'cypress/**/*.mp4', allowEmptyArchive: true)
+          archiveArtifacts(artifacts: 'cypress/**/*.png', allowEmptyArchive: true)
         }
       }
     }
