@@ -80,9 +80,6 @@ const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
 const {
-  uploadCasePdfs,
-} = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
-const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
 const {
@@ -209,7 +206,6 @@ module.exports = ({ userId } = {}) => {
         forwardWorkItem,
         sendPetitionToIRS,
         updateCase,
-        uploadCasePdfs,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,

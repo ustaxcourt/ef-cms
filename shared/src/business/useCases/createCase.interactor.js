@@ -18,14 +18,20 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
  * @param applicationContext
  * @returns {Promise<*|{caseId}>}
  */
-exports.createCase = async ({ petition, documents, applicationContext }) => {
+exports.createCase = async ({
+  petitionMetadata,
+  petitionFileId,
+  applicationContext,
+}) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user.userId, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
-  const Petition = applicationContext.getEntityConstructors().Petition;
-  const petitionEntity = new Petition(petition).validate();
 
+  const Petition = applicationContext.getEntityConstructors().Petition;
+  const petitionEntity = new Petition(petitionMetadata).validate();
+
+  // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,
@@ -43,44 +49,43 @@ exports.createCase = async ({ petition, documents, applicationContext }) => {
     docketNumber,
   });
 
-  documents.forEach(document => {
-    const documentEntity = new Document({
-      ...document,
-      userId: user.userId,
-      filedBy: 'Petitioner',
-    });
-
-    const workItemEntity = new WorkItem({
-      sentBy: user.userId,
-      caseId: caseToAdd.caseId,
-      document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
-      },
-      caseStatus: caseToAdd.status,
-      assigneeId: null,
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberSuffix: caseToAdd.docketNumberSuffix,
-      section: PETITIONS_SECTION,
-      assigneeName: null,
-    });
-    workItemEntity.addMessage(
-      new Message({
-        message: `A ${document.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-        sentBy: user.name,
-        createdAt: new Date().toISOString(),
-      }),
-    );
-    documentEntity.addWorkItem(workItemEntity);
-    caseToAdd.addDocument(documentEntity);
+  const documentEntity = new Document({
+    documentId: petitionFileId,
+    documentType: Case.documentTypes.petitionFile,
+    userId: user.userId,
+    filedBy: 'Petitioner',
   });
+
+  const workItemEntity = new WorkItem({
+    sentBy: user.userId,
+    caseId: caseToAdd.caseId,
+    document: {
+      ...documentEntity.toRawObject(),
+      createdAt: documentEntity.createdAt,
+    },
+    caseStatus: caseToAdd.status,
+    assigneeId: null,
+    docketNumber: caseToAdd.docketNumber,
+    docketNumberSuffix: caseToAdd.docketNumberSuffix,
+    section: PETITIONS_SECTION,
+    assigneeName: null,
+  });
+  workItemEntity.addMessage(
+    new Message({
+      message: `A ${Case.documentTypes.petitionFile} filed by ${capitalize(
+        user.role,
+      )} is ready for review.`,
+      sentBy: user.name,
+      createdAt: new Date().toISOString(),
+    }),
+  );
+  documentEntity.addWorkItem(workItemEntity);
+  caseToAdd.addDocument(documentEntity);
 
   await applicationContext.getPersistenceGateway().saveCase({
     caseToSave: caseToAdd.validate().toRawObject(),
     applicationContext,
   });
 
-  return new Case(caseToAdd).validate().toRawObject();
+  return new Case(caseToAdd).toRawObject();
 };
