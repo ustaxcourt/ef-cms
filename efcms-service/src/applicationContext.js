@@ -35,9 +35,6 @@ const {
   saveCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
 const {
-  createCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
-const {
   getCaseByCaseId,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
@@ -65,7 +62,7 @@ const {
   getCasesByStatus: getCasesByStatusUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
 const {
-  createCase: createCaseUC,
+  createCase,
 } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
 const {
   getCasesByUser: getCasesByUserUC,
@@ -179,7 +176,6 @@ module.exports = ({ userId } = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         saveCase,
-        createCase,
         getCaseByCaseId,
         getCaseByDocketNumber,
       };
@@ -198,7 +194,7 @@ module.exports = ({ userId } = {}) => {
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
     getUseCases: () => {
       return {
-        createCase: createCaseUC,
+        createCase,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,

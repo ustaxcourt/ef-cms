@@ -16,7 +16,12 @@ const stripInternalKeys = items => {
 };
 exports.stripInternalKeys = stripInternalKeys;
 
-const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
+const getRecordsViaMapping = async ({
+  applicationContext,
+  key,
+  type,
+  isVersioned = false,
+}) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const mapping = await client.query({
@@ -38,7 +43,7 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
     tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
-      sk: id,
+      sk: isVersioned ? '0' : id,
     })),
   });
 
@@ -47,7 +52,12 @@ const getRecordsViaMapping = async ({ applicationContext, key, type }) => {
 
 exports.getRecordsViaMapping = getRecordsViaMapping;
 
-const getRecordViaMapping = async ({ applicationContext, key, type }) => {
+const getRecordViaMapping = async ({
+  applicationContext,
+  key,
+  type,
+  isVersioned = false,
+}) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
   const [mapping] = await client.query({
@@ -71,7 +81,7 @@ const getRecordViaMapping = async ({ applicationContext, key, type }) => {
     TableName: TABLE,
     Key: {
       pk: sk,
-      sk: sk,
+      sk: isVersioned ? '0' : sk,
     },
   });
 
