@@ -1,5 +1,4 @@
 const { createCase } = require('./createCase.interactor');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const sinon = require('sinon');
 const uuid = require('uuid');
 const User = require('../entities/User');
@@ -7,7 +6,6 @@ const PetitionWithoutFiles = require('../entities/PetitionWithoutFiles');
 
 describe('createCase', () => {
   let applicationContext;
-  let documents = MOCK_DOCUMENTS;
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const MOCK_DOCKET_NUMBER = '101-18';
   const DATE = '2018-11-21T20:49:28.192Z';
@@ -51,13 +49,13 @@ describe('createCase', () => {
     };
 
     const createdCase = await createCase({
-      petition: {
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
-      documents: documents,
       applicationContext,
     });
 
@@ -73,11 +71,9 @@ describe('createCase', () => {
         {
           caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
           workItems: [
             {
@@ -90,10 +86,9 @@ describe('createCase', () => {
               docketNumberSuffix: 'S',
               document: {
                 createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
+                filedBy: 'Petitioner',
                 userId: 'taxpayer',
                 workItems: [],
               },
@@ -102,92 +97,6 @@ describe('createCase', () => {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   message:
                     'A Petition filed by Petitioner is ready for review.',
-                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'taxpayer',
-              updatedAt: '2018-11-21T20:49:28.192Z',
-              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-            },
-          ],
-        },
-        {
-          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Statement of Taxpayer Identification Number',
-          filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
-          userId: 'taxpayer',
-          workItems: [
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
-              createdAt: '2018-11-21T20:49:28.192Z',
-              docketNumber: '101-18',
-              docketNumberSuffix: 'S',
-              document: {
-                createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                documentType: 'Statement of Taxpayer Identification Number',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
-                userId: 'taxpayer',
-                workItems: [],
-              },
-              messages: [
-                {
-                  createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Statement of Taxpayer Identification Number filed by Petitioner is ready for review.',
-                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'taxpayer',
-              updatedAt: '2018-11-21T20:49:28.192Z',
-              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-            },
-          ],
-        },
-        {
-          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Request for Place of Trial',
-          filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
-          userId: 'taxpayer',
-          workItems: [
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
-              createdAt: '2018-11-21T20:49:28.192Z',
-              docketNumber: '101-18',
-              docketNumberSuffix: 'S',
-              document: {
-                createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                documentType: 'Request for Place of Trial',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
-                userId: 'taxpayer',
-                workItems: [],
-              },
-              messages: [
-                {
-                  createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Request for Place of Trial filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
                 },
@@ -211,6 +120,7 @@ describe('createCase', () => {
           name: 'Test Taxpayer',
           phone: '111-111-1111',
           role: 'petitioner',
+          section: undefined,
           state: 'FL',
           token: 'taxpayer',
           userId: 'taxpayer',
@@ -257,12 +167,13 @@ describe('createCase', () => {
     };
 
     const createdCase = await createCase({
-      petition: {
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
         preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: DATE,
       },
-      documents: documents,
       applicationContext,
     });
 
@@ -278,11 +189,9 @@ describe('createCase', () => {
         {
           caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
           userId: 'taxpayer',
           workItems: [
             {
@@ -295,10 +204,9 @@ describe('createCase', () => {
               docketNumberSuffix: 'S',
               document: {
                 createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
+                filedBy: 'Petitioner',
                 userId: 'taxpayer',
                 workItems: [],
               },
@@ -318,94 +226,8 @@ describe('createCase', () => {
             },
           ],
         },
-        {
-          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Statement of Taxpayer Identification Number',
-          filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
-          userId: 'taxpayer',
-          workItems: [
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
-              createdAt: '2018-11-21T20:49:28.192Z',
-              docketNumber: '101-18',
-              docketNumberSuffix: 'S',
-              document: {
-                createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                documentType: 'Statement of Taxpayer Identification Number',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
-                userId: 'taxpayer',
-                workItems: [],
-              },
-              messages: [
-                {
-                  createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Statement of Taxpayer Identification Number filed by Petitioner is ready for review.',
-                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'taxpayer',
-              updatedAt: '2018-11-21T20:49:28.192Z',
-              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-            },
-          ],
-        },
-        {
-          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Request for Place of Trial',
-          filedBy: 'Petitioner',
-          reviewDate: '2018-11-21T20:49:28.192Z',
-          reviewUser: 'petitionsclerk',
-          userId: 'taxpayer',
-          workItems: [
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
-              createdAt: '2018-11-21T20:49:28.192Z',
-              docketNumber: '101-18',
-              docketNumberSuffix: 'S',
-              document: {
-                createdAt: '2018-11-21T20:49:28.192Z',
-                documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                documentType: 'Request for Place of Trial',
-                reviewDate: '2018-11-21T20:49:28.192Z',
-                reviewUser: 'petitionsclerk',
-                userId: 'taxpayer',
-                workItems: [],
-              },
-              messages: [
-                {
-                  createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Request for Place of Trial filed by Petitioner is ready for review.',
-                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'taxpayer',
-              updatedAt: '2018-11-21T20:49:28.192Z',
-              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-            },
-          ],
-        },
       ],
-      irsNoticeDate: undefined,
+      irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
           addressLine1: '111 Orange St.',
@@ -416,6 +238,7 @@ describe('createCase', () => {
           name: 'Test Taxpayer',
           phone: '111-111-1111',
           role: 'petitioner',
+          section: undefined,
           state: 'FL',
           token: 'taxpayer',
           userId: 'taxpayer',
@@ -459,13 +282,13 @@ describe('createCase', () => {
     };
     try {
       await createCase({
-        petition: {
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
-        documents: documents,
         applicationContext,
       });
     } catch (error) {
@@ -503,22 +326,21 @@ describe('createCase', () => {
     let error;
     try {
       await createCase({
-        petition: {
+        petitionFileId: null,
+        petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
-        documents: [],
         applicationContext,
       });
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
-    );
+    expect(error.message).toContain('The Document entity was invalid');
   });
+
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
       getCurrentUser: () => {
@@ -528,7 +350,13 @@ describe('createCase', () => {
     let error;
     try {
       await createCase({
-        documents,
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseType: 'other',
+          procedureType: 'Small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
         applicationContext,
       });
     } catch (err) {
