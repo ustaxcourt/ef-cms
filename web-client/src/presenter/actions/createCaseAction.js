@@ -3,8 +3,7 @@ import { omit } from 'lodash';
 
 export default async ({ applicationContext, get, store, path }) => {
   try {
-    const user = get(state.user);
-    const caseInitiator = omit(get(state.petition), 'uploadsFinished');
+    const { petitionFile } = get(state.petition);
     const useCases = applicationContext.getUseCases();
 
     const fileHasUploaded = () => {
@@ -13,17 +12,6 @@ export default async ({ applicationContext, get, store, path }) => {
         get(state.petition.uploadsFinished) + 1,
       );
     };
-
-    const { petitionDocumentId } = await useCases.uploadCasePdfs({
-      applicationContext,
-      caseInitiator,
-      userId: user.userId,
-      fileHasUploaded,
-    });
-
-    const documents = [
-      { documentType: 'Petition', documentId: petitionDocumentId },
-    ];
 
     const form = omit(
       {
@@ -35,10 +23,11 @@ export default async ({ applicationContext, get, store, path }) => {
       ['year', 'month', 'day', 'trialCities', 'signature'],
     );
 
-    await useCases.createCase({
+    await useCases.filePetition({
       applicationContext,
-      petition: form,
-      documents,
+      petitionMetadata: form,
+      petitionFile,
+      fileHasUploaded,
     });
 
     return path.success();
