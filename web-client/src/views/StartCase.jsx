@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import ModalDialog from './ModalDialog';
+import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
 
 import ErrorNotification from './ErrorNotification';
@@ -50,7 +50,7 @@ export default connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <ModalDialog />}
+          {showModal && <StartCaseCancelModalDialog />}
           <ErrorNotification />
           <div className="grey-container">
             <div className="usa-grid-full">
