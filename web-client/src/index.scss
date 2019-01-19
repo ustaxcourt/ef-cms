@@ -1,12 +1,13 @@
-@import './styles/variables.scss';
+@import './styles/variables.scss'; // must be imported first
 @import '../node_modules/uswds/src/stylesheets/uswds.scss';
-@import './styles/overrides.scss';
-@import './styles/typography.scss';
 @import './styles/buttons.scss';
-@import './styles/custom.scss';
-@import './styles/tables.scss';
-@import './styles/forms.scss';
-@import './styles/progress.scss';
-@import './styles/tabs.scss';
 @import './styles/cards.scss';
+@import './styles/custom.scss';
+@import './styles/forms.scss';
 @import './styles/icons.scss';
+@import './styles/modals.scss';
+@import './styles/overrides.scss';
+@import './styles/progress.scss';
+@import './styles/tables.scss';
+@import './styles/tabs.scss';
+@import './styles/typography.scss';
