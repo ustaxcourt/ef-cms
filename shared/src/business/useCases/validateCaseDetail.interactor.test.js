@@ -1,4 +1,7 @@
 const { validateCaseDetail } = require('./validateCaseDetail.interactor');
+const Case = require('../entities/Case');
+const { omit } = require('lodash');
+const moment = require('moment');
 
 describe('validate case detail', () => {
   it('returns the expected errors object on an empty case', () => {
@@ -56,6 +59,18 @@ describe('validate case detail', () => {
       },
     });
     expect(errors).toEqual(null);
+  });
+
+  it('returns the expected errors when passed bad date objects', () => {
+    const errors = validateCaseDetail({
+      caseDetail: {
+        irsNoticeDate: 'aa',
+        payGovDate: '12',
+      },
+    });
+    expect(errors).toBeTruthy();
+    expect(errors.irsNoticeDate).toBeTruthy();
+    expect(errors.payGovDate).toBeTruthy();
   });
 
 });
