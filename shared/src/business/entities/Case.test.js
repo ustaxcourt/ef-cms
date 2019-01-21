@@ -262,4 +262,51 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('filterMetadata', () => {
+    it('removes any field that a petitioner or respondent should not have access to', () => {
+      const result = Case.filterMetadata({
+        cases: {
+          documents: [],
+          docketNumber: '101-18',
+          caseId: '123',
+          docketNumberSuffix: 'W',
+          caseTitle: 'John vs IRS',
+          userId: 1,
+          petitioners: [
+            {
+              name: 'John',
+            },
+          ],
+          respondent: {
+            name: 'Bob',
+          },
+          createdAt: '123',
+          status: 'new',
+          payGovId: '123',
+          payGovDate: '2011/01/10',
+          preferredTrialCity: 1,
+          irsSendDate: '2011/01/10',
+        },
+        applicationContext: {
+          isAuthorizedForCaseMetadata: () => false,
+        },
+      });
+      expect(result).toEqual({
+        caseId: '123',
+        caseTitle: 'John vs IRS',
+        createdAt: '123',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'W',
+        documents: [],
+        payGovDate: '2011/01/10',
+        payGovId: '123',
+        petitioners: [{ name: 'John' }],
+        preferredTrialCity: 1,
+        respondent: { name: 'Bob' },
+        status: 'new',
+        userId: 1,
+      });
+    });
+  });
 });
