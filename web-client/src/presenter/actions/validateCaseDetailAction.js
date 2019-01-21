@@ -3,7 +3,6 @@ import { omit } from 'lodash';
 
 export default ({ applicationContext, store, path, get }) => {
   const caseDetail = get(state.caseDetail);
-
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = get(
     state.form,
   );
@@ -42,7 +41,6 @@ export default ({ applicationContext, store, path, get }) => {
   } else {
     form.payGovDate = null;
   }
-
   const errors = applicationContext.getUseCases().validateCaseDetail({
     caseDetail: { ...caseDetail, ...form },
     applicationContext,
