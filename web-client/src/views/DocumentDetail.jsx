@@ -67,7 +67,7 @@ class DocumentDetail extends React.Component {
                 <button
                   role="tab"
                   className="tab-link"
-                  id="tab-my-queue"
+                  id="tab-document-info"
                   aria-selected={helper.showDocumentInfo}
                   onClick={() =>
                     updateCurrentTabSequence({
@@ -82,7 +82,7 @@ class DocumentDetail extends React.Component {
                 <button
                   role="tab"
                   className="tab-link"
-                  id="tab-work-queue"
+                  id="tab-pending-messages"
                   aria-selected={helper.showPendingMessages}
                   onClick={() =>
                     updateCurrentTabSequence({
@@ -114,7 +114,7 @@ class DocumentDetail extends React.Component {
                     document.workItems.map((workItem, idx) => (
                       <div
                         className="card"
-                        aria-labelledby="messages-label"
+                        aria-labelledby="tab-pending-messages"
                         key={idx}
                       >
                         <div className="content-wrapper">
