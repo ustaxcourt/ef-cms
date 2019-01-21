@@ -19,4 +19,20 @@ describe('Get internal users', () => {
     }
     expect(error).toBeUndefined();
   });
+
+  it('throws unauthorized error for unauthorized users', async () => {
+    let error;
+    try {
+      await getInternalUsers({
+        applicationContext: {
+          getCurrentUser: () => ({
+            userId: 'taxpayer',
+          }),
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
+  });
 });

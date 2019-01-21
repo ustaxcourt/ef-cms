@@ -37,6 +37,7 @@ describe('saveWorkItem', () => {
       environment: {
         stage: 'dev',
       },
+      filterCaseMetadata: ({ cases }) => cases,
       isAuthorizedForWorkItems: () => true,
     };
     const result = await saveWorkItem({
