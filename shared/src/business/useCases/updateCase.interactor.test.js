@@ -7,7 +7,10 @@ const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '56789-18',
   status: 'new',
+  caseType: 'Other',
+  procedureType: 'Regular',
   createdAt: new Date().toISOString(),
+  preferredTrialCity: 'Washington, D.C.',
   petitioners: [{ name: 'Test Taxpayer' }],
   documents: [
     {

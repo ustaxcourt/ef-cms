@@ -5,6 +5,7 @@
   },
   {
     "createdAt": "2018-12-27T18:22:57.418Z",
+    "preferredTrialCity": "Hartford, CT",
     "documents": [
       {
         "createdAt": "2018-12-27T18:22:57.418Z",
@@ -63,6 +64,7 @@
   },
   {
     "caseStatus": "general",
+    "preferredTrialCity": "Hartford, CT",
     "document": {
       "documentType": "Stipulated Decision",
       "createdAt": "2018-12-27T18:06:02.968Z",
@@ -170,6 +172,7 @@
       },
       {
         "createdAt": "2018-12-27T18:06:02.971Z",
+        "preferredTrialCity": "Hartford, CT",
         "documentType": "Stipulated Decision",
         "filedBy": "Test Respondent",
         "workItems": [
@@ -227,6 +230,7 @@
     "createdAt": "2018-12-27T17:26:36.948Z",
     "payGovId": "1234",
     "procedureType": "Small",
+    "preferredTrialCity": "Hartford, CT",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "sk": "0",
@@ -252,6 +256,7 @@
   },
   {
     "caseStatus": "general",
+    "preferredTrialCity": "Hartford, CT",
     "document": {
       "documentType": "Petition",
       "createdAt": "2018-12-27T18:05:54.164Z",
@@ -330,6 +335,7 @@
   },
   {
     "createdAt": "2018-12-27T18:23:07.975Z",
+    "preferredTrialCity": "Hartford, CT",
     "documents": [
       {
         "createdAt": "2018-12-27T18:23:07.975Z",
