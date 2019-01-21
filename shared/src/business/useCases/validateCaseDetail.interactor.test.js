@@ -69,5 +69,4 @@ describe('validate case detail', () => {
     expect(errors.irsNoticeDate).toBeTruthy();
     expect(errors.payGovDate).toBeTruthy();
   });
-
 });
