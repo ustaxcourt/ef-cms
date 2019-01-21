@@ -1,8 +1,12 @@
 import { set } from 'cerebral/factories';
 import { state, props } from 'cerebral';
-import validateCaseDetailAction from '../actions/validateCaseDetailAction';
+import validateCaseDetail from '../actions/validateCaseDetailAction';
+import setAlertError from '../actions/setAlertErrorAction';
 
 export default [
-  validateCaseDetailAction,
-  set(state.caseDetail[props.key], props.value)
+  validateCaseDetail,
+  {
+    success: [set(state.caseDetail[props.key], props.value)],
+    error: [setAlertError],
+  },
 ];
