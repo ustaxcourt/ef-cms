@@ -10,6 +10,7 @@ const applicationContext = {
   environment: {
     stage: 'local',
   },
+  filterCaseMetadata: ({ cases }) => cases,
   isAuthorizedForWorkItems: () => true,
 };
 
