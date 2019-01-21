@@ -31,6 +31,7 @@ import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetition.interactor';
+import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetail.interactor';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 
 import Petition from '../../shared/src/business/entities/Petition';
@@ -90,6 +91,7 @@ const applicationContext = {
       updateCase,
       updateWorkItem,
       validatePetition,
+      validateCaseDetail,
     };
   },
   getCurrentUser,
