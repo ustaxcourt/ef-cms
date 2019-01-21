@@ -340,6 +340,8 @@ Case.filterMetadata = ({ cases, applicationContext }) => {
     'caseId',
     'docketNumberSuffix',
     'caseTitle',
+    'caseType',
+    'procedureType',
     'userId',
     'petitioners',
     'respondent',
