@@ -67,7 +67,6 @@ describe('validateCaseDetail', async () => {
         presenter,
       },
     });
-    expect(state.caseDetailErrors).toEqual('error');
     expect(errorStub.calledOnce).toEqual(true);
   });
 });

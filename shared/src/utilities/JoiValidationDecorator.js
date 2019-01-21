@@ -18,18 +18,52 @@ function toRawObject(entity) {
 
 function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
+  console.log('errros', errors)
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
+    console.log('errors[key]', errors[key])
     if (Array.isArray(errors[key])) {
       errors[key] = errors[key].map(error =>
-        Object.keys(error).map(
-          otherKey => entity.getErrorToMessageMap()[otherKey],
-        ),
+        Object.keys(error).map(otherKey => {
+          const errorMap = entity.getErrorToMessageMap()[otherKey];
+          if (Array.isArray(errorMap)) {
+            for (let errorObject of errorMap) {
+              console.log('errorOBject', errorObject, errorObject)
+              if (
+                typeof errorObject === 'object' &&
+                error[otherKey].indexOf(errorObject.contains) > -1
+              ) {
+                return errorObject.message;
+              } else {
+                return errorObject;
+              }
+            }
+          }
+          return errorMap;
+        }),
       );
     } else {
-      errors[key] = entity.getErrorToMessageMap()[key];
+      const errorMap = entity.getErrorToMessageMap()[key];
+      console.log('errorMap', errorMap)
+      if (Array.isArray(errorMap)) {
+        for (let errorObject of errorMap) {
+          if (
+            typeof errorObject === 'object' &&
+            errors[key].indexOf(errorObject.contains) > -1
+          ) {
+            errors[key] = errorObject.message;
+            break;
+          } else {
+            errors[key] = errorObject;
+          }
+        }
+      } else {
+        errors[key] = errorMap;
+        console.log('setting', errors[key])
+      }
     }
   }
+  console.log(errors)
   return errors;
 }
 
@@ -104,19 +138,6 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.getFormattedValidationErrors = function() {
     return getFormattedValidationErrors(this);
-
-    // const errors = this.getValidationErrors();
-    // if (!errors) return null;
-    // for (let key of Object.keys(errors)) {
-    //   if (Array.isArray(errors[key])) {
-    //     errors[key] = errors[key].map(error =>
-    //       Object.keys(error).map(otherKey => errorToMessageMap[otherKey]),
-    //     );
-    //   } else {
-    //     errors[key] = errorToMessageMap[key];
-    //   }
-    // }
-    // return errors;
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
