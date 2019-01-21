@@ -4,20 +4,44 @@ import { omit } from 'lodash';
 export default ({ applicationContext, store, path, get }) => {
   const caseDetail = get(state.caseDetail);
 
+  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = get(
+    state.form,
+  );
+
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
-        state.form.day,
-      )}`,
+      irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
+      payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
     },
-    ['year', 'month', 'day', 'trialCities'],
+    [
+      'irsYear',
+      'irsMonth',
+      'irsDay',
+      'payGovYear',
+      'payGovMonth',
+      'payGovDay',
+      'trialCities',
+    ],
   );
 
-  form.irsNoticeDate = form.irsNoticeDate
-    .split('-')
-    .map(segment => (segment = segment.padStart(2, '0')))
-    .join('-');
+  if (irsYear && irsMonth && irsDay) {
+    form.irsNoticeDate = form.irsNoticeDate
+      .split('-')
+      .map(segment => (segment = segment.padStart(2, '0')))
+      .join('-');
+  } else {
+    form.irsNoticeDate = null;
+  }
+
+  if (payGovYear && payGovMonth && payGovDay) {
+    form.payGovDate = form.payGovDate
+      .split('-')
+      .map(segment => (segment = segment.padStart(2, '0')))
+      .join('-');
+  } else {
+    form.payGovDate = null;
+  }
 
   const errors = applicationContext.getUseCases().validateCaseDetail({
     caseDetail: { ...caseDetail, ...form },
