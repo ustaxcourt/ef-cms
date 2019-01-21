@@ -7,6 +7,8 @@ exports.FILE_ANSWER = 'fileAnswer';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
 exports.PETITION = 'getPetitionOptions';
+exports.CASE_METADATA = 'caseMetadata';
+
 /**
  * isAuthorized
  *
@@ -27,6 +29,7 @@ exports.isAuthorized = (userId, action, owner) => {
 
   if (
     action === exports.WORKITEM ||
+    action === exports.CASE_METADATA ||
     action === exports.GET_CASES_BY_DOCUMENT_ID
   ) {
     return (
