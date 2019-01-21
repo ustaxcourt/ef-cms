@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
 
-export default ({ applicationContext, path, get }) => {
+export default ({ applicationContext, store, path, get }) => {
   const caseDetail = get(state.caseDetail);
 
   const form = omit(
@@ -24,7 +24,7 @@ export default ({ applicationContext, path, get }) => {
     applicationContext,
   });
 
-  console.log(errors)
+  store.set(state.caseDetailErrors, errors);
 
   if (!errors) {
     return path.success();
