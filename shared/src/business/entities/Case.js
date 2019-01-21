@@ -112,7 +112,6 @@ function Case(rawCase) {
   } else {
     this.documents = [];
   }
-  console.log('added year amounts', this.yearAmounts)
 }
 
 Case.name = 'Case';
