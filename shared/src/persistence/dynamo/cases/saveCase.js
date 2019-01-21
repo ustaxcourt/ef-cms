@@ -131,8 +131,11 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     applicationContext,
   });
 
-  return stripWorkItems(
-    stripInternalKeys(results),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+  return applicationContext.filterCaseMetadata({
+    cases: stripWorkItems(
+      stripInternalKeys(results),
+      applicationContext.isAuthorizedForWorkItems(),
+    ),
+    applicationContext,
+  });
 };
