@@ -20,7 +20,7 @@ presenter.providers.path = {
 };
 
 describe('validateCaseDetail', async () => {
-  it('should call the path succes when no errors are found', async () => {
+  it('should call the path success when no errors are found', async () => {
     await runAction(validateCaseDetail, {
       state: {
         form: {
@@ -56,8 +56,8 @@ describe('validateCaseDetail', async () => {
           irsMonth: '10',
           irsDay: '13',
           payGovYear: '2010',
-          payGovMonth: '1',
-          payGovDay: '1',
+          payGovMonth: '01',
+          payGovDay: '01',
         },
         caseDetail: {
           caseId: '123',
