@@ -1,10 +1,10 @@
 import { runCompute } from 'cerebral/test';
 
-import { showAction } from '../presenter/computeds/documentDetailHelper';
+import helper from '../presenter/computeds/documentDetailHelper';
 
 describe('formatted work queue computed', () => {
   it('formats the workitems', () => {
-    const result = runCompute(showAction, {
+    const result = runCompute(helper.showAction, {
       state: {
         workItemActions: {
           abc: 'complete',
