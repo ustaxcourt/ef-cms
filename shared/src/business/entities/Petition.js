@@ -34,15 +34,4 @@ joiValidationDecorator(
   Petition.errorToMessageMap,
 );
 
-// const original = Petition.prototype.getValidationErrors;
-//
-// Petition.prototype.getValidationErrors = function() {
-//   const errors = original.call(this);
-//   if (!errors) return null;
-//   for (let key of Object.keys(errors)) {
-//     errors[key] = Petition.errorToMessageMap[key];
-//   }
-//   return errors;
-// };
-
 module.exports = Petition;
