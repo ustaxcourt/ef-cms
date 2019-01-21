@@ -5,7 +5,7 @@ const joi = require('joi-browser');
 const uuid = require('uuid');
 const { uniq } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-
+const { pick } = require('lodash');
 const YearAmount = require('./YearAmount');
 
 const uuidVersions = {
@@ -89,14 +89,16 @@ function Case(rawCase) {
       createdAt: rawCase.createdAt || new Date().toISOString(),
       status: rawCase.status || 'new',
       caseTitle:
-        rawCase.petitioners && rawCase.petitioners.length
+        rawCase.caseTitle ||
+        (rawCase.petitioners && rawCase.petitioners.length
           ? `${
               rawCase.petitioners[0].name
             }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`
-          : '',
+          : ''),
     },
     {
-      docketNumberSuffix: getDocketNumberSuffix(rawCase),
+      docketNumberSuffix:
+        rawCase.docketNumberSuffix || getDocketNumberSuffix(rawCase),
     },
     rawCase.payGovId && !rawCase.payGovDate
       ? { payGovDate: new Date().toISOString() }
@@ -313,6 +315,33 @@ Case.getTrialCities = procedureType => {
       return REGULAR_TRIAL_CITIES;
     default:
       return REGULAR_TRIAL_CITIES;
+  }
+};
+
+Case.filterMetadata = ({ cases, applicationContext }) => {
+  const fieldsToPick = [
+    'documents',
+    'docketNumber',
+    'caseId',
+    'docketNumberSuffix',
+    'caseTitle',
+    'userId',
+    'petitioners',
+    'respondent',
+    'createdAt',
+    'status',
+    'payGovId',
+    'payGovDate',
+    'preferredTrialCity',
+  ];
+  if (applicationContext.isAuthorizedForCaseMetadata()) {
+    return cases;
+  } else {
+    if (Array.isArray(cases)) {
+      return cases.map(c => pick(c, fieldsToPick));
+    } else {
+      return pick(cases, fieldsToPick);
+    }
   }
 };
 
