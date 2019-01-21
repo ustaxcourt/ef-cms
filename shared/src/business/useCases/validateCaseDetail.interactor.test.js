@@ -1,7 +1,4 @@
 const { validateCaseDetail } = require('./validateCaseDetail.interactor');
-const Case = require('../entities/Case');
-const { omit } = require('lodash');
-const moment = require('moment');
 
 describe('validate case detail', () => {
   it('returns the expected errors object on an empty case', () => {
