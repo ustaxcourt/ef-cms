@@ -20,8 +20,12 @@ exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
       sk: '0',
     },
   });
-  return stripWorkItems(
-    stripInternalKeys(results),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+
+  return applicationContext.filterCaseMetadata({
+    cases: stripWorkItems(
+      stripInternalKeys(results),
+      applicationContext.isAuthorizedForWorkItems(),
+    ),
+    applicationContext,
+  });
 };

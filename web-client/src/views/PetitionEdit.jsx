@@ -1,12 +1,14 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import UpdateCaseCancelModalDialog from './UpdateCaseCancelModalDialog';
 
 export default connect(
-  { submitting: state.submitting },
-  function PetitionEdit({ submitting }) {
+  { submitting: state.submitting, showModal: state.showModal },
+  function PetitionEdit({ submitting, showModal }) {
     return (
       <form noValidate onSubmit={() => {}} role="form">
+        {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
           <div className="usa-form-group">
