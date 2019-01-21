@@ -108,11 +108,13 @@ const {
 const {
   isAuthorized,
   WORKITEM,
+  CASE_METADATA,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
 const User = require('ef-cms-shared/src/business/entities/User');
+const Case = require('ef-cms-shared/src/business/entities/Case');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -192,6 +194,7 @@ module.exports = ({ userId } = {}) => {
     getCurrentUser,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
+    isAuthorizedForCaseMetadata: () => isAuthorized(userId, CASE_METADATA),
     getUseCases: () => {
       return {
         createCase,
@@ -237,6 +240,7 @@ module.exports = ({ userId } = {}) => {
         return getWorkItemsForUser;
       }
     },
+    filterCaseMetadata: Case.filterMetadata,
     getInteractorForGettingCases,
   };
 };
