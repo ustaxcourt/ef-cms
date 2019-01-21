@@ -13,6 +13,11 @@ joiValidationDecorator(
     year: joi.string().required(),
     amount: joi.string().required(),
   }),
+  () => true,
+  {
+    year: 'A valid year is required.',
+    amount: 'A valid amount is required.',
+  },
 );
 
 module.exports = YearAmount;

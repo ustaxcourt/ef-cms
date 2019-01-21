@@ -16,12 +16,29 @@ function toRawObject(entity) {
   return obj;
 }
 
-function getValidationErrors(entity) {
+function getFormattedValidationErrorsHelper(entity) {
+  const errors = entity.getValidationErrors();
+  if (!errors) return null;
+  for (let key of Object.keys(errors)) {
+    if (Array.isArray(errors[key])) {
+      errors[key] = errors[key].map(error =>
+        Object.keys(error).map(
+          otherKey => entity.getErrorToMessageMap()[otherKey],
+        ),
+      );
+    } else {
+      errors[key] = entity.getErrorToMessageMap()[key];
+    }
+  }
+  return errors;
+}
+
+function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
   const obj = {};
   let errors = null;
   if (entity && entity.getFormattedValidationErrors) {
-    errors = entity.getValidationErrors();
+    errors = getFormattedValidationErrorsHelper(entity);
   }
   if (errors) {
     Object.assign(obj, errors);
@@ -29,13 +46,26 @@ function getValidationErrors(entity) {
   for (let key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
-      obj[key] = value.map(v => getValidationErrors(v));
+      obj[key] = value
+        .map(v => getFormattedValidationErrors(v))
+        .filter(v => v)
+        .map((v, index) => ({ ...v, index }));
+      if (obj[key].length === 0) {
+        if (errors && errors[key]) {
+          obj[key] =
+            (entity.getErrorToMessageMap() || {})[key] ||
+            'An invalid value was found';
+        } else {
+          delete obj[key];
+        }
+      }
     } else if (
       typeof value === 'object' &&
       value &&
       value.getFormattedValidationErrors
     ) {
-      obj[key] = getValidationErrors(value);
+      obj[key] = getFormattedValidationErrors(value);
+      if (!obj[key]) delete obj[key];
     }
   }
   return Object.keys(obj).length === 0 ? null : obj;
@@ -47,6 +77,10 @@ exports.joiValidationDecorator = function(
   customValidate,
   errorToMessageMap,
 ) {
+  entityConstructor.prototype.getErrorToMessageMap = function() {
+    return errorToMessageMap;
+  };
+
   entityConstructor.prototype.isValid = function isValid() {
     return (
       joi.validate(this, schema, { allowUnknown: true }).error === null &&
@@ -68,14 +102,21 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
-  entityConstructor.prototype.getFormattedValidationErrors = function getFormattedValidationErrors() {
+  entityConstructor.prototype.getFormattedValidationErrors = function() {
+    return getFormattedValidationErrors(this);
+
     // const errors = this.getValidationErrors();
-    const errors = getValidationErrors(this);
-    if (!errors) return null;
-    for (let key of Object.keys(errors)) {
-      errors[key] = errorToMessageMap[key];
-    }
-    return errors;
+    // if (!errors) return null;
+    // for (let key of Object.keys(errors)) {
+    //   if (Array.isArray(errors[key])) {
+    //     errors[key] = errors[key].map(error =>
+    //       Object.keys(error).map(otherKey => errorToMessageMap[otherKey]),
+    //     );
+    //   } else {
+    //     errors[key] = errorToMessageMap[key];
+    //   }
+    // }
+    // return errors;
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {

@@ -48,6 +48,15 @@ describe('validate case detail', () => {
             reviewUser: 'petitionsclerk',
             workItems: [],
           },
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
         ],
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'defined',
@@ -68,5 +77,53 @@ describe('validate case detail', () => {
     expect(errors).toBeTruthy();
     expect(errors.irsNoticeDate).toBeTruthy();
     expect(errors.payGovDate).toBeTruthy();
+  });
+
+  it('returns an error if yearAmounts is missing a required value', () => {
+    const errors = validateCaseDetail({
+      caseDetail: {
+        caseType: 'defined',
+        procedureType: 'defined',
+        docketNumber: '101-18',
+        documents: [
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+        ],
+        petitioners: [{ name: 'user' }],
+        irsNoticeDate: new Date().toISOString(),
+        signature: true,
+        yearAmounts: [
+          {
+            amount: 123,
+          },
+          {
+            year: 123,
+          },
+        ],
+      },
+    });
+    expect(errors).toMatchObject({
+      preferredTrialCity: 'Preferred Trial City is required.',
+      yearAmounts: [
+        { index: 0, year: 'A valid year is required.' },
+        { index: 1, amount: 'A valid amount is required.' },
+      ],
+    });
   });
 });
