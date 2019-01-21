@@ -148,6 +148,7 @@ joiValidationDecorator(
     irsNoticeDate: joi
       .date()
       .iso()
+      .allow(null)
       .optional(),
     irsSendDate: joi
       .date()
@@ -157,6 +158,7 @@ joiValidationDecorator(
     payGovDate: joi
       .date()
       .iso()
+      .allow(null)
       .optional(),
     status: joi
       .string()
@@ -191,6 +193,7 @@ joiValidationDecorator(
     preferredTrialCity: 'Preferred Trial City is a required field.',
     yearAmounts: 'A valid year and amount need to be provided.',
     payGovId: 'Fee Payment Id must be in a valid format',
+    payGovDate: 'Pay Gov Date is required',
   },
 );
 

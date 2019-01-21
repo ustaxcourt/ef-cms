@@ -50,7 +50,7 @@ exports.joiValidationDecorator = function(
       errors[key] = errorToMessageMap[key];
     }
     return errors;
-  }
+  };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
     const { error } = joi.validate(this, schema, {

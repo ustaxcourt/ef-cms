@@ -1,5 +1,4 @@
 import { runAction } from 'cerebral/test';
-import { CerebralTest } from 'cerebral/test';
 
 import presenter from '../presenter';
 import sinon from 'sinon';
@@ -20,16 +19,17 @@ presenter.providers.path = {
   error: errorStub,
 };
 
-const test = CerebralTest(presenter);
-
 describe('validateCaseDetail', async () => {
   it('should call the path succes when no errors are found', async () => {
     await runAction(validateCaseDetail, {
       state: {
         form: {
-          year: '2009',
-          month: '10',
-          day: '13',
+          irsYear: '2009',
+          irsMonth: '10',
+          irsDay: '13',
+          payGovYear: '2010',
+          payGovMonth: '1',
+          payGovDay: '1',
         },
         caseDetail: {
           caseId: '123',
@@ -42,6 +42,7 @@ describe('validateCaseDetail', async () => {
     expect(validateCaseDetailStub.getCall(0).args[0].caseDetail).toMatchObject({
       caseId: '123',
       irsNoticeDate: '2009-10-13',
+      payGovDate: '2010-01-01',
     });
     expect(successStub.calledOnce).toEqual(true);
   });
@@ -51,9 +52,12 @@ describe('validateCaseDetail', async () => {
     const { state } = await runAction(validateCaseDetail, {
       state: {
         form: {
-          year: '2009',
-          month: '10',
-          day: '13',
+          irsYear: '2009',
+          irsMonth: '10',
+          irsDay: '13',
+          payGovYear: '2010',
+          payGovMonth: '1',
+          payGovDay: '1',
         },
         caseDetail: {
           caseId: '123',
