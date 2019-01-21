@@ -16,6 +16,31 @@ function toRawObject(entity) {
   return obj;
 }
 
+function getValidationErrors(entity) {
+  const keys = Object.keys(entity);
+  const obj = {};
+  let errors = null;
+  if (entity && entity.getFormattedValidationErrors) {
+    errors = entity.getValidationErrors();
+  }
+  if (errors) {
+    Object.assign(obj, errors);
+  }
+  for (let key of keys) {
+    const value = entity[key];
+    if (Array.isArray(value)) {
+      obj[key] = value.map(v => getValidationErrors(v));
+    } else if (
+      typeof value === 'object' &&
+      value &&
+      value.getFormattedValidationErrors
+    ) {
+      obj[key] = getValidationErrors(value);
+    }
+  }
+  return Object.keys(obj).length === 0 ? null : obj;
+}
+
 exports.joiValidationDecorator = function(
   entityConstructor,
   schema,
@@ -44,7 +69,8 @@ exports.joiValidationDecorator = function(
   };
 
   entityConstructor.prototype.getFormattedValidationErrors = function getFormattedValidationErrors() {
-    const errors = this.getValidationErrors();
+    // const errors = this.getValidationErrors();
+    const errors = getValidationErrors(this);
     if (!errors) return null;
     for (let key of Object.keys(errors)) {
       errors[key] = errorToMessageMap[key];

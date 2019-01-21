@@ -8,6 +8,7 @@ import updateCase from '../actions/updateCaseAction';
 export default [
   clearAlerts,
   clearForm,
+  //validate
   updateCase,
   {
     error: [setAlertError],
