@@ -10,13 +10,22 @@ function YearAmount(yearAmount) {
 joiValidationDecorator(
   YearAmount,
   joi.object().keys({
-    year: joi.string().required(),
+    year: joi
+      .date()
+      .max('now')
+      .required(),
     amount: joi.string().required(),
   }),
   () => true,
   {
-    year: 'A valid year is required.',
-    amount: 'A valid amount is required.',
+    year: [
+      {
+        contains: 'must be less than or equal to',
+        message: 'That year is in the future. Please enter a valid year.',
+      },
+      'Please enter a valid year.',
+    ],
+    amount: 'Please enter a valid amount.',
   },
 );
 

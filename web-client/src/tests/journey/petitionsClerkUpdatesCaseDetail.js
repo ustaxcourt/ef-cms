@@ -9,8 +9,8 @@ export default test => {
       value: '',
     });
 
-    expect(test.getState('alertError')).toEqual({
-      title: 'Errors were found. Please correct your form and resubmit.',
+    expect(test.getState('caseDetailErrors')).toEqual({
+      caseType: 'Case Type is required.',
     });
 
     await test.runSequence('updateCaseValueSequence', {
@@ -18,17 +18,39 @@ export default test => {
       value: 'Other',
     });
 
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual(null);
 
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '100' }],
     });
 
-    expect(test.getState('alertError')).toEqual({
-      title: 'Errors were found. Please correct your form and resubmit.',
+    expect(test.getState('caseDetailErrors')).toEqual({
+      yearAmounts: [
+        {
+          amount: 'Please enter a valid amount.',
+          index: 0,
+          year: 'Please enter a valid year.',
+        },
+      ],
     });
 
+    // await test.runSequence('updateCaseValueSequence', {
+    //   key: 'yearAmounts',
+    //   value: [{ year: '2100' }],
+    // });
+    //
+    // expect(test.getState('caseDetailErrors')).toEqual({
+    //   yearAmounts: [
+    //     {
+    //       amount: 'Please enter a valid amount.',
+    //       index: 0,
+    //       year: 'That year is in the future. Please enter a valid year.',
+    //     },
+    //   ],
+    // });
+
+    ////////
     // await test.runSequence('updateCaseValueSequence', {
     //   key: 'yearAmounts',
     //   value: [{ year: '2000', amount: '100' }],
@@ -63,7 +85,6 @@ export default test => {
     //check for errors
     //check for success
 
-
     // test.setState('caseDetail', {});
     // await test.runSequence('gotoCaseDetailSequence', {
     //   docketNumber: test.docketNumber,
@@ -81,6 +102,5 @@ export default test => {
     // expect(helper.showPayGovIdInput).toEqual(false);
     // expect(helper.showPaymentOptions).toEqual(true);
     // expect(helper.showActionRequired).toEqual(true);
-
   });
 };

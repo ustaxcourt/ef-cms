@@ -41,20 +41,22 @@ export default ({ applicationContext, store, path, get }) => {
   } else {
     form.payGovDate = null;
   }
+
+  if (form.yearAmounts && form.yearAmounts.length) {
+    form.yearAmounts.forEach(yearAmount => {
+      yearAmount.year = `${yearAmount.year}-01-01`;
+    });
+  }
+
   const errors = applicationContext.getUseCases().validateCaseDetail({
     caseDetail: { ...caseDetail, ...form },
     applicationContext,
   });
-
-  store.set(state.caseDetailErrors, errors);
+  console.log('errors from backend', errors);
 
   if (!errors) {
     return path.success();
   } else {
-    return path.error({
-      alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
-      },
-    });
+    return path.error({ errors });
   }
 };
