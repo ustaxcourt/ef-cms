@@ -10,6 +10,7 @@ import {
   faFlag,
   faListUl,
   faShareSquare,
+  faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -38,6 +39,7 @@ const app = {
       faFlag,
       faListUl,
       faShareSquare,
+      faTimesCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
