@@ -20,8 +20,6 @@ export default test => {
     );
     expect(caseDetail.documents.length).toEqual(1);
     expect(caseDetail.preferredTrialCity).toEqual('Chattanooga, TN');
-    expect(caseDetail.caseType).toEqual('Whistleblower');
-    expect(caseDetail.procedureType).toEqual('Regular');
     await test.runSequence('viewDocumentSequence', {
       documentId: test.getState('caseDetail.documents.0.documentId'),
       callback: documentBlob => {
