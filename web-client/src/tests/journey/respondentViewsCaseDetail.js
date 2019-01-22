@@ -7,6 +7,6 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual('general');
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(1);
   });
 };

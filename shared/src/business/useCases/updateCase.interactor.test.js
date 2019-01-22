@@ -7,7 +7,11 @@ const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '56789-18',
   status: 'new',
+  caseType: 'Other',
+  procedureType: 'Regular',
   createdAt: new Date().toISOString(),
+  preferredTrialCity: 'Washington, D.C.',
+  petitioners: [{ name: 'Test Taxpayer' }],
   documents: [
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -45,13 +49,16 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         userId: 'petitionsclerk',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {
       error = err;
     }
     expect(error).not.toBeNull;
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
@@ -69,13 +76,16 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'documents'),
         userId: 'petitionsclerk',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {
       error = err;
     }
     expect(error).not.toBeNull();
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 
   it('should update a case', async () => {
@@ -95,6 +105,7 @@ describe('updateCase', () => {
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
+      petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
 
@@ -125,6 +136,7 @@ describe('updateCase', () => {
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       userId: 'petitionsclerk',
+      petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
 
@@ -148,6 +160,7 @@ describe('updateCase', () => {
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         userId: 'someuser',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (err) {

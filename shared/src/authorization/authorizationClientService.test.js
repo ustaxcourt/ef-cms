@@ -26,7 +26,7 @@ describe('Authorization client service', () => {
   });
 
   it('should return false when a user doesnt have a petitionsclerk role', () => {
-    expect(isAuthorized('notapetitionsclerk', GET_CASES_BY_STATUS)).to.be.false;
+    expect(isAuthorized('notaclerk', GET_CASES_BY_STATUS)).to.be.false;
   });
 
   it('should authorize a petitions clerk for workitems', () => {

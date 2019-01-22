@@ -22,6 +22,6 @@ export default [
     public: [setCurrentPage('CaseDetailPublic')],
     respondent: [setCurrentPage('CaseDetailRespondent')],
     seniorattorney: [setCurrentPage('CaseDetailInternal')],
-    taxpayer: [setCurrentPage('CaseDetailPetitioner')],
+    petitioner: [setCurrentPage('CaseDetailPetitioner')],
   },
 ];

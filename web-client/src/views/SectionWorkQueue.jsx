@@ -118,10 +118,13 @@ export default connect(
                   id={`label-${item.workItemId}`}
                 />
               </td>
-              <td>{item.docketNumber}</td>
+              <td>{item.docketNumberWithSuffix}</td>
               <td>{item.currentMessage.createdAtFormatted}</td>
               <td>
                 <a
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
                   href={`/case-detail/${item.docketNumber}/documents/${
                     item.document.documentId
                   }`}
