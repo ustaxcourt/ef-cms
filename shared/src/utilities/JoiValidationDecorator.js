@@ -20,42 +20,21 @@ function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
-    if (Array.isArray(errors[key])) {
-      errors[key] = errors[key].map(error =>
-        Object.keys(error).map(otherKey => {
-          const errorMap = entity.getErrorToMessageMap()[otherKey];
-          if (Array.isArray(errorMap)) {
-            for (let errorObject of errorMap) {
-              if (
-                typeof errorObject === 'object' &&
-                error[otherKey].indexOf(errorObject.contains) > -1
-              ) {
-                return errorObject.message;
-              } else {
-                return errorObject;
-              }
-            }
-          }
-          return errorMap;
-        }),
-      );
-    } else {
-      const errorMap = entity.getErrorToMessageMap()[key];
-      if (Array.isArray(errorMap)) {
-        for (let errorObject of errorMap) {
-          if (
-            typeof errorObject === 'object' &&
-            errors[key].indexOf(errorObject.contains) > -1
-          ) {
-            errors[key] = errorObject.message;
-            break;
-          } else {
-            errors[key] = errorObject;
-          }
+    const errorMap = entity.getErrorToMessageMap()[key];
+    if (Array.isArray(errorMap)) {
+      for (let errorObject of errorMap) {
+        if (
+          typeof errorObject === 'object' &&
+          errors[key].indexOf(errorObject.contains) > -1
+        ) {
+          errors[key] = errorObject.message;
+          break;
+        } else {
+          errors[key] = errorObject;
         }
-      } else {
-        errors[key] = errorMap;
       }
+    } else {
+      errors[key] = errorMap;
     }
   }
   return errors;
@@ -177,3 +156,5 @@ exports.joiValidationDecorator = function(
     return collection.map(entity => entity.validate());
   };
 };
+
+exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;
