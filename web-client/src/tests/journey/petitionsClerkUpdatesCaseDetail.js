@@ -77,6 +77,37 @@ export default test => {
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
+    //error on save
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'caseType',
+      value: '',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'procedureType',
+      value: '',
+    });
+
+    await test.runSequence('submitUpdateCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      caseType: 'Case Type is required.',
+      procedureType: 'Procedure Type is required.',
+    });
+    expect(test.getState('alertError')).toEqual({
+      alertError: {
+        message: 'Case Type is required. Procedure Type is required. ',
+        title: 'There is an error with this page.',
+      },
+    });
+
+    //user changes value and hits save
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'caseType',
+      value: 'Whistleblower',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'procedureType',
+      value: 'Regular',
+    });
     //submit and route to case detail
     await test.runSequence('submitUpdateCaseSequence');
     test.setState('caseDetail', {});
@@ -96,28 +127,5 @@ export default test => {
       state: test.getState(),
     });
     expect(helper.showPaymentRecord).toEqual(true);
-
-    //call updateCaseValueSequence
-
-    //check for errors
-    //check for success
-
-    // test.setState('caseDetail', {});
-    // await test.runSequence('gotoCaseDetailSequence', {
-    //   docketNumber: test.docketNumber,
-    // });
-    // expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    // expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    // expect(test.getState('caseDetail.status')).toEqual('new');
-    // expect(test.getState('caseDetail.documents').length).toEqual(1);
-    //
-    // const helper = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(helper.showDocumentStatus).toEqual(true);
-    // expect(helper.showIrsServedDate).toEqual(false);
-    // expect(helper.showPayGovIdInput).toEqual(false);
-    // expect(helper.showPaymentOptions).toEqual(true);
-    // expect(helper.showActionRequired).toEqual(true);
   });
 };
