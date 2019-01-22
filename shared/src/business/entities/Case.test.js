@@ -67,26 +67,37 @@ describe('Case entity', () => {
       assert.ok(!myCase.isValid());
     });
 
-    it('will not allow year amounts with duplicate years', () => {
-      let error;
-      try {
-        new Case({
-          petitioners: [],
-          yearAmounts: [
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-          ],
-        });
-      } catch (e) {
-        error = e;
-      }
-      assert.ok(error !== null);
+    it('should not be valid because of duplicate years in yearAmounts', () => {
+      const isValid = new Case({
+        ...MOCK_CASE,
+        yearAmounts: [
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+        ],
+      }).isValid();
+      expect(isValid).toBeFalsy();
+    });
+  });
+
+  describe('areYearsUnique', () => {
+    it('will fail validation when having two year amounts with the same year', () => {
+      const isValid = Case.areYearsUnique([
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+      ]);
+      expect(isValid).toBeFalsy();
     });
   });
 

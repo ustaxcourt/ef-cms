@@ -13,6 +13,7 @@ joiValidationDecorator(
     year: joi
       .date()
       .max('now')
+      .iso()
       .required(),
     amount: joi.string().required(),
   }),

@@ -52,7 +52,6 @@ export default ({ applicationContext, store, path, get }) => {
     caseDetail: { ...caseDetail, ...form },
     applicationContext,
   });
-  console.log('errors from backend', errors);
 
   if (!errors) {
     return path.success();
