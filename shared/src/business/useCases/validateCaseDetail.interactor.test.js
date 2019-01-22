@@ -113,14 +113,14 @@ describe('validate case detail', () => {
             amount: '123',
           },
           {
-            year: '1236',
+            year: '1236-01-01',
           },
           {
-            year: '1234',
+            year: '1234-01-01',
             amount: '1000',
           },
           {
-            year: '2100',
+            year: '2100-01-01',
             amount: '1000',
           },
         ],
@@ -184,7 +184,7 @@ describe('validate case detail', () => {
           },
           {
             year: '2000',
-            amount: '123',
+            amount: '99',
           },
         ],
       },
@@ -226,7 +226,7 @@ describe('validate case detail', () => {
         signature: true,
         yearAmounts: [
           {
-            year: '2100',
+            year: '2100-01-01',
             amount: 0,
           },
         ],
@@ -241,5 +241,54 @@ describe('validate case detail', () => {
         },
       ],
     });
+  });
+
+  it('returns no errors on valid amounts and years', () => {
+    const errors = validateCaseDetail({
+      caseDetail: {
+        caseType: 'defined',
+        procedureType: 'defined',
+        docketNumber: '101-18',
+        preferredTrialCity: 'Chattanooga, TN',
+        documents: [
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+        ],
+        petitioners: [{ name: 'user' }],
+        irsNoticeDate: new Date().toISOString(),
+        signature: true,
+        yearAmounts: [
+          {
+            year: '2000',
+            amount: '123',
+          },
+          {
+            year: '2001',
+            amount: 123,
+          },
+          {
+            year: '2002',
+            amount: '1',
+          },
+        ],
+      },
+    });
+    expect(errors).toEqual(null);
   });
 });
