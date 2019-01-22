@@ -63,7 +63,6 @@ function getFormattedValidationErrorsHelper(entity) {
       }
     }
   }
-  console.log(errors)
   return errors;
 }
 
@@ -79,7 +78,9 @@ function getFormattedValidationErrors(entity) {
   }
   for (let key of keys) {
     const value = entity[key];
+    console.log(value, entity[key])
     if (Array.isArray(value)) {
+
       obj[key] = value
         .map(v => getFormattedValidationErrors(v))
         .filter(v => v)
@@ -100,8 +101,12 @@ function getFormattedValidationErrors(entity) {
     ) {
       obj[key] = getFormattedValidationErrors(value);
       if (!obj[key]) delete obj[key];
+    } else {
+      console.log(obj[key], value)
+      // obj[key] = value;
     }
   }
+  console.log('here', obj)
   return Object.keys(obj).length === 0 ? null : obj;
 }
 

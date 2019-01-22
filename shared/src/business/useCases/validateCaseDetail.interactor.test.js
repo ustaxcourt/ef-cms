@@ -110,18 +110,35 @@ describe('validate case detail', () => {
         signature: true,
         yearAmounts: [
           {
-            amount: 123,
+            amount: '123',
           },
-          // ,
-          // {
-          //   year: 123
-          // },
+          {
+            year: '1234',
+          },
+          {
+            year: '1234',
+            amount: '1000',
+          },
+          {
+            year: '2100',
+            amount: '1000',
+          },
         ],
       },
     });
     expect(errors.preferredTrialCity).toEqual(
       'Preferred Trial City is required.',
     );
-    expect(errors.yearAmounts.length).toBeGreaterThan(1);
+    expect(errors.yearAmounts[0].year).toEqual('Please enter a valid year.');
+    expect(errors.yearAmounts[0].amount).toBeUndefined();
+    expect(errors.yearAmounts[1].amount).toEqual(
+      'Please enter a valid amount.',
+    );
+    expect(errors.yearAmounts[1].year).toBeUndefined();
+    expect(errors.yearAmounts[2]).toBeUndefined();
+    console.log(errors)
+    expect(errors.yearAmounts[3].year).toEqual(
+      'That year is in the future. Please enter a valid year.',
+    );
   });
 });
