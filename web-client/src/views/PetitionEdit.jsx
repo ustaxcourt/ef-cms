@@ -4,24 +4,19 @@ import React from 'react';
 import UpdateCaseCancelModalDialog from './UpdateCaseCancelModalDialog';
 
 export default connect(
-  { submitting: state.submitting, showModal: state.showModal },
-  function PetitionEdit({ submitting, showModal }) {
+  {
+    caseDetail: state.caseDetail,
+    submitting: state.submitting,
+    showModal: state.showModal,
+  },
+  function PetitionEdit({ caseDetail, submitting, showModal }) {
     return (
       <form noValidate onSubmit={() => {}} role="form">
         {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
-          <div className="usa-form-group">
-            <label htmlFor="case-type">Type of Notice</label>
-            <select
-              name="caseType"
-              id="case-type"
-              aria-labelledby="case-type"
-              onChange={() => {}}
-            >
-              <option value="">-- Select --</option>
-            </select>
-          </div>
+          <span className="label">Type of Notice</span>
+          <p>{caseDetail.caseType}</p>
           <div className="usa-grid-full usa-form-group">
             <div className="usa-input-grid usa-input-grid-small">
               <label htmlFor="year">Year</label>
@@ -88,10 +83,10 @@ export default connect(
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>
-          <p className="label">Case Procedure</p>
-          <p>Regular Tax Case</p>
-          <p className="label">Trial Location</p>
-          <p>Small Tax Case</p>
+          <span className="label">Case Procedure</span>
+          <p>{caseDetail.procedureType} Tax Case</p>
+          <span className="label">Trial Location</span>
+          <p>{caseDetail.preferredTrialCity}</p>
           <fieldset>
             <legend id="fee-payment-date-legend">Fee Payment Date</legend>
             <div className="usa-date-of-birth">
@@ -147,7 +142,12 @@ export default connect(
           </fieldset>
           <div className="usa-form-group">
             <label htmlFor="fee-payment-id">Fee Payment ID</label>
-            <input id="fee-payment-id" type="text" onChange={() => {}} />
+            <input
+              id="fee-payment-id"
+              type="number"
+              value={caseDetail.payGovId}
+              onChange={() => {}}
+            />
           </div>
         </div>
         <button

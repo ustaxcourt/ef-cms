@@ -65,6 +65,7 @@ class DocumentDetail extends React.Component {
             <ul role="tablist">
               <li className={helper.showDocumentInfo ? 'active' : ''}>
                 <button
+                  disabled
                   role="tab"
                   className="tab-link"
                   id="tab-document-info"
