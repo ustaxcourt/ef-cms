@@ -3,18 +3,25 @@ import FormData from 'form-data';
 
 import applicationContext from '../applicationContext';
 import presenter from '../presenter';
+import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 
 import taxpayerLogin from './journey/taxpayerLogIn';
+import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
+import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
+import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
+import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
+import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -54,6 +61,10 @@ presenter.providers.router = {
         docketNumber: test.docketNumber,
       });
     }
+
+    if (url === '/') {
+      await test.runSequence('gotoDashboardSequence');
+    }
   },
 };
 
@@ -72,6 +83,10 @@ describe('Case journey', async () => {
   });
 
   taxpayerLogin(test);
+  taxpayerCancelsCreateCase(test);
+  taxpayerNavigatesToCreateCase(test);
+  taxpayerChoosesProcedureType(test);
+  taxpayerChoosesCaseType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
@@ -79,6 +94,10 @@ describe('Case journey', async () => {
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsDashboard(test);
+  petitionsClerkAssignsWorkItemToSelf(test);
+  petitionsClerkAssignsWorkItemToOther(test);
+  petitionsClerkLogIn(test, 'petitionsclerk1');
+  petitionsClerkViewsDashboardAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkRecordsPayGovId(test);
   petitionsClerkSubmitsCaseToIrs(test);

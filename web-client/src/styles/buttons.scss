@@ -1,5 +1,5 @@
 .usa-button {
-  margin: 0 30px 30px 0;
+  margin: 0 20px 20px 0;
 }
 
 button {
@@ -33,6 +33,22 @@ button.tab-link {
   cursor: pointer;
   font-weight: normal;
   text-decoration: none;
+}
+
+button.text-style {
+  padding: 0;
+  margin: 0;
+  background: none;
+  color: $color-blue;
+  cursor: pointer;
+  font-weight: normal;
+  text-decoration: none;
+
+  &:hover,
+  &:active {
+    background: inherit;
+    color: inherit;
+  }
 }
 
 #file-a-petition .usa-button-active:disabled {

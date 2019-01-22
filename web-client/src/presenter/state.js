@@ -3,12 +3,15 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
-import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { extractedDocument } from './computeds/extractDocument';
+import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
-import { showAction } from './computeds/documentDetailHelper';
+import { getTrialCityName } from './computeds/formattedTrialCity';
+import alertHelper from './computeds/alertHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
+import documentDetailHelper from './computeds/documentDetailHelper';
+import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
 
 export default {
@@ -22,6 +25,7 @@ export default {
   mobileMenu: {
     isVisible: false,
   },
+  showModal: false,
   paymentInfo: {
     showDetails: false,
   },
@@ -36,6 +40,8 @@ export default {
   workQueueToDisplay: 'individual',
   assigneeId: null,
   selectedWorkItems: [],
+  caseTypes: [],
+  procedureTypes: [],
   user: {
     userId: '',
     role: 'public',
@@ -67,15 +73,19 @@ export default {
   },
   caseDetail: {},
   cases: [],
-  workItemActions: {},
   completeForm: {},
+  workItemActions: {},
+
+  alertHelper,
   caseDetailHelper,
+  documentDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   formattedCaseDetail,
   formattedCases,
   formattedSectionWorkQueue,
   formattedWorkQueue,
+  getTrialCityName,
+  startCaseHelper,
   workQueueHelper,
-  showAction,
 };

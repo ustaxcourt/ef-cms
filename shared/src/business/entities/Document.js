@@ -3,21 +3,13 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
+const { getDocumentTypes } = require('./Case');
+
 const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const petitionDocumentTypes = [
-  'Petition',
-  'Request for Place of Trial',
-  'Statement of Taxpayer Identification Number',
-];
-
-const documentTypes = [
-  ...petitionDocumentTypes,
-  'Answer',
-  'Stipulated Decision',
-];
+const petitionDocumentTypes = ['Petition'];
 
 const WorkItem = require('./WorkItem');
 
@@ -35,6 +27,8 @@ function Document(rawDocument) {
   );
 }
 
+Document.name = 'Document';
+
 Document.prototype.isPetitionDocument = function() {
   return petitionDocumentTypes.includes(this.documentType);
 };
@@ -44,7 +38,7 @@ joiValidationDecorator(
   joi.object().keys({
     documentType: joi
       .string()
-      .valid(documentTypes)
+      .valid(getDocumentTypes())
       .required(),
     documentId: joi
       .string()

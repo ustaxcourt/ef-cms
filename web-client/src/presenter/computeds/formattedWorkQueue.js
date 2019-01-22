@@ -22,6 +22,11 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
+  result.caseStatus = _.startCase(result.caseStatus);
+
+  result.docketNumberWithSuffix = `${
+    result.docketNumber
+  }${result.docketNumberSuffix || ''}`;
 
   result.selected = !!selectedWorkItems.find(
     workItem => workItem.workItemId == result.workItemId,

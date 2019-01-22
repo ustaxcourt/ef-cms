@@ -43,7 +43,7 @@ describe('Log in', async () => {
       expect(test.getState('form.name')).toEqual('taxpayer');
       await test.runSequence('submitLogInSequence');
       expect(test.getState('user.userId')).toEqual('taxpayer');
-      expect(test.getState('user.role')).toEqual('taxpayer');
+      expect(test.getState('user.role')).toEqual('petitioner');
     });
 
     it('succeeds with token and path in URL', async () => {
@@ -54,7 +54,7 @@ describe('Log in', async () => {
       expect(test.getState('currentPage')).toEqual('LogIn');
       expect(test.getState('form.name')).toEqual('taxpayer');
       expect(test.getState('user.userId')).toEqual('taxpayer');
-      expect(test.getState('user.role')).toEqual('taxpayer');
+      expect(test.getState('user.role')).toEqual('petitioner');
     });
   });
 

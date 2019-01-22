@@ -1,3 +1,5 @@
+const { getSectionForRole } = require('./WorkQueue');
+
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -18,7 +20,7 @@ function User(user) {
   Object.assign(this, user);
 
   const validRoles = [
-    'taxpayer',
+    'petitioner',
     'petitionsclerk',
     'intakeclerk',
     'respondent',
@@ -27,8 +29,17 @@ function User(user) {
   ];
 
   let role = this.userId;
-  if (role === 'docketclerk1') {
+  if (role.indexOf('docketclerk') > -1 && /docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
+  }
+  if (
+    role.indexOf('petitionsclerk') > -1 &&
+    /petitionsclerk(\d{1,2})?$/.test(role)
+  ) {
+    role = 'petitionsclerk';
+  }
+  if (role.indexOf('taxpayer') > -1) {
+    role = 'petitioner';
   }
 
   if (validRoles.includes(role)) {
@@ -50,6 +61,7 @@ function User(user) {
       zip: '37208',
       phone: '111-111-1111',
     });
+    this.section = getSectionForRole(role);
   } else {
     throw new Error('invalid user');
   }
@@ -61,10 +73,6 @@ function User(user) {
  */
 User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
-};
-
-User.prototype.hasAccessToWorkItems = function hasAccessToWorkItems() {
-  return;
 };
 
 module.exports = User;
