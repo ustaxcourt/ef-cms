@@ -15,7 +15,10 @@ joiValidationDecorator(
       .max('now')
       .iso()
       .required(),
-    amount: joi.string().required(),
+    amount: joi
+      .number()
+      .greater(0)
+      .required(),
   }),
   () => true,
   {

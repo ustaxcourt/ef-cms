@@ -194,7 +194,7 @@ describe('validate case detail', () => {
     });
   });
 
-  it('returns an error if yearAmounts have duplicate years', () => {
+  it('returns an error if yearAmounts is in the future', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
@@ -227,7 +227,7 @@ describe('validate case detail', () => {
         yearAmounts: [
           {
             year: '2100',
-            amount: '000',
+            amount: 0,
           },
         ],
       },
@@ -235,6 +235,7 @@ describe('validate case detail', () => {
     expect(errors).toEqual({
       yearAmounts: [
         {
+          amount: 'Please enter a valid amount.',
           year: 'That year is in the future. Please enter a valid year.',
           index: 0,
         },
