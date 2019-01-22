@@ -33,10 +33,16 @@ const MOCK_WORK_ITEM = {
 
 describe('assignWorkItems', () => {
   it('unauthorized user tries to assign a work item', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        userId: 'baduser',
+      }),
+      environment: { stage: 'local' },
+    };
     let error;
     try {
       await assignWorkItems({
-        userId: 'baduser',
+        applicationContext,
       });
     } catch (err) {
       error = err;

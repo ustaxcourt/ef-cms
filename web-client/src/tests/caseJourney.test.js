@@ -19,8 +19,8 @@ import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkRecordsPayGovId from './journey/petitionsClerkRecordsPayGovId';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 
 import respondentLogIn from './journey/respondentLogIn';
@@ -99,7 +99,7 @@ describe('Case journey', async () => {
   petitionsClerkLogIn(test, 'petitionsclerk1');
   petitionsClerkViewsDashboardAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
-  petitionsClerkRecordsPayGovId(test);
+  petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
 
   respondentLogIn(test);
