@@ -16,8 +16,6 @@ joiValidationDecorator(
   CaseInitiator,
   joi.object().keys({
     petitionFile: joi.object().required(),
-    requestForPlaceOfTrial: joi.object().required(),
-    statementOfTaxpayerIdentificationNumber: joi.object().required(),
   }),
 );
 

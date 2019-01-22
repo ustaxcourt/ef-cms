@@ -17,7 +17,7 @@ export default test => {
     test.workItemId = workItem.workItemId;
 
     expect(workItem.messages[0]).toMatchObject({
-      message: 'a Stipulated Decision filed by respondent is ready for review',
+      message: 'A Stipulated Decision filed by Respondent is ready for review.',
       sentBy: 'Test Respondent',
       userId: 'respondent',
     });
@@ -26,6 +26,9 @@ export default test => {
       state: test.getState(),
     });
     expect(formatted[0].createdAtFormatted).toBeDefined();
+    expect(formatted[0].docketNumberWithSuffix).toEqual(
+      `${test.docketNumber}W`,
+    );
     expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
   });
 };

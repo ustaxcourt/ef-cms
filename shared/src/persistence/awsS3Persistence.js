@@ -76,33 +76,15 @@ exports.uploadPdfsForNewCase = async ({
   fileHasUploaded,
 }) => {
   const policy = await getUploadPolicy({ applicationContext });
-
   const petitionDocumentId = await exports.uploadPdf({
     applicationContext,
     policy,
     file: caseInitiator.petitionFile,
   });
-  fileHasUploaded();
 
-  const requestForPlaceOfTrialDocumentId = await exports.uploadPdf({
-    applicationContext,
-    policy,
-    file: caseInitiator.requestForPlaceOfTrial,
-  });
-  fileHasUploaded();
-
-  const statementOfTaxpayerIdentificationNumberDocumentId = await exports.uploadPdf(
-    {
-      applicationContext,
-      policy,
-      file: caseInitiator.statementOfTaxpayerIdentificationNumber,
-    },
-  );
   fileHasUploaded();
 
   return {
     petitionDocumentId,
-    requestForPlaceOfTrialDocumentId,
-    statementOfTaxpayerIdentificationNumberDocumentId,
   };
 };

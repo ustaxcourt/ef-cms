@@ -1,6 +1,9 @@
+import { state } from 'cerebral';
+import { set } from 'cerebral/factories';
+
 import clearAlerts from '../actions/clearAlertsAction';
 import getCase from '../actions/getCaseAction';
-import getUsersInSection from '../actions/getUsersInSectionAction';
+import getInternalUsers from '../actions/getInternalUsersAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setBaseUrl from '../actions/setBaseUrlAction';
 import setCase from '../actions/setCaseAction';
@@ -18,10 +21,11 @@ export default [
   getCase,
   setCase,
   setBaseUrl,
-  getUsersInSection({}),
+  getInternalUsers,
   {
     error: [setAlertError],
     success: [setInternalUsers],
   },
+  set(state.currentTab, 'Pending Messages'),
   setCurrentPage('DocumentDetail'),
 ];

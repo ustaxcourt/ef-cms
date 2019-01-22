@@ -5,6 +5,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 const WorkItem = require('../../entities/WorkItem');
 const Message = require('../../entities/Message');
+const { capitalize } = require('lodash');
 
 /**
  * getWorkItem
@@ -14,12 +15,11 @@ const Message = require('../../entities/Message');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
-  if (!isAuthorized(userId, WORKITEM)) {
-    throw new UnauthorizedError(`Unauthorized to assign work item`);
+exports.assignWorkItems = async ({ workItems, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user.userId, WORKITEM)) {
+    throw new UnauthorizedError('Unauthorized to assign work item');
   }
-
-  const user = applicationContext.user;
 
   const workItemEntities = await Promise.all(
     workItems.map(workItem => {
@@ -38,7 +38,11 @@ exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
             })
             .addMessage(
               new Message({
-                message: `The work item was assigned.`,
+                message: `A ${
+                  fullWorkItem.document.documentType
+                } filed by ${capitalize(
+                  fullWorkItem.document.filedBy,
+                )} is ready for review.`,
                 sentBy: user.name,
                 userId: user.userId,
                 sentTo: workItem.assigneeName,

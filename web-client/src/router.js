@@ -36,9 +36,9 @@ const router = {
       const path = query.path || '/';
       app.getSequence('loginWithTokenSequence')({ token, path });
     });
-    route('/file-a-petition', () => {
-      document.title = `File a petition ${pageTitleSuffix}`;
-      app.getSequence('gotoFilePetitionSequence')();
+    route('/start-a-case', () => {
+      document.title = `Start a case ${pageTitleSuffix}`;
+      app.getSequence('gotoStartCaseSequence')();
     });
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;

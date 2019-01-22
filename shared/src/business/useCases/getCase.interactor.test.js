@@ -1,9 +1,9 @@
 const assert = require('assert');
 const { getCase } = require('./getCase.interactor');
 const sinon = require('sinon');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const { MOCK_CASE } = require('../../test/mockCase');
 
-const documents = MOCK_DOCUMENTS;
+const documents = MOCK_CASE.documents;
 
 describe('Get case', () => {
   let applicationContext;
@@ -14,12 +14,7 @@ describe('Get case', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () =>
-            Promise.resolve({
-              docketNumber: '101-18',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              documents,
-            }),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
       environment: { stage: 'local' },
@@ -45,6 +40,7 @@ describe('Get case', () => {
       await getCase({
         userId: 'petitionsclerk',
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (error) {
@@ -56,11 +52,7 @@ describe('Get case', () => {
   });
 
   it('success case by docket number', async () => {
-    const getCaseByDocketNumberStub = sinon.stub().resolves({
-      docketNumber: '00101-00',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documents,
-    });
+    const getCaseByDocketNumberStub = sinon.stub().resolves(MOCK_CASE);
     applicationContext = {
       getPersistenceGateway: () => ({
         getCaseByDocketNumber: getCaseByDocketNumberStub,
@@ -86,6 +78,11 @@ describe('Get case', () => {
           Promise.resolve({
             docketNumber: '00101-00',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            petitioners: [{ name: 'Test Taxpayer' }],
+            caseType: 'Other',
+            procedureType: 'Regular',
+            createdAt: new Date().toISOString(),
+            preferredTrialCity: 'Washington, D.C.',
             documents,
           }),
       }),
@@ -110,6 +107,11 @@ describe('Get case', () => {
             {
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
+              caseType: 'Other',
+              procedureType: 'Regular',
+              createdAt: new Date().toISOString(),
+              preferredTrialCity: 'Washington, D.C.',
               documents,
             },
           ]),
@@ -135,6 +137,11 @@ describe('Get case', () => {
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
+              caseType: 'Other',
+              procedureType: 'Regular',
+              createdAt: new Date().toISOString(),
+              preferredTrialCity: 'Washington, D.C.',
             }),
         };
       },
@@ -150,7 +157,9 @@ describe('Get case', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
@@ -161,6 +170,11 @@ describe('Get case', () => {
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              petitioners: [{ name: 'Test Taxpayer' }],
+              caseType: 'Other',
+              procedureType: 'Regular',
+              createdAt: new Date().toISOString(),
+              preferredTrialCity: 'Washington, D.C.',
             }),
         };
       },
@@ -176,6 +190,8 @@ describe('Get case', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain(
+      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+    );
   });
 });

@@ -72,11 +72,24 @@ h6,
   margin-bottom: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  &.underlined {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $color-gray-lighter;
+  }
+}
+
 h1[tabIndex='-1']:focus {
   outline: none;
 }
 
 p {
+  max-width: 700px;
   margin-top: 0;
   margin-bottom: 20px;
   font-weight: $font-regular;

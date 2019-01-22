@@ -26,7 +26,7 @@ export default connect(
               <td className="responsive-title">
                 <span className="responsive-label">Docket number</span>
                 <a href={'/case-detail/' + item.docketNumber}>
-                  {item.docketNumber}
+                  {item.docketNumberWithSuffix}
                 </a>
               </td>
               <td>

@@ -4,6 +4,21 @@
 
 .usa-form-group {
   margin-bottom: 30px;
+
+  label {
+    margin: 0 0 12px;
+  }
+
+  option:first-child {
+    font-weight: initial;
+  }
+}
+
+.usa-form-hint {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: $color-gray;
+  font-size: 15px;
 }
 
 .usa-header .usa-nav-secondary .usa-search {
@@ -26,4 +41,16 @@
 
 .usa-section {
   padding-top: 0;
+}
+
+.usa-unstyled-list li {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.usa-date-of-birth {
+  label {
+    margin: 0 0 10px;
+    font-weight: $font-normal;
+  }
 }

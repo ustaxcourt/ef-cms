@@ -8,6 +8,7 @@ module.exports = {
   ],
   plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jest'],
   rules: {
+    quotes: ['error', 'single'],
     'prettier/prettier': 'error',
     'arrow-parens': ['error', 'as-needed'],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
