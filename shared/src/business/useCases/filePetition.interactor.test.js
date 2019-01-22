@@ -2,8 +2,6 @@ const { filePetition } = require('./filePetition.interactor');
 const sinon = require('sinon');
 
 describe('filePetition', () => {
-  let applicationContext;
-
   function createApplicationContext(options) {
     return {
       getCurrentUser: () => ({

@@ -8,6 +8,9 @@ export default test => {
       key: 'caseType',
       value: '',
     });
+
+    await test.runSequence('validateCaseDetailSequence');
+
     // caseType
     expect(test.getState('caseDetailErrors')).toEqual({
       caseType: 'Case Type is required.',
@@ -18,6 +21,8 @@ export default test => {
       value: 'Other',
     });
 
+    await test.runSequence('validateCaseDetailSequence');
+
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
     //yearAmounts
@@ -25,6 +30,8 @@ export default test => {
       key: 'yearAmounts',
       value: [{ amount: '1,000', year: '1999' }],
     });
+
+    await test.runSequence('validateCaseDetailSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
@@ -44,18 +51,19 @@ export default test => {
     // });
 
     // irsNoticeDate
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
+    await test.runSequence('validateCaseDetailSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
@@ -64,18 +72,19 @@ export default test => {
       key: 'payGovId',
       value: '123',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'payGovYear',
       value: '2018',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'payGovMonth',
       value: '12',
     });
-    await test.runSequence('updateCaseValueSequence', {
+    await test.runSequence('updateFormValueSequence', {
       key: 'payGovDay',
       value: '24',
     });
+    await test.runSequence('validateCaseDetailSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
