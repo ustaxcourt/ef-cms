@@ -10,46 +10,27 @@ export default test => {
     expect(
       runCompute(extractedPendingMessagesFromCaseDetail, {
         state: test.getState(),
-      }),
+      }).map(message => ({
+        message: message.currentMessage.message,
+        sentBy: message.currentMessage.sentBy,
+        assigneeId: message.assigneeId,
+      })),
     ).toMatchObject([
       {
-        assigneeId: null,
-        assigneeName: 'Unassigned',
-        caseStatus: 'General Docket',
-        docketNumber: test.docketNumber,
-        document: {
-          documentType: 'Answer',
-        },
-        messages: [
-          {
-            message: 'a Answer filed by respondent is ready for review',
-            sentBy: 'Test Respondent',
-            userId: 'respondent',
-          },
-        ],
-        section: 'docket',
-        selected: false,
-        sentBy: 'respondent',
+        assigneeId: 'petitionsclerk1',
+        message: 'A Petition filed by Petitioner is ready for review.',
+        sentBy: 'Test Petitionsclerk',
       },
       {
         assigneeId: null,
-        assigneeName: 'Unassigned',
-        caseStatus: 'General Docket',
-        docketNumber: test.docketNumber,
-        document: {
-          documentType: 'Stipulated Decision',
-        },
-        messages: [
-          {
-            message:
-              'a Stipulated Decision filed by respondent is ready for review',
-            sentBy: 'Test Respondent',
-            userId: 'respondent',
-          },
-        ],
-        section: 'docket',
-        selected: false,
-        sentBy: 'respondent',
+        message: 'A Answer filed by Respondent is ready for review.',
+        sentBy: 'Test Respondent',
+      },
+      {
+        assigneeId: null,
+        message:
+          'A Stipulated Decision filed by Respondent is ready for review.',
+        sentBy: 'Test Respondent',
       },
     ]);
   });

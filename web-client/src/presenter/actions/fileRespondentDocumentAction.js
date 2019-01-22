@@ -19,7 +19,7 @@ export default async ({ applicationContext, get }) => {
     docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
       title: `Your ${documentType} was uploaded successfully.`,
-      message: `Your document has been filed.`,
+      message: 'Your document has been filed.',
     },
   };
 };

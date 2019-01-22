@@ -2,11 +2,11 @@ describe('File a petition', function() {
   let rowCount;
   let createdDocketNumber;
 
-  before(() => {
-    cy.login('taxpayer');
-  });
-
   describe('Dashboard view', () => {
+    before(() => {
+      cy.login('taxpayer');
+    });
+
     it('finds footer element', () => {
       cy.get('footer').should('exist');
     });
@@ -19,6 +19,7 @@ describe('File a petition', function() {
         });
       cy.get('#init-file-petition').click();
     });
+
     describe('USA Banner', () => {
       it('shows header and hides content', () => {
         cy.contains('.usa-banner-header', 'how you know');
@@ -38,54 +39,79 @@ describe('File a petition', function() {
 
   describe('creation form', () => {
     before(() => {
-      cy.url().should('include', 'file-a-petition');
+      cy.login('taxpayer', 'start-a-case');
     });
 
-    it('has three file inputs', () => {
-      cy.get('form#file-a-petition')
-        .find('input[type="file"]')
-        .should('have.length', 3);
+    it('has a file a petition file input', () => {
       cy.get('input#petition-file').should('exist');
-      cy.get('input#request-for-place-of-trial').should('exist');
-      cy.get('input#statement-of-taxpayer-id').should('exist');
-      cy.contains('button[type="submit"]', 'Upload');
+      cy.contains('button[type="submit"]', 'Submit');
+    });
+
+    it('fill in the case-type select', () => {
+      cy.get('#case-type')
+        .scrollIntoView()
+        .select('Notice of Deficiency');
+    });
+
+    it('fills in the date', () => {
+      cy.get('#date-of-notice-month')
+        .scrollIntoView()
+        .type('01');
+      cy.get('#date-of-notice-day')
+        .scrollIntoView()
+        .type('19');
+      cy.get('#date-of-notice-year')
+        .scrollIntoView()
+        .type('1999');
+    });
+
+    it('click the small radio button', () => {
+      cy.get('#radios').scrollIntoView();
+      cy.get('#radios label')
+        .first()
+        .click();
+    });
+
+    it('select a city', () => {
+      cy.get('#preferred-trial-city')
+        .scrollIntoView()
+        .select('Mobile, Alabama');
     });
 
     it('shows validation checkmark when file is selected', () => {
-      cy.get('form#file-a-petition')
+      cy.get('form')
         .find('label[for="petition-file"]')
+        .scrollIntoView()
         .should('not.have.class', 'validated');
 
       // select first file
-      cy.upload_file('w3-dummy.pdf', 'form#file-a-petition #petition-file');
+      cy.upload_file('w3-dummy.pdf', 'form #petition-file');
 
-      cy.get('form#file-a-petition')
+      cy.get('form')
         .find('label[for="petition-file"]')
         .should('have.class', 'validated');
+    });
 
-      // select second file
-      cy.upload_file(
-        'w3-dummy.pdf',
-        'form#file-a-petition #request-for-place-of-trial',
-      );
-      cy.get('form#file-a-petition')
-        .find('label[for="request-for-place-of-trial"]')
-        .should('have.class', 'validated');
+    it('tries to submit the form without clicking the signature', () => {
+      cy.get('form button#submit-case')
+        .scrollIntoView()
+        .click();
+      cy.get('.usa-alert.usa-alert-error').should('exist');
+    });
 
-      // select third file
-      cy.upload_file(
-        'w3-dummy.pdf',
-        'form#file-a-petition #statement-of-taxpayer-id',
-      );
-      cy.get('form#file-a-petition')
-        .find('label[for="statement-of-taxpayer-id"]')
-        .should('have.class', 'validated');
+    it('check the signature', () => {
+      // why do we click the label instead of the input?  Because a click() or check() on the input doesn't work for some reason.... ಠ_ಠ
+      cy.get('#signature + label')
+        .scrollIntoView()
+        .click();
     });
 
     it('submits forms and shows a success message', () => {
       cy.server();
       cy.route('POST', '*/cases').as('postCase');
-      cy.get('form#file-a-petition button[type="submit"]').click();
+      cy.get('form button#submit-case')
+        .scrollIntoView()
+        .click();
       cy.wait('@postCase');
       cy.get('@postCase').should(xhr => {
         expect(xhr.responseBody).to.have.property('docketNumber');
@@ -93,7 +119,7 @@ describe('File a petition', function() {
       });
       cy.get('.usa-alert-success', { timeout: 10000 }).should(
         'contain',
-        'uploaded successfully',
+        'successfully submitted',
       );
     });
     it('case list table reflects newly-added record', () => {
@@ -105,7 +131,8 @@ describe('File a petition', function() {
 
   describe('can view case detail', () => {
     before(() => {
-      cy.routeTo(`/case-detail/${createdDocketNumber}`);
+      cy.get('#search-field').type(createdDocketNumber);
+      cy.get('#search-input').submit();
       cy.url().should('include', 'case-detail');
     });
 
