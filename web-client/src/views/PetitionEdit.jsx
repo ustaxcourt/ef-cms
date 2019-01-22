@@ -1,17 +1,38 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 import React from 'react';
 import UpdateCaseCancelModalDialog from './UpdateCaseCancelModalDialog';
 
 export default connect(
   {
     caseDetail: state.caseDetail,
-    submitting: state.submitting,
+    form: state.form,
     showModal: state.showModal,
+    submitting: state.submitting,
+    submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
-  function PetitionEdit({ caseDetail, submitting, showModal }) {
+  function PetitionEdit({
+    caseDetail,
+    form,
+    showModal,
+    submitting,
+    submitUpdateCaseSequence,
+    updateCaseValueSequence,
+    updateFormValueSequence,
+    validateCaseDetailSequence,
+  }) {
     return (
-      <form noValidate onSubmit={() => {}} role="form">
+      <form
+        noValidate
+        onSubmit={e => {
+          e.preventDefault();
+          submitUpdateCaseSequence();
+        }}
+        role="form"
+      >
         {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
@@ -20,11 +41,23 @@ export default connect(
           <div className="usa-grid-full usa-form-group">
             <div className="usa-input-grid usa-input-grid-small">
               <label htmlFor="year">Year</label>
-              <input id="year" type="text" />
+              <input
+                id="year"
+                type="text"
+                onBlur={() => {
+                  validateCaseDetailSequence();
+                }}
+              />
             </div>
             <div className="usa-input-grid usa-input-grid-medium">
               <label htmlFor="amount">Amount</label>
-              <input id="amount" type="text" />
+              <input
+                id="amount"
+                type="text"
+                onBlur={() => {
+                  validateCaseDetailSequence();
+                }}
+              />
             </div>
           </div>
           <fieldset>
@@ -35,15 +68,24 @@ export default connect(
                   MM
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="date-of-notice-legend"
-                  id="date-of-notice-month"
-                  name="month"
                   aria-label="month, two digits"
-                  type="number"
-                  min="1"
+                  className="usa-input-inline"
+                  id="date-of-notice-month"
                   max="12"
-                  onChange={() => {}}
+                  min="1"
+                  name="irsMonth"
+                  type="number"
+                  value={form.irsMonth}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
               <div className="usa-form-group usa-form-group-day">
@@ -51,15 +93,24 @@ export default connect(
                   DD
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="date-of-notice-legend"
                   aria-label="day, two digits"
+                  className="usa-input-inline"
                   id="date-of-notice-day"
-                  name="day"
-                  type="number"
-                  min="1"
                   max="31"
-                  onChange={() => {}}
+                  min="1"
+                  name="irsDay"
+                  type="number"
+                  value={form.irsDay}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
               <div className="usa-form-group usa-form-group-year">
@@ -67,15 +118,24 @@ export default connect(
                   YYYY
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="date-of-notice-legend"
                   aria-label="year, four digits"
+                  className="usa-input-inline"
                   id="date-of-notice-year"
-                  name="year"
-                  type="number"
-                  min="1900"
                   max="2100"
-                  onChange={() => {}}
+                  min="1900"
+                  name="irsYear"
+                  type="number"
+                  value={form.irsYear}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -95,15 +155,24 @@ export default connect(
                   MM
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="fee-payment-date-legend"
-                  id="fee-payment-date-month"
-                  name="month"
                   aria-label="month, two digits"
-                  type="number"
-                  min="1"
+                  className="usa-input-inline"
+                  id="fee-payment-date-month"
                   max="12"
-                  onChange={() => {}}
+                  min="1"
+                  name="payGovMonth"
+                  type="number"
+                  value={form.payGovMonth}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
               <div className="usa-form-group usa-form-group-day">
@@ -111,15 +180,24 @@ export default connect(
                   DD
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="fee-payment-date-legend"
                   aria-label="day, two digits"
+                  className="usa-input-inline"
                   id="fee-payment-date-day"
-                  name="day"
-                  type="number"
-                  min="1"
                   max="31"
-                  onChange={() => {}}
+                  min="1"
+                  name="payGovDay"
+                  type="number"
+                  value={form.payGovDay}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
               <div className="usa-form-group usa-form-group-year">
@@ -127,15 +205,24 @@ export default connect(
                   YYYY
                 </label>
                 <input
-                  className="usa-input-inline"
                   aria-describedby="fee-payment-date-legend"
                   aria-label="year, four digits"
+                  className="usa-input-inline"
                   id="fee-payment-date-year"
-                  name="year"
-                  type="number"
-                  min="1900"
                   max="2100"
-                  onChange={() => {}}
+                  min="1900"
+                  name="payGovYear"
+                  type="number"
+                  value={form.payGovYear}
+                  onBlur={() => {
+                    validateCaseDetailSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -144,17 +231,26 @@ export default connect(
             <label htmlFor="fee-payment-id">Fee Payment ID</label>
             <input
               id="fee-payment-id"
+              name="payGovId"
               type="number"
               value={caseDetail.payGovId}
-              onChange={() => {}}
+              onBlur={() => {
+                validateCaseDetailSequence();
+              }}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
             />
           </div>
         </div>
         <button
-          type="submit"
-          disabled={submitting}
-          className={submitting ? 'usa-button-active' : 'usa-button'}
           aria-disabled={submitting ? 'true' : 'false'}
+          className={submitting ? 'usa-button-active' : 'usa-button'}
+          disabled={submitting}
+          type="submit"
         >
           {submitting && <div className="spinner" />}
           Save
