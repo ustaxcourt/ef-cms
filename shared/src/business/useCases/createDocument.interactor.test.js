@@ -10,7 +10,10 @@ const MOCK_CASE = {
   docketNumber: '56789-18',
   petitioners: [{ name: 'Test Taxpayer' }],
   status: 'new',
+  caseType: 'Other',
+  procedureType: 'Regular',
   createdAt: new Date().toISOString(),
+  preferredTrialCity: 'Washington, D.C.',
   documents: [],
 };
 describe('createDocument', () => {
