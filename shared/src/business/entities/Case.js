@@ -3,7 +3,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
-const { uniq } = require('lodash');
+const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { pick } = require('lodash');
 const YearAmount = require('./YearAmount');
@@ -174,7 +174,10 @@ joiValidationDecorator(
     workItems: joi.array().optional(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
-    yearAmounts: joi.array().optional(),
+    yearAmounts: joi
+      .array()
+      .unique((a, b) => a.year === b.year)
+      .optional(),
   }),
   function() {
     const Document = require('./Document');
@@ -182,7 +185,7 @@ joiValidationDecorator(
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       YearAmount.validateCollection(this.yearAmounts) &&
-      uniq(this.yearAmounts).length === this.yearAmounts.length
+      Case.areYearsUnique(this.yearAmounts)
     );
   },
   {
@@ -194,7 +197,13 @@ joiValidationDecorator(
     irsNoticeDate: 'A valid IRS Notice Date is a required field for serving.',
     procedureType: 'Procedure Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
-    yearAmounts: 'A valid year and amount are required.',
+    yearAmounts: [
+      {
+        contains: 'contains a duplicate',
+        message: 'Duplicate years are not allowed',
+      },
+      'A valid year and amount are required.',
+    ],
     payGovId: 'Fee Payment Id must be in a valid format',
     payGovDate: 'Pay Gov Date is required',
   },
@@ -303,6 +312,10 @@ Case.documentTypes = {
   answer: 'Answer',
   stipulatedDecision: 'Stipulated Decision',
   irsNotice: 'IRS Notice',
+};
+
+Case.areYearsUnique = yearAmounts => {
+  return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
 };
 
 Case.getDocumentTypes = () => {

@@ -28,7 +28,6 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual({
       yearAmounts: [
         {
-          amount: 'Please enter a valid amount.',
           index: 0,
           year: 'Please enter a valid year.',
         },

@@ -18,17 +18,14 @@ function toRawObject(entity) {
 
 function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
-  console.log('errros', errors)
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
-    console.log('errors[key]', errors[key])
     if (Array.isArray(errors[key])) {
       errors[key] = errors[key].map(error =>
         Object.keys(error).map(otherKey => {
           const errorMap = entity.getErrorToMessageMap()[otherKey];
           if (Array.isArray(errorMap)) {
             for (let errorObject of errorMap) {
-              console.log('errorOBject', errorObject, errorObject)
               if (
                 typeof errorObject === 'object' &&
                 error[otherKey].indexOf(errorObject.contains) > -1
@@ -44,7 +41,6 @@ function getFormattedValidationErrorsHelper(entity) {
       );
     } else {
       const errorMap = entity.getErrorToMessageMap()[key];
-      console.log('errorMap', errorMap)
       if (Array.isArray(errorMap)) {
         for (let errorObject of errorMap) {
           if (
@@ -59,7 +55,6 @@ function getFormattedValidationErrorsHelper(entity) {
         }
       } else {
         errors[key] = errorMap;
-        console.log('setting', errors[key])
       }
     }
   }
@@ -78,13 +73,15 @@ function getFormattedValidationErrors(entity) {
   }
   for (let key of keys) {
     const value = entity[key];
-    console.log(value, entity[key])
-    if (Array.isArray(value)) {
-
+    if (errors && errors[key]) {
+      continue;
+    } else if (Array.isArray(value)) {
       obj[key] = value
-        .map(v => getFormattedValidationErrors(v))
-        .filter(v => v)
-        .map((v, index) => ({ ...v, index }));
+        .map((v, index) => {
+          const e = getFormattedValidationErrors(v);
+          return e ? { ...e, index } : null;
+        })
+        .filter(v => v);
       if (obj[key].length === 0) {
         if (errors && errors[key]) {
           obj[key] =
@@ -101,12 +98,8 @@ function getFormattedValidationErrors(entity) {
     ) {
       obj[key] = getFormattedValidationErrors(value);
       if (!obj[key]) delete obj[key];
-    } else {
-      console.log(obj[key], value)
-      // obj[key] = value;
     }
   }
-  console.log('here', obj)
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
@@ -153,7 +146,11 @@ exports.joiValidationDecorator = function(
     if (!error) return null;
     const errors = {};
     error.details.forEach(detail => {
-      errors[detail.context.key] = detail.message;
+      if (!Number.isInteger(detail.context.key)) {
+        errors[detail.context.key] = detail.message;
+      } else {
+        errors[detail.context.label] = detail.message;
+      }
     });
     return errors;
   };
