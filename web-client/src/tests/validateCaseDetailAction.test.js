@@ -44,7 +44,7 @@ describe('validateCaseDetail', async () => {
 
   it('should call the path error when any errors are found', async () => {
     validateCaseDetailStub.returns('error');
-    const { state } = await runAction(validateCaseDetail, {
+    await runAction(validateCaseDetail, {
       state: {
         form: {
           irsYear: '2009',
