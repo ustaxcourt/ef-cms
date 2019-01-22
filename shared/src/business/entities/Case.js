@@ -130,7 +130,7 @@ joiValidationDecorator(
       // .uuid(uuidVersions)
       .optional(),
     caseTitle: joi.string().required(),
-    caseType: joi.string().optional(),
+    caseType: joi.string().required(),
     createdAt: joi
       .date()
       .iso()
@@ -150,6 +150,7 @@ joiValidationDecorator(
     irsNoticeDate: joi
       .date()
       .iso()
+      .allow(null)
       .optional(),
     irsSendDate: joi
       .date()
@@ -159,6 +160,7 @@ joiValidationDecorator(
     payGovDate: joi
       .date()
       .iso()
+      .allow(null)
       .optional(),
     status: joi
       .string()
@@ -170,8 +172,8 @@ joiValidationDecorator(
       .min(1)
       .required(),
     workItems: joi.array().optional(),
-    preferredTrialCity: joi.string().optional(),
-    procedureType: joi.string().optional(),
+    preferredTrialCity: joi.string().required(),
+    procedureType: joi.string().required(),
     yearAmounts: joi.array().optional(),
   }),
   function() {
@@ -182,6 +184,19 @@ joiValidationDecorator(
       YearAmount.validateCollection(this.yearAmounts) &&
       uniq(this.yearAmounts).length === this.yearAmounts.length
     );
+  },
+  {
+    caseTitle: 'A case title is required.',
+    docketNumber: 'Docket number is required.',
+    documents: 'At least one valid document is required.',
+    caseType: 'Case Type is required.',
+    petitioners: 'At least one valid petitioner is required.',
+    irsNoticeDate: 'A valid IRS Notice Date is a required field for serving.',
+    procedureType: 'Procedure Type is required.',
+    preferredTrialCity: 'Preferred Trial City is required.',
+    yearAmounts: 'A valid year and amount are required.',
+    payGovId: 'Fee Payment Id must be in a valid format',
+    payGovDate: 'Pay Gov Date is required',
   },
 );
 
@@ -325,6 +340,8 @@ Case.filterMetadata = ({ cases, applicationContext }) => {
     'caseId',
     'docketNumberSuffix',
     'caseTitle',
+    'caseType',
+    'procedureType',
     'userId',
     'petitioners',
     'respondent',

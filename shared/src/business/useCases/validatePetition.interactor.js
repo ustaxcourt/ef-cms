@@ -9,7 +9,7 @@
 exports.validatePetition = ({ petition, applicationContext }) => {
   const errors = new (applicationContext.getEntityConstructors()).Petition(
     petition,
-  ).getValidationErrors();
+  ).getFormattedValidationErrors();
   if (!errors) return null;
   return errors;
 };
