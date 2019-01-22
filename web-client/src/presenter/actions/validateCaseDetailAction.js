@@ -42,14 +42,18 @@ export default ({ applicationContext, store, path, get }) => {
     form.payGovDate = null;
   }
 
+  let yearAmounts = [];
   if (form.yearAmounts && form.yearAmounts.length) {
     form.yearAmounts.forEach(yearAmount => {
-      yearAmount.year = `${yearAmount.year}-01-01`;
+      const year = `${yearAmount.year},11,31`;
+      const amount = yearAmount.amount.replace(/,/g, '');
+      yearAmounts.push({ year, amount});
     });
   }
+  console.log(form.yearAmounts);
 
   const errors = applicationContext.getUseCases().validateCaseDetail({
-    caseDetail: { ...caseDetail, ...form },
+    caseDetail: { ...caseDetail, ...form, ...yearAmounts },
     applicationContext,
   });
   console.log('errors from backend', errors);

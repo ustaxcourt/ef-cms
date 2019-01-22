@@ -8,7 +8,7 @@ export default test => {
       key: 'caseType',
       value: '',
     });
-
+    // caseType
     expect(test.getState('caseDetailErrors')).toEqual({
       caseType: 'Case Type is required.',
     });
@@ -20,26 +20,19 @@ export default test => {
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
+    //yearAmounts
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
-      value: [{ amount: '100' }],
+      value: [{ amount: '1,000', year: '1999' }],
     });
 
-    expect(test.getState('caseDetailErrors')).toEqual({
-      yearAmounts: [
-        {
-          amount: 'Please enter a valid amount.',
-          index: 0,
-          year: 'Please enter a valid year.',
-        },
-      ],
-    });
+    expect(test.getState('caseDetailErrors')).toEqual(null);
 
+    // // failure tests - TODO make work
     // await test.runSequence('updateCaseValueSequence', {
     //   key: 'yearAmounts',
-    //   value: [{ year: '2100' }],
+    //   value: [{ amount: '000', year: '2100' }],
     // });
-    //
     // expect(test.getState('caseDetailErrors')).toEqual({
     //   yearAmounts: [
     //     {
@@ -50,24 +43,26 @@ export default test => {
     //   ],
     // });
 
-    ////////
-    // await test.runSequence('updateCaseValueSequence', {
-    //   key: 'yearAmounts',
-    //   value: [{ year: '2000', amount: '100' }],
-    // });
-    //
-    // expect(test.getState('alertError')).toEqual(null);
+    // irsNoticeDate
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
 
-    // await test.runSequence('updateFormValueSequence', {
-    //   key: 'yearAmounts',
-    //   value: [{ year: '', amount: '100' }],
-    // });
-    //
-    // await test.runSequence('updateCaseValueSequence');
-    //
-    // expect(test.getState('alertError')).toEqual({
-    //   title: 'Errors were found. Please correct your form and resubmit.',
-    // });
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+
+
+    // payGovId and payGovDate
+
+
 
     // await test.runSequence('submitUpdateCaseSequence');
     // test.setState('caseDetail', {});
