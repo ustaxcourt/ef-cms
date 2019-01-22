@@ -5,7 +5,6 @@ const joi = require('joi-browser');
 const uuid = require('uuid');
 const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const { pick } = require('lodash');
 const YearAmount = require('./YearAmount');
 
 const uuidVersions = {
@@ -343,35 +342,6 @@ Case.getTrialCities = procedureType => {
       return REGULAR_TRIAL_CITIES;
     default:
       return REGULAR_TRIAL_CITIES;
-  }
-};
-
-Case.filterMetadata = ({ cases, applicationContext }) => {
-  const fieldsToPick = [
-    'documents',
-    'docketNumber',
-    'caseId',
-    'docketNumberSuffix',
-    'caseTitle',
-    'caseType',
-    'procedureType',
-    'userId',
-    'petitioners',
-    'respondent',
-    'createdAt',
-    'status',
-    'payGovId',
-    'payGovDate',
-    'preferredTrialCity',
-  ];
-  if (applicationContext.isAuthorizedForCaseMetadata()) {
-    return cases;
-  } else {
-    if (Array.isArray(cases)) {
-      return cases.map(c => pick(c, fieldsToPick));
-    } else {
-      return pick(cases, fieldsToPick);
-    }
   }
 };
 

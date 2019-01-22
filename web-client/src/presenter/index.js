@@ -36,6 +36,7 @@ import updateForwardFormValueSequence from './sequences/updateForwardFormValueSe
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
+import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 
 import state from './state';
 
@@ -83,6 +84,7 @@ export default {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     viewDocumentSequence,
+    validateCaseDetailSequence,
   },
   state,
 };
