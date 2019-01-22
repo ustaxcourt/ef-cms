@@ -4,25 +4,6 @@ import caseDetailHelper from '../../presenter/computeds/caseDetailHelper';
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'caseType',
-      value: '',
-    });
-
-    await test.runSequence('validateCaseDetailSequence');
-
-    // caseType
-    expect(test.getState('caseDetailErrors')).toEqual({
-      caseType: 'Case Type is required.',
-    });
-
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'caseType',
-      value: 'Other',
-    });
-
-    await test.runSequence('validateCaseDetailSequence');
-
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
     //yearAmounts
@@ -35,22 +16,29 @@ export default test => {
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
-    // // failure tests - TODO make work
-    // await test.runSequence('updateCaseValueSequence', {
-    //   key: 'yearAmounts',
-    //   value: [{ amount: '000', year: '2100' }],
-    // });
-    // expect(test.getState('caseDetailErrors')).toEqual({
-    //   yearAmounts: [
-    //     {
-    //       amount: 'Please enter a valid amount.',
-    //       index: 0,
-    //       year: 'That year is in the future. Please enter a valid year.',
-    //     },
-    //   ],
-    // });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'yearAmounts',
+      value: [{ amount: '000', year: '2100' }],
+    });
+
+    await test.runSequence('validateCaseDetailSequence');
+
+    expect(test.getState('caseDetailErrors')).toEqual({
+      yearAmounts: [
+        {
+          index: 0,
+          year: 'That year is in the future. Please enter a valid year.',
+        },
+      ],
+    });
+
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'yearAmounts',
+      value: [{ amount: '10', year: '1990' }],
+    });
 
     // irsNoticeDate
+
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -101,7 +89,6 @@ export default test => {
     expect(test.getState('caseDetail.payGovDate')).toEqual(
       '2018-12-24T00:00:00.000Z',
     );
-    expect(test.getState('caseDetail.caseType')).toEqual('Other');
 
     //
     const helper = runCompute(caseDetailHelper, {
