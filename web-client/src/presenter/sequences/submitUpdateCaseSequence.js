@@ -13,12 +13,13 @@ export default [
   clearForm,
   validateCaseDetail,
   {
-    success: [set(state.caseDetail[props.key], props.value)],
+    success: [
+      updateCase,
+      {
+        error: [setAlertError],
+        success: [setCase, setAlertSuccess, clearForm],
+      },
+    ],
     error: [set(state.caseDetailErrors, props.errors)],
-  },
-  updateCase,
-  {
-    error: [setAlertError],
-    success: [setCase, setAlertSuccess, clearForm],
   },
 ];
