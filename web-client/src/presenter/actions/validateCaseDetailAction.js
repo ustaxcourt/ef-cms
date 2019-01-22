@@ -50,7 +50,6 @@ export default ({ applicationContext, store, path, get }) => {
       yearAmounts.push({ year, amount});
     });
   }
-  console.log(form.yearAmounts);
 
   const errors = applicationContext.getUseCases().validateCaseDetail({
     caseDetail: { ...caseDetail, ...form, ...yearAmounts },
