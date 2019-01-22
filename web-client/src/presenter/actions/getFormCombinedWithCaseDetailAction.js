@@ -45,9 +45,9 @@ export default ({ get }) => {
   }
 
   let yearAmounts = [];
-  if (form.yearAmounts && form.yearAmounts.length) {
-    form.yearAmounts.forEach(yearAmount => {
-      const year = `${yearAmount.year}-12-31`;
+  if (caseDetail.yearAmounts && caseDetail.yearAmounts.length) {
+    caseDetail.yearAmounts.forEach(yearAmount => {
+      const year = yearAmount.year;
       const amount = yearAmount.amount.replace(/,/g, '');
       yearAmounts.push({ year, amount });
     });

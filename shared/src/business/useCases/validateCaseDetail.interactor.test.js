@@ -193,4 +193,52 @@ describe('validate case detail', () => {
       yearAmounts: 'Duplicate years are not allowed',
     });
   });
+
+  it('returns an error if yearAmounts have duplicate years', () => {
+    const errors = validateCaseDetail({
+      caseDetail: {
+        caseType: 'defined',
+        procedureType: 'defined',
+        docketNumber: '101-18',
+        preferredTrialCity: 'Chattanooga, TN',
+        documents: [
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+          {
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            createdAt: '2018-11-21T20:49:28.192Z',
+            userId: 'taxpayer',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            workItems: [],
+          },
+        ],
+        petitioners: [{ name: 'user' }],
+        irsNoticeDate: new Date().toISOString(),
+        signature: true,
+        yearAmounts: [
+          {
+            year: '2100',
+            amount: '000',
+          },
+        ],
+      },
+    });
+    expect(errors).toEqual({
+      yearAmounts: [
+        {
+          year: 'That year is in the future. Please enter a valid year.',
+          index: 0,
+        },
+      ],
+    });
+  });
 });
