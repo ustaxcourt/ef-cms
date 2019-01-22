@@ -81,6 +81,8 @@
       "notes": "checks a11y of forward form",
       "url": "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
       "actions": [
+        "wait for #tab-pending-messages to be visible",
+        "click element #tab-pending-messages]",
         "wait for .send-to[data-workitemid='af60fe99-37dc-435c-9bdf-24be67769344'] to be visible",
         "click element .send-to[data-workitemid='af60fe99-37dc-435c-9bdf-24be67769344']",
         "wait for form.forward-form[data-workitemid='af60fe99-37dc-435c-9bdf-24be67769344'] to be visible"
