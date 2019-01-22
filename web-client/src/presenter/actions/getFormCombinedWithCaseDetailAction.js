@@ -2,10 +2,10 @@ import { state } from 'cerebral';
 import { omit } from 'lodash';
 
 export default ({ get }) => {
-  const caseDetail = get(state.caseDetail);
-  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = get(
-    state.form,
-  );
+  const caseDetail = { ...get(state.caseDetail) };
+  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
+    ...get(state.form),
+  };
 
   const form = omit(
     {
@@ -44,16 +44,22 @@ export default ({ get }) => {
     form.payGovDate = null;
   }
 
-  let yearAmounts = [];
-  if (caseDetail.yearAmounts && caseDetail.yearAmounts.length) {
-    caseDetail.yearAmounts.forEach(yearAmount => {
-      const year = yearAmount.year;
-      const amount = yearAmount.amount.replace(/,/g, '');
-      yearAmounts.push({ year, amount });
-    });
-  }
+  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
+    yearAmount => {
+      let yearToDate;
+      try {
+        yearToDate = new Date(`${yearAmount.year}-01-01`).toISOString();
+      } catch (err) {
+        yearToDate = null;
+      }
+      return {
+        amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+        year: yearAmount.year ? yearToDate : null,
+      };
+    },
+  );
 
   return {
-    combinedCaseDetailWithForm: { ...caseDetail, ...form, yearAmounts },
+    combinedCaseDetailWithForm: { ...caseDetail, ...form },
   };
 };
