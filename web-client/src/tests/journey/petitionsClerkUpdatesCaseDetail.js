@@ -60,18 +60,46 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
     // payGovId and payGovDate
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovId',
+      value: '123',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovYear',
+      value: '2018',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovMonth',
+      value: '12',
+    });
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'payGovDay',
+      value: '24',
+    });
 
-    // await test.runSequence('submitUpdateCaseSequence');
-    // test.setState('caseDetail', {});
-    // await test.runSequence('gotoCaseDetailSequence', {
-    //   docketNumber: test.docketNumber,
-    // });
-    // expect(test.getState('caseDetail.payGovId')).toEqual('123');
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+
+    //submit and route to case detail
+    await test.runSequence('submitUpdateCaseSequence');
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+    expect(test.getState('caseDetail.payGovId')).toEqual('123');
+    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
+      '2018-12-24T00:00:00.000Z',
+    );
+    expect(test.getState('caseDetail.payGovDate')).toEqual(
+      '2018-12-24T00:00:00.000Z',
+    );
+    expect(test.getState('caseDetail.caseType')).toEqual('Other');
+
     //
-    // const helper = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(helper.showPaymentRecord).toEqual(true);
+    const helper = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    expect(helper.showPaymentRecord).toEqual(true);
+
     //call updateCaseValueSequence
 
     //check for errors

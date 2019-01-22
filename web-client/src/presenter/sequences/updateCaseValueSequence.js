@@ -8,7 +8,7 @@ export default [
   set(state.form[props.key], props.value),
   validateCaseDetail,
   {
-    success: [set(state.caseDetail[props.key], props.value)],
+    success: [],
     error: [set(state.caseDetailErrors, props.errors)],
   },
 ];
