@@ -18,6 +18,15 @@ export default test => {
 
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
+      value: [{ amount: '1,000.95', year: '1999' }],
+    });
+
+    await test.runSequence('validateCaseDetailSequence');
+
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'yearAmounts',
       value: [{ amount: '000', year: '2100' }],
     });
 
@@ -38,6 +47,8 @@ export default test => {
       value: [{ amount: '10', year: '1990' }],
     });
 
+    await test.runSequence('validateCaseDetailSequence');
+
     // irsNoticeDate
 
     await test.runSequence('updateFormValueSequence', {
@@ -52,6 +63,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
+
     await test.runSequence('validateCaseDetailSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
