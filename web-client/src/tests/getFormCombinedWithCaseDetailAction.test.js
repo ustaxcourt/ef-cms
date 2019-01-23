@@ -34,7 +34,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2009-01-01T00:00:00.000Z',
-        payGovDate: '2009-01-01T00:00:00.000Z',
+        payGovDate: '2009-01-01',
         yearAmounts: [
           {
             amount: '1',
