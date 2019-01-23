@@ -26,10 +26,3 @@ export default ({ props, store }) => {
   };
   store.set(state.alertError, alertError);
 };
-
-// var list = [];
-// _.each(data, function(item) {
-//   list.push(_.omit(item, 'children'));
-//   list.push(_.flatten(_.pick(item, 'children')));
-// });
-// var result = _.flatten(list);
