@@ -43,20 +43,36 @@ export default connect(
               <label htmlFor="year">Year</label>
               <input
                 id="year"
+                name="year"
                 type="text"
-                onBlur={() => {
-                  validateCaseDetailSequence();
+                value={caseDetail.yearAmounts[0].year}
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
                 }}
+                // onBlur={() => {
+                //   validateCaseDetailSequence();
+                // }}
               />
             </div>
             <div className="usa-input-grid usa-input-grid-medium">
               <label htmlFor="amount">Amount</label>
               <input
                 id="amount"
+                name="amount"
                 type="text"
-                onBlur={() => {
-                  validateCaseDetailSequence();
+                value={caseDetail.yearAmounts[0].amount}
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
                 }}
+                // onBlur={() => {
+                //   validateCaseDetailSequence();
+                // }}
               />
             </div>
           </div>
