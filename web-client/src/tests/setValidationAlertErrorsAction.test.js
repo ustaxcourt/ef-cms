@@ -29,8 +29,8 @@ describe('setValidationAlertErrors', async () => {
     expect(state.alertError).toMatchObject({
       messages: [
         'Some issue occurred',
-        'entry #1 - A year can not be in the future',
-        'entry #6 - An amount must exist',
+        'yearAmounts #1 - year field - A year can not be in the future',
+        'yearAmounts #6 - amount field - An amount must exist',
       ],
     });
   });

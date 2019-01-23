@@ -155,7 +155,10 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    payGovId: joi.string().optional(),
+    payGovId: joi
+      .string()
+      .allow(null)
+      .optional(),
     payGovDate: joi
       .date()
       .iso()
@@ -193,7 +196,7 @@ joiValidationDecorator(
     documents: 'At least one valid document is required.',
     caseType: 'Case Type is required.',
     petitioners: 'At least one valid petitioner is required.',
-    irsNoticeDate: 'A valid IRS Notice Date is a required field for serving.',
+    irsNoticeDate: 'IRS Notice Date is invalid.',
     procedureType: 'Procedure Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
     yearAmounts: [
@@ -204,7 +207,7 @@ joiValidationDecorator(
       'A valid year and amount are required.',
     ],
     payGovId: 'Fee Payment Id must be in a valid format',
-    payGovDate: 'Pay Gov Date is required',
+    payGovDate: 'Fee Payment Date is invalid',
   },
 );
 
