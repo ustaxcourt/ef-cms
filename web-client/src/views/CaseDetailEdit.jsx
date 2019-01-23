@@ -57,10 +57,8 @@ export default connect(
                   name="year"
                   value={yearAmount.year}
                   onChange={e => {
-                    updateCaseValueByIndexSequence({
-                      key: 'yearAmounts',
-                      index: idx,
-                      subKey: e.target.name,
+                    updateCaseValueSequence({
+                      key: `yearAmounts.${idx}.year`,
                       value: e.target.value,
                     });
                   }}
@@ -77,10 +75,8 @@ export default connect(
                   name="amount"
                   value={yearAmount.amount}
                   onChange={e => {
-                    updateCaseValueByIndexSequence({
-                      key: 'yearAmounts',
-                      index: idx,
-                      subKey: e.target.name,
+                    updateCaseValueSequence({
+                      key: `yearAmounts.${idx}.amount`,
                       value: e.target.value,
                     });
                   }}
@@ -137,7 +133,7 @@ export default connect(
                   min="1"
                   name="irsMonth"
                   type="number"
-                  value={form.irsMonth}
+                  value={form.irsMonth || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -162,7 +158,7 @@ export default connect(
                   min="1"
                   name="irsDay"
                   type="number"
-                  value={form.irsDay}
+                  value={form.irsDay || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -187,7 +183,7 @@ export default connect(
                   min="1900"
                   name="irsYear"
                   type="number"
-                  value={form.irsYear}
+                  value={form.irsYear || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -224,7 +220,7 @@ export default connect(
                   min="1"
                   name="payGovMonth"
                   type="number"
-                  value={form.payGovMonth}
+                  value={form.payGovMonth || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -249,7 +245,7 @@ export default connect(
                   min="1"
                   name="payGovDay"
                   type="number"
-                  value={form.payGovDay}
+                  value={form.payGovDay || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -274,7 +270,7 @@ export default connect(
                   min="1900"
                   name="payGovYear"
                   type="number"
-                  value={form.payGovYear}
+                  value={form.payGovYear || ''}
                   onBlur={() => {
                     validateCaseDetailSequence();
                   }}
@@ -294,7 +290,7 @@ export default connect(
               id="fee-payment-id"
               name="payGovId"
               type="number"
-              value={caseDetail.payGovId}
+              value={caseDetail.payGovId || ''}
               onBlur={() => {
                 validateCaseDetailSequence();
               }}
