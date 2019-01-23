@@ -10,10 +10,10 @@
     "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^3.32.2",
     "serverless-plugin-aws-alerts": "^1.2.4",
-    "serverless-plugin-bind-deployment-id": "github:codyseibert/serverless-plugin-bind-deployment-id#update_lodash",
+    "serverless-plugin-bind-deployment-id": "github:ustaxcourt/serverless-plugin-bind-deployment-id#update_lodash",
     "serverless-plugin-git-variables": "^3.2.0",
     "serverless-plugin-split-stacks": "^1.7.0",
-    "serverless-s3-local": "github:codyseibert/serverless-s3-local",
+    "serverless-s3-local": "github:ustaxcourt/serverless-s3-local",
     "uuid": "^3.3.2"
   },
   "license": "CC0-1.0",
