@@ -105,10 +105,8 @@ export default test => {
       procedureType: 'Procedure Type is required.',
     });
     expect(test.getState('alertError')).toEqual({
-      alertError: {
-        message: 'Case Type is required. Procedure Type is required. ',
-        title: 'There is an error with this page.',
-      },
+      messages: ['Case Type is required.', 'Procedure Type is required.'],
+      title: 'There is an error with this page.',
     });
 
     //user changes value and hits save
