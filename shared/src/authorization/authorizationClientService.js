@@ -24,7 +24,7 @@ exports.isAuthorized = (userId, action, owner) => {
   }
 
   if (action === exports.PETITION) {
-    return userId === 'taxpayer';
+    return userId === 'taxpayer' || userId.indexOf('petitioner') > -1;
   }
 
   if (
