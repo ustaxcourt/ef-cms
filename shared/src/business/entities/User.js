@@ -32,6 +32,9 @@ function User(user) {
   if (role.indexOf('docketclerk') > -1 && /docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
   }
+  if (role.indexOf('petitioner') > -1) {
+    role = 'petitioner';
+  }
   if (
     role.indexOf('petitionsclerk') > -1 &&
     /petitionsclerk(\d{1,2})?$/.test(role)
