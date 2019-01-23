@@ -57,7 +57,7 @@ export default test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
-      value: '12',
+      value: '1',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsDay',
@@ -126,7 +126,7 @@ export default test => {
     });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T00:00:00.000Z',
+      '2018-01-24T00:00:00.000Z',
     );
     expect(test.getState('caseDetail.payGovDate')).toEqual(
       '2018-12-24T00:00:00.000Z',
