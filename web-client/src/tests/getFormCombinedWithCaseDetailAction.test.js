@@ -14,6 +14,12 @@ describe('castToISO', () => {
   it('returns null when the date string passed in is invalid', () => {
     expect(castToISO('x-10-10')).toEqual(null);
   });
+
+  it('returns the same iso string passed in when an iso string is passed in', () => {
+    expect(castToISO('1990-01-01T00:00:00.000Z')).toEqual(
+      '1990-01-01T00:00:00.000Z',
+    );
+  });
 });
 
 describe('getFormCombinedWithCaseDetailAction', async () => {

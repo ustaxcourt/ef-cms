@@ -1,8 +1,15 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
+import moment from 'moment';
 
 export const castToISO = dateString => {
   const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/g;
+
+  const formatted = moment(dateString, 'YYYY-MM-DD').format('YYYY-MM-DD');
+  if (formatted.indexOf('Invalid') === -1) {
+    dateString = formatted;
+  }
+
   if (dateRegex.test(dateString)) {
     const date = new Date(
       dateString
@@ -45,6 +52,8 @@ export default ({ get }) => {
 
   form.irsNoticeDate = castToISO(form.irsNoticeDate);
   form.payGovDate = castToISO(form.payGovDate);
+
+  console.log('caseDetail.yearAmounts', caseDetail.yearAmounts);
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
     yearAmount => ({
