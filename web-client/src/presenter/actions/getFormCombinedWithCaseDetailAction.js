@@ -29,7 +29,10 @@ export default ({ get }) => {
       .split('-')
       .map(segment => (segment = segment.padStart(2, '0')))
       .join('-');
-    form.irsNoticeDate = new Date(form.irsNoticeDate).toISOString();
+    const irsNoticeDate = new Date(form.irsNoticeDate);
+    if (irsNoticeDate instanceof Date && !isNaN(irsNoticeDate)) {
+      form.irsNoticeDate = irsNoticeDate.toISOString();
+    }
   } else {
     form.irsNoticeDate = null;
   }
@@ -39,7 +42,10 @@ export default ({ get }) => {
       .split('-')
       .map(segment => (segment = segment.padStart(2, '0')))
       .join('-');
-    form.payGovDate = new Date(form.payGovDate).toISOString();
+    const payGovDate = new Date(form.payGovDate).toISOString();
+    if (payGovDate instanceof Date && !isNaN(payGovDate)) {
+      form.payGovDate = payGovDate;
+    }
   } else {
     form.payGovDate = null;
   }
