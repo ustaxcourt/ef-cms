@@ -1,6 +1,25 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
 
+export const castToISO = dateString => {
+  const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/g;
+  if (dateRegex.test(dateString)) {
+    const date = new Date(
+      dateString
+        .split('-')
+        .map(segment => segment.padStart(2, '0'))
+        .join('-'),
+    );
+    if (!isNaN(date)) {
+      return date.toISOString();
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+};
+
 export default ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
@@ -24,39 +43,14 @@ export default ({ get }) => {
     ],
   );
 
-  if (irsYear && irsMonth && irsDay) {
-    form.irsNoticeDate = form.irsNoticeDate
-      .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
-      .join('-');
-    form.irsNoticeDate = new Date(form.irsNoticeDate).toISOString();
-  } else {
-    form.irsNoticeDate = null;
-  }
-
-  if (payGovYear && payGovMonth && payGovDay) {
-    form.payGovDate = form.payGovDate
-      .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
-      .join('-');
-    form.payGovDate = new Date(form.payGovDate).toISOString();
-  } else {
-    form.payGovDate = null;
-  }
+  form.irsNoticeDate = castToISO(form.irsNoticeDate);
+  form.payGovDate = castToISO(form.payGovDate);
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
-    yearAmount => {
-      let yearToDate;
-      try {
-        yearToDate = new Date(`${yearAmount.year}-01-01`).toISOString();
-      } catch (err) {
-        yearToDate = null;
-      }
-      return {
-        amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-        year: yearAmount.year ? yearToDate : null,
-      };
-    },
+    yearAmount => ({
+      amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+      year: castToISO(`${yearAmount.year}-01-01`),
+    }),
   );
 
   return {
