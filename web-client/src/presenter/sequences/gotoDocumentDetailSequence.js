@@ -11,6 +11,7 @@ import setCurrentPage from '../actions/setCurrentPageAction';
 import setDocumentId from '../actions/setDocumentIdAction';
 import clearWorkItemActionMap from '../actions/clearWorkItemActionMapAction';
 import clearForms from '../actions/clearFormsAction';
+import setFormForCaseAction from '../actions/setFormForCaseAction';
 import setInternalUsers from '../actions/setInternalUsersAction';
 
 export default [
@@ -20,6 +21,7 @@ export default [
   setDocumentId,
   getCase,
   setCase,
+  setFormForCaseAction,
   setBaseUrl,
   getInternalUsers,
   {
