@@ -10,6 +10,23 @@ export const formatDocument = document => {
   return result;
 };
 
+export const formatYearAmounts = caseDetail => {
+  if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
+    caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
+  } else {
+    caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(yearAmount => {
+      const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
+      return {
+        ...yearAmount,
+        year:
+          formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+            ? yearAmount.year
+            : formattedYear,
+      };
+    });
+  }
+};
+
 const formatCase = caseDetail => {
   const result = _.cloneDeep(caseDetail);
 
@@ -34,6 +51,8 @@ const formatCase = caseDetail => {
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
+
+  formatYearAmounts(result);
 
   result.status =
     result.status === 'general' ? 'general docket' : result.status;

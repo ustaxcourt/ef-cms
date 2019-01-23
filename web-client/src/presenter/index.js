@@ -37,6 +37,9 @@ import updatePetitionValueSequence from './sequences/updatePetitionValueSequence
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
+import updateCaseValueByIndexSequence from './sequences/updateCaseValueByIndexSequence';
+import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
+import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 
 import state from './state';
 
@@ -85,6 +88,9 @@ export default {
     updateSearchTermSequence,
     viewDocumentSequence,
     validateCaseDetailSequence,
+    updateCaseValueByIndexSequence,
+    appendNewYearAmountSequence,
+    removeYearAmountSequence,
   },
   state,
 };

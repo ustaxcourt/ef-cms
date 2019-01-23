@@ -2,14 +2,19 @@ import { state } from 'cerebral';
 import { omit } from 'lodash';
 
 export const castToISO = dateString => {
-  const dateRegex = /\d{4}-\d{1,2}-\d{1,2}/g;
+  const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/g;
   if (dateRegex.test(dateString)) {
-    return new Date(
+    const date = new Date(
       dateString
         .split('-')
         .map(segment => segment.padStart(2, '0'))
         .join('-'),
-    ).toISOString();
+    );
+    if (!isNaN(date)) {
+      return date.toISOString();
+    } else {
+      return null;
+    }
   } else {
     return null;
   }
