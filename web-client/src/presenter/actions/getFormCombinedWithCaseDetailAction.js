@@ -3,28 +3,37 @@ import { omit } from 'lodash';
 import moment from 'moment';
 
 export const castToISO = dateString => {
+  console.log('at the top', dateString);
   const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/g;
 
-  const formatted = moment(dateString, 'YYYY-MM-DD').format('YYYY-MM-DD');
-  if (formatted.indexOf('Invalid') === -1) {
-    dateString = formatted;
-  }
-
-  if (dateRegex.test(dateString)) {
-    const date = new Date(
-      dateString
-        .split('-')
-        .map(segment => segment.padStart(2, '0'))
-        .join('-'),
-    );
-    if (!isNaN(date)) {
-      return date.toISOString();
-    } else {
-      return null;
-    }
+  if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
+    console.log('isValid')
+    return moment.utc(dateString, 'YYYY-MM-DD').toISOString();
   } else {
     return null;
   }
+  // const formatted = moment(dateString, 'YYYY-MM-DD').format('YYYY-MM-DD');
+  // if (formatted.indexOf('Invalid') === -1) {
+  //   console.log(formatted)
+  //   dateString = formatted;
+  // }
+
+  // if (dateRegex.test(dateString)) {
+  //   console.log(dateString);
+  //   const date = new Date(
+  //     dateString
+  //       .split('-')
+  //       .map(segment => segment.padStart(2, '0'))
+  //       .join('-'),
+  //   );
+  //   if (!isNaN(date)) {
+  //     return date.toISOString();
+  //   } else {
+  //     return null;
+  //   }
+  // } else {
+  //   return null;
+  // }
 };
 
 export default ({ get }) => {
