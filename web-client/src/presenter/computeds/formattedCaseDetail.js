@@ -35,6 +35,12 @@ const formatCase = caseDetail => {
     result.irsDateFormatted
   }`;
 
+  result.yearAmountsFormatted = !result.yearAmounts
+    ? []
+    : result.yearAmounts.length === 0
+    ? [{ year: '', amount: '' }]
+    : result.yearAmounts;
+
   result.status =
     result.status === 'general' ? 'general docket' : result.status;
 
