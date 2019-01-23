@@ -131,7 +131,7 @@ export default test => {
       '2018-12-24T00:00:00.000Z',
     );
     expect(test.getState('caseDetail.payGovDate')).toEqual(
-      '2018-12-24T00:00:00.000Z',
+      '2018-12-24',
     );
 
     //
