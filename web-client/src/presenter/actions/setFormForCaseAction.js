@@ -24,9 +24,4 @@ export default ({ get, store }) => {
     store.set(state.form.payGovDay, payGovDate.format('D'));
     store.set(state.form.payGovYear, payGovDate.format('YYYY'));
   }
-
-  const yearAmounts = caseDetail.yearAmounts;
-  if (!yearAmounts || !yearAmounts[0]) {
-    yearAmounts.push({});
-  }
 };
