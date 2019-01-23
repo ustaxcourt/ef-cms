@@ -3,37 +3,17 @@ import { omit } from 'lodash';
 import moment from 'moment';
 
 export const castToISO = dateString => {
-  console.log('at the top', dateString);
-  const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/g;
-
-  if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
-    console.log('isValid')
-    return moment.utc(dateString, 'YYYY-MM-DD').toISOString();
+  if (moment(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+    return moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).toISOString();
+  } else if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
+    return moment.utc(dateString, 'YYYY-MM-DD', true).toISOString();
+  } else if (moment(dateString, 'YYYY-MM-DDT00:00:00.000Z', true).isValid()) {
+    return moment
+      .utc(dateString, 'YYYY-MM-DDT00:00:00.000Z', true)
+      .toISOString();
   } else {
-    return null;
+    return '-1';
   }
-  // const formatted = moment(dateString, 'YYYY-MM-DD').format('YYYY-MM-DD');
-  // if (formatted.indexOf('Invalid') === -1) {
-  //   console.log(formatted)
-  //   dateString = formatted;
-  // }
-
-  // if (dateRegex.test(dateString)) {
-  //   console.log(dateString);
-  //   const date = new Date(
-  //     dateString
-  //       .split('-')
-  //       .map(segment => segment.padStart(2, '0'))
-  //       .join('-'),
-  //   );
-  //   if (!isNaN(date)) {
-  //     return date.toISOString();
-  //   } else {
-  //     return null;
-  //   }
-  // } else {
-  //   return null;
-  // }
 };
 
 export default ({ get }) => {
@@ -62,16 +42,26 @@ export default ({ get }) => {
   form.irsNoticeDate = castToISO(form.irsNoticeDate);
   form.payGovDate = castToISO(form.payGovDate);
 
-  console.log('caseDetail.yearAmounts', caseDetail.yearAmounts);
+  if ([irsYear, irsMonth, irsDay].join('') === '') {
+    form.irsNoticeDate = null;
+  }
+
+  if ([payGovYear, payGovMonth, payGovDay].join('') === '') {
+    form.payGovDate = null;
+  }
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
     yearAmount => ({
       amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-      year: castToISO(`${yearAmount.year}-01-01`),
+      year: castToISO(yearAmount.year),
     }),
   );
 
   return {
-    combinedCaseDetailWithForm: { ...caseDetail, ...form },
+    combinedCaseDetailWithForm: {
+      ...caseDetail,
+      ...form,
+      payGovId: caseDetail.payGovId === '' ? null : caseDetail.payGovId,
+    },
   };
 };
