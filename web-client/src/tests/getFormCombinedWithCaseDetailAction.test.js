@@ -12,7 +12,13 @@ describe('castToISO', () => {
   });
 
   it('returns null when the date string passed in is invalid', () => {
-    expect(castToISO('x-10-10')).toEqual(null);
+    expect(castToISO('x-10-10')).toEqual('-1');
+  });
+
+  it('returns the same iso string passed in when an iso string is passed in', () => {
+    expect(castToISO('1990-01-01T00:00:00.000Z')).toEqual(
+      '1990-01-01T00:00:00.000Z',
+    );
   });
 });
 
@@ -99,12 +105,12 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     });
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
-        irsNoticeDate: null,
-        payGovDate: null,
+        irsNoticeDate: '-1',
+        payGovDate: '-1',
         yearAmounts: [
           {
             amount: '1',
-            year: null,
+            year: '-1',
           },
           {
             amount: '2',
