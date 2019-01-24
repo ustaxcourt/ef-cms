@@ -53,7 +53,7 @@ export default connect(
                   id="year"
                   type="text"
                   name="year"
-                  value={yearAmount.year}
+                  value={yearAmount.year || ''}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.year`,
@@ -71,7 +71,7 @@ export default connect(
                   id="amount"
                   type="text"
                   name="amount"
-                  value={yearAmount.amount}
+                  value={yearAmount.amount || ''}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
