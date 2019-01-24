@@ -99,9 +99,6 @@ function Case(rawCase) {
       docketNumberSuffix:
         rawCase.docketNumberSuffix || getDocketNumberSuffix(rawCase),
     },
-    rawCase.payGovId && !rawCase.payGovDate
-      ? { payGovDate: new Date().toISOString() }
-      : null,
   );
 
   this.yearAmounts = (this.yearAmounts || []).map(
