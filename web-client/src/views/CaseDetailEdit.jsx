@@ -17,6 +17,7 @@ export default connect(
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
   },
   function PetitionEdit({
     appendNewYearAmountSequence,
@@ -28,6 +29,7 @@ export default connect(
     showModal,
     submitting,
     submitUpdateCaseSequence,
+    unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
   }) {
@@ -39,6 +41,9 @@ export default connect(
           submitUpdateCaseSequence();
         }}
         role="form"
+        onFocus={() => {
+          unsetFormSaveSuccessSequence();
+        }}
       >
         {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
@@ -312,7 +317,7 @@ export default connect(
           {submitting && <div className="spinner" />}
           Save
         </button>
-        {true && (
+        {form.showSaveSuccess && (
           <span className="mini-success">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.
