@@ -21,11 +21,8 @@ exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
     },
   });
 
-  return applicationContext.filterCaseMetadata({
-    cases: stripWorkItems(
-      stripInternalKeys(results),
-      applicationContext.isAuthorizedForWorkItems(),
-    ),
-    applicationContext,
-  });
+  return stripWorkItems(
+    stripInternalKeys(results),
+    applicationContext.isAuthorizedForWorkItems(),
+  );
 };
