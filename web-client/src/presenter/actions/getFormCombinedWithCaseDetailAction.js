@@ -21,14 +21,17 @@ export const castToISO = dateString => {
 };
 
 export const checkDate = (updatedDateString, originalDate) => {
+  const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
   } else {
-    const hasAllDateParts = /.+-.+-.+/;
-    if (hasAllDateParts.test(updatedDateString)) {
+    if (
+      updatedDateString.indexOf('undefined') === -1 &&
+      hasAllDateParts.test(updatedDateString)
+    ) {
       updatedDateString = castToISO(updatedDateString);
     } else {
-      //partial date
+      //xx-xx-undefined
       if (originalDate) {
         updatedDateString = originalDate;
       } else {

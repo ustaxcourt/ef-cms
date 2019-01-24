@@ -100,7 +100,7 @@ export default test => {
     });
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      irsNoticeDate: 'IRS Notice Date is invalid.',
+      irsNoticeDate: 'Please enter a valid IRS notice date.',
     });
 
     // irsNoticeDate - valid
