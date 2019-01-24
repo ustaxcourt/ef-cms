@@ -131,20 +131,6 @@ pipeline {
         }
       }
     }
-    stage('Setup S3 Replication Pre Prod') {
-      when {
-        expression {
-          shouldDeploy(env.branch_name)
-        }
-      }
-      steps {
-        script {
-          dir('efcms-service') {
-            sh "./docker-s3replication.sh ${branchMap[env.branch_name]}"
-          }
-        }
-      }
-    }
     stage('Setup Global Tables') {
       when {
         expression {
