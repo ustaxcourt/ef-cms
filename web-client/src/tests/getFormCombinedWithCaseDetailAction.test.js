@@ -124,4 +124,53 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
       },
     });
   });
+
+  it('should not delete the date if it was present and partially modified', async () => {
+    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      state: {
+        form: {
+          irsYear: '',
+          irsMonth: '12',
+          irsDay: '24',
+          payGovYear: '',
+          payGovMonth: '12',
+          payGovDay: '24',
+        },
+        caseDetail: {
+          irsNoticeDate: '2018-12-24T00:00:00.000Z',
+          payGovDate: '2018-12-24T00:00:00.000Z',
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      combinedCaseDetailWithForm: {
+        irsNoticeDate: '2018-12-24T00:00:00.000Z',
+        payGovDate: '2018-12-24T00:00:00.000Z',
+        payGovId: undefined,
+        yearAmounts: [],
+      },
+    });
+  });
+  it('should delete the date if it was present and the user removed it', async () => {
+    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      state: {
+        form: {
+          irsYear: '',
+          irsMonth: '',
+          irsDay: '',
+          payGovYear: '',
+          payGovMonth: '',
+          payGovDay: '',
+        },
+        caseDetail: {
+          irsNoticeDate: '2018-12-24T00:00:00.000Z',
+          payGovDate: '2018-12-24T00:00:00.000Z',
+        },
+      },
+    });
+    expect(results.output.combinedCaseDetailWithForm.irsNoticeDate).toEqual(
+      null,
+    );
+    expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
+  });
 });
