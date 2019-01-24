@@ -6,32 +6,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default connect(
   {
+    appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
+    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
-    formattedCaseDetail: state.formattedCaseDetail,
     form: state.form,
+    formattedCaseDetail: state.formattedCaseDetail,
+    removeYearAmountSequence: sequences.removeYearAmountSequence,
     showModal: state.showModal,
     submitting: state.submitting,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
-    updateCaseValueByIndexSequence: sequences.updateCaseValueByIndexSequence,
-    appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
-    removeYearAmountSequence: sequences.removeYearAmountSequence,
   },
   function PetitionEdit({
+    appendNewYearAmountSequence,
+    autoSaveCaseSequence,
     caseDetail,
-    formattedCaseDetail,
     form,
+    formattedCaseDetail,
+    removeYearAmountSequence,
     showModal,
     submitting,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
-    validateCaseDetailSequence,
-    updateCaseValueByIndexSequence,
-    appendNewYearAmountSequence,
-    removeYearAmountSequence,
   }) {
     return (
       <form
@@ -63,7 +61,7 @@ export default connect(
                     });
                   }}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                 />
               </div>
@@ -81,7 +79,7 @@ export default connect(
                     });
                   }}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                 />
               </div>
@@ -135,7 +133,7 @@ export default connect(
                   type="number"
                   value={form.irsMonth || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -160,7 +158,7 @@ export default connect(
                   type="number"
                   value={form.irsDay || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -185,7 +183,7 @@ export default connect(
                   type="number"
                   value={form.irsYear || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -222,7 +220,7 @@ export default connect(
                   type="number"
                   value={form.payGovMonth || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -247,7 +245,7 @@ export default connect(
                   type="number"
                   value={form.payGovDay || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -272,7 +270,7 @@ export default connect(
                   type="number"
                   value={form.payGovYear || ''}
                   onBlur={() => {
-                    validateCaseDetailSequence();
+                    autoSaveCaseSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -292,7 +290,7 @@ export default connect(
               type="number"
               value={caseDetail.payGovId || ''}
               onBlur={() => {
-                validateCaseDetailSequence();
+                autoSaveCaseSequence();
               }}
               onChange={e => {
                 updateCaseValueSequence({
@@ -305,7 +303,9 @@ export default connect(
         </div>
         <button
           aria-disabled={submitting ? 'true' : 'false'}
-          className={submitting ? 'usa-button-active' : 'usa-button'}
+          className={
+            submitting ? 'usa-button-active' : 'usa-button usa-button-secondary'
+          }
           disabled={submitting}
           type="submit"
         >
