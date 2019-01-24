@@ -132,16 +132,12 @@ describe('validate case detail', () => {
     const yearAmount0 = errors.yearAmounts.find(
       yearAmount => yearAmount.index === 0,
     );
-    const yearAmount1 = errors.yearAmounts.find(
-      yearAmount => yearAmount.index === 1,
-    );
+
     const yearAmount3 = errors.yearAmounts.find(
       yearAmount => yearAmount.index === 3,
     );
     expect(yearAmount0.year).toEqual('Please enter a valid year.');
     expect(yearAmount0.amount).toBeUndefined();
-    expect(yearAmount1.amount).toEqual('Please enter a valid amount.');
-    expect(yearAmount1.year).toBeUndefined();
     expect(yearAmount3.year).toEqual(
       'That year is in the future. Please enter a valid year.',
     );
