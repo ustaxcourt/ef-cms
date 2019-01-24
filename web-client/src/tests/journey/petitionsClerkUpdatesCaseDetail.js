@@ -57,7 +57,7 @@ export default test => {
     await test.runSequence('validateCaseDetailSequence');
 
     // irsNoticeDate
-
+    // 2018--
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -66,12 +66,61 @@ export default test => {
       key: 'irsMonth',
       value: '',
     });
-
     await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       irsNoticeDate: 'IRS Notice Date is invalid.',
     });
 
+    // 2018-1-
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '1',
+    });
+    await test.runSequence('validateCaseDetailSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate: 'IRS Notice Date is invalid.',
+    });
+    // 2068-1-1
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2068',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '1',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '1',
+    });
+    await test.runSequence('validateCaseDetailSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate: 'IRS Notice Date is invalid.',
+    });
+
+    // 2018-1-0
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '1',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '0',
+    });
+    await test.runSequence('validateCaseDetailSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate: 'IRS Notice Date is invalid.',
+    });
+
+    // 2018-12-24
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
