@@ -60,20 +60,6 @@ export default ({ get }) => {
 
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
-  // // if (irsNoticeDate) {
-  // //   form.irsNoticeDate = irsNoticeDate;
-  // // } else {
-  // //   console.log('should be null',irsNoticeDate, caseDetail.irsNoticeDate)
-  // //   caseDetail.irsNoticeDate
-  // //     ? (form.irsNoticeDate = null)
-  // //     : (form.irsNoticeDate = caseDetail.irsNoticeDate);
-  // //   console.log('should be null still', form.irsNoticeDate)
-  // // }
-  //
-  // const payGovDate = checkDate(form.payGovDate);
-  // payGovDate
-  //   ? (form.payGovDate = payGovDate)
-  //   : (form.payGovDate = caseDetail.payGovDate);
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
     yearAmount => ({
