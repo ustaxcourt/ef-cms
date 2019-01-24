@@ -21,11 +21,8 @@ exports.getCaseByDocketNumber = async ({
     isVersioned: true,
   });
 
-  return applicationContext.filterCaseMetadata({
-    cases: stripWorkItems(
-      stripInternalKeys(aCase),
-      applicationContext.isAuthorizedForWorkItems(),
-    ),
-    applicationContext,
-  });
+  return stripWorkItems(
+    stripInternalKeys(aCase),
+    applicationContext.isAuthorizedForWorkItems(),
+  );
 };

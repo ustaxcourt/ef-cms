@@ -6,7 +6,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
-import PetitionEdit from './PetitionEdit';
+import CaseDetailEdit from './CaseDetailEdit';
 
 class DocumentDetail extends React.Component {
   render() {
@@ -65,7 +65,6 @@ class DocumentDetail extends React.Component {
             <ul role="tablist">
               <li className={helper.showDocumentInfo ? 'active' : ''}>
                 <button
-                  disabled
                   role="tab"
                   className="tab-link"
                   id="tab-document-info"
@@ -99,7 +98,7 @@ class DocumentDetail extends React.Component {
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
-              {helper.showDocumentInfo && <PetitionEdit />}
+              {helper.showDocumentInfo && <CaseDetailEdit />}
               {helper.showPendingMessages && (
                 <React.Fragment>
                   {(!document ||

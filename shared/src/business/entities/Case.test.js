@@ -67,26 +67,37 @@ describe('Case entity', () => {
       assert.ok(!myCase.isValid());
     });
 
-    it('will not allow year amounts with duplicate years', () => {
-      let error;
-      try {
-        new Case({
-          petitioners: [],
-          yearAmounts: [
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-          ],
-        });
-      } catch (e) {
-        error = e;
-      }
-      assert.ok(error !== null);
+    it('should not be valid because of duplicate years in yearAmounts', () => {
+      const isValid = new Case({
+        ...MOCK_CASE,
+        yearAmounts: [
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+        ],
+      }).isValid();
+      expect(isValid).toBeFalsy();
+    });
+  });
+
+  describe('areYearsUnique', () => {
+    it('will fail validation when having two year amounts with the same year', () => {
+      const isValid = Case.areYearsUnique([
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+      ]);
+      expect(isValid).toBeFalsy();
     });
   });
 
@@ -259,53 +270,6 @@ describe('Case entity', () => {
         const trialCities = Case.getTrialCities(procedureType);
         expect(trialCities).not.toBeNull();
         expect(trialCities.length).toBeGreaterThan(1);
-      });
-    });
-  });
-
-  describe('filterMetadata', () => {
-    it('removes any field that a petitioner or respondent should not have access to', () => {
-      const result = Case.filterMetadata({
-        cases: {
-          documents: [],
-          docketNumber: '101-18',
-          caseId: '123',
-          docketNumberSuffix: 'W',
-          caseTitle: 'John vs IRS',
-          userId: 1,
-          petitioners: [
-            {
-              name: 'John',
-            },
-          ],
-          respondent: {
-            name: 'Bob',
-          },
-          createdAt: '123',
-          status: 'new',
-          payGovId: '123',
-          payGovDate: '2011/01/10',
-          preferredTrialCity: 1,
-          irsSendDate: '2011/01/10',
-        },
-        applicationContext: {
-          isAuthorizedForCaseMetadata: () => false,
-        },
-      });
-      expect(result).toEqual({
-        caseId: '123',
-        caseTitle: 'John vs IRS',
-        createdAt: '123',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'W',
-        documents: [],
-        payGovDate: '2011/01/10',
-        payGovId: '123',
-        petitioners: [{ name: 'John' }],
-        preferredTrialCity: 1,
-        respondent: { name: 'Bob' },
-        status: 'new',
-        userId: 1,
       });
     });
   });
