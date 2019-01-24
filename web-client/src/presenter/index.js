@@ -1,4 +1,6 @@
+import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
+import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
 import clearDocumentSequence from './sequences/clearDocumentSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
@@ -8,12 +10,13 @@ import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
-import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
+import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
 import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -27,6 +30,7 @@ import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequen
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
+import updateCaseValueByIndexSequence from './sequences/updateCaseValueByIndexSequence';
 import updateCaseValueSequence from './sequences/updateCaseValueSequence';
 import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
 import updateCurrentTabSequence from './sequences/updateCurrentTabSequence';
@@ -35,11 +39,8 @@ import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
-import viewDocumentSequence from './sequences/viewDocumentSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
-import updateCaseValueByIndexSequence from './sequences/updateCaseValueByIndexSequence';
-import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
-import removeYearAmountSequence from './sequences/removeYearAmountSequence';
+import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import state from './state';
 
@@ -49,7 +50,9 @@ import state from './state';
 export default {
   providers: {},
   sequences: {
+    appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
+    autoSaveCaseSequence,
     clearDocumentSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
@@ -59,12 +62,13 @@ export default {
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
+    removeYearAmountSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
     setWorkItemActionSequence,
-    startACaseToggleCancelSequence,
     startACaseConfirmCancelSequence,
+    startACaseToggleCancelSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
@@ -78,6 +82,7 @@ export default {
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
+    updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
     updateCurrentTabSequence,
@@ -86,11 +91,8 @@ export default {
     updateForwardFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
-    viewDocumentSequence,
     validateCaseDetailSequence,
-    updateCaseValueByIndexSequence,
-    appendNewYearAmountSequence,
-    removeYearAmountSequence,
+    viewDocumentSequence,
   },
   state,
 };
