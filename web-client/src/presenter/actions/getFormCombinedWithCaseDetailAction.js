@@ -17,14 +17,19 @@ export const castToISO = dateString => {
 };
 
 export const checkDate = (updatedDateString, originalDate) => {
-  if (!originalDate && updatedDateString.indexOf('undefined') > -1) {
+  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
   } else {
     const hasAllDateParts = /.+-.+-.+/;
     if (hasAllDateParts.test(updatedDateString)) {
       updatedDateString = castToISO(updatedDateString);
     } else {
-      updatedDateString = null;
+      //partial date
+      if (originalDate) {
+        updatedDateString = originalDate;
+      } else {
+        updatedDateString = null;
+      }
     }
   }
   return updatedDateString;
@@ -53,15 +58,22 @@ export default ({ get }) => {
     ],
   );
 
-  const irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
-  irsNoticeDate
-    ? (form.irsNoticeDate = irsNoticeDate)
-    : (form.irsNoticeDate = caseDetail.irsNoticeDate);
-
-  const payGovDate = checkDate(form.payGovDate);
-  irsNoticeDate
-    ? (form.payGovDate = payGovDate)
-    : (form.payGovDate = caseDetail.payGovDate);
+  form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
+  form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
+  // // if (irsNoticeDate) {
+  // //   form.irsNoticeDate = irsNoticeDate;
+  // // } else {
+  // //   console.log('should be null',irsNoticeDate, caseDetail.irsNoticeDate)
+  // //   caseDetail.irsNoticeDate
+  // //     ? (form.irsNoticeDate = null)
+  // //     : (form.irsNoticeDate = caseDetail.irsNoticeDate);
+  // //   console.log('should be null still', form.irsNoticeDate)
+  // // }
+  //
+  // const payGovDate = checkDate(form.payGovDate);
+  // payGovDate
+  //   ? (form.payGovDate = payGovDate)
+  //   : (form.payGovDate = caseDetail.payGovDate);
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
     yearAmount => ({
