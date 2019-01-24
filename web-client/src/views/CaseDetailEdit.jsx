@@ -50,18 +50,27 @@ export default connect(
         {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
-          <p>{JSON.stringify(caseDetailErrors)}</p>
           <span className="label">Type of Notice</span>
           <p>{caseDetail.caseType}</p>
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
-            <div key={idx} className="usa-grid-full usa-form-group">
+            <div
+              key={idx}
+              className={
+                'usa-grid-full usa-form-group' +
+                (caseDetailErrors.yearAmounts &&
+                caseDetailErrors.yearAmounts[idx] &&
+                caseDetailErrors.yearAmounts[idx].year
+                  ? ' usa-input-error'
+                  : '')
+              }
+            >
               <div className="usa-input-grid usa-input-grid-small">
                 <label htmlFor="year">Year</label>
                 <input
                   id="year"
                   type="text"
                   name="year"
-                  value={yearAmount.year}
+                  value={yearAmount.year || ''}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.year`,
@@ -79,7 +88,7 @@ export default connect(
                   id="amount"
                   type="text"
                   name="amount"
-                  value={yearAmount.amount}
+                  value={yearAmount.amount || ''}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
@@ -91,6 +100,13 @@ export default connect(
                   }}
                 />
               </div>
+              {caseDetailErrors.yearAmounts &&
+                caseDetailErrors.yearAmounts[idx] &&
+                caseDetailErrors.yearAmounts[idx].year && (
+                  <div className="usa-input-grid usa-input-grid-large usa-input-error-message">
+                    {caseDetailErrors.yearAmounts[idx].year}
+                  </div>
+                )}
               {idx !== 0 && (
                 <div>
                   <button
@@ -123,8 +139,11 @@ export default connect(
               <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
             </span>
           </button>
-          <fieldset>
+          <fieldset
+            className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
+          >
             <legend id="date-of-notice-legend">Date of Notice</legend>
+
             <div className="usa-date-of-birth">
               <div className="usa-form-group usa-form-group-month">
                 <label htmlFor="date-of-notice-month" aria-hidden="true">
@@ -133,7 +152,10 @@ export default connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="month, two digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
                   id="date-of-notice-month"
                   max="12"
                   min="1"
@@ -158,7 +180,10 @@ export default connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="day, two digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
                   id="date-of-notice-day"
                   max="31"
                   min="1"
@@ -183,7 +208,10 @@ export default connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="year, four digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
                   id="date-of-notice-year"
                   max="2100"
                   min="1900"
@@ -203,6 +231,11 @@ export default connect(
               </div>
             </div>
           </fieldset>
+          {caseDetailErrors.irsNoticeDate && (
+            <div className="usa-input-error-message" role="alert">
+              {caseDetailErrors.irsNoticeDate}
+            </div>
+          )}
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>
@@ -214,11 +247,6 @@ export default connect(
             className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}
           >
             <legend id="fee-payment-date-legend">Fee Payment Date</legend>
-            {caseDetailErrors.payGovDate && (
-              <span className="usa-input-error-message" role="alert">
-                {caseDetailErrors.payGovDate}
-              </span>
-            )}
             <div className="usa-date-of-birth">
               <div className="usa-form-group usa-form-group-month">
                 <label htmlFor="fee-payment-date-month" aria-hidden="true">
@@ -227,7 +255,10 @@ export default connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="month, two digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                  }
                   id="fee-payment-date-month"
                   max="12"
                   min="1"
@@ -252,7 +283,10 @@ export default connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="day, two digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                  }
                   id="fee-payment-date-day"
                   max="31"
                   min="1"
@@ -277,7 +311,10 @@ export default connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="year, four digits"
-                  className="usa-input-inline"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                  }
                   id="fee-payment-date-year"
                   max="2100"
                   min="1900"
@@ -297,6 +334,11 @@ export default connect(
               </div>
             </div>
           </fieldset>
+          {caseDetailErrors.payGovDate && (
+            <div className="usa-input-error-message" role="alert">
+              {caseDetailErrors.payGovDate}
+            </div>
+          )}
           <div className="usa-form-group">
             <label htmlFor="fee-payment-id">Fee Payment ID</label>
             <input
