@@ -17,9 +17,10 @@ joiValidationDecorator(
       .required(),
     amount: joi
       .number()
+      .allow(null)
       .greater(0)
       .integer()
-      .required(),
+      .optional(),
   }),
   () => true,
   {

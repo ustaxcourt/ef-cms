@@ -7,31 +7,28 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
     //yearAmounts
+    //valid with comma
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '1,000', year: '1999' }],
     });
-
-    await test.runSequence('validateCaseDetailSequence');
-
+    await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
+    //valid with cents
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '1,000.95', year: '1999' }],
     });
-
-    await test.runSequence('validateCaseDetailSequence');
-
+    await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
+    //invalid with zeros and year in future
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '000', year: '2100' }],
     });
-
-    await test.runSequence('validateCaseDetailSequence');
-
+    await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       yearAmounts: [
         {
@@ -42,15 +39,30 @@ export default test => {
       ],
     });
 
+    //invalid year in future
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'yearAmounts',
+      value: [{ amount: '', year: '2100' }],
+    });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      yearAmounts: [
+        {
+          index: 0,
+          year: 'That year is in the future. Please enter a valid year.',
+        },
+      ],
+    });
+
+    //valid
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '10', year: '1990' }],
     });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual(null);
 
-    await test.runSequence('validateCaseDetailSequence');
-
-    // irsNoticeDate
-
+    // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -63,9 +75,75 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual(null);
 
-    await test.runSequence('validateCaseDetailSequence');
+    // irsNoticeDate - invalid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: 'twentyoughteight',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate: 'IRS Notice Date is invalid.',
+    });
 
+    // irsNoticeDate - valid with no month etc. does not overwrite existing
+    // irsNoticeDate - valid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('autoSaveCaseSequence');
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
+      '2001-01-01T00:00:00.000Z',
+    );
+
+    // irsNoticeDate - valid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
     // payGovId and payGovDate
@@ -85,7 +163,7 @@ export default test => {
       key: 'payGovDay',
       value: '24',
     });
-    await test.runSequence('validateCaseDetailSequence');
+    await test.runSequence('autoSaveCaseSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
