@@ -319,7 +319,7 @@ provider:
         Fn::Join:
           - ''
           - - 'arn:aws:s3:::'
-            - Ref: DocumentsBucket
+            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
             - '/*'
     - Effect: 'Allow'
       Action:
@@ -348,26 +348,6 @@ package:
 
 resources:
   Resources:
-    #####
-    # Begin S3
-    #####
-    DocumentsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders:
-                - Authorization
-              AllowedMethods:
-                - GET
-                - POST
-              AllowedOrigins:
-                - '*'
-              MaxAge: 3000
-        VersioningConfiguration:
-          Status: Enabled
-
     #####
     # Begin Stage for API Gateway Logging
     #####
