@@ -3,6 +3,10 @@ import { omit } from 'lodash';
 import moment from 'moment';
 
 export const castToISO = dateString => {
+  dateString = dateString
+    .split('-')
+    .map(segment => segment.padStart(2, '0'))
+    .join('-');
   if (moment(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
     return moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).toISOString();
   } else if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
