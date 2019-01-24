@@ -57,6 +57,12 @@
 
 .usa-input-error-message {
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0;
   line-height: 1;
+}
+
+.usa-input-error input,
+.usa-input-error textarea,
+.usa-input-error select {
+  width: calc(100%);
 }
