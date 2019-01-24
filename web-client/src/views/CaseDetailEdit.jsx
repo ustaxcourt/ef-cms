@@ -9,6 +9,7 @@ export default connect(
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
+    caseDetailErrors: state.caseDetailErrors,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     removeYearAmountSequence: sequences.removeYearAmountSequence,
@@ -23,6 +24,7 @@ export default connect(
     appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
+    caseDetailErrors,
     form,
     formattedCaseDetail,
     removeYearAmountSequence,
@@ -48,6 +50,7 @@ export default connect(
         {showModal && <UpdateCaseCancelModalDialog />}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
+          <p>{JSON.stringify(caseDetailErrors)}</p>
           <span className="label">Type of Notice</span>
           <p>{caseDetail.caseType}</p>
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
@@ -118,7 +121,7 @@ export default connect(
           >
             <span>
               <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
-            </span>{' '}
+            </span>
           </button>
           <fieldset>
             <legend id="date-of-notice-legend">Date of Notice</legend>
@@ -207,8 +210,15 @@ export default connect(
           <p>{caseDetail.procedureType} Tax Case</p>
           <span className="label">Trial Location</span>
           <p>{caseDetail.preferredTrialCity}</p>
-          <fieldset>
+          <fieldset
+            className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}
+          >
             <legend id="fee-payment-date-legend">Fee Payment Date</legend>
+            {caseDetailErrors.payGovDate && (
+              <span className="usa-input-error-message" role="alert">
+                {caseDetailErrors.payGovDate}
+              </span>
+            )}
             <div className="usa-date-of-birth">
               <div className="usa-form-group usa-form-group-month">
                 <label htmlFor="fee-payment-date-month" aria-hidden="true">
