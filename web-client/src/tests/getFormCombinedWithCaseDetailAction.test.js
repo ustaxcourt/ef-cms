@@ -178,7 +178,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     });
   });
 
-
   it('should delete the date if it was present and the user removed it', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
