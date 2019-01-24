@@ -64,6 +64,20 @@ export default test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
+      value: '',
+    });
+
+    await test.runSequence('validateCaseDetailSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate: 'IRS Notice Date is invalid.',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
+      value: '2018',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
       value: '12',
     });
     await test.runSequence('updateFormValueSequence', {
