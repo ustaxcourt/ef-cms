@@ -5,7 +5,7 @@ import { formattedCaseDetail } from '../../presenter/computeds/formattedCaseDeta
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
@@ -20,7 +20,7 @@ export default test => {
       value: [{ amount: '1,000', year: '1999' }],
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     //valid with cents
     await test.runSequence('updateCaseValueSequence', {
@@ -28,7 +28,7 @@ export default test => {
       value: [{ amount: '1,000.95', year: '1999' }],
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     //invalid with zeros and year in future
     await test.runSequence('updateCaseValueSequence', {
@@ -67,7 +67,7 @@ export default test => {
       value: [{ amount: '10', year: '1990' }],
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
@@ -83,7 +83,7 @@ export default test => {
       value: '24',
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - invalid
     await test.runSequence('updateFormValueSequence', {
@@ -117,7 +117,7 @@ export default test => {
       value: '24',
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -131,7 +131,7 @@ export default test => {
       value: '24',
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2001-01-01T00:00:00.000Z',
     );
@@ -150,7 +150,7 @@ export default test => {
       value: '24',
     });
     await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     // payGovId and payGovDate
     await test.runSequence('updateCaseValueSequence', {
@@ -171,7 +171,7 @@ export default test => {
     });
     await test.runSequence('autoSaveCaseSequence');
 
-    expect(test.getState('caseDetailErrors')).toEqual(null);
+    expect(test.getState('caseDetailErrors')).toEqual({});
 
     //error on save
     await test.runSequence('updateCaseValueSequence', {
