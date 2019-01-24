@@ -139,103 +139,105 @@ export default connect(
               <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
             </span>
           </button>
-          <fieldset
+          <div
             className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
           >
-            <legend id="date-of-notice-legend">Date of Notice</legend>
+            <fieldset>
+              <legend id="date-of-notice-legend">Date of Notice</legend>
 
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="date-of-notice-month" aria-hidden="true">
-                  MM
-                </label>
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="month, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                  }
-                  id="date-of-notice-month"
-                  max="12"
-                  min="1"
-                  name="irsMonth"
-                  type="number"
-                  value={form.irsMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+              <div className="usa-date-of-birth">
+                <div className="usa-form-group usa-form-group-month">
+                  <label htmlFor="date-of-notice-month" aria-hidden="true">
+                    MM
+                  </label>
+                  <input
+                    aria-describedby="date-of-notice-legend"
+                    aria-label="month, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    }
+                    id="date-of-notice-month"
+                    max="12"
+                    min="1"
+                    name="irsMonth"
+                    type="number"
+                    value={form.irsMonth || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-day">
+                  <label htmlFor="date-of-notice-day" aria-hidden="true">
+                    DD
+                  </label>
+                  <input
+                    aria-describedby="date-of-notice-legend"
+                    aria-label="day, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    }
+                    id="date-of-notice-day"
+                    max="31"
+                    min="1"
+                    name="irsDay"
+                    type="number"
+                    value={form.irsDay || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-year">
+                  <label htmlFor="date-of-notice-year" aria-hidden="true">
+                    YYYY
+                  </label>
+                  <input
+                    aria-describedby="date-of-notice-legend"
+                    aria-label="year, four digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    }
+                    id="date-of-notice-year"
+                    max="2100"
+                    min="1900"
+                    name="irsYear"
+                    type="number"
+                    value={form.irsYear || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="date-of-notice-day" aria-hidden="true">
-                  DD
-                </label>
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="day, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                  }
-                  id="date-of-notice-day"
-                  max="31"
-                  min="1"
-                  name="irsDay"
-                  type="number"
-                  value={form.irsDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+            </fieldset>
+            {caseDetailErrors.irsNoticeDate && (
+              <div className="usa-input-error-message" role="alert">
+                {caseDetailErrors.irsNoticeDate}
               </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="date-of-notice-year" aria-hidden="true">
-                  YYYY
-                </label>
-                <input
-                  aria-describedby="date-of-notice-legend"
-                  aria-label="year, four digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                  }
-                  id="date-of-notice-year"
-                  max="2100"
-                  min="1900"
-                  name="irsYear"
-                  type="number"
-                  value={form.irsYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-          {caseDetailErrors.irsNoticeDate && (
-            <div className="usa-input-error-message" role="alert">
-              {caseDetailErrors.irsNoticeDate}
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>
@@ -243,102 +245,103 @@ export default connect(
           <p>{caseDetail.procedureType} Tax Case</p>
           <span className="label">Trial Location</span>
           <p>{caseDetail.preferredTrialCity}</p>
-          <fieldset
-            className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}
-          >
-            <legend id="fee-payment-date-legend">Fee Payment Date</legend>
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="fee-payment-date-month" aria-hidden="true">
-                  MM
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="month, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-month"
-                  max="12"
-                  min="1"
-                  name="payGovMonth"
-                  type="number"
-                  value={form.payGovMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+          <div className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}>
+            <fieldset>
+              <legend id="fee-payment-date-legend">Fee Payment Date</legend>
+              <div className="usa-date-of-birth">
+                <div className="usa-form-group usa-form-group-month">
+                  <label htmlFor="fee-payment-date-month" aria-hidden="true">
+                    MM
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="month, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-month"
+                    max="12"
+                    min="1"
+                    name="payGovMonth"
+                    type="number"
+                    value={form.payGovMonth || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-day">
+                  <label htmlFor="fee-payment-date-day" aria-hidden="true">
+                    DD
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="day, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-day"
+                    max="31"
+                    min="1"
+                    name="payGovDay"
+                    type="number"
+                    value={form.payGovDay || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-year">
+                  <label htmlFor="fee-payment-date-year" aria-hidden="true">
+                    YYYY
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="year, four digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-year"
+                    max="2100"
+                    min="1900"
+                    name="payGovYear"
+                    type="number"
+                    value={form.payGovYear || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="fee-payment-date-day" aria-hidden="true">
-                  DD
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="day, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-day"
-                  max="31"
-                  min="1"
-                  name="payGovDay"
-                  type="number"
-                  value={form.payGovDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="fee-payment-date-year" aria-hidden="true">
-                  YYYY
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="year, four digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-year"
-                  max="2100"
-                  min="1900"
-                  name="payGovYear"
-                  type="number"
-                  value={form.payGovYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-          {caseDetailErrors.payGovDate && (
-            <div className="usa-input-error-message" role="alert">
-              {caseDetailErrors.payGovDate}
-            </div>
-          )}
+              {caseDetailErrors.payGovDate && (
+                <div className="usa-input-error-message" role="alert">
+                  {caseDetailErrors.payGovDate}
+                </div>
+              )}
+            </fieldset>
+          </div>
+
           <div className="usa-form-group">
             <label htmlFor="fee-payment-id">Fee Payment ID</label>
             <input
