@@ -6,7 +6,16 @@ export default test => {
   return it('Petitions clerk updates case detail', async () => {
     expect(test.getState('caseDetailErrors')).toEqual(null);
 
-    //yearAmounts
+    // yearAmounts
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'yearAmounts',
+      value: [{ year: '1999' }],
+    });
+
+    await test.runSequence('validateCaseDetailSequence');
+
+    expect(test.getState('caseDetailErrors')).toEqual(null);
+
     await test.runSequence('updateCaseValueSequence', {
       key: 'yearAmounts',
       value: [{ amount: '1,000', year: '1999' }],
@@ -61,7 +70,7 @@ export default test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsDay',
-      value: '24',
+      value: '02',
     });
 
     await test.runSequence('validateCaseDetailSequence');
@@ -126,7 +135,7 @@ export default test => {
     });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-01-24T00:00:00.000Z',
+      '2018-01-02T00:00:00.000Z',
     );
     expect(test.getState('caseDetail.payGovDate')).toEqual(
       '2018-12-24T00:00:00.000Z',
