@@ -20,15 +20,18 @@ export const castToISO = dateString => {
   }
 };
 
-export const checkDate = (updatedDateString, originalDate) => {
+const checkDate = (updatedDateString, originalDate) => {
+  const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
   } else {
-    const hasAllDateParts = /.+-.+-.+/;
-    if (hasAllDateParts.test(updatedDateString)) {
+    if (
+      updatedDateString.indexOf('undefined') === -1 &&
+      hasAllDateParts.test(updatedDateString)
+    ) {
       updatedDateString = castToISO(updatedDateString);
     } else {
-      //partial date
+      //xx-xx-undefined
       if (originalDate) {
         updatedDateString = originalDate;
       } else {
@@ -65,14 +68,16 @@ export default ({ get }) => {
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
-  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
-    yearAmount => ({
+  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || [])
+    .filter(yearAmount => {
+      return yearAmount.amount || yearAmount.year;
+    })
+    .map(yearAmount => ({
       amount: !yearAmount.amount
         ? null
         : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
       year: castToISO(yearAmount.year),
-    }),
-  );
+    }));
 
   return {
     combinedCaseDetailWithForm: {
