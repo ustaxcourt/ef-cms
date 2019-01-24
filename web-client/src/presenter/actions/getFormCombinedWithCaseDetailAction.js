@@ -16,6 +16,20 @@ export const castToISO = dateString => {
   }
 };
 
+export const checkDate = (updatedDateString, originalDate) => {
+  if (!originalDate && updatedDateString.indexOf('undefined') > -1) {
+    updatedDateString = null;
+  } else {
+    const hasAllDateParts = /.+-.+-.+/;
+    if (hasAllDateParts.test(updatedDateString)) {
+      updatedDateString = castToISO(updatedDateString);
+    } else {
+      updatedDateString = null;
+    }
+  }
+  return updatedDateString;
+};
+
 export default ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
@@ -39,20 +53,21 @@ export default ({ get }) => {
     ],
   );
 
-  form.irsNoticeDate = castToISO(form.irsNoticeDate);
-  form.payGovDate = castToISO(form.payGovDate);
+  const irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
+  irsNoticeDate
+    ? (form.irsNoticeDate = irsNoticeDate)
+    : (form.irsNoticeDate = caseDetail.irsNoticeDate);
 
-  if ([irsYear, irsMonth, irsDay].join('') === '') {
-    form.irsNoticeDate = null;
-  }
-
-  if ([payGovYear, payGovMonth, payGovDay].join('') === '') {
-    form.payGovDate = null;
-  }
+  const payGovDate = checkDate(form.payGovDate);
+  irsNoticeDate
+    ? (form.payGovDate = payGovDate)
+    : (form.payGovDate = caseDetail.payGovDate);
 
   caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
     yearAmount => ({
-      amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+      amount: !yearAmount.amount
+        ? null
+        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
       year: castToISO(yearAmount.year),
     }),
   );
