@@ -21,7 +21,6 @@ describe('Case entity', () => {
     it('adds a paygov date to an already existing case json', () => {
       const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
       assert.ok(myCase.isValid());
-      assert.ok(myCase.payGovDate);
     });
 
     it('Creates an invalid case with a document', () => {

@@ -57,5 +57,30 @@ describe('YearAmount', () => {
         }).isValid(),
       ).toBeFalsy();
     });
+
+    it('returns true if the amount is undefined', () => {
+      expect(
+        new YearAmount({
+          year: new Date('2000-01-01').toISOString(),
+        }).isValid(),
+      ).toBeTruthy();
+    });
+
+    it('returns true if the amount is empty', () => {
+      expect(
+        new YearAmount({
+          year: new Date('2000-01-01').toISOString(),
+          amount: null,
+        }).isValid(),
+      ).toBeTruthy();
+    });
+
+    it('returns false if the year is undefined', () => {
+      expect(
+        new YearAmount({
+          amount: 10,
+        }).isValid(),
+      ).toBeFalsy();
+    });
   });
 });
