@@ -1,10 +1,17 @@
 import { runCompute } from 'cerebral/test';
 
 import caseDetailHelper from '../../presenter/computeds/caseDetailHelper';
+import { formattedCaseDetail } from '../../presenter/computeds/formattedCaseDetail';
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
     expect(test.getState('caseDetailErrors')).toEqual(null);
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(caseDetailFormatted.yearAmountsFormatted.length).toEqual(1);
 
     //yearAmounts
     //valid with comma
@@ -96,7 +103,6 @@ export default test => {
       irsNoticeDate: 'IRS Notice Date is invalid.',
     });
 
-    // irsNoticeDate - valid with no month etc. does not overwrite existing
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
