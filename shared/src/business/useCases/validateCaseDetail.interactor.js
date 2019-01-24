@@ -9,6 +9,5 @@ const Case = require('../entities/Case');
  * @returns {Promise<{petitionFileId}>}
  */
 exports.validateCaseDetail = ({ caseDetail }) => {
-  console.log(caseDetail)
   return new Case(caseDetail).getFormattedValidationErrors();
 };
