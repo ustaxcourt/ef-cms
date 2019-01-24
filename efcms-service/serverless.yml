@@ -7,7 +7,13 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-prune-plugin
 custom:
+
+  prune:
+    automatic: true
+    number: 3
+    
   serverless-offline:
     host: 0.0.0.0
 
