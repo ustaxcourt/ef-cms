@@ -312,6 +312,12 @@ export default connect(
           {submitting && <div className="spinner" />}
           Save
         </button>
+        {true && (
+          <span className="mini-success">
+            <FontAwesomeIcon icon="check-circle" size="sm" />
+            Your changes have been saved.
+          </span>
+        )}
       </form>
     );
   },
