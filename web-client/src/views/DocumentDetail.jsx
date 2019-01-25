@@ -69,6 +69,7 @@ class DocumentDetail extends React.Component {
                     role="tab"
                     className="tab-link"
                     id="tab-document-info"
+                    aria-controls="tab-document-info-panel"
                     aria-selected={helper.showDocumentInfo}
                     onClick={() =>
                       updateCurrentTabSequence({
@@ -85,6 +86,7 @@ class DocumentDetail extends React.Component {
                   role="tab"
                   className="tab-link"
                   id="tab-pending-messages"
+                  aria-controls="tab-pending-messages-panel"
                   aria-selected={helper.showPendingMessages}
                   onClick={() =>
                     updateCurrentTabSequence({
@@ -100,10 +102,24 @@ class DocumentDetail extends React.Component {
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
-              {helper.showDocumentInfo && <CaseDetailEdit />}
+              {helper.showDocumentInfo && (
+                <div
+                  role="tabpanel"
+                  id="tab-document-info-panel"
+                  aria-labelledby="tab-document-info"
+                  tabIndex="0"
+                >
+                  <CaseDetailEdit />
+                </div>
+              )}
               {/*workitem tab start*/}
               {helper.showPendingMessages && (
-                <React.Fragment>
+                <div
+                  role="tabpanel"
+                  id="tab-pending-messages-panel"
+                  aria-labelledby="tab-pending-messages"
+                  tabIndex="0"
+                >
                   {(!document ||
                     !document.workItems ||
                     !document.workItems.length) && (
@@ -358,7 +374,7 @@ class DocumentDetail extends React.Component {
                         )}
                       </div>
                     ))}
-                </React.Fragment>
+                </div>
               )}
             </div>
 
