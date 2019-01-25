@@ -38,6 +38,7 @@ export default connect(
   }) {
     return (
       <form
+        id="case-edit-form"
         noValidate
         onSubmit={e => {
           e.preventDefault();
