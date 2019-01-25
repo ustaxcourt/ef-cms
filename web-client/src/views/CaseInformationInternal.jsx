@@ -19,7 +19,7 @@ export default connect(
                 <p className="label">Notice/Case Type</p>
                 <p>{caseDetail.caseType}</p>
                 <p className="label">IRS Notice Date</p>
-                <p>{caseDetail.irsNoticeDateFormatted}</p>
+                <p id="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
               </div>
               <div className="usa-width-one-third">
                 <p className="label">Case Procedure</p>
