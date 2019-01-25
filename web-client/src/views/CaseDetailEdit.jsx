@@ -186,13 +186,15 @@ export default connect(
                 <span>$</span>
                 <input
                   id="amount"
-                  type="number"
+                  type="text"
                   name="amount"
-                  value={yearAmount.amount || ''}
+                  value={
+                    Number(yearAmount.amount).toLocaleString('en-US') || ''
+                  }
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
-                      value: e.target.value,
+                      value: e.target.value.replace(/\D/g, ''),
                     });
                   }}
                   onBlur={() => {
