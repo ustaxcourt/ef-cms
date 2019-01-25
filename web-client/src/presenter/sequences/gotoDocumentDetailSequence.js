@@ -28,6 +28,6 @@ export default [
     error: [setAlertError],
     success: [setInternalUsers],
   },
-  set(state.currentTab, 'Pending Messages'),
+  set(state.currentTab, 'Document Info'),
   setCurrentPage('DocumentDetail'),
 ];
