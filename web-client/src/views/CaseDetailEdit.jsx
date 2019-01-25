@@ -148,7 +148,7 @@ export default connect(
               </div>
             </fieldset>
             {caseDetailErrors.irsNoticeDate && (
-              <div className="usa-input-error-message" role="alert">
+              <div className="usa-input-error-message beneath" role="alert">
                 {caseDetailErrors.irsNoticeDate}
               </div>
             )}
@@ -223,7 +223,7 @@ export default connect(
                 )}
               </div>
               {yearAmount.showError && (
-                <div className="usa-input-error-message">
+                <div className="usa-input-error-message beneath">
                   {yearAmount.errorMessage}
                 </div>
               )}
@@ -340,7 +340,7 @@ export default connect(
                 </div>
               </div>
               {caseDetailErrors.payGovDate && (
-                <div className="usa-input-error-message" role="alert">
+                <div className="usa-input-error-message beneath" role="alert">
                   {caseDetailErrors.payGovDate}
                 </div>
               )}
