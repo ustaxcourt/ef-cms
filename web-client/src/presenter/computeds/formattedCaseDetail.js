@@ -30,7 +30,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
             yearAmount.showError = true;
             yearAmount.errorMessage = yearAmountError.year;
           }
-        } else {
+        } else if (typeof caseDetailErrors.yearAmounts === 'string') {
           const duplicates = _.filter(
             caseDetail.yearAmounts,
             (val, i, iteratee) =>
@@ -38,6 +38,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
                 return val.formattedYear === val2.formattedYear && i !== i2;
               }),
           );
+
           duplicates.forEach(duplicate => {
             duplicate.showError = true;
             duplicate.errorMessage = caseDetailErrors.yearAmounts;
