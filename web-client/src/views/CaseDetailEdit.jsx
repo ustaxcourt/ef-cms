@@ -158,9 +158,7 @@ export default connect(
               key={idx}
               className={
                 '' +
-                (caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year
+                (yearAmount.showError
                   ? ' usa-input-error'
                   : '')
               }
@@ -227,13 +225,11 @@ export default connect(
                   </button>
                 )}
               </div>
-              {caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year && (
-                  <div className="usa-input-error-message">
-                    {caseDetailErrors.yearAmounts[idx].year}
-                  </div>
-                )}
+              {yearAmount.showError && (
+                <div className="usa-input-error-message">
+                  {yearAmount.errorMessage}
+                </div>
+              )}
             </div>
           ))}
           <button
