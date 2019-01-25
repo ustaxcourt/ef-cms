@@ -34,6 +34,16 @@ describe('User entity', () => {
     assert.ok(user.isValid());
   });
 
+  it('Creates a valid petitioner user', () => {
+    const user = new User({
+      userId: 'petitioner',
+      role: 'Tester',
+      firstName: 'firstName',
+      lastName: 'lastName',
+    });
+    assert.ok(user.isValid());
+  });
+
   it('Creates a valid petitionsclerk user', () => {
     const user = new User({
       userId: 'petitionsclerk',
