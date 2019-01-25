@@ -63,21 +63,23 @@ class DocumentDetail extends React.Component {
           </div>
           <nav className="horizontal-tabs subsection">
             <ul role="tablist">
-              <li className={helper.showDocumentInfo ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="tab-document-info"
-                  aria-selected={helper.showDocumentInfo}
-                  onClick={() =>
-                    updateCurrentTabSequence({
-                      value: 'Document Info',
-                    })
-                  }
-                >
-                  Document Info
-                </button>
-              </li>
+              {helper.isEditablePetition && (
+                <li className={helper.showDocumentInfo ? 'active' : ''}>
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    id="tab-document-info"
+                    aria-selected={helper.showDocumentInfo}
+                    onClick={() =>
+                      updateCurrentTabSequence({
+                        value: 'Document Info',
+                      })
+                    }
+                  >
+                    Document Info
+                  </button>
+                </li>
+              )}
               <li className={helper.showPendingMessages ? 'active' : ''}>
                 <button
                   role="tab"
@@ -99,6 +101,7 @@ class DocumentDetail extends React.Component {
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
               {helper.showDocumentInfo && <CaseDetailEdit />}
+              {/*workitem tab start*/}
               {helper.showPendingMessages && (
                 <React.Fragment>
                   {(!document ||
