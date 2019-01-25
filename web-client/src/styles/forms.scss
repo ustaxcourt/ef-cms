@@ -68,6 +68,10 @@ label.validated::after {
   margin-right: 10px;
   vertical-align: top;
 
+  label {
+    padding-left: 1.5rem;
+  }
+
   input {
     display: inline-block;
     max-width: 100px;
