@@ -10,24 +10,53 @@ export const formatDocument = document => {
   return result;
 };
 
-export const formatYearAmounts = caseDetail => {
+export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
     caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
   } else {
-    caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(yearAmount => {
-      const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
-      return {
-        ...yearAmount,
-        year:
-          formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
-            ? yearAmount.year
-            : formattedYear,
-      };
-    });
+    caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
+      (yearAmount, idx) => {
+        const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
+        yearAmount.formattedYear = formattedYear;
+        yearAmount.showError = false;
+        if (Array.isArray(caseDetailErrors.yearAmounts)) {
+          const yearAmountError = (caseDetailErrors.yearAmounts || []).find(
+            error => {
+              return error.index === idx;
+            },
+          );
+
+          if (yearAmountError) {
+            yearAmount.showError = true;
+            yearAmount.errorMessage = yearAmountError.year;
+          }
+        } else {
+          const duplicates = _.filter(
+            caseDetail.yearAmounts,
+            (val, i, iteratee) =>
+              _.find(iteratee, (val2, i2) => {
+                return val.formattedYear === val2.formattedYear && i !== i2;
+              }),
+          );
+          duplicates.forEach(duplicate => {
+            duplicate.showError = true;
+            duplicate.errorMessage = caseDetailErrors.yearAmounts;
+          });
+        }
+
+        return {
+          ...yearAmount,
+          year:
+            formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+              ? yearAmount.year
+              : formattedYear,
+        };
+      },
+    );
   }
 };
 
-const formatCase = caseDetail => {
+const formatCase = (caseDetail, caseDetailErrors) => {
   const result = _.cloneDeep(caseDetail);
 
   if (result.documents) result.documents = result.documents.map(formatDocument);
@@ -52,7 +81,7 @@ const formatCase = caseDetail => {
     result.irsDateFormatted
   }`;
 
-  formatYearAmounts(result);
+  formatYearAmounts(result, caseDetailErrors);
 
   result.status =
     result.status === 'general' ? 'general docket' : result.status;
@@ -67,5 +96,6 @@ export const formattedCases = get => {
 
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
-  return formatCase(caseDetail);
+  const caseDetailErrors = get(state.caseDetailErrors);
+  return formatCase(caseDetail, caseDetailErrors);
 };

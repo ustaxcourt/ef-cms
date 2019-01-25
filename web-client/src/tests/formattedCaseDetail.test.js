@@ -34,14 +34,8 @@ describe('formatYearAmounts', () => {
     };
     formatYearAmounts(caseDetail);
     expect(caseDetail.yearAmountsFormatted).toEqual([
-      {
-        year: '2000',
-        amount: '',
-      },
-      {
-        year: '',
-        amount: '',
-      },
+      { amount: '', formattedYear: '2000', showError: false, year: '2000' },
+      { amount: '', formattedYear: 'Invalid date', showError: false, year: '' },
     ]);
   });
 });
