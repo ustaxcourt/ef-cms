@@ -1,13 +1,62 @@
-exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
-exports.UPDATE_CASE = 'updateCase';
-exports.GET_CASE = 'getCase';
-exports.WORKITEM = 'workItem';
-exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
-exports.FILE_ANSWER = 'fileAnswer';
-exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
-exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
-exports.PETITION = 'getPetitionOptions';
 exports.CASE_METADATA = 'caseMetadata';
+exports.FILE_ANSWER = 'fileAnswer';
+exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
+exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
+exports.GET_CASE = 'getCase';
+exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
+exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
+exports.PETITION = 'getPetitionOptions';
+exports.UPDATE_CASE = 'updateCase';
+exports.WORKITEM = 'workItem';
+
+const AUTHORIZATION_MAP = {
+  docketclerk: [
+    exports.CASE_METADATA,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_CASES_BY_STATUS,
+    exports.WORKITEM,
+  ],
+  intakeclerk: [
+    exports.CASE_METADATA,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_CASES_BY_STATUS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
+  ],
+  petitioner: [exports.PETITION],
+  petitionsclerk: [
+    exports.CASE_METADATA,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_CASES_BY_STATUS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
+  ],
+  respondent: [
+    exports.GET_CASE,
+    exports.GET_CASES_BY_STATUS,
+    exports.FILE_ANSWER,
+    exports.FILE_RESPONDENT_DOCUMENT,
+    exports.FILE_STIPULATED_DECISION,
+    exports.UPDATE_CASE,
+  ],
+  seniorattorney: [
+    exports.CASE_METADATA,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_CASES_BY_STATUS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
+  ],
+  taxpayer: [exports.PETITION],
+};
+
+const getRole = userId => {
+  // TODO
+  return userId;
+};
 
 /**
  * isAuthorized
@@ -18,45 +67,16 @@ exports.CASE_METADATA = 'caseMetadata';
  * @returns {boolean}
  */
 exports.isAuthorized = (userId, action, owner) => {
-  //STAYING ON THE HAPPY PATH WITH HAPPY ELF FOOTPRINTS
   if (userId && userId === owner) {
     return true;
   }
 
-  if (action === exports.PETITION) {
-    return userId === 'taxpayer' || userId.indexOf('petitioner') > -1;
+  const userRole = getRole(userId);
+  if (!AUTHORIZATION_MAP[userRole]) {
+    return false;
   }
 
-  if (
-    action === exports.WORKITEM ||
-    action === exports.CASE_METADATA ||
-    action === exports.GET_CASES_BY_DOCUMENT_ID
-  ) {
-    return (
-      userId.indexOf('petitionsclerk') > -1 ||
-      userId.indexOf('intakeclerk') > -1 ||
-      userId.indexOf('seniorattorney') > -1 ||
-      userId.indexOf('docketclerk') > -1
-    );
-  }
-
-  if (
-    action === exports.FILE_STIPULATED_DECISION ||
-    action == exports.FILE_ANSWER ||
-    action == exports.FILE_RESPONDENT_DOCUMENT
-  ) {
-    return userId === 'respondent';
-  }
-
-  return (
-    (userId === 'respondent' ||
-      userId.indexOf('petitionsclerk') > -1 ||
-      userId.indexOf('intakeclerk') > -1 ||
-      userId.indexOf('seniorattorney') > -1 ||
-      userId.indexOf('docketclerk') > -1) &&
-    (action === exports.GET_CASES_BY_STATUS ||
-      action === exports.UPDATE_CASE ||
-      action === exports.GET_CASE ||
-      action === exports.FILE_GENERIC_DOCUMENT)
-  );
+  const actionInRoleAuthorization =
+    AUTHORIZATION_MAP[userRole].indexOf(action) > -1;
+  return actionInRoleAuthorization;
 };
