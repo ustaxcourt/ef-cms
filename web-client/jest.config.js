@@ -12,5 +12,5 @@ module.exports = {
   },
   // TODO: remove 'e2e/**/*.js' - this is including e2e tests in our global coverage %
   // TODO: add in '!src/**/*.test.js' - this is including unit tests in our global coverage %
-  // collectCoverageFrom: ['src/**/*.js', 'e2e/**/*.js'],
+  // collectCoverageFrom: ['src/presenter/**/*.js', '!src/**/*.test.js'],
 };

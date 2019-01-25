@@ -26,18 +26,6 @@
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
-  "jest": {
-    "collectCoverage": true,
-    "coverageDirectory": "./coverage",
-    "coverageThreshold": {
-      "global": {
-        "branches": 95,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    }
-  },
   "postcss": {
     "modules": false,
     "plugins": {
