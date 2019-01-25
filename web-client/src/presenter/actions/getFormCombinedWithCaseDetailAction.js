@@ -3,6 +3,10 @@ import { omit } from 'lodash';
 import moment from 'moment';
 
 export const castToISO = dateString => {
+  dateString = dateString
+    .split('-')
+    .map(segment => segment.padStart(2, '0'))
+    .join('-');
   if (moment(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
     return moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).toISOString();
   } else if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
@@ -14,6 +18,28 @@ export const castToISO = dateString => {
   } else {
     return '-1';
   }
+};
+
+const checkDate = (updatedDateString, originalDate) => {
+  const hasAllDateParts = /.+-.+-.+/;
+  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
+    updatedDateString = null;
+  } else {
+    if (
+      updatedDateString.indexOf('undefined') === -1 &&
+      hasAllDateParts.test(updatedDateString)
+    ) {
+      updatedDateString = castToISO(updatedDateString);
+    } else {
+      //xx-xx-undefined
+      if (originalDate) {
+        updatedDateString = originalDate;
+      } else {
+        updatedDateString = null;
+      }
+    }
+  }
+  return updatedDateString;
 };
 
 export default ({ get }) => {
@@ -39,23 +65,19 @@ export default ({ get }) => {
     ],
   );
 
-  form.irsNoticeDate = castToISO(form.irsNoticeDate);
-  form.payGovDate = castToISO(form.payGovDate);
+  form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
+  form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
-  if ([irsYear, irsMonth, irsDay].join('') === '') {
-    form.irsNoticeDate = null;
-  }
-
-  if ([payGovYear, payGovMonth, payGovDay].join('') === '') {
-    form.payGovDate = null;
-  }
-
-  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
-    yearAmount => ({
-      amount: `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || [])
+    .filter(yearAmount => {
+      return yearAmount.amount || yearAmount.year;
+    })
+    .map(yearAmount => ({
+      amount: !yearAmount.amount
+        ? null
+        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
       year: castToISO(yearAmount.year),
-    }),
-  );
+    }));
 
   return {
     combinedCaseDetailWithForm: {

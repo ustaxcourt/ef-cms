@@ -8,8 +8,8 @@ import {
   faExclamationTriangle,
   faFilePdf,
   faFlag,
-  faPlusCircle,
   faListUl,
+  faPlusCircle,
   faShareSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -46,8 +46,8 @@ const app = {
       faExclamationTriangle,
       faFilePdf,
       faFlag,
-      faPlusCircle,
       faListUl,
+      faPlusCircle,
       faShareSquare,
       faTimesCircle,
     );
