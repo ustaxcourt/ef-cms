@@ -183,15 +183,17 @@ export default connect(
                   $
                 </span>
                 <input
-                  id="amount"
-                  type="number"
-                  name="amount"
                   aria-label="IRS Notice Amount in whole dollars"
-                  value={yearAmount.amount || ''}
+                  id="amount"
+                  name="amount"
+                  type="text"
+                  value={
+                    Number(yearAmount.amount).toLocaleString('en-US') || ''
+                  }
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
-                      value: e.target.value,
+                      value: e.target.value.replace(/\D/g, ''),
                     });
                   }}
                   onBlur={() => {
