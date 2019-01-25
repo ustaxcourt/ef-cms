@@ -171,6 +171,7 @@ export default connect(
                   id="year"
                   type="number"
                   name="year"
+                  aria-label="IRS Notice Year"
                   value={yearAmount.year || ''}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -185,11 +186,14 @@ export default connect(
               </div>
               <div className="inline-input-amount">
                 <label htmlFor="amount">Amount</label>
-                <span>$</span>
+                <span aria-hidden="true" role="presentation">
+                  $
+                </span>
                 <input
                   id="amount"
                   type="number"
                   name="amount"
+                  aria-label="IRS Notice Amount in whole dollars"
                   value={yearAmount.amount || ''}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -201,7 +205,9 @@ export default connect(
                     autoSaveCaseSequence();
                   }}
                 />
-                <span>.00</span>
+                <span aria-hidden="true" role="presentation">
+                  .00
+                </span>
                 {idx !== 0 && (
                   <button
                     className="link"
