@@ -58,7 +58,6 @@ export default connect(
           >
             <fieldset>
               <legend id="date-of-notice-legend">Date of Notice</legend>
-
               <div className="usa-date-of-birth">
                 <div className="usa-form-group usa-form-group-month">
                   <label htmlFor="date-of-notice-month" aria-hidden="true">
@@ -168,7 +167,7 @@ export default connect(
                 <label htmlFor="year">Year</label>
                 <input
                   id="year"
-                  type="text"
+                  type="number"
                   name="year"
                   value={yearAmount.year || ''}
                   onChange={e => {
@@ -187,7 +186,7 @@ export default connect(
                 <span>$</span>
                 <input
                   id="amount"
-                  type="text"
+                  type="number"
                   name="amount"
                   value={yearAmount.amount || ''}
                   onChange={e => {
@@ -201,10 +200,10 @@ export default connect(
                   }}
                 />
                 <span>.00</span>
-
                 {idx !== 0 && (
                   <button
                     className="link"
+                    type="button"
                     aria-controls="removeYearAmount"
                     onClick={e => {
                       e.preventDefault();
@@ -231,6 +230,7 @@ export default connect(
           ))}
           <button
             className="link"
+            type="button"
             aria-controls="addAnotherYearAmount"
             onClick={e => {
               e.preventDefault();
@@ -238,7 +238,8 @@ export default connect(
             }}
           >
             <span>
-              <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
+              <FontAwesomeIcon icon="plus-circle" size="sm" />
+              Add Another
             </span>
           </button>
         </div>
