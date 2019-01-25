@@ -28,6 +28,14 @@ import presenter from './presenter';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
+    if (process.env.USTC_ENV === 'dev') {
+      const user =
+        JSON.parse(window.localStorage.getItem('user') || 'null') ||
+        presenter.state.user;
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+    }
+
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,

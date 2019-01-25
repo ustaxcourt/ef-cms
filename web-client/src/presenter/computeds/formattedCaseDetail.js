@@ -45,7 +45,7 @@ const formatCase = caseDetail => {
   }${result.docketNumberSuffix || ''}`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
-    ? moment(result.irsNoticeDate).format('L')
+    ? moment.utc(result.irsNoticeDate).format('L')
     : 'No Date Provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
