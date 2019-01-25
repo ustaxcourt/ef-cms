@@ -10,5 +10,9 @@ module.exports = {
       statements: 50,
     },
   },
-  collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
+  collectCoverageFrom: [
+    'src/presenter/**/*.js',
+    '!e2e/**/*.js',
+    '!src/**/*.test.js',
+  ],
 };
