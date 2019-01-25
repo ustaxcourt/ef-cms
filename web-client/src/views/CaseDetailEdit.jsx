@@ -156,7 +156,7 @@ export default connect(
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
               key={idx}
-              className={'' + (yearAmount.showError ? ' usa-input-error' : '')}
+              className={yearAmount.showError ? ' usa-input-error' : ''}
             >
               <div className="inline-input-year">
                 <label htmlFor="year">Year</label>
