@@ -156,7 +156,7 @@ export default connect(
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
               key={idx}
-              className={'' + (yearAmount.showError ? ' usa-input-error' : '')}
+              className={yearAmount.showError ? ' usa-input-error' : ''}
             >
               <div className="inline-input-year">
                 <label htmlFor="year">Year</label>
@@ -183,15 +183,17 @@ export default connect(
                   $
                 </span>
                 <input
-                  id="amount"
-                  type="number"
-                  name="amount"
                   aria-label="IRS Notice Amount in whole dollars"
-                  value={yearAmount.amount || ''}
+                  id="amount"
+                  name="amount"
+                  type="text"
+                  value={
+                    Number(yearAmount.amount).toLocaleString('en-US') || ''
+                  }
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
-                      value: e.target.value,
+                      value: e.target.value.replace(/\D/g, ''),
                     });
                   }}
                   onBlur={() => {
