@@ -30,6 +30,16 @@ select {
   margin: 0 0 2rem;
 }
 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 input:focus::placeholder {
   color: transparent;
 }
