@@ -11,6 +11,11 @@ export const formatDocument = document => {
 };
 
 export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
+  caseDetail.canAddYearAmount =
+    (caseDetail.yearAmounts || []).filter(yearAmount => {
+      return !yearAmount.year;
+    }).length !== 1;
+
   if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
     caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
   } else {
