@@ -1,6 +1,3 @@
-import { state } from 'cerebral';
-import { set } from 'cerebral/factories';
-
 import clearAlerts from '../actions/clearAlertsAction';
 import getCase from '../actions/getCaseAction';
 import getInternalUsers from '../actions/getInternalUsersAction';
