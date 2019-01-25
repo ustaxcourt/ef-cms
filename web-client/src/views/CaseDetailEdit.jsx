@@ -233,6 +233,7 @@ export default connect(
             className="link"
             type="button"
             aria-controls="addAnotherYearAmount"
+            disabled={!formattedCaseDetail.canAddYearAmount}
             onClick={e => {
               e.preventDefault();
               appendNewYearAmountSequence();
