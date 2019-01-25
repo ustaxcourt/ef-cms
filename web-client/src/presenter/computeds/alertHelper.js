@@ -4,7 +4,7 @@ export default get => {
   const alertError = get(state.alertError);
 
   return {
-    showErrorAlert: alertError,
+    showErrorAlert: !!alertError,
     showSingleMessage: alertError && !!alertError.message,
     showMultipleMessages: alertError && !!alertError.messages,
     showNoMessage: alertError && !alertError.message && !alertError.messages,
