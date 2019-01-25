@@ -30,7 +30,7 @@ joiValidationDecorator(
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),
-  () => true,
+  undefined,
   Petition.errorToMessageMap,
 );
 
