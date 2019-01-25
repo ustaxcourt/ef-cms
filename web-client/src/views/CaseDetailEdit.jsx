@@ -16,9 +16,9 @@ export default connect(
     showModal: state.showModal,
     submitting: state.submitting,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
   },
   function PetitionEdit({
     appendNewYearAmountSequence,
@@ -52,93 +52,7 @@ export default connect(
           <h3>IRS Notice(s)</h3>
           <span className="label">Type of Notice</span>
           <p>{caseDetail.caseType}</p>
-          {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
-            <div
-              key={idx}
-              className={
-                'usa-grid-full usa-form-group' +
-                (caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year
-                  ? ' usa-input-error'
-                  : '')
-              }
-            >
-              <div className="usa-input-grid usa-input-grid-small">
-                <label htmlFor="year">Year</label>
-                <input
-                  id="year"
-                  type="text"
-                  name="year"
-                  value={yearAmount.year || ''}
-                  onChange={e => {
-                    updateCaseValueSequence({
-                      key: `yearAmounts.${idx}.year`,
-                      value: e.target.value,
-                    });
-                  }}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                />
-              </div>
-              <div className="usa-input-grid usa-input-grid-medium">
-                <label htmlFor="amount">Amount</label>
-                <input
-                  id="amount"
-                  type="text"
-                  name="amount"
-                  value={yearAmount.amount || ''}
-                  onChange={e => {
-                    updateCaseValueSequence({
-                      key: `yearAmounts.${idx}.amount`,
-                      value: e.target.value,
-                    });
-                  }}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                />
-              </div>
-              {caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year && (
-                  <div className="usa-input-grid usa-input-grid-large usa-input-error-message">
-                    {caseDetailErrors.yearAmounts[idx].year}
-                  </div>
-                )}
-              {idx !== 0 && (
-                <div>
-                  <button
-                    className="link"
-                    aria-controls="removeYearAmount"
-                    onClick={e => {
-                      e.preventDefault();
-                      removeYearAmountSequence({
-                        index: idx,
-                      });
-                    }}
-                  >
-                    <span>
-                      <FontAwesomeIcon icon="times-circle" size="sm" /> Remove
-                    </span>{' '}
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-          <button
-            className="link"
-            aria-controls="addAnotherYearAmount"
-            onClick={e => {
-              e.preventDefault();
-              appendNewYearAmountSequence();
-            }}
-          >
-            <span>
-              <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
-            </span>
-          </button>
+
           <div
             className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
           >
@@ -238,6 +152,95 @@ export default connect(
               </div>
             )}
           </div>
+          {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
+            <div
+              key={idx}
+              className={
+                '' +
+                (caseDetailErrors.yearAmounts &&
+                caseDetailErrors.yearAmounts[idx] &&
+                caseDetailErrors.yearAmounts[idx].year
+                  ? ' usa-input-error'
+                  : '')
+              }
+            >
+              <div className="inline-input-year">
+                <label htmlFor="year">Year</label>
+                <input
+                  id="year"
+                  type="text"
+                  name="year"
+                  value={yearAmount.year || ''}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: `yearAmounts.${idx}.year`,
+                      value: e.target.value,
+                    });
+                  }}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                />
+              </div>
+              <div className="inline-input-amount">
+                <label htmlFor="amount">Amount</label>
+                <span>$</span>
+                <input
+                  id="amount"
+                  type="text"
+                  name="amount"
+                  value={yearAmount.amount || ''}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: `yearAmounts.${idx}.amount`,
+                      value: e.target.value,
+                    });
+                  }}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                />
+                <span>.00</span>
+
+                {idx !== 0 && (
+                  <button
+                    className="link"
+                    aria-controls="removeYearAmount"
+                    onClick={e => {
+                      e.preventDefault();
+                      removeYearAmountSequence({
+                        index: idx,
+                      });
+                    }}
+                  >
+                    <span>
+                      <FontAwesomeIcon icon="times-circle" size="sm" />
+                      Remove
+                    </span>
+                  </button>
+                )}
+              </div>
+              {caseDetailErrors.yearAmounts &&
+                caseDetailErrors.yearAmounts[idx] &&
+                caseDetailErrors.yearAmounts[idx].year && (
+                  <div className="usa-input-error-message">
+                    {caseDetailErrors.yearAmounts[idx].year}
+                  </div>
+                )}
+            </div>
+          ))}
+          <button
+            className="link"
+            aria-controls="addAnotherYearAmount"
+            onClick={e => {
+              e.preventDefault();
+              appendNewYearAmountSequence();
+            }}
+          >
+            <span>
+              <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Another
+            </span>
+          </button>
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>

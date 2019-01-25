@@ -45,3 +45,32 @@ label.validated::after {
   background-repeat: no-repeat;
   content: ' ';
 }
+
+.inline-input-year {
+  display: inline-block;
+  width: 80px;
+  margin-right: 20px;
+}
+
+.inline-input-amount {
+  display: inline-block;
+  width: 240px;
+  margin-right: 10px;
+  vertical-align: top;
+
+  input {
+    display: inline-block;
+    max-width: 100px;
+    margin-right: 5px;
+  }
+
+  button {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  span {
+    display: inline-block;
+    margin-right: 5px;
+  }
+}
