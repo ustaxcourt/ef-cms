@@ -5,6 +5,7 @@ OUTPUT=$(sonar-scanner -Dsonar.projectKey="${SONAR_KEY}" -Dsonar.branch.name="${
 sleep 10
 CURL_URL="${FULL_URL}/api/qualitygates/project_status?projectKey=${SONAR_KEY}&branch=${branch_name}"
 JSON=$(curl -X GET -H 'Accept: application/json' "${CURL_URL}")
+echo $JSON
 STATUS=$(echo "${JSON}" | jq -r ".projectStatus.status")
 set +e
 CONTAINS_FAILURE=$(echo "${OUTPUT}" | grep 'EXECUTION FAILURE')
