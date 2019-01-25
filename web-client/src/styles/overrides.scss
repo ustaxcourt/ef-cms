@@ -55,11 +55,19 @@
   }
 }
 
+.usa-input-error {
+  margin-top: auto;
+  padding-top: unset;
+}
+
 .usa-input-error-message {
   padding: 0;
   margin: 10px 0 0;
   clear: left;
   line-height: 1;
+  &.beneath {
+    margin: 0 0 10px;
+  }
 }
 
 .usa-input-error input,
