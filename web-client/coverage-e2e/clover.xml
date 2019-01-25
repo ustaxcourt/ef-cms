@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1548422459562" clover="3.2.0">
+  <project timestamp="1548422459563" name="All files">
+    <metrics statements="480" coveredstatements="343" conditionals="171" coveredconditionals="100" methods="152" coveredmethods="118" elements="803" coveredelements="561" complexity="0" loc="480" ncloc="480" packages="6" files="142" classes="142">
+      <package name="src">
+        <metrics statements="62" coveredstatements="12" conditionals="6" coveredconditionals="2" methods="17" coveredmethods="8"/>
+        <file name="applicationContext.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/applicationContext.js">
+          <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
+          <line num="9" count="3" type="stmt"/>
+          <line num="41" count="3" type="stmt"/>
+          <line num="42" count="47" type="stmt"/>
+          <line num="44" count="3" type="stmt"/>
+          <line num="45" count="11" type="stmt"/>
+          <line num="48" count="3" type="stmt"/>
+          <line num="50" count="87" type="cond" truecount="2" falsecount="0"/>
+          <line num="52" count="80" type="stmt"/>
+          <line num="54" count="3" type="stmt"/>
+          <line num="56" count="3" type="stmt"/>
+          <line num="60" count="7" type="stmt"/>
+          <line num="69" count="129" type="stmt"/>
+        </file>
+        <file name="index.dev.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/index.dev.js">
+          <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="2" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="7" count="0" type="stmt"/>
+          <line num="12" count="0" type="stmt"/>
+          <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="14" count="0" type="stmt"/>
+          <line num="22" count="0" type="stmt"/>
+        </file>
+        <file name="index.prod.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/index.prod.js">
+          <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="9" count="0" type="stmt"/>
+        </file>
+        <file name="router.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/router.js">
+          <metrics statements="32" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="8" count="0" type="stmt"/>
+          <line num="9" count="0" type="stmt"/>
+          <line num="10" count="0" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+          <line num="13" count="0" type="stmt"/>
+          <line num="14" count="0" type="stmt"/>
+          <line num="15" count="0" type="stmt"/>
+          <line num="17" count="0" type="stmt"/>
+          <line num="18" count="0" type="stmt"/>
+          <line num="19" count="0" type="stmt"/>
+          <line num="24" count="0" type="stmt"/>
+          <line num="25" count="0" type="stmt"/>
+          <line num="26" count="0" type="stmt"/>
+          <line num="28" count="0" type="stmt"/>
+          <line num="29" count="0" type="stmt"/>
+          <line num="30" count="0" type="stmt"/>
+          <line num="32" count="0" type="stmt"/>
+          <line num="34" count="0" type="stmt"/>
+          <line num="35" count="0" type="stmt"/>
+          <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="37" count="0" type="stmt"/>
+          <line num="39" count="0" type="stmt"/>
+          <line num="40" count="0" type="stmt"/>
+          <line num="41" count="0" type="stmt"/>
+          <line num="43" count="0" type="stmt"/>
+          <line num="44" count="0" type="stmt"/>
+          <line num="45" count="0" type="stmt"/>
+          <line num="47" count="0" type="stmt"/>
+        </file>
+        <file name="server.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/server.js">
+          <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+        </file>
+      </package>
+      <package name="src.presenter">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <file name="index.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/index.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="state.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/state.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="src.presenter.actions">
+        <metrics statements="308" coveredstatements="238" conditionals="111" coveredconditionals="66" methods="102" coveredmethods="84"/>
+        <file name="appendNewYearAmountAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/appendNewYearAmountAction.js">
+          <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+        </file>
+        <file name="assignSelectedWorkItemsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/assignSelectedWorkItemsAction.js">
+          <metrics statements="24" coveredstatements="23" conditionals="6" coveredconditionals="5" methods="7" coveredmethods="6"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="3" type="stmt"/>
+          <line num="7" count="3" type="stmt"/>
+          <line num="8" count="3" type="stmt"/>
+          <line num="9" count="3" type="stmt"/>
+          <line num="11" count="3" type="stmt"/>
+          <line num="13" count="3" type="stmt"/>
+          <line num="20" count="3" type="stmt"/>
+          <line num="23" count="49" type="cond" truecount="2" falsecount="0"/>
+          <line num="24" count="49" type="stmt"/>
+          <line num="26" count="3" type="stmt"/>
+          <line num="32" count="46" type="stmt"/>
+          <line num="37" count="3" type="stmt"/>
+          <line num="38" count="1" type="stmt"/>
+          <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
+          <line num="42" count="1" type="stmt"/>
+          <line num="43" count="1" type="cond" truecount="1" falsecount="1"/>
+          <line num="45" count="0" type="stmt"/>
+          <line num="48" count="1" type="stmt"/>
+          <line num="57" count="3" type="stmt"/>
+          <line num="58" count="3" type="stmt"/>
+          <line num="60" count="3" type="stmt"/>
+          <line num="61" count="3" type="stmt"/>
+        </file>
+        <file name="clearAlertsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearAlertsAction.js">
+          <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="59" type="stmt"/>
+          <line num="5" count="59" type="stmt"/>
+          <line num="6" count="59" type="stmt"/>
+        </file>
+        <file name="clearCompleteFormAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearCompleteFormAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="1" type="stmt"/>
+        </file>
+        <file name="clearDocumentAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearDocumentAction.js">
+          <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+        </file>
+        <file name="clearFormAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearFormAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="4" type="stmt"/>
+        </file>
+        <file name="clearFormsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearFormsAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+        </file>
+        <file name="clearForwardFormAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearForwardFormAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="1" type="stmt"/>
+        </file>
+        <file name="clearLoginFormAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearLoginFormAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="4" type="stmt"/>
+        </file>
+        <file name="clearPetitionAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearPetitionAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="clearWorkItemActionMapAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/clearWorkItemActionMapAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="completeWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/completeWorkItemAction.js">
+          <metrics statements="18" coveredstatements="16" conditionals="6" coveredconditionals="3" methods="3" coveredmethods="3"/>
+          <line num="4" count="1" type="stmt"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="9" count="1" type="stmt"/>
+          <line num="10" count="3" type="stmt"/>
+          <line num="12" count="1" type="stmt"/>
+          <line num="13" count="3" type="stmt"/>
+          <line num="15" count="1" type="stmt"/>
+          <line num="17" count="1" type="cond" truecount="2" falsecount="2"/>
+          <line num="20" count="1" type="stmt"/>
+          <line num="21" count="1" type="stmt"/>
+          <line num="30" count="1" type="cond" truecount="1" falsecount="1"/>
+          <line num="31" count="0" type="stmt"/>
+          <line num="32" count="0" type="stmt"/>
+          <line num="35" count="1" type="stmt"/>
+          <line num="37" count="1" type="stmt"/>
+          <line num="39" count="1" type="stmt"/>
+          <line num="46" count="1" type="stmt"/>
+        </file>
+        <file name="createCaseAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/createCaseAction.js">
+          <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+          <line num="5" count="1" type="stmt"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="9" count="1" type="stmt"/>
+          <line num="10" count="1" type="stmt"/>
+          <line num="16" count="1" type="stmt"/>
+          <line num="26" count="1" type="stmt"/>
+          <line num="33" count="1" type="stmt"/>
+          <line num="35" count="0" type="stmt"/>
+        </file>
+        <file name="expireFormSaveSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/expireFormSaveSuccessAction.js">
+          <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+          <line num="4" count="1" type="stmt"/>
+          <line num="5" count="1" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+        </file>
+        <file name="fileRespondentDocumentAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/fileRespondentDocumentAction.js">
+          <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="6" count="2" type="stmt"/>
+          <line num="8" count="2" type="stmt"/>
+          <line num="10" count="2" type="stmt"/>
+          <line num="18" count="2" type="stmt"/>
+        </file>
+        <file name="formatSearchParamsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/formatSearchParamsAction.js">
+          <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+        </file>
+        <file name="forwardWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/forwardWorkItemAction.js">
+          <metrics statements="14" coveredstatements="13" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
+          <line num="4" count="1" type="stmt"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="9" count="1" type="stmt"/>
+          <line num="10" count="1" type="stmt"/>
+          <line num="11" count="1" type="stmt"/>
+          <line num="20" count="1" type="stmt"/>
+          <line num="21" count="1" type="stmt"/>
+          <line num="22" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="25" count="3" type="stmt"/>
+          <line num="26" count="1" type="stmt"/>
+          <line num="27" count="1" type="stmt"/>
+          <line num="29" count="1" type="stmt"/>
+          <line num="36" count="0" type="stmt"/>
+        </file>
+        <file name="getCaseAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getCaseAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="14" type="stmt"/>
+          <line num="9" count="14" type="stmt"/>
+        </file>
+        <file name="getCaseTypesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getCaseTypesAction.js">
+          <metrics statements="5" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="8" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="9" count="3" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+        </file>
+        <file name="getCasesByUserAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getCasesByUserAction.js">
+          <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="5" count="7" type="stmt"/>
+          <line num="6" count="7" type="stmt"/>
+          <line num="7" count="7" type="stmt"/>
+          <line num="11" count="7" type="stmt"/>
+          <line num="12" count="7" type="stmt"/>
+        </file>
+        <file name="getCasesNewAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getCasesNewAction.js">
+          <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="2" count="0" type="stmt"/>
+          <line num="4" count="0" type="cond" truecount="0" falsecount="4"/>
+          <line num="5" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+        </file>
+        <file name="getCreateCaseAlertSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getCreateCaseAlertSuccessAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="1" type="stmt"/>
+        </file>
+        <file name="getDocumentAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getDocumentAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="1" type="stmt"/>
+          <line num="8" count="1" type="stmt"/>
+        </file>
+        <file name="getDocumentTypeAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getDocumentTypeAction.js">
+          <metrics statements="5" coveredstatements="4" conditionals="3" coveredconditionals="2" methods="1" coveredmethods="1"/>
+          <line num="5" count="2" type="stmt"/>
+          <line num="6" count="2" type="cond" truecount="2" falsecount="1"/>
+          <line num="8" count="1" type="stmt"/>
+          <line num="10" count="1" type="stmt"/>
+          <line num="12" count="0" type="stmt"/>
+        </file>
+        <file name="getFileDocumentAlertSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getFileDocumentAlertSuccessAction.js">
+          <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="2" count="0" type="stmt"/>
+        </file>
+        <file name="getFormCombinedWithCaseDetailAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getFormCombinedWithCaseDetailAction.js">
+          <metrics statements="29" coveredstatements="27" conditionals="24" coveredconditionals="19" methods="6" coveredmethods="6"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="23" type="stmt"/>
+          <line num="8" count="43" type="stmt"/>
+          <line num="10" count="23" type="cond" truecount="2" falsecount="0"/>
+          <line num="11" count="13" type="stmt"/>
+          <line num="12" count="10" type="cond" truecount="2" falsecount="0"/>
+          <line num="13" count="9" type="stmt"/>
+          <line num="14" count="1" type="cond" truecount="1" falsecount="1"/>
+          <line num="15" count="0" type="stmt"/>
+          <line num="19" count="1" type="stmt"/>
+          <line num="23" count="3" type="stmt"/>
+          <line num="24" count="26" type="stmt"/>
+          <line num="25" count="26" type="cond" truecount="2" falsecount="0"/>
+          <line num="26" count="15" type="stmt"/>
+          <line num="28" count="11" type="cond" truecount="2" falsecount="0"/>
+          <line num="32" count="10" type="stmt"/>
+          <line num="35" count="1" type="cond" truecount="1" falsecount="1"/>
+          <line num="36" count="1" type="stmt"/>
+          <line num="38" count="0" type="stmt"/>
+          <line num="42" count="26" type="stmt"/>
+          <line num="46" count="13" type="stmt"/>
+          <line num="47" count="13" type="stmt"/>
+          <line num="51" count="13" type="stmt"/>
+          <line num="68" count="13" type="stmt"/>
+          <line num="69" count="13" type="stmt"/>
+          <line num="71" count="13" type="cond" truecount="2" falsecount="2"/>
+          <line num="73" count="13" type="cond" truecount="2" falsecount="0"/>
+          <line num="75" count="13" type="stmt"/>
+          <line num="82" count="13" type="stmt"/>
+        </file>
+        <file name="getInternalUsersAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getInternalUsersAction.js">
+          <metrics statements="4" coveredstatements="3" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+          <line num="2" count="3" type="stmt"/>
+          <line num="5" count="3" type="cond" truecount="3" falsecount="1"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="13" count="3" type="stmt"/>
+        </file>
+        <file name="getProcedureTypesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getProcedureTypesAction.js">
+          <metrics statements="5" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="8" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="9" count="3" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+        </file>
+        <file name="getSelectedWorkItemsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getSelectedWorkItemsAction.js">
+          <metrics statements="2" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="cond" truecount="0" falsecount="3"/>
+        </file>
+        <file name="getTrialCitiesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getTrialCitiesAction.js">
+          <metrics statements="5" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+          <line num="2" count="4" type="stmt"/>
+          <line num="3" count="4" type="stmt"/>
+          <line num="7" count="4" type="cond" truecount="1" falsecount="1"/>
+          <line num="8" count="4" type="stmt"/>
+          <line num="10" count="0" type="stmt"/>
+        </file>
+        <file name="getUserAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getUserAction.js">
+          <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+          <line num="4" count="12" type="stmt"/>
+          <line num="5" count="12" type="stmt"/>
+          <line num="6" count="12" type="cond" truecount="2" falsecount="0"/>
+          <line num="7" count="1" type="stmt"/>
+        </file>
+        <file name="getUserRoleAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getUserRoleAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="30" type="stmt"/>
+          <line num="5" count="30" type="stmt"/>
+        </file>
+        <file name="getUsersInSectionAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getUsersInSectionAction.js">
+          <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+          <line num="1" count="6" type="stmt"/>
+          <line num="2" count="12" type="stmt"/>
+          <line num="5" count="12" type="stmt"/>
+        </file>
+        <file name="getWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getWorkItemAction.js">
+          <metrics statements="3" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="cond" truecount="0" falsecount="4"/>
+          <line num="4" count="0" type="stmt"/>
+        </file>
+        <file name="getWorkItemsByUserAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getWorkItemsByUserAction.js">
+          <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="5" count="18" type="stmt"/>
+          <line num="6" count="18" type="stmt"/>
+          <line num="7" count="18" type="stmt"/>
+          <line num="11" count="18" type="stmt"/>
+          <line num="12" count="18" type="stmt"/>
+        </file>
+        <file name="getWorkItemsForSectionAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/getWorkItemsForSectionAction.js">
+          <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="15" type="stmt"/>
+          <line num="3" count="15" type="stmt"/>
+          <line num="10" count="15" type="stmt"/>
+        </file>
+        <file name="isLoggedInAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/isLoggedInAction.js">
+          <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+          <line num="4" count="23" type="stmt"/>
+          <line num="5" count="23" type="cond" truecount="2" falsecount="0"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="8" count="22" type="stmt"/>
+        </file>
+        <file name="navigateToCaseDetailAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/navigateToCaseDetailAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="1" type="stmt"/>
+        </file>
+        <file name="navigateToDashboardAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/navigateToDashboardAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="4" type="stmt"/>
+        </file>
+        <file name="navigateToLoginAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/navigateToLoginAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="2" count="1" type="stmt"/>
+        </file>
+        <file name="navigateToPathAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/navigateToPathAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="11" type="stmt"/>
+          <line num="5" count="11" type="stmt"/>
+        </file>
+        <file name="removeYearAmountAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/removeYearAmountAction.js">
+          <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="8" count="0" type="stmt"/>
+        </file>
+        <file name="selectWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/selectWorkItemAction.js">
+          <metrics statements="6" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="7" count="0" type="stmt"/>
+          <line num="10" count="0" type="stmt"/>
+          <line num="13" count="0" type="stmt"/>
+          <line num="17" count="3" type="stmt"/>
+        </file>
+        <file name="sendPetitionToIrsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/sendPetitionToIrsAction.js">
+          <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="5" count="1" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="12" count="1" type="stmt"/>
+          <line num="13" count="1" type="stmt"/>
+        </file>
+        <file name="setAlertErrorAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setAlertErrorAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="setAlertSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setAlertSuccessAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="7" type="stmt"/>
+        </file>
+        <file name="setAssigneeIdAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setAssigneeIdAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+        </file>
+        <file name="setBaseUrlAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setBaseUrlAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="11" type="stmt"/>
+        </file>
+        <file name="setCaseAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setCaseAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="15" type="stmt"/>
+        </file>
+        <file name="setCaseIdFromSearchAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setCaseIdFromSearchAction.js">
+          <metrics statements="6" coveredstatements="6" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+          <line num="2" count="3" type="stmt"/>
+          <line num="5" count="1" type="stmt"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="8" count="1" type="cond" truecount="4" falsecount="1"/>
+          <line num="9" count="1" type="stmt"/>
+          <line num="10" count="1" type="stmt"/>
+        </file>
+        <file name="setCaseTypesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setCaseTypesAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="setCasesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setCasesAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="7" type="stmt"/>
+        </file>
+        <file name="setCurrentPageAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setCurrentPageAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+          <line num="4" count="51" type="stmt"/>
+          <line num="5" count="41" type="stmt"/>
+        </file>
+        <file name="setDefaultDocumentDetailTabAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setDefaultDocumentDetailTabAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+          <line num="5" count="3" type="stmt"/>
+        </file>
+        <file name="setDocumentIdAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setDocumentIdAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="setFocusedWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setFocusedWorkItemAction.js">
+          <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="8" count="0" type="stmt"/>
+          <line num="10" count="0" type="stmt"/>
+        </file>
+        <file name="setFormForCaseAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setFormForCaseAction.js">
+          <metrics statements="11" coveredstatements="11" conditionals="10" coveredconditionals="8" methods="1" coveredmethods="1"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="3" type="stmt"/>
+          <line num="7" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="12" count="3" type="stmt"/>
+          <line num="13" count="3" type="stmt"/>
+          <line num="14" count="3" type="stmt"/>
+          <line num="17" count="3" type="stmt"/>
+          <line num="18" count="3" type="cond" truecount="1" falsecount="1"/>
+          <line num="23" count="3" type="stmt"/>
+          <line num="24" count="3" type="stmt"/>
+          <line num="25" count="3" type="stmt"/>
+        </file>
+        <file name="setFormSaveSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setFormSaveSuccessAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="1" type="stmt"/>
+        </file>
+        <file name="setFormSubmittingAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setFormSubmittingAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="17" type="stmt"/>
+        </file>
+        <file name="setInternalUsersAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setInternalUsersAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="setPathAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setPathAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+          <line num="4" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="5" count="2" type="stmt"/>
+        </file>
+        <file name="setProcedureTypesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setProcedureTypesAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="3" type="stmt"/>
+        </file>
+        <file name="setSectionWorkQueueAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setSectionWorkQueueAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="15" type="stmt"/>
+        </file>
+        <file name="setTrialCitiesAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setTrialCitiesAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="4" type="stmt"/>
+        </file>
+        <file name="setUserAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setUserAction.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="11" type="stmt"/>
+          <line num="5" count="11" type="stmt"/>
+        </file>
+        <file name="setUsersAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setUsersAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="12" type="stmt"/>
+        </file>
+        <file name="setValidationAlertErrorsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setValidationAlertErrorsAction.js">
+          <metrics statements="10" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="5" coveredmethods="2"/>
+          <line num="5" count="1" type="stmt"/>
+          <line num="9" count="2" type="stmt"/>
+          <line num="10" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="11" count="0" type="stmt"/>
+          <line num="12" count="0" type="stmt"/>
+          <line num="13" count="0" type="stmt"/>
+          <line num="15" count="0" type="stmt"/>
+          <line num="16" count="0" type="stmt"/>
+          <line num="22" count="2" type="stmt"/>
+          <line num="27" count="1" type="stmt"/>
+        </file>
+        <file name="setWorkItemAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setWorkItemAction.js">
+          <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="4" count="0" type="stmt"/>
+        </file>
+        <file name="setWorkItemActionMapAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setWorkItemActionMapAction.js">
+          <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+          <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="7" count="0" type="stmt"/>
+          <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="9" count="0" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+          <line num="13" count="0" type="stmt"/>
+        </file>
+        <file name="setWorkItemsAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/setWorkItemsAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="18" type="stmt"/>
+        </file>
+        <file name="switchWorkQueueAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/switchWorkQueueAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="2" type="stmt"/>
+        </file>
+        <file name="unsetFormSaveSuccessAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/unsetFormSaveSuccessAction.js">
+          <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+        </file>
+        <file name="unsetFormSubmittingAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/unsetFormSubmittingAction.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="17" type="stmt"/>
+        </file>
+        <file name="updateCaseAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/updateCaseAction.js">
+          <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+          <line num="4" count="9" type="stmt"/>
+          <line num="5" count="9" type="stmt"/>
+          <line num="7" count="9" type="stmt"/>
+          <line num="13" count="9" type="stmt"/>
+        </file>
+        <file name="uploadDocumentAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/uploadDocumentAction.js">
+          <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="1" count="0" type="stmt"/>
+          <line num="3" count="0" type="cond" truecount="0" falsecount="4"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="8" count="0" type="stmt"/>
+        </file>
+        <file name="validateCaseDetailAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/validateCaseDetailAction.js">
+          <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+          <line num="4" count="13" type="stmt"/>
+          <line num="6" count="13" type="stmt"/>
+          <line num="11" count="13" type="cond" truecount="2" falsecount="0"/>
+          <line num="13" count="13" type="cond" truecount="2" falsecount="0"/>
+          <line num="14" count="9" type="stmt"/>
+          <line num="18" count="4" type="stmt"/>
+        </file>
+        <file name="validateDocumentAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/validateDocumentAction.js">
+          <metrics statements="6" coveredstatements="4" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="6" count="2" type="cond" truecount="3" falsecount="1"/>
+          <line num="7" count="0" type="stmt"/>
+          <line num="14" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="15" count="0" type="stmt"/>
+          <line num="22" count="2" type="stmt"/>
+        </file>
+        <file name="validatePetitionAction.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/actions/validatePetitionAction.js">
+          <metrics statements="8" coveredstatements="8" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="7" count="3" type="stmt"/>
+          <line num="17" count="3" type="stmt"/>
+          <line num="19" count="9" type="stmt"/>
+          <line num="22" count="3" type="stmt"/>
+          <line num="27" count="3" type="cond" truecount="2" falsecount="0"/>
+          <line num="28" count="1" type="stmt"/>
+          <line num="30" count="2" type="stmt"/>
+        </file>
+      </package>
+      <package name="src.presenter.computeds">
+        <metrics statements="106" coveredstatements="92" conditionals="54" coveredconditionals="32" methods="32" coveredmethods="26"/>
+        <file name="alertHelper.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/alertHelper.js">
+          <metrics statements="2" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+        </file>
+        <file name="caseDetailHelper.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/caseDetailHelper.js">
+          <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="5" count="2" type="stmt"/>
+          <line num="7" count="2" type="stmt"/>
+        </file>
+        <file name="documentDetailHelper.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/documentDetailHelper.js">
+          <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+          <line num="3" count="3" type="stmt"/>
+          <line num="6" count="1" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="11" count="0" type="stmt"/>
+          <line num="12" count="0" type="stmt"/>
+        </file>
+        <file name="extractDocument.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/extractDocument.js">
+          <metrics statements="11" coveredstatements="11" conditionals="6" coveredconditionals="3" methods="4" coveredmethods="4"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="2" type="stmt"/>
+          <line num="7" count="2" type="stmt"/>
+          <line num="8" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="9" count="6" type="stmt"/>
+          <line num="11" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="12" count="2" type="stmt"/>
+          <line num="13" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="14" count="2" type="stmt"/>
+          <line num="15" count="1" type="stmt"/>
+          <line num="16" count="2" type="stmt"/>
+        </file>
+        <file name="extractPendingMessagesFromCaseDetail.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/extractPendingMessagesFromCaseDetail.js">
+          <metrics statements="7" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="4"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="3" type="stmt"/>
+          <line num="7" count="3" type="stmt"/>
+          <line num="8" count="9" type="cond" truecount="1" falsecount="1"/>
+          <line num="11" count="3" type="stmt"/>
+          <line num="12" count="9" type="stmt"/>
+          <line num="13" count="8" type="stmt"/>
+        </file>
+        <file name="formattedCaseDetail.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/formattedCaseDetail.js">
+          <metrics statements="32" coveredstatements="26" conditionals="18" coveredconditionals="8" methods="6" coveredmethods="4"/>
+          <line num="5" count="3" type="stmt"/>
+          <line num="6" count="4" type="stmt"/>
+          <line num="7" count="4" type="stmt"/>
+          <line num="8" count="4" type="stmt"/>
+          <line num="9" count="4" type="stmt"/>
+          <line num="10" count="4" type="stmt"/>
+          <line num="13" count="3" type="stmt"/>
+          <line num="14" count="2" type="cond" truecount="3" falsecount="1"/>
+          <line num="15" count="2" type="stmt"/>
+          <line num="17" count="0" type="stmt"/>
+          <line num="18" count="0" type="stmt"/>
+          <line num="19" count="0" type="stmt"/>
+          <line num="30" count="3" type="stmt"/>
+          <line num="31" count="2" type="stmt"/>
+          <line num="33" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="34" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="35" count="0" type="stmt"/>
+          <line num="39" count="2" type="stmt"/>
+          <line num="40" count="2" type="stmt"/>
+          <line num="41" count="2" type="stmt"/>
+          <line num="43" count="2" type="stmt"/>
+          <line num="47" count="2" type="cond" truecount="1" falsecount="1"/>
+          <line num="51" count="2" type="stmt"/>
+          <line num="55" count="2" type="stmt"/>
+          <line num="57" count="2" type="stmt"/>
+          <line num="60" count="2" type="stmt"/>
+          <line num="63" count="3" type="stmt"/>
+          <line num="64" count="0" type="stmt"/>
+          <line num="65" count="0" type="stmt"/>
+          <line num="68" count="3" type="stmt"/>
+          <line num="69" count="2" type="stmt"/>
+          <line num="70" count="2" type="stmt"/>
+        </file>
+        <file name="formattedSectionWorkQueue.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/formattedSectionWorkQueue.js">
+          <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+          <line num="6" count="3" type="stmt"/>
+          <line num="7" count="1" type="stmt"/>
+          <line num="8" count="1" type="stmt"/>
+          <line num="9" count="1" type="stmt"/>
+          <line num="10" count="19" type="stmt"/>
+          <line num="11" count="18" type="stmt"/>
+        </file>
+        <file name="formattedTrialCity.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/formattedTrialCity.js">
+          <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+          <line num="1" count="3" type="stmt"/>
+          <line num="2" count="251" type="stmt"/>
+        </file>
+        <file name="formattedWorkQueue.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/formattedWorkQueue.js">
+          <metrics statements="27" coveredstatements="26" conditionals="11" coveredconditionals="10" methods="6" coveredmethods="5"/>
+          <line num="5" count="3" type="cond" truecount="1" falsecount="0"/>
+          <line num="6" count="31" type="stmt"/>
+          <line num="7" count="31" type="stmt"/>
+          <line num="8" count="31" type="stmt"/>
+          <line num="9" count="31" type="stmt"/>
+          <line num="10" count="45" type="stmt"/>
+          <line num="11" count="45" type="stmt"/>
+          <line num="12" count="45" type="cond" truecount="2" falsecount="0"/>
+          <line num="13" count="33" type="stmt"/>
+          <line num="15" count="12" type="stmt"/>
+          <line num="17" count="45" type="cond" truecount="2" falsecount="0"/>
+          <line num="18" count="45" type="stmt"/>
+          <line num="22" count="31" type="cond" truecount="2" falsecount="0"/>
+          <line num="23" count="31" type="stmt"/>
+          <line num="25" count="31" type="stmt"/>
+          <line num="27" count="31" type="stmt"/>
+          <line num="31" count="31" type="stmt"/>
+          <line num="32" count="0" type="stmt"/>
+          <line num="35" count="31" type="stmt"/>
+          <line num="36" count="31" type="stmt"/>
+          <line num="38" count="31" type="stmt"/>
+          <line num="41" count="3" type="stmt"/>
+          <line num="42" count="3" type="stmt"/>
+          <line num="43" count="3" type="stmt"/>
+          <line num="44" count="3" type="stmt"/>
+          <line num="45" count="18" type="stmt"/>
+          <line num="46" count="4" type="stmt"/>
+        </file>
+        <file name="startCaseHelper.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/startCaseHelper.js">
+          <metrics statements="8" coveredstatements="8" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+          <line num="4" count="7" type="stmt"/>
+          <line num="5" count="7" type="stmt"/>
+          <line num="6" count="7" type="cond" truecount="2" falsecount="0"/>
+          <line num="7" count="7" type="stmt"/>
+          <line num="8" count="7" type="stmt"/>
+          <line num="9" count="7" type="stmt"/>
+          <line num="11" count="251" type="stmt"/>
+          <line num="17" count="7" type="stmt"/>
+        </file>
+        <file name="workQueueHelper.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/computeds/workQueueHelper.js">
+          <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="4" count="0" type="stmt"/>
+          <line num="5" count="0" type="stmt"/>
+          <line num="7" count="0" type="stmt"/>
+        </file>
+      </package>
+      <package name="src.presenter.sequences">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <file name="appendNewYearAmountSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/appendNewYearAmountSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="assignSelectedWorkItemsSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/assignSelectedWorkItemsSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="autoSaveCaseSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/autoSaveCaseSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="clearDocumentSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/clearDocumentSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="getTrialCitiesSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/getTrialCitiesSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="gotoCaseDetailSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoCaseDetailSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="gotoDashboardSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoDashboardSequence.js">
+          <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+          <line num="17" count="3" type="stmt"/>
+        </file>
+        <file name="gotoDocumentDetailSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoDocumentDetailSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="gotoLogInSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoLogInSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="gotoStartCaseSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoStartCaseSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="gotoStyleGuideSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/gotoStyleGuideSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="loginWithTokenSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/loginWithTokenSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="removeYearAmountSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/removeYearAmountSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="selectAssigneeSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/selectAssigneeSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="selectWorkItemSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/selectWorkItemSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="setFocusedWorkItemSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/setFocusedWorkItemSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="setWorkItemActionSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/setWorkItemActionSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="startACaseConfirmCancelSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/startACaseConfirmCancelSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="startACaseToggleCancelSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/startACaseToggleCancelSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitCompleteSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitCompleteSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitDocumentSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitDocumentSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitFilePetitionSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitFilePetitionSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitForwardSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitForwardSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitLogInSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitLogInSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitSearchSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitSearchSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitToIrsSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitToIrsSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="submitUpdateCaseSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/submitUpdateCaseSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="switchWorkQueueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/switchWorkQueueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="toggleCaseDifferenceSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/toggleCaseDifferenceSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="toggleMobileMenuSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/toggleMobileMenuSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="togglePaymentDetailsSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/togglePaymentDetailsSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="toggleUsaBannerDetailsSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/toggleUsaBannerDetailsSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="unsetFormSaveSuccessSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/unsetFormSaveSuccessSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateCaseValueByIndexSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateCaseValueByIndexSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateCaseValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateCaseValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateCompleteFormValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateCompleteFormValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateCurrentTabSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateCurrentTabSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateDocumentValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateDocumentValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateFormValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateFormValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateForwardFormValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateForwardFormValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateLoginValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateLoginValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updatePetitionValueSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updatePetitionValueSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="updateSearchTermSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/updateSearchTermSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="validateCaseDetailSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/validateCaseDetailSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+        <file name="viewDocumentSequence.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/presenter/sequences/viewDocumentSequence.js">
+          <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        </file>
+      </package>
+      <package name="src.views">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <file name="openDocumentBlob.js" path="/Users/cseibert/Workspace/ef-cms/web-client/src/views/openDocumentBlob.js">
+          <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+          <line num="3" count="0" type="stmt"/>
+          <line num="6" count="0" type="stmt"/>
+          <line num="8" count="0" type="stmt"/>
+        </file>
+      </package>
+    </metrics>
+  </project>
+</coverage>
