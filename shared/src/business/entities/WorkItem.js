@@ -78,7 +78,7 @@ joiValidationDecorator(
 );
 
 WorkItem.prototype.addMessage = function(message) {
-  this.messages = [...(this.messages || []), message];
+  this.messages = [...this.messages, message];
   return this;
 };
 

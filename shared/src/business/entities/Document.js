@@ -71,7 +71,7 @@ joiValidationDecorator(
 );
 
 Document.prototype.addWorkItem = function(workItem) {
-  this.workItems = [...(this.workItems || []), workItem];
+  this.workItems = [...this.workItems, workItem];
 };
 
 module.exports = Document;
