@@ -72,6 +72,7 @@ export default {
     // role: 'seniorattorney',
   },
   caseDetail: {},
+  caseDetailErrors: {},
   cases: [],
   completeForm: {},
   workItemActions: {},

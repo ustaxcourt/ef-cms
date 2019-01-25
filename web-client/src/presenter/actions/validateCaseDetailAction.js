@@ -8,7 +8,7 @@ export default ({ store, applicationContext, path, props }) => {
     applicationContext,
   });
 
-  store.set(state.caseDetailErrors, errors);
+  store.set(state.caseDetailErrors, errors || {});
 
   if (!errors) {
     return path.success({

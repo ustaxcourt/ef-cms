@@ -99,9 +99,6 @@ function Case(rawCase) {
       docketNumberSuffix:
         rawCase.docketNumberSuffix || getDocketNumberSuffix(rawCase),
     },
-    rawCase.payGovId && !rawCase.payGovDate
-      ? { payGovDate: new Date().toISOString() }
-      : null,
   );
 
   this.yearAmounts = (this.yearAmounts || []).map(
@@ -150,6 +147,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .allow(null)
+      .max('now')
       .optional(),
     irsSendDate: joi
       .date()
@@ -162,6 +160,7 @@ joiValidationDecorator(
     payGovDate: joi
       .date()
       .iso()
+      .max('now')
       .allow(null)
       .optional(),
     status: joi
@@ -196,7 +195,14 @@ joiValidationDecorator(
     documents: 'At least one valid document is required.',
     caseType: 'Case Type is required.',
     petitioners: 'At least one valid petitioner is required.',
-    irsNoticeDate: 'IRS Notice Date is invalid.',
+    irsNoticeDate: [
+      {
+        contains: 'must be less than or equal to',
+        message:
+          'The IRS notice date is in the future. Please enter a valid date.',
+      },
+      'Please enter a valid IRS notice date.',
+    ],
     procedureType: 'Procedure Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
     yearAmounts: [
@@ -207,7 +213,14 @@ joiValidationDecorator(
       'A valid year and amount are required.',
     ],
     payGovId: 'Fee Payment Id must be in a valid format',
-    payGovDate: 'Fee Payment Date is invalid',
+    payGovDate: [
+      {
+        contains: 'must be less than or equal to',
+        message:
+          'The Fee Payment date is in the future. Please enter a valid date.',
+      },
+      'Please enter a valid Fee Payment date.',
+    ],
   },
 );
 
