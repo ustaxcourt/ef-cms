@@ -55,7 +55,7 @@ const AUTHORIZATION_MAP = {
 
 const getRole = userId => {
   // TODO
-  return userId;
+  return userId.replace(/\d+/g, '');
 };
 
 /**
