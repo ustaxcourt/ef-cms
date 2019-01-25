@@ -17,6 +17,7 @@ import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
 import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
+import submitCaseDetailEditSaveSequence from './sequences/submitCaseDetailEditSaveSequence';
 import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
@@ -70,6 +71,7 @@ export default {
     setWorkItemActionSequence,
     startACaseConfirmCancelSequence,
     startACaseToggleCancelSequence,
+    submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
     submitDocumentSequence,
     submitFilePetitionSequence,
