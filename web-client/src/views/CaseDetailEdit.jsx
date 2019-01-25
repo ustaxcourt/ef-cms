@@ -15,7 +15,8 @@ export default connect(
     removeYearAmountSequence: sequences.removeYearAmountSequence,
     showModal: state.showModal,
     submitting: state.submitting,
-    submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    submitCaseDetailEditSaveSequence:
+      sequences.submitCaseDetailEditSaveSequence,
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,7 +31,7 @@ export default connect(
     removeYearAmountSequence,
     showModal,
     submitting,
-    submitUpdateCaseSequence,
+    submitCaseDetailEditSaveSequence,
     unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
@@ -40,7 +41,7 @@ export default connect(
         noValidate
         onSubmit={e => {
           e.preventDefault();
-          submitUpdateCaseSequence();
+          submitCaseDetailEditSaveSequence();
         }}
         role="form"
         onFocus={() => {
