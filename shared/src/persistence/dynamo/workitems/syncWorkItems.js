@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-// TODO: tests will come in the next PR
 const persistence = require('../../awsDynamoPersistence');
 const client = require('../../dynamodbClientService');
 
@@ -59,6 +57,14 @@ exports.syncWorkItems = async ({
           workItemToSave: workItem,
         });
       }
+
+      if (caseToSave.status !== currentCaseState.status) {
+        workItem.caseStatus = caseToSave.status;
+        await exports.updateWorkItem({
+          applicationContext,
+          workItemToSave: workItem,
+        });
+      }
     }
   }
 };
@@ -98,5 +104,17 @@ exports.reassignWorkItem = async ({
     pkId: workItemToSave.assigneeId,
     skId: workItemToSave.workItemId,
     type: 'workItem',
+  });
+};
+
+exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
+  await client.put({
+    applicationContext,
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: workItemToSave.workItemId,
+      sk: workItemToSave.workItemId,
+      ...workItemToSave,
+    },
   });
 };

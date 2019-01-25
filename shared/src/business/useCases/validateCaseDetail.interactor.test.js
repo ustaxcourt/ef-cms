@@ -123,12 +123,17 @@ describe('validate case detail', () => {
             year: '2100-01-01',
             amount: '1000',
           },
+          {
+            year: '2200-01-01',
+            amount: '123',
+          },
         ],
       },
     });
     expect(errors.preferredTrialCity).toEqual(
       'Preferred Trial City is required.',
     );
+
     const yearAmount0 = errors.yearAmounts.find(
       yearAmount => yearAmount.index === 0,
     );
@@ -136,11 +141,19 @@ describe('validate case detail', () => {
     const yearAmount3 = errors.yearAmounts.find(
       yearAmount => yearAmount.index === 3,
     );
+
+    const yearAmount4 = errors.yearAmounts.find(
+      yearAmount => yearAmount.index === 4,
+    );
     expect(yearAmount0.year).toEqual('Please enter a valid year.');
     expect(yearAmount0.amount).toBeUndefined();
     expect(yearAmount3.year).toEqual(
       'That year is in the future. Please enter a valid year.',
     );
+    expect(yearAmount4.year).toEqual(
+      'That year is in the future. Please enter a valid year.',
+    );
+    expect(yearAmount4.index).toEqual(4);
   });
 
   it('returns an error if yearAmounts have duplicate years', () => {

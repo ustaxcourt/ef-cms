@@ -10,7 +10,9 @@
     "dev:debug": "USTC_DEBUG=true npm run dev",
     "dist": "rm -rf dist; USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src && stylelint ./src/**/*.scss",
-    "test": "jest ./**/tests/*.test.js",
+    "test": "jest .*test\\.js$",
+    "test:unit": "jest --config jest-unit.config.js ./src/.*test\\.js$",
+    "test:e2e": "jest --config jest-e2e.config.js ./e2e/.*test\\.js$",
     "test:pa11y": "pa11y-ci --config pa11y-ci.config.json",
     "start": "npm run dev",
     "docker:init": "./docker-init.sh",
@@ -23,18 +25,6 @@
   "license": "CC0-1.0",
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "coverageDirectory": "./coverage",
-    "coverageThreshold": {
-      "global": {
-        "branches": 95,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    }
   },
   "postcss": {
     "modules": false,
