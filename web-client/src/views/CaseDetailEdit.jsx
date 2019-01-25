@@ -15,7 +15,8 @@ export default connect(
     removeYearAmountSequence: sequences.removeYearAmountSequence,
     showModal: state.showModal,
     submitting: state.submitting,
-    submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    submitCaseDetailEditSaveSequence:
+      sequences.submitCaseDetailEditSaveSequence,
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,17 +31,18 @@ export default connect(
     removeYearAmountSequence,
     showModal,
     submitting,
-    submitUpdateCaseSequence,
+    submitCaseDetailEditSaveSequence,
     unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
   }) {
     return (
       <form
+        id="case-edit-form"
         noValidate
         onSubmit={e => {
           e.preventDefault();
-          submitUpdateCaseSequence();
+          submitCaseDetailEditSaveSequence();
         }}
         role="form"
         onFocus={() => {
@@ -154,14 +156,7 @@ export default connect(
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
               key={idx}
-              className={
-                '' +
-                (caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year
-                  ? ' usa-input-error'
-                  : '')
-              }
+              className={'' + (yearAmount.showError ? ' usa-input-error' : '')}
             >
               <div className="inline-input-year">
                 <label htmlFor="year">Year</label>
@@ -169,6 +164,7 @@ export default connect(
                   id="year"
                   type="number"
                   name="year"
+                  aria-label="IRS Notice Year"
                   value={yearAmount.year || ''}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -183,11 +179,14 @@ export default connect(
               </div>
               <div className="inline-input-amount">
                 <label htmlFor="amount">Amount</label>
-                <span>$</span>
+                <span aria-hidden="true" role="presentation">
+                  $
+                </span>
                 <input
+                  aria-label="IRS Notice Amount in whole dollars"
                   id="amount"
-                  type="text"
                   name="amount"
+                  type="text"
                   value={
                     Number(yearAmount.amount).toLocaleString('en-US') || ''
                   }
@@ -201,7 +200,9 @@ export default connect(
                     autoSaveCaseSequence();
                   }}
                 />
-                <span>.00</span>
+                <span aria-hidden="true" role="presentation">
+                  .00
+                </span>
                 {idx !== 0 && (
                   <button
                     className="link"
@@ -221,13 +222,11 @@ export default connect(
                   </button>
                 )}
               </div>
-              {caseDetailErrors.yearAmounts &&
-                caseDetailErrors.yearAmounts[idx] &&
-                caseDetailErrors.yearAmounts[idx].year && (
-                  <div className="usa-input-error-message">
-                    {caseDetailErrors.yearAmounts[idx].year}
-                  </div>
-                )}
+              {yearAmount.showError && (
+                <div className="usa-input-error-message">
+                  {yearAmount.errorMessage}
+                </div>
+              )}
             </div>
           ))}
           <button
