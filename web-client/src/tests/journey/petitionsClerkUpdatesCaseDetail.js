@@ -183,7 +183,7 @@ export default test => {
       value: '',
     });
 
-    await test.runSequence('submitUpdateCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       caseType: 'Case Type is required.',
       procedureType: 'Procedure Type is required.',
@@ -203,7 +203,7 @@ export default test => {
       value: 'Regular',
     });
     //submit and route to case detail
-    await test.runSequence('submitUpdateCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
