@@ -105,7 +105,7 @@ function Case(rawCase) {
     yearAmount => new YearAmount(yearAmount),
   );
 
-  if (this.documents && Array.isArray(this.documents)) {
+  if (Array.isArray(this.documents)) {
     this.documents = this.documents.map(document => new Document(document));
   } else {
     this.documents = [];
@@ -235,7 +235,7 @@ Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
     createdAt: new Date().toISOString(),
   };
 
-  this.documents = [...(this.documents || []), documentMetadata];
+  this.documents = [...this.documents, documentMetadata];
   this.documents = this.documents.map(document => new Document(document));
 
   return documentMetadata;
@@ -252,7 +252,7 @@ Case.prototype.attachRespondent = function({ user }) {
 
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
-  this.documents = [...(this.documents || []), document];
+  this.documents = [...this.documents, document];
 };
 
 /**
