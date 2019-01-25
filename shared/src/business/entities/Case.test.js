@@ -1,6 +1,7 @@
 const assert = require('assert');
 
 const Case = require('./Case');
+const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 const DATE = '2018-12-17T15:33:23.492Z';
@@ -270,6 +271,11 @@ describe('Case entity', () => {
         expect(trialCities).not.toBeNull();
         expect(trialCities.length).toBeGreaterThan(1);
       });
+    });
+    it('returns the regular trial cities for unidentified procedure type', () => {
+      const procedureType = 'unknown';
+      const trialCities = Case.getTrialCities(procedureType);
+      expect(trialCities).toEqual(REGULAR_TRIAL_CITIES);
     });
   });
 });
