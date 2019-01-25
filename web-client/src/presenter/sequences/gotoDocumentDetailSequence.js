@@ -1,6 +1,3 @@
-import { state } from 'cerebral';
-import { set } from 'cerebral/factories';
-
 import clearAlerts from '../actions/clearAlertsAction';
 import getCase from '../actions/getCaseAction';
 import getInternalUsers from '../actions/getInternalUsersAction';
@@ -13,6 +10,7 @@ import clearWorkItemActionMap from '../actions/clearWorkItemActionMapAction';
 import clearForms from '../actions/clearFormsAction';
 import setFormForCaseAction from '../actions/setFormForCaseAction';
 import setInternalUsers from '../actions/setInternalUsersAction';
+import setDefaultDocumentDetailTab from '../actions/setDefaultDocumentDetailTabAction';
 
 export default [
   clearAlerts,
@@ -28,6 +26,6 @@ export default [
     error: [setAlertError],
     success: [setInternalUsers],
   },
-  set(state.currentTab, 'Pending Messages'),
+  setDefaultDocumentDetailTab,
   setCurrentPage('DocumentDetail'),
 ];
