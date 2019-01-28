@@ -35,7 +35,7 @@ import { validateCaseDetail } from '../../shared/src/business/useCases/validateC
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 
 import Petition from '../../shared/src/business/entities/Petition';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import ErrorFactory from './presenter/errors/ErrorFactory';
 
 let user;
 
