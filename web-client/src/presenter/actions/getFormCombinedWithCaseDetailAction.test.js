@@ -125,7 +125,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     });
   });
 
-  it('should not delete the date if it was present and partially modified', async () => {
+  it('should not delete the date if year is missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         form: {
@@ -139,6 +139,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
+          yearAmounts: [],
         },
       },
     });
@@ -151,7 +152,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
       },
     });
   });
-  it('should not delete the date if it was present and partially modified', async () => {
+  it('should not delete the date if year and month are missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         form: {
@@ -165,6 +166,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
         caseDetail: {
           irsNoticeDate: null,
           payGovDate: '2018-12-24T00:00:00.000Z',
+          yearAmounts: [],
         },
       },
     });
@@ -178,7 +180,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     });
   });
 
-  it('should delete the date if it was present and the user removed it', async () => {
+  it('clears the irsNoticeDate and payGovDate to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         form: {
@@ -192,6 +194,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
+          yearAmounts: [],
         },
       },
     });
@@ -201,7 +204,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
   });
 
-  it('should delete the date if it was present and the user removed it', async () => {
+  it('delets the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         form: {
@@ -215,6 +218,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
         caseDetail: {
           // irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
+          yearAmounts: [],
         },
       },
     });
