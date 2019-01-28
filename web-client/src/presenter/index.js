@@ -1,4 +1,5 @@
 import actionErrorSequence from './sequences/actionErrorSequence';
+import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
@@ -44,13 +45,13 @@ import updatePetitionValueSequence from './sequences/updatePetitionValueSequence
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
-
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import state from './state';
+import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 
 /**
  * Main Cerebral module
@@ -106,10 +107,10 @@ export default {
   },
   state,
   catch: [
-    [ActionError, actionErrorSequence], // generic error handler
-    [InvalidRequestError, actionErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, actionErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, actionErrorSequence], // 403, 404
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
+    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404
     [UnidentifiedUserError, actionErrorSequence], // 401
   ],
 };
