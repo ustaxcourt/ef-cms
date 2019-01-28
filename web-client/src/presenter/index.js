@@ -1,4 +1,3 @@
-import actionErrorSequence from './sequences/actionErrorSequence';
 import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
@@ -8,6 +7,7 @@ import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
+import gotoErrorViewSequence from './sequences/gotoErrorViewSequence';
 import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
@@ -49,7 +49,6 @@ import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
-import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import state from './state';
 import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 
@@ -67,6 +66,7 @@ export default {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoErrorViewSequence,
     gotoLogInSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
@@ -92,6 +92,7 @@ export default {
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
+    unauthorizedErrorSequence,
     unsetFormSaveSuccessSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
@@ -110,7 +111,6 @@ export default {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404
-    [UnidentifiedUserError, actionErrorSequence], // 401
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404, 401
   ],
 };
