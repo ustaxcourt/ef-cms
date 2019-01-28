@@ -1,3 +1,4 @@
+import actionErrorSequence from './sequences/actionErrorSequence';
 import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
@@ -44,6 +45,11 @@ import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
+import { ActionError } from './errors/ActionError';
+import { InvalidRequestError } from './errors/InvalidRequestError';
+import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import state from './state';
 
 /**
@@ -99,4 +105,11 @@ export default {
     viewDocumentSequence,
   },
   state,
+  catch: [
+    [ActionError, actionErrorSequence], // other errors which don't match previous codes
+    [InvalidRequestError, actionErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, actionErrorSequence], // 501, 503, etc
+    [UnauthorizedRequestError, actionErrorSequence], // 403, 404
+    [UnidentifiedUserError, actionErrorSequence], // 401
+  ],
 };
