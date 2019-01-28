@@ -106,7 +106,7 @@ export default {
   },
   state,
   catch: [
-    [ActionError, actionErrorSequence], // other errors which don't match previous codes
+    [ActionError, actionErrorSequence], // generic error handler
     [InvalidRequestError, actionErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, actionErrorSequence], // 501, 503, etc
     [UnauthorizedRequestError, actionErrorSequence], // 403, 404
