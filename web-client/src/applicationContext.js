@@ -54,7 +54,9 @@ function decorateWithTryCatch(useCases) {
         Array.prototype.slice.call(arguments),
       );
       if (response && response.then) {
-        response.catch(ErrorFactory);
+        response.catch(e => {
+          return Promise.reject(ErrorFactory.getError(e));
+        });
       }
       return response;
     };
@@ -63,9 +65,36 @@ function decorateWithTryCatch(useCases) {
   Object.keys(useCases).forEach(key => {
     useCases[key] = decorate(useCases[key]);
   });
-
-  return useCases;
 }
+
+const allUseCases = {
+  assignWorkItems,
+  createDocument,
+  createCase,
+  downloadDocumentFile,
+  fileRespondentDocument,
+  filePetition,
+  forwardWorkItem,
+  getCase,
+  getCasesByStatus,
+  getCasesByUser,
+  getCasesForRespondent,
+  getCaseTypes,
+  getInternalUsers,
+  getProcedureTypes,
+  getTrialCities,
+  getUser,
+  getUsersInSection,
+  getWorkItem,
+  getWorkItems,
+  getWorkItemsBySection,
+  sendPetitionToIRS,
+  updateCase,
+  updateWorkItem,
+  validatePetition,
+  validateCaseDetail,
+};
+decorateWithTryCatch(allUseCases);
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -90,34 +119,7 @@ const applicationContext = {
       uploadPdfsForNewCase,
     };
   },
-  getUseCases: () =>
-    decorateWithTryCatch({
-      assignWorkItems,
-      createDocument,
-      createCase,
-      downloadDocumentFile,
-      fileRespondentDocument,
-      filePetition,
-      forwardWorkItem,
-      getCase,
-      getCasesByStatus,
-      getCasesByUser,
-      getCasesForRespondent,
-      getCaseTypes,
-      getInternalUsers,
-      getProcedureTypes,
-      getTrialCities,
-      getUser,
-      getUsersInSection,
-      getWorkItem,
-      getWorkItems,
-      getWorkItemsBySection,
-      sendPetitionToIRS,
-      updateCase,
-      updateWorkItem,
-      validatePetition,
-      validateCaseDetail,
-    }),
+  getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,
 };
