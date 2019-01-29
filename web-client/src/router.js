@@ -40,6 +40,10 @@ const router = {
       document.title = `Start a case ${pageTitleSuffix}`;
       app.getSequence('gotoStartCaseSequence')();
     });
+    route('/error', () => {
+      document.title = `An error has occurred ${pageTitleSuffix}`;
+      app.getSequence('gotoErrorViewSequence')();
+    });
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();

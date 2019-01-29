@@ -48,8 +48,6 @@ class DocumentDetail extends React.Component {
             </span>
           </p>
           <hr aria-hidden="true" />
-          <SuccessNotification />
-          <ErrorNotification />
           <h2>{document.documentType}</h2>
           <div className="usa-grid-full subsection">
             <div className="usa-width-one-fourth">
@@ -61,6 +59,8 @@ class DocumentDetail extends React.Component {
               <span>{document.filedBy}</span>
             </div>
           </div>
+          <SuccessNotification />
+          <ErrorNotification />
           <nav className="horizontal-tabs subsection">
             <ul role="tablist">
               {helper.isEditablePetition && (
