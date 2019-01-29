@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-const VALID_PETITION_METADATA_EDIT_STATUSES = ['new', 'served', 'recalled'];
+const VALID_PETITION_METADATA_EDIT_STATUSES = ['New', 'Recalled', 'Served'];
 
 export default get => {
   const caseDetail = get(state.caseDetail);
