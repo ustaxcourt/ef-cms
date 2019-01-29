@@ -9,11 +9,9 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import validateDocument from '../actions/validateDocumentAction';
 
 export default [
   clearAlerts,
-  validateDocument,
   setFormSubmitting,
   getDocumentType,
   {
