@@ -2,7 +2,7 @@ import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { ActionError } from './ActionError';
 import { InvalidRequestError } from './InvalidRequestError';
 import { ServerInvalidResponseError } from './ServerInvalidResponseError';
-import { UnidentifiedUserError } from "./UnidentifiedUserError";
+import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export default {
   getError: e => {
