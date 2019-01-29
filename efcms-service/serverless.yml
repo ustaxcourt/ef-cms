@@ -545,14 +545,14 @@ functions:
                   'application/json': case
 
   sendToIRS:
-    handler: src/cases/sendPetitionToIRSLambda.post
+    handler: src/cases/sendPetitionToIRSHoldingQueueLambda.post
     events:
       - http:
           path: v1/cases/{caseId}/irsPetitionPackage
           method: post
           cors: true
           documentation:
-            summary: send a case package to the respondent
+            summary: sends the case to the holding queue
             tags:
               - cases
             description: >

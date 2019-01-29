@@ -6,7 +6,7 @@ export default test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailRespondent');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('General');
+    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
     expect(test.getState('caseDetail.documents').length).toEqual(1);
   });
 };

@@ -27,7 +27,7 @@ import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
 import submitLogInSequence from './sequences/submitLogInSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
-import submitToIrsSequence from './sequences/submitToIrsSequence';
+import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
@@ -87,7 +87,7 @@ export default {
     submitForwardSequence,
     submitLogInSequence,
     submitSearchSequence,
-    submitToIrsSequence,
+    submitPetitionToIRSHoldingQueueSequence,
     submitUpdateCaseSequence,
     switchWorkQueueSequence,
     toggleCaseDifferenceSequence,

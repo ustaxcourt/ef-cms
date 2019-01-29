@@ -26,7 +26,7 @@ import { getInternalUsers } from '../../shared/src/business/useCases/getInternal
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
+import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
@@ -68,7 +68,7 @@ const allUseCases = {
   getWorkItem,
   getWorkItems,
   getWorkItemsBySection,
-  sendPetitionToIRS,
+  sendPetitionToIRSHoldingQueue,
   updateCase,
   updateWorkItem,
   validatePetition,
