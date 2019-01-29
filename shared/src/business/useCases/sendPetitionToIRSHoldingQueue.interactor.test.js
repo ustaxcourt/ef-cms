@@ -1,7 +1,7 @@
 const assert = require('assert');
 const {
   sendPetitionToIRSHoldingQueue,
-} = require('./sendPetitionToIRSHOldingQueue.interactor');
+} = require('./sendPetitionToIRSHoldingQueue.interactor');
 const { getCase } = require('./getCase.interactor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
