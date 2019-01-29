@@ -68,14 +68,12 @@ export default ({ get }) => {
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
-  caseDetail.yearAmounts = ((caseDetail || {}).yearAmounts || []).map(
-    yearAmount => ({
-      amount: !yearAmount.amount
-        ? null
-        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-      year: castToISO(yearAmount.year),
-    }),
-  );
+  caseDetail.yearAmounts = caseDetail.yearAmounts.map(yearAmount => ({
+    amount: !yearAmount.amount
+      ? null
+      : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+    year: castToISO(yearAmount.year),
+  }));
 
   return {
     combinedCaseDetailWithForm: {
