@@ -9,32 +9,21 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event
  * @returns {Promise<*|undefined>}
  */
-const headers = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
-};
-exports.get = async () => {
-  return {
-    statusCode: '401',
-    body: 'Unauthorized',
-    headers,
-  };
-}
-// exports.get = event =>
-//   handle(() => {
-//     const status = (event.queryStringParameters || {}).status;
-//     const documentId = (event.queryStringParameters || {}).documentId;
-//     const userId = getAuthHeader(event);
-//     const applicationContext = createApplicationContext({ userId });
-//     const useCase = applicationContext.getInteractorForGettingCases({
-//       userId,
-//       documentId,
-//       applicationContext,
-//     });
-//     return useCase({
-//       documentId,
-//       userId: userId,
-//       status: status,
-//       applicationContext,
-//     });
-//   });
+exports.get = event =>
+  handle(() => {
+    const status = (event.queryStringParameters || {}).status;
+    const documentId = (event.queryStringParameters || {}).documentId;
+    const userId = getAuthHeader(event);
+    const applicationContext = createApplicationContext({ userId });
+    const useCase = applicationContext.getInteractorForGettingCases({
+      userId,
+      documentId,
+      applicationContext,
+    });
+    return useCase({
+      documentId,
+      userId: userId,
+      status: status,
+      applicationContext,
+    });
+  });
