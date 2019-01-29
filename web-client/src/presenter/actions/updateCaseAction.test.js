@@ -5,18 +5,11 @@ import sinon from 'sinon';
 import updateCaseAction from './updateCaseAction';
 
 const updateCaseStub = sinon.stub().returns({});
-const successStub = sinon.stub();
-const errorStub = sinon.stub();
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     updateCase: updateCaseStub,
   }),
-};
-
-presenter.providers.path = {
-  success: successStub,
-  error: errorStub,
 };
 
 describe('updateCaseAction', async () => {
@@ -56,6 +49,5 @@ describe('updateCaseAction', async () => {
         { amount: '1000', year: '2002' },
       ],
     });
-    expect(successStub.calledOnce).toEqual(true);
   });
 });

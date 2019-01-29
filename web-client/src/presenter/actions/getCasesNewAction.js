@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
 
-export default async ({ applicationContext, get, path }) => {
+export default async ({ applicationContext, get }) => {
   const useCases = applicationContext.getUseCases();
   let caseList = await useCases.getCasesByStatus({
     applicationContext,
@@ -9,5 +9,5 @@ export default async ({ applicationContext, get, path }) => {
     status: 'new',
   });
   caseList = _.orderBy(caseList, 'createdAt', 'asc');
-  return path.success({ caseList });
+  return { caseList };
 };

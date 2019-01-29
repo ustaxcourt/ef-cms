@@ -8,14 +8,21 @@ import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import validatePetition from '../actions/validatePetitionAction';
 
+import setAlertError from '../actions/setAlertErrorAction';
+
 export default [
   clearAlerts,
   validatePetition,
-  setFormSubmitting,
-  createCase,
-  getCreateCaseAlertSuccess,
-  setAlertSuccess,
-  navigateToDashboard,
-  unsetFormSubmitting,
-  clearForm,
+  {
+    success: [
+      setFormSubmitting,
+      createCase,
+      getCreateCaseAlertSuccess,
+      setAlertSuccess,
+      navigateToDashboard,
+      unsetFormSubmitting,
+      clearForm,
+    ],
+    error: [setAlertError],
+  },
 ];
