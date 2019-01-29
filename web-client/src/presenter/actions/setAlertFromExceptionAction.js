@@ -1,7 +1,8 @@
 import { state } from 'cerebral';
 
 export default ({ props, store }) => {
-  if (!props.error) {
+  const hasError = props.error && (props.error.title || props.error.message);
+  if (!hasError) {
     return;
   }
   store.set(state.alertError, {
