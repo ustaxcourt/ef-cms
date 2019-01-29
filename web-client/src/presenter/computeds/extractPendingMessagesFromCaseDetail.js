@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 import { formatWorkItem } from './formattedWorkQueue';
 
 export const extractedPendingMessagesFromCaseDetail = get => {
-  const caseDetail = get(state.caseDetail);
-  const workItems = caseDetail.documents.reduce(
+  const documents = get(state.caseDetail).documents || [];
+  const workItems = documents.reduce(
     (acc, document) => [...acc, ...(document.workItems || [])],
     [],
   );

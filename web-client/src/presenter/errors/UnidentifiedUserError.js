@@ -1,5 +1,5 @@
-import { CerebralError } from 'cerebral';
-export class UnidentifiedUserError extends CerebralError {
+import { ActionError } from './ActionError';
+export class UnidentifiedUserError extends ActionError {
   // HTTP 401
   constructor() {
     super(arguments);
