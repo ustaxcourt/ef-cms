@@ -20,26 +20,26 @@ describe('getCasesByStatus', () => {
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'put').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
         pk: '123',
         sk: '123',
         caseId: '123',
-        status: 'new',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
@@ -64,14 +64,14 @@ describe('getCasesByStatus', () => {
 
   it('should strip the pk and sk from the results', async () => {
     const result = await getCasesByStatus({
-      status: 'new',
+      status: 'New',
       applicationContext,
     });
-    expect(result).to.deep.equal([{ caseId: '123', status: 'new' }]);
+    expect(result).to.deep.equal([{ caseId: '123', status: 'New' }]);
   });
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await getCasesByStatus({
-      status: 'new',
+      status: 'New',
       applicationContext,
     });
     expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([

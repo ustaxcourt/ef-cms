@@ -35,7 +35,7 @@ describe('formatted work queue computed', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
-          status: 'new',
+          status: 'New',
         },
         workItemActions: {
           abc: 'complete',
@@ -49,7 +49,7 @@ describe('formatted work queue computed', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
-          status: 'recalled',
+          status: 'Recalled',
         },
         workItemActions: {
           abc: 'complete',
