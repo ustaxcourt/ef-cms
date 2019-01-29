@@ -15,12 +15,7 @@ presenter.providers.router = {
 
 describe('navigateToErrorAction', async () => {
   it('calls router.route to the error page', async () => {
-    const result = await runAction(navigateToErrorAction, {
-      state: {
-        path: '123',
-      },
-      props: {},
-    });
-    expect(result.state.path).toEqual('123');
+    const result = await runAction(navigateToErrorAction, presenter);
+    expect(result.state.path).toEqual('/error');
   });
 });
