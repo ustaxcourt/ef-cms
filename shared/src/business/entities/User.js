@@ -1,3 +1,5 @@
+const { UnknownUserError } = require('../../errors/errors');
+
 const { getSectionForRole } = require('./WorkQueue');
 
 const {
@@ -63,7 +65,7 @@ function User(user) {
     });
     this.section = getSectionForRole(role);
   } else {
-    throw new Error('invalid user');
+    throw new UnknownUserError('Unknown user');
   }
 }
 
