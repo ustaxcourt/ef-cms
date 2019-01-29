@@ -71,6 +71,17 @@
   }
 }
 
+.usa-alert-error,
+.usa-alert-success {
+  max-width: 700px;
+
+  button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+  }
+}
+
 .usa-input-error input,
 .usa-input-error textarea,
 .usa-input-error select {

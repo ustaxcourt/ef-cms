@@ -3,6 +3,7 @@ import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
 import clearDocumentSequence from './sequences/clearDocumentSequence';
+import dismissAlertSequence from './sequences/dismissAlertSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
@@ -62,6 +63,7 @@ export default {
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
     clearDocumentSequence,
+    dismissAlertSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
