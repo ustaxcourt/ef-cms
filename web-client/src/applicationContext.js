@@ -46,6 +46,27 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
+function decorateWithTryCatch(useCases) {
+  function decorate(method) {
+    return function() {
+      const response = method.apply(
+        null,
+        Array.prototype.slice.call(arguments),
+      );
+      if (response && response.then) {
+        response.catch(ErrorFactory);
+      }
+      return response;
+    };
+  }
+
+  Object.keys(useCases).forEach(key => {
+    useCases[key] = decorate(useCases[key]);
+  });
+
+  return useCases;
+}
+
 const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
@@ -69,8 +90,8 @@ const applicationContext = {
       uploadPdfsForNewCase,
     };
   },
-  getUseCases: () => {
-    return {
+  getUseCases: () =>
+    decorateWithTryCatch({
       assignWorkItems,
       createDocument,
       createCase,
@@ -96,8 +117,7 @@ const applicationContext = {
       updateWorkItem,
       validatePetition,
       validateCaseDetail,
-    };
-  },
+    }),
   getCurrentUser,
   setCurrentUser,
 };
