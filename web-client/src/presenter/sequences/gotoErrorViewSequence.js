@@ -1,5 +1,3 @@
 import setCurrentPage from '../actions/setCurrentPageAction';
 
-export default [
-  setCurrentPage('Error')
-];
+export default [setCurrentPage('Error')];

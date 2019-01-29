@@ -1,9 +1,8 @@
-import { CerebralError } from 'cerebral';
-export class UnauthorizedRequestError extends CerebralError {
+import { ActionError } from './ActionError';
+export class UnauthorizedRequestError extends ActionError {
   // HTTP 403, 404
   constructor(e) {
-    const message =
-      (e && e.response && e.response.data) || e.message || 'unknown';
+    const message = (e.response && e.response.data) || e.message;
     super(message);
     this.title = 'We cannot find the page you requested';
     this.message = message;

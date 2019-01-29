@@ -1,5 +1,5 @@
-import { CerebralError } from 'cerebral';
-export class ServerInvalidResponseError extends CerebralError {
+import { ActionError } from './ActionError';
+export class ServerInvalidResponseError extends ActionError {
   // HTTP 5XX series errors
   constructor() {
     super(arguments);

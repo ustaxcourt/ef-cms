@@ -1,6 +1,9 @@
 import { CerebralError } from 'cerebral';
 export class ActionError extends CerebralError {
-  // all other unclassified errors
+  // an unclassified error
+  get className() {
+    return this.constructor.name;
+  }
   constructor() {
     super(arguments);
     this.title = 'An error occurred';
