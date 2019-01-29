@@ -108,9 +108,9 @@ export default {
   },
   state,
   catch: [
-    [ActionError, setCurrentPageErrorSequence], // generic error handler
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404, 401
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
 };

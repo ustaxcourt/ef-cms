@@ -36,6 +36,7 @@ import { createDocument } from '../../shared/src/proxies/documents/createDocumen
 
 import Petition from '../../shared/src/business/entities/Petition';
 import ErrorFactory from './presenter/errors/ErrorFactory';
+import decorateWithTryCatch from './tryCatchDecorator';
 
 let user;
 
@@ -45,27 +46,6 @@ const getCurrentUser = () => {
 const setCurrentUser = newUser => {
   user = newUser;
 };
-
-function decorateWithTryCatch(useCases) {
-  function decorate(method) {
-    return function() {
-      const response = method.apply(
-        null,
-        Array.prototype.slice.call(arguments),
-      );
-      if (response && response.then) {
-        response.catch(e => {
-          return Promise.reject(ErrorFactory.getError(e));
-        });
-      }
-      return response;
-    };
-  }
-
-  Object.keys(useCases).forEach(key => {
-    useCases[key] = decorate(useCases[key]);
-  });
-}
 
 const allUseCases = {
   assignWorkItems,
