@@ -1,9 +1,9 @@
 import ErrorFactory from './ErrorFactory';
 
 describe('ErrorFactory', () => {
-  it('creates UnauthorizedRequestError errors for status code 401', () => {
+  it('creates UnidentifiedUserError errors for status code 401', () => {
     const error = new Error();
-    error.response = { data: 'Unauthorized', status: 401 };
+    error.response = { data: 'Unknown user', status: 401 };
     const result = ErrorFactory.getError(error);
     expect(result.className).toEqual('UnidentifiedUserError');
     expect(result.title).toEqual('You are not logged in');
