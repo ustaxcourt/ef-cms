@@ -7,5 +7,8 @@ export default [
   clearAlerts,
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
-  updateCase,
+  {
+    success: [updateCase],
+    error: [],
+  },
 ];
