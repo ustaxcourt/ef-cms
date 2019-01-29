@@ -36,6 +36,7 @@ import { createDocument } from '../../shared/src/proxies/documents/createDocumen
 
 import Petition from '../../shared/src/business/entities/Petition';
 import ErrorFactory from './presenter/errors/ErrorFactory';
+import decorateWithTryCatch from './tryCatchDecorator';
 
 let user;
 
@@ -45,6 +46,35 @@ const getCurrentUser = () => {
 const setCurrentUser = newUser => {
   user = newUser;
 };
+
+const allUseCases = {
+  assignWorkItems,
+  createDocument,
+  createCase,
+  downloadDocumentFile,
+  fileRespondentDocument,
+  filePetition,
+  forwardWorkItem,
+  getCase,
+  getCasesByStatus,
+  getCasesByUser,
+  getCasesForRespondent,
+  getCaseTypes,
+  getInternalUsers,
+  getProcedureTypes,
+  getTrialCities,
+  getUser,
+  getUsersInSection,
+  getWorkItem,
+  getWorkItems,
+  getWorkItemsBySection,
+  sendPetitionToIRS,
+  updateCase,
+  updateWorkItem,
+  validatePetition,
+  validateCaseDetail,
+};
+decorateWithTryCatch(allUseCases);
 
 const applicationContext = {
   getBaseUrl: () => {
@@ -69,35 +99,7 @@ const applicationContext = {
       uploadPdfsForNewCase,
     };
   },
-  getUseCases: () => {
-    return {
-      assignWorkItems,
-      createDocument,
-      createCase,
-      downloadDocumentFile,
-      fileRespondentDocument,
-      filePetition,
-      forwardWorkItem,
-      getCase,
-      getCasesByStatus,
-      getCasesByUser,
-      getCasesForRespondent,
-      getCaseTypes,
-      getInternalUsers,
-      getProcedureTypes,
-      getTrialCities,
-      getUser,
-      getUsersInSection,
-      getWorkItem,
-      getWorkItems,
-      getWorkItemsBySection,
-      sendPetitionToIRS,
-      updateCase,
-      updateWorkItem,
-      validatePetition,
-      validateCaseDetail,
-    };
-  },
+  getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,
 };
