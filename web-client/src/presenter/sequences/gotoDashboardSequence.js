@@ -6,7 +6,6 @@ import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
 import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
 import isLoggedIn from '../actions/isLoggedInAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
-import setAlertError from '../actions/setAlertErrorAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setPath from '../actions/setPathAction';
@@ -19,10 +18,7 @@ const goToDashboard = [
   {
     petitioner: [
       getCasesByUser,
-      {
-        error: [setAlertError],
-        success: [setCases],
-      },
+      setCases,
       setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
@@ -48,10 +44,7 @@ const goToDashboard = [
     respondent: [
       clearAlerts,
       getCasesByUser,
-      {
-        error: [setAlertError],
-        success: [setCases],
-      },
+      setCases,
       setCurrentPage('DashboardRespondent'),
     ],
     seniorattorney: [

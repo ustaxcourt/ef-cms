@@ -2,33 +2,27 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import clearAlerts from '../actions/clearAlertsAction';
+import fileRespondentDocument from '../actions/fileRespondentDocumentAction';
 import getCase from '../actions/getCaseAction';
+import getDocumentType from '../actions/getDocumentTypeAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
-import setAlertError from '../actions/setAlertErrorAction';
 import setCase from '../actions/setCaseAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import fileRespondentDocument from '../actions/fileRespondentDocumentAction';
-import getDocumentType from '../actions/getDocumentTypeAction';
 import validateDocument from '../actions/validateDocumentAction';
 
 export default [
   clearAlerts,
   validateDocument,
+  setFormSubmitting,
+  getDocumentType,
   {
-    success: [
-      setFormSubmitting,
-      getDocumentType,
-      {
-        answer: [fileRespondentDocument],
-        stipulatedDecision: [fileRespondentDocument],
-      },
-      getCase,
-      setCase,
-      setAlertSuccess,
-      unsetFormSubmitting,
-      set(state.currentTab, 'Docket Record'),
-    ],
-    error: [setAlertError],
+    answer: [fileRespondentDocument],
+    stipulatedDecision: [fileRespondentDocument],
   },
+  getCase,
+  setCase,
+  setAlertSuccess,
+  unsetFormSubmitting,
+  set(state.currentTab, 'Docket Record'),
 ];
