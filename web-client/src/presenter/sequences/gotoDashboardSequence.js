@@ -26,7 +26,6 @@ const goToDashboard = [
       setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      clearAlerts,
       getUsersInSection({ sectionType: 'petitions' }),
       setUsers,
       getWorkItemsForSection,
