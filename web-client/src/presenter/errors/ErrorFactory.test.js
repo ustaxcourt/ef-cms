@@ -5,8 +5,8 @@ describe('ErrorFactory', () => {
     const error = new Error();
     error.response = { data: 'Unauthorized', status: 401 };
     const result = ErrorFactory.getError(error);
-    expect(result.className).toEqual('UnauthorizedRequestError');
-    expect(result.title).toEqual('We cannot find the page you requested');
+    expect(result.className).toEqual('UnidentifiedUserError');
+    expect(result.title).toEqual('You are not logged in');
   });
   it('creates UnauthorizedRequestError errors for status code 403', () => {
     const error = new Error();

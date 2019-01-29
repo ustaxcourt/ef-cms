@@ -5,5 +5,5 @@ import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 export default [
   unsetFormSubmitting,
   setAlertFromExceptionAction,
-  setCurrentPage('Error'),
+  setCurrentPage('LogIn'),
 ];
