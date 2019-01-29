@@ -654,3 +654,11 @@ functions:
           path: v1/swagger
           method: get
           cors: true
+
+  swaggerJson:
+    handler: src/swagger/swaggerLambda.json
+    events:
+      - http:
+          path: v1/swagger.json
+          method: get
+          cors: true
