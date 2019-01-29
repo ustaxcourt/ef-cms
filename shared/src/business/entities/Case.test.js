@@ -154,6 +154,14 @@ describe('Case entity', () => {
     });
   });
 
+  describe('sendToIRSHoldingQueue', () => {
+    it('sets status for irs batch', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.sendToIRSHoldingQueue();
+      expect(caseRecord.status).toEqual('Batched for IRS');
+    });
+  });
+
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
       const caseRecord = new Case(MOCK_CASE);
