@@ -15,8 +15,7 @@ export default connect(
     currentTab: state.currentTab,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
-    submitPetitionToIRSHoldingQueueSequence:
-      sequences.submitPetitionToIRSHoldingQueueSequence,
+    submitSendToIrsSequence: sequences.submitSendToIrsSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
@@ -28,7 +27,7 @@ export default connect(
     currentTab,
     extractedPendingMessages,
     helper,
-    submitPetitionToIRSHoldingQueueSequence,
+    submitSendToIrsSequence,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
@@ -144,7 +143,7 @@ export default connect(
                 <button
                   className="usa-button"
                   id="send-to-irs"
-                  onClick={() => submitPetitionToIRSHoldingQueueSequence()}
+                  onClick={() => submitSendToIrsSequence()}
                 >
                   Send to IRS
                 </button>
