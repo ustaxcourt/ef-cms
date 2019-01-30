@@ -43,6 +43,6 @@ describe('setAlertFromExceptionAction', async () => {
     const { state } = await runAction(setAlertFromExceptionAction, {
       props: {},
     });
-    expect(state.alertError).toEqual(undefined);
+    expect(state.alertError).toEqual({});
   });
 });
