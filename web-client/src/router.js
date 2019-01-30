@@ -49,7 +49,7 @@ const router = {
       () => {
         document.title = `Error ${pageTitleSuffix}`;
         app.getSequence('unauthorizedErrorSequence')({
-          error: { title: '', message: '' },
+          error: {},
         });
       },
       true,
