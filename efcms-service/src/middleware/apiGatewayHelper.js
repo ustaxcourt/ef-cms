@@ -5,7 +5,7 @@ const {
 
 const headers = {
   'Content-Type': 'application/json',
-  'Cache-Control': 'no-cache',
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Pragma': 'no-cache',
   'Access-Control-Allow-Origin': '*',
   'X-Content-Type-Options': 'nosniff',
