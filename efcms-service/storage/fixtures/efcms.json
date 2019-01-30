@@ -318,6 +318,11 @@
     "pk": "docketclerk|workItem"
   },
   {
+    "pk": "docketclerk|completedWorkItem",
+    "sk": "2019-01-30T00:00:00Z",
+    "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344"
+  },
+  {
     "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "pk": "103-18|case"
   },
