@@ -15,8 +15,6 @@ export default connect(
     currentTab: state.currentTab,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
-    submitPetitionToIRSHoldingQueueSequence:
-      sequences.submitPetitionToIRSHoldingQueueSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
