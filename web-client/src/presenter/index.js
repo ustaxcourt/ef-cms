@@ -32,6 +32,7 @@ import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
+import toggleShowModalSequence from './sequences/toggleShowModalSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
 import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import unidentifiedUserErrorSequence from './sequences/unidentifiedUserErrorSequence';
@@ -95,6 +96,7 @@ export default {
     toggleCaseDifferenceSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
+    toggleShowModalSequence,
     toggleUsaBannerDetailsSequence,
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
