@@ -91,4 +91,16 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
   return this;
 };
 
+WorkItem.prototype.setAsCompleted = function(userId) {
+  this.completedAt = new Date().toISOString();
+
+  this.addMessage(
+    new Message({
+      message: 'work item completed',
+      sentBy: userId,
+      userId: userId,
+    }),
+  );
+};
+
 module.exports = WorkItem;
