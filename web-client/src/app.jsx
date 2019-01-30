@@ -5,6 +5,7 @@ import {
   faCaretUp,
   faCheckCircle,
   faCloudUploadAlt,
+  faEraser,
   faExclamationTriangle,
   faFilePdf,
   faFlag,
@@ -13,6 +14,7 @@ import {
   faShareSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
@@ -42,7 +44,9 @@ const app = {
       faCaretLeft,
       faCaretUp,
       faCheckCircle,
+      faClock,
       faCloudUploadAlt,
+      faEraser,
       faExclamationTriangle,
       faFilePdf,
       faFlag,
