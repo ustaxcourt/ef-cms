@@ -3,12 +3,11 @@ import _ from 'lodash';
 
 export default async ({ applicationContext, get }) => {
   const useCases = applicationContext.getUseCases();
-  const userId = get(state.user.userId);
-  let caseList;
-  caseList = await useCases.getCasesByUser({
+  let caseList = await useCases.getCasesByStatus({
     applicationContext,
-    userId,
+    userId: get(state.user.token),
+    status: 'new',
   });
-  caseList = _.orderBy(caseList, 'createdAt', 'desc');
+  caseList = _.orderBy(caseList, 'createdAt', 'asc');
   return { caseList };
 };

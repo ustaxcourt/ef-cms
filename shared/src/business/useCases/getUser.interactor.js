@@ -5,9 +5,6 @@ const User = require('../entities/User');
  * @returns {User}
  */
 exports.getUser = async userId => {
-  try {
-    return new User({ userId }).toRawObject();
-  } catch (err) {
-    return null;
-  }
+  const user = new User({ userId }).toRawObject();
+  return user;
 };

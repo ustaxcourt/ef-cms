@@ -1,5 +1,3 @@
-import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
-import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
@@ -16,6 +14,7 @@ import loginWithTokenSequence from './sequences/loginWithTokenSequence';
 import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
+import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
@@ -34,6 +33,7 @@ import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequen
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
+import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import unidentifiedUserErrorSequence from './sequences/unidentifiedUserErrorSequence';
 import unsetFormSaveSuccessSequence from './sequences/unsetFormSaveSuccessSequence';
 import updateCaseValueByIndexSequence from './sequences/updateCaseValueByIndexSequence';
@@ -47,12 +47,14 @@ import updatePetitionValueSequence from './sequences/updatePetitionValueSequence
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
+
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+
 import state from './state';
-import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 
 /**
  * Main Cerebral module
@@ -111,6 +113,7 @@ export default {
   },
   state,
   catch: [
+    // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404
