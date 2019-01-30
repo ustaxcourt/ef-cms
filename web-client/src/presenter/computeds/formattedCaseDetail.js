@@ -7,6 +7,7 @@ export const formatDocument = document => {
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
+  result.isPetition = result.documentType === 'Petition';
   return result;
 };
 
