@@ -106,15 +106,17 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            <div className="usa-width-one-half">
-              <button
-                className="serve-to-irs"
-                onClick={() => toggleShowModal()}
-              >
-                <FontAwesomeIcon icon={['far', 'clock']} />
-                Serve to IRS
-              </button>
-            </div>
+            {caseDetail.canServeToIRS && (
+              <div className="usa-width-one-half">
+                <button
+                  className="serve-to-irs"
+                  onClick={() => toggleShowModal()}
+                >
+                  <FontAwesomeIcon icon={['far', 'clock']} />
+                  Serve to IRS
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="usa-grid-full">
