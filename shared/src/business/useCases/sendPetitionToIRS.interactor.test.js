@@ -36,7 +36,7 @@ describe('Send petition to IRS', () => {
     expect(error.message).toContain('Unauthorized for send to IRS');
   });
 
-  it('throws invalid entity error if user is invalid', async () => {
+  it('throws invalid entity error if sendDate from irs gateway is invalid', async () => {
     let error;
     try {
       await sendPetitionToIRS({

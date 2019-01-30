@@ -11,6 +11,8 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
+const STATUSES = ['General', 'Batched for IRS', 'New'];
+
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -86,7 +88,7 @@ function Case(rawCase) {
     {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || 'new',
+      status: rawCase.status || 'New',
       caseTitle:
         rawCase.caseTitle ||
         (rawCase.petitioners && rawCase.petitioners.length
@@ -165,7 +167,7 @@ joiValidationDecorator(
       .optional(),
     status: joi
       .string()
-      .regex(/^(new|general)$/)
+      .valid(STATUSES)
       .optional(),
     petitioners: joi.array().optional(),
     documents: joi
@@ -262,7 +264,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
 
   this.irsSendDate = sendDate;
-  this.status = 'general';
+  this.status = 'General';
   this.documents.forEach(document => {
     const doc = new Document(document);
     if (doc.isPetitionDocument()) {
@@ -272,11 +274,30 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   return this;
 };
 
+/**
+ *
+ * @param sendDate
+ * @returns {Case}
+ */
+Case.prototype.sendToIRSHoldingQueue = function() {
+  this.status = 'Batched for IRS';
+  return this;
+};
+
+/**
+ *
+ * @param payGovDate
+ * @returns {Case}
+ */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
   return this;
 };
 
+/**
+ *
+ * @returns {*[]}
+ */
 Case.getCaseTypes = () => {
   return CASE_TYPES;
 };

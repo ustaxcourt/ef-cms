@@ -56,14 +56,14 @@
     "docketNumberSuffix": "SL",
     "procedureType": "small",
     "caseType": "CDP (Lien/Levy)",
-    "status": "new"
+    "status": "New"
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "b6238482-5f0e-48a8-bb8e-da2957074a08|case"
   },
   {
-    "caseStatus": "general",
+    "caseStatus": "General",
     "preferredTrialCity": "Hartford, CT",
     "document": {
       "documentType": "Stipulated Decision",
@@ -113,7 +113,7 @@
         "workItems": [],
         "documentId": "36bf0a37-6d75-4ea5-85ee-eea07bf9ed99",
         "userId": "taxpayer",
-        "status": "served"
+        "status": "Served"
       },
       {
         "createdAt": "2018-12-27T17:26:36.948Z",
@@ -122,7 +122,7 @@
         "workItems": [],
         "documentId": "d4b00ffe-a36d-4452-b696-7f21bcb0dff1",
         "userId": "taxpayer",
-        "status": "served"
+        "status": "Served"
       },
       {
         "createdAt": "2018-12-27T17:26:36.948Z",
@@ -131,7 +131,7 @@
         "workItems": [],
         "documentId": "204b7563-05e0-42df-b1c5-e77edec2e11e",
         "userId": "taxpayer",
-        "status": "served"
+        "status": "Served"
       },
       {
         "createdAt": "2018-12-27T18:05:54.166Z",
@@ -141,7 +141,7 @@
           {
             "createdAt": "2018-12-27T18:05:54.166Z",
             "assigneeName": "Test Docketclerk",
-            "caseStatus": "general",
+            "caseStatus": "General",
             "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
             "document": {
               "documentType": "Answer",
@@ -179,7 +179,7 @@
           {
             "createdAt": "2018-12-27T18:06:02.971Z",
             "assigneeName": null,
-            "caseStatus": "general",
+            "caseStatus": "General",
             "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
             "document": {
               "documentType": "Stipulated Decision",
@@ -252,10 +252,10 @@
     ],
     "docketNumber": "101-18",
     "docketNumberSuffix": "W",
-    "status": "general"
+    "status": "General"
   },
   {
-    "caseStatus": "new",
+    "caseStatus": "New",
     "preferredTrialCity": "Hartford, CT",
     "document": {
       "documentType": "Petition",
@@ -285,7 +285,7 @@
     "updatedAt": "2018-12-27T18:05:54.164Z"
   },
   {
-    "caseStatus": "general",
+    "caseStatus": "General",
     "document": {
       "documentType": "Answer",
       "createdAt": "2018-12-27T18:05:54.164Z",
@@ -323,11 +323,11 @@
   },
   {
     "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "pk": "new|case-status"
+    "pk": "New|case-status"
   },
   {
     "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "pk": "new|case-status"
+    "pk": "New|case-status"
   },
   {
     "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
@@ -386,7 +386,7 @@
     "userId": "taxpayer",
     "docketNumber": "103-18",
     "docketNumberSuffix": "X",
-    "status": "new"
+    "status": "New"
   },
   {
     "sk": "docketNumberCounter",
@@ -395,7 +395,7 @@
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "general|case-status"
+    "pk": "General|case-status"
   },
   {
     "sk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
