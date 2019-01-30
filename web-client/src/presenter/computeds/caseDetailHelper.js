@@ -5,7 +5,7 @@ export default get => {
   const form = get(state.form);
 
   return {
-    canServeToIRS: true,
+    canServeToIRS: ['General', 'New'].includes(caseDetail.status),
     showDocumentStatus: !caseDetail.irsSendDate,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
