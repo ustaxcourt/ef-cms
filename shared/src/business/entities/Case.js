@@ -1,3 +1,4 @@
+const moment = require('moment');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -6,6 +7,7 @@ const uuid = require('uuid');
 const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const YearAmount = require('./YearAmount');
+const DocketRecord = require('./DocketRecord');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -112,6 +114,14 @@ function Case(rawCase) {
   } else {
     this.documents = [];
   }
+
+  if (Array.isArray(this.docketRecord)) {
+    this.docketRecord = this.docketRecord.map(
+      docketRecord => new DocketRecord(docketRecord),
+    );
+  } else {
+    this.docketRecord = [];
+  }
 }
 
 Case.name = 'Case';
@@ -141,6 +151,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    docketRecord: joi.array().optional(),
     respondent: joi
       .object()
       .allow(null)
@@ -188,7 +199,8 @@ joiValidationDecorator(
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       YearAmount.validateCollection(this.yearAmounts) &&
-      Case.areYearsUnique(this.yearAmounts)
+      Case.areYearsUnique(this.yearAmounts) &&
+      DocketRecord.validateCollection(this.docketRecord)
     );
   },
   {
@@ -226,23 +238,6 @@ joiValidationDecorator(
   },
 );
 
-Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
-  const Document = require('./Document');
-
-  const documentMetadata = {
-    documentType,
-    documentId,
-    userId: userId,
-    filedBy: 'Respondent',
-    createdAt: new Date().toISOString(),
-  };
-
-  this.documents = [...this.documents, documentMetadata];
-  this.documents = this.documents.map(document => new Document(document));
-
-  return documentMetadata;
-};
-
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {
     ...user,
@@ -255,6 +250,15 @@ Case.prototype.attachRespondent = function({ user }) {
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
+
+  this.addDocketRecord(
+    new DocketRecord({
+      filingDate: document.createdAt,
+      filedBy: document.filedBy,
+      description: document.documentType,
+      status: document.status,
+    }),
+  );
 };
 
 /**
@@ -271,6 +275,14 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       document.status = 'served';
     }
   });
+
+  const status = `R served on ${moment(sendDate).format('L LT')}`;
+  this.docketRecord.forEach(docketRecord => {
+    if (docketRecord.description === Case.documentTypes.petitionFile) {
+      docketRecord.status = status;
+    }
+  });
+
   return this;
 };
 
@@ -286,12 +298,28 @@ Case.prototype.sendToIRSHoldingQueue = function() {
 
 /**
  *
- * @param payGovDate
+ * @param {string} payGovDate an ISO formatted datestring
  * @returns {Case}
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
+  if (payGovDate) {
+    this.addDocketRecord(
+      new DocketRecord({
+        filingDate: payGovDate,
+        description: 'Filing fee paid',
+      }),
+    );
+  }
   return this;
+};
+
+/**
+ *
+ * @param docketRecordEntity
+ */
+Case.prototype.addDocketRecord = function(docketRecordEntity) {
+  this.docketRecord = [...this.docketRecord, docketRecordEntity];
 };
 
 /**
@@ -350,10 +378,19 @@ Case.documentTypes = {
   irsNotice: 'IRS Notice',
 };
 
+/**
+ *
+ * @param yearAmounts
+ * @returns {boolean}
+ */
 Case.areYearsUnique = yearAmounts => {
   return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
 };
 
+/**
+ *
+ * @returns {*[]}
+ */
 Case.getDocumentTypes = () => {
   return Object.keys(Case.documentTypes).map(key => Case.documentTypes[key]);
 };
