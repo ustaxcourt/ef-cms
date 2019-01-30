@@ -7,6 +7,7 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 import CaseDetailEdit from './CaseDetailEdit';
+import ServeToIrsModalDialog from './ServeToIrsModalDialog';
 
 class DocumentDetail extends React.Component {
   render() {
@@ -14,11 +15,12 @@ class DocumentDetail extends React.Component {
       baseUrl,
       caseDetail,
       document,
-      form,
       setWorkItemActionSequence,
+      showModal,
       helper,
       submitCompleteSequence,
       submitForwardSequence,
+      toggleShowModal,
       updateCompleteFormValueSequence,
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
@@ -105,7 +107,10 @@ class DocumentDetail extends React.Component {
               </nav>
             </div>
             <div className="usa-width-one-half">
-              <button className="serve-to-irs" onClick={() => {}}>
+              <button
+                className="serve-to-irs"
+                onClick={() => toggleShowModal()}
+              >
                 <FontAwesomeIcon icon={['far', 'clock']} />
                 Serve to IRS
               </button>
@@ -400,6 +405,7 @@ class DocumentDetail extends React.Component {
             </div>
           </div>
         </section>
+        {showModal && <ServeToIrsModalDialog />}
       </React.Fragment>
     );
   }
@@ -409,12 +415,12 @@ DocumentDetail.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   document: PropTypes.object,
-  form: PropTypes.object,
   helper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
-  showForwardInputs: PropTypes.bool,
+  showModal: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
+  toggleShowModal: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
   updateCurrentTabSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
@@ -427,12 +433,12 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     document: state.extractedDocument,
-    form: state.form,
     helper: state.documentDetailHelper,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
-    showForwardInputs: state.form.showForwardInputs,
+    showModal: state.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
+    toggleShowModal: sequences.toggleShowModalSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
