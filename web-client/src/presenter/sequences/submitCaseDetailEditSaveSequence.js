@@ -1,7 +1,6 @@
 import clearAlerts from '../actions/clearAlertsAction';
 import expireFormSaveSuccess from '../actions/expireFormSaveSuccessAction';
 import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDetailAction';
-import setAlertError from '../actions/setAlertErrorAction';
 import setCase from '../actions/setCaseAction';
 import setFormSaveSuccess from '../actions/setFormSaveSuccessAction';
 import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsAction';
@@ -13,13 +12,7 @@ export default [
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
   {
-    success: [
-      updateCase,
-      {
-        error: [setAlertError],
-        success: [setCase, setFormSaveSuccess, expireFormSaveSuccess],
-      },
-    ],
+    success: [updateCase, setCase, setFormSaveSuccess, expireFormSaveSuccess],
     error: [setValidationAlertErrorsAction],
   },
 ];

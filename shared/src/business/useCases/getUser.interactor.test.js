@@ -1,3 +1,4 @@
+const { UnknownUserError } = require('../../errors/errors');
 const { getUser } = require('./getUser.interactor');
 
 describe('Get user', () => {
@@ -7,7 +8,14 @@ describe('Get user', () => {
     expect(user.role).toEqual('petitioner');
   });
   it('not found', async () => {
-    const user = await getUser('someuser');
-    expect(user).toBeNull();
+    let result = '😡';
+    try {
+      await getUser('someuser');
+    } catch (e) {
+      if (e instanceof UnknownUserError) {
+        result = '😃';
+      }
+    }
+    expect(result).toEqual('😃');
   });
 });

@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ get, store, applicationContext, path, props }) => {
+export default async ({ get, store, applicationContext, props }) => {
   const completeWorkItemDate = new Date().toISOString();
 
   const caseDetail = get(state.caseDetail);
@@ -42,6 +42,4 @@ export default async ({ get, store, applicationContext, path, props }) => {
     workItemId: props.workItemId,
     userId: get(state.user.token),
   });
-
-  return path.success();
 };

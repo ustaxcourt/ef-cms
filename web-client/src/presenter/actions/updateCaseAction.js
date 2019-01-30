@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path, props }) => {
+export default async ({ applicationContext, get, props }) => {
   const useCases = applicationContext.getUseCases();
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
@@ -15,11 +15,11 @@ export default async ({ applicationContext, get, path, props }) => {
     userId: get(state.user.token),
   });
 
-  return path.success({
+  return {
     caseDetail: caseToUpdate,
     alertSuccess: {
       title: 'Success',
       message: `Case ${caseDetail.docketNumber} has been updated.`,
     },
-  });
+  };
 };

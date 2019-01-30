@@ -6,7 +6,7 @@
     "ef-cms-shared": "file:../shared",
     "serverless": "^1.36.0",
     "serverless-aws-documentation": "^1.1.0",
-    "serverless-domain-manager": "^2.6.10",
+    "serverless-domain-manager": "^2.6.13",
     "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^3.32.2",
     "serverless-plugin-aws-alerts": "^1.2.4",
@@ -21,7 +21,7 @@
   "devDependencies": {
     "artillery": "^1.6.0-25",
     "artillery-plugin-fuzzer": "^1.0.1",
-    "aws-sdk": "^2.394.0",
+    "aws-sdk": "^2.395.0",
     "aws-sdk-mock": "^4.2.0",
     "chai": "^4.1.2",
     "chai-string": "^1.4.0",
@@ -37,7 +37,7 @@
     "lambda-tester": "^3.4.1",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
-    "prettier": "^1.14.3",
+    "prettier": "^1.16.2",
     "proxyquire": "^2.1.0",
     "spawn-sync": "^2.0.0",
     "try-thread-sleep": "^2.0.0"
