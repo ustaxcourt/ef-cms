@@ -40,7 +40,8 @@ describe('Send petition to IRS Holding Queue', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(null),
+          saveCase: () => null,
+          getCaseByCaseId: () => null,
         };
       },
       environment: { stage: 'local' },

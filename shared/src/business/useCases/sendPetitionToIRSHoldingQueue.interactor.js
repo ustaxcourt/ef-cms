@@ -7,6 +7,7 @@ const {
 const {
   UnauthorizedError,
   InvalidEntityError,
+  NotFoundError,
 } = require('../../errors/errors');
 
 /**
@@ -25,13 +26,23 @@ exports.sendPetitionToIRSHoldingQueue = async ({
     throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
   }
 
-  const caseRecord = await applicationContext.getUseCases().getCase({
-    userId,
-    caseId,
-    applicationContext,
-  });
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      caseId,
+      applicationContext,
+    });
 
-  const caseEntity = new Case(caseRecord);
+  if (!caseRecord) throw new NotFoundError(`Case ${caseId} was not found`);
+
+  const caseEntity = new Case(caseRecord).validate();
+
+  const petitionDocument = caseEntity.documents.find(
+    document => document.documentType === Case.documentTypes.petitionFile,
+  );
+  petitionDocument.workItems.forEach(workItem =>
+    workItem.setAsCompleted(userId),
+  );
   const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
   caseEntity.validateWithError(invalidEntityError);
 
