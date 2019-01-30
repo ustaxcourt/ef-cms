@@ -51,6 +51,11 @@ button.text-style {
   }
 }
 
+button.serve-to-irs {
+  margin-right: 0;
+  float: right;
+}
+
 #file-a-petition .usa-button-active:disabled {
   background-color: $color-primary-darkest;
 }

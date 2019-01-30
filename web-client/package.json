@@ -50,6 +50,7 @@
     "@babel/register": "^7.0.0",
     "@cerebral/react": "^4.0.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.13",
+    "@fortawesome/free-regular-svg-icons": "^5.7.0",
     "@fortawesome/free-solid-svg-icons": "^5.7.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "acorn": "^6.0.6",
