@@ -22,9 +22,17 @@
   margin: auto;
   background: $color-white;
 
+  .modal-header {
+    margin-bottom: 0.75em;
+
+    h3 {
+      display: inline;
+    }
+  }
+
   .modal-close-button {
-    float: right;
     margin-right: -10px;
+    float: right;
 
     svg {
       margin-right: 0;
