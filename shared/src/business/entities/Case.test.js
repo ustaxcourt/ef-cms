@@ -1,11 +1,9 @@
 const assert = require('assert');
 
 const Case = require('./Case');
+const DocketRecord = require('./DocketRecord');
 const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
 const { MOCK_CASE } = require('../../test/mockCase');
-
-const DATE = '2018-12-17T15:33:23.492Z';
-const sinon = require('sinon');
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -170,6 +168,31 @@ describe('Case entity', () => {
     });
   });
 
+  describe('addDocketRecord', () => {
+    it('adds a new docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(
+        new DocketRecord({
+          filingDate: new Date().toISOString(),
+          description: 'test',
+        }),
+      );
+      expect(caseRecord.docketRecord).toHaveLength(1);
+      expect(caseRecord.docketRecord[0].description).toEqual('test');
+    });
+    it('validates the docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      let error;
+      try {
+        caseRecord.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeTruthy();
+    });
+  });
+
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;
@@ -192,34 +215,6 @@ describe('Case entity', () => {
         error = e;
       }
       assert.ok(!error);
-    });
-  });
-
-  describe('attachDocument', () => {
-    beforeEach(() => {
-      sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
-    });
-
-    afterEach(() => {
-      window.Date.prototype.toISOString.restore();
-    });
-
-    it('should attach the document to the case', () => {
-      const caseToVerify = new Case({});
-      caseToVerify.attachDocument({
-        documentType: 'Answer',
-        documentId: '123',
-        userId: 'respondent',
-      });
-      expect(caseToVerify.documents.length).toEqual(1);
-      expect(caseToVerify.documents[0]).toEqual({
-        documentType: 'Answer',
-        documentId: '123',
-        userId: 'respondent',
-        filedBy: 'Respondent',
-        createdAt: DATE,
-        workItems: [],
-      });
     });
   });
 

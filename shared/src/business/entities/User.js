@@ -77,4 +77,8 @@ User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
 };
 
+User.prototype.getDocketRecordName = function getDocketRecordName() {
+  return this.role === 'petitioner' ? `Petitioner ${this.name}` : this.name;
+};
+
 module.exports = User;
