@@ -85,10 +85,10 @@ ZAP Scanning Report
 <td><a href="#medium">Medium</a></td><td align="center">0</td>
 </tr>
 <tr bgcolor="#e8e8e8">
-<td><a href="#low">Low</a></td><td align="center">4</td>
+<td><a href="#low">Low</a></td><td align="center">3</td>
 </tr>
 <tr bgcolor="#e8e8e8">
-<td><a href="#info">Informational</a></td><td align="center">2</td>
+<td><a href="#info">Informational</a></td><td align="center">1</td>
 </tr>
 </table>
 <div class="spacer-lg"></div>
@@ -333,6 +333,106 @@ ZAP Scanning Report
   
   
 <tr height="24" class="risk-low">
+<a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">Incomplete or No Cache-control and Pragma HTTP Header Set</th>
+</tr>
+  
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Description</td><td width="80%"><p>The cache-control and pragma HTTP header have not been set properly or are missing allowing the browser and proxies to cache content.</p></td>
+</tr>
+<TR vAlign="top">
+<TD colspan="2"></TD>
+</TR>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger.json</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">no-cache</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/documents/uploadPolicy</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">no-cache</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">no-cache</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Instances</td><td width="80%">3</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Solution</td><td width="80%"><p>Whenever possible ensure the cache-control HTTP header is set with no-cache, no-store, must-revalidate; and that the pragma HTTP header is set with no-cache.</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Reference</td><td width="80%"><p>https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Web_Content_Caching</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">CWE Id</td><td width="80%">525</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">WASC Id</td><td width="80%">13</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Source ID</td><td width="80%">3</td>
+</tr>
+
+</table>
+<div class="spacer"></div>
+<table width="100%" class="results">
+  
+  
+  
+<tr height="24" class="risk-low">
 <a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">Cross-Domain JavaScript Source File Inclusion</th>
 </tr>
   
@@ -396,165 +496,6 @@ ZAP Scanning Report
   
   
   
-<tr height="24" class="risk-low">
-<a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">Incomplete or No Cache-control and Pragma HTTP Header Set</th>
-</tr>
-  
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>The cache-control and pragma HTTP header have not been set properly or are missing allowing the browser and proxies to cache content.</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/documents/uploadPolicy</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">no-cache</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger.json</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Parameter</td><td width="80%">Cache-Control</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">3</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Solution</td><td width="80%"><p>Whenever possible ensure the cache-control HTTP header is set with no-cache, no-store, must-revalidate; and that the pragma HTTP header is set with no-cache.</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Reference</td><td width="80%"><p>https://www.owasp.org/index.php/Session_Management_Cheat_Sheet#Web_Content_Caching</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">CWE Id</td><td width="80%">525</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">WASC Id</td><td width="80%">13</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Source ID</td><td width="80%">3</td>
-</tr>
-
-</table>
-<div class="spacer"></div>
-<table width="100%" class="results">
-  
-  
-  
-<tr height="24" class="risk-low">
-<a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">X-Content-Type-Options Header Missing</th>
-</tr>
-  
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger.json</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Parameter</td><td width="80%">X-Content-Type-Options</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">1</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Solution</td><td width="80%"><p>Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.</p><p>If possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Other information</td><td width="80%"><p>This issue still applies to error type pages (401, 403, 500, etc) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.</p><p>At "High" threshold this scanner will not alert on client or server error responses.</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Reference</td><td width="80%"><p>http://msdn.microsoft.com/en-us/library/ie/gg622941%28v=vs.85%29.aspx</p><p>https://www.owasp.org/index.php/List_of_useful_HTTP_headers</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">CWE Id</td><td width="80%">16</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">WASC Id</td><td width="80%">15</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Source ID</td><td width="80%">3</td>
-</tr>
-
-</table>
-<div class="spacer"></div>
-<table width="100%" class="results">
-  
-  
-  
 <tr height="24" class="risk-info">
 <th width="20%"><a name="info"></a>Informational (High)</th><th width="80%">A Client Error response code was returned by the server</th>
 </tr>
@@ -595,20 +536,6 @@ ZAP Scanning Report
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/documents/5801765263644378304</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
 </tr>
   
   
@@ -726,6 +653,20 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/cases/3735100732808378673</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 404</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/cases/%7BcaseId%7D</td>
 </tr>
   
@@ -782,20 +723,6 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/1799463376689219331</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/</td>
 </tr>
   
@@ -838,6 +765,20 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/documents/5316319840189347153</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/documents/</td>
 </tr>
   
@@ -873,69 +814,6 @@ ZAP Scanning Report
   
 <tr bgcolor="#e8e8e8">
 <td width="20%">Source ID</td><td width="80%">4</td>
-</tr>
-
-</table>
-<div class="spacer"></div>
-<table width="100%" class="results">
-  
-  
-  
-<tr height="24" class="risk-info">
-<th width="20%"><a name="info"></a>Informational (Medium)</th><th width="80%">Information Disclosure - Suspicious Comments</th>
-</tr>
-  
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>The response appears to contain suspicious comments which may help an attacker.</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/v1/swagger</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">1</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Solution</td><td width="80%"><p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Other information</td><td width="80%"><p>&lt;script&gt;</p><p>          SwaggerUIBundle({</p><p>            dom_id: '#swagger',</p><p>            spec: {"swagger":"2.0","info":{"description":"Documents API for U.S. Tax Court EF-CMS","version":"2018-11-09T22:05:06Z","title":"will-ef-cms","contact":{"url":"https://www.ustaxcourt.gov","email":"webmaster@ustaxcourt.gov"},"license":{"name":"Creative Commons 0","url":"https://creativecommons.org/share-your-work/public-domain/cc0/"}},"host":"efcms-dev.ustc-case-mgmt.flexion.us","tags":[{"name":"ef-cms","description":"EF-CMS"},{"name":"documents","description":"document service"}],"schemes":["https"],"paths":{"/v1/cases":{"get":{"tags":["cases"],"summary":"get all cases for a user","description":"Get all cases for a user.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/case"}}}},"post":{"tags":["cases"],"summary":"create a case","description":"Create a case.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/case"}}}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}},"/v1/cases/{caseId}":{"get":{"tags":["cases"],"summary":"get a case by caseId","description":"Get a case by caseId.\n","produces":["application/json"],"parameters":[{"name":"caseId","in":"path","required":true,"type":"string"}],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/case"}}}},"put":{"tags":["cases"],"summary":"update a case","description":"Update a case.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/case"}},"422":{"description":"422 response","schema":{"$ref":"#/definitions/unprocessableEntityError"}}}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}},"/v1/documents":{"post":{"tags":["documents"],"summary":"create a document","description":"Create a document.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/document"}}}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}},"/v1/documents/uploadPolicy":{"get":{"tags":["documents"],"summary":"create a pre-signed url for uploads","description":"Create a pre-signed url for document uploads to S3.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/policyUrl"}}}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}},"/v1/documents/{documentId}/downloadPolicy":{"get":{"tags":["documents"],"summary":"create a pre-signed url for downloads","description":"Create a pre-signed url for document downloads from S3.\n","produces":["application/json"],"responses":{"200":{"description":"200 response","schema":{"$ref":"#/definitions/policyUrl"}}}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}},"/v1/swagger":{"get":{"responses":{}},"options":{"consumes":["application/json"],"produces":["application/json"],"responses":{"200":{"description":"200 response","headers":{"Access-Control-Allow-Origin":{"type":"string"},"Access-Control-Allow-Methods":{"type":"string"},"Access-Control-Allow-Credentials":{"type":"string"},"Access-Control-Allow-Headers":{"type":"string"}}}}}}},"definitions":{"policyUrl":{"type":"object","properties":{"fields":{"$ref":"#/definitions/fields"},"url":{"type":"string","description":"url"}},"description":"a policy url response"},"document":{"type":"object","properties":{"createdAt":{"type":"string","description":"date document created"},"documentType":{"type":"string","description":"type of this document"},"documentId":{"type":"string","description":"id of document"},"userId":{"type":"string","description":"id of user who created the document"}},"description":"a document response"},"unprocessableEntityError":{"type":"object","required":["message"],"properties":{"message":{"type":"string"}},"description":"a unprocessable entity error (422), due to a problem in the body or the id in the url"},"fields":{"type":"object","properties":{"bucket":{"type":"string","description":"The bucket name."},"Policy":{"type":"string","description":"The policy."},"X-Amz-Date":{"type":"string","description":"The date."},"X-Amz-Algorithm":{"type":"string","description":"The algorithm."},"X-Amz-Signature":{"type":"string","description":"The signature."},"X-Amz-Security-Token":{"type":"string","description":"The security token."},"X-Amz-Credential":{"type":"string","description":"The credential."}},"description":"a policy url response"},"case":{"type":"object","properties":{"createdAt":{"type":"string","description":"date case created"},"documents":{"type":"array","description":"array of document ids and types associated with the case","items":{"type":"object","properties":{"documentType":{"type":"string"},"documentId":{"type":"string"}}}},"caseId":{"type":"string","description":"id of case"},"userId":{"type":"string","description":"id of user who created the case"}},"description":"a case response"}}}</p><p>          });</p><p>        &lt;/script&gt;</p><p></p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Reference</td><td width="80%"><p></p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">CWE Id</td><td width="80%">200</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">WASC Id</td><td width="80%">13</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Source ID</td><td width="80%">3</td>
 </tr>
 
 </table>
