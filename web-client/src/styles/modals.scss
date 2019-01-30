@@ -17,15 +17,26 @@
   display: block;
   width: 500px;
   min-height: 145px;
-  padding: 3rem 3rem 0;
+  padding: 13px 30px 10px 20px;
   border-top: 10px solid $color-gold;
   margin: auto;
   background: $color-white;
 
+  .modal-header {
+    margin-bottom: 0.75em;
+
+    h3 {
+      display: inline;
+    }
+  }
+
   .modal-close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    margin-right: -10px;
+    float: right;
+
+    svg {
+      margin-right: 0;
+    }
   }
 
   .usa-button,

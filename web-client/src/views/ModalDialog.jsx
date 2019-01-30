@@ -51,16 +51,18 @@ class ModalDialog extends React.Component {
           role="alertdialog"
           onClick={event => event.stopPropagation()}
         >
-          <button
-            type="button"
-            className="modal-close-button text-style"
-            onClick={this.runCancelSequence}
-          >
-            Close <FontAwesomeIcon icon="times-circle" />
-          </button>
-          <h3 tabIndex="-1" className="title">
-            {modal.title}
-          </h3>
+          <div className="modal-header">
+            <button
+              type="button"
+              className="modal-close-button text-style"
+              onClick={this.runCancelSequence}
+            >
+              Close <FontAwesomeIcon icon="times-circle" />
+            </button>
+            <h3 tabIndex="-1" className="title">
+              {modal.title}
+            </h3>
+          </div>
           <p>{modal.message}</p>
           <button
             type="button"
