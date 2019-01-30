@@ -107,7 +107,7 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            {caseHelper.canServeToIRS && (
+            {caseHelper.canServeToIRS && document.isPetition && (
               <div className="usa-width-one-half">
                 <button
                   className="serve-to-irs"

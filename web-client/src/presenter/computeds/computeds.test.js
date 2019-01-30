@@ -10,7 +10,7 @@ describe('formatted case details computed', () => {
           irsDate: '2018-11-21T20:49:28.192Z',
           documents: [
             {
-              documentType: 'fakeType',
+              documentType: 'Petition',
               createdAt: '2018-11-21T20:49:28.192Z',
               reviewDate: '2018-11-22T20:49:28.192Z',
               status: 'served',
@@ -21,6 +21,7 @@ describe('formatted case details computed', () => {
       },
     });
     expect(result.irsDateFormatted).toContain('11/21/2018');
+    expect(result.documents[0].isPetition).toEqual(true);
   });
 
   it('formats the date in a list of cases', () => {
