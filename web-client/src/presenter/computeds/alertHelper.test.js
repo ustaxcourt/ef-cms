@@ -15,21 +15,33 @@ describe('alertHelper', () => {
       showErrorAlert: true,
       showSingleMessage: true,
       showMultipleMessages: false,
-      showNoMessage: false,
+      showTitleOnly: false,
     });
   });
 
   it('no messages', async () => {
     const result = await runCompute(alertHelper, {
       state: {
-        alertError: {},
+        alertError: { title: 'hello' },
       },
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
       showSingleMessage: false,
       showMultipleMessages: false,
-      showNoMessage: true,
+      showTitleOnly: true,
+    });
+  });
+
+  it('alertError is undefined', async () => {
+    const result = await runCompute(alertHelper, {
+      state: {},
+    });
+    expect(result).toMatchObject({
+      showErrorAlert: false,
+      showSingleMessage: false,
+      showMultipleMessages: false,
+      showTitleOnly: false,
     });
   });
 });

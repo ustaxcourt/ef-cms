@@ -42,7 +42,7 @@ class ErrorNotification extends React.Component {
                   ))}
                 </ul>
               )}
-              {alertHelper.showNoMessage && (
+              {alertHelper.showTitleOnly && (
                 <div className="alert-blank-message" />
               )}
             </div>
