@@ -1,4 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
+import { ActionError } from '../src/presenter/errors/ActionError';
 
 import presenter from '../src/presenter';
 import applicationContext from '../src/applicationContext';
@@ -59,6 +60,7 @@ describe('Log in', async () => {
   });
 
   it('fails with Bad actor', async () => {
+    let result = '😡';
     await test.runSequence('gotoLogInSequence');
     expect(test.getState('currentPage')).toEqual('LogIn');
     await test.runSequence('updateFormValueSequence', {
@@ -66,7 +68,13 @@ describe('Log in', async () => {
       value: 'Bad actor',
     });
     expect(test.getState('form.name')).toEqual('Bad actor');
-    await test.runSequence('submitLogInSequence');
-    expect(test.getState('alertError.title')).toBeDefined();
+    try {
+      await test.runSequence('submitLogInSequence');
+    } catch (e) {
+      if (e instanceof ActionError) {
+        result = '😃';
+      }
+    }
+    expect(result).toEqual('😃');
   });
 });
