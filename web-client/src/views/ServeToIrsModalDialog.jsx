@@ -19,7 +19,7 @@ class ServeToIrsModalDialog extends ModalDialog {
 export default connect(
   {
     cancelSequence: sequences.toggleShowModalSequence,
-    confirmSequence: sequences.toggleShowModalSequence,
+    confirmSequence: sequences.submitPetitionToIRSHoldingQueueSequence,
   },
   ServeToIrsModalDialog,
 );
