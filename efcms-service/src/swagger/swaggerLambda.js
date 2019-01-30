@@ -28,6 +28,20 @@ exports.handler = async () => {
     headers: {
       'Content-Type': 'text/html',
       'Access-Control-Allow-Origin': '*',
+      'X-Frame-Options': 'deny',
+      'X-XSS-Protection': '1; mode=block',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  };
+};
+
+exports.json = async () => {
+  return {
+    statusCode: '200',
+    body: JSON.stringify(swagger),
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
     },
   };
 };

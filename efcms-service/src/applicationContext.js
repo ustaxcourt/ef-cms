@@ -71,8 +71,8 @@ const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
 const {
-  sendPetitionToIRS,
-} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS.interactor');
+  sendPetitionToIRSHoldingQueue,
+} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueue.interactor');
 const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
@@ -108,7 +108,6 @@ const {
 const {
   isAuthorized,
   WORKITEM,
-  CASE_METADATA,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
@@ -201,7 +200,7 @@ module.exports = ({ userId } = {}) => {
         getCasesByUser: getCasesByUserUC,
         getUser,
         forwardWorkItem,
-        sendPetitionToIRS,
+        sendPetitionToIRSHoldingQueue,
         updateCase,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,

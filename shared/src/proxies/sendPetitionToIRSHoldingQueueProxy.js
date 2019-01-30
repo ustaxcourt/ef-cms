@@ -1,4 +1,8 @@
-exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
+exports.sendPetitionToIRSHoldingQueue = async ({
+  caseId,
+  userId,
+  applicationContext,
+}) => {
   const userToken = userId; //TODO refactor for jwt
 
   const response = await applicationContext.getHttpClient().post(

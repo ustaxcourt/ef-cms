@@ -4,7 +4,7 @@ import moment from 'moment';
 export default async ({ applicationContext, get, props }) => {
   const useCases = applicationContext.getUseCases();
 
-  const irsSendDate = await useCases.sendPetitionToIRS({
+  const irsSendDate = await useCases.sendPetitionToIRSHoldingQueue({
     caseId: get(state.caseDetail).caseId,
     userId: get(state.user.token),
     applicationContext,
@@ -12,7 +12,7 @@ export default async ({ applicationContext, get, props }) => {
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {
-      title: 'Successfully served to IRS',
+      title: 'The petition is now in the IRS Holding Queue',
       message: moment(irsSendDate).format('L LT'),
     },
   };

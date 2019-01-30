@@ -87,7 +87,7 @@ describe('syncWorkItems', function() {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
-        status: 'general',
+        status: 'General',
         documents: [
           {
             workItems: [
@@ -99,7 +99,7 @@ describe('syncWorkItems', function() {
         ],
       },
       currentCaseState: {
-        status: 'new',
+        status: 'New',
         documents: [
           {
             workItems: [

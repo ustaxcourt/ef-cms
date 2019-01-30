@@ -14,7 +14,7 @@ export default test => {
       .getState('sectionWorkQueue')
       .find(workItem => workItem.docketNumber === test.docketNumber);
     expect(workItem).toBeDefined();
-    expect(workItem.caseStatus).toEqual('new');
+    expect(workItem.caseStatus).toEqual('New');
     expect(workItem.messages[0].message).toEqual(
       'A Petition filed by Petitioner is ready for review.',
     );
