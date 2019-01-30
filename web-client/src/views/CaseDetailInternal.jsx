@@ -28,7 +28,6 @@ export default connect(
     currentTab,
     extractedPendingMessages,
     helper,
-    submitPetitionToIRSHoldingQueueSequence,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
@@ -140,15 +139,6 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="" role="tabpanel">
-              {!helper.showIrsServedDate && (
-                <button
-                  className="usa-button"
-                  id="send-to-irs"
-                  onClick={() => submitPetitionToIRSHoldingQueueSequence()}
-                >
-                  Send to IRS
-                </button>
-              )}
               <table className="responsive-table">
                 <thead>
                   <tr>
