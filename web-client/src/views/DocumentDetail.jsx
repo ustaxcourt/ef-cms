@@ -59,46 +59,58 @@ class DocumentDetail extends React.Component {
               <span>{document.filedBy}</span>
             </div>
           </div>
+
           <SuccessNotification />
           <ErrorNotification />
-          <nav className="horizontal-tabs subsection">
-            <ul role="tablist">
-              {helper.isEditablePetition && (
-                <li className={helper.showDocumentInfo ? 'active' : ''}>
-                  <button
-                    role="tab"
-                    className="tab-link"
-                    id="tab-document-info"
-                    aria-controls="tab-document-info-panel"
-                    aria-selected={helper.showDocumentInfo}
-                    onClick={() =>
-                      updateCurrentTabSequence({
-                        value: 'Document Info',
-                      })
-                    }
-                  >
-                    Document Info
-                  </button>
-                </li>
-              )}
-              <li className={helper.showPendingMessages ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="tab-pending-messages"
-                  aria-controls="tab-pending-messages-panel"
-                  aria-selected={helper.showPendingMessages}
-                  onClick={() =>
-                    updateCurrentTabSequence({
-                      value: 'Pending Messages',
-                    })
-                  }
-                >
-                  Pending Messages
-                </button>
-              </li>
-            </ul>
-          </nav>
+
+          <div className="usa-grid-full">
+            <div className="usa-width-one-half">
+              <nav className="horizontal-tabs subsection">
+                <ul role="tablist">
+                  {helper.isEditablePetition && (
+                    <li className={helper.showDocumentInfo ? 'active' : ''}>
+                      <button
+                        role="tab"
+                        className="tab-link"
+                        id="tab-document-info"
+                        aria-controls="tab-document-info-panel"
+                        aria-selected={helper.showDocumentInfo}
+                        onClick={() =>
+                          updateCurrentTabSequence({
+                            value: 'Document Info',
+                          })
+                        }
+                      >
+                        Document Info
+                      </button>
+                    </li>
+                  )}
+                  <li className={helper.showPendingMessages ? 'active' : ''}>
+                    <button
+                      role="tab"
+                      className="tab-link"
+                      id="tab-pending-messages"
+                      aria-controls="tab-pending-messages-panel"
+                      aria-selected={helper.showPendingMessages}
+                      onClick={() =>
+                        updateCurrentTabSequence({
+                          value: 'Pending Messages',
+                        })
+                      }
+                    >
+                      Pending Messages
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div className="usa-width-one-half">
+              <button className="serve-to-irs" onClick={() => {}}>
+                <FontAwesomeIcon icon={['far', 'clock']} />
+                Serve to IRS
+              </button>
+            </div>
+          </div>
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
