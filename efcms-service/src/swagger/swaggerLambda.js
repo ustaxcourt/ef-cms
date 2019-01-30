@@ -1,4 +1,6 @@
 const swagger = require('../../swagger.json');
+const { headers } = require('../middleware/apiGatewayHelper');
+
 /**
  * Renders a simple HTML page that loads up the swagger-ui package and consumes the swagger.json file found at the root of this project.
  *
@@ -16,7 +18,7 @@ exports.handler = async () => {
         <script>
           SwaggerUIBundle({
             dom_id: '#swagger',
-            spec: ${JSON.stringify(swagger)}
+            url: '/v1/swagger.json'
           });
         </script>
       </body>
@@ -26,11 +28,10 @@ exports.handler = async () => {
     statusCode: '200',
     body: body,
     headers: {
+      ...headers,
       'Content-Type': 'text/html',
-      'Access-Control-Allow-Origin': '*',
-      'X-Frame-Options': 'deny',
+      'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',
-      'X-Content-Type-Options': 'nosniff',
     },
   };
 };
@@ -39,9 +40,6 @@ exports.json = async () => {
   return {
     statusCode: '200',
     body: JSON.stringify(swagger),
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
+    headers,
   };
 };
