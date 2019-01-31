@@ -9,6 +9,9 @@ const {
   getCompletedWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getCompletedWorkItemsForUser');
 const {
+  getCompletedWorkItemsForSection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getCompletedWorkItemsForSection');
+const {
   getWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
 const {
@@ -103,6 +106,9 @@ const {
 const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const { 
+  getCompletedWorkItemsForSection: getCompletedWorkItemsForSectionUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getCompletedWorkItemsForSection.interactor');
 const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
@@ -176,6 +182,7 @@ module.exports = ({ userId } = {}) => {
         getWorkItemById,
         saveWorkItem,
         getCompletedWorkItemsForUser,
+        getCompletedWorkItemsForSection,
 
         // cases
         getCasesByStatus,
@@ -239,7 +246,9 @@ module.exports = ({ userId } = {}) => {
     getWorkItemsInteractor: event => {
       const section = (event.queryStringParameters || {}).section;
       const completed = (event.queryStringParameters || {}).completed;
-      if (section) {
+      if (section && completed) {
+        return getCompletedWorkItemsForSectionUC;
+      } else if (section) {
         return getWorkItemsBySection;
       } else if (completed) {
         return getCompletedWorkItemsForUserUC;
