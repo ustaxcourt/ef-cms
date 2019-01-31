@@ -27,8 +27,8 @@ import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 
-import { getCompletedWorkItemsForUser } from '../../shared/src/proxies/workitems/getCompletedWorkItemsForUserProxy';
-import { getCompletedWorkItemsForSection } from '../../shared/src/proxies/workitems/getCompletedWorkItemsForSectionProxy';
+import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
@@ -64,8 +64,8 @@ const allUseCases = {
   getCasesByUser,
   getCasesForRespondent,
   getCaseTypes,
-  getCompletedWorkItemsForSection,
-  getCompletedWorkItemsForUser,
+  getSentWorkItemsForSection,
+  getSentWorkItemsForUser,
   getInternalUsers,
   getProcedureTypes,
   getTrialCities,

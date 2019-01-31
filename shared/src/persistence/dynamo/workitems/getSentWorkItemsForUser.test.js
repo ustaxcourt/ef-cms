@@ -1,11 +1,9 @@
-const {
-  getCompletedWorkItemsForSection,
-} = require('./getCompletedWorkItemsForSection');
+const { getSentWorkItemsForUser } = require('./getSentWorkItemsForUser');
 
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 
-describe('getCompletedWorkItemsForSection', () => {
+describe('getSentWorkItemsForUser', () => {
   beforeEach(() => {
     sinon.stub(client, 'query').resolves([
       {
@@ -38,15 +36,15 @@ describe('getCompletedWorkItemsForSection', () => {
         stage: 'dev',
       },
     };
-    await getCompletedWorkItemsForSection({
+    await getSentWorkItemsForUser({
       applicationContext,
-      section: 'petitions',
+      userId: 'docketclerk',
     });
     expect(client.query.getCall(0).args[0]).toEqual({
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
-        ':pk': 'petitions|completedWorkItem',
+        ':pk': 'docketclerk|sentWorkItem',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
       TableName: 'efcms-dev',

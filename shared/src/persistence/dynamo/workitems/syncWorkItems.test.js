@@ -20,6 +20,7 @@ describe('syncWorkItems', function() {
     sinon.stub(client, 'put').resolves(null);
     sinon.stub(sync, 'reassignWorkItem').resolves(null);
     sinon.stub(sync, 'updateWorkItem').resolves(null);
+    sinon.stub(persistence, 'createSortMappingRecord').resolves(null);
   });
 
   afterEach(() => {
@@ -27,6 +28,7 @@ describe('syncWorkItems', function() {
     client.put.restore();
     sync.reassignWorkItem.restore();
     sync.updateWorkItem.restore();
+    persistence.createSortMappingRecord.restore();
   });
 
   it('creates a new work item record for the work item and the mapping record for the assignee when a new work item is added to a case', async () => {
@@ -144,5 +146,124 @@ describe('syncWorkItems', function() {
       },
     });
     expect(sync.reassignWorkItem.called).to.be.true;
+  });
+
+  it('creates 2 mapping records if the case status changes to Batched for IRS', async () => {
+    await syncWorkItems({
+      applicationContext,
+      caseToSave: {
+        status: 'Batched for IRS',
+        documents: [
+          {
+            workItems: [
+              {
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      currentCaseState: {
+        status: 'New',
+        documents: [
+          {
+            workItems: [
+              {
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                section: 'petitions',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+    expect(
+      persistence.createSortMappingRecord.getCall(0).args[0].pkId,
+    ).to.equal('petitionsclerk1');
+    expect(
+      persistence.createSortMappingRecord.getCall(0).args[0].skId,
+    ).to.equal('123');
+    expect(
+      persistence.createSortMappingRecord.getCall(1).args[0].pkId,
+    ).to.equal('petitions');
+    expect(
+      persistence.createSortMappingRecord.getCall(1).args[0].skId,
+    ).to.equal('123');
+  });
+
+  it('creates a mapping record when the work item is completed', async () => {
+    await syncWorkItems({
+      applicationContext,
+      caseToSave: {
+        status: 'New',
+        documents: [
+          {
+            workItems: [
+              {
+                completedAt: '123',
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                section: 'petitions',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      currentCaseState: {
+        status: 'New',
+        documents: [
+          {
+            workItems: [
+              {
+                completedAt: null,
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                section: 'petitions',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+    expect(
+      persistence.createSortMappingRecord.getCall(0).args[0].pkId,
+    ).to.equal('petitions');
+    expect(
+      persistence.createSortMappingRecord.getCall(0).args[0].skId,
+    ).to.equal('123');
   });
 });
