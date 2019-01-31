@@ -26,6 +26,10 @@ import { getInternalUsers } from '../../shared/src/business/useCases/getInternal
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
+
+import { getCompletedWorkItemsForUser } from '../../shared/src/proxies/workitems/getCompletedWorkItemsForUserProxy';
+import { getCompletedWorkItemsForSection } from '../../shared/src/proxies/workitems/getCompletedWorkItemsForSectionProxy';
+
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
@@ -60,6 +64,8 @@ const allUseCases = {
   getCasesByUser,
   getCasesForRespondent,
   getCaseTypes,
+  getCompletedWorkItemsForSection,
+  getCompletedWorkItemsForUser,
   getInternalUsers,
   getProcedureTypes,
   getTrialCities,

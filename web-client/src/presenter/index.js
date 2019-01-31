@@ -2,6 +2,7 @@ import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
 import clearDocumentSequence from './sequences/clearDocumentSequence';
+import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
 import dismissAlertSequence from './sequences/dismissAlertSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
@@ -25,8 +26,8 @@ import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
 import submitLogInSequence from './sequences/submitLogInSequence';
-import submitSearchSequence from './sequences/submitSearchSequence';
 import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
+import submitSearchSequence from './sequences/submitSearchSequence';
 import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
 import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
@@ -67,6 +68,7 @@ export default {
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
     clearDocumentSequence,
+    clickServeToIrsSequence,
     dismissAlertSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
@@ -89,8 +91,8 @@ export default {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLogInSequence,
-    submitSearchSequence,
     submitPetitionToIRSHoldingQueueSequence,
+    submitSearchSequence,
     submitUpdateCaseSequence,
     switchWorkQueueSequence,
     toggleCaseDifferenceSequence,
