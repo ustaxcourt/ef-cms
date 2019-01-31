@@ -1,19 +1,13 @@
 export default test => {
   return it('Petitions clerk submits case to IRS holding queue', async () => {
-    //click send to irs button
     await test.runSequence('toggleShowModalSequence');
     expect(test.getState('showModal')).toEqual(true);
-    //await modal
-    //click no
-    //expect case detail page
-    //change something in case detail and submit again
+
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2017',
     });
     await test.runSequence('autoSaveCaseSequence');
-    //check that modal loads
-    //click yes
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual({});
