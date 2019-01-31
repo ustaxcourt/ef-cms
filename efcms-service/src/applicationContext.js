@@ -6,6 +6,9 @@ const {
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
 const {
+  getCompletedWorkItemsForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getCompletedWorkItemsForUser');
+const {
   getWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
 const {
@@ -55,6 +58,9 @@ const {
 } = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
+const {
+  getCompletedWorkItemsForUser: getCompletedWorkItemsForUserUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getCompletedWorkItemsForUser.interactor');
 const {
   getCase,
 } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
@@ -169,6 +175,7 @@ module.exports = ({ userId } = {}) => {
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
+        getCompletedWorkItemsForUser,
 
         // cases
         getCasesByStatus,
@@ -231,9 +238,13 @@ module.exports = ({ userId } = {}) => {
     },
     getWorkItemsInteractor: event => {
       const section = (event.queryStringParameters || {}).section;
+      const completed = (event.queryStringParameters || {}).completed;
       if (section) {
         return getWorkItemsBySection;
+      } else if (completed) {
+        return getCompletedWorkItemsForUserUC;
       } else {
+        // TODO: this is not an calling an interactor, which is BAD
         return getWorkItemsForUser;
       }
     },
