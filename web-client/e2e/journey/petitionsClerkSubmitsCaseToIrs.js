@@ -1,8 +1,5 @@
 export default test => {
   return it('Petitions clerk submits case to IRS holding queue', async () => {
-    await test.runSequence('toggleShowModalSequence');
-    expect(test.getState('showModal')).toEqual(true);
-
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2050',
