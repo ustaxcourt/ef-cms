@@ -32,7 +32,7 @@ describe('getCompletedWorkItemsForUser', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('should do stuff', async () => {
+  it('invokes the peristence layer with the proper request object and date filter', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
