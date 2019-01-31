@@ -1,11 +1,11 @@
 const { getSortRecordsViaMapping } = require('../../awsDynamoPersistence');
 const moment = require('moment');
 
-exports.getCompletedWorkItemsForSection = ({ section, applicationContext }) => {
+exports.getSentWorkItemsForUser = ({ userId, applicationContext }) => {
   return getSortRecordsViaMapping({
     applicationContext,
-    key: section,
-    type: 'completedWorkItem',
+    key: userId,
+    type: 'sentWorkItem',
     afterDate: moment
       .utc(new Date().toISOString())
       .startOf('day')

@@ -1,4 +1,4 @@
-exports.getCompletedWorkItemsForSection = async ({
+exports.getSentWorkItemsForSection = async ({
   applicationContext,
   userId,
   section,
