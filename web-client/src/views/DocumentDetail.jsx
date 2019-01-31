@@ -408,7 +408,10 @@ class DocumentDetail extends React.Component {
             </div>
           </div>
         </section>
-        {showModal && <ServeToIrsModalDialog />}
+        <div tabIndex="0" />
+        {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
+        <div tabIndex="0" />
+
       </React.Fragment>
     );
   }
@@ -422,7 +425,7 @@ DocumentDetail.propTypes = {
   document: PropTypes.object,
   helper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
-  showModal: PropTypes.bool,
+  showModal: PropTypes.string,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
