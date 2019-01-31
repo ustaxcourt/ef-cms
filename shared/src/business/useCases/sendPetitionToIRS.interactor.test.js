@@ -173,7 +173,7 @@ describe('Send petition to IRS', () => {
       },
       environment: { stage: 'local' },
       irsGateway: {
-        sendToIRS: () => 'a',
+        sendToIRS: () => null,
       },
       getUseCases: () => ({ getCase }),
     };
