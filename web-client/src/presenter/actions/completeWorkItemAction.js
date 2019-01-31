@@ -5,6 +5,7 @@ export default async ({ get, store, applicationContext, path, props }) => {
 
   const caseDetail = get(state.caseDetail);
   let workItems = [];
+
   caseDetail.documents.forEach(
     document => (workItems = [...workItems, ...document.workItems]),
   );
