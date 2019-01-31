@@ -2,12 +2,11 @@
  * getWorkItem
  *
  * @param userId
- * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({ userId, workItems, applicationContext }) => {
-  const userToken = userId;
+exports.assignWorkItems = async ({ workItems, applicationContext }) => {
+  const userToken = applicationContext.getCurrentUser().userId;
   const response = await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}/workitems`, workItems, {

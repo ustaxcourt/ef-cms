@@ -20,6 +20,8 @@ function Message(rawMessage) {
   });
 }
 
+Message.name = 'Message';
+
 joiValidationDecorator(
   Message,
   joi.object().keys({

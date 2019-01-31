@@ -1,11 +1,16 @@
 import {
+  faArrowAltCircleLeft,
+  faCaretDown,
+  faCaretLeft,
+  faCaretUp,
+  faCheckCircle,
+  faCloudUploadAlt,
+  faExclamationTriangle,
   faFilePdf,
   faFlag,
-  faShareSquare,
-  faCheckCircle,
   faListUl,
-  faCaretLeft,
-  faCloudUploadAlt,
+  faShareSquare,
+  faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -23,13 +28,18 @@ import presenter from './presenter';
 const app = {
   initialize: (applicationContext, debugTools) => {
     library.add(
+      faArrowAltCircleLeft,
+      faCaretDown,
+      faCaretLeft,
+      faCaretUp,
+      faCheckCircle,
+      faCloudUploadAlt,
+      faExclamationTriangle,
       faFilePdf,
       faFlag,
-      faShareSquare,
-      faCheckCircle,
       faListUl,
-      faCaretLeft,
-      faCloudUploadAlt,
+      faShareSquare,
+      faTimesCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

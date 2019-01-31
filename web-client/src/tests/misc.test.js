@@ -14,11 +14,6 @@ describe('Miscellaneous', () => {
     expect(test.getState('currentPage')).toEqual('StyleGuide');
   });
 
-  it('Handles routing to file petition', async () => {
-    await test.runSequence('gotoFilePetitionSequence');
-    expect(test.getState('currentPage')).toEqual('FilePetition');
-  });
-
   it('Toggles USA Banner Content', async () => {
     await test.runSequence('toggleUsaBannerDetailsSequence');
     expect(test.getState('usaBanner.showDetails')).toEqual(true);

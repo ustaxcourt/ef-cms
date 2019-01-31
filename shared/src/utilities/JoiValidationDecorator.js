@@ -20,6 +20,7 @@ exports.joiValidationDecorator = function(
   entityConstructor,
   schema,
   customValidate,
+  errorToMessageMap,
 ) {
   entityConstructor.prototype.isValid = function isValid() {
     return (
@@ -34,9 +35,34 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      throw new Error('The entity was invalid ' + this.getValidationError());
+      throw new Error(
+        `The ${entityConstructor.name ||
+          ''} entity was invalid ${this.getValidationError()}`,
+      );
     }
     return this;
+  };
+
+  entityConstructor.prototype.getFormattedValidationErrors = function getFormattedValidationErrors() {
+    const errors = this.getValidationErrors();
+    if (!errors) return null;
+    for (let key of Object.keys(errors)) {
+      errors[key] = errorToMessageMap[key];
+    }
+    return errors;
+  };
+
+  entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
+    const { error } = joi.validate(this, schema, {
+      allowUnknown: true,
+      abortEarly: false,
+    });
+    if (!error) return null;
+    const errors = {};
+    error.details.forEach(detail => {
+      errors[detail.context.key] = detail.message;
+    });
+    return errors;
   };
 
   entityConstructor.prototype.validateWithError = function validate(error) {

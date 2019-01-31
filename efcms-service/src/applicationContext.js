@@ -35,9 +35,6 @@ const {
   saveCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
 const {
-  createCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
-const {
   getCaseByCaseId,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
@@ -65,7 +62,7 @@ const {
   getCasesByStatus: getCasesByStatusUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
 const {
-  createCase: createCaseUC,
+  createCase,
 } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
 const {
   getCasesByUser: getCasesByUserUC,
@@ -80,9 +77,6 @@ const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
 const {
-  uploadCasePdfs,
-} = require('ef-cms-shared/src/business/useCases/uploadCasePdfs.interactor');
-const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
 const {
@@ -95,11 +89,8 @@ const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
-  associateRespondentDocumentToCase,
-} = require('ef-cms-shared/src/business/useCases/respondent/associateRespondentDocumentToCase.interactor');
-const {
-  associateDocumentToCase,
-} = require('ef-cms-shared/src/business/useCases/associateDocumentToCase.interactor');
+  createDocument,
+} = require('ef-cms-shared/src/business/useCases/createDocument.interactor');
 const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
@@ -117,9 +108,13 @@ const {
 const {
   isAuthorized,
   WORKITEM,
+  CASE_METADATA,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
+const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+
 const User = require('ef-cms-shared/src/business/entities/User');
+const Case = require('ef-cms-shared/src/business/entities/Case');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -128,11 +123,17 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
 };
+let user;
+const getCurrentUser = () => {
+  return user;
+};
+const setCurrentUser = newUser => {
+  user = newUser;
+};
 
 module.exports = ({ userId } = {}) => {
-  let user;
   if (userId) {
-    user = new User({ userId });
+    setCurrentUser(new User({ userId }));
   }
   return {
     getStorageClient: () => {
@@ -154,6 +155,9 @@ module.exports = ({ userId } = {}) => {
     getUniqueId: () => {
       return uuidv4();
     },
+    getEntityConstructors: () => ({
+      Petition: PetitionWithoutFiles,
+    }),
     getPersistenceGateway: () => {
       return {
         incrementCounter,
@@ -174,7 +178,6 @@ module.exports = ({ userId } = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         saveCase,
-        createCase,
         getCaseByCaseId,
         getCaseByDocketNumber,
       };
@@ -188,12 +191,13 @@ module.exports = ({ userId } = {}) => {
       s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
       documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
     },
-    user,
+    getCurrentUser,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
+    isAuthorizedForCaseMetadata: () => isAuthorized(userId, CASE_METADATA),
     getUseCases: () => {
       return {
-        createCase: createCaseUC,
+        createCase,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
@@ -201,13 +205,11 @@ module.exports = ({ userId } = {}) => {
         forwardWorkItem,
         sendPetitionToIRS,
         updateCase,
-        uploadCasePdfs,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,
         updateWorkItem,
-        associateDocumentToCase,
-        associateRespondentDocumentToCase,
+        createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         assignWorkItems: assignWorkItemsUC,
       };
@@ -216,10 +218,6 @@ module.exports = ({ userId } = {}) => {
       const interactorName =
         (event.queryStringParameters || {}).interactorName || 'updateCase';
       switch (interactorName) {
-      case 'associateRespondentDocumentToCase':
-        return associateRespondentDocumentToCase;
-      case 'associateDocumentToCase':
-        return associateDocumentToCase;
       default:
         return updateCase;
       }
@@ -242,6 +240,7 @@ module.exports = ({ userId } = {}) => {
         return getWorkItemsForUser;
       }
     },
+    filterCaseMetadata: Case.filterMetadata,
     getInteractorForGettingCases,
   };
 };

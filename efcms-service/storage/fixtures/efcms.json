@@ -5,6 +5,7 @@
   },
   {
     "createdAt": "2018-12-27T18:22:57.418Z",
+    "preferredTrialCity": "Hartford, CT",
     "documents": [
       {
         "createdAt": "2018-12-27T18:22:57.418Z",
@@ -32,7 +33,7 @@
       }
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "petitioners": [
@@ -52,6 +53,9 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
+    "docketNumberSuffix": "SL",
+    "procedureType": "small",
+    "caseType": "CDP (Lien/Levy)",
     "status": "new"
   },
   {
@@ -60,6 +64,7 @@
   },
   {
     "caseStatus": "general",
+    "preferredTrialCity": "Hartford, CT",
     "document": {
       "documentType": "Stipulated Decision",
       "createdAt": "2018-12-27T18:06:02.968Z",
@@ -84,6 +89,7 @@
     ],
     "pk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:06:02.968Z"
   },
   {
@@ -155,6 +161,7 @@
             "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
             "assigneeId": "docketclerk",
             "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:05:54.164Z"
           }
@@ -165,6 +172,7 @@
       },
       {
         "createdAt": "2018-12-27T18:06:02.971Z",
+        "preferredTrialCity": "Hartford, CT",
         "documentType": "Stipulated Decision",
         "filedBy": "Test Respondent",
         "workItems": [
@@ -191,6 +199,7 @@
             "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
             "assigneeId": null,
             "docketNumber": "101-18",
+            "docketNumberSuffix": "W",
             "sentBy": "respondent",
             "updatedAt": "2018-12-27T18:06:02.968Z"
           }
@@ -220,8 +229,11 @@
     "irsSendDate": "2018-12-27T17:27:11.113Z",
     "createdAt": "2018-12-27T17:26:36.948Z",
     "payGovId": "1234",
+    "procedureType": "Small",
+    "preferredTrialCity": "Hartford, CT",
+    "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "0",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "petitioners": [
       {
@@ -239,7 +251,38 @@
       }
     ],
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "status": "general"
+  },
+  {
+    "caseStatus": "general",
+    "preferredTrialCity": "Hartford, CT",
+    "document": {
+      "documentType": "Petition",
+      "createdAt": "2018-12-27T18:05:54.164Z",
+      "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
+    },
+    "section": "docket",
+    "workItemId": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "assigneeId": "docketclerk",
+    "sentBy": "respondent",
+    "createdAt": "2018-12-27T18:05:54.166Z",
+    "assigneeName": "Test Docketclerk",
+    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "messages": [
+      {
+        "createdAt": "2018-12-27T18:05:54.164Z",
+        "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
+        "message": "a Petition filed by taxpayer is ready for review",
+        "userId": "taxpayer",
+        "sentBy": "Test Taxpayer"
+      }
+    ],
+    "pk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "docketNumber": "102-18",
+    "docketNumberSuffix": "SL",
+    "updatedAt": "2018-12-27T18:05:54.164Z"
   },
   {
     "caseStatus": "general",
@@ -267,6 +310,7 @@
     ],
     "pk": "af60fe99-37dc-435c-9bdf-24be67769344",
     "docketNumber": "101-18",
+    "docketNumberSuffix": "W",
     "updatedAt": "2018-12-27T18:05:54.164Z"
   },
   {
@@ -291,6 +335,7 @@
   },
   {
     "createdAt": "2018-12-27T18:23:07.975Z",
+    "preferredTrialCity": "Hartford, CT",
     "documents": [
       {
         "createdAt": "2018-12-27T18:23:07.975Z",
@@ -317,8 +362,10 @@
         "workItems": []
       }
     ],
+    "procedureType": "regular",
+    "caseType": "Exempt Organization",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "petitioners": [
@@ -338,6 +385,7 @@
     ],
     "userId": "taxpayer",
     "docketNumber": "103-18",
+    "docketNumberSuffix": "X",
     "status": "new"
   },
   {
@@ -356,6 +404,10 @@
   {
     "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
     "pk": "docket|workItem"
+  },
+  {
+    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
+    "pk": "petitions|workItem"
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",

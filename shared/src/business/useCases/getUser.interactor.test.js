@@ -6,7 +6,7 @@ describe('Get user', () => {
   it('Success taxpayer', async () => {
     const user = await getUser('taxpayer');
     assert.equal(user.userId, 'taxpayer');
-    assert.equal(user.role, 'taxpayer');
+    assert.equal(user.role, 'petitioner');
   });
   it('Success petitionsclerk', async () => {
     const user = await getUser('petitionsclerk');

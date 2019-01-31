@@ -15,9 +15,14 @@ exports.getCasesByDocumentId = async ({ documentId, applicationContext }) => {
     applicationContext,
     key: documentId,
     type: 'case',
+    isVersioned: true,
   });
-  return stripWorkItems(
-    stripInternalKeys(cases),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+
+  return applicationContext.filterCaseMetadata({
+    cases: stripWorkItems(
+      stripInternalKeys(cases),
+      applicationContext.isAuthorizedForWorkItems(),
+    ),
+    applicationContext,
+  });
 };

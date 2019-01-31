@@ -381,6 +381,26 @@ resources:
             MetricsEnabled: true
 
 functions:
+  createDocument:
+    handler: src/documents/createDocumentLambda.createDocument
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents
+          method: post
+          cors: true
+          documentation:
+            summary: create a new document inside of a case
+            tags:
+              - documents
+            description: >
+              Create a new document and attaches it to a case.  It will also create a generic work item.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'the document metadata'
+                responseModels:
+                  'application/json': 'document'
+
   getUploadPolicy:
     handler: src/documents/getUploadPolicyLambda.create
     events:

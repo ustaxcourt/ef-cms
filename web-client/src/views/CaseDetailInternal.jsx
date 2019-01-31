@@ -5,6 +5,7 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import PartyInformation from './PartyInformation';
+import CaseInformationInternal from './CaseInformationInternal';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
@@ -42,7 +43,7 @@ export default connect(
         </div>
         <section className="usa-section usa-grid">
           <h1 className="captioned" tabIndex="-1">
-            Docket number: {caseDetail.docketNumber}
+            Docket Number: {caseDetail.docketNumberWithSuffix}
           </h1>
           <p>
             {caseDetail.petitioners[0].name} v. Commissioner of Internal
@@ -200,13 +201,26 @@ export default connect(
                       <td />
                     </tr>
                   )}
+                  {helper.showPreferredTrialCity && (
+                    <tr>
+                      <td>{caseDetail.createdAtFormatted}</td>
+                      <td>
+                        Request for Place of Trial at{' '}
+                        {caseDetail.preferredTrialCity}
+                      </td>
+                      <td />
+                      <td />
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           )}
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
+              <CaseInformationInternal />
               <PartyInformation />
+
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>

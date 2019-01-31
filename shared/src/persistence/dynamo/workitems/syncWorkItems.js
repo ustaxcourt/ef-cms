@@ -10,7 +10,7 @@ exports.syncWorkItems = async ({
 }) => {
   let currentWorkItems = [];
   let newWorkItems = [];
-  (currentCaseState.documents || []).forEach(
+  ((currentCaseState || {}).documents || []).forEach(
     document =>
       (currentWorkItems = [...currentWorkItems, ...(document.workItems || [])]),
   );

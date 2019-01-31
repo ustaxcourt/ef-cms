@@ -10,6 +10,7 @@ const applicationContext = {
   environment: {
     stage: 'local',
   },
+  filterCaseMetadata: ({ cases }) => cases,
   isAuthorizedForWorkItems: () => true,
 };
 
@@ -74,7 +75,7 @@ describe('getCasesByUser', () => {
       applicationContext,
     });
     expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([
-      { pk: '123', sk: '123' },
+      { pk: '123', sk: '0' },
     ]);
   });
 });

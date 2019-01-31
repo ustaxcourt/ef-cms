@@ -11,5 +11,6 @@ export default get => {
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
     showActionRequired: !caseDetail.payGovId,
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
+    showPreferredTrialCity: caseDetail.preferredTrialCity,
   };
 };

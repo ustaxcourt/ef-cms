@@ -1,10 +1,14 @@
+import applicationContext from '../../applicationContext';
+
 export default test => {
   return it('Taxpayer logs in', async () => {
-    test.setState('user', {
-      name: 'Test Taxpayer',
-      role: 'taxpayer',
-      token: 'taxpayer',
-      userId: 'taxpayer',
+    await test.runSequence('updateFormValueSequence', {
+      key: 'name',
+      value: 'taxpayer',
     });
+    await test.runSequence('submitLogInSequence');
+    expect(test.getState('user.userId')).toEqual('taxpayer');
+    expect(applicationContext.getCurrentUser()).toBeDefined();
+    expect(applicationContext.getCurrentUser().userId).toEqual('taxpayer');
   });
 };

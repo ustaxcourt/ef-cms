@@ -11,7 +11,6 @@ import clearCompleteFormAction from '../actions/clearCompleteFormAction';
 export default [
   setFormSubmitting,
   clearAlerts,
-  unsetFormSubmitting,
   completeWorkItemAction,
   {
     error: [setAlertError],
@@ -21,4 +20,5 @@ export default [
       setAlertSuccess,
     ],
   },
+  unsetFormSubmitting,
 ];

@@ -39,12 +39,12 @@ exports.updateWorkItem = async ({
     .validate()
     .toRawObject();
 
-  const caseAfterUpdate = await applicationContext
+  const afterUpdate = await applicationContext
     .getPersistenceGateway()
     .saveWorkItem({
       workItemToSave: updatedWorkItem,
       applicationContext,
     });
 
-  return new WorkItem(caseAfterUpdate).validate().toRawObject();
+  return new WorkItem(afterUpdate).validate().toRawObject();
 };

@@ -1,11 +1,11 @@
 const { createCase } = require('./createCase.interactor');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const sinon = require('sinon');
 const uuid = require('uuid');
+const User = require('../entities/User');
+const PetitionWithoutFiles = require('../entities/PetitionWithoutFiles');
 
 describe('createCase', () => {
   let applicationContext;
-  let documents = MOCK_DOCUMENTS;
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const MOCK_DOCKET_NUMBER = '101-18';
   const DATE = '2018-11-21T20:49:28.192Z';
@@ -21,14 +21,18 @@ describe('createCase', () => {
   });
 
   it('should create a case entity (with a generated caseId) and return it', async () => {
-    const createCaseStub = sinon
-      .stub()
-      .callsFake(({ caseRecord }) => caseRecord);
+    const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: createCaseStub,
+          saveCase: saveCaseStub,
         };
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -45,73 +49,226 @@ describe('createCase', () => {
     };
 
     const createdCase = await createCase({
-      userId: 'taxpayer',
-      documents: documents,
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: 'other',
+        procedureType: 'Small',
+        preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: DATE,
+      },
       applicationContext,
     });
 
     const expectedCaseRecordToPersist = {
-      caseId: MOCK_CASE_ID,
-      docketNumber: '101-18',
+      caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       caseTitle:
-        'test taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      caseType: 'other',
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketNumber: '101-18',
+      docketNumberSuffix: 'S',
+      documents: [
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          documentType: 'Petition',
+          filedBy: 'Petitioner',
+          userId: 'taxpayer',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+              caseStatus: 'new',
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketNumber: '101-18',
+              docketNumberSuffix: 'S',
+              document: {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+                documentType: 'Petition',
+                filedBy: 'Petitioner',
+                userId: 'taxpayer',
+                workItems: [],
+              },
+              messages: [
+                {
+                  createdAt: '2018-11-21T20:49:28.192Z',
+                  message:
+                    'A Petition filed by Petitioner is ready for review.',
+                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+                  sentBy: 'Test Taxpayer',
+                },
+              ],
+              section: 'petitions',
+              sentBy: 'taxpayer',
+              updatedAt: '2018-11-21T20:49:28.192Z',
+              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+            },
+          ],
+        },
+      ],
+      irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
+          addressLine1: '111 Orange St.',
+          addressLine2: 'Building 2',
+          barNumber: undefined,
+          city: 'Orlando',
+          email: 'testtaxpayer@example.com',
+          name: 'Test Taxpayer',
+          phone: '111-111-1111',
+          role: 'petitioner',
+          section: undefined,
+          state: 'FL',
+          token: 'taxpayer',
+          userId: 'taxpayer',
+          zip: '37208',
+        },
+      ],
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      status: 'new',
+      userId: 'taxpayer',
+    };
+    const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
+      .caseToSave;
+    expect(createdCase).toMatchObject(expectedCaseRecordToPersist);
+    expect(createdCase).toMatchObject(caseRecordSentToPersistence);
+  });
+
+  it('should create a case entity without a irsNoticeDate and return it', async () => {
+    const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          saveCase: saveCaseStub,
+        };
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
+      getUseCases: () => ({
+        getUser: () => ({
           address: '123',
           email: 'test@example.com',
           name: 'test taxpayer',
           phone: '(123) 456-7890',
-        },
-      ],
+        }),
+      }),
+      environment: { stage: 'local' },
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
+      },
+    };
+
+    const createdCase = await createCase({
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: 'other',
+        procedureType: 'Small',
+        preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: DATE,
+      },
+      applicationContext,
+    });
+
+    const expectedCaseRecordToPersist = {
+      caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      caseTitle:
+        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      caseType: 'other',
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketNumber: '101-18',
+      docketNumberSuffix: 'S',
       documents: [
         {
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
-          createdAt: DATE,
+          filedBy: 'Petitioner',
           userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
-          reviewDate: DATE,
-          reviewUser: 'petitionsclerk',
-          workItems: [],
-        },
-        {
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Statement of Taxpayer Identification Number',
-          createdAt: DATE,
-          userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
-          reviewDate: DATE,
-          reviewUser: 'petitionsclerk',
-          workItems: [],
-        },
-        {
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Request for Place of Trial',
-          createdAt: DATE,
-          userId: 'taxpayer',
-          filedBy: 'Petitioner test taxpayer',
-          reviewDate: DATE,
-          reviewUser: 'petitionsclerk',
-          workItems: [],
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+              caseStatus: 'new',
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketNumber: '101-18',
+              docketNumberSuffix: 'S',
+              document: {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+                documentType: 'Petition',
+                filedBy: 'Petitioner',
+                userId: 'taxpayer',
+                workItems: [],
+              },
+              messages: [
+                {
+                  createdAt: '2018-11-21T20:49:28.192Z',
+                  message:
+                    'A Petition filed by Petitioner is ready for review.',
+                  messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+                  sentBy: 'Test Taxpayer',
+                },
+              ],
+              section: 'petitions',
+              sentBy: 'taxpayer',
+              updatedAt: '2018-11-21T20:49:28.192Z',
+              workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+            },
+          ],
         },
       ],
-      createdAt: DATE,
+      irsNoticeDate: '2018-11-21T20:49:28.192Z',
+      petitioners: [
+        {
+          addressLine1: '111 Orange St.',
+          addressLine2: 'Building 2',
+          barNumber: undefined,
+          city: 'Orlando',
+          email: 'testtaxpayer@example.com',
+          name: 'Test Taxpayer',
+          phone: '111-111-1111',
+          role: 'petitioner',
+          section: undefined,
+          state: 'FL',
+          token: 'taxpayer',
+          userId: 'taxpayer',
+          zip: '37208',
+        },
+      ],
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       status: 'new',
       userId: 'taxpayer',
     };
-    const caseRecordSentToPersistence = createCaseStub.getCall(0).args[0]
-      .caseRecord;
-    expect(createdCase).toEqual(expectedCaseRecordToPersist);
-    expect(createdCase).toEqual(caseRecordSentToPersistence);
+    const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
+      .caseToSave;
+    expect(createdCase).toMatchObject(expectedCaseRecordToPersist);
+    expect(createdCase).toMatchObject(caseRecordSentToPersistence);
   });
 
   it('failure', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: () => Promise.reject(new Error('problem')),
+          saveCase: () => Promise.reject(new Error('problem')),
         };
       },
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getUseCases: () => ({
         getUser: () => ({
           name: 'john doe',
@@ -125,8 +282,13 @@ describe('createCase', () => {
     };
     try {
       await createCase({
-        userId: 'petitionsclerk',
-        documents: documents,
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseType: 'other',
+          procedureType: 'Small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
         applicationContext,
       });
     } catch (error) {
@@ -138,12 +300,18 @@ describe('createCase', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          createCase: () =>
+          saveCase: () =>
             Promise.resolve({
               docketNumber: '00101-00',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             }),
         };
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -158,13 +326,42 @@ describe('createCase', () => {
     let error;
     try {
       await createCase({
-        userId: 'taxpayer',
-        documents,
+        petitionFileId: null,
+        petitionMetadata: {
+          caseType: 'other',
+          procedureType: 'Small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
         applicationContext,
       });
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain('The entity was invalid');
+    expect(error.message).toContain('The Document entity was invalid');
+  });
+
+  it('throws an error if the user is not valid or authorized', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({ userId: 'docketclerk' });
+      },
+    };
+    let error;
+    try {
+      await createCase({
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseType: 'other',
+          procedureType: 'Small',
+          preferredTrialCity: 'Chattanooga, TN',
+          irsNoticeDate: DATE,
+        },
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized');
   });
 });
