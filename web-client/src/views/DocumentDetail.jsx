@@ -15,13 +15,13 @@ class DocumentDetail extends React.Component {
       baseUrl,
       caseDetail,
       caseHelper,
+      clickServeToIrsSequence,
       document,
+      helper,
       setWorkItemActionSequence,
       showModal,
-      helper,
       submitCompleteSequence,
       submitForwardSequence,
-      toggleShowModal,
       updateCompleteFormValueSequence,
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
@@ -111,7 +111,7 @@ class DocumentDetail extends React.Component {
               <div className="usa-width-one-half">
                 <button
                   className="serve-to-irs"
-                  onClick={() => toggleShowModal()}
+                  onClick={() => clickServeToIrsSequence()}
                 >
                   <FontAwesomeIcon icon={['far', 'clock']} />
                   Serve to IRS
@@ -418,13 +418,13 @@ DocumentDetail.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   caseHelper: PropTypes.object,
+  clickServeToIrsSequence: PropTypes.func,
   document: PropTypes.object,
   helper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
   showModal: PropTypes.bool,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
-  toggleShowModal: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
   updateCurrentTabSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
@@ -437,13 +437,13 @@ export default connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     document: state.extractedDocument,
     helper: state.documentDetailHelper,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     showModal: state.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
-    toggleShowModal: sequences.toggleShowModalSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
