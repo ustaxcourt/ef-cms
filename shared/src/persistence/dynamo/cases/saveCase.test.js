@@ -88,4 +88,21 @@ describe('saveCase', () => {
     );
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
   });
+
+  it('creates a docket number mapping if this is the first time a case was created', async () => {
+    client.get.resolves(null);
+    await saveCase({
+      caseToSave: {
+        caseId: '123',
+        userId: 'taxpayer',
+        status: 'General',
+        docketNumber: '101-18',
+      },
+      applicationContext,
+    });
+    expect(client.put.getCall(0).args[0].Item.pk).to.equal('taxpayer|case');
+    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(1).args[0].Item.pk).to.equal('101-18|case');
+    expect(client.put.getCall(1).args[0].Item.sk).to.equal('123');
+  });
 });
