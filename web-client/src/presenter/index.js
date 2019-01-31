@@ -4,6 +4,7 @@ import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
 import clearDocumentSequence from './sequences/clearDocumentSequence';
 import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
 import dismissAlertSequence from './sequences/dismissAlertSequence';
+import dismissModalSequence from './sequences/dismissModalSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
@@ -33,7 +34,6 @@ import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
-import toggleShowModalSequence from './sequences/toggleShowModalSequence';
 import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
 import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
 import unidentifiedUserErrorSequence from './sequences/unidentifiedUserErrorSequence';
@@ -70,6 +70,7 @@ export default {
     clearDocumentSequence,
     clickServeToIrsSequence,
     dismissAlertSequence,
+    dismissModalSequence,
     getTrialCitiesSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -98,7 +99,6 @@ export default {
     toggleCaseDifferenceSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
-    toggleShowModalSequence,
     toggleUsaBannerDetailsSequence,
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
