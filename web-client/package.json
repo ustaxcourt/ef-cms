@@ -12,6 +12,7 @@
     "lint": "eslint ./src && stylelint ./src/**/*.scss",
     "test": "jest ./**/tests/*.test.js",
     "test:pa11y": "pa11y-ci --config pa11y-ci.config.json",
+    "print:success": "../wait-until.sh http://localhost:1234 && echo 'Build successful. You can access the site at http://localhost:1234/log-in'",
     "start": "npm run dev",
     "docker:init": "./docker-init.sh",
     "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge"
