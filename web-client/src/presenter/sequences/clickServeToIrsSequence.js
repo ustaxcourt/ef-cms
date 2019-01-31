@@ -1,4 +1,4 @@
-import { toggle } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
 import clearAlerts from '../actions/clearAlertsAction';
@@ -11,7 +11,7 @@ export default [
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
   {
-    success: [toggle(state.showModal)],
+    success: [set(state.showModal, 'ServeToIrsModalDialog')],
     error: [setValidationAlertErrorsAction],
   },
 ];
