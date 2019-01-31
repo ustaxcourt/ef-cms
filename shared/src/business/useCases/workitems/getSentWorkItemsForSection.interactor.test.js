@@ -1,8 +1,8 @@
 const {
-  getCompletedWorkItemsForSection,
-} = require('./getCompletedWorkItemsForSection.interactor');
+  getSentWorkItemsForSection,
+} = require('./getSentWorkItemsForSection.interactor');
 
-describe('getCompletedWorkItemsForSection', () => {
+describe('getSentWorkItemsForSection', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
     const applicationContext = {
       getCurrentUser: () => ({
@@ -14,7 +14,7 @@ describe('getCompletedWorkItemsForSection', () => {
 
     let error;
     try {
-      await getCompletedWorkItemsForSection({
+      await getSentWorkItemsForSection({
         applicationContext,
       });
     } catch (err) {
@@ -30,7 +30,7 @@ describe('getCompletedWorkItemsForSection', () => {
         name: 'Tax Payer',
       }),
       getPersistenceGateway: () => ({
-        getCompletedWorkItemsForSection: () => [
+        getSentWorkItemsForSection: () => [
           {
             workItemId: 'abc',
           },
@@ -39,7 +39,7 @@ describe('getCompletedWorkItemsForSection', () => {
       environment: { stage: 'local' },
     };
 
-    const results = await getCompletedWorkItemsForSection({
+    const results = await getSentWorkItemsForSection({
       applicationContext,
     });
 

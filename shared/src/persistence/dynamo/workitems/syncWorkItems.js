@@ -66,12 +66,41 @@ exports.syncWorkItems = async ({
           item: {
             workItemId: existing.workItemId,
           },
-          type: 'completedWorkItem',
+          type: 'sentWorkItem',
         });
       }
 
       if (caseToSave.status !== currentCaseState.status) {
         workItem.caseStatus = caseToSave.status;
+        if (
+          caseToSave.status === 'Batched for IRS' &&
+          workItem.isInitializeCase
+        ) {
+          const batchedMessage = workItem.messages.find(
+            message => message.message === 'Petition batched for IRS',
+          );
+          const { userId, createdAt } = batchedMessage;
+
+          await persistence.createSortMappingRecord({
+            applicationContext,
+            pkId: userId,
+            skId: createdAt,
+            item: {
+              workItemId: existing.workItemId,
+            },
+            type: 'sentWorkItem',
+          });
+
+          await persistence.createSortMappingRecord({
+            applicationContext,
+            pkId: existing.section,
+            skId: createdAt,
+            item: {
+              workItemId: existing.workItemId,
+            },
+            type: 'sentWorkItem',
+          });
+        }
         await exports.updateWorkItem({
           applicationContext,
           workItemToSave: workItem,
