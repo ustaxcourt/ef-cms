@@ -4,10 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.getCompletedWorkItemsForSection = async ({
-  section,
-  applicationContext,
-}) => {
+exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user.userId, WORKITEM)) {
@@ -18,8 +15,8 @@ exports.getCompletedWorkItemsForSection = async ({
 
   const workItems = await applicationContext
     .getPersistenceGateway()
-    .getCompletedWorkItemsForSection({
-      section,
+    .getSentWorkItemsForUser({
+      userId: user.userId,
       applicationContext,
     });
 

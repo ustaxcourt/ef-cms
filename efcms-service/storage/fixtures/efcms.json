@@ -1,4 +1,4 @@
-[
+[[
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "101-18|case"
@@ -318,12 +318,12 @@
     "pk": "docketclerk|workItem"
   },
   {
-    "pk": "docket|completedWorkItem",
+    "pk": "docket|sentWorkItem",
     "sk": "2019-01-30T00:00:00Z",
     "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344"
   },
   {
-    "pk": "docketclerk|completedWorkItem",
+    "pk": "docketclerk|sentWorkItem",
     "sk": "2019-01-30T00:00:00Z",
     "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344"
   },
@@ -427,4 +427,4 @@
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "8eef49b4-9d40-4773-84ab-49e1e59e49cd|case"
   }
-]
+]]
