@@ -17,7 +17,7 @@ class StartCaseCancelModalDialog extends ModalDialog {
 
 export default connect(
   {
-    cancelSequence: sequences.startACaseToggleCancelSequence,
+    cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.startACaseConfirmCancelSequence,
   },
   StartCaseCancelModalDialog,
