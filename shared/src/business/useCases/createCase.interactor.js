@@ -1,5 +1,6 @@
 const Case = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
+const DocketRecord = require('../entities/DocketRecord');
 const Document = require('../entities/Document');
 const Message = require('../entities/Message');
 const { capitalize } = require('lodash');
@@ -48,6 +49,15 @@ exports.createCase = async ({
     ],
     docketNumber,
   });
+
+  caseToAdd.addDocketRecord(
+    new DocketRecord({
+      filingDate: caseToAdd.createdAt,
+      description: `Request for Place of Trial at ${
+        caseToAdd.preferredTrialCity
+      }`,
+    }),
+  );
 
   const documentEntity = new Document({
     documentId: petitionFileId,

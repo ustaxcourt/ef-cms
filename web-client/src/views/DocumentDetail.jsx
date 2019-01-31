@@ -14,6 +14,7 @@ class DocumentDetail extends React.Component {
     const {
       baseUrl,
       caseDetail,
+      caseHelper,
       document,
       setWorkItemActionSequence,
       showModal,
@@ -106,15 +107,17 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            <div className="usa-width-one-half">
-              <button
-                className="serve-to-irs"
-                onClick={() => toggleShowModal()}
-              >
-                <FontAwesomeIcon icon={['far', 'clock']} />
-                Serve to IRS
-              </button>
-            </div>
+            {caseHelper.canServeToIRS && document.isPetition && (
+              <div className="usa-width-one-half">
+                <button
+                  className="serve-to-irs"
+                  onClick={() => toggleShowModal()}
+                >
+                  <FontAwesomeIcon icon={['far', 'clock']} />
+                  Serve to IRS
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="usa-grid-full">
@@ -414,6 +417,7 @@ class DocumentDetail extends React.Component {
 DocumentDetail.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
+  caseHelper: PropTypes.object,
   document: PropTypes.object,
   helper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
@@ -432,6 +436,7 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
+    caseHelper: state.caseDetailHelper,
     document: state.extractedDocument,
     helper: state.documentDetailHelper,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
