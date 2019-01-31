@@ -210,6 +210,24 @@ exports.createMappingRecord = async ({
   });
 };
 
+exports.createSortMappingRecord = async ({
+  applicationContext,
+  pkId,
+  skId,
+  item,
+  type,
+}) => {
+  return client.put({
+    applicationContext,
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${pkId}|${type}`,
+      sk: skId,
+      ...item,
+    },
+  });
+};
+
 const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
   if (isAuthorizedForWorkItems) return casesToModify;
   if (!casesToModify) return casesToModify;
