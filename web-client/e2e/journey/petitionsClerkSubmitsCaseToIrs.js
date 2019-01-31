@@ -5,12 +5,26 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
+      value: '2050',
+    });
+    await test.runSequence('autoSaveCaseSequence');
+
+    await test.runSequence('clickServeToIrsSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      irsNoticeDate:
+        'The IRS notice date is in the future. Please enter a valid date.',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsYear',
       value: '2017',
     });
     await test.runSequence('autoSaveCaseSequence');
-    await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
+    await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
+
+    await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
     //check that save occurred
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
