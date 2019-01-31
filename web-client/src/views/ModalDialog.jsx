@@ -33,8 +33,7 @@ class ModalDialog extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log(' - componentDidUpdate');
-    // this.focusModal();
+    this.focusModal();
   }
 
   focusModal() {
