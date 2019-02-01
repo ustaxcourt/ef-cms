@@ -13,7 +13,7 @@ custom:
   prune:
     automatic: true
     number: 3
-    
+
   serverless-offline:
     host: 0.0.0.0
 
@@ -96,7 +96,7 @@ custom:
             respondent:
               type: string
               description: the respondent who is associated with the case
-            irsSendDate: 
+            irsSendDate:
               type: string
               description: the date the case was sent to the IRS
             payGovId:
@@ -110,7 +110,7 @@ custom:
               description: the status of the case
             petitioners:
               type: array
-              items: 
+              items:
                 type: object
                 properties:
                   userId:
@@ -129,7 +129,7 @@ custom:
                     items:
                       type: object
               description: array of rawDocument ids and types associated with the case
-            
+
       - name: 'document'
         description: 'a document response'
         contentType: 'application/json'
@@ -145,10 +145,10 @@ custom:
             userId:
               type: string
               description: id of user who created the document
-            filedBy: 
+            filedBy:
               type: boolean
               description: the user name who filed the document
-            validated: 
+            validated:
               type: boolean
               description: if the document has been validated
             reviewDate:
@@ -200,7 +200,7 @@ custom:
             caseId:
               type: string
               description: the case id
-            document: 
+            document:
               type: object
               properties:
                 documentId:
@@ -561,6 +561,29 @@ functions:
               - statusCode: '200'
                 responseBody:
                   description: 'updated case including send date'
+                responseModels:
+                  'application/json': case
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'
+
+  recallFromIRS:
+    handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.delete
+    events:
+      - http:
+          path: v1/cases/{caseId}/irsPetitionPackage
+          method: delete
+          cors: true
+          documentation:
+            summary: deletes the petition on the case from the holding queue
+            tags:
+              - cases
+            description: >
+              Deletes the petition on the case from the holding queue.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'case status set to recalled and petition workitem updated'
                 responseModels:
                   'application/json': case
               - statusCode: '422'
