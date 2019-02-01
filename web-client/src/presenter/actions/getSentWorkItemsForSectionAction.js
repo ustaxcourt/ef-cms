@@ -5,7 +5,6 @@ export default async ({ applicationContext }) => {
     .getSentWorkItemsForSection({
       applicationContext,
       section: user.section,
-      userId: user.userId,
     });
   return { sectionWorkItems };
 };
