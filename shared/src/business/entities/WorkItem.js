@@ -110,7 +110,7 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.assignToUser({
     assigneeId: user.userId,
-    role: 'petitionsclerk',
+    role: user.role,
     assigneeName: user.name,
   });
   this.addMessage(
