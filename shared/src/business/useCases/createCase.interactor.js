@@ -73,6 +73,7 @@ exports.createCase = async ({
       ...documentEntity.toRawObject(),
       createdAt: documentEntity.createdAt,
     },
+    isInitializeCase: true,
     caseStatus: caseToAdd.status,
     assigneeId: null,
     docketNumber: caseToAdd.docketNumber,

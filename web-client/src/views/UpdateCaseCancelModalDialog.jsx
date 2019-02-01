@@ -8,7 +8,7 @@ class UpdateCaseCancelModalDialog extends ModalDialog {
     this.modal = {
       title: 'Are you sure you want to exit?',
       message:
-        'You have unsaved changes. If you exit this screen withotus aving, your changes will be lost.',
+        'You have unsaved changes. If you exit this screen without saving, your changes will be lost.',
       confirmLabel: 'Yes, exit without saving',
       cancelLabel: 'No, take me back',
       classNames: '',
@@ -18,7 +18,7 @@ class UpdateCaseCancelModalDialog extends ModalDialog {
 
 export default connect(
   {
-    cancelSequence: sequences.startACaseToggleCancelSequence,
+    cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.startACaseConfirmCancelSequence,
   },
   UpdateCaseCancelModalDialog,

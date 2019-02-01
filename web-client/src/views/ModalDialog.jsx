@@ -26,6 +26,7 @@ class ModalDialog extends React.Component {
   }
   componentDidMount() {
     document.addEventListener('keydown', this.keydownTriggered, false);
+    this.focusModal();
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keydownTriggered, false);
@@ -36,19 +37,19 @@ class ModalDialog extends React.Component {
   }
 
   focusModal() {
-    const modalHeader = document.querySelector('.modal-dialog .title');
+    const modalHeader = document.querySelector('.modal-header .title');
     modalHeader.focus();
   }
 
   render() {
     const { modal } = this;
-
     return (
       <div className="modal-screen" onClick={this.runCancelSequence}>
         <div
           className={`modal-dialog ${modal.classNames}`}
-          aria-live="assertive"
-          role="alertdialog"
+          data-aria-live="assertive"
+          aria-modal="true"
+          role="dialog"
           onClick={event => event.stopPropagation()}
         >
           <div className="modal-header">

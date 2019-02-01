@@ -25,7 +25,7 @@ export default {
   mobileMenu: {
     isVisible: false,
   },
-  showModal: false,
+  showModal: '',
   paymentInfo: {
     showDetails: false,
   },

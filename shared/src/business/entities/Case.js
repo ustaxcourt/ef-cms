@@ -13,7 +13,12 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const STATUSES = ['General', 'Batched for IRS', 'New'];
+const statusMap = {
+  general: 'General',
+  batchedForIRS: 'Batched for IRS',
+  new: 'New',
+};
+const STATUSES = [statusMap.general, statusMap.batchedForIRS, statusMap.new];
 
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
@@ -292,7 +297,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  * @returns {Case}
  */
 Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = 'Batched for IRS';
+  this.status = statusMap.batchedForIRS;
   return this;
 };
 

@@ -6,11 +6,11 @@ const {
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
 const {
-  getCompletedWorkItemsForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getCompletedWorkItemsForUser');
+  getSentWorkItemsForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
-  getCompletedWorkItemsForSection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getCompletedWorkItemsForSection');
+  getSentWorkItemsForSection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
   getWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
@@ -62,8 +62,8 @@ const {
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
-  getCompletedWorkItemsForUser: getCompletedWorkItemsForUserUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getCompletedWorkItemsForUser.interactor');
+  getSentWorkItemsForUser: getSentWorkItemsForUserUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUser.interactor');
 const {
   getCase,
 } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
@@ -107,8 +107,8 @@ const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 const { 
-  getCompletedWorkItemsForSection: getCompletedWorkItemsForSectionUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getCompletedWorkItemsForSection.interactor');
+  getSentWorkItemsForSection: getSentWorkItemsForSectionUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
 const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
@@ -181,8 +181,8 @@ module.exports = ({ userId } = {}) => {
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
-        getCompletedWorkItemsForUser,
-        getCompletedWorkItemsForSection,
+        getSentWorkItemsForUser,
+        getSentWorkItemsForSection,
 
         // cases
         getCasesByStatus,
@@ -247,11 +247,11 @@ module.exports = ({ userId } = {}) => {
       const section = (event.queryStringParameters || {}).section;
       const completed = (event.queryStringParameters || {}).completed;
       if (section && completed) {
-        return getCompletedWorkItemsForSectionUC;
+        return getSentWorkItemsForSectionUC;
       } else if (section) {
         return getWorkItemsBySection;
       } else if (completed) {
-        return getCompletedWorkItemsForUserUC;
+        return getSentWorkItemsForUserUC;
       } else {
         // TODO: this is not an calling an interactor, which is BAD
         return getWorkItemsForUser;
