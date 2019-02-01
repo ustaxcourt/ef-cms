@@ -40,9 +40,10 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   const petitionDocument = caseEntity.documents.find(
     document => document.documentType === Case.documentTypes.petitionFile,
   );
-  petitionDocument.workItems.forEach(workItem =>
-    workItem.setAsCompleted(userId),
+  const initializeCaseWorkItem = petitionDocument.workItems.find(
+    workItem => workItem.isInitializeCase,
   );
+  initializeCaseWorkItem.assignToIRSBatchSystem({ userId });
   const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
   caseEntity.validateWithError(invalidEntityError);
 

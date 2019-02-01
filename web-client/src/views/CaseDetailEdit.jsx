@@ -49,7 +49,9 @@ export default connect(
           unsetFormSaveSuccessSequence();
         }}
       >
-        {showModal && <UpdateCaseCancelModalDialog />}
+        {showModal === 'UpdateCaseCancelModalDialog' && (
+          <UpdateCaseCancelModalDialog />
+        )}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
           <span className="label">Type of Notice</span>

@@ -17,6 +17,11 @@ export default test => {
       })),
     ).toMatchObject([
       {
+        assigneeId: 'irsBatchSystem',
+        message: 'Petition batched for IRS',
+        sentBy: 'petitionsclerk1',
+      },
+      {
         assigneeId: null,
         message: 'A Answer filed by Respondent is ready for review.',
         sentBy: 'Test Respondent',

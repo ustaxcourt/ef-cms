@@ -71,6 +71,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    isInitializeCase: joi.boolean().optional(),
   }),
   function() {
     return Message.validateCollection(this.messages);
@@ -89,6 +90,21 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
     section: getSectionForRole(role),
   });
   return this;
+};
+
+WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
+  this.assignToUser({
+    assigneeId: 'irsBatchSystem',
+    role: 'irsBatchSystem',
+    assigneeName: 'IRS Holding Queue',
+  });
+  this.addMessage(
+    new Message({
+      message: 'Petition batched for IRS',
+      sentBy: userId,
+      userId: userId,
+    }),
+  );
 };
 
 WorkItem.prototype.setAsCompleted = function(userId) {
