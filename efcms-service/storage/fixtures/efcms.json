@@ -13,7 +13,36 @@
         "documentType": "Petition",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
+        "workItems": [
+          {
+            "createdAt": "2018-12-27T18:22:57.418Z",
+            "assigneeName": "IRSBatchSystem",
+            "caseStatus": "Batched for IRS",
+            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+            "document": {
+              "documentType": "Petition",
+              "createdAt": "2018-12-27T18:22:57.418Z",
+              "documentId": "61e96924-ce65-49f4-bebf-780bfc148520"
+            },
+            "messages": [
+              {
+                "createdAt": "2018-12-27T18:22:57.418Z",
+                "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
+                "message": "Petition ready for review",
+                "userId": "taxpayer",
+                "sentBy": "Petitioner"
+              }
+            ],
+            "section": "petitions",
+            "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
+            "assigneeId": null,
+            "docketNumber": "102-18",
+            "docketNumberSuffix": "SL",
+            "sentBy": "petitioner",
+            "updatedAt": "2018-12-27T18:06:02.968Z",
+            "isInitializeCase": true
+          }
+        ]
       },
       {
         "createdAt": "2018-12-27T18:22:57.418Z",
