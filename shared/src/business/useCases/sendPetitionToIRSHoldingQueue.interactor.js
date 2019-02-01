@@ -62,5 +62,4 @@ exports.sendPetitionToIRSHoldingQueue = async ({
       `Petition workItem for Case ${caseId} was not found`,
     );
   }
-  return;
 };

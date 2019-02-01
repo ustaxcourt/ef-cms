@@ -13,7 +13,6 @@ exports.delete = event =>
     const applicationContext = createApplicationContext({ userId });
     return applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
       caseId: event.pathParameters.caseId,
-      userId,
       applicationContext,
     });
   });
