@@ -43,6 +43,9 @@ export default test => {
     // back on the dashboard
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueue.my.inbox.0.status')).toEqual('Recalled');
+    expect(test.getState('workQueue.my.inbox.0.messages.0')).toEqual(
+      'Assigned to Petitions Clerk',
+    );
     // goto the first work item in the my queue inbox, the one we just recalled
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
@@ -56,9 +59,7 @@ export default test => {
     expect(helperRecalled.showSendToIrsButton).toEqual(true);
     expect(helperRecalled.showRecallButton).toEqual(false);
     // assign to another petitionsclerk
-    const workItem = test
-      .getState('workQueue.my.inbox')
-      .find(workItem => workItem.caseStatus === 'Recalled');
+    const workItem = test.getState('workQueue.my.inbox.0');
     await test.runSequence('selectWorkItemSequence', {
       workItem: workItem,
     });
@@ -67,5 +68,9 @@ export default test => {
       assigneeName: 'Test Petitionsclerk XX',
     });
     await test.runSequence('assignSelectedWorkItemsSequence');
+    // no longer in our inbox!
+    expect(test.getState('workQueue.my.inbox.0.docketNumber')).not.toBe(
+      test.docketNumber,
+    );
   });
 };
