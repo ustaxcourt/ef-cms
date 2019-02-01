@@ -21,6 +21,7 @@ describe('syncWorkItems', function() {
     sinon.stub(sync, 'reassignWorkItem').resolves(null);
     sinon.stub(sync, 'updateWorkItem').resolves(null);
     sinon.stub(persistence, 'createSortMappingRecord').resolves(null);
+    sinon.stub(persistence, 'deleteMappingRecord').resolves(null);
   });
 
   afterEach(() => {
@@ -29,6 +30,7 @@ describe('syncWorkItems', function() {
     sync.reassignWorkItem.restore();
     sync.updateWorkItem.restore();
     persistence.createSortMappingRecord.restore();
+    persistence.deleteMappingRecord.restore();
   });
 
   it('creates a new work item record for the work item and the mapping record for the assignee when a new work item is added to a case', async () => {
@@ -265,5 +267,69 @@ describe('syncWorkItems', function() {
     expect(
       persistence.createSortMappingRecord.getCall(0).args[0].skId,
     ).to.equal('123');
+  });
+
+  it('deletes the mapping records for the sent box items when the status changes to Recalled', async () => {
+    await syncWorkItems({
+      applicationContext,
+      caseToSave: {
+        status: 'Recalled',
+        documents: [
+          {
+            workItems: [
+              {
+                completedAt: '123',
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                section: 'petitions',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      currentCaseState: {
+        status: 'New',
+        documents: [
+          {
+            workItems: [
+              {
+                completedAt: null,
+                workItemId: 'abc',
+                assigneeId: 'rick',
+                section: 'irsBatchSection',
+                isInitializeCase: true,
+                messages: [
+                  {
+                    message: 'Petition batched for IRS',
+                    userId: 'petitionsclerk1',
+                    createdAt: '123',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+    expect(persistence.deleteMappingRecord.getCall(0).args[0].pkId).to.equal(
+      'petitionsclerk1',
+    );
+    expect(persistence.deleteMappingRecord.getCall(0).args[0].skId).to.equal(
+      '123',
+    );
+    expect(persistence.deleteMappingRecord.getCall(1).args[0].pkId).to.equal(
+      'petitions',
+    );
+    expect(persistence.deleteMappingRecord.getCall(1).args[0].skId).to.equal(
+      '123',
+    );
   });
 });
