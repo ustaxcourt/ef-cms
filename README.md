@@ -11,6 +11,7 @@ This is a React-based Javascript application. It’s housed in a [monorepo](http
 * The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
 * The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
 * The deployment process is documented in [`SETUP.md`](SETUP.md).
+* The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
 
 ## Building everything
 
