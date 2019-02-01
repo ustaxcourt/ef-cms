@@ -6,8 +6,8 @@
 .work-queue-tab {
   display: inline-block;
   padding: 1rem 2rem;
-  border-right: 1px solid $color-gray-lighter;
   margin: 0;
+  border-right: 1px solid $color-gray-lighter;
   background-color: $color-white;
   box-shadow: 0 2px 0 $color-white;
 }
@@ -25,8 +25,8 @@
 
     button {
       padding-bottom: 10px;
-      border-bottom: 3px $color-white solid;
       margin: 0 45px 0 0;
+      border-bottom: 3px $color-white solid;
       border-radius: 0;
       cursor: pointer;
       font-family: $font-serif;
