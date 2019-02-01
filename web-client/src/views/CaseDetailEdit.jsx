@@ -189,9 +189,7 @@ export default connect(
                   id="amount"
                   name="amount"
                   type="text"
-                  value={
-                    Number(yearAmount.amount).toLocaleString('en-US') || ''
-                  }
+                  value={Number(yearAmount.amount || 0).toLocaleString('en-US')}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
