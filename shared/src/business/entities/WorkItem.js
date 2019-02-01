@@ -107,6 +107,21 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
   );
 };
 
+WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
+  this.assignToUser({
+    assigneeId: user.userId,
+    role: 'petitionsclerk',
+    assigneeName: user.name,
+  });
+  this.addMessage(
+    new Message({
+      message: 'Petition recalled from IRS Holding Queue',
+      sentBy: user.userId,
+      userId: user.userId,
+    }),
+  );
+};
+
 WorkItem.prototype.setAsCompleted = function(userId) {
   this.completedAt = new Date().toISOString();
 
