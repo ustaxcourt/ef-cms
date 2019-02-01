@@ -22,8 +22,7 @@ import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDeta
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
-import petitionsClerkViewsIrsHoldingQueue from './journey/petitionsClerkViewsIrsHoldingQueue';
-import petitionsClerkEditCaseInIrsHoldingQueue from './journey/petitionsClerkEditCaseInIrsHoldingQueue';
+import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -103,8 +102,7 @@ describe('Case journey', async () => {
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  petitionsClerkViewsIrsHoldingQueue(test);
-  petitionsClerkEditCaseInIrsHoldingQueue(test);
+  petitionsClerkIrsHoldingQueue(test);
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
