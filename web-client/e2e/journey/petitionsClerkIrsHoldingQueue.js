@@ -5,12 +5,29 @@ import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
 export default test => {
   return xit('Petitions clerk views IRS Holding Queue', async () => {
     // go to the petitions section work queue
-    await test.runSequence('gotoDashboardSequence');
+    await test.runSequence('gotoDashboardSequence'); //runs getWorkItemsForSection then set
+    //verify that individuals workitems for the inbox are in state
+
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
+
     await test.runSequence('switchWorkQueueSequence', {
+      queue: 'section',
+      box: 'inbox',
+    });
+
+    //verify that the workitems for the section inbox are in state
+
+    //click on Sent/Outbox tab for the section
+    await test.runSequence('switchWorkQueueSequence', {
+      //switched from inbox to outbox
       queue: 'section',
       box: 'outbox',
     });
+    //verify Sent tab is shown
+    //verify that the recalled and general
+
+    //verify that the section workitems are in state
+
     expect(test.getState('workQueueToDisplay')).toEqual('section');
     // TODO: verify that nothing in the outbox is over 7 days old, we'll need over a week of seed data for this
     expect(test.getState('workQueue.section.outbox').length).toBeGreaterThan(0);

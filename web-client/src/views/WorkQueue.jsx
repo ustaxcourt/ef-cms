@@ -27,7 +27,8 @@ export default connect(
                 aria-selected={workQueueHelper.showIndividualWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
-                    workQueueToDisplay: 'individual',
+                    queue: 'my',
+                    box: 'inbox',
                   })
                 }
               >
@@ -44,7 +45,8 @@ export default connect(
                 aria-selected={workQueueHelper.showSectionWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
-                    workQueueToDisplay: 'section',
+                    queue: 'section',
+                    box: 'inbox',
                   })
                 }
               >
