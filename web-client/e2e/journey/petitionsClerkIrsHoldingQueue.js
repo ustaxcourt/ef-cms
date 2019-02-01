@@ -13,9 +13,7 @@ export default test => {
     });
     expect(test.getState('workQueueToDisplay')).toEqual('section');
     // TODO: verify that nothing in the outbox is over 7 days old, we'll need over a week of seed data for this
-    expect(
-      test.getState('workQueue.sectionQueue.outbox').length,
-    ).toBeGreaterThan(0);
+    expect(test.getState('workQueue.section.outbox').length).toBeGreaterThan(0);
     // the first item in the outbox should be the Petition batched for IRS from the previous test
     expect(test.getState('workQueue.section.outbox.0.status')).toEqual(
       'Batched for IRS',
@@ -44,9 +42,7 @@ export default test => {
     await test.runSequence('submitRecallPetitionSequence');
     // back on the dashboard
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
-    expect(test.getState('workQueue.myQueue.inbox.0.status')).toEqual(
-      'Recalled',
-    );
+    expect(test.getState('workQueue.my.inbox.0.status')).toEqual('Recalled');
     // goto the first work item in the my queue inbox, the one we just recalled
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
