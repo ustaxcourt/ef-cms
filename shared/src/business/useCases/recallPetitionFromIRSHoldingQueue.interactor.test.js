@@ -1,7 +1,7 @@
 const assert = require('assert');
 const {
-  sendPetitionToIRSHoldingQueue,
-} = require('./sendPetitionToIRSHoldingQueue.interactor');
+  recallPetitionFromIRSHoldingQueue,
+} = require('./recallPetitionFromIRSHoldingQueue.interactor');
 const { getCase } = require('./getCase.interactor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -39,7 +39,8 @@ const MOCK_WORK_ITEMS = [
     isInitializeCase: true,
   },
 ];
-describe('Send petition to IRS Holding Queue', () => {
+
+describe('Recall petition from IRS Holding Queue', () => {
   let applicationContext;
   let mockCase;
 
@@ -61,20 +62,23 @@ describe('Send petition to IRS Holding Queue', () => {
     };
   });
 
-  it('sets the case status to Batched for IRS', async () => {
-    const result = await sendPetitionToIRSHoldingQueue({
+  it('sets the case status to recalled', async () => {
+    const result = await recallPetitionFromIRSHoldingQueue({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      userId: 'petitionsclerk',
       applicationContext,
     });
 
-    expect(result.status).toEqual('Batched for IRS');
+    expect(result.status).toEqual('Recalled');
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
     let error;
+    applicationContext.getCurrentUser = () => {
+      return new User({ userId: 'taxpayer' });
+    };
+
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueue({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'someuser',
         applicationContext,
@@ -83,7 +87,7 @@ describe('Send petition to IRS Holding Queue', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'Unauthorized for send to IRS Holding Queue',
+      'Unauthorized for recall from IRS Holding Queue',
     );
   });
 
@@ -97,10 +101,13 @@ describe('Send petition to IRS Holding Queue', () => {
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk' });
+      },
     };
     let error;
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueue({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         userId: 'petitionsclerk',
         applicationContext,
@@ -118,15 +125,18 @@ describe('Send petition to IRS Holding Queue', () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
+          getCaseByCaseId: () => Promise.resolve(omit(mockCase, 'documents')),
         };
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk' });
+      },
     };
     let error;
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueue({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',
         applicationContext,

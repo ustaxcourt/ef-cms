@@ -17,8 +17,14 @@ const statusMap = {
   general: 'General',
   batchedForIRS: 'Batched for IRS',
   new: 'New',
+  recalled: 'Recalled',
 };
-const STATUSES = [statusMap.general, statusMap.batchedForIRS, statusMap.new];
+const STATUSES = [
+  statusMap.general,
+  statusMap.batchedForIRS,
+  statusMap.new,
+  statusMap.recalled,
+];
 
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
@@ -298,6 +304,11 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  */
 Case.prototype.sendToIRSHoldingQueue = function() {
   this.status = statusMap.batchedForIRS;
+  return this;
+};
+
+Case.prototype.recallFromIRSHoldingQueue = function() {
+  this.status = statusMap.recalled;
   return this;
 };
 

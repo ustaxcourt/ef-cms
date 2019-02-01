@@ -13,17 +13,18 @@ const {
 /**
  *
  * @param caseId
- * @param userId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sendPetitionToIRSHoldingQueue = async ({
+exports.recallPetitionFromIRSHoldingQueue = async ({
   caseId,
-  userId,
   applicationContext,
 }) => {
-  if (!isAuthorized(userId, UPDATE_CASE)) {
-    throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user.userId, UPDATE_CASE)) {
+    throw new UnauthorizedError(
+      'Unauthorized for recall from IRS Holding Queue',
+    );
   }
 
   const caseRecord = await applicationContext
@@ -40,18 +41,20 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   const petitionDocument = caseEntity.documents.find(
     document => document.documentType === Case.documentTypes.petitionFile,
   );
+
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,
   );
-
   if (initializeCaseWorkItem) {
-    initializeCaseWorkItem.assignToIRSBatchSystem({ userId });
+    initializeCaseWorkItem.recallFromIRSBatchSystem({ user });
     const invalidEntityError = new InvalidEntityError(
-      'Invalid for send to IRS',
+      'Invalid for recall from IRS',
     );
     caseEntity.validateWithError(invalidEntityError);
 
-    caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
+    caseEntity
+      .recallFromIRSHoldingQueue()
+      .validateWithError(invalidEntityError);
 
     return await applicationContext.getPersistenceGateway().saveCase({
       caseToSave: caseEntity.toRawObject(),

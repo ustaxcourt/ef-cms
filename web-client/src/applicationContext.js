@@ -30,6 +30,7 @@ import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWor
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 
+import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
@@ -74,6 +75,7 @@ const allUseCases = {
   getWorkItem,
   getWorkItems,
   getWorkItemsBySection,
+  recallPetitionFromIRSHoldingQueue,
   sendPetitionToIRSHoldingQueue,
   updateCase,
   updateWorkItem,

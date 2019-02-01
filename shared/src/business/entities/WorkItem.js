@@ -8,7 +8,7 @@ const uuidVersions = {
 };
 const uuid = require('uuid');
 const Message = require('./Message');
-const { getSectionForRole } = require('./WorkQueue');
+const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 
 /**
  * constructor
@@ -103,6 +103,22 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
       message: 'Petition batched for IRS',
       sentBy: userId,
       userId: userId,
+    }),
+  );
+};
+
+WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
+  this.assignToUser({
+    assigneeId: user.userId,
+    role: user.role,
+    assigneeName: user.name,
+  });
+  this.section = PETITIONS_SECTION;
+  this.addMessage(
+    new Message({
+      message: 'Petition recalled from IRS Holding Queue',
+      sentBy: user.userId,
+      userId: user.userId,
     }),
   );
 };
