@@ -31,6 +31,7 @@ export default test => {
     expect(test.getState('alertSuccess.title')).toEqual(
       'The petition is now in the IRS Holding Queue',
     );
+    expect(test.getState('alertSuccess.message')).toBeUndefined();
     expect(test.getState('caseDetailErrors')).toEqual({});
   });
 };
