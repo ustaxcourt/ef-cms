@@ -75,7 +75,7 @@ describe('Recall petition from IRS Holding Queue', () => {
     let error;
     applicationContext.getCurrentUser = () => {
       return new User({ userId: 'taxpayer' });
-    }
+    };
 
     try {
       await recallPetitionFromIRSHoldingQueue({
