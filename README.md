@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
 
 <a href="docs/images/screenshot_new_petition.png"><img src="docs/images/screenshot_new_petition.png" width="32%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot_petitioner.png"><img src="docs/images/screenshot_petitioner.png" width="32%" style="float: left;" /></a>
@@ -16,6 +16,12 @@ This is a React-based Javascript application. It’s housed in a [monorepo](http
 * The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
 * The deployment process is documented in [`SETUP.md`](SETUP.md).
 * The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
+* A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
+* Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
+
+## Backlog
+
+The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
 
 ## Building everything
 
