@@ -8,7 +8,7 @@ const uuidVersions = {
 };
 const uuid = require('uuid');
 const Message = require('./Message');
-const { getSectionForRole } = require('./WorkQueue');
+const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 
 /**
  * constructor
@@ -113,6 +113,7 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     role: 'petitionsclerk',
     assigneeName: user.name,
   });
+  this.section = PETITIONS_SECTION;
   this.addMessage(
     new Message({
       message: 'Petition recalled from IRS Holding Queue',
