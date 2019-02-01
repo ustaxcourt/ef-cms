@@ -43,16 +43,24 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,
   );
-  initializeCaseWorkItem.assignToIRSBatchSystem({ userId });
-  const invalidEntityError = new InvalidEntityError('Invalid for send to IRS');
-  caseEntity.validateWithError(invalidEntityError);
 
-  caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
+  if (initializeCaseWorkItem) {
+    initializeCaseWorkItem.assignToIRSBatchSystem({ userId });
+    const invalidEntityError = new InvalidEntityError(
+      'Invalid for send to IRS',
+    );
+    caseEntity.validateWithError(invalidEntityError);
 
-  await applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: caseEntity.toRawObject(),
-    applicationContext,
-  });
+    caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
 
+    return await applicationContext.getPersistenceGateway().saveCase({
+      caseToSave: caseEntity.toRawObject(),
+      applicationContext,
+    });
+  } else {
+    throw new NotFoundError(
+      `Petition workItem for Case ${caseId} was not found`,
+    );
+  }
   return;
 };
