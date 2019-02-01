@@ -73,9 +73,16 @@ Install the following for best results:
 
 ## Using the application with Internet Explorer 11
 
-If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at
-https://get.adobe.com/reader/
-Install as directed. This will permit PDF documents to be viewed in-browser with Internet Explorer 11.
+If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at https://get.adobe.com/reader/. Install as directed. This will permit PDFs to be viewed in-browser with Internet Explorer 11.
+
+## Forked dependencies
+The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repsitories are:
+
+* [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
+* [s3rver](https://github.com/ustaxcourt/s3rver)
+* [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
+
+_If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
 
 ## Contributing
 
