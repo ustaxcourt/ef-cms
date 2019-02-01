@@ -2,6 +2,10 @@
 
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work began in October 2018, and can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
+<a href="docs/images/screenshot_new_petition.png"><img src="docs/images/screenshot_new_petition.png" width="30%" style="float: left;" /></a>
+<a href="docs/images/screenshot_petitioner.png"><img src="docs/images/screenshot_petitioner.png" width="30%" style="float: left;" /></a>
+<a href="docs/images/screenshot_docket_record.png"><img src="docs/images/screenshot_docket_record.png" width="30%" style="float: left;" /></a>
+
 ## Technical overview
 
 This is a React-based Javascript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`efcms-service/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via a Jenkins server, and [that process is documented in `SETUP.md`](SETUP.md).
