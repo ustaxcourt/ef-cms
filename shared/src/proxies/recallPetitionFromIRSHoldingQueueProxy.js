@@ -1,9 +1,8 @@
 exports.sendPetitionToIRSHoldingQueue = async ({
   caseId,
-  userId,
   applicationContext,
 }) => {
-  const userToken = userId; //TODO refactor for jwt
+  const userToken = applicationContext.getCurrentUser().userId; //TODO refactor for jwt
 
   const response = await applicationContext.getHttpClient().delete(
     `${applicationContext.getBaseUrl()}/cases/${caseId}/irsPetitionPackage`,
