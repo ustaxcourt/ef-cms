@@ -112,6 +112,9 @@ const {
 const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
+const {
+  recallPetitionFromIRSHoldingQueue
+} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
 
 const {
   forwardWorkItem
@@ -223,6 +226,7 @@ module.exports = ({ userId } = {}) => {
         createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         assignWorkItems: assignWorkItemsUC,
+        recallPetitionFromIRSHoldingQueue,
       };
     },
     getUpdateCaseInteractorQueryParam: event => {
