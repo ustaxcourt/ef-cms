@@ -86,7 +86,7 @@ Install the following for best results:
 If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at https://get.adobe.com/reader/. Install as directed. This will permit PDFs to be viewed in-browser with Internet Explorer 11.
 
 ## Forked dependencies
-The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repsitories are:
+The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
 
 * [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
 * [s3rver](https://github.com/ustaxcourt/s3rver)
