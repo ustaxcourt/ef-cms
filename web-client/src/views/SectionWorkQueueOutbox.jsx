@@ -1,28 +1,14 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state, sequences } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default connect(
   {
-    assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     sectionWorkQueue: state.formattedSectionWorkQueue,
-    selectAssigneeSequence: sequences.selectAssigneeSequence,
-    selectedWorkItems: state.selectedWorkItems,
-    selectWorkItemSequence: sequences.selectWorkItemSequence,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
-    users: state.users,
-    workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueueOutbox({
-    assignSelectedWorkItemsSequence,
-    sectionWorkQueue,
-    selectAssigneeSequence,
-    selectedWorkItems,
-    selectWorkItemSequence,
-    setFocusedWorkItem,
-    users,
-    workQueueHelper,
-  }) {
+  function SectionWorkQueueOutbox({ sectionWorkQueue, setFocusedWorkItem }) {
     return (
       <table
         className="work-queue"
@@ -31,56 +17,17 @@ export default connect(
       >
         <thead>
           <tr>
-            <th colSpan="2">Select</th>
+            <th colSpan="2" aria-hidden="true">
+              &nbsp;
+            </th>
             <th aria-label="Docket Number">Docket</th>
-            <th>Received</th>
+            <th>Sent</th>
             <th>Document</th>
             <th>Status</th>
             <th>From</th>
             <th>To</th>
           </tr>
         </thead>
-        {workQueueHelper.showSendToBar && (
-          <tbody className="action-bar">
-            <tr>
-              <td
-                colSpan="8"
-                className="action-bar"
-                aria-label="Action bar: choose an assignee."
-                aria-live="polite"
-              >
-                <span className="selected-count">
-                  {selectedWorkItems.length} selected
-                </span>
-                <label htmlFor="options">Send to</label>
-                <select
-                  onChange={event =>
-                    selectAssigneeSequence({
-                      assigneeId: event.target.value,
-                      assigneeName:
-                        event.target.options[event.target.selectedIndex].text,
-                    })
-                  }
-                  name="options"
-                  id="options"
-                >
-                  <option value>- Select -</option>
-                  {users.map(user => (
-                    <option key={user.userId} value={user.userId}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  onClick={() => assignSelectedWorkItemsSequence()}
-                  className="usa-button"
-                >
-                  Send
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        )}
         {sectionWorkQueue.map(item => (
           <tbody
             key={item.workItemId}
@@ -101,25 +48,17 @@ export default connect(
                 />{' '}
               </td>
               <td>
-                <input
-                  id={item.workItemId}
-                  type="checkbox"
-                  onChange={e => {
-                    selectWorkItemSequence({
-                      workItem: item,
-                    });
-                    e.stopPropagation();
-                  }}
-                  checked={item.selected}
-                  aria-label="Select work item"
-                />
-                <label
-                  htmlFor={item.workItemId}
-                  id={`label-${item.workItemId}`}
-                />
+                {item.showBatchedStatusIcon && (
+                  <FontAwesomeIcon
+                    icon={['far', 'clock']}
+                    className="iconStatusBatched"
+                    aria-label={item.caseStatus}
+                    title={item.caseStatus}
+                  />
+                )}
               </td>
               <td>{item.docketNumberWithSuffix}</td>
-              <td>{item.currentMessage.createdAtFormatted}</td>
+              <td>{item.currentMessage.createdAtFormatted} TODO </td>
               <td>
                 <a
                   onClick={e => {

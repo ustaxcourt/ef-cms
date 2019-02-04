@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state, sequences } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default connect(
   {
@@ -17,13 +18,13 @@ export default connect(
         >
           <thead>
             <tr>
-              <th colSpan="2" aria-label="Docket Number">
-                Docket
+              <th colSpan="2" aria-hidden="true">
+                &nbsp;
               </th>
-              <th>Received</th>
+              <th aria-label="Docket Number">Docket</th>
+              <th>Sent</th>
               <th>Document</th>
               <th>Status</th>
-              <th>From</th>
               <th>To</th>
             </tr>
           </thead>
@@ -46,6 +47,16 @@ export default connect(
                     aria-controls={`detail-${item.workItemId}`}
                   />
                 </td>
+                <td>
+                  {item.showBatchedStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['far', 'clock']}
+                      className="iconStatusBatched"
+                      aria-label={item.caseStatus}
+                      title={item.caseStatus}
+                    />
+                  )}
+                </td>
                 <td>{item.docketNumberWithSuffix}</td>
                 <td>{item.currentMessage.createdAtFormatted}</td>
                 <td>
@@ -62,7 +73,6 @@ export default connect(
                   </a>
                 </td>
                 <td>{item.caseStatus}</td>
-                <td>{item.currentMessage.sentBy}</td>
                 <td>{item.assigneeName}</td>
               </tr>
               {item.isFocused && (
@@ -74,9 +84,9 @@ export default connect(
                       aria-disabled="true"
                     />
                   </td>
-                  <td colSpan="2" aria-hidden="true" />
+                  <td colSpan="3" aria-hidden="true" />
                   <td
-                    colSpan="4"
+                    colSpan="3"
                     className="message-detail"
                     aria-label="Message detail"
                     aria-live="polite"
