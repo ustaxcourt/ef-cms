@@ -47,7 +47,7 @@ export default test => {
     // });
     // expect(helperBatched.showCaseDetailsView).toEqual(true);
     // expect(helperBatched.showCaseDetailsEdit).toEqual(false);
-    // expect(helperBatched.showSendToIrsButton).toEqual(false);
+    // expect(helperBatched.showServeToIrsButton).toEqual(false);
     // expect(helperBatched.showRecallButton).toEqual(true);
     //
     // await test.runSequence('clickRecallPetitionSequence');
@@ -73,7 +73,7 @@ export default test => {
     // });
     // expect(helperRecalled.showCaseDetailsView).toEqual(false);
     // expect(helperRecalled.showCaseDetailsEdit).toEqual(true);
-    // expect(helperRecalled.showSendToIrsButton).toEqual(true);
+    // expect(helperRecalled.showServeToIrsButton).toEqual(true);
     // expect(helperRecalled.showRecallButton).toEqual(false);
     // // assign to another petitionsclerk
     // const workItem = test.getState('workQueue.my.inbox.0');
