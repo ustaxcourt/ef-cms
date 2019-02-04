@@ -2,9 +2,9 @@ hr {
   display: block;
   height: 1px;
   padding: 0;
+  margin: 20px 0;
   border: 0;
   border-top: 1px solid $color-gray-light;
-  margin: 20px 0;
 }
 
 .case-status-label {
@@ -119,8 +119,7 @@ iframe {
 
   .usa-accordion-content {
     border: 1px solid $color-primary;
-    box-shadow:
-      0 4px 4px rgba(0, 0, 0, 0.15),
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
   }
 }
