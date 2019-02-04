@@ -5,7 +5,12 @@ import { formattedSectionWorkQueue } from '../../src/presenter/computeds/formatt
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
-    const sectionWorkQueue = test.getState('sectionWorkQueue');
+    await test.runSequence('switchWorkQueueSequence', {
+      queue: 'section',
+      box: 'inbox',
+    });
+
+    const sectionWorkQueue = test.getState('workQueue');
     expect(sectionWorkQueue.length).toBeGreaterThanOrEqual(2);
     const workItem = sectionWorkQueue.find(
       workItem =>

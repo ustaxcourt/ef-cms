@@ -71,7 +71,8 @@
         "wait for #tab-work-queue to be visible",
         "click element #tab-work-queue",
         "wait for #section-work-queue to be visible",
-        "click element #label-af60fe99-37dc-435c-9bdf-24be67769344",
+        "wait for #label-78de1ba3-add3-4329-8372-ce37bda6bc93 to be visible",
+        "click element #label-78de1ba3-add3-4329-8372-ce37bda6bc93",
         "wait for td.action-bar to be visible"
       ]
     },

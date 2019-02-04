@@ -6,7 +6,9 @@ export default get => {
 
   return {
     showSendToBar: selectedWorkItems.length > 0,
-    showSectionWorkQueue: workQueueToDisplay === 'section',
-    showIndividualWorkQueue: workQueueToDisplay === 'individual',
+    showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showIndividualWorkQueue: workQueueToDisplay.queue === 'my',
+    showInbox: workQueueToDisplay.box === 'inbox',
+    showOutbox: workQueueToDisplay.box === 'outbox',
   };
 };
