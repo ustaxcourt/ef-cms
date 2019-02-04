@@ -87,7 +87,7 @@ export default connect(
             onClick={() =>
               setFocusedWorkItem({
                 workItemId: item.workItemId,
-                queueType: 'sectionWorkQueue',
+                queueType: 'workQueue',
               })
             }
           >

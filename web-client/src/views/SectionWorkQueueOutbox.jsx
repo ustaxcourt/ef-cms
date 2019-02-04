@@ -34,7 +34,7 @@ export default connect(
             onClick={() =>
               setFocusedWorkItem({
                 workItemId: item.workItemId,
-                queueType: 'sectionWorkQueue',
+                queueType: 'workQueue',
               })
             }
           >
@@ -58,7 +58,7 @@ export default connect(
                 )}
               </td>
               <td>{item.docketNumberWithSuffix}</td>
-              <td>{item.currentMessage.createdAtFormatted} TODO </td>
+              <td>{item.sentDateFormatted}</td>
               <td>
                 <a
                   onClick={e => {

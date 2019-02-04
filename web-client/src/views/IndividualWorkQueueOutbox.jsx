@@ -58,7 +58,7 @@ export default connect(
                   )}
                 </td>
                 <td>{item.docketNumberWithSuffix}</td>
-                <td>{item.currentMessage.createdAtFormatted}</td>
+                <td>{item.sentDateFormatted}</td>
                 <td>
                   <a
                     onClick={e => {
