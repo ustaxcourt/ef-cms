@@ -2,14 +2,13 @@ import clearAlerts from '../actions/clearAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
-import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
 import isLoggedIn from '../actions/isLoggedInAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setPath from '../actions/setPathAction';
 import setUsers from '../actions/setUsersAction';
-import setWorkItems from '../actions/setWorkItemsAction';
+import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [
   getUserRole,
@@ -22,15 +21,13 @@ const goToDashboard = [
     petitionsclerk: [
       getUsersInSection({ sectionType: 'petitions' }),
       setUsers,
-      getWorkItemsByUser,
-      setWorkItems,
+      ...chooseWorkQueueSequence,
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     docketclerk: [
       getUsersInSection({ sectionType: 'docket' }),
       setUsers,
-      getWorkItemsByUser,
-      setWorkItems,
+      ...chooseWorkQueueSequence,
       setCurrentPage('DashboardDocketClerk'),
     ],
     intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
@@ -42,8 +39,7 @@ const goToDashboard = [
     ],
     seniorattorney: [
       clearAlerts,
-      getWorkItemsByUser,
-      setWorkItems,
+      ...chooseWorkQueueSequence,
       setCurrentPage('DashboardSeniorAttorney'),
     ],
   },

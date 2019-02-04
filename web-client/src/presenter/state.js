@@ -35,7 +35,6 @@ export default {
   form: {},
   searchTerm: '',
   workQueue: [],
-  sectionWorkQueue: [],
   users: [],
   workQueueToDisplay: { queue: 'my', box: 'inbox' },
   assigneeId: null,
