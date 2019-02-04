@@ -104,7 +104,8 @@ exports.syncWorkItems = async ({
         } else if (caseToSave.status === 'Recalled') {
           // TODO: this seems like business logic, refactor
           const batchedMessage = workItem.messages.find(
-            message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
+            message =>
+              message.message === 'Petition recalled from IRS Holding Queue', // TODO: this probably shouldn't be hard coded
           );
           const { userId, createdAt } = batchedMessage;
 
