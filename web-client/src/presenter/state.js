@@ -37,7 +37,7 @@ export default {
   workQueue: [],
   sectionWorkQueue: [],
   users: [],
-  workQueueToDisplay: 'individual',
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
   assigneeId: null,
   selectedWorkItems: [],
   caseTypes: [],
