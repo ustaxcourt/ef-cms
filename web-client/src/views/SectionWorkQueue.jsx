@@ -15,7 +15,7 @@ export default connect(
         <div role="tablist" className="queue-tab-container">
           <button
             aria-controls="section-inbox-tab-content"
-            aria-selected={workQueueHelper.selectedInbox}
+            aria-selected={workQueueHelper.showInbox}
             className="tab-link queue-tab"
             id="section-inbox-tab"
             role="tab"
@@ -30,7 +30,7 @@ export default connect(
           </button>
           <button
             aria-controls="section-sent-tab-content"
-            aria-selected={workQueueHelper.selectedOutbox}
+            aria-selected={workQueueHelper.showOutbox}
             className="tab-link queue-tab"
             id="section-sent-tab"
             role="tab"
@@ -44,12 +44,12 @@ export default connect(
             Sent
           </button>
         </div>
-        {workQueueHelper.selectedInbox && (
+        {workQueueHelper.showInbox && (
           <div role="tabpanel" id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
           </div>
         )}
-        {workQueueHelper.selectedOutbox && (
+        {workQueueHelper.showOutbox && (
           <div role="tabpanel" id="section-sent-tab-content">
             <SectionWorkQueueOutbox />
           </div>
