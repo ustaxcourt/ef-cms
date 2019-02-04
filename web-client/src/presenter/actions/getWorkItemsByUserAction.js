@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 export default async ({ applicationContext, get }) => {
   const useCases = applicationContext.getUseCases();
@@ -8,6 +7,5 @@ export default async ({ applicationContext, get }) => {
     applicationContext,
     userId,
   });
-  workItems = _.orderBy(workItems, 'createdAt', 'desc');
   return { workItems };
 };

@@ -26,6 +26,7 @@ class DocumentDetail extends React.Component {
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
       users,
+      submitRecallPetitionFromIRSHoldingQueueSequence,
     } = this.props;
     return (
       <React.Fragment>
@@ -115,6 +116,19 @@ class DocumentDetail extends React.Component {
                 >
                   <FontAwesomeIcon icon={['far', 'clock']} />
                   Serve to IRS
+                </button>
+              </div>
+            )}
+            {caseHelper.showRecallButton && document.isPetition && (
+              <div className="usa-width-one-half">
+                <button
+                  className="serve-to-irs"
+                  onClick={() =>
+                    submitRecallPetitionFromIRSHoldingQueueSequence()
+                  }
+                >
+                  <FontAwesomeIcon icon={['far', 'clock']} />
+                  Recall
                 </button>
               </div>
             )}
@@ -432,6 +446,7 @@ DocumentDetail.propTypes = {
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
   workItemActions: PropTypes.object,
+  submitRecallPetitionFromIRSHoldingQueueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -451,6 +466,8 @@ export default connect(
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     users: state.internalUsers,
     workItemActions: state.workItemActions,
+    submitRecallPetitionFromIRSHoldingQueueSequence:
+      sequences.submitRecallPetitionFromIRSHoldingQueueSequence,
   },
   DocumentDetail,
 );

@@ -1,6 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
 import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
+import documentDetailHelper from '../../src/presenter/computeds/documentDetailHelper';
 
 export default test => {
   return it('Petitions clerk views IRS Holding Queue', async () => {
@@ -46,13 +47,17 @@ export default test => {
       docketNumber: test.docketNumber,
       documentId: test.getState('workQueue.0.document.documentId'),
     });
-    const helperBatched = runCompute(caseDetailHelper, {
+
+    const caseDetailHelperBatched = runCompute(caseDetailHelper, {
       state: test.getState(),
     });
-    // expect(helperBatched.showCaseDetailsView).toEqual(true); //doesn't exist?
-    // expect(helperBatched.showCaseDetailsEdit).toEqual(false);
-    expect(helperBatched.showServeToIrsButton).toEqual(false);
-    expect(helperBatched.showRecallButton).toEqual(true);
+    const documentDetailHelperBatched = runCompute(documentDetailHelper, {
+      state: test.getState(),
+    });
+    expect(documentDetailHelperBatched.showCaseDetailsView).toEqual(true);
+    expect(documentDetailHelperBatched.showCaseDetailsEdit).toEqual(false);
+    expect(caseDetailHelperBatched.showServeToIrsButton).toEqual(false);
+    expect(caseDetailHelperBatched.showRecallButton).toEqual(true);
 
     // await test.runSequence('clickRecallPetitionSequence');
     // expect(test.getState('showModal')).toEqual('RecallModalDialog');
@@ -68,15 +73,14 @@ export default test => {
       queue: 'section',
     });
     //switch to sent box
-    // await test.runSequence('switchWorkQueueSequence', {
-    //   //switched from inbox to outbox
-    //   queue: 'my',
-    //   box: 'outbox',
-    // });
-    // expect(test.getState('workQueueToDisplay')).toEqual({
-    //   box: 'outbox',
-    //   queue: 'my',
-    // });
+    await test.runSequence('switchWorkQueueSequence', {
+      queue: 'my',
+      box: 'inbox',
+    });
+    expect(test.getState('workQueueToDisplay')).toEqual({
+      queue: 'my',
+      box: 'inbox',
+    });
     // //
     // await test.runSequence('switchWorkQueueSequence', {
     //   //switched from inbox to outbox
@@ -89,22 +93,29 @@ export default test => {
     //   queue: 'section',
     // });
 
-    // expect(test.getState('workQueue.0.status')).toEqual('Recalled');
-    // expect(test.getState('workQueue.my.inbox.0.messages.0')).toEqual(
-    //   'Assigned to Petitions Clerk',
-    // );
-    // // goto the first work item in the my queue inbox, the one we just recalled
-    // await test.runSequence('gotoDocumentDetailSequence', {
-    //   docketNumber: test.docketNumber,
-    //   documentId: test.getState('workQueue.my.inbox.0.document.documentId'),
-    // });
-    // const helperRecalled = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(helperRecalled.showCaseDetailsView).toEqual(false);
-    // expect(helperRecalled.showCaseDetailsEdit).toEqual(true);
-    // expect(helperRecalled.showServeToIrsButton).toEqual(true);
-    // expect(helperRecalled.showRecallButton).toEqual(false);
+    console.log('LOL', test.getState('workQueue'));
+
+    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    expect(test.getState('workQueue.0.messages.0')).toEqual(
+      'Assigned to Petitions Clerk',
+    );
+    // goto the first work item in the my queue inbox, the one we just recalled
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: test.getState('workQueue.0.document.documentId'),
+    });
+
+    const caseDetailHelperRecalled = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    const documentDetailHelperRecalled = runCompute(documentDetailHelper, {
+      state: test.getState(),
+    });
+    expect(documentDetailHelperRecalled.showCaseDetailsView).toEqual(false);
+    expect(caseDetailHelperRecalled.showCaseDetailsEdit).toEqual(true);
+    expect(caseDetailHelperRecalled.showServeToIrsButton).toEqual(true);
+    expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
+
     // // assign to another petitionsclerk
     // const workItem = test.getState('workQueue.my.inbox.0');
     // await test.runSequence('selectWorkItemSequence', {
@@ -121,6 +132,5 @@ export default test => {
     // );
 
     // await test.runSequence('submitPetitionToIRSHoldingQueueSequence'); // ??
-
   });
 };
