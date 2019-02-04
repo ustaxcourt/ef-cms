@@ -1,9 +1,9 @@
 import { state } from 'cerebral';
 
 export default ({ store, get }) => {
-  const { isEditablePetition } = get(state.documentDetailHelper);
+  const { showCaseDetailsEdit } = get(state.documentDetailHelper);
   store.set(
     state.currentTab,
-    isEditablePetition ? 'Document Info' : 'Pending Messages',
+    showCaseDetailsEdit ? 'Document Info' : 'Pending Messages',
   );
 };

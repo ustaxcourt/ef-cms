@@ -5,7 +5,8 @@ export default get => {
   const form = get(state.form);
 
   return {
-    canServeToIRS: ['General', 'New'].includes(caseDetail.status),
+    showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
+    showRecallButton: caseDetail.status === 'Batched for IRS',
     showDocumentStatus: !caseDetail.irsSendDate,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
