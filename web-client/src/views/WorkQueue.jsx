@@ -6,10 +6,10 @@ import IndividualWorkQueue from './IndividualWorkQueue';
 
 export default connect(
   {
-    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  function WorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
+  function WorkQueue({ chooseWorkQueueSequence, workQueueHelper }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
@@ -27,7 +27,7 @@ export default connect(
                 aria-controls="tab-individual-panel"
                 aria-selected={workQueueHelper.showIndividualWorkQueue}
                 onClick={() =>
-                  switchWorkQueueSequence({
+                  chooseWorkQueueSequence({
                     queue: 'my',
                     box: 'inbox',
                   })
@@ -46,7 +46,7 @@ export default connect(
                 aria-controls="tab-section-panel"
                 aria-selected={workQueueHelper.showSectionWorkQueue}
                 onClick={() =>
-                  switchWorkQueueSequence({
+                  chooseWorkQueueSequence({
                     queue: 'section',
                     box: 'inbox',
                   })

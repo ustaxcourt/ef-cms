@@ -6,10 +6,10 @@ import SectionWorkQueueInbox from './SectionWorkQueueInbox';
 
 export default connect(
   {
-    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
+  function SectionWorkQueue({ chooseWorkQueueSequence, workQueueHelper }) {
     return (
       <React.Fragment>
         <div role="tablist" className="queue-tab-container">
@@ -20,7 +20,7 @@ export default connect(
             id="section-inbox-tab"
             role="tab"
             onClick={() =>
-              switchWorkQueueSequence({
+              chooseWorkQueueSequence({
                 queue: 'section',
                 box: 'inbox',
               })
@@ -35,7 +35,7 @@ export default connect(
             id="section-sent-tab"
             role="tab"
             onClick={() =>
-              switchWorkQueueSequence({
+              chooseWorkQueueSequence({
                 queue: 'section',
                 box: 'outbox',
               })

@@ -6,10 +6,10 @@ import IndividualWorkQueueOutbox from './IndividualWorkQueueOutbox';
 
 export default connect(
   {
-    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  function IndividualWorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
+  function IndividualWorkQueue({ chooseWorkQueueSequence, workQueueHelper }) {
     return (
       <React.Fragment>
         <div role="tablist" className="queue-tab-container">
@@ -20,7 +20,7 @@ export default connect(
             id="individual-inbox-tab"
             role="tab"
             onClick={() =>
-              switchWorkQueueSequence({
+              chooseWorkQueueSequence({
                 queue: 'my',
                 box: 'inbox',
               })
@@ -35,7 +35,7 @@ export default connect(
             id="individual-sent-tab"
             role="tab"
             onClick={() =>
-              switchWorkQueueSequence({
+              chooseWorkQueueSequence({
                 queue: 'my',
                 box: 'outbox',
               })
