@@ -17,7 +17,7 @@ describe('formatted work queue computed', () => {
     expect(result.showAction('complete', 'abc')).toEqual(true);
   });
 
-  it('sets the isEditablePetition boolean false when case status is general', () => {
+  it('sets the showCaseDetailsEdit boolean false when case status is general', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
@@ -28,10 +28,10 @@ describe('formatted work queue computed', () => {
         },
       },
     });
-    expect(result.isEditablePetition).toEqual(false);
+    expect(result.showCaseDetailsEdit).toEqual(false);
   });
 
-  it('sets the isEditablePetition boolean true when case status new', () => {
+  it('sets the showCaseDetailsEdit boolean true when case status new', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
@@ -42,10 +42,10 @@ describe('formatted work queue computed', () => {
         },
       },
     });
-    expect(result.isEditablePetition).toEqual(true);
+    expect(result.showCaseDetailsEdit).toEqual(true);
   });
 
-  it('sets the isEditablePetition boolean true when case status recalled', () => {
+  it('sets the showCaseDetailsEdit boolean true when case status recalled', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
@@ -56,6 +56,6 @@ describe('formatted work queue computed', () => {
         },
       },
     });
-    expect(result.isEditablePetition).toEqual(true);
+    expect(result.showCaseDetailsEdit).toEqual(true);
   });
 });
