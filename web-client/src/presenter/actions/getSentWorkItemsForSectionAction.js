@@ -1,10 +1,10 @@
 export default async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
-  let sectionWorkItems = await applicationContext
+  let workItems = await applicationContext
     .getUseCases()
     .getSentWorkItemsForSection({
       applicationContext,
       section: user.section,
     });
-  return { sectionWorkItems };
+  return { workItems };
 };
