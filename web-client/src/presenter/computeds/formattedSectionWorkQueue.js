@@ -4,7 +4,7 @@ import { state } from 'cerebral';
 import { formatWorkItem } from './formattedWorkQueue';
 
 export const formattedSectionWorkQueue = get => {
-  const workItems = _.orderBy(get(state.sectionWorkQueue), 'updatedAt', 'desc');
+  const workItems = _.orderBy(get(state.workQueue), 'updatedAt', 'desc');
   const selectedWorkItems = get(state.selectedWorkItems);
   return workItems
     .filter(items => !items.completedAt)

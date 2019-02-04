@@ -19,14 +19,13 @@ describe('setPathAction', async () => {
             workItemId: 'q',
           },
         ],
-        sectionWorkQueue: [
+        workQueue: [
           {
             workItemId: 'q',
             assigneeId: 'docketclerk1',
             assigneeName: 'Docket Clerk 1',
           },
         ],
-        workQueue: [],
         assigneeId: 'docketclerk',
         assigneeName: 'Docket Clerk',
         user: {
@@ -37,13 +36,6 @@ describe('setPathAction', async () => {
         presenter,
       },
     });
-    expect(result.state.sectionWorkQueue).toEqual([
-      {
-        assigneeId: 'docketclerk',
-        assigneeName: 'Docket Clerk',
-        workItemId: 'q',
-      },
-    ]);
     expect(result.state.workQueue).toEqual([
       {
         assigneeId: 'docketclerk',
@@ -51,49 +43,6 @@ describe('setPathAction', async () => {
         workItemId: 'q',
       },
     ]);
-    expect(result.state.selectedWorkItems).toEqual([]);
-  });
-
-  it('removes the assigned work item from the individual work queue when it is assigned to another user', async () => {
-    const result = await runAction(assignSelectedWorkItemsAction, {
-      state: {
-        selectedWorkItems: [
-          {
-            workItemId: 'q',
-          },
-        ],
-        sectionWorkQueue: [
-          {
-            workItemId: 'q',
-            assigneeId: 'docketclerk',
-            assigneeName: 'Docket Clerk',
-          },
-        ],
-        workQueue: [
-          {
-            workItemId: 'q',
-            assigneeId: 'docketclerk',
-            assigneeName: 'Docket Clerk',
-          },
-        ],
-        assigneeId: 'docketclerk1',
-        assigneeName: 'Docket Clerk 1',
-        user: {
-          token: 'docketclerk',
-        },
-      },
-      modules: {
-        presenter,
-      },
-    });
-    expect(result.state.sectionWorkQueue).toEqual([
-      {
-        assigneeId: 'docketclerk1',
-        assigneeName: 'Docket Clerk 1',
-        workItemId: 'q',
-      },
-    ]);
-    expect(result.state.workQueue).toEqual([]);
     expect(result.state.selectedWorkItems).toEqual([]);
   });
 });
