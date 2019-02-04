@@ -1,4 +1,4 @@
-exports.sendPetitionToIRSHoldingQueue = async ({
+exports.recallPetitionFromIRSHoldingQueue = async ({
   caseId,
   applicationContext,
 }) => {
