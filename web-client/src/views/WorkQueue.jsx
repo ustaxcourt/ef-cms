@@ -24,6 +24,7 @@ export default connect(
                 role="tab"
                 className="tab-link"
                 id="tab-my-queue"
+                aria-controls="tab-individual-panel"
                 aria-selected={workQueueHelper.showIndividualWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
@@ -42,6 +43,7 @@ export default connect(
                 role="tab"
                 className="tab-link"
                 id="tab-work-queue"
+                aria-controls="tab-section-panel"
                 aria-selected={workQueueHelper.showSectionWorkQueue}
                 onClick={() =>
                   switchWorkQueueSequence({
@@ -55,17 +57,15 @@ export default connect(
             </li>
           </ul>
         </nav>
-        <div className="work-queue-tab-container">
-          <h3 className="work-queue-tab">Inbox</h3>
-        </div>
-        {workQueueHelper.showSectionWorkQueue && (
-          <div role="tabpanel">
-            <SectionWorkQueue />
+
+        {workQueueHelper.showIndividualWorkQueue && (
+          <div role="tabpanel" id="tab-individual-panel">
+            <IndividualWorkQueue />
           </div>
         )}
-        {workQueueHelper.showIndividualWorkQueue && (
-          <div role="tabpanel">
-            <IndividualWorkQueue />
+        {workQueueHelper.showSectionWorkQueue && (
+          <div role="tabpanel" id="tab-section-panel">
+            <SectionWorkQueue />
           </div>
         )}
       </React.Fragment>

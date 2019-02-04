@@ -2,27 +2,39 @@ import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
+const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
+const DATE_TODAY_TIME = 'LT';
+const DATE_MMDDYYYY = 'L';
+
+const formatDateIfToday = date => {
+  const now = moment();
+  const then = moment(date);
+  let formattedDate;
+  if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
+    formattedDate = then.format(DATE_TODAY_TIME);
+  } else {
+    formattedDate = then.format(DATE_MMDDYYYY);
+  }
+  return formattedDate;
+};
+
 export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   const result = _.cloneDeep(workItem);
-  result.createdAtFormatted = moment(result.createdAt).format('L');
+  result.createdAtFormatted = moment(result.createdAt).format(DATE_MMDDYYYY);
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
-    const now = moment();
-    const then = moment(message.createdAt);
-    if (now.format('L') == then.format('L')) {
-      message.createdAtFormatted = then.format('LT');
-    } else {
-      message.createdAtFormatted = then.format('L');
-    }
+    message.createdAtFormatted = formatDateIfToday(message.createdAt);
     message.sentTo = message.sentTo || 'Unassigned';
     message.createdAtTimeFormatted = moment(message.createdAt).format(
-      'MM/DD/YYYY hh:mm a',
+      DATE_FORMAT_LONG,
     );
   });
   result.assigneeName = result.assigneeName || 'Unassigned';
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
   result.caseStatus = _.startCase(result.caseStatus);
+
+  result.showBatchedStatusIcon = result.caseStatus === 'Batched For IRS'; // TODO
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -33,6 +45,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   );
 
   result.currentMessage = result.messages[0];
+  result.sentDateFormatted = formatDateIfToday(result.currentMessage);
   result.historyMessages = result.messages.slice(1);
 
   return result;

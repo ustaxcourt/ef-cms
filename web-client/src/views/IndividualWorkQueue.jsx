@@ -1,93 +1,60 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { state, sequences } from 'cerebral';
+import IndividualWorkQueueInbox from './IndividualWorkQueueInbox';
+import IndividualWorkQueueOutbox from './IndividualWorkQueueOutbox';
 
 export default connect(
   {
-    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
-    workQueue: state.formattedWorkQueue,
+    switchWorkQueueSequence: sequences.switchWorkQueueSequence,
+    workQueueHelper: state.workQueueHelper,
   },
-  function IndividualWorkQueue({ setFocusedWorkItem, workQueue }) {
+  function IndividualWorkQueue({ switchWorkQueueSequence, workQueueHelper }) {
     return (
-      <table
-        className="work-queue"
-        id="my-work-queue"
-        aria-describedby="tab-my-queue"
-      >
-        <thead>
-          <tr>
-            <th colSpan="2" aria-label="Docket Number">
-              Docket
-            </th>
-            <th>Received</th>
-            <th>Document</th>
-            <th>Status</th>
-            <th>From</th>
-            <th>To</th>
-          </tr>
-        </thead>
-        {workQueue.map(item => (
-          <tbody
-            key={item.workItemId}
+      <React.Fragment>
+        <div role="tablist" className="queue-tab-container">
+          <button
+            aria-controls="individual-inbox-tab-content"
+            aria-selected={workQueueHelper.showInbox}
+            className="tab-link queue-tab"
+            id="individual-inbox-tab"
+            role="tab"
             onClick={() =>
-              setFocusedWorkItem({
-                workItemId: item.workItemId,
-                queueType: 'workQueue',
+              switchWorkQueueSequence({
+                queue: 'my',
+                box: 'inbox',
               })
             }
           >
-            <tr>
-              <td className="focus-toggle">
-                <button
-                  className="focus-button"
-                  aria-label="Expand message detail"
-                  aria-expanded={item.isFocused}
-                  aria-controls={`detail-${item.workItemId}`}
-                />
-              </td>
-              <td>{item.docketNumberWithSuffix}</td>
-              <td>{item.currentMessage.createdAtFormatted}</td>
-              <td>
-                <a
-                  onClick={e => {
-                    e.stopPropagation();
-                  }}
-                  href={`/case-detail/${item.docketNumber}/documents/${
-                    item.document.documentId
-                  }`}
-                  className="case-link"
-                >
-                  {item.document.documentType}
-                </a>
-              </td>
-              <td>{item.caseStatus}</td>
-              <td>{item.currentMessage.sentBy}</td>
-              <td>{item.assigneeName}</td>
-            </tr>
-            {item.isFocused && (
-              <tr className="queue-message">
-                <td className="focus-toggle">
-                  <button
-                    className="focus-button"
-                    tabIndex="-1"
-                    aria-disabled="true"
-                  />
-                </td>
-                <td colSpan="2" aria-hidden="true" />
-                <td
-                  colSpan="4"
-                  className="message-detail"
-                  aria-label="Message detail"
-                  aria-live="polite"
-                  id={`detail-${item.workItemId}`}
-                >
-                  {item.currentMessage.message}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        ))}
-      </table>
+            Inbox
+          </button>
+          <button
+            aria-controls="individual-sent-tab-content"
+            aria-selected={workQueueHelper.showOutbox}
+            className="tab-link queue-tab"
+            id="individual-sent-tab"
+            role="tab"
+            onClick={() =>
+              switchWorkQueueSequence({
+                queue: 'my',
+                box: 'outbox',
+              })
+            }
+          >
+            Sent
+          </button>
+        </div>
+        {workQueueHelper.showInbox && (
+          <div role="tabpanel" id="individual-inbox-tab-content">
+            <IndividualWorkQueueInbox />
+          </div>
+        )}
+        {workQueueHelper.showOutbox && (
+          <div role="tabpanel" id="individual-sent-tab-content">
+            <IndividualWorkQueueOutbox />
+          </div>
+        )}
+      </React.Fragment>
     );
   },
 );
