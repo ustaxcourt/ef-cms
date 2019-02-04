@@ -5,7 +5,7 @@ import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQ
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
     // find the work item that is part of an Petition upload
-    const sectionWorkItems = test.getState('sectionWorkQueue');
+    const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
       item =>
         item.document.documentType === 'Petition' &&
@@ -14,7 +14,7 @@ export default test => {
 
     // verify that there is an unassigned work item in the section queue; we will assign it
     const unassignedWorkItem = test
-      .getState('sectionWorkQueue')
+      .getState('workQueue')
       .find(
         workItem =>
           !workItem.assigneeId &&
@@ -50,7 +50,7 @@ export default test => {
     expect(test.getState('selectedWorkItems').length).toEqual(0);
 
     // should have updated the work item in the section queue to have an assigneeId
-    const sectionWorkQueue = test.getState('sectionWorkQueue');
+    const sectionWorkQueue = test.getState('workQueue');
     const assignedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );

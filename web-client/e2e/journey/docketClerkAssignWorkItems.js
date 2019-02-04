@@ -1,7 +1,7 @@
 export default test => {
   return it('Docket clerk assigns the selected work items to another user', async () => {
     expect(test.getState('selectedWorkItems').length).toEqual(1);
-    let sectionWorkQueue = test.getState('sectionWorkQueue');
+    let sectionWorkQueue = test.getState('workQueue');
     let selectedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === test.selectedWorkItem.workItemId,
     );
@@ -11,7 +11,7 @@ export default test => {
 
     await test.runSequence('assignSelectedWorkItemsSequence');
 
-    sectionWorkQueue = test.getState('sectionWorkQueue');
+    sectionWorkQueue = test.getState('workQueue');
     selectedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === test.selectedWorkItem.workItemId,
     );

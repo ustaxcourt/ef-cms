@@ -5,10 +5,10 @@ export default get => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
 
   return {
-    showSendToBar: selectedWorkItems.length > 0,
-    selectedInbox: workQueueToDisplay.box === 'inbox',
-    selectedOutbox: workQueueToDisplay.box === 'outbox',
-    showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showInbox: workQueueToDisplay.box === 'inbox',
     showIndividualWorkQueue: workQueueToDisplay.queue === 'my',
+    showOutbox: workQueueToDisplay.box === 'outbox',
+    showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showSendToBar: selectedWorkItems.length > 0,
   };
 };
