@@ -106,7 +106,7 @@ const {
 const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
-const { 
+const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
 const {
@@ -225,6 +225,8 @@ module.exports = ({ userId } = {}) => {
         updateWorkItem,
         createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
+        getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
+        getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         assignWorkItems: assignWorkItemsUC,
         recallPetitionFromIRSHoldingQueue,
       };
@@ -253,7 +255,7 @@ module.exports = ({ userId } = {}) => {
       if (section && completed) {
         return getSentWorkItemsForSectionUC;
       } else if (section) {
-        return getWorkItemsBySection;
+        return getWorkItemsBySectionUC;
       } else if (completed) {
         return getSentWorkItemsForUserUC;
       } else {
