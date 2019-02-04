@@ -4,12 +4,11 @@ import navigateToDashboard from '../actions/navigateToDashboardAction';
 import sendPetitionToIRSHoldingQueueAction from '../actions/sendPetitionToIRSHoldingQueueAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
-import { state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import clearModal from '../actions/clearModalAction';
 
 export default [
   clearAlerts,
-  set(state.modal, ''),
+  clearModal,
   sendPetitionToIRSHoldingQueueAction,
   setAlertSuccess,
   getCase,
