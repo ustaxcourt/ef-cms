@@ -1,5 +1,4 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
 import navigateToDashboardAction from '../actions/navigateToDashboardAction';
+import clearModal from '../actions/clearModalAction';
 
-export default [set(state.showModal, ''), navigateToDashboardAction];
+export default [clearModal, navigateToDashboardAction];
