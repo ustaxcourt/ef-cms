@@ -14,42 +14,50 @@ export default test => {
       queue: 'section',
       box: 'inbox',
     });
-    //
-    // //verify that the workitems for the section inbox are in state
-    //
-    // //click on Sent/Outbox tab for the section
-    // await test.runSequence('switchWorkQueueSequence', {
-    //   //switched from inbox to outbox
-    //   queue: 'section',
-    //   box: 'outbox',
-    // });
-    // //verify Sent tab is shown
-    // //verify that the recalled and general
-    //
-    // //verify that the section workitems are in state
-    //
-    // expect(test.getState('workQueueToDisplay')).toEqual('section');
-    // // TODO: verify that nothing in the outbox is over 7 days old, we'll need over a week of seed data for this
-    // expect(test.getState('workQueue.section.outbox').length).toBeGreaterThan(0);
-    // // the first item in the outbox should be the Petition batched for IRS from the previous test
-    // expect(test.getState('workQueue.section.outbox.0.status')).toEqual(
-    //   'Batched for IRS',
-    // );
-    // // goto the first work item in the section queue outbox, the one we just batched for IRS
-    // await test.runSequence('gotoDocumentDetailSequence', {
-    //   docketNumber: test.docketNumber,
-    //   documentId: test.getState(
-    //     'workQueue.section.outbox.0.document.documentId',
-    //   ),
-    // });
-    // const helperBatched = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(helperBatched.showCaseDetailsView).toEqual(true);
+
+    expect(test.getState('workQueueToDisplay')).toEqual({
+      box: 'inbox',
+      queue: 'section',
+    });
+    expect(test.getState('workQueue').length).toBeGreaterThan(0);
+
+    //click on Sent/Outbox tab for the section
+    await test.runSequence('switchWorkQueueSequence', {
+      //switched from inbox to outbox
+      queue: 'section',
+      box: 'outbox',
+    });
+    //verify Sent tab is shown
+    //verify that the recalled and general
+
+    //verify that the section workitems are in state
+
+    expect(test.getState('workQueueToDisplay')).toEqual({
+      box: 'outbox',
+      queue: 'section',
+    });
+
+    // TODO: verify that nothing in the outbox is over 7 days old, we'll need over a week of seed data for this
+    expect(test.getState('workQueue').length).toBeGreaterThan(0);
+    // the first item in the outbox should be the Petition batched for IRS from the previous test
+    expect(test.getState('workQueue.0.caseStatus')).toEqual(
+      'Batched for IRS',
+    );
+    // goto the first work item in the section queue outbox, the one we just batched for IRS
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: test.getState(
+        'workQueue.0.document.documentId',
+      ),
+    });
+    const helperBatched = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    // expect(helperBatched.showCaseDetailsView).toEqual(true); //doesn't exist?
     // expect(helperBatched.showCaseDetailsEdit).toEqual(false);
-    // expect(helperBatched.showServeToIrsButton).toEqual(false);
-    // expect(helperBatched.showRecallButton).toEqual(true);
-    //
+    expect(helperBatched.showServeToIrsButton).toEqual(false);
+    expect(helperBatched.showRecallButton).toEqual(true);
+
     // await test.runSequence('clickRecallPetitionSequence');
     // expect(test.getState('showModal')).toEqual('RecallModalDialog');
     // await test.runSequence('dismissModalSequence');

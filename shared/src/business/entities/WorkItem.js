@@ -103,6 +103,7 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
       message: 'Petition batched for IRS',
       sentBy: userId,
       userId: userId,
+      sentTo: 'IRS Holding Queue',
     }),
   );
 };
@@ -117,8 +118,9 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.addMessage(
     new Message({
       message: 'Petition recalled from IRS Holding Queue',
-      sentBy: user.userId,
-      userId: user.userId,
+      sentBy: 'IRS Holding Queue',
+      userId: 'irsBatchSystem',
+      sentTo: user.name,
     }),
   );
 };
