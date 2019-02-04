@@ -70,7 +70,7 @@ class DocumentDetail extends React.Component {
             <div className="usa-width-one-half">
               <nav className="horizontal-tabs subsection">
                 <ul role="tablist">
-                  {helper.isEditablePetition && (
+                  {helper.showCaseDetailsEdit && (
                     <li className={helper.showDocumentInfo ? 'active' : ''}>
                       <button
                         role="tab"
@@ -107,7 +107,7 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            {caseHelper.canServeToIRS && document.isPetition && (
+            {caseHelper.showServeToIrsButton && document.isPetition && (
               <div className="usa-width-one-half">
                 <button
                   className="serve-to-irs"
@@ -411,7 +411,6 @@ class DocumentDetail extends React.Component {
         <div tabIndex="0" />
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         <div tabIndex="0" />
-
       </React.Fragment>
     );
   }
