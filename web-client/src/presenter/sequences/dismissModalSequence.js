@@ -1,4 +1,3 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import clearModal from '../actions/clearModalAction';
 
-export default [set(state.showModal, '')];
+export default [clearModal];
