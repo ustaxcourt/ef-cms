@@ -1,7 +1,11 @@
 export default test => {
   return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
-    const sectionWorkItems = test.getState('sectionWorkQueue');
+    await test.runSequence('switchWorkQueueSequence', {
+      queue: 'section',
+      box: 'inbox',
+    });
+    const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
       item =>
         item.document.documentType === 'Petition' &&
@@ -10,7 +14,7 @@ export default test => {
 
     // verify that there is an unassigned work item in the section queue; we will assign it
     const workItemToReassign = test
-      .getState('sectionWorkQueue')
+      .getState('workQueue')
       .find(
         workItem =>
           workItem.docketNumber === test.docketNumber &&
@@ -42,7 +46,8 @@ export default test => {
     expect(test.getState('selectedWorkItems').length).toEqual(0);
 
     // should have updated the work item in the section queue to have an assigneeId
-    const sectionWorkQueue = test.getState('sectionWorkQueue');
+
+    const sectionWorkQueue = test.getState('workQueue');
     const assignedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
@@ -52,6 +57,10 @@ export default test => {
     });
 
     // the work item should be removed from the individual work queue
+    await test.runSequence('switchWorkQueueSequence', {
+      queue: 'my',
+      box: 'inbox',
+    });
     const workQueue = test.getState('workQueue');
     const movedWorkItem = workQueue.find(
       workItem => workItem.workItemId === test.petitionWorkItemId,
