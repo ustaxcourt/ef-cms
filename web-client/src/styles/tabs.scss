@@ -8,7 +8,6 @@
     padding: 1rem 2rem;
     margin: 0;
     border-radius: 0;
-    box-shadow: 0 2px 0 $color-white;
     font-family: $font-serif;
     font-size: 20px;
     font-weight: 500;
@@ -16,7 +15,6 @@
 
     &.selected,
     &[aria-selected='true'] {
-      border-right: 1px solid $color-gray-lighter;
       background-color: $color-white;
       box-shadow: 0 2px 0 $color-white;
       font-weight: 700;
