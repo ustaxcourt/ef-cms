@@ -40,15 +40,11 @@ export default test => {
     // TODO: verify that nothing in the outbox is over 7 days old, we'll need over a week of seed data for this
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     // the first item in the outbox should be the Petition batched for IRS from the previous test
-    expect(test.getState('workQueue.0.caseStatus')).toEqual(
-      'Batched for IRS',
-    );
+    expect(test.getState('workQueue.0.caseStatus')).toEqual('Batched for IRS');
     // goto the first work item in the section queue outbox, the one we just batched for IRS
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
-      documentId: test.getState(
-        'workQueue.0.document.documentId',
-      ),
+      documentId: test.getState('workQueue.0.document.documentId'),
     });
     const helperBatched = runCompute(caseDetailHelper, {
       state: test.getState(),
@@ -64,10 +60,36 @@ export default test => {
     // expect(test.getState('showModal')).toEqual('');
     // // recall the petition
     // await test.runSequence('clickRecallPetitionSequence');
-    // await test.runSequence('submitRecallPetitionSequence');
-    // // back on the dashboard
-    // expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
-    // expect(test.getState('workQueue.my.inbox.0.status')).toEqual('Recalled');
+    await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
+    // back on the dashboard
+    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
+    expect(test.getState('workQueueToDisplay')).toEqual({
+      box: 'outbox',
+      queue: 'section',
+    });
+    //switch to sent box
+    // await test.runSequence('switchWorkQueueSequence', {
+    //   //switched from inbox to outbox
+    //   queue: 'my',
+    //   box: 'outbox',
+    // });
+    // expect(test.getState('workQueueToDisplay')).toEqual({
+    //   box: 'outbox',
+    //   queue: 'my',
+    // });
+    // //
+    // await test.runSequence('switchWorkQueueSequence', {
+    //   //switched from inbox to outbox
+    //   queue: 'section',
+    //   box: 'inbox',
+    // });
+    //
+    // expect(test.getState('workQueueToDisplay')).toEqual({
+    //   box: 'inbox',
+    //   queue: 'section',
+    // });
+
+    // expect(test.getState('workQueue.0.status')).toEqual('Recalled');
     // expect(test.getState('workQueue.my.inbox.0.messages.0')).toEqual(
     //   'Assigned to Petitions Clerk',
     // );
@@ -97,5 +119,8 @@ export default test => {
     // expect(test.getState('workQueue.my.inbox.0.docketNumber')).not.toBe(
     //   test.docketNumber,
     // );
+
+    // await test.runSequence('submitPetitionToIRSHoldingQueueSequence'); // ??
+
   });
 };

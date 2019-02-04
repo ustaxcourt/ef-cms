@@ -1,6 +1,5 @@
-exports.getSentWorkItemsForUser = async ({ applicationContext, userId }) => {
-  const userToken = userId; //TODO refactor for jwt
-
+exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
+  const userToken = applicationContext.getCurrentUser().userId; //TODO refactor for jwt
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/workitems?completed=true`, {
