@@ -1,9 +1,8 @@
 exports.getSentWorkItemsForSection = async ({
   applicationContext,
-  userId,
   section,
 }) => {
-  const userToken = userId; //TODO refactor for jwt
+  const userToken = applicationContext.getCurrentUser().userId; //TODO refactor for jwt
 
   const response = await applicationContext
     .getHttpClient()
