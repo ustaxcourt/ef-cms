@@ -1,4 +1,5 @@
 import clearAlerts from '../actions/clearAlertsAction';
+import clearErrorAlerts from '../actions/clearErrorAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
@@ -11,6 +12,7 @@ import setUsers from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [
+  clearErrorAlerts,
   getUserRole,
   {
     petitioner: [

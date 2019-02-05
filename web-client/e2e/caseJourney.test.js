@@ -105,32 +105,32 @@ describe('Case journey', async () => {
   petitionsClerkIrsHoldingQueue(test);
 
   respondentLogIn(test);
-  respondentViewsDashboard(test);
-  respondentViewsCaseDetail(test);
-  respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecision(test, fakeFile);
-
-  docketClerkLogIn(test);
-  docketClerkViewsDashboardWithoutWorkItem(test);
-  docketClerkViewsCaseDetail(test);
-  docketClerkViewsDecisionDocument(test);
-
-  docketClerkLogIn(test, 'docketclerk1');
-  docketClerkDocketDashboard(test);
-  docketClerkSelectsAssignee(test);
-  docketClerkSelectsWorkItems(test);
-  docketClerkAssignWorkItems(test);
-  docketClerkLogIn(test);
-  docketClerkViewsDashboard(test);
-  docketClerkViewsDocument(test);
-  docketClerkForwardWorkItem(test);
-  docketClerkViewsDashboardAfterForward(test);
-
-  seniorAttorneyLogIn(test);
-  seniorAttorneyViewsDashboard(test);
-  seniorAttorneyViewsCaseDetail(test);
-  seniorAttorneyViewsDocumentDetail(test);
-  seniorAttorneyMarksStipulatedWorkItemAsCompleted(test);
-  seniorAttorneyViewsCaseDetailAfterComplete(test);
-  seniorAttorneyViewsDashboardAfterComplete(test);
+  // respondentViewsDashboard(test);
+  // respondentViewsCaseDetail(test);
+  // respondentAddsAnswer(test, fakeFile);
+  // respondentAddsStipulatedDecision(test, fakeFile);
+  //
+  // docketClerkLogIn(test);
+  // docketClerkViewsDashboardWithoutWorkItem(test);
+  // docketClerkViewsCaseDetail(test);
+  // docketClerkViewsDecisionDocument(test);
+  //
+  // docketClerkLogIn(test, 'docketclerk1');
+  // docketClerkDocketDashboard(test);
+  // docketClerkSelectsAssignee(test);
+  // docketClerkSelectsWorkItems(test);
+  // docketClerkAssignWorkItems(test);
+  // docketClerkLogIn(test);
+  // docketClerkViewsDashboard(test);
+  // docketClerkViewsDocument(test);
+  // docketClerkForwardWorkItem(test);
+  // docketClerkViewsDashboardAfterForward(test);
+  //
+  // seniorAttorneyLogIn(test);
+  // seniorAttorneyViewsDashboard(test);
+  // seniorAttorneyViewsCaseDetail(test);
+  // seniorAttorneyViewsDocumentDetail(test);
+  // seniorAttorneyMarksStipulatedWorkItemAsCompleted(test);
+  // seniorAttorneyViewsCaseDetailAfterComplete(test);
+  // seniorAttorneyViewsDashboardAfterComplete(test);
 });

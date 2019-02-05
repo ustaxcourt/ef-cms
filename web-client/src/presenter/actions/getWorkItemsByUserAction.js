@@ -1,12 +1,13 @@
-import { state } from 'cerebral';
-import _ from 'lodash';
-
-export default async ({ applicationContext, get }) => {
-  const userId = get(state.user.userId);
-  let workItems = await applicationContext.getUseCases().getWorkItems({
+/**
+ *
+ * @param applicationContext
+ * @returns {Promise<{workItems: *}>}
+ */
+export default async ({ applicationContext }) => {
+  const useCases = applicationContext.getUseCases();
+  const workItems = await useCases.getWorkItems({
     applicationContext,
-    userId,
   });
-  workItems = _.orderBy(workItems, 'createdAt', 'desc');
+
   return { workItems };
 };
