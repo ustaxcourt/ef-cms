@@ -6,5 +6,6 @@ export default async ({ applicationContext, get, props }) => {
     docketNumber: props.docketNumber,
     userId: get(state.user.token),
   });
+
   return { caseDetail };
 };
