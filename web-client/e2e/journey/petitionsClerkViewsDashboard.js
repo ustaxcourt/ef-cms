@@ -4,8 +4,9 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueue').length).toBeGreaterThanOrEqual(0);
     expect(test.getState('users').length).toBeGreaterThan(0);
-    await test.runSequence('switchWorkQueueSequence', {
-      queue: 'section', box: 'inbox'
+    await test.runSequence('chooseWorkQueueSequence', {
+      queue: 'section',
+      box: 'inbox',
     });
     const workItem = test
       .getState('workQueue')

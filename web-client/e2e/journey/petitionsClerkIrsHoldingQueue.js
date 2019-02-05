@@ -10,7 +10,7 @@ export default test => {
 
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
 
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'section',
       box: 'inbox',
     });
@@ -22,7 +22,7 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
 
     //click on Sent/Outbox tab for the section
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       //switched from inbox to outbox
       queue: 'section',
       box: 'outbox',
@@ -68,7 +68,7 @@ export default test => {
       queue: 'section',
     });
     //switch to sent box
-    // await test.runSequence('switchWorkQueueSequence', {
+    // await test.runSequence('chooseWorkQueueSequence', {
     //   //switched from inbox to outbox
     //   queue: 'my',
     //   box: 'outbox',
@@ -78,7 +78,7 @@ export default test => {
     //   queue: 'my',
     // });
     // //
-    // await test.runSequence('switchWorkQueueSequence', {
+    // await test.runSequence('chooseWorkQueueSequence', {
     //   //switched from inbox to outbox
     //   queue: 'section',
     //   box: 'inbox',
@@ -121,6 +121,5 @@ export default test => {
     // );
 
     // await test.runSequence('submitPetitionToIRSHoldingQueueSequence'); // ??
-
   });
 };

@@ -12,6 +12,7 @@ export default test => {
     const caseDetail = test.getState('caseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
     let workItem;
+    // console.log('LOOKING FOR ', test.workItemId);
     caseDetail.documents.forEach(document =>
       document.workItems.forEach(item => {
         if (item.workItemId === test.workItemId) {
