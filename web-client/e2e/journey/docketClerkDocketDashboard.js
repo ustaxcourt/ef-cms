@@ -5,7 +5,7 @@ import { formattedSectionWorkQueue } from '../../src/presenter/computeds/formatt
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'section',
       box: 'inbox',
     });
