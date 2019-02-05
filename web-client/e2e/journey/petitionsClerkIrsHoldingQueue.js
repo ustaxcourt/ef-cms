@@ -77,16 +77,12 @@ export default test => {
       box: 'outbox',
       queue: 'section',
     });
-    // console.log('--------------');
-    //switch to my in box
-    // console.log('switching to my inbox');
-    //the following does not wait!
 
-    const generatePromise = (millis, value) => {
-      return new Promise(resolve => {
-        setTimeout(() => resolve(value), millis);
-      });
-    };
+    // const generatePromise = (millis, value) => {
+    //   return new Promise(resolve => {
+    //     setTimeout(() => resolve(value), millis);
+    //   });
+    // };
 
     await test
       .runSequence('chooseWorkQueueSequence', {
@@ -94,22 +90,12 @@ export default test => {
         queue: 'section',
       })
       .then(() => {
-        console.log('then1');
         expect(test.getState('workQueueToDisplay')).toEqual({
           box: 'inbox',
           queue: 'section',
         });
       });
 
-    // await test.runSequence('getTrialCitiesSequence');
-
-    console.log(
-      'workQueue for section inbox',
-      test.getState('workQueue').length,
-    );
-
-    console.log('---again-------');
-    //
     await test
       .runSequence('chooseWorkQueueSequence', {
         //switched from inbox to outbox
@@ -117,50 +103,58 @@ export default test => {
         box: 'inbox',
       })
       .then(() => {
-        console.log('then2');
         expect(test.getState('workQueueToDisplay')).toEqual({
           box: 'inbox',
           queue: 'section',
         });
       });
 
-    await generatePromise(3000, true);
+    // await generatePromise(3000, true);
 
-    // expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
-    // expect(test.getState('workQueue.0.messages.0')).toEqual(
-    //   'Assigned to Petitions Clerk',
-    // );
-    // // goto the first work item in the my queue inbox, the one we just recalled
-    // await test.runSequence('gotoDocumentDetailSequence', {
-    //   docketNumber: test.docketNumber,
-    //   documentId: test.getState('workQueue.0.document.documentId'),
-    // });
-    //
-    // const caseDetailHelperRecalled = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // const documentDetailHelperRecalled = runCompute(documentDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(documentDetailHelperRecalled.showCaseDetailsView).toEqual(false);
-    // expect(caseDetailHelperRecalled.showCaseDetailsEdit).toEqual(true);
-    // expect(caseDetailHelperRecalled.showServeToIrsButton).toEqual(true);
-    // expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
+    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    const foundMessage = test.getState('workQueue.0.messages').find(message => {
+      return message.message === 'Petition recalled from IRS Holding Queue';
+    });
+    expect(foundMessage.message).toEqual(
+      'Petition recalled from IRS Holding Queue',
+    );
+    // goto the first work item in the my queue inbox, the one we just recalled
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: test.docketNumber,
+      documentId: test.getState('workQueue.0.document.documentId'),
+    });
+    const caseDetailHelperRecalled = runCompute(caseDetailHelper, {
+      state: test.getState(),
+    });
+    const documentDetailHelperRecalled = runCompute(documentDetailHelper, {
+      state: test.getState(),
+    });
+
+    expect(documentDetailHelperRecalled.showCaseDetailsView).toEqual(false);
+    expect(documentDetailHelperRecalled.showCaseDetailsEdit).toEqual(true);
+    expect(caseDetailHelperRecalled.showServeToIrsButton).toEqual(true);
+    expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
 
     // // assign to another petitionsclerk
-    // const workItem = test.getState('workQueue.my.inbox.0');
-    // await test.runSequence('selectWorkItemSequence', {
-    //   workItem: workItem,
-    // });
-    // await test.runSequence('selectAssigneeSequence', {
-    //   assigneeId: 'petitionsclerkXX',
-    //   assigneeName: 'Test Petitionsclerk XX',
-    // });
-    // await test.runSequence('assignSelectedWorkItemsSequence');
-    // // no longer in our inbox!
-    // expect(test.getState('workQueue.my.inbox.0.docketNumber')).not.toBe(
-    //   test.docketNumber,
-    // );
+    const workItem = test.getState('workQueue.0');
+    await test.runSequence('selectWorkItemSequence', {
+      workItem: workItem,
+    });
+    await test.runSequence('selectAssigneeSequence', {
+      assigneeId: 'petitionsclerk',
+      assigneeName: 'Test Petitionsclerk',
+    });
+    await test.runSequence('assignSelectedWorkItemsSequence');
+    await test
+    .runSequence('chooseWorkQueueSequence', {
+      //switched from inbox to outbox
+      queue: 'my',
+      box: 'inbox',
+    });
+    // no longer in our inbox!
+    expect(test.getState('workQueue.0.docketNumber')).not.toBe(
+      test.docketNumber,
+    );
 
     // await test.runSequence('submitPetitionToIRSHoldingQueueSequence'); // ??
     // expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
