@@ -16,28 +16,30 @@ export default connect(
           <span className="label">Type of Notice</span>
           <p>{caseDetail.caseType}</p>
 
-          <h3>Date of Notice</h3>
-          <p>{caseDetail.formattedIrsNoticeDate}</p>
+          <div className="label">Date of Notice</div>
+          <p>{caseDetail.formattedIrsNoticeDate || 'none'}</p>
           <div>
             {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
               <div key={idx}>
                 <div className="inline-input-year">
-                  {idx === 0 && <label htmlFor="year">Year</label>}
-                  <p id={idx}>{yearAmount.year}</p>
+                  <div className="label">Year</div>
+                  <p>{yearAmount.year}</p>
                 </div>
                 <div className="inline-input-amount">
-                  {idx === 0 && <label htmlFor="amount">Amount</label>}
-                  <span aria-hidden="true" role="presentation">
-                    $
-                  </span>
-                  <span
-                    aria-label="IRS Notice Amount in whole dollars"
-                    id="amount"
-                  />
-                  {yearAmount.amount}
-                  <span aria-hidden="true" role="presentation">
-                    .00
-                  </span>
+                  <div className="label">Amount</div>
+                  <p>
+                    <span aria-hidden="true" role="presentation">
+                      $
+                    </span>
+                    <span
+                      aria-label="IRS Notice Amount in whole dollars"
+                      id="amount"
+                    />
+                    {yearAmount.amount}
+                    <span aria-hidden="true" role="presentation">
+                      .00
+                    </span>
+                  </p>
                 </div>
               </div>
             ))}
@@ -46,13 +48,13 @@ export default connect(
 
         <div className="blue-container">
           <h3>Case Information</h3>
-          <span className="label">Case Procedure</span>
+          <div className="label">Case Procedure</div>
           <p>{caseDetail.procedureType} Tax Case</p>
-          <span className="label">Trial Location</span>
+          <div className="label">Trial Location</div>
           <p>{caseDetail.preferredTrialCity}</p>
-          <h3>Filing Date</h3>
+          <div className="label">Filing Date</div>
           <p>{caseDetail.formattedPayGovDate || 'Unpaid'}</p>
-          <h3>Fee Payment ID</h3>
+          <div className="label">Fee Payment ID</div>
           <p id="fee-payment-id" name="payGovId">
             {caseDetail.payGovId || 'Unpaid'}
           </p>
