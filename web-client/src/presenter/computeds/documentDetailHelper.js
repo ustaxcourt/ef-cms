@@ -7,7 +7,9 @@ export default get => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showCaseDetailsView: caseDetail.status === 'Batched for IRS',
+    showCaseDetailsView: ['New', 'Recalled', 'Batched for IRS'].includes(
+      caseDetail.status,
+    ),
     showCaseDetailsEdit: ['New', 'Recalled'].includes(caseDetail.status),
     showDocumentInfo: get(state.currentTab) === 'Document Info',
     showPendingMessages: get(state.currentTab) === 'Pending Messages',

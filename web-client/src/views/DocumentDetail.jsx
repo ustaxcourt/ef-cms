@@ -7,6 +7,7 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 import CaseDetailEdit from './CaseDetailEdit';
+import CaseDetailReadOnly from './CaseDetailReadOnly';
 import ServeToIrsModalDialog from './ServeToIrsModalDialog';
 
 class DocumentDetail extends React.Component {
@@ -71,7 +72,7 @@ class DocumentDetail extends React.Component {
             <div className="usa-width-one-half">
               <nav className="horizontal-tabs subsection">
                 <ul role="tablist">
-                  {helper.showCaseDetailsEdit && (
+                  {helper.showCaseDetailsView && (
                     <li className={helper.showDocumentInfo ? 'active' : ''}>
                       <button
                         role="tab"
@@ -143,7 +144,8 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="tab-document-info"
                   tabIndex="0"
                 >
-                  <CaseDetailEdit />
+                  {helper.showCaseDetailsEdit && <CaseDetailEdit />}
+                  {!helper.showCaseDetailsEdit && <CaseDetailReadOnly />}
                 </div>
               )}
               {/*workitem tab start*/}
