@@ -1,9 +1,7 @@
 import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, props }) => {
-  const useCases = applicationContext.getUseCases();
-
-  await useCases.recallPetitionFromIRSHoldingQueue({
+  await applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
     caseId: get(state.caseDetail).caseId,
     applicationContext,
   });

@@ -1,7 +1,6 @@
 import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, props }) => {
-  const useCases = applicationContext.getUseCases();
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
@@ -9,7 +8,7 @@ export default async ({ applicationContext, get, props }) => {
     return yearAmount.amount || yearAmount.year;
   });
 
-  const caseDetail = await useCases.updateCase({
+  const caseDetail = await applicationContext.getUseCases().updateCase({
     applicationContext,
     caseToUpdate,
     userId: get(state.user.token),
