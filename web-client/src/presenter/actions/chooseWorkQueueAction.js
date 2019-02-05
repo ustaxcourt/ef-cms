@@ -6,5 +6,6 @@ export default ({ store, props, path, get }) => {
   }
   let queuePrefs = get(state.workQueueToDisplay);
   const workQueuePath = `${queuePrefs.queue}${queuePrefs.box}`;
+  console.log('!!!!!!', workQueuePath);
   return path[workQueuePath]();
 };
