@@ -10,10 +10,15 @@ export default [
   clearWorkQueue,
   chooseWorkQueue,
   {
-    sectioninbox: [getWorkItemsForSection],
-    sectionoutbox: [getSentWorkItemsForSection],
-    myinbox: [getWorkItemsByUser],
-    myoutbox: [getSentWorkItemsForUser],
+    sectioninbox: [getWorkItemsForSection, setWorkItems],
+    sectionoutbox: [getSentWorkItemsForSection, setWorkItems],
+    myinbox: [
+      getWorkItemsByUser,
+      () => {
+        console.log('LOL');
+      },
+      setWorkItems,
+    ],
+    myoutbox: [getSentWorkItemsForUser, setWorkItems],
   },
-  setWorkItems,
 ];

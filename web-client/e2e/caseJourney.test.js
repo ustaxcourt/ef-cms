@@ -103,8 +103,8 @@ describe('Case journey', async () => {
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
-
-  respondentLogIn(test);
+  //
+  // respondentLogIn(test);
   // respondentViewsDashboard(test);
   // respondentViewsCaseDetail(test);
   // respondentAddsAnswer(test, fakeFile);
