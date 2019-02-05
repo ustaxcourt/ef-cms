@@ -78,11 +78,11 @@ export default test => {
       queue: 'section',
     });
 
-    // const generatePromise = (millis, value) => {
-    //   return new Promise(resolve => {
-    //     setTimeout(() => resolve(value), millis);
-    //   });
-    // };
+    const generatePromise = (millis, value) => {
+      return new Promise(resolve => {
+        setTimeout(() => resolve(value), millis);
+      });
+    };
 
     await test
       .runSequence('chooseWorkQueueSequence', {
@@ -109,9 +109,9 @@ export default test => {
         });
       });
 
-    // await generatePromise(3000, true);
 
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+
     const foundMessage = test.getState('workQueue.0.messages').find(message => {
       return message.message === 'Petition recalled from IRS Holding Queue';
     });
@@ -119,10 +119,22 @@ export default test => {
       'Petition recalled from IRS Holding Queue',
     );
     // goto the first work item in the my queue inbox, the one we just recalled
+    const documentId = test.getState('workQueue.0.document.documentId');
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.docketNumber,
-      documentId: test.getState('workQueue.0.document.documentId'),
+      docketNumber: docketNumber,
+      documentId: documentId,
     });
+
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+
+    // console.log(JSON.stringify(test.getState('caseDetail.status')));
+    // console.log(test.getState('workQueue.0.caseStatus'));
+    // console.log(test.getState('workQueue.0.docketNumber'));
+    // console.log(test.getState('caseDetail.docketNumber'))
+
+    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    expect(test.getState('caseDetail.status')).toEqual('Recalled');
+
     const caseDetailHelperRecalled = runCompute(caseDetailHelper, {
       state: test.getState(),
     });
@@ -145,18 +157,26 @@ export default test => {
       assigneeName: 'Test Petitionsclerk',
     });
     await test.runSequence('assignSelectedWorkItemsSequence');
-    await test
-    .runSequence('chooseWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       //switched from inbox to outbox
       queue: 'my',
       box: 'inbox',
     });
     // no longer in our inbox!
-    expect(test.getState('workQueue.0.docketNumber')).not.toBe(
-      test.docketNumber,
+    expect(test.getState('workQueue.0.docketNumber')).not.toEqual(
+      docketNumber,
     );
 
-    // await test.runSequence('submitPetitionToIRSHoldingQueueSequence'); // ??
-    // expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
+    await test.runSequence('gotoDocumentDetailSequence', {
+      docketNumber: docketNumber,
+      documentId: documentId,
+    });
+
+    await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
+    expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
+    await test.runSequence('gotoDashboardSequence');
+    await generatePromise(3000, true); //why does the last promise in this test not work?
+
+    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
   });
 };

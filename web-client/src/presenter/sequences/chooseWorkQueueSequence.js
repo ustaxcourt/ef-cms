@@ -12,13 +12,7 @@ export default [
   {
     sectioninbox: [getWorkItemsForSection, setWorkItems],
     sectionoutbox: [getSentWorkItemsForSection, setWorkItems],
-    myinbox: [
-      getWorkItemsByUser,
-      () => {
-        console.log('LOL');
-      },
-      setWorkItems,
-    ],
+    myinbox: [getWorkItemsByUser, setWorkItems],
     myoutbox: [getSentWorkItemsForUser, setWorkItems],
   },
 ];
