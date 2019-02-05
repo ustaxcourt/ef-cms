@@ -6,7 +6,7 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export default {
   getError: e => {
-    let responseCode = e.response && e.response.status;
+    let responseCode = (e.response && e.response.status) || e.statusCode;
     if ([403, 404].includes(responseCode)) {
       return new UnauthorizedRequestError(e);
     } else if (401 === responseCode) {
