@@ -1,4 +1,5 @@
 const { getWorkItems } = require('./getWorkItems.interactor');
+const User = require('../../entities/User');
 
 describe('getWorkItems', () => {
   let applicationContext;
@@ -18,6 +19,9 @@ describe('getWorkItems', () => {
 
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext = {
+      getCurrentUser: () => {
+        return new User({ userId: 'taxpayer' });
+      },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => null,
       }),
@@ -26,7 +30,6 @@ describe('getWorkItems', () => {
     let error;
     try {
       await getWorkItems({
-        userId: 'taxpayer',
         applicationContext,
       });
     } catch (e) {
@@ -37,6 +40,9 @@ describe('getWorkItems', () => {
 
   it('returns an empty array if no work items are returned', async () => {
     applicationContext = {
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk' });
+      },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => null,
       }),
@@ -51,6 +57,9 @@ describe('getWorkItems', () => {
 
   it('validates and returns the work items', async () => {
     applicationContext = {
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk' });
+      },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => [mockWorkItem],
       }),

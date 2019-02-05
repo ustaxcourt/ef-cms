@@ -107,6 +107,9 @@ const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 const {
+  getWorkItems: getWorkItemsUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
+const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
 const {
@@ -222,6 +225,7 @@ module.exports = ({ userId } = {}) => {
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,
+        getWorkItemsUC,
         updateWorkItem,
         createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
@@ -259,8 +263,7 @@ module.exports = ({ userId } = {}) => {
       } else if (completed) {
         return getSentWorkItemsForUserUC;
       } else {
-        // TODO: this is not an calling an interactor, which is BAD
-        return getWorkItemsForUser;
+        return getWorkItemsUC;
       }
     },
     getInteractorForGettingCases,

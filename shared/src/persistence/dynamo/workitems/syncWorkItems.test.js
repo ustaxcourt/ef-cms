@@ -288,12 +288,7 @@ describe('syncWorkItems', function() {
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
                     createdAt: '123',
-                  },
-                  {
-                    message: 'Petition recalled from IRS Holding Queue',
-                    userId: 'petitionsclerk1',
-                    createdAt: '123',
-                  },
+                  }
                 ],
               },
             ],
