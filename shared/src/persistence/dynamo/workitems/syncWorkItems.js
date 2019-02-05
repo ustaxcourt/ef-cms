@@ -104,24 +104,29 @@ exports.syncWorkItems = async ({
         } else if (caseToSave.status === 'Recalled') {
           // TODO: this seems like business logic, refactor
           const batchedMessage = workItem.messages.find(
-            message =>
-              message.message === 'Petition recalled from IRS Holding Queue', // TODO: this probably shouldn't be hard coded
+            message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
           );
-          const { userId, createdAt } = batchedMessage;
+          let userId, createdAt;
+          if (batchedMessage) {
+            console.log('found batchedMEssage', batchedMessage);
+            userId = batchedMessage.userId;
+            createdAt = batchedMessage.createdAt;
 
-          await persistence.deleteMappingRecord({
-            applicationContext,
-            pkId: userId,
-            skId: createdAt,
-            type: 'sentWorkItem',
-          });
-          await persistence.deleteMappingRecord({
-            applicationContext,
-            pkId: 'petitions', // TODO: this probably shouldn't be hard coded
-            skId: createdAt,
-            type: 'sentWorkItem',
-          });
+            await persistence.deleteMappingRecord({
+              applicationContext,
+              pkId: userId,
+              skId: createdAt,
+              type: 'sentWorkItem',
+            });
+            await persistence.deleteMappingRecord({
+              applicationContext,
+              pkId: 'petitions', // TODO: this probably shouldn't be hard coded
+              skId: createdAt,
+              type: 'sentWorkItem',
+            });
+          }
         }
+        console.log('new status on workitem before save', workItem.caseStatus);
         await exports.updateWorkItem({
           applicationContext,
           workItemToSave: workItem,
