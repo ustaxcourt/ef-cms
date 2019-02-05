@@ -7,8 +7,10 @@ describe('formatted work queue computed', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
-          status: 'general',
+          status: 'General',
+          documents: [],
         },
+        documentId: 'abc',
         workItemActions: {
           abc: 'complete',
         },
@@ -21,8 +23,10 @@ describe('formatted work queue computed', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
-          status: 'general',
+          status: 'General',
+          documents: [],
         },
+        documentId: 'abc',
         workItemActions: {
           abc: 'complete',
         },
@@ -36,7 +40,9 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           status: 'New',
+          documents: [],
         },
+        documentId: 'abc',
         workItemActions: {
           abc: 'complete',
         },
@@ -50,7 +56,9 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           status: 'Recalled',
+          documents: [],
         },
+        documentId: 'abc',
         workItemActions: {
           abc: 'complete',
         },
