@@ -75,7 +75,7 @@ export default test => {
     //switch to my in box
     console.log('switching to my inbox');
     //the following does not wait!
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'my',
       box: 'inbox',
     });
