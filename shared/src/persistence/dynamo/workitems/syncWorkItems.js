@@ -108,7 +108,6 @@ exports.syncWorkItems = async ({
           );
           let userId, createdAt;
           if (batchedMessage) {
-            console.log('found batchedMEssage', batchedMessage);
             userId = batchedMessage.userId;
             createdAt = batchedMessage.createdAt;
 
@@ -126,7 +125,6 @@ exports.syncWorkItems = async ({
             });
           }
         }
-        console.log('new status on workitem before save', workItem.caseStatus);
         await exports.updateWorkItem({
           applicationContext,
           workItemToSave: workItem,
