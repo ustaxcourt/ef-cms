@@ -67,24 +67,36 @@ export default test => {
     // await test.runSequence('clickRecallPetitionSequence');
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
     // back on the dashboard
+    // console.log('--------------');
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'outbox',
       queue: 'section',
     });
+    // console.log('--------------');
     //switch to my in box
-    console.log('switching to my inbox');
+    // console.log('switching to my inbox');
     //the following does not wait!
+    console.log('workQueue for section outbox', test.getState('workQueue'));
+
+    console.log('--------------');
+
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'my',
-      box: 'inbox',
-    });
-    expect(test.getState('workQueueToDisplay')).toEqual({
-      queue: 'my',
-      box: 'inbox',
+      queue: 'section',
+      box: 'outbox',
     });
 
-    console.log('workQueue for my inbox', test.getState('workQueue'));
+    expect(test.getState('workQueueToDisplay')).toEqual({
+      queue: 'section',
+      box: 'outbox',
+    });
+
+    console.log(
+      'workQueue for section outbox',
+      test.getState('workQueue').length,
+    );
+
+    console.log('--------------');
     // //
     // await test.runSequence('chooseWorkQueueSequence', {
     //   //switched from inbox to outbox
@@ -97,7 +109,7 @@ export default test => {
     //   queue: 'section',
     // });
 
-    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    // expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     // expect(test.getState('workQueue.0.messages.0')).toEqual(
     //   'Assigned to Petitions Clerk',
     // );
