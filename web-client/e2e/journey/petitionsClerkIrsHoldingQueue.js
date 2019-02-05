@@ -12,21 +12,24 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
 
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'my',
     });
 
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
-      queue: 'section',
+      queue: 'my',
     });
-    expect(test.getState('workQueue').length).toBeGreaterThan(0);
+    // expect(test.getState('workQueue').length).toBeGreaterThan(0);
 
     //click on Sent/Outbox tab for the section
     await test.runSequence('chooseWorkQueueSequence', {
       //switched from inbox to outbox
-      queue: 'section',
       box: 'outbox',
+      queue: 'section',
+      // })
+      // .then(r => {
+      //   console.log('wow man');
     });
     //verify Sent tab is shown
     //verify that the recalled and general
@@ -43,6 +46,7 @@ export default test => {
     // the first item in the outbox should be the Petition batched for IRS from the previous test
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Batched for IRS');
     // goto the first work item in the section queue outbox, the one we just batched for IRS
+    const docketNumber = test.getState('workQueue.0.docketNumber');
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.getState('workQueue.0.document.documentId'),
@@ -77,37 +81,50 @@ export default test => {
     //switch to my in box
     // console.log('switching to my inbox');
     //the following does not wait!
-    console.log('workQueue for section outbox', test.getState('workQueue'));
 
-    console.log('--------------');
+    const generatePromise = (millis, value) => {
+      return new Promise(resolve => {
+        setTimeout(() => resolve(value), millis);
+      });
+    };
 
-    await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
-      box: 'outbox',
-    });
+    await test
+      .runSequence('chooseWorkQueueSequence', {
+        box: 'inbox',
+        queue: 'section',
+      })
+      .then(() => {
+        console.log('then1');
+        expect(test.getState('workQueueToDisplay')).toEqual({
+          box: 'inbox',
+          queue: 'section',
+        });
+      });
 
-    expect(test.getState('workQueueToDisplay')).toEqual({
-      queue: 'section',
-      box: 'outbox',
-    });
+    // await test.runSequence('getTrialCitiesSequence');
 
     console.log(
-      'workQueue for section outbox',
+      'workQueue for section inbox',
       test.getState('workQueue').length,
     );
 
-    console.log('--------------');
-    // //
-    // await test.runSequence('chooseWorkQueueSequence', {
-    //   //switched from inbox to outbox
-    //   queue: 'section',
-    //   box: 'inbox',
-    // });
+    console.log('---again-------');
     //
-    // expect(test.getState('workQueueToDisplay')).toEqual({
-    //   box: 'inbox',
-    //   queue: 'section',
-    // });
+    await test
+      .runSequence('chooseWorkQueueSequence', {
+        //switched from inbox to outbox
+        queue: 'section',
+        box: 'inbox',
+      })
+      .then(() => {
+        console.log('then2');
+        expect(test.getState('workQueueToDisplay')).toEqual({
+          box: 'inbox',
+          queue: 'section',
+        });
+      });
+
+    await generatePromise(3000, true);
 
     // expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     // expect(test.getState('workQueue.0.messages.0')).toEqual(
