@@ -146,6 +146,8 @@ export default test => {
       queue: 'my',
       box: 'inbox',
     });
+    await generatePromise(3000, true);
+
     // no longer in our inbox!
     expect(test.getState('workQueue.0.docketNumber')).not.toEqual(
       docketNumber,
