@@ -88,8 +88,6 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "regenerator-runtime": "^0.12.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
     "riot": "^3.13.2",
     "riot-route": "^3.1.4",
     "sass": "^1.17.0",
