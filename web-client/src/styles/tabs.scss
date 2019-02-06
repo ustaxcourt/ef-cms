@@ -17,7 +17,7 @@
     &[aria-selected='true'] {
       background-color: $color-white;
       box-shadow: 0 2px 0 $color-white;
-      font-weight: 700;
+      font-weight: $font-bold;
     }
   }
 }

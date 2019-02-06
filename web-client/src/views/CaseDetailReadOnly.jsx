@@ -8,16 +8,16 @@ export default connect(
     caseDetailErrors: state.caseDetailErrors,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  function PetitionEdit({ caseDetail, formattedCaseDetail }) {
+  function CaseDetailReadOnly({ caseDetail, formattedCaseDetail }) {
     return (
       <React.Fragment>
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
-          <span className="label">Type of Notice</span>
+          <span className="label">Type of Case</span>
           <p>{caseDetail.caseType}</p>
 
           <div className="label">Date of Notice</div>
-          <p>{caseDetail.formattedIrsNoticeDate || 'none'}</p>
+          <p>{caseDetail.formattedIrsNoticeDate || 'No notice provided'}</p>
           <div>
             {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
               <div key={idx}>
