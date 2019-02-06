@@ -51,9 +51,20 @@ button.text-style {
   }
 }
 
-button.serve-to-irs {
-  margin-right: 0;
+.DocumentDetail .usa-width-one-half .recall-button-box {
+  padding: 2px;
+  margin-right: 2px;
+  margin-bottom: 2rem;
+  border: 1px solid $color-gold;
   float: right;
+  font-family: $font-serif;
+  svg {
+    margin: 0 2rem;
+    color: $color-gold;
+  }
+  button {
+    margin-left: 2rem;
+  }
 }
 
 #file-a-petition .usa-button-active:disabled {

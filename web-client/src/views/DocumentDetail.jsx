@@ -9,6 +9,7 @@ import SuccessNotification from './SuccessNotification';
 import CaseDetailEdit from './CaseDetailEdit';
 import CaseDetailReadOnly from './CaseDetailReadOnly';
 import ServeToIrsModalDialog from './ServeToIrsModalDialog';
+import RecallPetitionModalDialog from './RecallPetitionModalDialog';
 
 class DocumentDetail extends React.Component {
   render() {
@@ -26,7 +27,7 @@ class DocumentDetail extends React.Component {
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
       users,
-      submitRecallPetitionFromIRSHoldingQueueSequence,
+      setModalDialogNameSequence,
     } = this.props;
     return (
       <React.Fragment>
@@ -36,7 +37,7 @@ class DocumentDetail extends React.Component {
             Back
           </a>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section usa-grid DocumentDetail">
           <h1 className="captioned" tabIndex="-1">
             <a href={'/case-detail/' + caseDetail.docketNumber}>
               Docket Number: {caseDetail.docketNumberWithSuffix}
@@ -123,15 +124,20 @@ class DocumentDetail extends React.Component {
             {caseHelper.showRecallButton &&
               helper.formattedDocument.isPetition && (
                 <div className="usa-width-one-half">
-                  <button
-                    className="serve-to-irs"
-                    onClick={() =>
-                      submitRecallPetitionFromIRSHoldingQueueSequence()
-                    }
-                  >
+                  <div className="recall-button-box">
                     <FontAwesomeIcon icon={['far', 'clock']} />
-                    Recall
-                  </button>
+                    Batched for IRS
+                    <button
+                      className="serve-to-irs"
+                      onClick={() =>
+                        setModalDialogNameSequence({
+                          showModal: 'RecallPetitionModalDialog',
+                        })
+                      }
+                    >
+                      Recall
+                    </button>
+                  </div>
                 </div>
               )}
           </div>
@@ -439,6 +445,9 @@ class DocumentDetail extends React.Component {
         </section>
         <div tabIndex="0" />
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
+        {showModal === 'RecallPetitionModalDialog' && (
+          <RecallPetitionModalDialog />
+        )}
         <div tabIndex="0" />
       </React.Fragment>
     );
@@ -451,6 +460,7 @@ DocumentDetail.propTypes = {
   caseHelper: PropTypes.object,
   clickServeToIrsSequence: PropTypes.func,
   helper: PropTypes.object,
+  setModalDialogNameSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   showModal: PropTypes.string,
   submitCompleteSequence: PropTypes.func,
@@ -460,7 +470,6 @@ DocumentDetail.propTypes = {
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
   workItemActions: PropTypes.object,
-  submitRecallPetitionFromIRSHoldingQueueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -470,6 +479,7 @@ export default connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     showModal: state.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
@@ -479,8 +489,6 @@ export default connect(
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     users: state.internalUsers,
     workItemActions: state.workItemActions,
-    submitRecallPetitionFromIRSHoldingQueueSequence:
-      sequences.submitRecallPetitionFromIRSHoldingQueueSequence,
   },
   DocumentDetail,
 );
