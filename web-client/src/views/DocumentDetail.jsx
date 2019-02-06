@@ -433,12 +433,12 @@ class DocumentDetail extends React.Component {
             </div>
           </div>
         </section>
-        <button tabIndex="0" />
+        <div tabIndex="0" />
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
         )}
-        <button tabIndex="0" />
+        <div tabIndex="0" />
       </React.Fragment>
     );
   }
