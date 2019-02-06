@@ -455,5 +455,350 @@
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "8eef49b4-9d40-4773-84ab-49e1e59e49cd|case"
+  },
+  {
+    "sk": "2019-01-06T22:59:16.055Z",
+    "pk": "petitions|sentWorkItem",
+    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "Batched for IRS",
+    "document": {
+      "createdAt": "2019-01-06T22:49:42.980Z",
+      "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+      "documentType": "Petition",
+      "userId": "taxpayer",
+      "filedBy": "Petitioner",
+      "workItems": []
+    },
+    "section": "irsBatchSection",
+    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
+    "isInitializeCase": true,
+    "assigneeId": "irsBatchSystem",
+    "sentBy": "taxpayer",
+    "createdAt": "2019-01-06T22:49:42.981Z",
+    "assigneeName": "IRS Holding Queue",
+    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
+    "messages": [
+      {
+        "createdAt": "2019-01-06T22:49:42.981Z",
+        "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
+        "message": "A Petition filed by Petitioner is ready for review.",
+        "sentBy": "Test Taxpayer"
+      },
+      {
+        "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
+        "createdAt": "2019-01-06T22:59:16.055Z",
+        "sentTo": "IRS Holding Queue",
+        "message": "Petition batched for IRS",
+        "userId": "petitionsclerk",
+        "sentBy": "petitionsclerk"
+      }
+    ],
+    "pk": "2b985402-00ec-41d8-a88e-51e4b164e904",
+    "docketNumber": "199-18",
+    "updatedAt": "2019-01-06T22:49:42.981Z"
+  },
+  {
+    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "pk": "taxpayer|case"
+  },
+  {
+    "sk": "2019-01-06T22:59:16.055Z",
+    "pk": "petitionsclerk|sentWorkItem",
+    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904"
+  },
+  {
+    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "pk": "Batched for IRS|case-status"
+  },
+  {
+    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "pk": "aadca074-542e-496a-8322-8cb1c175a63c|case"
+  },
+  {
+    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
+    "pk": "irsBatchSystem|workItem"
+  },
+  {
+    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "pk": "199-18|case"
+  },
+  {
+    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
+    "pk": "irsBatchSection|workItem"
+  },
+  {
+    "procedureType": "Small",
+    "docketNumberSuffix": "S",
+    "documents": [
+      {
+        "createdAt": "2019-01-06T22:49:42.980Z",
+        "documentType": "Petition",
+        "filedBy": "Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "Batched for IRS",
+            "document": {
+              "createdAt": "2019-01-06T22:49:42.980Z",
+              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Petitioner",
+              "workItems": []
+            },
+            "section": "irsBatchSection",
+            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
+            "isInitializeCase": true,
+            "assigneeId": "irsBatchSystem",
+            "sentBy": "taxpayer",
+            "createdAt": "2019-01-06T22:49:42.981Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+            "messages": [
+              {
+                "createdAt": "2019-01-06T22:49:42.981Z",
+                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Taxpayer"
+              },
+              {
+                "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
+                "createdAt": "2019-01-06T22:59:16.055Z",
+                "sentTo": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "userId": "petitionsclerk",
+                "sentBy": "petitionsclerk"
+              }
+            ],
+            "docketNumber": "199-18",
+            "updatedAt": "2019-01-06T22:49:42.981Z"
+          }
+        ],
+        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "taxpayer",
+    "currentVersion": "2",
+    "caseType": "Deficiency",
+    "yearAmounts": [],
+    "preferredTrialCity": "Washington, District of Columbia",
+    "createdAt": "2019-01-06T22:49:42.980Z",
+    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "docketRecord": [
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Request for Place of Trial at Washington, District of Columbia"
+      },
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Petition",
+        "filedBy": "Petitioner"
+      }
+    ],
+    "sk": "0",
+    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "petitioner",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "docketNumber": "199-18",
+    "status": "Batched for IRS"
+  },
+  {
+    "procedureType": "Small",
+    "docketNumberSuffix": "S",
+    "documents": [
+      {
+        "createdAt": "2019-01-06T22:49:42.980Z",
+        "documentType": "Petition",
+        "filedBy": "Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-01-06T22:49:42.980Z",
+              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-01-06T22:49:42.981Z",
+            "assigneeName": null,
+            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+            "messages": [
+              {
+                "createdAt": "2019-01-06T22:49:42.981Z",
+                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Taxpayer"
+              }
+            ],
+            "docketNumber": "199-18",
+            "updatedAt": "2019-01-06T22:49:42.981Z"
+          }
+        ],
+        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "taxpayer",
+    "currentVersion": "1",
+    "caseType": "Deficiency",
+    "yearAmounts": [],
+    "preferredTrialCity": "Washington, District of Columbia",
+    "createdAt": "2019-01-06T22:49:42.980Z",
+    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "docketRecord": [
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Request for Place of Trial at Washington, District of Columbia"
+      },
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Petition",
+        "filedBy": "Petitioner"
+      }
+    ],
+    "sk": "1",
+    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "petitioner",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "docketNumber": "199-18",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "docketNumberSuffix": "S",
+    "documents": [
+      {
+        "createdAt": "2019-01-06T22:49:42.980Z",
+        "documentType": "Petition",
+        "filedBy": "Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "Batched for IRS",
+            "document": {
+              "createdAt": "2019-01-06T22:49:42.980Z",
+              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Petitioner",
+              "workItems": []
+            },
+            "section": "irsBatchSection",
+            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
+            "isInitializeCase": true,
+            "assigneeId": "irsBatchSystem",
+            "sentBy": "taxpayer",
+            "createdAt": "2019-01-06T22:49:42.981Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+            "messages": [
+              {
+                "createdAt": "2019-01-06T22:49:42.981Z",
+                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Taxpayer"
+              },
+              {
+                "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
+                "createdAt": "2019-01-06T22:59:16.055Z",
+                "sentTo": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "userId": "petitionsclerk",
+                "sentBy": "petitionsclerk"
+              }
+            ],
+            "docketNumber": "199-18",
+            "updatedAt": "2019-01-06T22:49:42.981Z"
+          }
+        ],
+        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "taxpayer",
+    "currentVersion": "2",
+    "caseType": "Deficiency",
+    "yearAmounts": [],
+    "preferredTrialCity": "Washington, District of Columbia",
+    "createdAt": "2019-01-06T22:49:42.980Z",
+    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "docketRecord": [
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Request for Place of Trial at Washington, District of Columbia"
+      },
+      {
+        "filingDate": "2019-01-06T22:49:42.980Z",
+        "description": "Petition",
+        "filedBy": "Petitioner"
+      }
+    ],
+    "sk": "2",
+    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "petitioners": [
+      {
+        "zip": "37208",
+        "role": "petitioner",
+        "city": "Orlando",
+        "phone": "111-111-1111",
+        "name": "Test Taxpayer",
+        "addressLine1": "111 Orange St.",
+        "addressLine2": "Building 2",
+        "state": "FL",
+        "userId": "taxpayer",
+        "email": "testtaxpayer@example.com",
+        "token": "taxpayer"
+      }
+    ],
+    "docketNumber": "199-18",
+    "status": "Batched for IRS"
   }
 ]
