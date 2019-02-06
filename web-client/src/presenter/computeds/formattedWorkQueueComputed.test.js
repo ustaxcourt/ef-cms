@@ -53,6 +53,8 @@ const FORMATTED_WORK_ITEM = {
   selected: false,
   sentBy: 'respondent',
   workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
+  showComplete: true,
+  showSendTo: true,
 };
 describe('formatted work queue computed', () => {
   const workItem = {
@@ -114,5 +116,17 @@ describe('formatted work queue computed', () => {
     expect(result[0].historyMessages[0].messageId).toEqual(
       '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
     );
+  });
+
+  it('sets showSendTo and showComplete', () => {
+    workItem.isInitializeCase = true;
+    const result2 = runCompute(formattedWorkQueue, {
+      state: {
+        workQueue: [workItem],
+        selectedWorkItems: [],
+      },
+    });
+    expect(result2[0].showSendTo).toBeFalsy();
+    expect(result2[0].showComplete).toBeFalsy();
   });
 });

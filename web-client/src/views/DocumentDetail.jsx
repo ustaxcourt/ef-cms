@@ -108,30 +108,32 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            {caseHelper.showServeToIrsButton && helper.formattedDocument.isPetition && (
-              <div className="usa-width-one-half">
-                <button
-                  className="serve-to-irs"
-                  onClick={() => clickServeToIrsSequence()}
-                >
-                  <FontAwesomeIcon icon={['far', 'clock']} />
-                  Serve to IRS
-                </button>
-              </div>
-            )}
-            {caseHelper.showRecallButton && helper.formattedDocument.isPetition && (
-              <div className="usa-width-one-half">
-                <button
-                  className="serve-to-irs"
-                  onClick={() =>
-                    submitRecallPetitionFromIRSHoldingQueueSequence()
-                  }
-                >
-                  <FontAwesomeIcon icon={['far', 'clock']} />
-                  Recall
-                </button>
-              </div>
-            )}
+            {caseHelper.showServeToIrsButton &&
+              helper.formattedDocument.isPetition && (
+                <div className="usa-width-one-half">
+                  <button
+                    className="serve-to-irs"
+                    onClick={() => clickServeToIrsSequence()}
+                  >
+                    <FontAwesomeIcon icon={['far', 'clock']} />
+                    Serve to IRS
+                  </button>
+                </div>
+              )}
+            {caseHelper.showRecallButton &&
+              helper.formattedDocument.isPetition && (
+                <div className="usa-width-one-half">
+                  <button
+                    className="serve-to-irs"
+                    onClick={() =>
+                      submitRecallPetitionFromIRSHoldingQueueSequence()
+                    }
+                  >
+                    <FontAwesomeIcon icon={['far', 'clock']} />
+                    Recall
+                  </button>
+                </div>
+              )}
           </div>
 
           <div className="usa-grid-full">
@@ -213,53 +215,63 @@ class DocumentDetail extends React.Component {
                             <FontAwesomeIcon icon="list-ul" size="sm" />
                             View History
                           </button>
-                          <button
-                            role="tab"
-                            id="complete-tab"
-                            aria-selected={helper.showAction(
-                              'complete',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="history-card"
-                            className={`usa-width-one-third ${
-                              helper.showAction('complete', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'complete',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="check-circle" size="sm" />
-                            Complete
-                          </button>
-                          <button
-                            role="tab"
-                            id="forward-tab"
-                            aria-selected={helper.showAction(
-                              'forward',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="forward-card"
-                            data-workitemid={workItem.workItemId}
-                            className={`usa-width-one-third send-to ${
-                              helper.showAction('forward', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'forward',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="share-square" size="sm" />{' '}
-                            Send To
-                          </button>
+                          {workItem.showComplete && (
+                            <button
+                              role="tab"
+                              id="complete-tab"
+                              aria-selected={helper.showAction(
+                                'complete',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="history-card"
+                              className={`usa-width-one-third ${
+                                helper.showAction(
+                                  'complete',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'complete',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="check-circle" size="sm" />
+                              Complete
+                            </button>
+                          )}
+                          {workItem.showSendTo && (
+                            <button
+                              role="tab"
+                              id="forward-tab"
+                              aria-selected={helper.showAction(
+                                'forward',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="forward-card"
+                              data-workitemid={workItem.workItemId}
+                              className={`usa-width-one-third send-to ${
+                                helper.showAction(
+                                  'forward',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'forward',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="share-square" size="sm" />{' '}
+                              Send To
+                            </button>
+                          )}
                         </div>
                         {helper.showAction('complete', workItem.workItemId) && (
                           <div
@@ -415,7 +427,9 @@ class DocumentDetail extends React.Component {
 
             <div className="usa-width-two-thirds">
               <iframe
-                title={`Document type: ${helper.formattedDocument.documentType}`}
+                title={`Document type: ${
+                  helper.formattedDocument.documentType
+                }`}
                 src={`${baseUrl}/documents/${
                   helper.formattedDocument.documentId
                 }/documentDownloadUrl`}
