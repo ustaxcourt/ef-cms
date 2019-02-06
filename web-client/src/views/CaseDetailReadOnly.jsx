@@ -8,7 +8,7 @@ export default connect(
     caseDetailErrors: state.caseDetailErrors,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  function PetitionEdit({ caseDetail, formattedCaseDetail }) {
+  function CaseDetailReadOnly({ caseDetail, formattedCaseDetail }) {
     return (
       <React.Fragment>
         <div className="blue-container">
