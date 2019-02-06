@@ -7,6 +7,7 @@ import React from 'react';
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 import CaseDetailEdit from './CaseDetailEdit';
+import CaseDetailReadOnly from './CaseDetailReadOnly';
 import ServeToIrsModalDialog from './ServeToIrsModalDialog';
 
 class DocumentDetail extends React.Component {
@@ -16,7 +17,6 @@ class DocumentDetail extends React.Component {
       caseDetail,
       caseHelper,
       clickServeToIrsSequence,
-      document,
       helper,
       setWorkItemActionSequence,
       showModal,
@@ -26,6 +26,7 @@ class DocumentDetail extends React.Component {
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
       users,
+      submitRecallPetitionFromIRSHoldingQueueSequence,
     } = this.props;
     return (
       <React.Fragment>
@@ -51,15 +52,15 @@ class DocumentDetail extends React.Component {
             </span>
           </p>
           <hr aria-hidden="true" />
-          <h2>{document.documentType}</h2>
+          <h2>{helper.formattedDocument.documentType}</h2>
           <div className="usa-grid-full subsection">
             <div className="usa-width-one-fourth">
               <span className="label-inline">Date filed</span>
-              <span>{document.createdAtFormatted}</span>
+              <span>{helper.formattedDocument.createdAtFormatted}</span>
             </div>
             <div className="usa-width-one-fourth">
               <span className="label-inline">Filed by</span>
-              <span>{document.filedBy}</span>
+              <span>{helper.formattedDocument.filedBy}</span>
             </div>
           </div>
 
@@ -70,7 +71,7 @@ class DocumentDetail extends React.Component {
             <div className="usa-width-one-half">
               <nav className="horizontal-tabs subsection">
                 <ul role="tablist">
-                  {helper.showCaseDetailsEdit && (
+                  {helper.showDocumentInfoTab && (
                     <li className={helper.showDocumentInfo ? 'active' : ''}>
                       <button
                         role="tab"
@@ -107,7 +108,7 @@ class DocumentDetail extends React.Component {
                 </ul>
               </nav>
             </div>
-            {caseHelper.showServeToIrsButton && document.isPetition && (
+            {caseHelper.showServeToIrsButton && helper.formattedDocument.isPetition && (
               <div className="usa-width-one-half">
                 <button
                   className="serve-to-irs"
@@ -115,6 +116,19 @@ class DocumentDetail extends React.Component {
                 >
                   <FontAwesomeIcon icon={['far', 'clock']} />
                   Serve to IRS
+                </button>
+              </div>
+            )}
+            {caseHelper.showRecallButton && helper.formattedDocument.isPetition && (
+              <div className="usa-width-one-half">
+                <button
+                  className="serve-to-irs"
+                  onClick={() =>
+                    submitRecallPetitionFromIRSHoldingQueueSequence()
+                  }
+                >
+                  <FontAwesomeIcon icon={['far', 'clock']} />
+                  Recall
                 </button>
               </div>
             )}
@@ -129,7 +143,8 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="tab-document-info"
                   tabIndex="0"
                 >
-                  <CaseDetailEdit />
+                  {helper.showCaseDetailsEdit && <CaseDetailEdit />}
+                  {helper.showCaseDetailsView && <CaseDetailReadOnly />}
                 </div>
               )}
               {/*workitem tab start*/}
@@ -140,17 +155,17 @@ class DocumentDetail extends React.Component {
                   aria-labelledby="tab-pending-messages"
                   tabIndex="0"
                 >
-                  {(!document ||
-                    !document.workItems ||
-                    !document.workItems.length) && (
+                  {(!helper.formattedDocument ||
+                    !helper.formattedDocument.workItems ||
+                    !helper.formattedDocument.workItems.length) && (
                     <div>
                       There are no pending messages associated with this
                       document.
                     </div>
                   )}
-                  {document &&
-                    document.workItems &&
-                    document.workItems.map((workItem, idx) => (
+                  {helper.formattedDocument &&
+                    helper.formattedDocument.workItems &&
+                    helper.formattedDocument.workItems.map((workItem, idx) => (
                       <div
                         className="card"
                         aria-labelledby="tab-pending-messages"
@@ -400,9 +415,9 @@ class DocumentDetail extends React.Component {
 
             <div className="usa-width-two-thirds">
               <iframe
-                title={`Document type: ${document.documentType}`}
+                title={`Document type: ${helper.formattedDocument.documentType}`}
                 src={`${baseUrl}/documents/${
-                  document.documentId
+                  helper.formattedDocument.documentId
                 }/documentDownloadUrl`}
               />
             </div>
@@ -421,7 +436,6 @@ DocumentDetail.propTypes = {
   caseDetail: PropTypes.object,
   caseHelper: PropTypes.object,
   clickServeToIrsSequence: PropTypes.func,
-  document: PropTypes.object,
   helper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
   showModal: PropTypes.string,
@@ -432,6 +446,7 @@ DocumentDetail.propTypes = {
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
   workItemActions: PropTypes.object,
+  submitRecallPetitionFromIRSHoldingQueueSequence: PropTypes.func,
 };
 
 export default connect(
@@ -440,7 +455,6 @@ export default connect(
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
-    document: state.extractedDocument,
     helper: state.documentDetailHelper,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     showModal: state.showModal,
@@ -451,6 +465,8 @@ export default connect(
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     users: state.internalUsers,
     workItemActions: state.workItemActions,
+    submitRecallPetitionFromIRSHoldingQueueSequence:
+      sequences.submitRecallPetitionFromIRSHoldingQueueSequence,
   },
   DocumentDetail,
 );

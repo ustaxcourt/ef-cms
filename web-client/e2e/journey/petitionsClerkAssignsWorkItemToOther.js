@@ -1,7 +1,7 @@
 export default test => {
   return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'section',
       box: 'inbox',
     });
@@ -57,7 +57,7 @@ export default test => {
     });
 
     // the work item should be removed from the individual work queue
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'my',
       box: 'inbox',
     });

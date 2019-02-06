@@ -52,7 +52,6 @@ exports.sendPetitionToIRSHoldingQueue = async ({
     caseEntity.validateWithError(invalidEntityError);
 
     caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
-
     return await applicationContext.getPersistenceGateway().saveCase({
       caseToSave: caseEntity.toRawObject(),
       applicationContext,

@@ -1,5 +1,5 @@
 export default test => {
-  return it('Docket clerk views document detail', async () => {
+  return it('Senior Attorney views document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,

@@ -3,7 +3,7 @@ export default test => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
     const workItem = test
-      .getState('sectionWorkQueue')
+      .getState('workQueue')
       .find(
         workItem => workItem.workItem === test.stipulatedDecisionWorkItemId,
       );

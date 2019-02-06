@@ -15,10 +15,10 @@ presenter.providers.applicationContext = {
 };
 test = CerebralTest(presenter);
 
-describe('switchWorkQueueSequence', async () => {
+describe('chooseWorkQueueSequence', async () => {
   it('should set the workQueueToDisplay to match the props passed in', async () => {
     test.setState('workQueueToDisplay', null);
-    await test.runSequence('switchWorkQueueSequence', {
+    await test.runSequence('chooseWorkQueueSequence', {
       queue: 'section',
       box: 'inbox',
     });
