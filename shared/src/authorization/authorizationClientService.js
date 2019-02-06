@@ -16,6 +16,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_DOCUMENT_ID,
     exports.GET_CASES_BY_STATUS,
     exports.WORKITEM,
+    exports.UPDATE_CASE,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
