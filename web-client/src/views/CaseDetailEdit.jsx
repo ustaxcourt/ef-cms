@@ -54,7 +54,7 @@ export default connect(
         )}
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
-          <span className="label">Type of Notice</span>
+          <span className="label">Type of Case</span>
           <p>{caseDetail.caseType}</p>
 
           <div
