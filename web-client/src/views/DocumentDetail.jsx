@@ -152,7 +152,7 @@ class DocumentDetail extends React.Component {
                   tabIndex="0"
                 >
                   {helper.showCaseDetailsEdit && <CaseDetailEdit />}
-                  {!helper.showCaseDetailsEdit && <CaseDetailReadOnly />}
+                  {helper.showCaseDetailsView && <CaseDetailReadOnly />}
                 </div>
               )}
               {/*workitem tab start*/}

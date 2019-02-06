@@ -20,22 +20,13 @@ export default test => {
       box: 'inbox',
       queue: 'my',
     });
-    // expect(test.getState('workQueue').length).toBeGreaterThan(0);
-
     //click on Sent/Outbox tab for the section
     await test.runSequence('chooseWorkQueueSequence', {
       //switched from inbox to outbox
       box: 'outbox',
       queue: 'section',
-      // })
-      // .then(r => {
-      //   console.log('wow man');
     });
-    //verify Sent tab is shown
-    //verify that the recalled and general
-
     //verify that the section workitems are in state
-
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'outbox',
       queue: 'section',
@@ -70,8 +61,6 @@ export default test => {
     // // recall the petition
     // await test.runSequence('clickRecallPetitionSequence');
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
-    // back on the dashboard
-    // console.log('--------------');
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'outbox',
@@ -127,11 +116,6 @@ export default test => {
 
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
 
-    // console.log(JSON.stringify(test.getState('caseDetail.status')));
-    // console.log(test.getState('workQueue.0.caseStatus'));
-    // console.log(test.getState('workQueue.0.docketNumber'));
-    // console.log(test.getState('caseDetail.docketNumber'))
-
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     expect(test.getState('caseDetail.status')).toEqual('Recalled');
 
@@ -174,8 +158,8 @@ export default test => {
 
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    await test.runSequence('gotoDashboardSequence');
-    await generatePromise(3000, true); //why does the last promise in this test not work?
+    // await test.runSequence('gotoDashboardSequence');
+    await generatePromise(6000, true); //why does the last promise in this test not work?
 
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
   });
