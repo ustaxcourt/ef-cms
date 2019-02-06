@@ -1,6 +1,6 @@
-describe('Updates the case information on a petition document', function() {
+xdescribe('Updates the case information on a petition document', function() {
   before(() => {
-    cy.login('petitionsclerk', '/case-detail/102-18');
+    cy.login('docketclerk', '/case-detail/102-18');
   });
 
   it('clicks case info tab', () => {
@@ -15,8 +15,8 @@ describe('Updates the case information on a petition document', function() {
 
   it('goes to the petition document info tab', () => {
     cy.login(
-      'petitionsclerk',
-      '/case-detail/102-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      'docketclerk',
+      '/case-detail/102-18/documents/61e96924-ce65-49f4-bebf-780bfc148520',
     );
     cy.get('#date-of-notice-month')
       .scrollIntoView()
@@ -31,7 +31,7 @@ describe('Updates the case information on a petition document', function() {
   });
 
   it('goes back to the case info tab on the case details page', () => {
-    cy.login('petitionsclerk', '/case-detail/102-18');
+    cy.login('docketclerk', '/case-detail/102-18');
     cy.get('#case-info-tab').click();
     cy.get('#irs-notice-date')
       .scrollIntoView()

@@ -34,9 +34,7 @@ export default async ({ get, store, applicationContext, props }) => {
 
   store.set(state.caseDetail, caseDetail);
 
-  const useCases = applicationContext.getUseCases();
-
-  await useCases.updateWorkItem({
+  await applicationContext.getUseCases().updateWorkItem({
     applicationContext,
     workItemToUpdate,
     workItemId: props.workItemId,

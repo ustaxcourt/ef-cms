@@ -1,6 +1,7 @@
 import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
+import chooseWorkQueueSequence from './sequences/chooseWorkQueueSequence';
 import clearDocumentSequence from './sequences/clearDocumentSequence';
 import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
 import dismissAlertSequence from './sequences/dismissAlertSequence';
@@ -31,7 +32,6 @@ import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionT
 import submitRecallPetitionFromIRSHoldingQueueSequence from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
 import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
-import switchWorkQueueSequence from './sequences/switchWorkQueueSequence';
 import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
 import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
 import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
@@ -68,6 +68,7 @@ export default {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
+    chooseWorkQueueSequence,
     clearDocumentSequence,
     clickServeToIrsSequence,
     dismissAlertSequence,
@@ -97,7 +98,6 @@ export default {
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
     submitUpdateCaseSequence,
-    switchWorkQueueSequence,
     toggleCaseDifferenceSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,

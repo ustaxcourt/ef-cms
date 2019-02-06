@@ -3,7 +3,6 @@ import { omit } from 'lodash';
 
 export default async ({ applicationContext, get, store }) => {
   const { petitionFile } = get(state.petition);
-  const useCases = applicationContext.getUseCases();
 
   const fileHasUploaded = () => {
     store.set(
@@ -22,7 +21,7 @@ export default async ({ applicationContext, get, store }) => {
     ['year', 'month', 'day', 'trialCities', 'signature'],
   );
 
-  await useCases.filePetition({
+  await applicationContext.getUseCases().filePetition({
     applicationContext,
     petitionMetadata: form,
     petitionFile,

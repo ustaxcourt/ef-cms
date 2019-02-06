@@ -1,6 +1,5 @@
 export default async ({ applicationContext, props }) => {
-  const useCases = applicationContext.getUseCases();
-  const trialCities = await useCases.getTrialCities({
+  const trialCities = await applicationContext.getUseCases().getTrialCities({
     procedureType: props.value,
     applicationContext: applicationContext,
   });
