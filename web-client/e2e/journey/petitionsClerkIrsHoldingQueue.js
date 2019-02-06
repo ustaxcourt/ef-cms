@@ -135,6 +135,10 @@ export default test => {
     const workItem = test.getState('workQueue').find(item => {
       return item.isInitializeCase && item.docketNumber === docketNumber;
     });
+
+    expect(workItem.showComplete).toBeFalsy();
+    expect(workItem.showSendTo).toBeFalsy();
+
     await test.runSequence('selectWorkItemSequence', {
       workItem: workItem,
     });
