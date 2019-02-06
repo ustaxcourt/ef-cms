@@ -19,6 +19,7 @@ import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
+import setModalDialogNameSequence from './sequences/setModalDialogNameSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
 import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
@@ -85,6 +86,7 @@ export default {
     selectAssigneeSequence,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
+    setModalDialogNameSequence,
     setWorkItemActionSequence,
     startACaseConfirmCancelSequence,
     startACaseToggleCancelSequence,
