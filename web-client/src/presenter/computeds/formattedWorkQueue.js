@@ -33,7 +33,8 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   result.caseStatus =
     result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
   result.caseStatus = _.startCase(result.caseStatus);
-
+  result.showComplete = result.isInitializeCase ? false : true;
+  result.showSendTo = result.isInitializeCase ? false : true;
   result.showBatchedStatusIcon = result.caseStatus === 'Batched For IRS'; // TODO
 
   result.docketNumberWithSuffix = `${

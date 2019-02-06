@@ -221,53 +221,63 @@ class DocumentDetail extends React.Component {
                             <FontAwesomeIcon icon="list-ul" size="sm" />
                             View History
                           </button>
-                          <button
-                            role="tab"
-                            id="complete-tab"
-                            aria-selected={helper.showAction(
-                              'complete',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="history-card"
-                            className={`usa-width-one-third ${
-                              helper.showAction('complete', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'complete',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="check-circle" size="sm" />
-                            Complete
-                          </button>
-                          <button
-                            role="tab"
-                            id="forward-tab"
-                            aria-selected={helper.showAction(
-                              'forward',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="forward-card"
-                            data-workitemid={workItem.workItemId}
-                            className={`usa-width-one-third send-to ${
-                              helper.showAction('forward', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'forward',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="share-square" size="sm" />{' '}
-                            Send To
-                          </button>
+                          {workItem.showComplete && (
+                            <button
+                              role="tab"
+                              id="complete-tab"
+                              aria-selected={helper.showAction(
+                                'complete',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="history-card"
+                              className={`usa-width-one-third ${
+                                helper.showAction(
+                                  'complete',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'complete',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="check-circle" size="sm" />
+                              Complete
+                            </button>
+                          )}
+                          {workItem.showSendTo && (
+                            <button
+                              role="tab"
+                              id="forward-tab"
+                              aria-selected={helper.showAction(
+                                'forward',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="forward-card"
+                              data-workitemid={workItem.workItemId}
+                              className={`usa-width-one-third send-to ${
+                                helper.showAction(
+                                  'forward',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'forward',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="share-square" size="sm" />{' '}
+                              Send To
+                            </button>
+                          )}
                         </div>
                         {helper.showAction('complete', workItem.workItemId) && (
                           <div
