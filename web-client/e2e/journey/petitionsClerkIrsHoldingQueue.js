@@ -132,7 +132,9 @@ export default test => {
     expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
 
     // // assign to another petitionsclerk
-    const workItem = test.getState('workQueue.0');
+    const workItem = test.getState('workQueue').find(item => {
+      return item.isInitializeCase && item.docketNumber === docketNumber;
+    });
     await test.runSequence('selectWorkItemSequence', {
       workItem: workItem,
     });
@@ -142,14 +144,24 @@ export default test => {
     });
     await test.runSequence('assignSelectedWorkItemsSequence');
     await test.runSequence('chooseWorkQueueSequence', {
-      //switched from inbox to outbox
+      //switched from section inbox to mybox
+      queue: 'my',
+      box: 'outbox',
+    });
+    await generatePromise(1000, true); //why does the last promise in this test not work?
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      //switched from section inbox to mybox
       queue: 'my',
       box: 'inbox',
     });
+    await generatePromise(1000, true); //why does the last promise in this test not work?
+
+    const assignedWorkItem = test.getState('workQueue').find(item => {
+      return item.isInitializeCreate && item.docketNumber === docketNumber;
+    });
     // no longer in our inbox!
-    expect(test.getState('workQueue.0.docketNumber')).not.toEqual(
-      docketNumber,
-    );
+    expect(assignedWorkItem).toBeUndefined();
 
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: docketNumber,
@@ -159,7 +171,7 @@ export default test => {
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
     // await test.runSequence('gotoDashboardSequence');
-    await generatePromise(6000, true); //why does the last promise in this test not work?
+    await generatePromise(1000, true); //why does the last promise in this test not work?
 
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
   });
