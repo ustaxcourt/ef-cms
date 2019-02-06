@@ -9,7 +9,7 @@ export default get => {
   const selectedDocument = (caseDetail.documents || []).find(
     document => document.documentId === documentId,
   );
-  let formattedDocument;
+  let formattedDocument = {};
   if (selectedDocument) {
     formattedDocument = formatDocument(selectedDocument);
     formattedDocument.workItems = (formattedDocument.workItems || [])
