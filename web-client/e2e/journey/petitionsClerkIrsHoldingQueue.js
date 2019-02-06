@@ -146,8 +146,6 @@ export default test => {
       queue: 'my',
       box: 'inbox',
     });
-    await generatePromise(3000, true);
-
     // no longer in our inbox!
     expect(test.getState('workQueue.0.docketNumber')).not.toEqual(
       docketNumber,
@@ -160,8 +158,8 @@ export default test => {
 
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    await test.runSequence('gotoDashboardSequence');
-    await generatePromise(3000, true); //why does the last promise in this test not work?
+    // await test.runSequence('gotoDashboardSequence');
+    await generatePromise(6000, true); //why does the last promise in this test not work?
 
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
   });
