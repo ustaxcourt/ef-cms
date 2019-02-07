@@ -60,7 +60,7 @@ describe('formatted work queue computed', () => {
   const workItem = {
     createdAt: '2018-12-27T18:05:54.166Z',
     assigneeName: null,
-    caseStatus: 'general',
+    caseStatus: 'General',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     document: {
       documentType: 'Answer',
