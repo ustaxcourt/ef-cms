@@ -187,3 +187,19 @@ iframe {
     margin-right: 5px;
   }
 }
+
+.before-starting-case {
+  .fa-before {
+    border: 2px solid $color-primary-alt;
+    border-radius: 200px;
+    color: $color-primary-alt;
+  }
+
+  .before-label {
+    display: block;
+    font-family: $font-serif;
+  }
+  .before-explanation {
+    display: block;
+  }
+}
