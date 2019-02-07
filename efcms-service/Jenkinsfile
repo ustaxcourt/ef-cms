@@ -10,7 +10,7 @@ pipeline {
   agent any
 
   options {
-    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) 
+    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3'))
     disableConcurrentBuilds()
   }
 
@@ -45,15 +45,16 @@ pipeline {
         }
       }
     }
-    stage('Audit') {
-      steps {
-        script {
-          dir('efcms-service') {
-            sh "./docker-audit.sh"
-          }
-        }
-      }
-    }
+    // temp remove until dynamodb-local can be replaced
+    //stage('Audit') {
+    //  steps {
+    //    script {
+    //      dir('efcms-service') {
+    //        sh "./docker-audit.sh"
+    //      }
+    //    }
+    //  }
+    //}
     stage('Lint') {
       steps {
         script {
@@ -131,19 +132,19 @@ pipeline {
         }
       }
     }
-    stage('Setup S3 Replication Pre Prod') {	
-      when {	
-        expression {	
-          shouldDeploy(env.branch_name)	
-        }	
-      }	
-      steps {	
-        script {	
-          dir('efcms-service') {	
-            sh "./docker-s3replication.sh ${branchMap[env.branch_name]}"	
-          }	
-        }	
-      }	
+    stage('Setup S3 Replication Pre Prod') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh "./docker-s3replication.sh ${branchMap[env.branch_name]}"
+          }
+        }
+      }
     }
     stage('Setup Global Tables') {
       when {

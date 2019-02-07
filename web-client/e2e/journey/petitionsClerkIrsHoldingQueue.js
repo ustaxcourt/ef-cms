@@ -20,12 +20,21 @@ export default test => {
       box: 'inbox',
       queue: 'my',
     });
+
     //click on Sent/Outbox tab for the section
     await test.runSequence('chooseWorkQueueSequence', {
       //switched from inbox to outbox
       box: 'outbox',
       queue: 'section',
     });
+
+    //verify item in general status older than 7 days does not show
+    const oldGeneralItem = test.getState('workQueue').find(item => {
+      return item.isInitializeCreate && item.docketNumber === '199-18';
+    });
+
+    expect(oldGeneralItem).toBeUndefined();
+
     //verify that the section workitems are in state
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'outbox',
@@ -97,7 +106,6 @@ export default test => {
           queue: 'section',
         });
       });
-
 
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
 
