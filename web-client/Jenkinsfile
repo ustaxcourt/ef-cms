@@ -56,6 +56,23 @@ pipeline {
         }
       }
     }
+    stage('Test') {
+      steps {
+        script {
+          dir('web-client') {
+            def CONTAINER_NAME = "ui-test-${BUILD_NUMBER}"
+            sh "CONTAINER_NAME=$CONTAINER_NAME ./docker-test-unit.sh"
+          }
+        }
+      }
+      post {
+        success {
+          dir('web-client') {
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+          }
+        }
+      }
+    }
     stage('SonarQube') {
       steps {
         script {

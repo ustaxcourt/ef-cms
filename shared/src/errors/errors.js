@@ -17,6 +17,24 @@ module.exports.NotFoundError = class NotFoundError extends Error {
 };
 
 /**
+ * Custom unknown user error handling for middlewares
+ *
+ * @type {module.UnknownUserError}
+ */
+module.exports.UnknownUserError = class UnknownUserError extends Error {
+  /**
+   * constructor
+   *
+   * @param message
+   */
+  constructor(message) {
+    super(message);
+
+    this.statusCode = 401;
+  }
+};
+
+/**
  * Unauthorized error
  *
  * @type {module.UnauthorizedError}

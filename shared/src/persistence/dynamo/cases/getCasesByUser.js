@@ -12,11 +12,8 @@ exports.getCasesByUser = async ({ userId, applicationContext }) => {
     isVersioned: true,
   });
 
-  return applicationContext.filterCaseMetadata({
-    cases: stripWorkItems(
-      stripInternalKeys(cases),
-      applicationContext.isAuthorizedForWorkItems(),
-    ),
-    applicationContext,
-  });
+  return stripWorkItems(
+    stripInternalKeys(cases),
+    applicationContext.isAuthorizedForWorkItems(),
+  );
 };

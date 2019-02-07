@@ -1,15 +1,25 @@
-.work-queue-tab-container {
+.queue-tab-container {
   border: 1px solid $color-gray-lighter;
   background-color: $color-gray-lightest;
-}
 
-.work-queue-tab {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border-right: 1px solid $color-gray-lighter;
-  margin: 0;
-  background-color: $color-white;
-  box-shadow: 0 2px 0 $color-white;
+  .queue-tab {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 1rem 2rem;
+    margin: 0;
+    border-radius: 0;
+    font-family: $font-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3em;
+
+    &.selected,
+    &[aria-selected='true'] {
+      background-color: $color-white;
+      box-shadow: 0 2px 0 $color-white;
+      font-weight: $font-bold;
+    }
+  }
 }
 
 .horizontal-tabs {
@@ -22,11 +32,12 @@
 
   li {
     display: inline-block;
+    margin: 0;
 
     button {
       padding-bottom: 10px;
-      border-bottom: 3px $color-white solid;
       margin: 0 45px 0 0;
+      border-bottom: 3px $color-white solid;
       border-radius: 0;
       cursor: pointer;
       font-family: $font-serif;
@@ -45,6 +56,15 @@
   li button:hover {
     border-bottom: 3px $color-primary-darkest solid;
     color: $color-primary-darkest;
+  }
+}
+
+.horizontal-tabs-header3 {
+  li {
+    button {
+      margin: 0 30px 0 0;
+      font-size: 20px;
+    }
   }
 }
 

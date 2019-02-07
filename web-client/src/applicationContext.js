@@ -26,7 +26,12 @@ import { getInternalUsers } from '../../shared/src/business/useCases/getInternal
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { sendPetitionToIRS } from '../../shared/src/proxies/sendPetitionToIRSProxy';
+
+import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
+
+import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
+import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
@@ -35,6 +40,8 @@ import { validateCaseDetail } from '../../shared/src/business/useCases/validateC
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 
 import Petition from '../../shared/src/business/entities/Petition';
+import ErrorFactory from './presenter/errors/ErrorFactory';
+import decorateWithTryCatch from './tryCatchDecorator';
 
 let user;
 
@@ -45,9 +52,44 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
+const allUseCases = {
+  assignWorkItems,
+  createDocument,
+  createCase,
+  downloadDocumentFile,
+  fileRespondentDocument,
+  filePetition,
+  forwardWorkItem,
+  getCase,
+  getCasesByStatus,
+  getCasesByUser,
+  getCasesForRespondent,
+  getCaseTypes,
+  getSentWorkItemsForSection,
+  getSentWorkItemsForUser,
+  getInternalUsers,
+  getProcedureTypes,
+  getTrialCities,
+  getUser,
+  getUsersInSection,
+  getWorkItem,
+  getWorkItems,
+  getWorkItemsBySection,
+  recallPetitionFromIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueue,
+  updateCase,
+  updateWorkItem,
+  validatePetition,
+  validateCaseDetail,
+};
+decorateWithTryCatch(allUseCases);
+
 const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
+  },
+  getError: e => {
+    return ErrorFactory.getError(e);
   },
   getHttpClient: () => axios,
   getUniqueId: () => {
@@ -65,35 +107,7 @@ const applicationContext = {
       uploadPdfsForNewCase,
     };
   },
-  getUseCases: () => {
-    return {
-      assignWorkItems,
-      createDocument,
-      createCase,
-      downloadDocumentFile,
-      fileRespondentDocument,
-      filePetition,
-      forwardWorkItem,
-      getCase,
-      getCasesByStatus,
-      getCasesByUser,
-      getCasesForRespondent,
-      getCaseTypes,
-      getInternalUsers,
-      getProcedureTypes,
-      getTrialCities,
-      getUser,
-      getUsersInSection,
-      getWorkItem,
-      getWorkItems,
-      getWorkItemsBySection,
-      sendPetitionToIRS,
-      updateCase,
-      updateWorkItem,
-      validatePetition,
-      validateCaseDetail,
-    };
-  },
+  getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,
 };

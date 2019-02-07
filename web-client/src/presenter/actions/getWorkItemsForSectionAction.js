@@ -7,5 +7,5 @@ export default async ({ applicationContext }) => {
       section: user.section,
       userId: user.userId,
     });
-  return { sectionWorkItems };
+  return { workItems: sectionWorkItems };
 };

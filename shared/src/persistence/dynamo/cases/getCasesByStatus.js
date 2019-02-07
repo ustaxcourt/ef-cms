@@ -17,11 +17,8 @@ exports.getCasesByStatus = async ({ status, applicationContext }) => {
     type: 'case-status',
     isVersioned: true,
   });
-  return applicationContext.filterCaseMetadata({
-    cases: stripWorkItems(
-      stripInternalKeys(cases),
-      applicationContext.isAuthorizedForWorkItems(),
-    ),
-    applicationContext,
-  });
+  return stripWorkItems(
+    stripInternalKeys(cases),
+    applicationContext.isAuthorizedForWorkItems(),
+  );
 };

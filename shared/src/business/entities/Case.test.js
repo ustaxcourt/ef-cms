@@ -1,10 +1,9 @@
 const assert = require('assert');
 
 const Case = require('./Case');
+const DocketRecord = require('./DocketRecord');
+const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
 const { MOCK_CASE } = require('../../test/mockCase');
-
-const DATE = '2018-12-17T15:33:23.492Z';
-const sinon = require('sinon');
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -21,7 +20,6 @@ describe('Case entity', () => {
     it('adds a paygov date to an already existing case json', () => {
       const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
       assert.ok(myCase.isValid());
-      assert.ok(myCase.payGovDate);
     });
 
     it('Creates an invalid case with a document', () => {
@@ -67,26 +65,37 @@ describe('Case entity', () => {
       assert.ok(!myCase.isValid());
     });
 
-    it('will not allow year amounts with duplicate years', () => {
-      let error;
-      try {
-        new Case({
-          petitioners: [],
-          yearAmounts: [
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-            {
-              year: '2000',
-              amount: '34.50',
-            },
-          ],
-        });
-      } catch (e) {
-        error = e;
-      }
-      assert.ok(error !== null);
+    it('should not be valid because of duplicate years in yearAmounts', () => {
+      const isValid = new Case({
+        ...MOCK_CASE,
+        yearAmounts: [
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+          {
+            year: '2000',
+            amount: '34.50',
+          },
+        ],
+      }).isValid();
+      expect(isValid).toBeFalsy();
+    });
+  });
+
+  describe('areYearsUnique', () => {
+    it('will fail validation when having two year amounts with the same year', () => {
+      const isValid = Case.areYearsUnique([
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+        {
+          year: '2000',
+          amount: '34.50',
+        },
+      ]);
+      expect(isValid).toBeFalsy();
     });
   });
 
@@ -143,11 +152,44 @@ describe('Case entity', () => {
     });
   });
 
+  describe('sendToIRSHoldingQueue', () => {
+    it('sets status for irs batch', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.sendToIRSHoldingQueue();
+      expect(caseRecord.status).toEqual('Batched for IRS');
+    });
+  });
+
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
+    });
+  });
+
+  describe('addDocketRecord', () => {
+    it('adds a new docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(
+        new DocketRecord({
+          filingDate: new Date().toISOString(),
+          description: 'test',
+        }),
+      );
+      expect(caseRecord.docketRecord).toHaveLength(1);
+      expect(caseRecord.docketRecord[0].description).toEqual('test');
+    });
+    it('validates the docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      let error;
+      try {
+        caseRecord.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeTruthy();
     });
   });
 
@@ -173,34 +215,6 @@ describe('Case entity', () => {
         error = e;
       }
       assert.ok(!error);
-    });
-  });
-
-  describe('attachDocument', () => {
-    beforeEach(() => {
-      sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
-    });
-
-    afterEach(() => {
-      window.Date.prototype.toISOString.restore();
-    });
-
-    it('should attach the document to the case', () => {
-      const caseToVerify = new Case({});
-      caseToVerify.attachDocument({
-        documentType: 'Answer',
-        documentId: '123',
-        userId: 'respondent',
-      });
-      expect(caseToVerify.documents.length).toEqual(1);
-      expect(caseToVerify.documents[0]).toEqual({
-        documentType: 'Answer',
-        documentId: '123',
-        userId: 'respondent',
-        filedBy: 'Respondent',
-        createdAt: DATE,
-        workItems: [],
-      });
     });
   });
 
@@ -261,52 +275,10 @@ describe('Case entity', () => {
         expect(trialCities.length).toBeGreaterThan(1);
       });
     });
-  });
-
-  describe('filterMetadata', () => {
-    it('removes any field that a petitioner or respondent should not have access to', () => {
-      const result = Case.filterMetadata({
-        cases: {
-          documents: [],
-          docketNumber: '101-18',
-          caseId: '123',
-          docketNumberSuffix: 'W',
-          caseTitle: 'John vs IRS',
-          userId: 1,
-          petitioners: [
-            {
-              name: 'John',
-            },
-          ],
-          respondent: {
-            name: 'Bob',
-          },
-          createdAt: '123',
-          status: 'new',
-          payGovId: '123',
-          payGovDate: '2011/01/10',
-          preferredTrialCity: 1,
-          irsSendDate: '2011/01/10',
-        },
-        applicationContext: {
-          isAuthorizedForCaseMetadata: () => false,
-        },
-      });
-      expect(result).toEqual({
-        caseId: '123',
-        caseTitle: 'John vs IRS',
-        createdAt: '123',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'W',
-        documents: [],
-        payGovDate: '2011/01/10',
-        payGovId: '123',
-        petitioners: [{ name: 'John' }],
-        preferredTrialCity: 1,
-        respondent: { name: 'Bob' },
-        status: 'new',
-        userId: 1,
-      });
+    it('returns the regular trial cities for unidentified procedure type', () => {
+      const procedureType = 'unknown';
+      const trialCities = Case.getTrialCities(procedureType);
+      expect(trialCities).toEqual(REGULAR_TRIAL_CITIES);
     });
   });
 });
