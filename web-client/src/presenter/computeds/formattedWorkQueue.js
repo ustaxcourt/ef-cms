@@ -33,9 +33,8 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
-
-  switch (result.caseStatus) {
-    case 'Batched For IRS':
+  switch (result.caseStatus.trim()) {
+    case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
       result.statusIcon = 'iconStatusBatched';
       break;
