@@ -36,6 +36,10 @@ const router = {
       const path = query.path || '/';
       app.getSequence('loginWithTokenSequence')({ token, path });
     });
+    route('/before-starting-a-case', () => {
+      document.title = `Before you start a case ${pageTitleSuffix}`;
+      app.getSequence('gotoBeforeStartCaseSequence')();
+    });
     route('/start-a-case', () => {
       document.title = `Start a case ${pageTitleSuffix}`;
       app.getSequence('gotoStartCaseSequence')();
