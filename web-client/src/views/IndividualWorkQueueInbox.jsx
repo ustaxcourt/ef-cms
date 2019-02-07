@@ -1,4 +1,5 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { state, sequences } from 'cerebral';
 
@@ -17,9 +18,10 @@ export default connect(
         >
           <thead>
             <tr>
-              <th colSpan="2" aria-label="Docket Number">
-                Docket
+              <th colSpan="2" aria-hidden="true">
+                &nbsp;
               </th>
+              <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th>Document</th>
               <th>Status</th>
@@ -45,6 +47,16 @@ export default connect(
                     aria-expanded={item.isFocused}
                     aria-controls={`detail-${item.workItemId}`}
                   />
+                </td>
+                <td>
+                  {item.showBatchedStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['far', 'clock']}
+                      className={item.statusIcon}
+                      aria-label={item.caseStatus}
+                      title={item.caseStatus}
+                    />
+                  )}
                 </td>
                 <td>{item.docketNumberWithSuffix}</td>
                 <td>{item.currentMessage.createdAtFormatted}</td>

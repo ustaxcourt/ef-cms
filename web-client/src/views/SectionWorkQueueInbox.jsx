@@ -1,4 +1,5 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { state, sequences } from 'cerebral';
 
@@ -31,7 +32,7 @@ export default connect(
       >
         <thead>
           <tr>
-            <th colSpan="2">Select</th>
+            <th colSpan="3">Select</th>
             <th aria-label="Docket Number">Docket</th>
             <th>Received</th>
             <th>Document</th>
@@ -100,7 +101,7 @@ export default connect(
                   aria-controls={`detail-${item.workItemId}`}
                 />{' '}
               </td>
-              <td>
+              <td className="queue-width-44">
                 <input
                   id={item.workItemId}
                   type="checkbox"
@@ -118,9 +119,23 @@ export default connect(
                   id={`label-${item.workItemId}`}
                 />
               </td>
-              <td>{item.docketNumberWithSuffix}</td>
-              <td>{item.currentMessage.createdAtFormatted}</td>
-              <td>
+              <td className="section-queue-row queue-width-44">
+                {item.showBatchedStatusIcon && (
+                  <FontAwesomeIcon
+                    icon={['far', 'clock']}
+                    className={item.statusIcon}
+                    aria-label={item.caseStatus}
+                    title={item.caseStatus}
+                  />
+                )}
+              </td>
+              <td className="section-queue-row">
+                {item.docketNumberWithSuffix}
+              </td>
+              <td className="section-queue-row">
+                {item.currentMessage.createdAtFormatted}
+              </td>
+              <td className="section-queue-row">
                 <a
                   onClick={e => {
                     e.stopPropagation();
@@ -133,9 +148,11 @@ export default connect(
                   {item.document.documentType}
                 </a>
               </td>
-              <td>{item.caseStatus}</td>
-              <td>{item.currentMessage.sentBy}</td>
-              <td>{item.assigneeName}</td>
+              <td className="section-queue-row">{item.caseStatus}</td>
+              <td className="section-queue-row">
+                {item.currentMessage.sentBy}
+              </td>
+              <td className="section-queue-row">{item.assigneeName}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">
