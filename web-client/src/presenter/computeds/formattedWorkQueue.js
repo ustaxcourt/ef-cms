@@ -30,11 +30,9 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     );
   });
   result.assigneeName = result.assigneeName || 'Unassigned';
-  result.caseStatus =
-    result.caseStatus === 'general' ? 'General Docket' : result.caseStatus;
-  result.caseStatus = _.startCase(result.caseStatus);
-  result.showComplete = result.isInitializeCase ? false : true;
-  result.showSendTo = result.isInitializeCase ? false : true;
+
+  result.showComplete = !result.isInitializeCase;
+  result.showSendTo = !result.isInitializeCase;
 
   switch (result.caseStatus) {
     case 'Batched For IRS':
@@ -46,9 +44,11 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       result.statusIcon = 'iconStatusRecalled';
       break;
     case 'General':
-      result.showBatchedStatusIcon = false;
+      result.caseStatus = 'General Docket';
       result.statusIcon = '';
+      result.showBatchedStatusIcon = false;
       break;
+    case 'New':
     default:
       result.statusIcon = '';
       result.showBatchedStatusIcon = false;
