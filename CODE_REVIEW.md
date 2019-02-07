@@ -2,6 +2,21 @@
 
 ## Introduction
 
+We perform a code review in order to ensure that the produced code meets the [Deliverables and Performance Standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), as defined in [the RFQ](https://github.com/ustaxcourt/case-management-rfq/)’s Statement of Work. That defines six deliverables, performance standards for each, prescribes a quality level for each, and defines how each will be assessed at the conclusion of each sprint. Although ultimately it is up to the [Contracting Officer’s Representative](https://www.fai.gov/certification/fac-cor) to monitor vendor performance, CORs rarely have the technical experience to do so for an agile team, and rely on a developer — you — to evaluate compliance with performance standards on a per-sprint basis.
+
+Here are the Deliverables and Performance Standards for the U.S. Tax Court’s EF-CMS:
+
+| Deliverable | Performance Standard(s) | Acceptable Quality Level | Method of Assessment |
+| --- | --- | --- | --- |
+| Tested Code | Code delivered under the order must have substantial test code coverage and a clean code base<br><br>Version-controlled Court GitHub repository of code that comprises product that will remain in the government domain | Minimum of 90% test coverage of all code | Combination of manual review and automated testing |
+| Properly Styled Code | [GSA 18F Front End Guide](https://frontend.18f.gov/#js-style) | 0 linting errors and 0 warnings | Combination of manual review and automated testing |
+| Accessible | Web Content Accessibility Guidelines 2.1 AA (WCAG 2.1 AA) standards | 0 errors reported for WCAG 2.1 AA standards using an automated scanner and 0 errors reported in manual testing | [http://squizlabs.github.io/HTML\_CodeSniffer/](http://squizlabs.github.io/HTML_CodeSniffer/) or [https://github.com/pa11y/pa11y](https://github.com/pa11y/pa11y) |
+| Deployed | Code must successfully build and deploy into staging environment. | Successful build with a single command | Combination of manual review and automated testing |
+| Documentation | All dependencies are listed and the licenses are documented. Major functionality in the software/source code is documented. Individual methods are documented inline using comments that permit the use tools such as JsDoc. System diagram is provided. | Combination of manual review and automated testing, if available | Manual review |
+| Secure | OWASP Application Security Verification Standard 3.0 | Code submitted must be free of medium- and high-level static and dynamic security vulnerabilities | Clean tests from a static testing SaaS (such as Gemnasium) and from OWASP ZAP, along with documentation explaining any false positives |
+
+## Approach
+
 It is important to approach a code review with the right frame of mind:
 
 * Expect to ask lots of questions, not as an interrogation, but as an ongoing conversation, taking place between the U.S. Tax Court and the vendor.
