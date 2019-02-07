@@ -1,9 +1,9 @@
 import { state } from 'cerebral';
 
 export default ({ store, get }) => {
-  const { showCaseDetailsEdit } = get(state.documentDetailHelper);
+  const { showDocumentInfoTab } = get(state.documentDetailHelper);
   store.set(
     state.currentTab,
-    showCaseDetailsEdit ? 'Document Info' : 'Pending Messages',
+    showDocumentInfoTab ? 'Document Info' : 'Pending Messages',
   );
 };
