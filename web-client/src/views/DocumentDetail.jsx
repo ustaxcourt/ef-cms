@@ -127,7 +127,7 @@ class DocumentDetail extends React.Component {
                     <FontAwesomeIcon icon={['far', 'clock']} />
                     Batched for IRS
                     <button
-                      className="serve-to-irs"
+                      className="recall-petition"
                       onClick={() =>
                         setModalDialogNameSequence({
                           showModal: 'RecallPetitionModalDialog',
