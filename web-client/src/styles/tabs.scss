@@ -32,6 +32,7 @@
 
   li {
     display: inline-block;
+    margin: 0;
 
     button {
       padding-bottom: 10px;
@@ -55,6 +56,15 @@
   li button:hover {
     border-bottom: 3px $color-primary-darkest solid;
     color: $color-primary-darkest;
+  }
+}
+
+.horizontal-tabs-header3 {
+  li {
+    button {
+      margin: 0 30px 0 0;
+      font-size: 20px;
+    }
   }
 }
 

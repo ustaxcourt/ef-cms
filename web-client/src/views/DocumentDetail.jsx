@@ -68,9 +68,9 @@ class DocumentDetail extends React.Component {
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="usa-grid-full">
+          <div className="usa-grid-full subsection">
             <div className="usa-width-one-half">
-              <nav className="horizontal-tabs subsection">
+              <nav className="horizontal-tabs horizontal-tabs-header3 ">
                 <ul role="tablist">
                   {helper.showDocumentInfoTab && (
                     <li className={helper.showDocumentInfo ? 'active' : ''}>
@@ -103,15 +103,16 @@ class DocumentDetail extends React.Component {
                         })
                       }
                     >
-                      Pending Messages
+                      Pending Messages?
                     </button>
                   </li>
                 </ul>
               </nav>
             </div>
-            {caseHelper.showServeToIrsButton &&
-              helper.formattedDocument.isPetition && (
-                <div className="usa-width-one-half">
+
+            <div className="usa-width-one-half">
+              {caseHelper.showServeToIrsButton &&
+                helper.formattedDocument.isPetition && (
                   <button
                     className="serve-to-irs"
                     onClick={() => clickServeToIrsSequence()}
@@ -119,11 +120,9 @@ class DocumentDetail extends React.Component {
                     <FontAwesomeIcon icon={['far', 'clock']} />
                     Serve to IRS
                   </button>
-                </div>
-              )}
-            {caseHelper.showRecallButton &&
-              helper.formattedDocument.isPetition && (
-                <div className="usa-width-one-half">
+                )}
+              {caseHelper.showRecallButton &&
+                helper.formattedDocument.isPetition && (
                   <div className="recall-button-box">
                     <FontAwesomeIcon icon={['far', 'clock']} />
                     Batched for IRS
@@ -138,8 +137,8 @@ class DocumentDetail extends React.Component {
                       Recall
                     </button>
                   </div>
-                </div>
-              )}
+                )}
+            </div>
           </div>
 
           <div className="usa-grid-full">
@@ -195,7 +194,7 @@ class DocumentDetail extends React.Component {
                           <p>{workItem.currentMessage.message}</p>
                         </div>
                         <div
-                          className="usa-grid-full content-wrapper toggle-button-wrapper actions-wrapper"
+                          className="content-wrapper toggle-button-wrapper actions-wrapper"
                           role="tablist"
                         >
                           <button
@@ -206,7 +205,7 @@ class DocumentDetail extends React.Component {
                               workItem.workItemId,
                             )}
                             aria-controls="history-card"
-                            className={`usa-width-one-third ${
+                            className={`${
                               helper.showAction('history', workItem.workItemId)
                                 ? 'selected'
                                 : 'unselected'
@@ -230,7 +229,7 @@ class DocumentDetail extends React.Component {
                                 workItem.workItemId,
                               )}
                               aria-controls="history-card"
-                              className={`usa-width-one-third ${
+                              className={`${
                                 helper.showAction(
                                   'complete',
                                   workItem.workItemId,
@@ -259,7 +258,7 @@ class DocumentDetail extends React.Component {
                               )}
                               aria-controls="forward-card"
                               data-workitemid={workItem.workItemId}
-                              className={`usa-width-one-third send-to ${
+                              className={`send-to ${
                                 helper.showAction(
                                   'forward',
                                   workItem.workItemId,
