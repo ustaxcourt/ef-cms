@@ -51,7 +51,7 @@ export default connect(
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
-                    className="iconStatusBatched"
+                    className={item.statusIcon}
                     aria-label={item.caseStatus}
                     title={item.caseStatus}
                   />
