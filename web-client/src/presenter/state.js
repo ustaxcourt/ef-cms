@@ -25,7 +25,7 @@ export default {
   mobileMenu: {
     isVisible: false,
   },
-  showModal: false,
+  showModal: '',
   paymentInfo: {
     showDetails: false,
   },
@@ -35,9 +35,8 @@ export default {
   form: {},
   searchTerm: '',
   workQueue: [],
-  sectionWorkQueue: [],
   users: [],
-  workQueueToDisplay: 'individual',
+  workQueueToDisplay: { queue: 'my', box: 'inbox' },
   assigneeId: null,
   selectedWorkItems: [],
   caseTypes: [],
@@ -72,6 +71,7 @@ export default {
     // role: 'seniorattorney',
   },
   caseDetail: {},
+  caseDetailErrors: {},
   cases: [],
   completeForm: {},
   workItemActions: {},

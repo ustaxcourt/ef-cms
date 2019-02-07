@@ -20,26 +20,26 @@ describe('getCaseByDocketNumber', () => {
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'put').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
         pk: '123',
         sk: '123',
         caseId: '123',
-        status: 'new',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
@@ -69,7 +69,7 @@ describe('getCaseByDocketNumber', () => {
       docketNumber: '101-18',
       applicationContext,
     });
-    expect(result).to.deep.equal({ caseId: '123', status: 'new' });
+    expect(result).to.deep.equal({ caseId: '123', status: 'New' });
   });
 
   it('should return null if no mapping records are returned from the query', async () => {

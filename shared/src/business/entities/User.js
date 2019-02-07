@@ -1,3 +1,5 @@
+const { UnknownUserError } = require('../../errors/errors');
+
 const { getSectionForRole } = require('./WorkQueue');
 
 const {
@@ -29,13 +31,13 @@ function User(user) {
   ];
 
   let role = this.userId;
-  if (role.indexOf('docketclerk') > -1 && /docketclerk(\d{1,2})?$/.test(role)) {
+  if (/docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
   }
-  if (
-    role.indexOf('petitionsclerk') > -1 &&
-    /petitionsclerk(\d{1,2})?$/.test(role)
-  ) {
+  if (role.indexOf('petitioner') > -1) {
+    role = 'petitioner';
+  }
+  if (/petitionsclerk(\d{1,2})?$/.test(role)) {
     role = 'petitionsclerk';
   }
   if (role.indexOf('taxpayer') > -1) {
@@ -63,7 +65,7 @@ function User(user) {
     });
     this.section = getSectionForRole(role);
   } else {
-    throw new Error('invalid user');
+    throw new UnknownUserError('Unknown user');
   }
 }
 
@@ -73,6 +75,10 @@ function User(user) {
  */
 User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
+};
+
+User.prototype.getDocketRecordName = function getDocketRecordName() {
+  return this.role === 'petitioner' ? `Petitioner ${this.name}` : this.name;
 };
 
 module.exports = User;

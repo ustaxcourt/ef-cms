@@ -16,6 +16,46 @@ const stripInternalKeys = items => {
 };
 exports.stripInternalKeys = stripInternalKeys;
 
+const getSortRecordsViaMapping = async ({
+  applicationContext,
+  key,
+  type,
+  foreignKey,
+  afterDate,
+  isVersioned = false,
+}) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
+  const mapping = await client.query({
+    applicationContext,
+    TableName: TABLE,
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `${key}|${type}`,
+      ':afterDate': afterDate,
+    },
+    KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+  });
+
+  const ids = mapping.map(metadata => metadata[foreignKey]);
+
+  const results = await client.batchGet({
+    applicationContext,
+    tableName: TABLE,
+    keys: ids.map(id => ({
+      pk: id,
+      sk: isVersioned ? '0' : id,
+    })),
+  });
+
+  return stripInternalKeys(results);
+};
+
+exports.getSortRecordsViaMapping = getSortRecordsViaMapping;
+
 const getRecordsViaMapping = async ({
   applicationContext,
   key,
@@ -166,6 +206,24 @@ exports.createMappingRecord = async ({
     Item: {
       pk: `${pkId}|${type}`,
       sk: skId,
+    },
+  });
+};
+
+exports.createSortMappingRecord = async ({
+  applicationContext,
+  pkId,
+  skId,
+  item,
+  type,
+}) => {
+  return client.put({
+    applicationContext,
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${pkId}|${type}`,
+      sk: skId,
+      ...item,
     },
   });
 };

@@ -1,19 +1,24 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path }) => {
-  const useCases = applicationContext.getUseCases();
+export default async ({ applicationContext, get, props }) => {
+  const { combinedCaseDetailWithForm } = props;
+  const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
-  const caseDetail = await useCases.updateCase({
+  caseToUpdate.yearAmounts = caseToUpdate.yearAmounts.filter(yearAmount => {
+    return yearAmount.amount || yearAmount.year;
+  });
+
+  const caseDetail = await applicationContext.getUseCases().updateCase({
     applicationContext,
-    caseToUpdate: get(state.caseDetail),
+    caseToUpdate,
     userId: get(state.user.token),
   });
 
-  return path.success({
-    caseDetail,
+  return {
+    caseDetail: caseToUpdate,
     alertSuccess: {
       title: 'Success',
       message: `Case ${caseDetail.docketNumber} has been updated.`,
     },
-  });
+  };
 };

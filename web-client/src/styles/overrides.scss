@@ -54,3 +54,36 @@
     font-weight: $font-normal;
   }
 }
+
+.usa-input-error {
+  padding-top: unset;
+  margin-top: auto;
+}
+
+.usa-input-error-message {
+  padding: 0;
+  margin: 10px 0 0;
+  clear: left;
+  line-height: 1;
+
+  &.beneath {
+    margin: 0 0 10px;
+  }
+}
+
+.usa-alert-error,
+.usa-alert-success {
+  max-width: 700px;
+
+  button {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+  }
+}
+
+.usa-input-error input,
+.usa-input-error textarea,
+.usa-input-error select {
+  width: calc(100%);
+}
