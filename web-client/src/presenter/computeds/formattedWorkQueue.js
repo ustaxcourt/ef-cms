@@ -35,7 +35,24 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   result.caseStatus = _.startCase(result.caseStatus);
   result.showComplete = result.isInitializeCase ? false : true;
   result.showSendTo = result.isInitializeCase ? false : true;
-  result.showBatchedStatusIcon = result.caseStatus === 'Batched For IRS'; // TODO
+
+  switch (result.caseStatus) {
+    case 'Batched For IRS':
+      result.showBatchedStatusIcon = true;
+      result.statusIcon = 'iconStatusBatched';
+      break;
+    case 'Recalled':
+      result.showBatchedStatusIcon = true;
+      result.statusIcon = 'iconStatusRecalled';
+      break;
+    case 'General':
+      result.showBatchedStatusIcon = false;
+      result.statusIcon = '';
+      break;
+    default:
+      result.statusIcon = '';
+      result.showBatchedStatusIcon = false;
+  }
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
