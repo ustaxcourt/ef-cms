@@ -5,8 +5,13 @@ const {
 
 const headers = {
   'Content-Type': 'application/json',
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+  'Pragma': 'no-cache',
   'Access-Control-Allow-Origin': '*',
+  'X-Content-Type-Options': 'nosniff',
 };
+
+exports.headers = headers;
 
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)

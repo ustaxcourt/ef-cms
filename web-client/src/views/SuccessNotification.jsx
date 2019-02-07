@@ -1,7 +1,9 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 class SuccessNotification extends React.Component {
   componentDidUpdate() {
@@ -17,6 +19,7 @@ class SuccessNotification extends React.Component {
 
   render() {
     const alertSuccess = this.props.alertSuccess;
+    const dismissAlert = this.props.dismissAlert;
     this.notificationRef = React.createRef();
 
     return (
@@ -31,6 +34,13 @@ class SuccessNotification extends React.Component {
             <div className="usa-alert-body">
               <h3 className="usa-alert-heading">{alertSuccess.title}</h3>
               <p className="usa-alert-text">{alertSuccess.message}</p>
+              <button
+                type="button"
+                className="modal-close-button text-style"
+                onClick={() => dismissAlert()}
+              >
+                Dismiss <FontAwesomeIcon icon="times-circle" />
+              </button>
             </div>
           </div>
         )}
@@ -41,11 +51,13 @@ class SuccessNotification extends React.Component {
 
 SuccessNotification.propTypes = {
   alertSuccess: PropTypes.object,
+  dismissAlert: PropTypes.func,
 };
 
 export default connect(
   {
     alertSuccess: state.alertSuccess,
+    dismissAlert: sequences.dismissAlertSequence,
   },
   SuccessNotification,
 );

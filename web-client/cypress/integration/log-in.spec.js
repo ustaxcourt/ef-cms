@@ -13,7 +13,7 @@ describe('Log in page', function() {
   it('fails login', () => {
     cy.get('form#log-in #name').type('Bad Actor');
     cy.get('form#log-in button[type="submit"]').click();
-    cy.get('.usa-alert-error').should('contain', 'User not found');
+    cy.get('.usa-alert-error').should('exist');
     cy.url().should('include', 'log-in');
   });
 

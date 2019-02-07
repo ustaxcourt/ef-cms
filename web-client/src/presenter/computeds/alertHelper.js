@@ -1,12 +1,16 @@
 import { state } from 'cerebral';
 
 export default get => {
-  const alertError = get(state.alertError);
+  const alertError = get(state.alertError) || {};
+  const userIsIdentified = get(state.user) || false;
 
   return {
-    showErrorAlert: alertError !== null,
-    showSingleMessage: alertError && !!alertError.message,
-    showMultipleMessages: alertError && !!alertError.messages,
-    showNoMessage: alertError && !alertError.message && !alertError.messages,
+    showLogIn: userIsIdentified,
+    showErrorAlert:
+      !!alertError.title || !!alertError.message || !!alertError.messages,
+    showSingleMessage: !!alertError.message,
+    showMultipleMessages: !!alertError.messages,
+    showTitleOnly:
+      !!alertError.title && !alertError.message && !alertError.messages,
   };
 };

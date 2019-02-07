@@ -6,6 +6,7 @@ exports.MOCK_CASE = {
   petitioners: [{ name: 'Test Taxpayer' }],
   caseType: 'Other',
   procedureType: 'Regular',
+  status: 'New',
   preferredTrialCity: 'Washington, D.C.',
   documents: MOCK_DOCUMENTS,
 };

@@ -3,7 +3,12 @@ const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-const { incrementCounter, stripWorkItems } = require('./awsDynamoPersistence');
+const {
+  createRespondentCaseMapping,
+  getRecordViaMapping,
+  incrementCounter,
+  stripWorkItems,
+} = require('./awsDynamoPersistence');
 
 chai.use(require('chai-string'));
 
@@ -19,26 +24,26 @@ describe('awsDynamoPersistence', function() {
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'put').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
         pk: '123',
         sk: '123',
         caseId: '123',
-        status: 'new',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
@@ -61,6 +66,42 @@ describe('awsDynamoPersistence', function() {
     client.updateConsistent.restore();
   });
 
+  describe('getRecordViaMapping', () => {
+    it('should map respondent to active case', async () => {
+      const key = '5678';
+      const type = '234';
+      const isVersioned = undefined;
+      await getRecordViaMapping({
+        applicationContext,
+        key,
+        type,
+        isVersioned,
+      });
+      /*
+      expect(client.query.getCall(0).args[0].Item.pk).to.equal(
+        `${respondentId}|activeCase`,
+      );
+      */
+      expect(client.get.getCall(0).args[0].Key.sk).not.to.equal('0');
+    });
+  });
+
+  describe('createRespondentCaseMapping', () => {
+    it('should map respondent to active case', async () => {
+      const respondentId = '5678';
+      const caseId = '234';
+      await createRespondentCaseMapping({
+        applicationContext,
+        caseId,
+        respondentId,
+      });
+      expect(client.put.getCall(0).args[0].Item.pk).to.equal(
+        `${respondentId}|activeCase`,
+      );
+      expect(client.put.getCall(0).args[0].Item.sk).to.equal(caseId);
+    });
+  });
+
   describe('incrementCounter', () => {
     it('should invoke the correct client updateConsistence method using the correct pk and sk', async () => {
       await incrementCounter({ applicationContext });
@@ -76,6 +117,11 @@ describe('awsDynamoPersistence', function() {
   });
 
   describe('stripWorkItems', () => {
+    it('does nothing if no cases are provided', () => {
+      let result = stripWorkItems(undefined, false);
+      expect(result).to.be.undefined;
+    });
+
     it('removes the workItems if not authorized', async () => {
       let caseRecord = { caseId: 1, workItems: [{ workItemId: 1 }] };
       stripWorkItems(caseRecord, false);

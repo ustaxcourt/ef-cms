@@ -44,6 +44,16 @@ const router = {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
     });
+    route(
+      '..',
+      () => {
+        document.title = `Error ${pageTitleSuffix}`;
+        app.getSequence('unauthorizedErrorSequence')({
+          error: {},
+        });
+      },
+      true,
+    );
     route.start(true);
   },
 };

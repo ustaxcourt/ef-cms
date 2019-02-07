@@ -1,5 +1,7 @@
 import { state } from 'cerebral';
+import _ from 'lodash';
 
 export default ({ store, props }) => {
-  store.set(state.workQueue, props.workItems);
+  const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc');
+  store.set(state.workQueue, orderedWorkItems);
 };

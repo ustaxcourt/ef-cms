@@ -6,23 +6,28 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
-import PetitionEdit from './PetitionEdit';
+import CaseDetailEdit from './CaseDetailEdit';
+import CaseDetailReadOnly from './CaseDetailReadOnly';
+import ServeToIrsModalDialog from './ServeToIrsModalDialog';
+import RecallPetitionModalDialog from './RecallPetitionModalDialog';
 
 class DocumentDetail extends React.Component {
   render() {
     const {
       baseUrl,
       caseDetail,
-      document,
-      form,
-      setWorkItemActionSequence,
+      caseHelper,
+      clickServeToIrsSequence,
       helper,
+      setWorkItemActionSequence,
+      showModal,
       submitCompleteSequence,
       submitForwardSequence,
       updateCompleteFormValueSequence,
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
       users,
+      setModalDialogNameSequence,
     } = this.props;
     return (
       <React.Fragment>
@@ -32,7 +37,7 @@ class DocumentDetail extends React.Component {
             Back
           </a>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section usa-grid DocumentDetail">
           <h1 className="captioned" tabIndex="-1">
             <a href={'/case-detail/' + caseDetail.docketNumber}>
               Docket Number: {caseDetail.docketNumberWithSuffix}
@@ -48,71 +53,126 @@ class DocumentDetail extends React.Component {
             </span>
           </p>
           <hr aria-hidden="true" />
-          <SuccessNotification />
-          <ErrorNotification />
-          <h2>{document.documentType}</h2>
+          <h2>{helper.formattedDocument.documentType}</h2>
           <div className="usa-grid-full subsection">
             <div className="usa-width-one-fourth">
               <span className="label-inline">Date filed</span>
-              <span>{document.createdAtFormatted}</span>
+              <span>{helper.formattedDocument.createdAtFormatted}</span>
             </div>
             <div className="usa-width-one-fourth">
               <span className="label-inline">Filed by</span>
-              <span>{document.filedBy}</span>
+              <span>{helper.formattedDocument.filedBy}</span>
             </div>
           </div>
-          <nav className="horizontal-tabs subsection">
-            <ul role="tablist">
-              <li className={helper.showDocumentInfo ? 'active' : ''}>
-                <button
-                  disabled
-                  role="tab"
-                  className="tab-link"
-                  id="tab-document-info"
-                  aria-selected={helper.showDocumentInfo}
-                  onClick={() =>
-                    updateCurrentTabSequence({
-                      value: 'Document Info',
-                    })
-                  }
-                >
-                  Document Info
-                </button>
-              </li>
-              <li className={helper.showPendingMessages ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="tab-pending-messages"
-                  aria-selected={helper.showPendingMessages}
-                  onClick={() =>
-                    updateCurrentTabSequence({
-                      value: 'Pending Messages',
-                    })
-                  }
-                >
-                  Pending Messages
-                </button>
-              </li>
-            </ul>
-          </nav>
+
+          <SuccessNotification />
+          <ErrorNotification />
+
+          <div className="usa-grid-full subsection">
+            <div className="usa-width-one-half">
+              <nav className="horizontal-tabs horizontal-tabs-header3 ">
+                <ul role="tablist">
+                  {helper.showDocumentInfoTab && (
+                    <li className={helper.showDocumentInfo ? 'active' : ''}>
+                      <button
+                        role="tab"
+                        className="tab-link"
+                        id="tab-document-info"
+                        aria-controls="tab-document-info-panel"
+                        aria-selected={helper.showDocumentInfo}
+                        onClick={() =>
+                          updateCurrentTabSequence({
+                            value: 'Document Info',
+                          })
+                        }
+                      >
+                        Document Info
+                      </button>
+                    </li>
+                  )}
+                  <li className={helper.showPendingMessages ? 'active' : ''}>
+                    <button
+                      role="tab"
+                      className="tab-link"
+                      id="tab-pending-messages"
+                      aria-controls="tab-pending-messages-panel"
+                      aria-selected={helper.showPendingMessages}
+                      onClick={() =>
+                        updateCurrentTabSequence({
+                          value: 'Pending Messages',
+                        })
+                      }
+                    >
+                      Pending Messages
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <div className="usa-width-one-half">
+              {caseHelper.showServeToIrsButton &&
+                helper.formattedDocument.isPetition && (
+                  <button
+                    className="serve-to-irs"
+                    onClick={() => clickServeToIrsSequence()}
+                  >
+                    <FontAwesomeIcon icon={['far', 'clock']} />
+                    Serve to IRS
+                  </button>
+                )}
+              {caseHelper.showRecallButton &&
+                helper.formattedDocument.isPetition && (
+                  <div className="recall-button-box">
+                    <FontAwesomeIcon icon={['far', 'clock']} />
+                    Batched for IRS
+                    <button
+                      className="recall-petition"
+                      onClick={() =>
+                        setModalDialogNameSequence({
+                          showModal: 'RecallPetitionModalDialog',
+                        })
+                      }
+                    >
+                      Recall
+                    </button>
+                  </div>
+                )}
+            </div>
+          </div>
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
-              {helper.showDocumentInfo && <PetitionEdit />}
+              {helper.showDocumentInfo && (
+                <div
+                  role="tabpanel"
+                  id="tab-document-info-panel"
+                  aria-labelledby="tab-document-info"
+                  tabIndex="0"
+                >
+                  {helper.showCaseDetailsEdit && <CaseDetailEdit />}
+                  {helper.showCaseDetailsView && <CaseDetailReadOnly />}
+                </div>
+              )}
+              {/*workitem tab start*/}
               {helper.showPendingMessages && (
-                <React.Fragment>
-                  {(!document ||
-                    !document.workItems ||
-                    !document.workItems.length) && (
+                <div
+                  role="tabpanel"
+                  id="tab-pending-messages-panel"
+                  aria-labelledby="tab-pending-messages"
+                  tabIndex="0"
+                >
+                  {(!helper.formattedDocument ||
+                    !helper.formattedDocument.workItems ||
+                    !helper.formattedDocument.workItems.length) && (
                     <div>
                       There are no pending messages associated with this
                       document.
                     </div>
                   )}
-                  {document &&
-                    document.workItems &&
-                    document.workItems.map((workItem, idx) => (
+                  {helper.formattedDocument &&
+                    helper.formattedDocument.workItems &&
+                    helper.formattedDocument.workItems.map((workItem, idx) => (
                       <div
                         className="card"
                         aria-labelledby="tab-pending-messages"
@@ -134,7 +194,7 @@ class DocumentDetail extends React.Component {
                           <p>{workItem.currentMessage.message}</p>
                         </div>
                         <div
-                          className="usa-grid-full content-wrapper toggle-button-wrapper actions-wrapper"
+                          className="content-wrapper toggle-button-wrapper actions-wrapper"
                           role="tablist"
                         >
                           <button
@@ -145,7 +205,7 @@ class DocumentDetail extends React.Component {
                               workItem.workItemId,
                             )}
                             aria-controls="history-card"
-                            className={`usa-width-one-third ${
+                            className={`${
                               helper.showAction('history', workItem.workItemId)
                                 ? 'selected'
                                 : 'unselected'
@@ -160,53 +220,63 @@ class DocumentDetail extends React.Component {
                             <FontAwesomeIcon icon="list-ul" size="sm" />
                             View History
                           </button>
-                          <button
-                            role="tab"
-                            id="complete-tab"
-                            aria-selected={helper.showAction(
-                              'complete',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="history-card"
-                            className={`usa-width-one-third ${
-                              helper.showAction('complete', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'complete',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="check-circle" size="sm" />
-                            Complete
-                          </button>
-                          <button
-                            role="tab"
-                            id="forward-tab"
-                            aria-selected={helper.showAction(
-                              'forward',
-                              workItem.workItemId,
-                            )}
-                            aria-controls="forward-card"
-                            data-workitemid={workItem.workItemId}
-                            className={`usa-width-one-third send-to ${
-                              helper.showAction('forward', workItem.workItemId)
-                                ? 'selected'
-                                : 'unselected'
-                            }`}
-                            onClick={() =>
-                              setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
-                                action: 'forward',
-                              })
-                            }
-                          >
-                            <FontAwesomeIcon icon="share-square" size="sm" />{' '}
-                            Send To
-                          </button>
+                          {workItem.showComplete && (
+                            <button
+                              role="tab"
+                              id="complete-tab"
+                              aria-selected={helper.showAction(
+                                'complete',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="history-card"
+                              className={`${
+                                helper.showAction(
+                                  'complete',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'complete',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="check-circle" size="sm" />
+                              Complete
+                            </button>
+                          )}
+                          {workItem.showSendTo && (
+                            <button
+                              role="tab"
+                              id="forward-tab"
+                              aria-selected={helper.showAction(
+                                'forward',
+                                workItem.workItemId,
+                              )}
+                              aria-controls="forward-card"
+                              data-workitemid={workItem.workItemId}
+                              className={`send-to ${
+                                helper.showAction(
+                                  'forward',
+                                  workItem.workItemId,
+                                )
+                                  ? 'selected'
+                                  : 'unselected'
+                              }`}
+                              onClick={() =>
+                                setWorkItemActionSequence({
+                                  workItemId: workItem.workItemId,
+                                  action: 'forward',
+                                })
+                              }
+                            >
+                              <FontAwesomeIcon icon="share-square" size="sm" />{' '}
+                              Send To
+                            </button>
+                          )}
                         </div>
                         {helper.showAction('complete', workItem.workItemId) && (
                           <div
@@ -356,20 +426,28 @@ class DocumentDetail extends React.Component {
                         )}
                       </div>
                     ))}
-                </React.Fragment>
+                </div>
               )}
             </div>
 
             <div className="usa-width-two-thirds">
               <iframe
-                title={`Document type: ${document.documentType}`}
+                title={`Document type: ${
+                  helper.formattedDocument.documentType
+                }`}
                 src={`${baseUrl}/documents/${
-                  document.documentId
+                  helper.formattedDocument.documentId
                 }/documentDownloadUrl`}
               />
             </div>
           </div>
         </section>
+        <div tabIndex="0" />
+        {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
+        {showModal === 'RecallPetitionModalDialog' && (
+          <RecallPetitionModalDialog />
+        )}
+        <div tabIndex="0" />
       </React.Fragment>
     );
   }
@@ -378,11 +456,12 @@ class DocumentDetail extends React.Component {
 DocumentDetail.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
-  document: PropTypes.object,
-  form: PropTypes.object,
+  caseHelper: PropTypes.object,
+  clickServeToIrsSequence: PropTypes.func,
   helper: PropTypes.object,
+  setModalDialogNameSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
-  showForwardInputs: PropTypes.bool,
+  showModal: PropTypes.string,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
   updateCompleteFormValueSequence: PropTypes.func,
@@ -396,11 +475,12 @@ export default connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    document: state.extractedDocument,
-    form: state.form,
+    caseHelper: state.caseDetailHelper,
+    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
-    showForwardInputs: state.form.showForwardInputs,
+    showModal: state.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,

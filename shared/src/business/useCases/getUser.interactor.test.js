@@ -1,28 +1,21 @@
-const assert = require('assert');
-
+const { UnknownUserError } = require('../../errors/errors');
 const { getUser } = require('./getUser.interactor');
 
 describe('Get user', () => {
   it('Success taxpayer', async () => {
     const user = await getUser('taxpayer');
-    assert.equal(user.userId, 'taxpayer');
-    assert.equal(user.role, 'petitioner');
+    expect(user.userId).toEqual('taxpayer');
+    expect(user.role).toEqual('petitioner');
   });
-  it('Success petitionsclerk', async () => {
-    const user = await getUser('petitionsclerk');
-    assert.equal(user.userId, 'petitionsclerk');
-    assert.equal(user.role, 'petitionsclerk');
-  });
-  it('Success intakeclerk', async () => {
-    const user = await getUser('intakeclerk');
-    assert.equal(user.userId, 'intakeclerk');
-    assert.equal(user.role, 'intakeclerk');
-  });
-  it('Failure', async () => {
+  it('not found', async () => {
+    let result = '😡';
     try {
-      await getUser('Bad actor');
+      await getUser('someuser');
     } catch (e) {
-      assert.equal(e.message, 'Username is incorrect');
+      if (e instanceof UnknownUserError) {
+        result = '😃';
+      }
     }
+    expect(result).toEqual('😃');
   });
 });
