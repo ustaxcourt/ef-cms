@@ -129,4 +129,40 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showSendTo).toBeFalsy();
     expect(result2[0].showComplete).toBeFalsy();
   });
+  it('sets showBatchedStatusIcon and statusIcon when false', () => {
+    workItem.isInitializeCase = true;
+    const result2 = runCompute(formattedWorkQueue, {
+      state: {
+        workQueue: [workItem],
+        selectedWorkItems: [],
+      },
+    });
+    expect(result2[0].showBatchedStatusIcon).toBeFalsy();
+    expect(result2[0].statusIcon).toEqual('');
+  });
+  it('sets showBatchedStatusIcon and statusIcon when true', () => {
+    workItem.isInitializeCase = true;
+    workItem.caseStatus = 'Batched for IRS';
+    const result2 = runCompute(formattedWorkQueue, {
+      state: {
+        workQueue: [workItem],
+        selectedWorkItems: [],
+      },
+    });
+    expect(result2[0].showBatchedStatusIcon).toBeTruthy();
+    expect(result2[0].statusIcon).toEqual('iconStatusBatched');
+  });
+
+  it('sets showBatchedStatusIcon and statusIcon for recalled', () => {
+    workItem.isInitializeCase = true;
+    workItem.caseStatus = 'Recalled';
+    const result2 = runCompute(formattedWorkQueue, {
+      state: {
+        workQueue: [workItem],
+        selectedWorkItems: [],
+      },
+    });
+    expect(result2[0].showBatchedStatusIcon).toBeTruthy();
+    expect(result2[0].statusIcon).toEqual('iconStatusRecalled');
+  });
 });
