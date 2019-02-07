@@ -56,22 +56,28 @@ describe('fileRespondentDocument', () => {
   });
 
   it('runs successfully with no errors on good data and valid user', async () => {
-    applicationContext = {
-      getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
-        saveCase: async () => null,
-      }),
-      getUseCases: () => ({
-        createDocument: () => null,
-      }),
-      environment: { stage: 'local' },
-    };
-    await fileRespondentDocument({
-      userId: 'respondent',
-      caseToUpdate: {},
-      document: {},
-      documentType: 'Answer',
-      applicationContext,
-    });
+    let error;
+    try {
+      applicationContext = {
+        getPersistenceGateway: () => ({
+          uploadDocument: async () => caseRecord,
+          saveCase: async () => null,
+        }),
+        getUseCases: () => ({
+          createDocument: () => null,
+        }),
+        environment: { stage: 'local' },
+      };
+      await fileRespondentDocument({
+        userId: 'respondent',
+        caseToUpdate: {},
+        document: {},
+        documentType: 'Answer',
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
   });
 });
