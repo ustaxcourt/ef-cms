@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ get, store, applicationContext, path, props }) => {
+export default async ({ get, store, applicationContext, props }) => {
   const completeWorkItemDate = new Date().toISOString();
 
   const caseDetail = get(state.caseDetail);
@@ -34,14 +34,10 @@ export default async ({ get, store, applicationContext, path, props }) => {
 
   store.set(state.caseDetail, caseDetail);
 
-  const useCases = applicationContext.getUseCases();
-
-  await useCases.updateWorkItem({
+  await applicationContext.getUseCases().updateWorkItem({
     applicationContext,
     workItemToUpdate,
     workItemId: props.workItemId,
     userId: get(state.user.token),
   });
-
-  return path.success();
 };

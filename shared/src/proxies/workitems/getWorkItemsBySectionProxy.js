@@ -1,9 +1,5 @@
-exports.getWorkItemsBySection = async ({
-  applicationContext,
-  userId,
-  section,
-}) => {
-  const userToken = userId; //TODO refactor for jwt
+exports.getWorkItemsBySection = async ({ applicationContext, section }) => {
+  const userToken = applicationContext.getCurrentUser().userId; //TODO refactor for jwt
 
   const response = await applicationContext
     .getHttpClient()

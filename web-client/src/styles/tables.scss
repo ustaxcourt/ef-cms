@@ -38,6 +38,14 @@ table.work-queue {
     }
   }
 
+  td.section-queue-row {
+    padding-top: 14px;
+  }
+
+  td.queue-width-44 {
+    width: 44px;
+  }
+
   tr {
     border-top: 1px solid $color-gray-lighter;
   }

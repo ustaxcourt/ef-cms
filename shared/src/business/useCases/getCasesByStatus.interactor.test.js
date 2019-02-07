@@ -19,7 +19,7 @@ describe('getCasesByStatus', () => {
     try {
       await getCasesByStatus({
         userId: 'petitionsclerk',
-        status: 'new',
+        status: 'New',
         applicationContext,
       });
     } catch (err) {

@@ -30,6 +30,16 @@ select {
   margin: 0 0 2rem;
 }
 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 input:focus::placeholder {
   color: transparent;
 }
@@ -44,4 +54,38 @@ label.validated::after {
   background-position: 100%;
   background-repeat: no-repeat;
   content: ' ';
+}
+
+.inline-input-year {
+  display: inline-block;
+  width: 80px;
+  margin-right: 20px;
+}
+
+.inline-input-amount {
+  display: inline-block;
+  width: 240px;
+  margin-right: 10px;
+  vertical-align: top;
+
+  label {
+    padding-left: 1.5rem;
+  }
+
+  input {
+    display: inline-block;
+    max-width: 100px;
+    margin-right: 5px;
+    text-align: right;
+  }
+
+  button {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+  span {
+    display: inline-block;
+    margin-right: 5px;
+  }
 }

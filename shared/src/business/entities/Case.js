@@ -1,16 +1,30 @@
+const moment = require('moment');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
-const { uniq } = require('lodash');
+const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const { pick } = require('lodash');
 const YearAmount = require('./YearAmount');
+const DocketRecord = require('./DocketRecord');
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
+
+const statusMap = {
+  general: 'General',
+  batchedForIRS: 'Batched for IRS',
+  new: 'New',
+  recalled: 'Recalled',
+};
+const STATUSES = [
+  statusMap.general,
+  statusMap.batchedForIRS,
+  statusMap.new,
+  statusMap.recalled,
+];
 
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
@@ -87,7 +101,7 @@ function Case(rawCase) {
     {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || 'new',
+      status: rawCase.status || 'New',
       caseTitle:
         rawCase.caseTitle ||
         (rawCase.petitioners && rawCase.petitioners.length
@@ -100,19 +114,24 @@ function Case(rawCase) {
       docketNumberSuffix:
         rawCase.docketNumberSuffix || getDocketNumberSuffix(rawCase),
     },
-    rawCase.payGovId && !rawCase.payGovDate
-      ? { payGovDate: new Date().toISOString() }
-      : null,
   );
 
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
   );
 
-  if (this.documents && Array.isArray(this.documents)) {
+  if (Array.isArray(this.documents)) {
     this.documents = this.documents.map(document => new Document(document));
   } else {
     this.documents = [];
+  }
+
+  if (Array.isArray(this.docketRecord)) {
+    this.docketRecord = this.docketRecord.map(
+      docketRecord => new DocketRecord(docketRecord),
+    );
+  } else {
+    this.docketRecord = [];
   }
 }
 
@@ -143,6 +162,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    docketRecord: joi.array().optional(),
     respondent: joi
       .object()
       .allow(null)
@@ -151,20 +171,25 @@ joiValidationDecorator(
       .date()
       .iso()
       .allow(null)
+      .max('now')
       .optional(),
     irsSendDate: joi
       .date()
       .iso()
       .optional(),
-    payGovId: joi.string().optional(),
+    payGovId: joi
+      .string()
+      .allow(null)
+      .optional(),
     payGovDate: joi
       .date()
       .iso()
+      .max('now')
       .allow(null)
       .optional(),
     status: joi
       .string()
-      .regex(/^(new|general)$/)
+      .valid(STATUSES)
       .optional(),
     petitioners: joi.array().optional(),
     documents: joi
@@ -174,7 +199,10 @@ joiValidationDecorator(
     workItems: joi.array().optional(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
-    yearAmounts: joi.array().optional(),
+    yearAmounts: joi
+      .array()
+      .unique((a, b) => a.year === b.year)
+      .optional(),
   }),
   function() {
     const Document = require('./Document');
@@ -182,7 +210,8 @@ joiValidationDecorator(
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
       YearAmount.validateCollection(this.yearAmounts) &&
-      uniq(this.yearAmounts).length === this.yearAmounts.length
+      Case.areYearsUnique(this.yearAmounts) &&
+      DocketRecord.validateCollection(this.docketRecord)
     );
   },
   {
@@ -191,31 +220,34 @@ joiValidationDecorator(
     documents: 'At least one valid document is required.',
     caseType: 'Case Type is required.',
     petitioners: 'At least one valid petitioner is required.',
-    irsNoticeDate: 'A valid IRS Notice Date is a required field for serving.',
+    irsNoticeDate: [
+      {
+        contains: 'must be less than or equal to',
+        message:
+          'The IRS notice date is in the future. Please enter a valid date.',
+      },
+      'Please enter a valid IRS notice date.',
+    ],
     procedureType: 'Procedure Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
-    yearAmounts: 'A valid year and amount are required.',
+    yearAmounts: [
+      {
+        contains: 'contains a duplicate',
+        message: 'Duplicate years are not allowed',
+      },
+      'A valid year and amount are required.',
+    ],
     payGovId: 'Fee Payment Id must be in a valid format',
-    payGovDate: 'Pay Gov Date is required',
+    payGovDate: [
+      {
+        contains: 'must be less than or equal to',
+        message:
+          'The Fee Payment date is in the future. Please enter a valid date.',
+      },
+      'Please enter a valid Fee Payment date.',
+    ],
   },
 );
-
-Case.prototype.attachDocument = function({ documentType, documentId, userId }) {
-  const Document = require('./Document');
-
-  const documentMetadata = {
-    documentType,
-    documentId,
-    userId: userId,
-    filedBy: 'Respondent',
-    createdAt: new Date().toISOString(),
-  };
-
-  this.documents = [...(this.documents || []), documentMetadata];
-  this.documents = this.documents.map(document => new Document(document));
-
-  return documentMetadata;
-};
 
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {
@@ -228,7 +260,16 @@ Case.prototype.attachRespondent = function({ user }) {
 
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
-  this.documents = [...(this.documents || []), document];
+  this.documents = [...this.documents, document];
+
+  this.addDocketRecord(
+    new DocketRecord({
+      filingDate: document.createdAt,
+      filedBy: document.filedBy,
+      description: document.documentType,
+      status: document.status,
+    }),
+  );
 };
 
 /**
@@ -238,21 +279,69 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
 
   this.irsSendDate = sendDate;
-  this.status = 'general';
+  this.status = 'General';
   this.documents.forEach(document => {
     const doc = new Document(document);
     if (doc.isPetitionDocument()) {
       document.status = 'served';
     }
   });
+
+  const status = `R served on ${moment(sendDate).format('L LT')}`;
+  this.docketRecord.forEach(docketRecord => {
+    if (docketRecord.description === Case.documentTypes.petitionFile) {
+      docketRecord.status = status;
+    }
+  });
+
   return this;
 };
 
+/**
+ *
+ * @param sendDate
+ * @returns {Case}
+ */
+Case.prototype.sendToIRSHoldingQueue = function() {
+  this.status = statusMap.batchedForIRS;
+  return this;
+};
+
+Case.prototype.recallFromIRSHoldingQueue = function() {
+  this.status = statusMap.recalled;
+  return this;
+};
+
+/**
+ *
+ * @param {string} payGovDate an ISO formatted datestring
+ * @returns {Case}
+ */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
+  if (payGovDate) {
+    this.addDocketRecord(
+      new DocketRecord({
+        filingDate: payGovDate,
+        description: 'Filing fee paid',
+      }),
+    );
+  }
   return this;
 };
 
+/**
+ *
+ * @param docketRecordEntity
+ */
+Case.prototype.addDocketRecord = function(docketRecordEntity) {
+  this.docketRecord = [...this.docketRecord, docketRecordEntity];
+};
+
+/**
+ *
+ * @returns {*[]}
+ */
 Case.getCaseTypes = () => {
   return CASE_TYPES;
 };
@@ -305,6 +394,19 @@ Case.documentTypes = {
   irsNotice: 'IRS Notice',
 };
 
+/**
+ *
+ * @param yearAmounts
+ * @returns {boolean}
+ */
+Case.areYearsUnique = yearAmounts => {
+  return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
+};
+
+/**
+ *
+ * @returns {*[]}
+ */
 Case.getDocumentTypes = () => {
   return Object.keys(Case.documentTypes).map(key => Case.documentTypes[key]);
 };
@@ -330,35 +432,6 @@ Case.getTrialCities = procedureType => {
       return REGULAR_TRIAL_CITIES;
     default:
       return REGULAR_TRIAL_CITIES;
-  }
-};
-
-Case.filterMetadata = ({ cases, applicationContext }) => {
-  const fieldsToPick = [
-    'documents',
-    'docketNumber',
-    'caseId',
-    'docketNumberSuffix',
-    'caseTitle',
-    'caseType',
-    'procedureType',
-    'userId',
-    'petitioners',
-    'respondent',
-    'createdAt',
-    'status',
-    'payGovId',
-    'payGovDate',
-    'preferredTrialCity',
-  ];
-  if (applicationContext.isAuthorizedForCaseMetadata()) {
-    return cases;
-  } else {
-    if (Array.isArray(cases)) {
-      return cases.map(c => pick(c, fieldsToPick));
-    } else {
-      return pick(cases, fieldsToPick);
-    }
   }
 };
 

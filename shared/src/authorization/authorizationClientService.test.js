@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const {
   GET_CASES_BY_STATUS,
   GET_CASE,
+  UPDATE_CASE,
   WORKITEM,
   isAuthorized,
 } = require('./authorizationClientService');
@@ -39,5 +40,13 @@ describe('Authorization client service', () => {
 
   it('should authorize a seniorattorney for workitems', () => {
     expect(isAuthorized('seniorattorney', WORKITEM)).to.be.true;
+  });
+
+  it('should authorize a respondent for getCase', () => {
+    expect(isAuthorized('respondent', UPDATE_CASE)).to.be.true;
+  });
+
+  it('should authorize a docketclerk for ', () => {
+    expect(isAuthorized('respondent', UPDATE_CASE)).to.be.true;
   });
 });

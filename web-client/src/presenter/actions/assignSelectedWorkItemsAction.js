@@ -2,11 +2,9 @@ import { state } from 'cerebral';
 
 export default async ({ applicationContext, get, store }) => {
   const selectedWorkItems = get(state.selectedWorkItems);
-  const sectionWorkQueue = get(state.sectionWorkQueue);
-  const workQueue = get(state.workQueue);
+  const sectionWorkQueue = get(state.workQueue);
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
-  const userId = get(state.user.token);
 
   await applicationContext.getUseCases().assignWorkItems({
     applicationContext,
@@ -18,7 +16,7 @@ export default async ({ applicationContext, get, store }) => {
   });
 
   store.set(
-    state.sectionWorkQueue,
+    state.workQueue,
     sectionWorkQueue.map(workItem => {
       if (
         selectedWorkItems.find(item => item.workItemId === workItem.workItemId)
@@ -34,29 +32,7 @@ export default async ({ applicationContext, get, store }) => {
     }),
   );
 
-  const filteredWorkQueue = workQueue.filter(
-    item => item.assigneeId !== userId,
-  );
-
-  if (userId === assigneeId) {
-    selectedWorkItems.forEach(item => {
-      if (
-        !filteredWorkQueue.find(
-          existing => existing.workItemId === item.workItemId,
-        )
-      ) {
-        filteredWorkQueue.push({
-          ...item,
-          assigneeId,
-          assigneeName,
-        });
-      }
-    });
-  }
-
-  store.set(state.workQueue, filteredWorkQueue);
   store.set(state.selectedWorkItems, []);
-
   store.set(state.assigneeId, null);
   store.set(state.assigneeName, null);
 };

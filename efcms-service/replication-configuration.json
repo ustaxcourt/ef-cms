@@ -1,5 +1,5 @@
 {
-  "Role": "arn:aws:iam::ACCOUNT_NUMBER:role/s3_replication_role",
+  "Role": "arn:aws:iam::ACCOUNT_NUMBER:role/s3_replication_role_ENV",
   "Rules": [
     {
       "Prefix": "",

@@ -7,7 +7,10 @@ const {
 
 const EXPECTED_HEADERS = {
   'Content-Type': 'application/json',
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Access-Control-Allow-Origin': '*',
+  'Pragma': 'no-cache',
+  'X-Content-Type-Options': 'nosniff',
 };
 
 describe('handle', () => {

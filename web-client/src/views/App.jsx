@@ -15,6 +15,7 @@ import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
 import DashboardSeniorAttorney from './DashboardSeniorAttorney';
 import DocumentDetail from './DocumentDetail';
+import Error from './Error';
 import Footer from './Footer';
 import Header from './Header';
 import Loading from './Loading';
@@ -36,6 +37,7 @@ const pages = {
   DashboardRespondent,
   DashboardSeniorAttorney,
   DocumentDetail,
+  Error,
   Loading,
   LogIn,
   StartCase,
