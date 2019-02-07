@@ -7,7 +7,7 @@ describe('setDefaultDocumentDetailTab', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTab, {
       state: {
         documentDetailHelper: {
-          showCaseDetailsEdit: true,
+          showDocumentInfoTab: true,
         },
       },
     });
@@ -18,7 +18,7 @@ describe('setDefaultDocumentDetailTab', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTab, {
       state: {
         documentDetailHelper: {
-          showCaseDetailsEdit: false,
+          showDocumentInfoTab: false,
         },
       },
     });
