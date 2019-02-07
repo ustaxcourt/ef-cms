@@ -103,7 +103,7 @@ class DocumentDetail extends React.Component {
                         })
                       }
                     >
-                      Pending Messages?
+                      Pending Messages
                     </button>
                   </li>
                 </ul>
