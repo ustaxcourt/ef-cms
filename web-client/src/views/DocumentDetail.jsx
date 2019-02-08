@@ -55,11 +55,11 @@ class DocumentDetail extends React.Component {
           <hr aria-hidden="true" />
           <h2>{helper.formattedDocument.documentType}</h2>
           <div className="usa-grid-full subsection">
-            <div className="usa-width-one-fourth">
+            <div className="usa-width-one-sixth">
               <span className="label-inline">Date filed</span>
               <span>{helper.formattedDocument.createdAtFormatted}</span>
             </div>
-            <div className="usa-width-one-fourth">
+            <div className="usa-width-one-sixth">
               <span className="label-inline">Filed by</span>
               <span>{helper.formattedDocument.filedBy}</span>
             </div>
