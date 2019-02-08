@@ -23,15 +23,14 @@ export default test => {
 
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
-    //check that save occurred
+    // check that save occurred
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2017-12-24T00:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
     expect(test.getState('alertSuccess.title')).toEqual(
-      'The petition is now in the IRS Holding Queue',
+      'The petition is now batched for IRS service.',
     );
-    expect(test.getState('alertSuccess.message')).toBeUndefined();
     expect(test.getState('caseDetailErrors')).toEqual({});
   });
 };
