@@ -189,17 +189,56 @@ iframe {
 }
 
 .before-starting-case {
-  .fa-before {
-    border: 2px solid $color-primary-alt;
-    border-radius: 200px;
-    color: $color-primary-alt;
+  [role='listitem'] {
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $color-gray-lightest;
+  }
+  [role='listitem'],
+  .button-box-container {
+    min-height: 150px;
+    clear: left;
   }
 
-  .before-label {
-    display: block;
-    font-family: $font-serif;
+  .fa-before {
+    position: absolute;
+    top: 0;
+    display: inline-block;
+    width: 150px;
+    color: $color-primary-alt;
+
+    svg {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+      border: 3px solid $color-primary-alt;
+      border-radius: 55px;
+    }
   }
+
+  .fa-before.stacked {
+    position: absolute;
+    top: 35px;
+    .fa-layers .slash-white {
+      padding-top: 30px;
+      border: none;
+      color: white;
+    }
+  }
+
   .before-explanation {
-    display: block;
+    position: relative;
+    top: 0;
+    left: 150px;
+    display: inline-block;
+
+    .before-label {
+      display: block;
+      margin-bottom: 14px;
+      font-family: $font-serif;
+      font-size: 20px;
+      font-weight: $font-bold;
+    }
   }
 }
