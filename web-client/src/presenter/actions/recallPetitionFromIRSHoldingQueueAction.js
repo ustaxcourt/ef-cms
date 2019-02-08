@@ -8,7 +8,8 @@ export default async ({ applicationContext, get, props }) => {
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {
-      title: 'The petition is now recalled from the IRS Holding Queue',
+      title: 'The petition is now recalled.',
+      message: 'It will need to be re-served to the IRS.',
     },
   };
 };

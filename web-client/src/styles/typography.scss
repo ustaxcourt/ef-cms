@@ -84,7 +84,8 @@ h6 {
   }
 }
 
-h1[tabIndex='-1']:focus {
+h1[tabIndex='-1']:focus,
+h3[tabIndex='-1']:focus {
   outline: none;
 }
 
