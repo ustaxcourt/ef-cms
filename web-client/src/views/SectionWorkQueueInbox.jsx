@@ -101,7 +101,7 @@ export default connect(
                   aria-controls={`detail-${item.workItemId}`}
                 />{' '}
               </td>
-              <td className="queue-width-44">
+              <td className="has-icon">
                 <input
                   id={item.workItemId}
                   type="checkbox"
@@ -119,7 +119,7 @@ export default connect(
                   id={`label-${item.workItemId}`}
                 />
               </td>
-              <td className="section-queue-row queue-width-44">
+              <td className="section-queue-row has-icon">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
