@@ -25,6 +25,9 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
         const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
         yearAmount.formattedYear = formattedYear;
         yearAmount.showError = false;
+        yearAmount.amountFormatted = Number(
+          yearAmount.amount || 0,
+        ).toLocaleString('en-US');
         if (Array.isArray(caseDetailErrors.yearAmounts)) {
           const yearAmountError = (caseDetailErrors.yearAmounts || []).find(
             error => {
