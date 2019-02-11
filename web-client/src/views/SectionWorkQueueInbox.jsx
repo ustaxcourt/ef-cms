@@ -45,7 +45,7 @@ export default connect(
           <tbody className="action-bar">
             <tr>
               <td
-                colSpan="8"
+                colSpan="9"
                 className="action-bar"
                 aria-label="Action bar: choose an assignee."
                 aria-live="polite"
