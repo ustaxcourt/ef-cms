@@ -123,6 +123,12 @@ export default connect(
                             type="radio"
                             name="filingType"
                             value={filingType}
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
                           />
                           <label id={`filing-type-${idx}`} htmlFor={filingType}>
                             {filingType}
