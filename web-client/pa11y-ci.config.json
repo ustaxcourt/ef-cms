@@ -21,6 +21,7 @@
     "http://localhost:1234/log-in",
     "http://localhost:1234/log-in?token=taxpayer&path=/",
 
+    "http://localhost:1234/log-in?token=taxpayer&path=/before-starting-a-case",
     "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case",
     {
       "notes": "expose all hidden elements on start-a-case",
