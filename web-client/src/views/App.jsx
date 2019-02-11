@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import BeforeStartingCase from './BeforeStartingCase';
 import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
 import CaseDetailPublic from './CaseDetailPublic';
@@ -25,6 +26,7 @@ import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
 
 const pages = {
+  BeforeStartingCase,
   CaseDetailInternal,
   CaseDetailPetitioner,
   CaseDetailPublic,
