@@ -21,12 +21,12 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'copy']} />
             </div>
             <div className="before-explanation">
-              <div className="before-label">
-                Have the IRS Notice(s) You've Received Available to Submit
-              </div>
+              <h2>
+                Have the IRS Notice(s) Youʼve Received Available to Submit
+              </h2>
               <p>
-                If you've received an IRS notice, such as a Notice of Deficiency
-                or Notice of Determination, you'll need to include a copy of
+                If youʼve received an IRS notice, such as a Notice of Deficiency
+                or Notice of Determination, youʼll need to include a copy of
                 those with your Petition. The U.S. Tax Court must receive all
                 Petitions in a timely manner. The IRS notice shows the last date
                 to file or the number of days you have to file a petition.{' '}
@@ -43,7 +43,7 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'edit']} />
             </div>
             <div className="before-explanation">
-              <div className="before-label">Fill Out Your Petition Form</div>
+              <h2>Fill Out Your Petition Form</h2>
               <p>
                 Complete the petition form,{' '}
                 <a
@@ -75,15 +75,15 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'eye-slash']} />
             </div>
             <div className="before-explanation">
-              <div className="before-label">
+              <h2>
                 Remove Personal Information From Your Petition and IRS Notice(s)
-              </div>
+              </h2>
               <p>
                 If the IRS notice includes personal information (such as Social
                 Security Numbers or employer identification numbers), remove or
                 redact that information before including it with your Petition.
                 You can remove this information by deleting it, marking through
-                it so it's illegible, or any other method that will prevent it
+                it so itʼs illegible, or any other method that will prevent it
                 from being seen.
               </p>
             </div>
@@ -94,12 +94,10 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
             </div>
             <div className="before-explanation">
-              <div className="before-label">
-                Combine Your Petition and IRS Notice(s) Into a Single PDF
-              </div>
+              <h2>Combine Your Petition and IRS Notice(s) Into a Single PDF</h2>
               <p>
                 Scan your petition and IRS notice into one Petition PDF or
-                combine them digitally. This is what you'll upload to the Court
+                combine them digitally. This is what youʼll upload to the Court
                 to start your case.{' '}
                 <a href="/">
                   Learn more about how to merge files into one PDF.
@@ -121,9 +119,7 @@ export default connect(
               </span>
             </div>
             <div className="before-explanation">
-              <div className="before-label">
-                Don't Submit Extra Documents With Your Petition
-              </div>
+              <h2>Donʼt Submit Extra Documents With Your Petition</h2>
               <p>
                 <strong>Do not</strong> include any additional documents with
                 your Petition, except for the IRS Notice. Documents that might
@@ -135,7 +131,7 @@ export default connect(
 
         <div className="button-box-container">
           <a className="usa-button" href="/start-a-case">
-            Got It, Let's Start My Case
+            Got It, Letʼs Start My Case
           </a>
           <a className="usa-button usa-button-secondary" href="/">
             Cancel
