@@ -112,7 +112,7 @@ export default connect(
                     className="usa-fieldset-inputs usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
-                      I am filing this petition on behalf of …
+                      I am filing this petition on behalf of&nbsp;…
                     </legend>
                     <ul className="usa-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
