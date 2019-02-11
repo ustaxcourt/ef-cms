@@ -7,10 +7,7 @@ export default connect(
   function BeforeStartingCase() {
     return (
       <section className="usa-section usa-grid before-starting-case">
-        <h1 tabIndex="-1">
-          Before you begin&nbsp;
-          <span className="ellipsis" />
-        </h1>
+        <h1 tabIndex="-1">Before you begin&nbsp;…</h1>
         <p>
           There are a few things you need to do before you can submit your case
           online.
@@ -21,9 +18,9 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'copy']} />
             </div>
             <div className="before-explanation">
-              <h2>
+              <h3>
                 Have the IRS Notice(s) Youʼve Received Available to Submit
-              </h2>
+              </h3>
               <p>
                 If youʼve received an IRS notice, such as a Notice of Deficiency
                 or Notice of Determination, youʼll need to include a copy of
@@ -43,7 +40,7 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'edit']} />
             </div>
             <div className="before-explanation">
-              <h2>Fill Out Your Petition Form</h2>
+              <h3>Fill Out Your Petition Form</h3>
               <p>
                 Complete the petition form,{' '}
                 <a
@@ -75,9 +72,9 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'eye-slash']} />
             </div>
             <div className="before-explanation">
-              <h2>
+              <h3>
                 Remove Personal Information From Your Petition and IRS Notice(s)
-              </h2>
+              </h3>
               <p>
                 If the IRS notice includes personal information (such as Social
                 Security Numbers or employer identification numbers), remove or
@@ -94,7 +91,7 @@ export default connect(
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
             </div>
             <div className="before-explanation">
-              <h2>Combine Your Petition and IRS Notice(s) Into a Single PDF</h2>
+              <h3>Combine Your Petition and IRS Notice(s) Into a Single PDF</h3>
               <p>
                 Scan your petition and IRS notice into one Petition PDF or
                 combine them digitally. This is what youʼll upload to the Court
@@ -119,7 +116,7 @@ export default connect(
               </span>
             </div>
             <div className="before-explanation">
-              <h2>Donʼt Submit Extra Documents With Your Petition</h2>
+              <h3>Donʼt Submit Extra Documents With Your Petition</h3>
               <p>
                 <strong>Do not</strong> include any additional documents with
                 your Petition, except for the IRS Notice. Documents that might
