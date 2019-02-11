@@ -52,8 +52,14 @@ export default connect(
                 </a>
                 , or you can upload your own petition that complies with the
                 requirements of the{' '}
-                <a href="#">Tax Court Rules of Practice and Procedure</a>.{' '}
-                <strong>Do not</strong> include personal information (such as
+                <a
+                  href="https://www.ustaxcourt.gov/rules.htm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tax Court Rules of Practice and Procedure
+                </a>
+                . <strong>Do not</strong> include personal information (such as
                 Social Security Numbers or employer identification numbers,
                 birthdates, names of minor children, or financial account
                 information) in your Petition.
@@ -92,7 +98,7 @@ export default connect(
                 Scan your petition and IRS notice into one Petition PDF or
                 combine them digitally. This is what you'll upload to the Court
                 to start your case.{' '}
-                <a href="#">
+                <a href="/">
                   Learn more about how to merge files into one PDF.
                 </a>
               </p>
