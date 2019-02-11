@@ -8,11 +8,20 @@ import {
   faFilePdf,
   faFlag,
   faListUl,
+  faPaperclip,
   faPlusCircle,
   faShareSquare,
+  faSlash,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { faClock, faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
+import {
+  faArrowAltCircleLeft,
+  faClock,
+  faCopy,
+  faEdit,
+  faFilePdf as faFilePdfRegular,
+  faEyeSlash,
+} from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
@@ -44,12 +53,18 @@ const app = {
       faCheckCircle,
       faClock,
       faCloudUploadAlt,
+      faCopy,
+      faEdit,
       faExclamationTriangle,
+      faEyeSlash,
       faFilePdf,
+      faFilePdfRegular,
       faFlag,
       faListUl,
+      faPaperclip,
       faPlusCircle,
       faShareSquare,
+      faSlash,
       faTimesCircle,
     );
     presenter.providers.applicationContext = applicationContext;

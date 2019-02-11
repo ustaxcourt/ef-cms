@@ -7,6 +7,7 @@ import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
 import dismissAlertSequence from './sequences/dismissAlertSequence';
 import dismissModalSequence from './sequences/dismissModalSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
+import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
@@ -75,6 +76,7 @@ export default {
     dismissAlertSequence,
     dismissModalSequence,
     getTrialCitiesSequence,
+    gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
