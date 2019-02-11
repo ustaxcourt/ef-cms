@@ -88,7 +88,7 @@ export default connect(
                 </div>
               </div>
               <div className="usa-width-two-thirds">
-                <div id="petition-upload-hint">
+                <div id="petition-upload-hint" className="alert-gold">
                   <span className="usa-form-hint">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
@@ -139,7 +139,7 @@ export default connect(
                   </fieldset>
                 </div>
                 <div className="usa-width-two-thirds">
-                  <div id="petition-hint">
+                  <div id="petition-hint" className="alert-gold">
                     <span className="usa-form-hint">
                       <FontAwesomeIcon
                         icon={['far', 'arrow-alt-circle-left']}
