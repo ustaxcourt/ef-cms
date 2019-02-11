@@ -5,5 +5,10 @@ export default test => {
       value: 'Whistleblower',
     });
     expect(test.getState('form.caseType')).toEqual('Whistleblower');
+    await test.runSequence('updateFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself',
+    });
+    expect(test.getState('form.filingType')).toEqual('Myself');
   });
 };

@@ -35,6 +35,7 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
@@ -56,6 +57,7 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: futureDate.toDate().toISOString(),

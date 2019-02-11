@@ -13,6 +13,7 @@ describe('validate case detail', () => {
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
       procedureType: 'Procedure Type is required.',
+      filingType: 'Filing Type is required.',
     });
   });
 
@@ -29,6 +30,7 @@ describe('validate case detail', () => {
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
       procedureType: 'Procedure Type is required.',
+      filingType: 'Filing Type is required.',
     });
   });
 
@@ -62,6 +64,7 @@ describe('validate case detail', () => {
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
         signature: true,
+        filingType: 'Myself',
       },
     });
     expect(errors).toEqual(null);
@@ -84,6 +87,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         documents: [
           {
@@ -161,6 +165,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -208,6 +213,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -257,6 +263,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -306,6 +313,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -343,6 +351,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
