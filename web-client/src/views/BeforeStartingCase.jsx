@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export default connect(
   {},
@@ -104,16 +105,10 @@ export default connect(
           </div>
 
           <div role="listitem">
-            <div className="fa-before stacked" role="display">
-              <span className="fa-layers fa-fw">
-                <FontAwesomeIcon icon={['fas', 'paperclip']} />
-                <FontAwesomeIcon
-                  icon={['fas', 'slash']}
-                  className="slash-white"
-                  color="white"
-                />
-                <FontAwesomeIcon icon={['fas', 'slash']} />
-              </span>
+            <div className="fa-before" role="display">
+              <div className="svg-wrapper">
+                <img src={paperclipSlashIcon} className="svg" />
+              </div>
             </div>
             <div className="before-explanation">
               <h3>Donʼt Submit Extra Documents With Your Petition</h3>
