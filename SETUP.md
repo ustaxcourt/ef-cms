@@ -65,6 +65,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
 - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
 - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
+- `COGNITO_SUFFIX` / your suffix to use for the cognito url, e.g. `flexion-efcms`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.

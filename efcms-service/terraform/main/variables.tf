@@ -9,3 +9,7 @@ variable "environment" {
 variable "dns_domain" {
   type = "string"
 }
+
+variable "cognito_suffix" {
+  type = "string"
+}
