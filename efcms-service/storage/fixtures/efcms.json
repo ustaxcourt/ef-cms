@@ -83,7 +83,8 @@
     "userId": "taxpayer",
     "docketNumber": "102-18",
     "docketNumberSuffix": "SL",
-    "procedureType": "small",
+    "procedureType": "Small",
+    "filingType": "Myself",
     "caseType": "CDP (Lien/Levy)",
     "status": "New"
   },
@@ -259,6 +260,7 @@
     "createdAt": "2018-12-27T17:26:36.948Z",
     "payGovId": "1234",
     "procedureType": "Small",
+    "filingType": "Myself",
     "preferredTrialCity": "Hartford, CT",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
@@ -401,7 +403,8 @@
         "workItems": []
       }
     ],
-    "procedureType": "regular",
+    "procedureType": "Regular",
+    "filingType": "Myself",
     "caseType": "Exempt Organization",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "0",
@@ -532,6 +535,7 @@
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -625,6 +629,7 @@
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -710,6 +715,7 @@
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
     "documents": [
       {

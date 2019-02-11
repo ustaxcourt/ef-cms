@@ -6,6 +6,7 @@ describe('WorkItem', () => {
       const workItem = new PetitionWithoutFiles({
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: null,
       });

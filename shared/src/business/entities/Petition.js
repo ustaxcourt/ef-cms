@@ -12,6 +12,7 @@ Petition.errorToMessageMap = {
   irsNoticeDate: 'IRS Notice Date is a required field.',
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
+  filingType: 'Filing Type is a required field.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   signature: 'You must review the form before submitting.',
 };
@@ -27,6 +28,7 @@ joiValidationDecorator(
       .required(),
     petitionFile: joi.object().required(),
     procedureType: joi.string().required(),
+    filingType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),

@@ -1,5 +1,4 @@
 import {
-  faArrowAltCircleLeft,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -14,6 +13,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';

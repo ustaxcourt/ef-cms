@@ -9,6 +9,7 @@ const MOCK_CASE = {
   status: 'New',
   caseType: 'Other',
   procedureType: 'Regular',
+  filingType: 'Myself',
   createdAt: new Date().toISOString(),
   preferredTrialCity: 'Washington, D.C.',
   petitioners: [{ name: 'Test Taxpayer' }],

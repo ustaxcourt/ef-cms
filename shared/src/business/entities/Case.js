@@ -88,6 +88,8 @@ const CASE_TYPES = [
 // This is the order that they appear in the UI
 const PROCEDURE_TYPES = ['Regular', 'Small'];
 
+const FILING_TYPES = ['Myself'];
+
 /**
  * Case
  * @param rawCase
@@ -199,6 +201,7 @@ joiValidationDecorator(
     workItems: joi.array().optional(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
+    filingType: joi.string().required(),
     yearAmounts: joi
       .array()
       .unique((a, b) => a.year === b.year)
@@ -229,6 +232,7 @@ joiValidationDecorator(
       'Please enter a valid IRS notice date.',
     ],
     procedureType: 'Procedure Type is required.',
+    filingType: 'Filing Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
     yearAmounts: [
       {
@@ -417,6 +421,14 @@ Case.getDocumentTypes = () => {
  */
 Case.getProcedureTypes = () => {
   return PROCEDURE_TYPES;
+};
+
+/**
+ * getFilingTypes
+ * @returns {string[]}
+ */
+Case.getFilingTypes = () => {
+  return FILING_TYPES;
 };
 
 /**
