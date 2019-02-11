@@ -53,6 +53,7 @@ describe('createCase', () => {
       petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
@@ -141,6 +142,7 @@ describe('createCase', () => {
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
+      filingType: 'Myself',
       status: 'New',
       userId: 'taxpayer',
     };
@@ -183,6 +185,7 @@ describe('createCase', () => {
       petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
@@ -259,6 +262,7 @@ describe('createCase', () => {
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
+      filingType: 'Myself',
       status: 'New',
       userId: 'taxpayer',
     };
@@ -298,6 +302,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
@@ -342,6 +347,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
@@ -366,6 +372,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
