@@ -180,18 +180,23 @@ iframe {
   }
 }
 
-.mini-success {
-  color: $color-green;
+.alert-gold {
+  padding: 10px;
+  border-left: 5px solid $color-gold;
+  background: $color-gold-lightest;
+  color: $color-base;
 
   svg {
     margin-right: 5px;
   }
 }
 
-.ellipsis::before {
-  content: '.\0000a0.\0000a0.';
-  letter-spacing: -3px;
-  white-space: nowrap;
+.mini-success {
+  color: $color-green;
+
+  svg {
+    margin-right: 5px;
+  }
 }
 
 .before-starting-case {
@@ -214,22 +219,18 @@ iframe {
     width: 150px;
     color: $color-primary-alt;
 
-    svg {
+    svg,
+    .svg-wrapper {
       width: 100px;
       height: 100px;
       padding: 20px;
       border: 3px solid $color-primary-alt;
       border-radius: 55px;
     }
-  }
 
-  .fa-before.stacked {
-    position: absolute;
-    top: 35px;
-    .fa-layers .slash-white {
-      padding-top: 30px;
-      border: none;
-      color: $color-white;
+    .svg-wrapper img.svg {
+      width: 54px;
+      height: 54px;
     }
   }
 

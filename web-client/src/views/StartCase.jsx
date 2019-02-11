@@ -88,7 +88,7 @@ export default connect(
                 </div>
               </div>
               <div className="usa-width-two-thirds">
-                <div id="petition-upload-hint">
+                <div id="petition-upload-hint" className="alert-gold">
                   <span className="usa-form-hint">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
@@ -112,7 +112,7 @@ export default connect(
                     className="usa-fieldset-inputs usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
-                      I am filing this petition on behalf of …
+                      I am filing this petition on behalf of&nbsp;…
                     </legend>
                     <ul className="usa-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
@@ -139,7 +139,7 @@ export default connect(
                   </fieldset>
                 </div>
                 <div className="usa-width-two-thirds">
-                  <div id="petition-hint">
+                  <div id="petition-hint" className="alert-gold">
                     <span className="usa-form-hint">
                       <FontAwesomeIcon
                         icon={['far', 'arrow-alt-circle-left']}
@@ -376,7 +376,7 @@ export default connect(
             your information appears the way you want it to.
           </p>
           <div className="blue-container">
-            <h3>Your Petition is Ready to Submit If …</h3>
+            <h3>Your Petition is Ready to Submit If&nbsp;…</h3>
             <ol>
               <li>You have confirmed the timeliness of your Petition.</li>
               <li>
