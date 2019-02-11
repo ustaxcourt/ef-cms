@@ -188,12 +188,6 @@ iframe {
   }
 }
 
-.ellipsis::before {
-  content: '.\0000a0.\0000a0.';
-  letter-spacing: -3px;
-  white-space: nowrap;
-}
-
 .before-starting-case {
   [role='listitem'] {
     position: relative;
@@ -214,22 +208,18 @@ iframe {
     width: 150px;
     color: $color-primary-alt;
 
-    svg {
+    svg,
+    .svg-wrapper {
       width: 100px;
       height: 100px;
       padding: 20px;
       border: 3px solid $color-primary-alt;
       border-radius: 55px;
     }
-  }
 
-  .fa-before.stacked {
-    position: absolute;
-    top: 35px;
-    .fa-layers .slash-white {
-      padding-top: 30px;
-      border: none;
-      color: $color-white;
+    .svg-wrapper img.svg {
+      width: 54px;
+      height: 54px;
     }
   }
 
