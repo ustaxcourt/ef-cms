@@ -376,7 +376,7 @@ export default connect(
             your information appears the way you want it to.
           </p>
           <div className="blue-container">
-            <h3>Your Petition is Ready to Submit If …</h3>
+            <h3>Your Petition is Ready to Submit If&nbsp;…</h3>
             <ol>
               <li>You have confirmed the timeliness of your Petition.</li>
               <li>
