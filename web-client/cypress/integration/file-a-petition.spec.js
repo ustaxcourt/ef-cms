@@ -66,8 +66,15 @@ describe('File a petition', function() {
     });
 
     it('click the small radio button', () => {
-      cy.get('#radios').scrollIntoView();
-      cy.get('#radios label')
+      cy.get('#procedure-type-radios').scrollIntoView();
+      cy.get('#procedure-type-radios label')
+        .first()
+        .click();
+    });
+
+    it('click the myself radio button', () => {
+      cy.get('#filing-type-radios').scrollIntoView();
+      cy.get('#filing-type-radios label')
         .first()
         .click();
     });
