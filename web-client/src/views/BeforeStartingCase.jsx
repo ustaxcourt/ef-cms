@@ -107,7 +107,11 @@ export default connect(
           <div role="listitem">
             <div className="fa-before" role="display">
               <div className="svg-wrapper">
-                <img src={paperclipSlashIcon} className="svg" />
+                <img
+                  src={paperclipSlashIcon}
+                  className="svg"
+                  aria-hidden="true"
+                />
               </div>
             </div>
             <div className="before-explanation">
