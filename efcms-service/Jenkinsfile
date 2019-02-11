@@ -160,6 +160,20 @@ pipeline {
         }
       }
     }
+    stage('Setup Cognito UI Configuration') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh "./docker-cognito-customize.sh ${branchMap[env.branch_name]}"
+          }
+        }
+      }
+    }
     stage('Smoke Tests') {
       when {
         expression {
