@@ -31,8 +31,20 @@ describe('formatYearAmounts', () => {
     };
     formatYearAmounts(caseDetail);
     expect(caseDetail.yearAmountsFormatted).toEqual([
-      { amount: '', formattedYear: '2000', showError: false, year: '2000' },
-      { amount: '', formattedYear: 'Invalid date', showError: false, year: '' },
+      {
+        amount: '',
+        amountFormatted: '',
+        formattedYear: '2000',
+        showError: false,
+        year: '2000',
+      },
+      {
+        amount: '',
+        amountFormatted: '',
+        formattedYear: 'Invalid date',
+        showError: false,
+        year: '',
+      },
     ]);
   });
 
@@ -54,9 +66,16 @@ describe('formatYearAmounts', () => {
     };
     formatYearAmounts(caseDetail, caseDetailErrors);
     expect(caseDetail.yearAmountsFormatted).toEqual([
-      { amount: '', formattedYear: '2000', showError: false, year: '2000' },
       {
         amount: '',
+        amountFormatted: '',
+        formattedYear: '2000',
+        showError: false,
+        year: '2000',
+      },
+      {
+        amount: '',
+        amountFormatted: '',
         errorMessage: 'year can not be in future',
         formattedYear: '5000',
         showError: true,
@@ -83,10 +102,17 @@ describe('formatYearAmounts', () => {
     };
     formatYearAmounts(caseDetail, caseDetailErrors);
     expect(caseDetail.yearAmountsFormatted).toEqual([
-      { amount: '1000', formattedYear: '2000', showError: false, year: '2000' },
+      {
+        amount: '1000',
+        amountFormatted: '1,000',
+        formattedYear: '2000',
+        showError: false,
+        year: '2000',
+      },
       {
         amount: '1337',
         errorMessage: 'Duplicate years are bad',
+        amountFormatted: '1,337',
         formattedYear: '2000',
         showError: true,
         year: '2000',
