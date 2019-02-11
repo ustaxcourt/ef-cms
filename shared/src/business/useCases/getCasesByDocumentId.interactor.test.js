@@ -37,6 +37,7 @@ describe('getCasesByDocumentId', () => {
               petitioners: [{ name: 'Test Taxpayer' }],
               caseType: 'Other',
               procedureType: 'Regular',
+              filingType: 'Myself',
               preferredTrialCity: 'Washington, D.C.',
               documents: [
                 {

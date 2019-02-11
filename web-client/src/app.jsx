@@ -1,5 +1,4 @@
 import {
-  faArrowAltCircleLeft,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -16,6 +15,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  faArrowAltCircleLeft,
   faClock,
   faCopy,
   faEdit,

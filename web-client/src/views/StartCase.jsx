@@ -10,6 +10,7 @@ import ErrorNotification from './ErrorNotification';
 export default connect(
   {
     caseTypes: state.caseTypes,
+    filingTypes: state.filingTypes,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
@@ -24,6 +25,7 @@ export default connect(
   },
   function StartCase({
     caseTypes,
+    filingTypes,
     form,
     getTrialCities,
     procedureTypes,
@@ -52,164 +54,9 @@ export default connect(
           </h1>
           {showModal && <StartCaseCancelModalDialog />}
           <ErrorNotification />
-          <div className="grey-container">
-            <div className="usa-grid-full">
-              <h2 id="get-started">Before You Get Started...</h2>
-              <p>
-                There are a few things you need to do before you can submit your
-                case.
-              </p>
-              <div role="list" aria-describedby="get-started">
-                <div
-                  className="usa-width-one-third create-case-step"
-                  role="listitem"
-                >
-                  <span className="step-count">1</span>
-                  <h3>Fill out a petition form</h3>
-                  <p>
-                    Use{' '}
-                    <a
-                      href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      USTC Form 2
-                    </a>{' '}
-                    or a custom petition format that complies with the
-                    requirements of the{' '}
-                    <a
-                      href="https://www.ustaxcourt.gov/rules.htm"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Tax Court Rules of Practice and Procedure
-                    </a>
-                    .
-                  </p>
-                </div>
-                <div
-                  className="usa-width-one-third create-case-step"
-                  role="listitem"
-                >
-                  <span className="step-count">2</span>
-                  <h3>Gather any IRS notice(s) you’ve received</h3>
-                  <p>
-                    If you’ve received an IRS notice, such as a Notice of
-                    Deficiency or Notice of Determination, you’ll need to
-                    include those in your Petition.
-                  </p>
-                </div>
-                <div
-                  className="usa-width-one-third create-case-step"
-                  role="listitem"
-                >
-                  <span className="step-count">3</span>
-                  <h3>Create your Petition as a single PDF</h3>
-                  <p>
-                    Scan your petition form and IRS notices into one Petition
-                    PDF or combine them digitally. Learn{' '}
-                    <a href="/">how to merge files into one PDF</a>.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
           <p className="required-statement">All fields required</p>
-          <h2>Tell Us About Your Case</h2>
-          <p>You must file a Petition to begin a Tax Court case.</p>
+          <h2>Upload Your Petition to Start Your Case</h2>
           <div className="blue-container">
-            <div className="usa-form-group">
-              <h3>Who is Filing This Case?</h3>
-              <p>Myself</p>
-              <h3>IRS Notice</h3>
-              <label htmlFor="case-type">Type of Notice</label>
-              <select
-                name="caseType"
-                id="case-type"
-                aria-labelledby="case-type"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              >
-                <option value="">-- Select --</option>
-                {caseTypes.map(caseType => (
-                  <option key={caseType.type} value={caseType.type}>
-                    {caseType.description}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <fieldset>
-              <legend id="date-of-notice-legend">Date of Notice</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month" aria-hidden="true">
-                    MM
-                  </label>
-                  <input
-                    className="usa-input-inline"
-                    aria-describedby="date-of-notice-legend"
-                    id="date-of-notice-month"
-                    name="month"
-                    aria-label="month, two digits"
-                    type="number"
-                    min="1"
-                    max="12"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day" aria-hidden="true">
-                    DD
-                  </label>
-                  <input
-                    className="usa-input-inline"
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="day, two digits"
-                    id="date-of-notice-day"
-                    name="day"
-                    type="number"
-                    min="1"
-                    max="31"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year" aria-hidden="true">
-                    YYYY
-                  </label>
-                  <input
-                    className="usa-input-inline"
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="year, four digits"
-                    id="date-of-notice-year"
-                    name="year"
-                    type="number"
-                    min="1900"
-                    max="2100"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
             <div className="usa-grid-full">
               <div className="usa-width-one-third">
                 <div className="usa-form-group">
@@ -241,13 +88,172 @@ export default connect(
                 </div>
               </div>
               <div className="usa-width-two-thirds">
-                <div className="alert-dark" id="petition-hint">
-                  <FontAwesomeIcon icon="arrow-alt-circle-left" size="sm" />
-                  <span>
+                <div id="petition-upload-hint">
+                  <span className="usa-form-hint">
+                    <FontAwesomeIcon
+                      icon={['far', 'arrow-alt-circle-left']}
+                      className="fa-icon-gold"
+                      size="sm"
+                    />
                     This should include your petition form and any IRS notice
                     <span aria-hidden="true">(s)</span> you received.
                   </span>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div className="usa-form-group">
+            <h3>Who is Filing This Case?</h3>
+            <div className="blue-container">
+              <div className="usa-grid-full">
+                <div className="usa-width-one-third">
+                  <fieldset
+                    id="filing-type-radios"
+                    className="usa-fieldset-inputs usa-sans"
+                  >
+                    <legend htmlFor="filing-type-radios">
+                      I am filing this petition on behalf of …
+                    </legend>
+                    <ul className="usa-unstyled-list">
+                      {filingTypes.map((filingType, idx) => (
+                        <li key={filingType}>
+                          <input
+                            id={filingType}
+                            data-type={filingType}
+                            type="radio"
+                            name="filingType"
+                            value={filingType}
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label id={`filing-type-${idx}`} htmlFor={filingType}>
+                            {filingType}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </fieldset>
+                </div>
+                <div className="usa-width-two-thirds">
+                  <div id="petition-hint">
+                    <span className="usa-form-hint">
+                      <FontAwesomeIcon
+                        icon={['far', 'arrow-alt-circle-left']}
+                        className="fa-icon-gold"
+                        size="sm"
+                      />
+                      To file a Petition on behalf of another taxpayer, you must
+                      be authorized to litigate in this Court as provided by the
+                      Tax Court Rules of Practice and Procedure (Rule 60).
+                      Enrolled agents, certified public accountants, and powers
+                      of attorney who are not admitted to practice before the
+                      Court are not eligible to represent taxpayers.{' '}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="usa-form-group">
+            <h3>Did you receive a notice from the IRS?</h3>
+            <div className="blue-container">
+              <h3>IRS Notice</h3>
+              <div className="usa-form-group">
+                <fieldset>
+                  <legend>Type of Notice</legend>
+                  <select
+                    name="caseType"
+                    id="case-type"
+                    aria-labelledby="case-type"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">-- Select --</option>
+                    {caseTypes.map(caseType => (
+                      <option key={caseType.type} value={caseType.type}>
+                        {caseType.description}
+                      </option>
+                    ))}
+                  </select>
+                </fieldset>
+              </div>
+              <div className="usa-form-group">
+                <fieldset>
+                  <legend id="date-of-notice-legend">Date of Notice</legend>
+                  <div className="usa-date-of-birth">
+                    <div className="usa-form-group usa-form-group-month">
+                      <label htmlFor="date-of-notice-month" aria-hidden="true">
+                        MM
+                      </label>
+                      <input
+                        className="usa-input-inline"
+                        aria-describedby="date-of-notice-legend"
+                        id="date-of-notice-month"
+                        name="month"
+                        aria-label="month, two digits"
+                        type="number"
+                        min="1"
+                        max="12"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="usa-form-group usa-form-group-day">
+                      <label htmlFor="date-of-notice-day" aria-hidden="true">
+                        DD
+                      </label>
+                      <input
+                        className="usa-input-inline"
+                        aria-describedby="date-of-notice-legend"
+                        aria-label="day, two digits"
+                        id="date-of-notice-day"
+                        name="day"
+                        type="number"
+                        min="1"
+                        max="31"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="usa-form-group usa-form-group-year">
+                      <label htmlFor="date-of-notice-year" aria-hidden="true">
+                        YYYY
+                      </label>
+                      <input
+                        className="usa-input-inline"
+                        aria-describedby="date-of-notice-legend"
+                        aria-label="year, four digits"
+                        id="date-of-notice-year"
+                        name="year"
+                        type="number"
+                        min="1900"
+                        max="2100"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </fieldset>
               </div>
             </div>
           </div>
@@ -287,7 +293,10 @@ export default connect(
           </div>
           <div className="blue-container">
             <div className="usa-form-group">
-              <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+              <fieldset
+                id="procedure-type-radios"
+                className="usa-fieldset-inputs usa-sans"
+              >
                 <legend>Select Case Procedure</legend>
                 <ul className="usa-unstyled-list">
                   {procedureTypes.map((procedureType, idx) => (
@@ -367,6 +376,19 @@ export default connect(
             your information appears the way you want it to.
           </p>
           <div className="blue-container">
+            <h3>Your Petition is Ready to Submit If …</h3>
+            <ol>
+              <li>You have confirmed the timeliness of your Petition.</li>
+              <li>
+                You have redacted all personal information from your documents.
+              </li>
+              <li>You have not included any evidence with your Petition.</li>
+              <li>
+                Your Petition and any IRS Notices have been saved and uploaded
+                as a single PDF.
+              </li>
+            </ol>
+
             <div className="usa-form-group">
               <legend>Review and Sign</legend>
               <input
@@ -381,8 +403,8 @@ export default connect(
                 }}
               />
               <label htmlFor="signature">
-                Checking this box acts as your digital signature, acknowledging
-                that you’ve verified all information is correct.
+                Checking this box acknowledges that you’ve verified all
+                information is correct.
               </label>
             </div>
           </div>

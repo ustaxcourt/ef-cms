@@ -266,6 +266,15 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getFilingTypes', () => {
+    it('returns the filing types', () => {
+      const filingTypes = Case.getFilingTypes();
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(1);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+  });
+
   describe('getTrialCities', () => {
     it('returns the trial cities by procedure type', () => {
       const procedureTypes = Case.getProcedureTypes();

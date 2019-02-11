@@ -40,6 +40,7 @@ export default {
   assigneeId: null,
   selectedWorkItems: [],
   caseTypes: [],
+  filingTypes: [],
   procedureTypes: [],
   user: {
     userId: '',
