@@ -88,7 +88,7 @@ export default connect(
                 </div>
               </div>
               <div className="usa-width-two-thirds">
-                <div id="petition-hint">
+                <div id="petition-upload-hint">
                   <span className="usa-form-hint">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
@@ -108,10 +108,12 @@ export default connect(
               <div className="usa-grid-full">
                 <div className="usa-width-one-third">
                   <fieldset
-                    id="radios"
+                    id="filing-type-radios"
                     className="usa-fieldset-inputs usa-sans"
                   >
-                    <legend>I am filing this petition on behalf of …</legend>
+                    <legend htmlFor="filing-type-radios">
+                      I am filing this petition on behalf of …
+                    </legend>
                     <ul className="usa-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
                         <li key={filingType}>
@@ -122,7 +124,7 @@ export default connect(
                             name="filingType"
                             value={filingType}
                           />
-                          <label id={`proc-type-${idx}`} htmlFor={filingType}>
+                          <label id={`filing-type-${idx}`} htmlFor={filingType}>
                             {filingType}
                           </label>
                         </li>
@@ -156,7 +158,7 @@ export default connect(
               <h3>IRS Notice</h3>
               <div className="usa-form-group">
                 <fieldset>
-                  <label htmlFor="case-type">Type of Notice</label>
+                  <legend>Type of Notice</legend>
                   <select
                     name="caseType"
                     id="case-type"
@@ -285,7 +287,10 @@ export default connect(
           </div>
           <div className="blue-container">
             <div className="usa-form-group">
-              <fieldset id="radios" className="usa-fieldset-inputs usa-sans">
+              <fieldset
+                id="procedure-type-radios"
+                className="usa-fieldset-inputs usa-sans"
+              >
                 <legend>Select Case Procedure</legend>
                 <ul className="usa-unstyled-list">
                   {procedureTypes.map((procedureType, idx) => (
