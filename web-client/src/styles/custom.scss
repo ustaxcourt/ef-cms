@@ -188,6 +188,12 @@ iframe {
   }
 }
 
+.ellipsis::before {
+  content: '.\0000a0.\0000a0.';
+  letter-spacing: -3px;
+  white-space: nowrap;
+}
+
 .before-starting-case {
   [role='listitem'] {
     position: relative;

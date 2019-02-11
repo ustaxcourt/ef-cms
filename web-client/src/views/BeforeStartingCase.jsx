@@ -7,7 +7,10 @@ export default connect(
   function BeforeStartingCase() {
     return (
       <section className="usa-section usa-grid before-starting-case">
-        <h1 tabIndex="-1">Before you begin ...</h1>
+        <h1 tabIndex="-1">
+          Before you begin&nbsp;
+          <span className="ellipsis" />
+        </h1>
         <p>
           There are a few things you need to do before you can submit your case
           online.
