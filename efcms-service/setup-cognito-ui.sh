@@ -14,5 +14,5 @@ aws cognito-idp set-ui-customization \
   --user-pool-id "${USER_POOL_ID}" \
   --client-id "${CLIENT_ID}" \
   --css "${CSS}" \
-  --image-file fileb://./cognito/logo.jpg
+  --image-file fileb://./cognito/logo.jpg \
   --region "${REGION}"
