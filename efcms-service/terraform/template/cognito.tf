@@ -48,39 +48,7 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id = "${aws_cognito_user_pool.pool.id}"
 }
 
-
-module "cognito-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
-
-  domain_name            = "auth-${var.environment}.${var.dns_domain}"
-  hosted_zone_name       = "${var.dns_domain}."
-  is_hosted_zone_private = "false"
-  validation_method      = "DNS"
-  certificate_name       = "auth-${var.environment}.${var.dns_domain}"
-  environment            = "${var.environment}"
-  description            = "Certificate for auth-${var.environment}.${var.dns_domain}"
-  product_domain         = "EFCMS"
-}
-
-
 resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "efcms-auth-${var.environment}"
-  # certificate_arn = "${module.cognito-certificate.acm_certificate_arn}"
+  domain       = "auth-${var.environment}-${var.cognito_suffix}"
   user_pool_id = "${aws_cognito_user_pool.pool.id}"
 }
-
-# data "aws_route53_zone" "zone" {
-#   name = "${var.dns_domain}."
-# }
-
-# resource "aws_route53_record" "www" {
-#   zone_id = "${data.aws_route53_zone.zone.zone_id}"
-#   name    = "auth-${var.environment}.${var.dns_domain}"
-#   type    = "A"
-
-#   alias = {
-#     name                   = "${aws_cognito_user_pool_domain.main.domain_name}"
-#     zone_id                = "${aws_cloudfront_distribution.distribution.hosted_zone_id}"
-#     evaluate_target_health = false
-#   }
-# }
