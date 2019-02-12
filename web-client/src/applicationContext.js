@@ -90,6 +90,12 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
+  getCognitoLoginUrl: () => {
+    return (
+      process.env.COGNITO_LOGIN_URL ||
+      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=4asa0lun20007bd1h76jpi689c&redirect_uri=http%3A//localhost%3A1234/log-in'
+    );
+  },
   getError: e => {
     return ErrorFactory.getError(e);
   },

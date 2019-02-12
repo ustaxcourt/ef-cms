@@ -32,6 +32,7 @@ export default {
   petition: {},
   document: {},
   documentId: null,
+  cognitoLoginUrl: null,
   form: {},
   searchTerm: '',
   workQueue: [],

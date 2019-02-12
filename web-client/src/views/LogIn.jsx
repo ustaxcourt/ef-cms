@@ -10,7 +10,11 @@ export default connect(
     submitLogInSequence: sequences.submitLogInSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function LogIn({ form, updateFormValueSequence, submitLogInSequence }) {
+  function LogIn({
+    form,
+    updateFormValueSequence,
+    submitLogInSequence,
+  }) {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Log in</h1>
