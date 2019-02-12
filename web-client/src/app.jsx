@@ -45,6 +45,8 @@ const app = {
       applicationContext.setCurrentUser(user);
     }
 
+    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,
