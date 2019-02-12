@@ -39,7 +39,7 @@ describe('Get case types', () => {
     let error;
     try {
       await getCaseTypes({
-        userId: 'notataxpayer',
+        userId: 'notarealboy',
       });
     } catch (err) {
       error = err;
