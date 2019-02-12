@@ -31,16 +31,22 @@ function User(user) {
   ];
 
   let role = this.userId;
+
   if (/docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
-  }
-  if (role.indexOf('petitioner') > -1) {
+  } else if (role.indexOf('petitioner') > -1) {
     role = 'petitioner';
-  }
-  if (/petitionsclerk(\d{1,2})?$/.test(role)) {
+  } else if (/petitionsclerk(\d{1,2})?$/.test(role)) {
     role = 'petitionsclerk';
-  }
-  if (role.indexOf('taxpayer') > -1) {
+  } else if (role.indexOf('respondent') > -1) {
+    role = 'respondent';
+  } else if (role.indexOf('seniorattorney') > -1) {
+    role = 'seniorattorney';
+  } else if (role.indexOf('intakeclerk') > -1) {
+    role = 'intakeclerk';
+  } else if (role === 'taxpayer') {
+    role = 'petitioner';
+  } else if (user.token) {
     role = 'petitioner';
   }
 

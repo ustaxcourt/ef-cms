@@ -39,7 +39,7 @@ describe('Get trial cities', () => {
   it('throws a UnauthorizedError if user is unauthorized', async () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'nottaxpayer' };
+        return { userId: 'notauser' };
       },
     };
 

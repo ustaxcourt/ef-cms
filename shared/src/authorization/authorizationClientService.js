@@ -1,3 +1,5 @@
+const User = require('../business/entities/User');
+
 exports.CASE_METADATA = 'caseMetadata';
 exports.FILE_ANSWER = 'fileAnswer';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
@@ -54,13 +56,7 @@ const AUTHORIZATION_MAP = {
   taxpayer: [exports.PETITION],
 };
 
-const getRole = userId => {
-  // TODO
-  return userId.replace(/\d+/g, '').replace(/@.*/g, '');
-};
-
 /**
- * isAuthorized
  *
  * @param userId
  * @param action
@@ -71,8 +67,14 @@ exports.isAuthorized = (userId, action, owner) => {
   if (userId && userId === owner) {
     return true;
   }
+  let user;
+  try {
+    user = new User({ userId });
+  } catch (err) {
+    return false;
+  }
 
-  const userRole = getRole(userId);
+  const userRole = user.role;
   if (!AUTHORIZATION_MAP[userRole]) {
     return false;
   }

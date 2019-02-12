@@ -31,7 +31,7 @@ describe('Get case procedure types', () => {
     let error;
     try {
       await getProcedureTypes({
-        userId: 'notataxpayer',
+        userId: 'notauser',
       });
     } catch (err) {
       error = err;

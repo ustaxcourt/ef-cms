@@ -30,7 +30,7 @@ describe('Get case filing types', () => {
     let error;
     try {
       await getFilingTypes({
-        userId: 'notataxpayer',
+        userId: 'notauser',
       });
     } catch (err) {
       error = err;
