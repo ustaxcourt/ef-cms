@@ -9,7 +9,7 @@ export default [
   setAlertFromExceptionAction,
   getEnvironment,
   {
-    local: [setCurrentPage('LogIn')],
+    local: [setCurrentPage('Error')],
     prod: [redirectToCognito],
   },
 ];
