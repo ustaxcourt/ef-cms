@@ -4,6 +4,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
+import PetitionerContact from './StartCase/PetitionerContact';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -158,6 +159,7 @@ export default connect(
               </div>
             </div>
           </div>
+          <PetitionerContact />
           <div className="usa-form-group">
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">
