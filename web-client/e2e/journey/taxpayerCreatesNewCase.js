@@ -27,6 +27,7 @@ export default (test, fakeFile) => {
     });
     expect(result.showPetitionerContact).toBeFalsy();
 
+    // showPetitionerContact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Myself',
@@ -81,15 +82,47 @@ export default (test, fakeFile) => {
       phone: '1234567890',
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: 'Petitioner & Spouse',
+    // showPetitionerAndSpouseContact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself and my spouse',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerDeceasedSpouseForm).toBeTruthy();
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'isSpouseDeceased',
+      value: 'No',
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
     expect(result.showPetitionerAndSpouseContact).toBeTruthy();
+
+    // showPetitionerAndDeceasedSpouseContact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself and my spouse',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerDeceasedSpouseForm).toBeTruthy();
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'isSpouseDeceased',
+      value: 'Yes',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerAndDeceasedSpouseContact).toBeTruthy();
 
     await test.runSequence('updateFormValueSequence', {
       key: 'partyType',
