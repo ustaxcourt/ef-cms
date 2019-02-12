@@ -27,9 +27,9 @@ export default (test, fakeFile) => {
     });
     expect(result.showPetitionerContact).toBeFalsy();
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: 'Petitioner',
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself',
     });
 
     result = runCompute(startCaseHelper, {
