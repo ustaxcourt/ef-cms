@@ -11,10 +11,4 @@ import decodeToken from '../actions/decodeTokenAction';
  * and navigating to dashboard
  *
  */
-export default [
-  decodeToken,
-  getUser,
-  setUser,
-  setPath,
-  navigateToPath
-]
+export default [decodeToken, getUser, setUser, setPath, navigateToPath];

@@ -30,7 +30,6 @@ function User(user) {
     'seniorattorney',
   ];
 
-
   let role = this.userId;
   if (/docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
@@ -46,7 +45,9 @@ function User(user) {
   }
 
   if (validRoles.includes(role)) {
-    const name = 'Test ' + this.userId.replace(/^\w/, c => c.toUpperCase()).replace(/@.*/, '');
+    const name =
+      'Test ' +
+      this.userId.replace(/^\w/, c => c.toUpperCase()).replace(/@.*/, '');
     const barNumber =
       this.userId === 'respondent' || this.userId === 'seniorattorney'
         ? '12345'
