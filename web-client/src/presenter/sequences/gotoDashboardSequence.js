@@ -11,6 +11,7 @@ import setCurrentPage from '../actions/setCurrentPageAction';
 import setPath from '../actions/setPathAction';
 import setUsers from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
+import getEnvironment from '../actions/getEnvironmentAction';
 
 const goToDashboard = [
   clearErrorAlerts,
@@ -51,7 +52,13 @@ const goToDashboard = [
 export default [
   isLoggedIn,
   {
-    unauthorized: [setPath, redirectToCognito],
+    unauthorized: [
+      getEnvironment,
+      {
+        local: [setPath, navigateToLogin],
+        prod: [redirectToCognito],
+      },
+    ],
     isLoggedIn: goToDashboard,
   },
 ];

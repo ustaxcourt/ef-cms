@@ -9,8 +9,7 @@ export default [
   setAlertFromExceptionAction,
   getEnvironment,
   {
-    dev: [redirectToCognito],
+    local: [setCurrentPage('LogIn')],
     prod: [redirectToCognito],
   },
-  // setCurrentPage('LogIn'),
 ];

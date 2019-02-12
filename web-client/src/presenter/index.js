@@ -15,7 +15,6 @@ import gotoLogInSequence from './sequences/gotoLogInSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
-import loginWithTokenPathSequence from './sequences/loginWithTokenPathSequence';
 import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
@@ -85,7 +84,6 @@ export default {
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
-    loginWithTokenPathSequence,
     removeYearAmountSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
