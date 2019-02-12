@@ -50,6 +50,7 @@ import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
+import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
@@ -118,6 +119,7 @@ export default {
     updateForwardFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
+    updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
     viewDocumentSequence,
   },

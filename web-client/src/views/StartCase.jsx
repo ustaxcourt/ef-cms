@@ -23,6 +23,8 @@ export default connect(
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    updateStartCaseFormValueSequence:
+      sequences.updateStartCaseFormValueSequence,
   },
   function StartCase({
     caseTypes,
@@ -37,6 +39,7 @@ export default connect(
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
+    updateStartCaseFormValueSequence,
     updatePetitionValueSequence,
   }) {
     return (
@@ -125,7 +128,7 @@ export default connect(
                             name="filingType"
                             value={filingType}
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateStartCaseFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -159,7 +162,7 @@ export default connect(
               </div>
             </div>
           </div>
-          <PetitionerContact />
+          {startCaseHelper.showPetitionerContact && <PetitionerContact />}
           <div className="usa-form-group">
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">
