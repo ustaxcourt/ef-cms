@@ -43,9 +43,10 @@ export default {
   caseTypes: [],
   filingTypes: [],
   procedureTypes: [],
-  user: {
-    userId: '',
-    role: 'public',
+  user: null,
+    // {
+    // userId: '',
+    // role: 'public',
 
     // userId: 'taxpayer',
     // name: 'Tax Payer',
@@ -71,7 +72,7 @@ export default {
     // name: 'Señor Attorney',
     // token: 'seniorattorney',
     // role: 'seniorattorney',
-  },
+  // },
   caseDetail: {},
   caseDetailErrors: {},
   cases: [],
