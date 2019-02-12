@@ -1,7 +1,9 @@
 import setUser from '../actions/setUserAction';
+import getUser from '../actions/getUserAction';
 // import updateLoginValueSequence from '../sequences/updateLoginValueSequence';
 // import submitLogInSequence from '../sequences/submitLogInSequence';
 import setPath from '../actions/setPathAction';
+import navigateToPath from '../actions/navigateToPathAction';
 import decodeToken from '../actions/decodeTokenAction';
 /**
  * Combine several sequences; set login value, and
@@ -10,11 +12,9 @@ import decodeToken from '../actions/decodeTokenAction';
  *
  */
 export default [
-  setPath,
   decodeToken,
+  getUser,
   setUser,
-  // parse the token, put it into session storage, and put the user into state with the token on it
-
-  // ...updateLoginValueSequence,
-  //  ...submitLogInSequence];
+  setPath,
+  navigateToPath
 ]
