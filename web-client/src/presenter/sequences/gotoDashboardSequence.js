@@ -5,6 +5,7 @@ import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
 import isLoggedIn from '../actions/isLoggedInAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
+import redirectToCognito from '../actions/redirectToCognitoAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setPath from '../actions/setPathAction';
@@ -50,7 +51,7 @@ const goToDashboard = [
 export default [
   isLoggedIn,
   {
-    unauthorized: [setPath, navigateToLogin],
+    unauthorized: [setPath, redirectToCognito],
     isLoggedIn: goToDashboard,
   },
 ];

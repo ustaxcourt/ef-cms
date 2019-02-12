@@ -90,6 +90,9 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
+  getCurrentEnvironment: () => {
+    return process.env.USTC_ENV || 'prod';
+  },
   getCognitoLoginUrl: () => {
     return (
       process.env.COGNITO_LOGIN_URL ||

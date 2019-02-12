@@ -95,14 +95,16 @@ export default connect(
                 </a>
               </li>
             </ul> */}
-            <div className="usa-nav-secondary">
-              <ul className="usa-unstyled-list usa-nav-secondary-links">
-                <li role="search" className="usa-search">
-                  <SearchBox />
-                </li>
-                {user.userId && <li>Hello, {user.name}</li>}
-              </ul>
-            </div>
+            {user && (
+              <div className="usa-nav-secondary">
+                <ul className="usa-unstyled-list usa-nav-secondary-links">
+                  <li role="search" className="usa-search">
+                    <SearchBox />
+                  </li>
+                  {user.userId && <li>Hello, {user.name}</li>}
+                </ul>
+              </div>
+            )}
           </div>
         </nav>
       </header>

@@ -7,6 +7,12 @@ const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
     route('/', () => {
+      console.log('user in router', app.getState('user'))
+      if (!app.getState('user')) {
+        const path = app.getState('cognitoLoginUrl');
+        window.location.replace(path);
+        return false;
+      }
       document.title = `Dashboard ${pageTitleSuffix}`;
       app.getSequence('gotoDashboardSequence')();
     });
@@ -32,7 +38,8 @@ const router = {
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = route.query();
-      const token = query.token;
+      console.log(query)
+      const token = query.access_token || query.token;
       const path = query.path || '/';
       app.getSequence('loginWithTokenSequence')({ token, path });
     });
