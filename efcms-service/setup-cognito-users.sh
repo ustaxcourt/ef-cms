@@ -10,20 +10,41 @@ CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_I
 CLIENT_ID="${CLIENT_ID%\"}"
 CLIENT_ID="${CLIENT_ID#\"}"
 
-# taxpayer@example.com
-aws cognito-idp sign-up \
-  --region "${REGION}" \
-  --client-id "${CLIENT_ID}" \
-  --username taxpayer@example.com \
-  --password Testing1234$ || true
+createAccount() {
+  email=$1
+  role=$2
+  aws cognito-idp sign-up \
+    --region "${REGION}" \
+    --client-id "${CLIENT_ID}" \
+    --username "${email}" \
+    --user-attributes 'Name="name",'Value="Test ${role^}" 'Name="custom:role",'Value="${role}" \
+    --password Testing1234$ || true
 
-aws cognito-idp admin-confirm-sign-up \
-  --region "${REGION}" \
-  --user-pool-id "${USER_POOL_ID}" \
-  --username taxpayer@example.com || true
+  aws cognito-idp admin-confirm-sign-up \
+    --region "${REGION}" \
+    --user-pool-id "${USER_POOL_ID}" \
+    --username "${email}" || true
 
-aws cognito-idp admin-update-user-attributes \
-  --region "${REGION}" \
-  --user-pool-id "${USER_POOL_ID}" \
-  --username taxpayer@example.com \
-  --user-attributes Name="custom:role",Value="petitioner" || true
+  # for updating attributes in the future
+  # aws cognito-idp admin-update-user-attributes \
+  #   --region "${REGION}" \
+  #   --user-pool-id "${USER_POOL_ID}" \
+  #   --username "${email}" \
+  #   --user-attributes 'Name="custom:role",'Value="${role}" || true
+} 
+
+createManyAccounts() {
+  emailPrefix=$1
+  role=$1
+  for i in $(seq 1 5);
+  do
+    createAccount "${emailPrefix}${i}@example.com" "${role}"
+  done
+}
+
+createManyAccounts "petitioner"
+createManyAccounts "petitionsclerk"
+createManyAccounts "docketclerk"
+createManyAccounts "seniorattorney"
+createManyAccounts "intakeclerk"
+createManyAccounts "respondent"
