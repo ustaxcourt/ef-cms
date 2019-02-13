@@ -15,11 +15,6 @@ presenter.providers.router = {
 const test = CerebralTest(presenter);
 
 describe('Log in', async () => {
-  it('redirects to /log-in if not authorized', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('LogIn');
-  });
-
   it('succeeds for Petitions clerk', async () => {
     await test.runSequence('gotoLogInSequence');
     expect(test.getState('currentPage')).toEqual('LogIn');

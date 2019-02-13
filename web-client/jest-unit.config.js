@@ -10,5 +10,8 @@ module.exports = {
       statements: 50,
     },
   },
+  globals: {
+    window: true,
+  },
   collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
 };

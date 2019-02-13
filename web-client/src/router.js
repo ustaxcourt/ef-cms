@@ -32,10 +32,6 @@ const router = {
       document.title = `File a document ${pageTitleSuffix}`;
       app.getSequence('gotoFileDocumentSequence')({ caseId });
     });
-    route('/log-in', () => {
-      document.title = `Log in ${pageTitleSuffix}`;
-      app.getSequence('gotoLogInSequence')();
-    });
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = queryString.parse(location.search);
@@ -55,6 +51,16 @@ const router = {
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
+    });
+    route('/mock-login...', () => {
+      if (process.env.COGNITO) {
+        //USTC_ENV is undefined in prod
+        document.title = `Dashboard ${pageTitleSuffix}`;
+        app.getSequence('gotoDashboardSequence')();
+      } else {
+        document.title = `Mock Login ${pageTitleSuffix}`;
+        app.getSequence('gotoLogInSequence')();
+      }
     });
     route(
       '..',

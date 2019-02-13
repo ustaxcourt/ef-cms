@@ -44,9 +44,9 @@ function User(user) {
     role = 'seniorattorney';
   } else if (role.indexOf('intakeclerk') > -1) {
     role = 'intakeclerk';
-  } else if (role === 'taxpayer') {
+  } else if (role.indexOf('taxpayer') > -1) {
     role = 'petitioner';
-  } else if (user.token) {
+  } else if (this.token) {
     role = 'petitioner';
   }
 
