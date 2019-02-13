@@ -27,7 +27,5 @@ export default get => {
     showPetitionerAndSpouseContact: form.partyType === 'Petitioner & Spouse',
     showPetitionerAndDeceasedSpouseContact:
       form.partyType === 'Petitioner & Deceased Spouse',
-    showEstateWithoutExecutorContact:
-      form.partyType === 'Estate without Executor/Personal Representative/Etc.',
   };
 };
