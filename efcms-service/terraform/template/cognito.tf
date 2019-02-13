@@ -12,7 +12,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   schema {
@@ -29,7 +29,7 @@ resource "aws_cognito_user_pool" "pool" {
   schema {
     attribute_data_type = "String"
     name                = "role"
-    required            = true
+    required            = false
     mutable             = true
 
     string_attribute_constraints {
