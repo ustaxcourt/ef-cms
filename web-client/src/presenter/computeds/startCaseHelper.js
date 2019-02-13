@@ -21,8 +21,15 @@ export default get => {
     showSmallTrialCitiesHint: form.procedureType === 'Small',
     trialCities: form.trialCities || [],
     trialCitiesByState: states,
+
+    showEstateFilingOptions: form.otherType === 'An estate or trust',
+
+    showDonorFilingOptions: form.partyType === 'Donor',
+    showTransfereeFilingOptions: form.partyType === 'Transferee',
+    showOtherFilingTypeOptions: form.filingType === 'Other',
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse',
+
     showPetitionerContact: form.partyType === 'Petitioner',
     showPetitionerAndSpouseContact: form.partyType === 'Petitioner & Spouse',
     showPetitionerAndDeceasedSpouseContact:

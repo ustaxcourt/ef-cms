@@ -163,7 +163,7 @@ export default connect(
                 </div>
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (
-                <div className="usa-grid-full ustc-is-spouse-deceased">
+                <div className="usa-grid-full ustc-secondary-question">
                   <div className="usa-width-one-third">
                     <fieldset
                       id="filing-type-radios"
@@ -200,6 +200,93 @@ export default connect(
                   </div>
                 </div>
               )}
+
+              {startCaseHelper.showOtherFilingTypeOptions && (
+                <div className="usa-grid-full ustc-secondary-question">
+                  <div className="usa-width-one-third">
+                    <fieldset
+                      id="other-type-radios"
+                      className="usa-fieldset-inputs usa-sans"
+                    >
+                      <legend htmlFor="other-type-radios">
+                        What other type of taxpayer are you filing for?
+                      </legend>
+                      <ul className="ustc-unstyled-list">
+                        {[
+                          'An estate or trust',
+                          'A minor or incompetent person',
+                          'Donor',
+                          'Transferee',
+                        ].map((otherType, idx) => (
+                          <li key={otherType}>
+                            <input
+                              id={`otherType-${otherType}`}
+                              type="radio"
+                              name="otherType"
+                              value={otherType}
+                              onChange={e => {
+                                updateStartCaseFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              id={`is-other-type-${idx}`}
+                              htmlFor={`otherType-${otherType}`}
+                            >
+                              {otherType}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+              )}
+
+              {startCaseHelper.showEstateFilingOptions && (
+                <div className="usa-grid-full ustc-secondary-question">
+                  <div className="usa-width-one-half">
+                    <fieldset
+                      id="estate-type-radios"
+                      className="usa-fieldset-inputs usa-sans"
+                    >
+                      <legend htmlFor="estate-type-radios">
+                        What other type of taxpayer are you filing for?
+                      </legend>
+                      <ul className="ustc-unstyled-list">
+                        {[
+                          'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+                          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+                          'Trust',
+                        ].map((estateType, idx) => (
+                          <li key={estateType}>
+                            <input
+                              id={`estateType-${estateType}`}
+                              type="radio"
+                              name="estateType"
+                              value={estateType}
+                              onChange={e => {
+                                updateStartCaseFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              id={`is-estate-type-${idx}`}
+                              htmlFor={`estateType-${estateType}`}
+                            >
+                              {estateType}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           {startCaseHelper.showPetitionerContact && <PetitionerContact />}
@@ -209,6 +296,7 @@ export default connect(
           {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
             <PetitionerAndDeceasedSpouseContact />
           )}
+
           <div className="usa-form-group">
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">

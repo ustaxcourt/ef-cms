@@ -134,6 +134,50 @@ export default (test, fakeFile) => {
     });
     expect(result.showEstateWithoutExecutorContact).toBeTruthy();
 
+    // showOtherFilingTypeOptions
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Other',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showOtherFilingTypeOptions).toBeTruthy();
+
+    // showEstateFilingOptions
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'otherType',
+      value: 'An estate or trust',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showEstateFilingOptions).toBeTruthy();
+
+    // donor type
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'otherType',
+      value: 'Donor',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showDonorFilingOptions).toBeTruthy();
+
+    // Transferee type
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'otherType',
+      value: 'Transferee',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showTransfereeFilingOptions).toBeTruthy();
+
     // try without checking the signature
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertError')).toEqual({
