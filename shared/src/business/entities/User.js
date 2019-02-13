@@ -31,6 +31,7 @@ function User(user) {
   ];
 
   let role = this.userId;
+  console.log(this)
 
   if (/docketclerk(\d{1,2})?$/.test(role)) {
     role = 'docketclerk';
@@ -46,7 +47,7 @@ function User(user) {
     role = 'intakeclerk';
   } else if (role.indexOf('taxpayer') > -1) {
     role = 'petitioner';
-  } else if (this.token) {
+  } else {
     role = 'petitioner';
   }
 
@@ -62,7 +63,6 @@ function User(user) {
       name,
       role: role,
       barNumber,
-      token: this.userId,
       email: `test${this.userId}@example.com`,
       addressLine1: '111 Orange St.',
       addressLine2: 'Building 2',

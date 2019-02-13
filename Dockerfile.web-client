@@ -23,7 +23,7 @@ RUN apt-get install -yq openssh-client python python-pip python-setuptools ca-ce
 RUN apt-get install -yq unzip wget
 # RUN pip install --upgrade pip
 RUN apt-get install -y awscli
-# RUN pip install awscli==${AWS_CLI_VERSION}
+RUN pip install awscli==${AWS_CLI_VERSION}
 #RUN pip install setuptools
 #RUN pip install pylint
 

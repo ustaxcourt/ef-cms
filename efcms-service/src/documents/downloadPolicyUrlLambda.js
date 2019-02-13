@@ -1,4 +1,4 @@
-const { handle } = require('../middleware/apiGatewayHelper');
+const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
@@ -9,7 +9,8 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.get = event =>
   handle(() => {
-    const applicationContext = createApplicationContext();
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
     return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       documentId: event.pathParameters.documentId,
       applicationContext,

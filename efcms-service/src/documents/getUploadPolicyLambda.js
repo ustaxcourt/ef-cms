@@ -1,4 +1,4 @@
-const { handle } = require('../middleware/apiGatewayHelper');
+const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
@@ -7,9 +7,10 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event
  * @returns {Promise<*|undefined>}
  */
-exports.create = () =>
+exports.create = event =>
   handle(() => {
-    const applicationContext = createApplicationContext();
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
     return applicationContext.getPersistenceGateway().getUploadPolicy({
       applicationContext,
     });
