@@ -11,10 +11,26 @@ resource "aws_cognito_user_pool" "pool" {
     email_subject_by_link = "U.S. Tax Court account verification"
   }
 
+  lifecycle {
+    prevent_destroy = false
+  }
+
   schema {
     attribute_data_type = "String"
     name                = "email"
     required            = true
+
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 2048
+    }
+  }
+
+  schema {
+    attribute_data_type = "String"
+    name                = "role"
+    required            = false
+    mutable             = true
 
     string_attribute_constraints {
       min_length = 0
@@ -34,7 +50,7 @@ resource "aws_cognito_user_pool" "pool" {
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
 
-  generate_secret     = true
+  generate_secret     = false
   refresh_token_validity = 30
   allowed_oauth_flows_user_pool_client = true
 
