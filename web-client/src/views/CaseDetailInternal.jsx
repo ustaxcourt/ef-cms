@@ -43,10 +43,7 @@ export default connect(
           <h1 className="captioned" tabIndex="-1">
             Docket Number: {caseDetail.docketNumberWithSuffix}
           </h1>
-          <p>
-            {caseDetail.petitioners[0].name} v. Commissioner of Internal
-            Revenue, Respondent
-          </p>
+          <p>{caseDetail.caseTitle}</p>
           <p>
             <span
               className="usa-label case-status-label"
