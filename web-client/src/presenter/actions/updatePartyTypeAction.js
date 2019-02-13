@@ -1,28 +1,25 @@
 import { state } from 'cerebral';
 
 export default async ({ store, props }) => {
+  let partyType = '';
   if (props.key === 'filingType') {
     switch (props.value) {
       case 'Myself':
-        store.set(state.form.partyType, 'Petitioner');
+        partyType = 'Petitioner';
         break;
-      default:
-        store.set(state.form.partyType, null);
     }
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
       case 'Yes':
-        store.set(state.form.partyType, 'Petitioner & Deceased Spouse');
-        store.set(state.form.contactSecondary, {});
+        partyType = 'Petitioner & Deceased Spouse';
         break;
       case 'No':
-        store.set(state.form.partyType, 'Petitioner & Spouse');
-        store.set(state.form.contactSecondary, {});
+        partyType = 'Petitioner & Spouse';
         break;
-      default:
-        store.set(state.form.partyType, null);
     }
-  } else {
-    store.set(state.form.partyType, null);
   }
+  store.set(state.form.partyType, partyType);
+  // ask UI
+  store.set(state.form.contactPrimary, {});
+  store.set(state.form.contactSecondary, {});
 };
