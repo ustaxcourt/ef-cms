@@ -88,7 +88,7 @@ const CASE_TYPES = [
 // This is the order that they appear in the UI
 const PROCEDURE_TYPES = ['Regular', 'Small'];
 
-const FILING_TYPES = ['Myself'];
+const FILING_TYPES = ['Myself', 'Myself and my spouse', 'A business', 'Other'];
 
 /**
  * Case

@@ -4,6 +4,9 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
+import PetitionerContact from './StartCase/PetitionerContact';
+import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
+import PetitionerAndDeceasedSpouseContact from './StartCase/PetitionerAndDeceasedSpouseContact';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -22,6 +25,8 @@ export default connect(
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    updateStartCaseFormValueSequence:
+      sequences.updateStartCaseFormValueSequence,
   },
   function StartCase({
     caseTypes,
@@ -36,6 +41,7 @@ export default connect(
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
+    updateStartCaseFormValueSequence,
     updatePetitionValueSequence,
   }) {
     return (
@@ -114,7 +120,7 @@ export default connect(
                     <legend htmlFor="filing-type-radios">
                       I am filing this petition on behalf of&nbsp;…
                     </legend>
-                    <ul className="usa-unstyled-list">
+                    <ul className="ustc-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
                         <li key={filingType}>
                           <input
@@ -124,7 +130,7 @@ export default connect(
                             name="filingType"
                             value={filingType}
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateStartCaseFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -156,8 +162,53 @@ export default connect(
                   </div>
                 </div>
               </div>
+              {startCaseHelper.showPetitionerDeceasedSpouseForm && (
+                <div className="usa-grid-full ustc-is-spouse-deceased">
+                  <div className="usa-width-one-third">
+                    <fieldset
+                      id="filing-type-radios"
+                      className="usa-fieldset-inputs usa-sans"
+                    >
+                      <legend htmlFor="filing-type-radios">
+                        Is your spouse deceased?
+                      </legend>
+                      <ul className="usa-unstyled-list">
+                        {['Yes', 'No'].map((isSpouseDeceased, idx) => (
+                          <li key={isSpouseDeceased}>
+                            <input
+                              id={`isSpouseDeceased-${isSpouseDeceased}`}
+                              type="radio"
+                              name="isSpouseDeceased"
+                              value={isSpouseDeceased}
+                              onChange={e => {
+                                updateStartCaseFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              id={`is-spouse-deceased-${idx}`}
+                              htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
+                            >
+                              {isSpouseDeceased}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+          {startCaseHelper.showPetitionerContact && <PetitionerContact />}
+          {startCaseHelper.showPetitionerAndSpouseContact && (
+            <PetitionerAndSpouseContact />
+          )}
+          {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
+            <PetitionerAndDeceasedSpouseContact />
+          )}
           <div className="usa-form-group">
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">

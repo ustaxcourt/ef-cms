@@ -11,6 +11,7 @@
     "dist": "rm -rf dist; USTC_ENV=prod parcel build --no-cache src/index.pug",
     "lint": "eslint ./src && stylelint ./src/**/*.scss",
     "test": "ENV=local jest .*test\\.js$",
+    "test:watch": "ENV=local jest --watch .*test\\.js$",
     "test:unit": "ENV=local jest --config jest-unit.config.js ./src/.*test\\.js$",
     "test:e2e": "ENV=local jest --config jest-e2e.config.js ./e2e/.*test\\.js$",
     "test:pa11y": "ENV=local pa11y-ci --config pa11y-ci.config.json",
