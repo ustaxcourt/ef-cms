@@ -1,12 +1,14 @@
 resource "aws_cognito_user_pool" "pool" {
   name           = "efcms-${var.environment}"
-  
+
   auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
-  
+
   verification_message_template {
     default_email_option = "CONFIRM_WITH_LINK"
+    email_message_by_link = "Please click the link below to verify your email address. {##Verify Email##} "
+    email_subject_by_link = "U.S. Tax Court account verification"
   }
 
   schema {
@@ -37,7 +39,7 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows_user_pool_client = true
 
   callback_urls          = [
-    "http://localhost:1234/log-in", 
+    "http://localhost:1234/log-in",
     "https://ui-${var.environment}.${var.dns_domain}/log-in"
   ]
 

@@ -5,11 +5,13 @@ import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
 import isLoggedIn from '../actions/isLoggedInAction';
 import navigateToLogin from '../actions/navigateToLoginAction';
+import redirectToCognito from '../actions/redirectToCognitoAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setPath from '../actions/setPathAction';
 import setUsers from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
+import getEnvironment from '../actions/getEnvironmentAction';
 
 const goToDashboard = [
   clearErrorAlerts,
@@ -50,7 +52,13 @@ const goToDashboard = [
 export default [
   isLoggedIn,
   {
-    unauthorized: [setPath, navigateToLogin],
+    unauthorized: [
+      getEnvironment,
+      {
+        local: [setPath, navigateToLogin],
+        prod: [redirectToCognito],
+      },
+    ],
     isLoggedIn: goToDashboard,
   },
 ];
