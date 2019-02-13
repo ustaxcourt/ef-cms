@@ -3,6 +3,7 @@ import { UnidentifiedUserError } from '../errors/UnidentifiedUserError';
 
 export default ({ applicationContext, get, path }) => {
   const user = get(state.user);
+  console.log('getUserRole', user)
   if (
     (applicationContext.getCurrentEnvironment() !== 'local' && !user) ||
     !user.role

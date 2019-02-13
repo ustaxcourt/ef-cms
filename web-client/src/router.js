@@ -37,6 +37,7 @@ const router = {
       const query = queryString.parse(location.search);
       const hash = queryString.parse(location.hash); // cognito uses a # instead of ?
       const token = hash.id_token || query.token;
+      console.log('token in router', token)
       const path = query.path || '/';
       app.getSequence('loginWithTokenSequence')({ token, path });
     });

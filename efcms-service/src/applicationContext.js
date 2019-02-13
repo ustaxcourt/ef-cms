@@ -147,10 +147,9 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
-module.exports = ({ userId } = {}) => {
-  if (userId) {
-    setCurrentUser(new User({ userId }));
-  }
+module.exports = (user = {}) => {
+  setCurrentUser(new User(user));
+
   return {
     getStorageClient: () => {
       return new S3({
@@ -211,7 +210,7 @@ module.exports = ({ userId } = {}) => {
     },
     getCurrentUser,
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
+    isAuthorizedForWorkItems: () => isAuthorized(user.userId, WORKITEM),
     getUseCases: () => {
       return {
         createCase,

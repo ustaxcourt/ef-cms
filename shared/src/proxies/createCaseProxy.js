@@ -10,7 +10,7 @@ exports.createCase = async ({
   petitionFileId,
   applicationContext,
 }) => {
-  const userToken = applicationContext.getCurrentUser().userId; // TODO temp until jwt
+  const userToken = applicationContext.getCurrentUserToken();
   const response = await applicationContext.getHttpClient().post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
