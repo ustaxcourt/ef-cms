@@ -12,7 +12,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   schema {
@@ -29,7 +29,7 @@ resource "aws_cognito_user_pool" "pool" {
   schema {
     attribute_data_type = "String"
     name                = "role"
-    required            = true
+    required            = false
     mutable             = true
 
     string_attribute_constraints {
@@ -50,7 +50,7 @@ resource "aws_cognito_user_pool" "pool" {
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
 
-  generate_secret     = true
+  generate_secret     = false
   refresh_token_validity = 30
   allowed_oauth_flows_user_pool_client = true
 
