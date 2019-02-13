@@ -8,6 +8,17 @@ export default async ({ store, props }) => {
         partyType = 'Petitioner';
         break;
     }
+  } else if (props.key === 'otherType') {
+    store.set(state.form.otherType, props.value);
+
+    switch (props.value) {
+      case 'Donor':
+        partyType = 'Donor';
+        break;
+      case 'Transferee':
+        partyType = 'Transferee';
+        break;
+    }
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
       case 'Yes':
