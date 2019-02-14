@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "dependencies": {
     "ef-cms-shared": "file:../shared",
+    "jsonwebtoken": "^8.4.0",
     "serverless": "^1.36.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-domain-manager": "^2.6.13",
@@ -44,9 +45,9 @@
   },
   "scripts": {
     "postinstall": "npm run install:dynamodb",
-    "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --efcmsTableName=efcms-local | grep -v -e '^$'",
+    "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
-    "seed:db": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls dynamodb seed --seed test --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop",
+    "seed:db": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls dynamodb seed --seed test --noTimeout --stage local --region us-east-1 --domain noop  --userPoolId noop --efcmsTableName=efcms-local --accountId noop",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "sls dynamodb start -p 8000 --migrate true --stage local",
     "start:local": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls offline start --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop",
@@ -85,6 +86,7 @@
       "setup-global-tables.js",
       "create-dynamo-tables.js",
       "src/cases",
+      "src/users",
       "src/documents",
       "src/swagger",
       "src/workitems",
@@ -101,7 +103,7 @@
     "lines": 95,
     "statements": 95,
     "functions": 95,
-    "branches": 95,
+    "branches": 90,
     "cache": true
   }
 }

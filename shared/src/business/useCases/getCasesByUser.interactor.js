@@ -6,11 +6,11 @@ const Case = require('../entities/Case');
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getCasesByUser = async ({ userId, applicationContext }) => {
+exports.getCasesByUser = async ({ user, applicationContext }) => {
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesByUser({
-      userId,
+      user,
       applicationContext,
     });
 

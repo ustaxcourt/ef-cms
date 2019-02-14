@@ -78,7 +78,7 @@ export default connect(
             Start a Case
           </h1>
           {showModal && <StartCaseCancelModalDialog />}
-          <ErrorNotification />
+          <p>{JSON.stringify(validationErrors)}</p>
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
           <div className="blue-container">

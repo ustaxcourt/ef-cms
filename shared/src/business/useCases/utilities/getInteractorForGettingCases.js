@@ -1,6 +1,3 @@
-const User = require('../../entities/User');
-const { UnauthorizedError } = require('../../../errors/errors');
-
 const { getCasesByUser } = require('../getCasesByUser.interactor');
 const {
   getCasesForRespondent,
@@ -8,13 +5,7 @@ const {
 const { getCasesByDocumentId } = require('../getCasesByDocumentId.interactor');
 const { getCasesByStatus } = require('../getCasesByStatus.interactor');
 
-exports.getInteractorForGettingCases = ({ documentId, userId }) => {
-  let user;
-  try {
-    user = new User({ userId });
-  } catch (err) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+exports.getInteractorForGettingCases = ({ documentId, user }) => {
   switch (user.role) {
     case 'petitioner':
       return getCasesByUser;

@@ -22,14 +22,14 @@ export default async ({ get, store, applicationContext, props }) => {
     ...workItemToUpdate.messages,
     {
       message,
-      sentBy: get(state.user.token),
-      userId: get(state.user.token),
+      sentBy: applicationContext.getCurrentUser().userId,
+      userId: applicationContext.getCurrentUser().userId,
     },
   ];
 
   if (!workItemToUpdate.assigneeId) {
-    workItemToUpdate.assigneeId = get(state.user.token);
-    workItemToUpdate.assigneeName = get(state.user.name);
+    workItemToUpdate.assigneeId = applicationContext.getCurrentUser().userId;
+    workItemToUpdate.assigneeName = applicationContext.getCurrentUser().name;
   }
 
   store.set(state.caseDetail, caseDetail);
@@ -38,6 +38,6 @@ export default async ({ get, store, applicationContext, props }) => {
     applicationContext,
     workItemToUpdate,
     workItemId: props.workItemId,
-    userId: get(state.user.token),
+    userId: applicationContext.getCurrentUser().userId,
   });
 };

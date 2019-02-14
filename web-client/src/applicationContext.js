@@ -53,6 +53,14 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
+let token;
+const getCurrentUserToken = () => {
+  return token;
+};
+const setCurrentUserToken = newToken => {
+  token = newToken;
+};
+
 const allUseCases = {
   assignWorkItems,
   createDocument,
@@ -90,14 +98,18 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
-  getCurrentEnvironment: () => {
-    return process.env.ENV || 'prod';
+  getEnvironment: () => {
+    return process.env.USTC_ENV;
   },
   getCognitoLoginUrl: () => {
-    return (
-      process.env.COGNITO_LOGIN_URL ||
-      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=4asa0lun20007bd1h76jpi689c&redirect_uri=http%3A//localhost%3A1234/log-in'
-    );
+    if (process.env.COGNITO) {
+      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
+    } else {
+      return (
+        process.env.COGNITO_LOGIN_URL ||
+        'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
+      );
+    }
   },
   getError: e => {
     return ErrorFactory.getError(e);
@@ -121,6 +133,8 @@ const applicationContext = {
   getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,
+  getCurrentUserToken,
+  setCurrentUserToken,
 };
 
 export default applicationContext;

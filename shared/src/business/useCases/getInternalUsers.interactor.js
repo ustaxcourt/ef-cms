@@ -13,13 +13,17 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {Promise<User[]>}
  */
 exports.getInternalUsers = async ({ applicationContext }) => {
-  if (!isAuthorized(applicationContext.getCurrentUser().userId, WORKITEM)) {
+  if (!isAuthorized(applicationContext.getCurrentUser(), WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // TODO: return internal users from database
   return User.validateRawCollection([
-    new User({ userId: 'docketclerk' }).toRawObject(),
-    new User({ userId: 'docketclerk1' }).toRawObject(),
-    new User({ userId: 'seniorattorney' }).toRawObject(),
+    new User({ userId: 'docketclerk', role: 'docketclerk' }).toRawObject(),
+    new User({ userId: 'docketclerk1', role: 'docketclerk' }).toRawObject(),
+    new User({
+      userId: 'petitionsclerk1',
+      role: 'petitionsclerk',
+    }).toRawObject(),
   ]);
 };
