@@ -1,9 +1,5 @@
-// const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-// const CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
 const AWS = require('aws-sdk');
 const { getSectionForRole } = require('../business/entities/WorkQueue');
-
-global.fetch = require('node-fetch');
 const client = require('../persistence/dynamodbClientService');
 
 exports.createUser = async ({ user, applicationContext }) => {

@@ -319,6 +319,7 @@ provider:
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
+    USER_POOL_ID: ${opt:userPoolId}
 
   iamRoleStatements:
     - Effect: 'Allow'

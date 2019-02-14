@@ -42,4 +42,7 @@ RUN cd /home/app/efcms-service && npm i
 
 COPY . /home/app
 
+RUN apk add curl
+RUN apk add jq
+
 CMD echo "please overwrite this command"
