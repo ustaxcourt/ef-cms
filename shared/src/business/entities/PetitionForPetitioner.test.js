@@ -1,13 +1,20 @@
 const PetitionForPetitioner = require('./PetitionForPetitioner');
 
-xdescribe('Petition', () => {
+describe('Petition', () => {
   describe('for Petitioner', () => {
     it('can validate primary contact name', () => {
       const petition = new PetitionForPetitioner({
-        contactPrimary: {},
+        contactPrimary: {
+          name: 'Betty Crocker',
+          address1: '1599 Pennsylvania Ave',
+          city: 'Walla Walla',
+          state: 'WA',
+          zip: '78774',
+          country: 'USA',
+          phone: '555-555-9823',
+          email: 'betty.crocker@example.com',
+        },
       });
-      const errors = petition.getValidationErrors();
-      console.log(errors);
       expect(petition.isValid()).toEqual(true);
     });
   });
