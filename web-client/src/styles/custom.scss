@@ -83,6 +83,11 @@ iframe {
   *:last-child {
     margin-bottom: 0;
   }
+
+  .push-right {
+    margin-right: 0;
+    float: right;
+  }
 }
 
 .alert-blank-message {
@@ -181,6 +186,7 @@ iframe {
 }
 
 .alert-gold {
+  max-width: 700px;
   padding: 10px;
   border-left: 5px solid $color-gold;
   background: $color-gold-lightest;
@@ -188,6 +194,10 @@ iframe {
 
   svg {
     margin-right: 5px;
+  }
+
+  &.add-bottom-margin {
+    margin-bottom: 20px;
   }
 }
 
