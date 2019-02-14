@@ -13,30 +13,31 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {Promise<User[]>}
  */
 exports.getUsersInSection = async ({ section, applicationContext }) => {
-  if (!isAuthorized(applicationContext.getCurrentUser().userId, WORKITEM)) {
+  if (!isAuthorized(applicationContext.getCurrentUser(), WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   if (!section) throw new Error('A section must be provided');
 
-  let result;
+  // let result;
 
-  switch (section.sectionType) {
-    case DOCKET_SECTION:
-      result = [
-        new User({ userId: 'docketclerk' }).toRawObject(),
-        new User({ userId: 'docketclerk1' }).toRawObject(),
-      ];
-      break;
-    case PETITIONS_SECTION:
-      result = [
-        new User({ userId: 'petitionsclerk' }).toRawObject(),
-        new User({ userId: 'petitionsclerk1' }).toRawObject(),
-      ];
-      break;
-    default:
-      throw new Error('Invalid section provided');
-  }
+  // TODO: need to fetch the real users in section
+  // switch (section.sectionType) {
+  //   case DOCKET_SECTION:
+  //     result = [
+  //       new User({ userId: 'docketclerk' }).toRawObject(),
+  //       new User({ userId: 'docketclerk1' }).toRawObject(),
+  //     ];
+  //     break;
+  //   case PETITIONS_SECTION:
+  //     result = [
+  //       new User({ userId: 'petitionsclerk' }).toRawObject(),
+  //       new User({ userId: 'petitionsclerk1' }).toRawObject(),
+  //     ];
+  //     break;
+  //   default:
+  //     throw new Error('Invalid section provided');
+  // }
 
-  return User.validateRawCollection(result);
+  return []; //User.validateRawCollection(result);
 };

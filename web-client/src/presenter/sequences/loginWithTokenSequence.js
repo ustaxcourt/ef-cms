@@ -12,4 +12,11 @@ import setToken from '../actions/setTokenAction';
  * and navigating to dashboard
  *
  */
-export default [decodeToken, setToken, setUser, setPath, navigateToPath];
+export default [
+  decodeToken,
+  setToken,
+  getUser,
+  setUser,
+  setPath,
+  navigateToPath,
+];

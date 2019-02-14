@@ -13,7 +13,7 @@ const WorkItem = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItem = async ({ userId, workItemId, applicationContext }) => {
+exports.getWorkItem = async ({ workItemId, applicationContext }) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
@@ -25,7 +25,9 @@ exports.getWorkItem = async ({ userId, workItemId, applicationContext }) => {
     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
   }
 
-  if (!isAuthorized(userId, WORKITEM, workItem.assigneeId)) {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, WORKITEM, workItem.assigneeId)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

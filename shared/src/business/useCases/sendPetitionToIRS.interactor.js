@@ -17,13 +17,14 @@ const {
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sendPetitionToIRS = async ({ caseId, userId, applicationContext }) => {
-  if (!isAuthorized(userId, UPDATE_CASE)) {
+exports.sendPetitionToIRS = async ({ caseId, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for send to IRS');
   }
 
   const caseRecord = await applicationContext.getUseCases().getCase({
-    userId,
     caseId,
     applicationContext,
   });

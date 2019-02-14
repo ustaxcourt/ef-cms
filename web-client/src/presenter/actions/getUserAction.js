@@ -1,7 +1,4 @@
-import { state } from 'cerebral';
-
-export default async ({ applicationContext, get, props }) => {
-  const userId = props.userId || get(state.form.name);
-  const user = await applicationContext.getUseCases().getUser(userId);
+export default async ({ applicationContext, props }) => {
+  const user = await applicationContext.getUseCases().getUser(props.user);
   return { user };
 };
