@@ -41,7 +41,7 @@ describe('getWorkItems', () => {
   it('returns an empty array if no work items are returned', async () => {
     applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => null,
@@ -58,7 +58,7 @@ describe('getWorkItems', () => {
   it('validates and returns the work items', async () => {
     applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => [mockWorkItem],
