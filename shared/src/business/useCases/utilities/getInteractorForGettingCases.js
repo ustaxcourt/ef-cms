@@ -1,6 +1,3 @@
-const User = require('../../entities/User');
-const { UnauthorizedError } = require('../../../errors/errors');
-
 const { getCasesByUser } = require('../getCasesByUser.interactor');
 const {
   getCasesForRespondent,

@@ -9,6 +9,9 @@ const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
+  getUserById,
+} = require('ef-cms-shared/src/persistence/getUserById');
+const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -180,6 +183,7 @@ module.exports = (appContextUser = {}) => {
         uploadPdf,
         getUploadPolicy,
         getDownloadPolicyUrl,
+        getUserById,
 
         // work items
         getWorkItemsBySection,
