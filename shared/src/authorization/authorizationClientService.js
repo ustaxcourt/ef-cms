@@ -9,6 +9,7 @@ exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
 exports.CREATE_USER = 'createUser';
+exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 
 const AUTHORIZATION_MAP = {
   docketclerk: [
@@ -18,6 +19,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.WORKITEM,
     exports.UPDATE_CASE,
+    exports.GET_USERS_IN_SECTION,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
@@ -26,6 +28,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
   petitioner: [exports.PETITION],
   petitionsclerk: [
@@ -35,6 +38,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
   respondent: [
     exports.GET_CASE,
@@ -51,6 +55,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
   admin: [exports.CREATE_USER],
   taxpayer: [exports.PETITION],
