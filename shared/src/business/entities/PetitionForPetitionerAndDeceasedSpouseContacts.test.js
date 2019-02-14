@@ -1,9 +1,17 @@
-const PetitionForPetitionerAndSpouse = require('./PetitionForPetitionerAndSpouse');
+const Petition = require('./Petition');
 
 describe('Petition', () => {
-  describe('for Petitioner And Deceased Spouse', () => {
+  describe('for Petitioner And Deceased Spouse Contacts', () => {
     it('can validate primary contact name', () => {
-      const petition = new PetitionForPetitionerAndSpouse({
+      const petition = new Petition({
+        caseType: 'other',
+        procedureType: 'Small',
+        filingType: 'Myself',
+        preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: '2009-10-13',
+        petitionFile: {},
+        signature: true,
+        partyType: 'Petitioner & Deceased Spouse',
         contactPrimary: {
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
@@ -20,8 +28,6 @@ describe('Petition', () => {
           city: 'Walla Walla',
           state: 'WA',
           zip: '78774',
-          phone: '1238675309',
-          email: 'someone.else@example.com',
         },
       });
       expect(petition.isValid()).toEqual(true);
