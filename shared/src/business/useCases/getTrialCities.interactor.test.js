@@ -18,7 +18,7 @@ describe('Get trial cities', () => {
   it('returns a collection of trial cities', async () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'taxpayer' };
+        return { userId: 'taxpayer', role: 'petitioner' };
       },
     };
     const trialCities = await getTrialCities({

@@ -17,10 +17,13 @@ exports.getInternalUsers = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO: fix this
+  // TODO: return internal users from database
   return User.validateRawCollection([
-    // new User({ userId: 'docketclerk' }).toRawObject(),
-    // new User({ userId: 'docketclerk1' }).toRawObject(),
-    // new User({ userId: 'seniorattorney' }).toRawObject(),
+    new User({ userId: 'docketclerk', role: 'docketclerk' }).toRawObject(),
+    new User({ userId: 'docketclerk1', role: 'docketclerk' }).toRawObject(),
+    new User({
+      userId: 'petitionsclerk1',
+      role: 'petitionsclerk',
+    }).toRawObject(),
   ]);
 };

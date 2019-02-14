@@ -12,8 +12,16 @@ describe('Get case procedure types', () => {
   beforeEach(() => {});
 
   it('returns a collection of procedure types', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
+    };
     const procedureTypes = await getProcedureTypes({
-      userId: 'taxpayer',
+      applicationContext,
     });
     expect(procedureTypes.length).toEqual(2);
     expect(procedureTypes[0]).toEqual('Regular');
@@ -28,10 +36,17 @@ describe('Get case procedure types', () => {
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
+    };
     let error;
     try {
       await getProcedureTypes({
-        userId: 'notauser',
+        applicationContext,
       });
     } catch (err) {
       error = err;

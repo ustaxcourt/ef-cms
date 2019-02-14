@@ -26,37 +26,38 @@ exports.getUsersInSection = async ({ section, applicationContext }) => {
     case DOCKET_SECTION:
       result = [
         {
-          userId: 'docketclerk',
+          userId: 'docketclerk1',
           section: 'docketclerk',
+          role: 'docketclerk',
           name: 'Test Docketclerk',
           'custom:role': 'docketclerk',
-          email: 'docketclerk',
+          email: 'docketclerk1@example.com',
         },
 
         {
-          userId: 'docketclerk1',
+          userId: 'docketclerk2',
           section: 'docketclerk',
-          name: 'Test Docketclerk1',
-          'custom:role': 'docketclerk',
-          email: 'docketclerk1',
+          name: 'Test Docketclerk2',
+          role: 'docketclerk',
+          email: 'docketclerk2@example.com',
         },
       ];
       break;
     case PETITIONS_SECTION:
       result = [
         {
-          userId: 'petitionsclerk',
+          userId: 'petitionsclerk1',
           section: 'petitionsclerk',
           name: 'Test petitionsclerk',
-          'custom:role': 'petitionsclerk',
+          role: 'petitionsclerk',
           email: 'petitionsclerk',
         },
         {
-          userId: 'petitionsclerk1',
+          userId: 'petitionsclerk2',
           section: 'petitionsclerk',
-          name: 'Test petitionsclerk1',
-          'custom:role': 'petitionsclerk',
-          email: 'petitionsclerk1',
+          name: 'Test Petitionsclerk2',
+          role: 'petitionsclerk',
+          email: 'petitionsclerk2@example.com',
         },
       ];
       break;

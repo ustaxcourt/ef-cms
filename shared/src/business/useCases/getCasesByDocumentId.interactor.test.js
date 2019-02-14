@@ -11,12 +11,17 @@ describe('getCasesByDocumentId', () => {
           ],
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesByDocumentId({
-        userId: 'taxpayer',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
       });
@@ -50,10 +55,15 @@ describe('getCasesByDocumentId', () => {
           ],
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     const result = await getCasesByDocumentId({
-      userId: 'docketclerk',
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       applicationContext,
     });
