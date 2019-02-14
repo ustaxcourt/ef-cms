@@ -9,19 +9,37 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerContact({ form, updateFormValueSequence }) {
+  function CorporationContact({ form, updateFormValueSequence }) {
     return (
       <div className="usa-form-group">
-        <h3>Tell Us About Yourself</h3>
+        <h3>Tell Us About the Corporation You Are Filing For</h3>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Business Name</label>
             <input
               id="name"
               type="text"
               name="contactPrimary.name"
               autoCapitalize="none"
               value={form.contactPrimary.name || ''}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <div className="usa-form-group">
+            <label htmlFor="inCareOf">
+              In Care Of <span className="usa-form-hint">(optional)</span>
+            </label>
+            <input
+              id="inCareOf"
+              type="text"
+              name="contactPrimary.inCareOf"
+              autoCapitalize="none"
+              value={form.contactPrimary.inCareOf || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,

@@ -9,13 +9,13 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerContact({ form, updateFormValueSequence }) {
+  function DonorContact({ form, updateFormValueSequence }) {
     return (
       <div className="usa-form-group">
-        <h3>Tell Us About Yourself</h3>
+        <h3>Tell Us About the Donor You Are Filing For</h3>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Name of Petitioner</label>
             <input
               id="name"
               type="text"
