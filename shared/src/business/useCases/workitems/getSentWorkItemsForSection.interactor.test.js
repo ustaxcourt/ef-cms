@@ -6,7 +6,8 @@ describe('getSentWorkItemsForSection', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
     const applicationContext = {
       getCurrentUser: () => ({
-        userId: 'taxpayer', role: 'petitioner',
+        userId: 'taxpayer',
+        role: 'petitioner',
         name: 'Tax Payer',
       }),
       environment: { stage: 'local' },
@@ -27,6 +28,7 @@ describe('getSentWorkItemsForSection', () => {
     const applicationContext = {
       getCurrentUser: () => ({
         userId: 'petitionsclerk',
+        role: 'petitionsclerk',
         name: 'Tax Payer',
       }),
       getPersistenceGateway: () => ({
