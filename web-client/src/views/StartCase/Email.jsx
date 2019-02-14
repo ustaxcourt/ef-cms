@@ -16,17 +16,20 @@ export default connect(
             <label htmlFor="email">Email Address</label>
             {form[type].email}
           </div>
-        </div>
-        <div className="usa-width-seven-twelfths">
-          <div id="change-email-hint" className="alert-gold">
-            <span className="usa-form-hint">
-              <FontAwesomeIcon
-                icon={['far', 'arrow-alt-circle-left']}
-                className="fa-icon-gold"
-                size="sm"
-              />
-              To change your email, go to your Account Settings.
-            </span>
+          <div className="usa-width-seven-twelfths">
+            <div
+              id="change-email-hint"
+              className="alert-gold add-bottom-margin"
+            >
+              <span className="usa-form-hint">
+                <FontAwesomeIcon
+                  icon={['far', 'arrow-alt-circle-left']}
+                  className="fa-icon-gold"
+                  size="sm"
+                />
+                To change your email, go to your Account Settings.
+              </span>
+            </div>
           </div>
         </div>
       </React.Fragment>

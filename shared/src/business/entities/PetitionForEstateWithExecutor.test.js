@@ -5,14 +5,6 @@ describe('Petition', () => {
     it('can validate primary contact name', () => {
       const petition = new PetitionForEstateWithExecutor({
         contactPrimary: {
-          nameOfDecedent: 'Jimmy Dean',
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          state: 'AK',
-          zip: '05198',
-          country: 'USA',
-        },
-        contactSecondary: {
           nameOfExecutor: 'Betty Crocker',
           title: 'Attorney at Law',
           address1: '1599 Pennsylvania Ave',
@@ -22,6 +14,14 @@ describe('Petition', () => {
           country: 'USA',
           email: 'betty.crocker@example.com',
           phone: '555-555-9823',
+        },
+        contactSecondary: {
+          nameOfDecedent: 'Jimmy Dean',
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          state: 'AK',
+          zip: '05198',
+          country: 'USA',
         },
       });
 

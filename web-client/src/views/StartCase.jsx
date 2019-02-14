@@ -139,6 +139,26 @@ export default connect(
             <h3>Who is Filing This Case?</h3>
             <div className="blue-container">
               <div className="usa-grid-full">
+                <div className="usa-width-seven-twelfths push-right">
+                  <div
+                    id="petition-hint"
+                    className="alert-gold add-bottom-margin"
+                  >
+                    <span className="usa-form-hint">
+                      <FontAwesomeIcon
+                        icon={['far', 'arrow-alt-circle-left']}
+                        className="fa-icon-gold"
+                        size="sm"
+                      />
+                      To file a Petition on behalf of another taxpayer, you must
+                      be authorized to litigate in this Court as provided by the
+                      Tax Court Rules of Practice and Procedure (Rule 60).
+                      Enrolled agents, certified public accountants, and powers
+                      of attorney who are not admitted to practice before the
+                      Court are not eligible to represent taxpayers.{' '}
+                    </span>
+                  </div>
+                </div>
                 <div className="usa-width-five-twelfths">
                   <fieldset
                     id="filing-type-radios"
@@ -170,23 +190,6 @@ export default connect(
                       ))}
                     </ul>
                   </fieldset>
-                </div>
-                <div className="usa-width-seven-twelfths">
-                  <div id="petition-hint" className="alert-gold">
-                    <span className="usa-form-hint">
-                      <FontAwesomeIcon
-                        icon={['far', 'arrow-alt-circle-left']}
-                        className="fa-icon-gold"
-                        size="sm"
-                      />
-                      To file a Petition on behalf of another taxpayer, you must
-                      be authorized to litigate in this Court as provided by the
-                      Tax Court Rules of Practice and Procedure (Rule 60).
-                      Enrolled agents, certified public accountants, and powers
-                      of attorney who are not admitted to practice before the
-                      Court are not eligible to represent taxpayers.{' '}
-                    </span>
-                  </div>
                 </div>
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (

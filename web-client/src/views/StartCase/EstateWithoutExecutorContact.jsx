@@ -19,9 +19,9 @@ export default connect(
             <input
               id="name"
               type="text"
-              name="contactPrimary.name"
+              name="contactPrimary.nameOfDecedent"
               autoCapitalize="none"
-              value={form.contactPrimary.name || ''}
+              value={form.contactPrimary.nameOfDecedent || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
