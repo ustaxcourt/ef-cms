@@ -98,9 +98,6 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
-  getCurrentEnvironment: () => {
-    return process.env.ENV || 'prod';
-  },
   getEnvironment: () => {
     return process.env.USTC_ENV;
   },
