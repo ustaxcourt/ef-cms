@@ -38,12 +38,17 @@ describe('fileRespondentDocument', () => {
       getUseCases: () => ({
         createDocument: () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await fileRespondentDocument({
-        userId: 'taxpayer', role: 'petitioner',
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',
@@ -66,10 +71,15 @@ describe('fileRespondentDocument', () => {
         getUseCases: () => ({
           createDocument: () => null,
         }),
+        getCurrentUser: () => {
+          return {
+            userId: 'respondent',
+            role: 'respondent',
+          };
+        },
         environment: { stage: 'local' },
       };
       await fileRespondentDocument({
-        userId: 'respondent',
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',

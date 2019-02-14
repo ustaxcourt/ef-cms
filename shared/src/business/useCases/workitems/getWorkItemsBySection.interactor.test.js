@@ -21,12 +21,17 @@ describe('getWorkItemsBySection', () => {
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getWorkItemsBySection({
-        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {
@@ -40,10 +45,15 @@ describe('getWorkItemsBySection', () => {
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     const result = await getWorkItemsBySection({
-      userId: 'docketclerk',
       applicationContext,
     });
     expect(result).toEqual([]);
@@ -54,6 +64,12 @@ describe('getWorkItemsBySection', () => {
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => [mockWorkItem],
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     const result = await getWorkItemsBySection({

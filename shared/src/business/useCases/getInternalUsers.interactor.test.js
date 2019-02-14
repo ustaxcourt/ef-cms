@@ -4,7 +4,7 @@ const User = require('../entities/User');
 describe('Get internal users', () => {
   const applicationContext = {
     getCurrentUser: () => {
-      return { userId: 'docketclerk' };
+      return { userId: 'docketclerk', role: 'docketclerk' };
     },
   };
 
@@ -26,7 +26,8 @@ describe('Get internal users', () => {
       await getInternalUsers({
         applicationContext: {
           getCurrentUser: () => ({
-            userId: 'taxpayer', role: 'petitioner',
+            userId: 'taxpayer',
+            role: 'petitioner',
           }),
         },
       });
