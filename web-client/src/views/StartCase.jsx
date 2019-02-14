@@ -43,6 +43,7 @@ export default connect(
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function StartCase({
     caseTypes,
@@ -60,6 +61,7 @@ export default connect(
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
     validationErrors,
+    validateStartCaseSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -507,6 +509,9 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group-day">
@@ -528,6 +533,9 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group-year">
@@ -548,6 +556,9 @@ export default connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                        }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
                         }}
                       />
                     </div>
@@ -723,6 +734,9 @@ export default connect(
                     key: e.target.name,
                     value: e.target.checked ? true : undefined,
                   });
+                }}
+                onBlur={() => {
+                  validateStartCaseSequence();
                 }}
               />
               <label htmlFor="signature">
