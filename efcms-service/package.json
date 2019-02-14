@@ -86,6 +86,7 @@
       "setup-global-tables.js",
       "create-dynamo-tables.js",
       "src/cases",
+      "src/users",
       "src/documents",
       "src/swagger",
       "src/workitems",
