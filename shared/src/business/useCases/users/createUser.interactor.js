@@ -12,12 +12,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {Promise<*|{caseId}>}
  */
 exports.createUser = async ({ user, applicationContext }) => {
+  // TODO: Add this back in
   // const requestUser = applicationContext.getCurrentUser();
   // if (!isAuthorized(requestUser, CREATE_USER)) {
   //   throw new UnauthorizedError('Unauthorized');
   // }
-  console.log('user', user);
-
   await applicationContext.getPersistenceGateway().createUser({
     user,
     applicationContext,
