@@ -52,6 +52,7 @@ import updatePetitionValueSequence from './sequences/updatePetitionValueSequence
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
+import validateStartCaseSequence from './sequences/validateStartCaseSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import { ActionError } from './errors/ActionError';
@@ -121,6 +122,7 @@ export default {
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
+    validateStartCaseSequence,
     viewDocumentSequence,
   },
   state,
