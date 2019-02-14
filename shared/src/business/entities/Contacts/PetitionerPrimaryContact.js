@@ -8,14 +8,14 @@ function PetitionerPrimaryContact(raw) {
 }
 
 PetitionerPrimaryContact.errorToMessageMap = {
-  name: '',
-  address1: '',
-  city: '',
-  state: '',
-  zip: '',
-  country: '',
-  phone: '',
-  email: '',
+  name: 'Name is required',
+  address1: 'Address is required',
+  city: 'City is required',
+  state: 'State is required',
+  zip: 'Zip code is required',
+  country: 'Country is required',
+  phone: 'Phone number is required',
+  email: 'Email is required',
 };
 
 joiValidationDecorator(
