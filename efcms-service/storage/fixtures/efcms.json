@@ -1,5 +1,21 @@
 [
   {
+    "pk": "docket|user",
+    "sk": "testing@example.com",
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "testing",
+    "userId": "testing@example.com",
+    "email": "testing@example.com"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "testing",
+    "userId": "testing@example.com",
+    "email": "testing@example.com"
+  },
+  {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "101-18|case"
   },

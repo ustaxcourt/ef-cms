@@ -22,7 +22,7 @@ describe('Get users in section', () => {
     });
 
     it('returns two docket clerks for the docket section', async () => {
-      const section = { userId: 'docketclerk', sectionType: 'docket' };
+      const section = { userId: 'docketclerk', section: 'docket' };
       const users = await getUsersInSection({ section, applicationContext });
       expect(users.length).toEqual(2);
       users.forEach(user => {
@@ -38,7 +38,7 @@ describe('Get users in section', () => {
     };
 
     it('returns two petitions clerks for the petitions section', async () => {
-      const section = { userId: 'petitionsclerk', sectionType: 'petitions' };
+      const section = { userId: 'petitionsclerk', section: 'petitions' };
       const users = await getUsersInSection({ section, applicationContext });
       expect(users.length).toEqual(2);
       users.forEach(user => {
@@ -55,7 +55,7 @@ describe('Get users in section', () => {
     };
 
     it('throws an error when provided an invalid sectionType', async () => {
-      const section = { userId: 'seniorattorney', sectionType: 'potatoes' };
+      const section = { userId: 'seniorattorney', section: 'potatoes' };
       let error;
       try {
         await getUsersInSection({ section, applicationContext });
@@ -75,7 +75,7 @@ describe('Get users in section', () => {
     };
 
     it('throws an Error if context user is unauthorized', async () => {
-      const section = { userId: 'seniorattorney', sectionType: 'potatoes' };
+      const section = { userId: 'seniorattorney', section: 'potatoes' };
       let error;
       try {
         await getUsersInSection({ section, applicationContext });
