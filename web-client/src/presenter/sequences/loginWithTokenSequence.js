@@ -1,7 +1,6 @@
 import setUser from '../actions/setUserAction';
 import getUser from '../actions/getUserAction';
 // import updateLoginValueSequence from '../sequences/updateLoginValueSequence';
-// import submitLogInSequence from '../sequences/submitLogInSequence';
 import setPath from '../actions/setPathAction';
 import navigateToPath from '../actions/navigateToPathAction';
 import decodeToken from '../actions/decodeTokenAction';

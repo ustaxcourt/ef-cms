@@ -10,6 +10,8 @@ exports.createUser = async ({ user, applicationContext }) => {
     Item: {
       pk: `${getSectionForRole(user.role)}|user`,
       sk: user.email,
+      userId: user.email,
+      ...user,
     },
   });
 

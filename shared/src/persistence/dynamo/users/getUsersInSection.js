@@ -1,9 +1,10 @@
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('../../awsDynamoPersistence');
 
-exports.getUsersInSection = ({ applicationContext, section }) => {
+exports.getUsersInSection = async ({ applicationContext, section }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
 
-  return client.query({
+  const users = await client.query({
     applicationContext,
     TableName: TABLE,
     ExpressionAttributeNames: {
@@ -14,4 +15,6 @@ exports.getUsersInSection = ({ applicationContext, section }) => {
     },
     KeyConditionExpression: '#pk = :pk',
   });
+
+  return stripInternalKeys(users);
 };
