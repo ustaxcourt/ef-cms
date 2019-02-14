@@ -1,3 +1,6 @@
+import { state } from 'cerebral';
+import { set } from 'cerebral/factories';
+
 import clearAlerts from '../actions/clearAlertsAction';
 import clearForm from '../actions/clearFormAction';
 import createCase from '../actions/createCaseAction';
@@ -13,6 +16,7 @@ import validatePetition from '../actions/validatePetitionAction';
 
 export default [
   clearAlerts,
+  set(state.showValidation, false),
   validatePetition,
   {
     success: [
@@ -25,6 +29,7 @@ export default [
       clearForm,
     ],
     error: [
+      set(state.showValidation, true),
       setAlertError,
       setValidationErrorsAction,
       setValidationAlertErrorsAction,

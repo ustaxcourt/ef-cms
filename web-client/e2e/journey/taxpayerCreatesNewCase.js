@@ -64,7 +64,7 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.email',
-      value: 'test@test.com',
+      value: 'test@example.com',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
@@ -78,7 +78,7 @@ export default (test, fakeFile) => {
       city: 'Cityville',
       state: 'CA',
       zip: '12345',
-      email: 'test@test.com',
+      email: 'test@example.com',
       phone: '1234567890',
     });
 
