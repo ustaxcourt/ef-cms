@@ -29,7 +29,7 @@ import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
-import submitLogInSequence from './sequences/submitLogInSequence';
+import submitLoginSequence from './sequences/submitLoginSequence';
 import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import submitRecallPetitionFromIRSHoldingQueueSequence from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
@@ -98,7 +98,7 @@ export default {
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
-    submitLogInSequence,
+    submitLoginSequence,
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
