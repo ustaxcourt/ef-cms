@@ -3,7 +3,7 @@ import { flattenDeep } from 'lodash';
 
 export default ({ props, store }) => {
   const alertError = {
-    title: 'There is an error with this page.',
+    title: 'Please correct the following errors on the page:',
     messages: flattenDeep(
       Object.keys(props.errors).map(key => {
         const error = props.errors[key];
