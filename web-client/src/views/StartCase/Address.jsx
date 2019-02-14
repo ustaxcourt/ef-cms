@@ -10,7 +10,7 @@ export default connect(
   },
   function Address({ form, updateFormValueSequence, type }) {
     return (
-      <div>
+      <React.Fragment>
         <div className="usa-form-group">
           <label htmlFor={`${type}.address1`}>Street Address</label>
           <input
@@ -157,7 +157,7 @@ export default connect(
             }}
           />
         </div>
-      </div>
+      </React.Fragment>
     );
   },
 );

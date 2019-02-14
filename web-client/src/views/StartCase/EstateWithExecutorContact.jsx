@@ -2,6 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Address from './Address';
+import Email from './Email';
 
 export default connect(
   {
@@ -10,7 +11,7 @@ export default connect(
   },
   function EstateWithExecutorContact({ form, updateFormValueSequence }) {
     return (
-      <div>
+      <React.Fragment>
         <div className="usa-form-group">
           <h3>
             Tell Us About Yourself as the Executor/Personal Representative For
@@ -55,10 +56,7 @@ export default connect(
               />
             </div>
             <Address type="contactPrimary" />
-            <div className="usa-form-group">
-              <label htmlFor="email">Email Address</label>
-              {form.contactPrimary.email || 'test@test.com'}
-            </div>
+            <Email type="contactPrimary" />
             <div className="usa-form-group">
               <label htmlFor="phone">Phone Number</label>
               <input
@@ -100,7 +98,7 @@ export default connect(
             <Address type="contactSecondary" />
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   },
 );
