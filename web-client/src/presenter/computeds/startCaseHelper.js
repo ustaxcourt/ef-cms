@@ -15,11 +15,19 @@ export default get => {
   );
 
   return {
-    showPetitionFileValid: petition.petitionFile,
+    showPetitionFileValid: petition && petition.petitionFile,
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSelectTrial: !!form.procedureType,
     showSmallTrialCitiesHint: form.procedureType === 'Small',
     trialCities: form.trialCities || [],
     trialCitiesByState: states,
+    showPetitionerDeceasedSpouseForm:
+      form.filingType === 'Myself and my spouse',
+    showPetitionerContact: form.partyType === 'Petitioner',
+    showPetitionerAndSpouseContact: form.partyType === 'Petitioner & Spouse',
+    showPetitionerAndDeceasedSpouseContact:
+      form.partyType === 'Petitioner & Deceased Spouse',
+    showEstateWithoutExecutorContact:
+      form.partyType === 'Estate without Executor/Personal Representative/Etc.',
   };
 };

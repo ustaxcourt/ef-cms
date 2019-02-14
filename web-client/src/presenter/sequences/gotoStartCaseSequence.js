@@ -1,5 +1,6 @@
 import clearAlerts from '../actions/clearAlertsAction';
 import clearForm from '../actions/clearFormAction';
+import prepareForm from '../actions/prepareFormAction';
 import clearPetition from '../actions/clearPetitionAction';
 import getCaseTypes from '../actions/getCaseTypesAction';
 import getFilingTypes from '../actions/getFilingTypesAction';
@@ -13,6 +14,7 @@ export default [
   clearAlerts,
   clearPetition,
   clearForm,
+  prepareForm,
   getCaseTypes,
   setCaseTypes,
   getFilingTypes,

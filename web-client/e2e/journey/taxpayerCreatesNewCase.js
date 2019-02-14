@@ -1,3 +1,7 @@
+import { runCompute } from 'cerebral/test';
+
+import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
+
 export default (test, fakeFile) => {
   return it('Taxpayer creates a new case', async () => {
     await test.runSequence('updatePetitionValueSequence', {
@@ -17,6 +21,118 @@ export default (test, fakeFile) => {
       key: 'year',
       value: '2001',
     });
+
+    let result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerContact).toBeFalsy();
+
+    // showPetitionerContact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerContact).toBeTruthy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.name',
+      value: 'Test Person',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address1',
+      value: '123 Abc Ln',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address2',
+      value: 'Apt 2',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.city',
+      value: 'Cityville',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.state',
+      value: 'CA',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.zip',
+      value: '12345',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.email',
+      value: 'test@test.com',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.phone',
+      value: '1234567890',
+    });
+
+    expect(test.getState('form.contactPrimary')).toEqual({
+      name: 'Test Person',
+      address1: '123 Abc Ln',
+      address2: 'Apt 2',
+      city: 'Cityville',
+      state: 'CA',
+      zip: '12345',
+      email: 'test@test.com',
+      phone: '1234567890',
+    });
+
+    // showPetitionerAndSpouseContact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself and my spouse',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerDeceasedSpouseForm).toBeTruthy();
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'isSpouseDeceased',
+      value: 'No',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerAndSpouseContact).toBeTruthy();
+
+    // showPetitionerAndDeceasedSpouseContact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself and my spouse',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerDeceasedSpouseForm).toBeTruthy();
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'isSpouseDeceased',
+      value: 'Yes',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPetitionerAndDeceasedSpouseContact).toBeTruthy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'partyType',
+      value: 'Estate without Executor/Personal Representative/Etc.',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showEstateWithoutExecutorContact).toBeTruthy();
 
     // try without checking the signature
     await test.runSequence('submitFilePetitionSequence');
