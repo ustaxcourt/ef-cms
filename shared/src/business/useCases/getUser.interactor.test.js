@@ -11,7 +11,7 @@ describe('Get user', () => {
   it('not found', async () => {
     let result = 'error';
     try {
-      await getUser({ userId: 'someuser'} );
+      await getUser({ userId: 'someuser' });
     } catch (e) {
       if (e instanceof UnknownUserError) {
         result = 'error';
