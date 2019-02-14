@@ -1,4 +1,3 @@
-const User = require('../entities/User');
 const { DOCKET_SECTION, PETITIONS_SECTION } = require('../entities/WorkQueue');
 const {
   isAuthorized,

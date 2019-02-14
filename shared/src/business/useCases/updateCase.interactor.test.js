@@ -17,17 +17,20 @@ const MOCK_CASE = {
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer', role: 'petitioner',
+      userId: 'taxpayer',
+      role: 'petitioner',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer', role: 'petitioner',
+      userId: 'taxpayer',
+      role: 'petitioner',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer', role: 'petitioner',
+      userId: 'taxpayer',
+      role: 'petitioner',
     },
   ],
 };
