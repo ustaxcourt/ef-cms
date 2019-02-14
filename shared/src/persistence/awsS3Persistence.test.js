@@ -14,6 +14,12 @@ describe('uploadPdf', () => {
         post: postSpy,
       }),
       getUniqueId: () => '123',
+      getCurrentUser: () => {
+        return { userId: 'taxpayer', role: 'petitioner' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
     };
     await uploadPdf({
       policy: {
@@ -53,6 +59,12 @@ describe('uploadPdf', () => {
         post: postSpy,
       }),
       getUniqueId: () => '123',
+      getCurrentUser: () => {
+        return { userId: 'taxpayer', role: 'petitioner' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
     };
     await uploadPdf({
       policy: {
@@ -98,6 +110,12 @@ describe('uploadDocument', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => DOCUMENT_ID,
       }),
+      getCurrentUser: () => {
+        return { userId: 'taxpayer', role: 'petitioner' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
     };
     const documentId = await uploadDocument({
       applicationContext,
@@ -123,6 +141,12 @@ describe('getDocument', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => BLOB_DATA,
       }),
+      getCurrentUser: () => {
+        return { userId: 'taxpayer', role: 'petitioner' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
     };
     const result = await getDocument({
       applicationContext,
@@ -160,6 +184,12 @@ describe('uploadPdfsForNewCase', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => 'abc',
       }),
+      getCurrentUser: () => {
+        return { userId: 'taxpayer', role: 'petitioner' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
     };
     const result = await uploadPdfsForNewCase({
       applicationContext,

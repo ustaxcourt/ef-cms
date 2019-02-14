@@ -24,7 +24,7 @@ const MOCK_WORK_ITEMS = [
         createdAt: '2018-12-27T18:06:02.968Z',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         message: 'Petition ready for review',
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         sentBy: 'Petitioner',
         sentTo: null,
       },
@@ -56,7 +56,7 @@ describe('Send petition to IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
     };
   });
@@ -72,11 +72,13 @@ describe('Send petition to IRS Holding Queue', () => {
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
+    applicationContext.getCurrentUser = () => {
+      return { userId: 'notauser' };
+    };
     let error;
     try {
       await sendPetitionToIRSHoldingQueue({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'someuser',
         applicationContext,
       });
     } catch (err) {
@@ -97,6 +99,9 @@ describe('Send petition to IRS Holding Queue', () => {
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
+      },
     };
     let error;
     try {
@@ -123,6 +128,9 @@ describe('Send petition to IRS Holding Queue', () => {
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
+      },
     };
     let error;
     try {

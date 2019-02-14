@@ -13,12 +13,17 @@ describe('getCasesByStatus', () => {
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesByStatus({
-        userId: 'petitionsclerk',
         status: 'New',
         applicationContext,
       });
@@ -31,11 +36,24 @@ describe('getCasesByStatus', () => {
   });
 
   it('throws an error if the user is unauthorized', async () => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCasesByStatus: () =>
+            Promise.resolve([omit(MOCK_CASE, 'documents')]),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
+      environment: { stage: 'local' },
+    };
     let error;
     try {
       await getCasesByStatus({
-        userId: 'baduser',
-        applicationContext: null,
+        applicationContext,
       });
     } catch (err) {
       error = err;

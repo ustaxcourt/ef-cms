@@ -8,12 +8,21 @@ const validateFilingTypes = filingTypes => {
     }
   });
 };
+
 describe('Get case filing types', () => {
   beforeEach(() => {});
 
   it('returns a collection of filing types', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
+    };
     const filingTypes = await getFilingTypes({
-      userId: 'taxpayer',
+      applicationContext,
     });
     expect(filingTypes.length).toEqual(4);
     expect(filingTypes[0]).toEqual('Myself');
@@ -27,10 +36,17 @@ describe('Get case filing types', () => {
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
+    };
     let error;
     try {
       await getFilingTypes({
-        userId: 'notauser',
+        applicationContext,
       });
     } catch (err) {
       error = err;

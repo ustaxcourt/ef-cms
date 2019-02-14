@@ -6,7 +6,7 @@ describe('fileRespondentDocument', () => {
   let applicationContext;
 
   let caseRecord = {
-    userId: 'taxpayer',
+    userId: 'taxpayer', role: 'petitioner',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '45678-18',
     documents: [
@@ -38,12 +38,17 @@ describe('fileRespondentDocument', () => {
       getUseCases: () => ({
         createDocument: () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await fileRespondentDocument({
-        userId: 'taxpayer',
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',
@@ -66,10 +71,15 @@ describe('fileRespondentDocument', () => {
         getUseCases: () => ({
           createDocument: () => null,
         }),
+        getCurrentUser: () => {
+          return {
+            userId: 'respondent',
+            role: 'respondent',
+          };
+        },
         environment: { stage: 'local' },
       };
       await fileRespondentDocument({
-        userId: 'respondent',
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',
