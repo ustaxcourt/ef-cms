@@ -3,7 +3,7 @@
 slsStage=$1
 region=$2
 
-USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${slsStage}'].Id | [0]" --max-results 30 --region "${region}")
+USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${slsStage}'].Id | [0]" --max-results 30 --region "us-east-1")
 USER_POOL_ID="${USER_POOL_ID%\"}"
 USER_POOL_ID="${USER_POOL_ID#\"}"
 
