@@ -58,15 +58,15 @@ createAccount() {
 createManyAccounts() {
   emailPrefix=$1
   role=$1
-  for i in $(seq 1 1);
+  for i in $(seq 1 5);
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}"
   done
 }
 
 createManyAccounts "petitioner"
-# createManyAccounts "petitionsclerk"
-# createManyAccounts "docketclerk"
-# createManyAccounts "seniorattorney"
-# createManyAccounts "intakeclerk"
-# createManyAccounts "respondent"
+createManyAccounts "petitionsclerk"
+createManyAccounts "docketclerk"
+createManyAccounts "seniorattorney"
+createManyAccounts "intakeclerk"
+createManyAccounts "respondent"
