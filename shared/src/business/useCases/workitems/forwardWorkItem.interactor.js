@@ -19,7 +19,11 @@ exports.forwardWorkItem = async ({
     throw new UnauthorizedError('Unauthorized for assign work item');
   }
 
-  const userToForwardTo = new User({ userId: assigneeId });
+  const userToForwardTo = new User(
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ userId: assigneeId }),
+  );
 
   const workItemToForward = await applicationContext
     .getPersistenceGateway()

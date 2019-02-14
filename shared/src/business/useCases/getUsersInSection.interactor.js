@@ -19,25 +19,50 @@ exports.getUsersInSection = async ({ section, applicationContext }) => {
 
   if (!section) throw new Error('A section must be provided');
 
-  // let result;
+  let result;
 
   // TODO: need to fetch the real users in section
-  // switch (section.sectionType) {
-  //   case DOCKET_SECTION:
-  //     result = [
-  //       new User({ userId: 'docketclerk' }).toRawObject(),
-  //       new User({ userId: 'docketclerk1' }).toRawObject(),
-  //     ];
-  //     break;
-  //   case PETITIONS_SECTION:
-  //     result = [
-  //       new User({ userId: 'petitionsclerk' }).toRawObject(),
-  //       new User({ userId: 'petitionsclerk1' }).toRawObject(),
-  //     ];
-  //     break;
-  //   default:
-  //     throw new Error('Invalid section provided');
-  // }
+  switch (section.sectionType) {
+    case DOCKET_SECTION:
+      result = [
+        {
+          userId: 'docketclerk',
+          section: 'docketclerk',
+          name: 'Test Docketclerk',
+          'custom:role': 'docketclerk',
+          email: 'docketclerk',
+        },
 
-  return []; //User.validateRawCollection(result);
+        {
+          userId: 'docketclerk1',
+          section: 'docketclerk',
+          name: 'Test Docketclerk1',
+          'custom:role': 'docketclerk',
+          email: 'docketclerk1',
+        },
+      ];
+      break;
+    case PETITIONS_SECTION:
+      result = [
+        {
+          userId: 'petitionsclerk',
+          section: 'petitionsclerk',
+          name: 'Test petitionsclerk',
+          'custom:role': 'petitionsclerk',
+          email: 'petitionsclerk',
+        },
+        {
+          userId: 'petitionsclerk1',
+          section: 'petitionsclerk',
+          name: 'Test petitionsclerk1',
+          'custom:role': 'petitionsclerk',
+          email: 'petitionsclerk1',
+        },
+      ];
+      break;
+    default:
+      throw new Error('Invalid section provided');
+  }
+
+  return result;
 };

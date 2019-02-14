@@ -33,7 +33,11 @@ exports.updateWorkItem = async ({
     throw new UnprocessableEntityError();
   }
 
-  const otherUser = new User({ userId: workItemToUpdate.assigneeId });
+  const otherUser = new User(
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ userId: workItemToUpdate.assigneeId }),
+  );
   workItemToUpdate.assigneeName = otherUser.name;
 
   const updatedWorkItem = new WorkItem(workItemToUpdate)

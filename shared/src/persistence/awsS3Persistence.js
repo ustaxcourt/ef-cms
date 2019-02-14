@@ -46,6 +46,11 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
     .getHttpClient()
     .get(
       `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
+      {
+        headers: {
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
+      },
     );
   return url;
 };
