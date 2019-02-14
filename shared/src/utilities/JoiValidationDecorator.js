@@ -70,6 +70,7 @@ function getFormattedValidationErrors(entity) {
       value.getFormattedValidationErrors
     ) {
       obj[key] = getFormattedValidationErrors(value);
+      if (!obj[key]) delete obj[key];
     }
   }
   return Object.keys(obj).length === 0 ? null : obj;
@@ -98,10 +99,9 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      const name = entityConstructor.name || '';
-      console.log('NAME WAS', name);
       throw new Error(
-        `The ${name} entity was invalid ${this.getValidationError()}`,
+        `The ${entityConstructor.name ||
+          ''} entity was invalid ${this.getValidationError()}`,
       );
     }
     return this;
