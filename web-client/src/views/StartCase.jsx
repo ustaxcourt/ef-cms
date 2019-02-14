@@ -4,9 +4,24 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
-import PetitionerContact from './StartCase/PetitionerContact';
-import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
+import ConservatorContact from './StartCase/ConservatorContact';
+import CorporationContact from './StartCase/CorporationContact';
+import CustodianContact from './StartCase/CustodianContact';
+import DonorContact from './StartCase/DonorContact';
+import EstateWithExecutorContact from './StartCase/EstateWithExecutorContact';
+import EstateWithoutExecutorContact from './StartCase/EstateWithoutExecutorContact';
+import GuardianContact from './StartCase/GuardianContact';
+import IncompetentPersonContact from './StartCase/IncompetentPersonContact';
+import MinorContact from './StartCase/MinorContact';
+import PartnershipBBAContact from './StartCase/PartnershipBBAContact';
+import PartnershipOtherContact from './StartCase/PartnershipOtherContact';
+import PartnershipTaxMattersContact from './StartCase/PartnershipTaxMattersContact';
 import PetitionerAndDeceasedSpouseContact from './StartCase/PetitionerAndDeceasedSpouseContact';
+import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
+import PetitionerContact from './StartCase/PetitionerContact';
+import SurvivingSpouseContact from './StartCase/SurvivingSpouseContact';
+import TransfereeContact from './StartCase/TransfereeContact';
+import TrustAndTrusteeContact from './StartCase/TrustAndTrusteeContact';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -27,6 +42,8 @@ export default connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function StartCase({
     caseTypes,
@@ -41,8 +58,10 @@ export default connect(
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
-    updateStartCaseFormValueSequence,
     updatePetitionValueSequence,
+    updateStartCaseFormValueSequence,
+    validationErrors,
+    validateStartCaseSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -64,8 +83,13 @@ export default connect(
           <h2>Upload Your Petition to Start Your Case</h2>
           <div className="blue-container">
             <div className="usa-grid-full">
-              <div className="usa-width-one-third">
-                <div className="usa-form-group">
+              <div className="usa-width-five-twelfths">
+                <div
+                  className={
+                    'usa-form-group ' +
+                    (validationErrors.petitionFile ? 'usa-input-error' : '')
+                  }
+                >
                   <label
                     htmlFor="petition-file"
                     className={
@@ -91,9 +115,12 @@ export default connect(
                       });
                     }}
                   />
+                  <div className="usa-input-error-message beneath">
+                    {validationErrors.petitionFile}
+                  </div>
                 </div>
               </div>
-              <div className="usa-width-two-thirds">
+              <div className="usa-width-seven-twelfths">
                 <div id="petition-upload-hint" className="alert-gold">
                   <span className="usa-form-hint">
                     <FontAwesomeIcon
@@ -112,13 +139,13 @@ export default connect(
             <h3>Who is Filing This Case?</h3>
             <div className="blue-container">
               <div className="usa-grid-full">
-                <div className="usa-width-one-third">
+                <div className="usa-width-five-twelfths">
                   <fieldset
                     id="filing-type-radios"
                     className="usa-fieldset-inputs usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
-                      I am filing this petition on behalf of&nbsp;…
+                      I am filing this petition on behalf of …
                     </legend>
                     <ul className="ustc-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
@@ -144,7 +171,7 @@ export default connect(
                     </ul>
                   </fieldset>
                 </div>
-                <div className="usa-width-two-thirds">
+                <div className="usa-width-seven-twelfths">
                   <div id="petition-hint" className="alert-gold">
                     <span className="usa-form-hint">
                       <FontAwesomeIcon
@@ -164,7 +191,7 @@ export default connect(
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-third">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="filing-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -201,9 +228,52 @@ export default connect(
                 </div>
               )}
 
+              {startCaseHelper.showBusinessFilingTypeOptions && (
+                <div className="usa-grid-full ustc-secondary-question">
+                  <div className="usa-width-one-whole">
+                    <fieldset
+                      id="business-type-radios"
+                      className="usa-fieldset-inputs usa-sans"
+                    >
+                      <legend htmlFor="business-type-radios">
+                        What type of business are you filing for?
+                      </legend>
+                      <ul className="ustc-unstyled-list">
+                        {[
+                          'Corporation',
+                          'Partnership (as the tax matters partner)',
+                          'Partnership (as a partner other than tax matters partner)',
+                          'Partnership (as a partnership representative under the BBA regime)',
+                        ].map((businessType, idx) => (
+                          <li key={businessType}>
+                            <input
+                              id={`businessType-${businessType}`}
+                              type="radio"
+                              name="businessType"
+                              value={businessType}
+                              onChange={e => {
+                                updateStartCaseFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              id={`is-business-type-${idx}`}
+                              htmlFor={`businessType-${businessType}`}
+                            >
+                              {businessType}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+              )}
               {startCaseHelper.showOtherFilingTypeOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-third">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="other-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -217,6 +287,7 @@ export default connect(
                           'A minor or incompetent person',
                           'Donor',
                           'Transferee',
+                          'Deceased Spouse',
                         ].map((otherType, idx) => (
                           <li key={otherType}>
                             <input
@@ -247,13 +318,13 @@ export default connect(
 
               {startCaseHelper.showEstateFilingOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-half">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="estate-type-radios"
                       className="usa-fieldset-inputs usa-sans"
                     >
                       <legend htmlFor="estate-type-radios">
-                        What other type of taxpayer are you filing for?
+                        What type of estate or trust are you filing for?
                       </legend>
                       <ul className="ustc-unstyled-list">
                         {[
@@ -287,8 +358,55 @@ export default connect(
                   </div>
                 </div>
               )}
+
+              {startCaseHelper.showMinorIncompetentFilingOptions && (
+                <div className="usa-grid-full ustc-secondary-question">
+                  <div className="usa-width-one-whole">
+                    <fieldset
+                      id="minorIncompetent-type-radios"
+                      className="usa-fieldset-inputs usa-sans"
+                    >
+                      <legend htmlFor="minorIncompetent-type-radios">
+                        What is your role in filing for this minor or
+                        incompetent person?
+                      </legend>
+                      <ul className="ustc-unstyled-list">
+                        {[
+                          'Conservator',
+                          'Guardian',
+                          'Custodian',
+                          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+                          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                        ].map((minorIncompetentType, idx) => (
+                          <li key={minorIncompetentType}>
+                            <input
+                              id={`minorIncompetentType-${minorIncompetentType}`}
+                              type="radio"
+                              name="minorIncompetentType"
+                              value={minorIncompetentType}
+                              onChange={e => {
+                                updateStartCaseFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              id={`is-minorIncompetent-type-${idx}`}
+                              htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                            >
+                              {minorIncompetentType}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+
           {startCaseHelper.showPetitionerContact && <PetitionerContact />}
           {startCaseHelper.showPetitionerAndSpouseContact && (
             <PetitionerAndSpouseContact />
@@ -296,12 +414,48 @@ export default connect(
           {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
             <PetitionerAndDeceasedSpouseContact />
           )}
+          {startCaseHelper.showEstateWithExecutorContact && (
+            <EstateWithExecutorContact />
+          )}
+          {startCaseHelper.showEstateWithoutExecutorContact && (
+            <EstateWithoutExecutorContact />
+          )}
+          {startCaseHelper.showTrustAndTrusteeContact && (
+            <TrustAndTrusteeContact />
+          )}
+          {startCaseHelper.showCorporationContact && <CorporationContact />}
+          {startCaseHelper.showPartnershipTaxMattersContact && (
+            <PartnershipTaxMattersContact />
+          )}
+          {startCaseHelper.showPartnershipOtherContact && (
+            <PartnershipOtherContact />
+          )}
+          {startCaseHelper.showPartnershipBBAContact && (
+            <PartnershipBBAContact />
+          )}
+          {startCaseHelper.showConservatorContact && <ConservatorContact />}
+          {startCaseHelper.showGuardianContact && <GuardianContact />}
+          {startCaseHelper.showCustodianContact && <CustodianContact />}
+          {startCaseHelper.showMinorContact && <MinorContact />}
+          {startCaseHelper.showIncompetentPersonContact && (
+            <IncompetentPersonContact />
+          )}
+          {startCaseHelper.showDonorContact && <DonorContact />}
+          {startCaseHelper.showTransfereeContact && <TransfereeContact />}
+          {startCaseHelper.showSurvivingSpouseContact && (
+            <SurvivingSpouseContact />
+          )}
 
           <div className="usa-form-group">
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">
               <h3>IRS Notice</h3>
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.caseType ? 'usa-input-error' : '')
+                }
+              >
                 <fieldset>
                   <legend>Type of Notice</legend>
                   <select
@@ -323,8 +477,16 @@ export default connect(
                     ))}
                   </select>
                 </fieldset>
+                <div className="usa-input-error-message beneath">
+                  {validationErrors.caseType}
+                </div>
               </div>
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                }
+              >
                 <fieldset>
                   <legend id="date-of-notice-legend">Date of Notice</legend>
                   <div className="usa-date-of-birth">
@@ -347,6 +509,9 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group-day">
@@ -367,6 +532,9 @@ export default connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                        }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
                         }}
                       />
                     </div>
@@ -389,7 +557,13 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
+                    </div>
+                    <div className="usa-input-error-message beneath">
+                      {validationErrors.irsNoticeDate}
                     </div>
                   </div>
                 </fieldset>
@@ -431,7 +605,12 @@ export default connect(
             </div>
           </div>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.procedureType ? 'usa-input-error' : '')
+              }
+            >
               <fieldset
                 id="procedure-type-radios"
                 className="usa-fieldset-inputs usa-sans"
@@ -461,7 +640,12 @@ export default connect(
               </fieldset>
             </div>
             {startCaseHelper.showSelectTrial && (
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+                }
+              >
                 <label htmlFor="preferred-trial-city" className="with-hint">
                   Select a Trial Location
                 </label>
@@ -508,6 +692,12 @@ export default connect(
                 </select>
               </div>
             )}
+            <div className="usa-input-error-message beneath">
+              {validationErrors.procedureType}
+            </div>
+            <div className="usa-input-error-message beneath">
+              {validationErrors.preferredTrialCity}
+            </div>
           </div>
           <h2>Review Your Information</h2>
           <p>
@@ -528,7 +718,12 @@ export default connect(
               </li>
             </ol>
 
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.signature ? 'usa-input-error' : '')
+              }
+            >
               <legend>Review and Sign</legend>
               <input
                 id="signature"
@@ -540,11 +735,17 @@ export default connect(
                     value: e.target.checked ? true : undefined,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
               <label htmlFor="signature">
                 Checking this box acknowledges that you’ve verified all
                 information is correct.
               </label>
+              <div className="usa-input-error-message beneath">
+                {validationErrors.signature}
+              </div>
             </div>
           </div>
           <button

@@ -9,17 +9,14 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerAndDeceasedSpouseContact({
-    form,
-    updateFormValueSequence,
-  }) {
+  function IncompetentPersonContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
-          <h3>Tell Us About Yourself</h3>
+          <h3>Tell Us About the Next Friend for This Incompetent Person</h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Name of Next Friend</label>
               <input
                 id="name"
                 type="text"
@@ -36,6 +33,10 @@ export default connect(
             </div>
             <Address type="contactPrimary" />
             <Email type="contactPrimary" />
+            <div className="usa-form-group">
+              <label htmlFor="email">Email Address</label>
+              {form.contactPrimary.email}
+            </div>
             <div className="usa-form-group">
               <label htmlFor="phone">Phone Number</label>
               <input
@@ -56,10 +57,10 @@ export default connect(
           </div>
         </div>
         <div className="usa-form-group">
-          <h3>Tell Us About Your Deceased Spouse</h3>
+          <h3>Tell Us About the Incompetent Person You Are Filing For</h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
+              <label htmlFor="secondaryName">Name of Incompetent Person</label>
               <input
                 id="secondaryName"
                 type="text"
@@ -74,7 +75,42 @@ export default connect(
                 }}
               />
             </div>
+            <div className="usa-form-group">
+              <label htmlFor="secondaryInCareOf">
+                In Care Of <span className="usa-form-hint">(optional)</span>
+              </label>
+              <input
+                id="secondaryInCareOf"
+                type="text"
+                name="contactSecondary.inCareOf"
+                autoCapitalize="none"
+                value={form.contactSecondary.inCareOf || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
             <Address type="contactSecondary" />
+            <div className="usa-form-group">
+              <label htmlFor="phone">Phone Number</label>
+              <input
+                id="phone"
+                type="tel"
+                name="contactSecondary.phone"
+                className="ustc-input-phone"
+                autoCapitalize="none"
+                value={form.contactSecondary.phone || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
       </React.Fragment>

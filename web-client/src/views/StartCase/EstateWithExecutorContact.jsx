@@ -9,23 +9,44 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerAndDeceasedSpouseContact({
-    form,
-    updateFormValueSequence,
-  }) {
+  function EstateWithExecutorContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
-          <h3>Tell Us About Yourself</h3>
+          <h3>
+            Tell Us About Yourself as the Executor/Personal Representative For
+            This Estate
+          </h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">
+                Name of Executor/Personal Representative
+              </label>
               <input
                 id="name"
                 type="text"
                 name="contactPrimary.name"
                 autoCapitalize="none"
                 value={form.contactPrimary.name || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+            <div className="usa-form-group">
+              <label htmlFor="title">
+                Title
+                <p className="usa-form-hint">For example, Executor, PR, etc.</p>
+              </label>
+              <input
+                id="title"
+                type="text"
+                name="contactPrimary.title"
+                autoCapitalize="none"
+                value={form.contactPrimary.title || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -56,10 +77,10 @@ export default connect(
           </div>
         </div>
         <div className="usa-form-group">
-          <h3>Tell Us About Your Deceased Spouse</h3>
+          <h3>Tell Us About the Estate You Are Filing For</h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
+              <label htmlFor="secondaryName">Name of Decedent</label>
               <input
                 id="secondaryName"
                 type="text"

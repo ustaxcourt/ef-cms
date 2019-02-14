@@ -9,14 +9,11 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerAndDeceasedSpouseContact({
-    form,
-    updateFormValueSequence,
-  }) {
+  function SurvivingSpouseContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
-          <h3>Tell Us About Yourself</h3>
+          <h3>Tell Us About Yourself as the Surviving Spouse</h3>
           <div className="blue-container">
             <div className="usa-form-group">
               <label htmlFor="name">Name</label>

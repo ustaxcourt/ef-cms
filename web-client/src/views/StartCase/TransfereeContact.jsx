@@ -9,17 +9,14 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function PetitionerAndDeceasedSpouseContact({
-    form,
-    updateFormValueSequence,
-  }) {
+  function TransfereeContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
-          <h3>Tell Us About Yourself</h3>
+          <h3>Tell Us About the Transferee You Are Filing For</h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Name of Petitioner</label>
               <input
                 id="name"
                 type="text"
@@ -53,28 +50,6 @@ export default connect(
                 }}
               />
             </div>
-          </div>
-        </div>
-        <div className="usa-form-group">
-          <h3>Tell Us About Your Deceased Spouse</h3>
-          <div className="blue-container">
-            <div className="usa-form-group">
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
-              <input
-                id="secondaryName"
-                type="text"
-                name="contactSecondary.name"
-                autoCapitalize="none"
-                value={form.contactSecondary.name || ''}
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
-            <Address type="contactSecondary" />
           </div>
         </div>
       </React.Fragment>
