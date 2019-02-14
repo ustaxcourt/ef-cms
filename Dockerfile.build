@@ -24,6 +24,9 @@ RUN cp terraform /usr/local/bin/
 
 WORKDIR /home/app
 
+RUN apk add curl
+RUN apk add jq
+
 # Since the .git file is ignored in the .dockerignore file,
 # we init a git repo here so that serverless can get a new hash
 # to deploy with... serverless is coupled to git
@@ -41,8 +44,5 @@ COPY efcms-service/package.json /home/app/efcms-service/package.json
 RUN cd /home/app/efcms-service && npm i
 
 COPY . /home/app
-
-RUN apk add curl
-RUN apk add jq
 
 CMD echo "please overwrite this command"
