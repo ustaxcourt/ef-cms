@@ -54,6 +54,7 @@ describe('assignWorkItems', () => {
     const applicationContext = {
       user: {
         name: 'bob',
+        role: 'petitionsclerk',
       },
       getPersistenceGateway: () => {
         return {

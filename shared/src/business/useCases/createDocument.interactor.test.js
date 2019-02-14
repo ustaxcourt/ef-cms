@@ -117,7 +117,7 @@ describe('createDocument', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
@@ -144,7 +144,7 @@ describe('createDocument', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
           filedBy: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'taxpayer', role: 'petitioner',
           workItems: [
             {
               assigneeId: null,
@@ -165,7 +165,7 @@ describe('createDocument', () => {
                   message: 'A Answer filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
-                  userId: 'taxpayer',
+                  userId: 'taxpayer', role: 'petitioner',
                 },
               ],
             },

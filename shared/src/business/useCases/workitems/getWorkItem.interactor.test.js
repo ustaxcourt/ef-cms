@@ -28,7 +28,7 @@ describe('getWorkItem', () => {
     try {
       await getWorkItem({
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {
@@ -48,7 +48,7 @@ describe('getWorkItem', () => {
     try {
       await getWorkItem({
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {

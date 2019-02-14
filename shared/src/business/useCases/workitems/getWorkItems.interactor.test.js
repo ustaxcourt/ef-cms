@@ -20,7 +20,7 @@ describe('getWorkItems', () => {
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getPersistenceGateway: () => ({
         getWorkItemsForUser: async () => null,

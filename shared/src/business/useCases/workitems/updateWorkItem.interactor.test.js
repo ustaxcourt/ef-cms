@@ -28,7 +28,7 @@ describe('updateWorkItem', () => {
     let error;
     try {
       await updateWorkItem({
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         workItemToUpdate: mockWorkItem,
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
