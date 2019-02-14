@@ -87,7 +87,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          userId: 'taxpayer', role: 'petitioner',
+          userId: 'taxpayer',
           workItems: [
             {
               assigneeId: null,
@@ -102,7 +102,7 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Petitioner',
-                userId: 'taxpayer', role: 'petitioner',
+                userId: 'taxpayer',
                 workItems: [],
               },
               messages: [
@@ -132,11 +132,9 @@ describe('createCase', () => {
           email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
           phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
           state: 'FL',
-          token: 'taxpayer',
-          userId: 'taxpayer', role: 'petitioner',
+          userId: 'taxpayer',
           zip: '37208',
         },
       ],
@@ -144,7 +142,7 @@ describe('createCase', () => {
       procedureType: 'Small',
       filingType: 'Myself',
       status: 'New',
-      userId: 'taxpayer', role: 'petitioner',
+      userId: 'taxpayer',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -207,7 +205,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          userId: 'taxpayer', role: 'petitioner',
+          userId: 'taxpayer',
           workItems: [
             {
               assigneeId: null,
@@ -222,7 +220,7 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Petitioner',
-                userId: 'taxpayer', role: 'petitioner',
+                userId: 'taxpayer',
                 workItems: [],
               },
               messages: [
@@ -252,11 +250,9 @@ describe('createCase', () => {
           email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
           phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
           state: 'FL',
-          token: 'taxpayer',
-          userId: 'taxpayer', role: 'petitioner',
+          userId: 'taxpayer',
           zip: '37208',
         },
       ],
@@ -264,7 +260,7 @@ describe('createCase', () => {
       procedureType: 'Small',
       filingType: 'Myself',
       status: 'New',
-      userId: 'taxpayer', role: 'petitioner',
+      userId: 'taxpayer',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
