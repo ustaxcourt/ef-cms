@@ -53,6 +53,14 @@ const router = {
       app.getSequence('gotoStyleGuideSequence')();
     });
     route('/mock-login...', () => {
+      const query = queryString.parse(location.search);
+      const { token, path } = query;
+      if (token) {
+        document.title = `Mock Login ${pageTitleSuffix}`;
+        app.getSequence('submitLoginSequence')({ token, path });
+        return;
+      }
+
       if (process.env.COGNITO) {
         //USTC_ENV is undefined in prod
         document.title = `Dashboard ${pageTitleSuffix}`;
