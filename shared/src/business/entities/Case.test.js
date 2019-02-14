@@ -270,7 +270,7 @@ describe('Case entity', () => {
     it('returns the filing types', () => {
       const filingTypes = Case.getFilingTypes();
       expect(filingTypes).not.toBeNull();
-      expect(filingTypes.length).toEqual(1);
+      expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
     });
   });
