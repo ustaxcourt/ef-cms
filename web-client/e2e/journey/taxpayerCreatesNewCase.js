@@ -547,9 +547,9 @@ export default (test, fakeFile) => {
 
     // try without checking the signature
     await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertError')).toEqual({
-      title: 'Errors were found. Please correct your form and resubmit.',
-    });
+    expect(test.getState('alertError.title')).toEqual(
+      'Please correct the following errors on the page:',
+    );
 
     // click the signature and try again
     await test.runSequence('updateFormValueSequence', {
@@ -560,7 +560,7 @@ export default (test, fakeFile) => {
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError.title')).toEqual(
-      'Errors were found. Please correct your form and resubmit.',
+      'Please correct the following errors on the page:',
     );
 
     await test.runSequence('updateFormValueSequence', {

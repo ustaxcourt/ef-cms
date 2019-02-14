@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const {
   UnauthorizedError,
   NotFoundError,
@@ -93,7 +95,10 @@ exports.getAuthHeader = event => {
   let usernameTokenArray;
   const authorizationHeader =
     event.headers &&
-    (event.headers.Authorization || event.headers.authorization);
+    (event.headers.Authorization || event.headers.authorization)
+  if ((event.queryStringParameters || {}).token) {
+    return (event.queryStringParameters || {}).token;
+  }
   if (authorizationHeader) {
     usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {
@@ -106,4 +111,18 @@ exports.getAuthHeader = event => {
   }
 
   return usernameTokenArray[1];
+};
+
+exports.getUserFromAuthHeader = event => {
+  const token = exports.getAuthHeader(event);
+  const decoded = jwt.decode(token);
+
+  if (decoded) {
+    decoded.token = token;
+    decoded.role = decoded['custom:role'];
+    decoded.userId = decoded.email;
+    return decoded;
+  } else {
+    return null;
+  }
 };

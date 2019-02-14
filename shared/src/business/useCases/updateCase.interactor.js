@@ -31,13 +31,10 @@ const setDocumentDetails = (userId, documents) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = async ({
-  userId,
-  caseToUpdate,
-  caseId,
-  applicationContext,
-}) => {
-  if (!isAuthorized(userId, UPDATE_CASE)) {
+exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
@@ -46,7 +43,10 @@ exports.updateCase = async ({
   }
 
   if (caseToUpdate.documents) {
-    caseToUpdate.documents = setDocumentDetails(userId, caseToUpdate.documents);
+    caseToUpdate.documents = setDocumentDetails(
+      user.userId,
+      caseToUpdate.documents,
+    );
   }
 
   const paidCase = new Case(caseToUpdate)

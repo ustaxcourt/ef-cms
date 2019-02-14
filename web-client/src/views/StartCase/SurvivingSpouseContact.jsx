@@ -8,8 +8,13 @@ export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
-  function SurvivingSpouseContact({ form, updateFormValueSequence }) {
+  function SurvivingSpouseContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
@@ -30,6 +35,9 @@ export default connect(
                   });
                 }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.name}
+              </div>
             </div>
             <Address type="contactPrimary" />
             <Email type="contactPrimary" />

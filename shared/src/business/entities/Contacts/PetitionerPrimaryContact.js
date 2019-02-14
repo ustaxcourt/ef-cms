@@ -8,14 +8,14 @@ function PetitionerPrimaryContact(raw) {
 }
 
 PetitionerPrimaryContact.errorToMessageMap = {
-  name: 'Name is required',
-  address1: 'Address is required',
-  city: 'City is required',
-  state: 'State is required',
-  zip: 'Zip code is required',
-  country: 'Country is required',
-  phone: 'Phone number is required',
-  email: 'Email is required',
+  name: 'Name is a required field.',
+  address1: 'Address is a required field.',
+  city: 'City is a required field.',
+  state: 'State is a required field.',
+  zip: 'Zip Code is a required field.',
+  // country: '',
+  phone: 'Phone is a required field.',
+  // email: '',
 };
 
 joiValidationDecorator(
@@ -26,9 +26,9 @@ joiValidationDecorator(
     city: joi.string().required(),
     state: joi.string().required(),
     zip: joi.string().required(),
-    country: joi.string().required(),
+    // country: joi.string().required(),
     phone: joi.string().required(),
-    email: joi.string().required(),
+    // email: joi.string().required(),
   }),
   undefined,
   PetitionerPrimaryContact.errorToMessageMap,

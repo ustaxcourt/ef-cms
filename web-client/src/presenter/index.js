@@ -11,7 +11,7 @@ import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoLogInSequence from './sequences/gotoLogInSequence';
+import gotoLoginSequence from './sequences/gotoLoginSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
@@ -29,7 +29,7 @@ import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
-import submitLogInSequence from './sequences/submitLogInSequence';
+import submitLoginSequence from './sequences/submitLoginSequence';
 import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import submitRecallPetitionFromIRSHoldingQueueSequence from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
@@ -82,7 +82,7 @@ export default {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
-    gotoLogInSequence,
+    gotoLoginSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
@@ -99,7 +99,7 @@ export default {
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
-    submitLogInSequence,
+    submitLoginSequence,
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
