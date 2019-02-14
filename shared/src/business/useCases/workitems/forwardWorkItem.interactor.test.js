@@ -52,7 +52,11 @@ describe('forwardWorkItem', () => {
         getWorkItemById: async () => mockWorkItem,
         saveWorkItem: async ({ workItemToSave }) => workItemToSave,
         getUserById: () => {
-          return { userId: 'docketclerk' };
+          return {
+            userId: 'docketclerk',
+            role: 'docketclerk',
+            name: 'Test Docketclerk',
+          };
         },
       }),
       getCurrentUser: () => ({

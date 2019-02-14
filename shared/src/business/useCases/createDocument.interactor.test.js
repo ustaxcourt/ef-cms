@@ -46,7 +46,11 @@ describe('createDocument', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'respondent' });
+        return new User({
+          userId: 'respondent',
+          role: 'respondent',
+          name: 'Test Respondent',
+        });
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
@@ -104,7 +108,7 @@ describe('createDocument', () => {
     });
   });
 
-  it('should create a document when a use is not a respondent', async () => {
+  it('should create a document when a user is not a respondent', async () => {
     const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
     applicationContext = {
       getPersistenceGateway: () => {
@@ -117,7 +121,11 @@ describe('createDocument', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer', role: 'petitioner' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
@@ -144,7 +152,7 @@ describe('createDocument', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
           filedBy: 'petitioner',
-          userId: 'taxpayer', role: 'petitioner',
+          userId: 'taxpayer',
           workItems: [
             {
               assigneeId: null,
@@ -165,7 +173,7 @@ describe('createDocument', () => {
                   message: 'A Answer filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                   sentBy: 'Test Taxpayer',
-                  userId: 'taxpayer', role: 'petitioner',
+                  userId: 'taxpayer',
                 },
               ],
             },
