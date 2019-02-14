@@ -67,7 +67,12 @@ export default connect(
           <div className="blue-container">
             <div className="usa-grid-full">
               <div className="usa-width-one-third">
-                <div className="usa-form-group">
+                <div
+                  className={
+                    'usa-form-group ' +
+                    (validationErrors.petitionFile ? 'usa-input-error' : '')
+                  }
+                >
                   <label
                     htmlFor="petition-file"
                     className={
@@ -93,6 +98,9 @@ export default connect(
                       });
                     }}
                   />
+                  <div className="usa-input-error-message beneath">
+                    {validationErrors.petitionFile}
+                  </div>
                 </div>
               </div>
               <div className="usa-width-two-thirds">
@@ -303,7 +311,12 @@ export default connect(
             <h3>Did you receive a notice from the IRS?</h3>
             <div className="blue-container">
               <h3>IRS Notice</h3>
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.caseType ? 'usa-input-error' : '')
+                }
+              >
                 <fieldset>
                   <legend>Type of Notice</legend>
                   <select
@@ -325,8 +338,16 @@ export default connect(
                     ))}
                   </select>
                 </fieldset>
+                <div className="usa-input-error-message beneath">
+                  {validationErrors.caseType}
+                </div>
               </div>
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                }
+              >
                 <fieldset>
                   <legend id="date-of-notice-legend">Date of Notice</legend>
                   <div className="usa-date-of-birth">
@@ -393,6 +414,9 @@ export default connect(
                         }}
                       />
                     </div>
+                    <div className="usa-input-error-message beneath">
+                      {validationErrors.irsNoticeDate}
+                    </div>
                   </div>
                 </fieldset>
               </div>
@@ -433,7 +457,12 @@ export default connect(
             </div>
           </div>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.procedureType ? 'usa-input-error' : '')
+              }
+            >
               <fieldset
                 id="procedure-type-radios"
                 className="usa-fieldset-inputs usa-sans"
@@ -463,7 +492,12 @@ export default connect(
               </fieldset>
             </div>
             {startCaseHelper.showSelectTrial && (
-              <div className="usa-form-group">
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+                }
+              >
                 <label htmlFor="preferred-trial-city" className="with-hint">
                   Select a Trial Location
                 </label>
@@ -510,6 +544,12 @@ export default connect(
                 </select>
               </div>
             )}
+            <div className="usa-input-error-message beneath">
+              {validationErrors.procedureType}
+            </div>
+            <div className="usa-input-error-message beneath">
+              {validationErrors.preferredTrialCity}
+            </div>
           </div>
           <h2>Review Your Information</h2>
           <p>
