@@ -27,6 +27,7 @@ export default connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    validationErrors: state.validationErrors,
   },
   function StartCase({
     caseTypes,
@@ -41,8 +42,9 @@ export default connect(
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
-    updateStartCaseFormValueSequence,
     updatePetitionValueSequence,
+    updateStartCaseFormValueSequence,
+    validationErrors,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -118,7 +120,7 @@ export default connect(
                     className="usa-fieldset-inputs usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
-                      I am filing this petition on behalf of&nbsp;…
+                      I am filing this petition on behalf of …
                     </legend>
                     <ul className="ustc-unstyled-list">
                       {filingTypes.map((filingType, idx) => (
@@ -528,7 +530,12 @@ export default connect(
               </li>
             </ol>
 
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.signature ? 'usa-input-error' : '')
+              }
+            >
               <legend>Review and Sign</legend>
               <input
                 id="signature"
@@ -545,6 +552,9 @@ export default connect(
                 Checking this box acknowledges that you’ve verified all
                 information is correct.
               </label>
+              <div className="usa-input-error-message beneath">
+                {validationErrors.signature}
+              </div>
             </div>
           </div>
           <button
