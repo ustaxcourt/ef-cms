@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint ./src && stylelint ./src/**/*.scss;",
     "test": "jest",
+    "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",
     "docker:lint": "./docker-lint.sh",
     "docker:shellcheck": "./docker-shellcheck.sh",
