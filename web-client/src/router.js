@@ -67,7 +67,7 @@ const router = {
         app.getSequence('gotoDashboardSequence')();
       } else {
         document.title = `Mock Login ${pageTitleSuffix}`;
-        app.getSequence('gotoLogInSequence')();
+        app.getSequence('gotoLoginSequence')();
       }
     });
     route(

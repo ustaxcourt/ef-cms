@@ -4,6 +4,6 @@ export default test => {
       key: 'name',
       value: 'seniorattorney',
     });
-    await test.runSequence('submitLogInSequence');
+    await test.runSequence('submitLoginSequence');
   });
 };

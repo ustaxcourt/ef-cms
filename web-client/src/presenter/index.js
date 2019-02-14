@@ -11,7 +11,7 @@ import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoLogInSequence from './sequences/gotoLogInSequence';
+import gotoLoginSequence from './sequences/gotoLoginSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
@@ -81,7 +81,7 @@ export default {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
-    gotoLogInSequence,
+    gotoLoginSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
