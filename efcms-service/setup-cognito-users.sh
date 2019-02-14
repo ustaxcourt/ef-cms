@@ -34,14 +34,14 @@ createAccount() {
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${token}" \
     --request POST \
-    --data "$(generate_post_data $email $role)" \
-    "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/v1/users"
+    --data "$(generate_post_data "${email}" "${role}")" \
+      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/v1/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
     --client-id "${CLIENT_ID}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}",PASSWORD="Testing1234$") 
+    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"') 
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -50,7 +50,7 @@ createAccount() {
       --user-pool-id  "${USER_POOL_ID}" \
       --client-id "${CLIENT_ID}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses NEW_PASSWORD="Testing1234$",USERNAME="${email}" \
+      --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
       --session "${session}"
   fi
 } 
@@ -58,15 +58,15 @@ createAccount() {
 createManyAccounts() {
   emailPrefix=$1
   role=$1
-  for i in $(seq 1 5);
+  for i in $(seq 1 1);
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}"
   done
 }
 
 createManyAccounts "petitioner"
-createManyAccounts "petitionsclerk"
-createManyAccounts "docketclerk"
-createManyAccounts "seniorattorney"
-createManyAccounts "intakeclerk"
-createManyAccounts "respondent"
+# createManyAccounts "petitionsclerk"
+# createManyAccounts "docketclerk"
+# createManyAccounts "seniorattorney"
+# createManyAccounts "intakeclerk"
+# createManyAccounts "respondent"
