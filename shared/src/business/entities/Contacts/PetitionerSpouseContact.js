@@ -8,14 +8,14 @@ function PetitionerSpouseContact(raw) {
 }
 
 PetitionerSpouseContact.errorToMessageMap = {
-  name: 'Name is required',
-  address1: 'Address is required',
-  city: 'City is required',
-  state: 'State is required',
-  zip: 'Zip code is required',
+  name: 'Name is a required field.',
+  address1: 'Address is a required field.',
+  city: 'City is a required field.',
+  state: 'State is a required field.',
+  zip: 'Zip code is a required field.',
   // country: 'Country is required',
-  phone: 'Phone number is required',
-  email: 'Email is required',
+  phone: 'Phone is a required field.',
+  email: 'Email is a required field.',
 };
 
 joiValidationDecorator(
