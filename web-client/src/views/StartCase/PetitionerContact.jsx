@@ -8,8 +8,13 @@ export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
-  function PetitionerContact({ form, updateFormValueSequence }) {
+  function PetitionerContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <div className="usa-form-group">
         <h3>Tell Us About Yourself</h3>
@@ -29,6 +34,11 @@ export default connect(
                 });
               }}
             />
+            {validationErrors.contactPrimary && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.name}
+              </div>
+            )}
           </div>
           <Address type="contactPrimary" />
           <Email type="contactPrimary" />
