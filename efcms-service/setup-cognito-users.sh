@@ -35,8 +35,7 @@ createAccount() {
     --header "Authorization: Bearer ${token}" \
     --request POST \
     --data "$(generate_post_data $email $role)" \
-    # "http://localhost:3000/v1/users"
-   "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/v1/users"
+    "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/v1/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -46,12 +45,14 @@ createAccount() {
 
   session=$(echo "${response}" | jq -r ".Session")
 
-  aws cognito-idp admin-respond-to-auth-challenge \
-    --user-pool-id  "${USER_POOL_ID}" \
-    --client-id "${CLIENT_ID}" \
-    --challenge-name NEW_PASSWORD_REQUIRED \
-    --challenge-responses NEW_PASSWORD="Testing1234$",USERNAME="${email}" \
-    --session "${session}"
+  if [ "$session" != "null" ]; then
+    aws cognito-idp admin-respond-to-auth-challenge \
+      --user-pool-id  "${USER_POOL_ID}" \
+      --client-id "${CLIENT_ID}" \
+      --challenge-name NEW_PASSWORD_REQUIRED \
+      --challenge-responses NEW_PASSWORD="Testing1234$",USERNAME="${email}" \
+      --session "${session}"
+  fi
 } 
 
 createManyAccounts() {

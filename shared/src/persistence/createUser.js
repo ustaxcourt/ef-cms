@@ -8,7 +8,7 @@ exports.createUser = async ({ user, applicationContext }) => {
   });
   await cognito
     .adminCreateUser({
-      UserPoolId: process.env.USER_POOL_ID || 'us-east-1_7uRkF0Axn',
+      UserPoolId: process.env.USER_POOL_ID,
       Username: user.email,
       MessageAction: 'SUPPRESS',
       TemporaryPassword: user.password,
