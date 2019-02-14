@@ -4,6 +4,6 @@ export default (test, role = 'petitionsclerk') => {
       key: 'name',
       value: role,
     });
-    await test.runSequence('submitLogInSequence');
+    await test.runSequence('submitLoginSequence');
   });
 };

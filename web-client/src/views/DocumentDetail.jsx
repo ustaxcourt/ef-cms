@@ -23,6 +23,7 @@ class DocumentDetail extends React.Component {
       showModal,
       submitCompleteSequence,
       submitForwardSequence,
+      token,
       updateCompleteFormValueSequence,
       updateCurrentTabSequence,
       updateForwardFormValueSequence,
@@ -437,7 +438,7 @@ class DocumentDetail extends React.Component {
                 }`}
                 src={`${baseUrl}/documents/${
                   helper.formattedDocument.documentId
-                }/documentDownloadUrl`}
+                }/documentDownloadUrl?token=${token}`}
               />
             </div>
           </div>
@@ -464,6 +465,7 @@ DocumentDetail.propTypes = {
   showModal: PropTypes.string,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
+  token: PropTypes.string,
   updateCompleteFormValueSequence: PropTypes.func,
   updateCurrentTabSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
@@ -483,6 +485,7 @@ export default connect(
     showModal: state.showModal,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
+    token: state.token,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,

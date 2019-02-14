@@ -6,13 +6,12 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ applicationContext, docketNumber, userId }) => {
-  const userToken = userId; //TODO refactor for jwt
+exports.getCase = async ({ applicationContext, docketNumber }) => {
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases/${docketNumber}`, {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
     });
   return response.data;

@@ -1,4 +1,4 @@
-const { getAuthHeader } = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
@@ -10,10 +10,9 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.get = event =>
   handle(() => {
-    const userId = getAuthHeader(event);
-    const applicationContext = createApplicationContext({ userId });
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().getCase({
-      userId: getAuthHeader(event),
       caseId: event.pathParameters.caseId,
       applicationContext,
     });

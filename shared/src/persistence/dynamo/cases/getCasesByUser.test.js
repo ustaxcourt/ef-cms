@@ -14,6 +14,11 @@ const applicationContext = {
   isAuthorizedForWorkItems: () => true,
 };
 
+const user = {
+  userId: 'taxpayer',
+  role: 'petitioner',
+};
+
 describe('getCasesByUser', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
@@ -64,14 +69,14 @@ describe('getCasesByUser', () => {
 
   it('should strip the pk and sk from the results', async () => {
     const result = await getCasesByUser({
-      userId: 'taxpayer',
+      user,
       applicationContext,
     });
     expect(result).to.deep.equal([{ caseId: '123', status: 'New' }]);
   });
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await getCasesByUser({
-      userId: 'taxpayer',
+      user,
       applicationContext,
     });
     expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([

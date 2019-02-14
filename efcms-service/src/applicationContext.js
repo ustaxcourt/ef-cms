@@ -9,6 +9,12 @@ const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
+  getUserById,
+} = require('ef-cms-shared/src/persistence/getUserById');
+const {
+  createUser,
+} = require('ef-cms-shared/src/persistence/createUser');
+const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -118,6 +124,9 @@ const {
 const {
   recallPetitionFromIRSHoldingQueue
 } = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
+const {
+  createUser: createUserUC
+} = require('ef-cms-shared/src/business/useCases/users/createUser.interactor');
 
 const {
   forwardWorkItem
@@ -147,10 +156,9 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
-module.exports = ({ userId } = {}) => {
-  if (userId) {
-    setCurrentUser(new User({ userId }));
-  }
+module.exports = (appContextUser = {}) => {
+  setCurrentUser(new User(appContextUser));
+
   return {
     getStorageClient: () => {
       return new S3({
@@ -181,6 +189,8 @@ module.exports = ({ userId } = {}) => {
         uploadPdf,
         getUploadPolicy,
         getDownloadPolicyUrl,
+        getUserById,
+        createUser,
 
         // work items
         getWorkItemsBySection,
@@ -211,10 +221,11 @@ module.exports = ({ userId } = {}) => {
     },
     getCurrentUser,
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
+    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
     getUseCases: () => {
       return {
         createCase,
+        createUser: createUserUC,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,

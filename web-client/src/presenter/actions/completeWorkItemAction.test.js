@@ -5,6 +5,10 @@ import presenter from '..';
 import completeWorkItem from './completeWorkItemAction';
 
 presenter.providers.applicationContext = {
+  getCurrentUser: () => ({
+    userId: 'docketclerk',
+    name: 'Docket Clerk',
+  }),
   getUseCases: () => ({
     updateWorkItem: async () => {
       return null;

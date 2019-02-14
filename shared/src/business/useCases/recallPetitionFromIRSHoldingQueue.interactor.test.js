@@ -25,6 +25,7 @@ const MOCK_WORK_ITEMS = [
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         message: 'Petition ready for review',
         userId: 'taxpayer',
+        role: 'petitioner',
         sentBy: 'Petitioner',
         sentTo: null,
       },
@@ -57,7 +58,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
     };
   });
@@ -74,7 +75,7 @@ describe('Recall petition from IRS Holding Queue', () => {
   it('throws unauthorized error if user is unauthorized', async () => {
     let error;
     applicationContext.getCurrentUser = () => {
-      return new User({ userId: 'taxpayer' });
+      return new User({ userId: 'taxpayer', role: 'petitioner' });
     };
 
     try {
@@ -102,7 +103,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
     };
     let error;
@@ -131,7 +132,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
       getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk' });
+        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
       },
     };
     let error;
