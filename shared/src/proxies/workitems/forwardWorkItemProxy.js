@@ -7,7 +7,6 @@
  * @returns {Promise<*>}
  */
 exports.forwardWorkItem = async ({
-  userId,
   workItemId,
   assigneeId,
   message,
