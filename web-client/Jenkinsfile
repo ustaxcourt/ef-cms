@@ -38,15 +38,16 @@ pipeline {
         }
       }
     }
-    stage('Audit') {
-      steps {
-        script {
-          dir('web-client') {
-            sh "./docker-audit.sh"
-          }
-        }
-      }
-    }
+    // TODO: temp remove until dynamodb-local can be replaced
+    // stage('Audit') {
+    //   steps {
+    //     script {
+    //       dir('web-client') {
+    //         sh "./docker-audit.sh"
+    //       }
+    //     }
+    //   }
+    // }
     stage('Lint') {
       steps {
         script {
