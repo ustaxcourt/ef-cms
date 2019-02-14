@@ -12,7 +12,7 @@ exports.filePetition = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user.userId, PETITION)) {
+  if (!isAuthorized(user, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

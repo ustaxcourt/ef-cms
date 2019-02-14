@@ -1,5 +1,3 @@
-const User = require('../business/entities/User');
-
 exports.CASE_METADATA = 'caseMetadata';
 exports.FILE_ANSWER = 'fileAnswer';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
@@ -63,15 +61,9 @@ const AUTHORIZATION_MAP = {
  * @param owner
  * @returns {boolean}
  */
-exports.isAuthorized = (userId, action, owner) => {
-  if (userId && userId === owner) {
+exports.isAuthorized = (user, action, owner) => {
+  if (user.userId === owner) {
     return true;
-  }
-  let user;
-  try {
-    user = new User({ userId });
-  } catch (err) {
-    return false;
   }
 
   const userRole = user.role;

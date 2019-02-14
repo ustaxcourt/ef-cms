@@ -95,7 +95,10 @@ exports.getAuthHeader = event => {
   let usernameTokenArray;
   const authorizationHeader =
     event.headers &&
-    (event.headers.Authorization || event.headers.authorization);
+    (event.headers.Authorization || event.headers.authorization)
+  if ((event.queryStringParameters || {}).token) {
+    return (event.queryStringParameters || {}).token;
+  }
   if (authorizationHeader) {
     usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {

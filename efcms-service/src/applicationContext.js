@@ -147,8 +147,8 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
-module.exports = (user = {}) => {
-  setCurrentUser(new User(user));
+module.exports = (appContextUser = {}) => {
+  setCurrentUser(new User(appContextUser));
 
   return {
     getStorageClient: () => {
@@ -210,7 +210,7 @@ module.exports = (user = {}) => {
     },
     getCurrentUser,
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(user.userId, WORKITEM),
+    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
     getUseCases: () => {
       return {
         createCase,

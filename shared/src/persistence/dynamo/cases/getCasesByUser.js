@@ -4,10 +4,10 @@ const {
   stripWorkItems,
 } = require('../../awsDynamoPersistence');
 
-exports.getCasesByUser = async ({ userId, applicationContext }) => {
+exports.getCasesByUser = async ({ user, applicationContext }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
-    key: userId,
+    key: user.userId,
     type: 'case',
     isVersioned: true,
   });

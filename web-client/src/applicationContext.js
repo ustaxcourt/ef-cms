@@ -46,7 +46,6 @@ import decorateWithTryCatch from './tryCatchDecorator';
 
 let user;
 
-
 const getCurrentUser = () => {
   return user;
 };

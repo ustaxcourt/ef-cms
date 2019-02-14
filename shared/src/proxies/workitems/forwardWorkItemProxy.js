@@ -13,7 +13,6 @@ exports.forwardWorkItem = async ({
   message,
   applicationContext,
 }) => {
-  const userToken = userId;
   const response = await applicationContext.getHttpClient().put(
     `${applicationContext.getBaseUrl()}/workitems/${workItemId}?interactorName=forwardWorkItem`,
     {
@@ -22,7 +21,7 @@ exports.forwardWorkItem = async ({
     },
     {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
     },
   );
