@@ -8,6 +8,11 @@ exports.getDownloadPolicyUrl = async ({ documentId, applicationContext }) => {
     .getHttpClient()
     .get(
       `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
+      {
+        headers: {
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
+      },
     );
   return response.data;
 };

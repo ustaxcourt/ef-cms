@@ -1,8 +1,6 @@
-import { state } from 'cerebral';
-
-export default async ({ applicationContext, get }) => {
+export default async ({ applicationContext }) => {
   const caseTypes = await applicationContext.getUseCases().getCaseTypes({
-    userId: get(state.user.userId),
+    applicationContext,
   });
   return { caseTypes };
 };

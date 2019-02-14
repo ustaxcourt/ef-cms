@@ -7,22 +7,32 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('Send petition to IRS', () => {
   let applicationContext;
-
-  applicationContext = {
-    getPersistenceGateway: () => {
-      return {
-        getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
-        saveCase: () => Promise.resolve(MOCK_CASE),
-      };
-    },
-    environment: { stage: 'local' },
-    irsGateway: {
-      sendToIRS: () => Promise.resolve(),
-    },
-    getUseCases: () => ({ getCase }),
-  };
+  beforeEach(() => {
+    applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
+      environment: { stage: 'local' },
+      irsGateway: {
+        sendToIRS: () => Promise.resolve(),
+      },
+      getUseCases: () => ({ getCase }),
+    };
+  });
 
   it('throws unauthorized error if user is unauthorized', async () => {
+    applicationContext.getCurrentUser = () => {
+      return { userId: 'someuser' };
+    };
     let error;
     try {
       await sendPetitionToIRS({
@@ -59,12 +69,17 @@ describe('Send petition to IRS', () => {
       },
       environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
     };
     let error;
     try {
       await sendPetitionToIRS({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        userId: 'petitionsclerk',
         applicationContext,
       });
     } catch (err) {
@@ -92,11 +107,16 @@ describe('Send petition to IRS', () => {
         sendToIRS: stub,
       },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
     };
 
     const irsSendDate = await sendPetitionToIRS({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      userId: 'petitionsclerk',
       applicationContext,
     });
     assert.ok(irsSendDate);
@@ -119,12 +139,17 @@ describe('Send petition to IRS', () => {
         sendToIRS: stub,
       },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
     };
     let error;
     try {
       await sendPetitionToIRS({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        userId: 'petitionsclerk',
         applicationContext,
       });
     } catch (err) {
@@ -148,12 +173,17 @@ describe('Send petition to IRS', () => {
         sendToIRS: () => {},
       },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
     };
     let error;
     try {
       await sendPetitionToIRS({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'petitionsclerk',
         applicationContext,
       });
     } catch (err) {
@@ -176,12 +206,17 @@ describe('Send petition to IRS', () => {
         sendToIRS: () => null,
       },
       getUseCases: () => ({ getCase }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
     };
     let error;
     try {
       await sendPetitionToIRS({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'petitionsclerk',
         applicationContext,
       });
     } catch (err) {
