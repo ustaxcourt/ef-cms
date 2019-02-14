@@ -4,7 +4,7 @@ describe('Get users in section', () => {
   describe('for docketclerk', () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'docketclerk' };
+        return { userId: 'docketclerk', role: 'docketclerk' };
       },
     };
 
@@ -33,7 +33,7 @@ describe('Get users in section', () => {
   describe('for petitionsclerk', () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'petitionsclerk' };
+        return { userId: 'petitionsclerk', role: 'petitionsclerk' };
       },
     };
 
@@ -50,7 +50,7 @@ describe('Get users in section', () => {
   describe('for a different role', () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'seniorattorney' };
+        return { userId: 'seniorattorney', role: 'seniorattorney' };
       },
     };
 

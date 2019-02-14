@@ -7,6 +7,7 @@ describe('getSentWorkItemsForSection', () => {
     const applicationContext = {
       getCurrentUser: () => ({
         userId: 'taxpayer',
+        role: 'petitioner',
         name: 'Tax Payer',
       }),
       environment: { stage: 'local' },
@@ -27,6 +28,7 @@ describe('getSentWorkItemsForSection', () => {
     const applicationContext = {
       getCurrentUser: () => ({
         userId: 'petitionsclerk',
+        role: 'petitionsclerk',
         name: 'Tax Payer',
       }),
       getPersistenceGateway: () => ({

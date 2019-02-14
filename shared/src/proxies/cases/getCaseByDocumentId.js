@@ -6,17 +6,12 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getCaseByDocumentId = async ({
-  applicationContext,
-  documentId,
-  userId,
-}) => {
-  const userToken = userId;
+exports.getCaseByDocumentId = async ({ applicationContext, documentId }) => {
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases?documentId=${documentId}`, {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
     });
   if (response.data.length && response.data.length === 1) {

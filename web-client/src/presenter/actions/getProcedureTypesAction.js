@@ -1,10 +1,8 @@
-import { state } from 'cerebral';
-
-export default async ({ applicationContext, get }) => {
+export default async ({ applicationContext }) => {
   const procedureTypes = await applicationContext
     .getUseCases()
     .getProcedureTypes({
-      userId: get(state.user.userId),
+      applicationContext,
     });
   return { procedureTypes };
 };

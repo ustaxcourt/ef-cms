@@ -94,7 +94,7 @@ export default connect(
                   : '')
               }
             >
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
+              <label htmlFor="secondaryName">Spouse’s Name</label>
               <input
                 id="secondaryName"
                 type="text"

@@ -18,14 +18,14 @@
   },
   "urls": [
     "http://localhost:1234/",
-    "http://localhost:1234/log-in",
-    "http://localhost:1234/log-in?token=taxpayer&path=/",
+    "http://localhost:1234/mock-login",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/",
 
-    "http://localhost:1234/log-in?token=taxpayer&path=/before-starting-a-case",
-    "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/before-starting-a-case",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case",
     {
       "notes": "expose all hidden elements on start-a-case",
-      "url": "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
       "actions": [
         "wait for button.case-difference to be visible",
         "click element button.case-difference",
@@ -36,27 +36,27 @@
       ]
     },
 
-    "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-18",
 
-    "http://localhost:1234/log-in?token=petitionsclerk&path=/",
-    "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-18",
     {
       "notes": "checks a11y of case information tab panel",
-      "url": "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/102-18&info=can-input-pay-id",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18&info=can-input-pay-id",
       "actions": [
         "wait for #case-info-tab to be visible",
         "click element #case-info-tab"
       ]
     },
 
-    "http://localhost:1234/log-in?token=intakeclerk&path=/",
-    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=intakeclerk&path=/",
+    "http://localhost:1234/mock-login?token=intakeclerk&path=/case-detail/101-18",
 
-    "http://localhost:1234/log-in?token=respondent&path=/",
-    "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=respondent&path=/",
+    "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-18",
     {
       "notes": "checks a11y of revealed form for filing document",
-      "url": "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18&info=can-file-document",
+      "url": "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-18&info=can-file-document",
       "actions": [
         "wait for #button-file-document to be visible",
         "click element #button-file-document",
@@ -64,10 +64,10 @@
       ]
     },
 
-    "http://localhost:1234/log-in?token=docketclerk&path=/",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/",
     {
       "notes": "checks a11y of section queue tab panel, may become brittle if element IDs change",
-      "url": "http://localhost:1234/log-in?token=docketclerk&path=/&info=section-queue-tab",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/&info=section-queue-tab",
       "actions": [
         "wait for #tab-work-queue to be visible",
         "click element #tab-work-queue",
@@ -77,11 +77,11 @@
         "wait for td.action-bar to be visible"
       ]
     },
-    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
     {
       "notes": "checks a11y of forward form",
-      "url": "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
       "actions": [
         "wait for #tab-pending-messages to be visible",
         "click element #tab-pending-messages",
@@ -91,9 +91,9 @@
       ]
     },
 
-    "http://localhost:1234/log-in?token=seniorattorney&path=/",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
     "http://localhost:1234/request-for-page-that-doesnt-exist"
   ]
 }

@@ -6,7 +6,7 @@ export default (test, token = 'docketclerk') => {
       key: 'name',
       value: token,
     });
-    await test.runSequence('submitLogInSequence');
+    await test.runSequence('submitLoginSequence');
     expect(test.getState('user.userId')).toEqual(token);
     expect(applicationContext.getCurrentUser()).toBeDefined();
     expect(applicationContext.getCurrentUser().userId).toEqual(token);

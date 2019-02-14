@@ -6,7 +6,7 @@ export default test => {
       key: 'name',
       value: 'taxpayer',
     });
-    await test.runSequence('submitLogInSequence');
+    await test.runSequence('submitLoginSequence');
     expect(test.getState('user.userId')).toEqual('taxpayer');
     expect(applicationContext.getCurrentUser()).toBeDefined();
     expect(applicationContext.getCurrentUser().userId).toEqual('taxpayer');
