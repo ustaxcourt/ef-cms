@@ -6,7 +6,8 @@ const Message = require('./Message');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  userId: 'taxpayer', role: 'petitioner',
+  userId: 'taxpayer',
+  role: 'petitioner',
 };
 
 describe('Document entity', () => {
