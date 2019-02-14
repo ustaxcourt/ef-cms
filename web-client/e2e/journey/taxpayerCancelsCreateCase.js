@@ -12,7 +12,7 @@ export default test => {
     });
     expect(helper.trialCities.length).toBe(0);
     expect(test.getState('showModal')).toBeFalsy();
-    expect(test.getState('form')).toEqual({});
+    expect(test.getState('form')).toEqual({ contactPrimary: {} });
     await test.runSequence('getTrialCitiesSequence', {
       value: 'Regular',
     });

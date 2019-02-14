@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 const persistence = require('../../awsDynamoPersistence');
 
 exports.syncDocuments = async ({

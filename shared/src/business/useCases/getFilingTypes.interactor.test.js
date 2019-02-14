@@ -24,7 +24,7 @@ describe('Get case filing types', () => {
     const filingTypes = await getFilingTypes({
       applicationContext,
     });
-    expect(filingTypes.length).toEqual(1);
+    expect(filingTypes.length).toEqual(4);
     expect(filingTypes[0]).toEqual('Myself');
     let error;
     try {

@@ -12,6 +12,9 @@ const {
   getUserById,
 } = require('ef-cms-shared/src/persistence/getUserById');
 const {
+  createUser,
+} = require('ef-cms-shared/src/persistence/createUser');
+const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -121,6 +124,9 @@ const {
 const {
   recallPetitionFromIRSHoldingQueue
 } = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
+const {
+  createUser: createUserUC
+} = require('ef-cms-shared/src/business/useCases/users/createUser.interactor');
 
 const {
   forwardWorkItem
@@ -184,6 +190,7 @@ module.exports = (appContextUser = {}) => {
         getUploadPolicy,
         getDownloadPolicyUrl,
         getUserById,
+        createUser,
 
         // work items
         getWorkItemsBySection,
@@ -218,6 +225,7 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         createCase,
+        createUser: createUserUC,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,

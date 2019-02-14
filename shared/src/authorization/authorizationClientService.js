@@ -8,6 +8,7 @@ exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
+exports.CREATE_USER = 'createUser';
 
 const AUTHORIZATION_MAP = {
   docketclerk: [
@@ -51,6 +52,7 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
   ],
+  admin: [exports.CREATE_USER],
   taxpayer: [exports.PETITION],
 };
 
