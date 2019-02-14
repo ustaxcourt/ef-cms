@@ -82,7 +82,11 @@ describe('assignWorkItems', () => {
   it('be successful when all validation passed', async () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'docketclerk', role: 'docketclerk' });
+        return new User({
+          userId: 'docketclerk1',
+          role: 'docketclerk',
+          name: 'Test Docketclerk',
+        });
       },
       getPersistenceGateway: () => {
         return {
