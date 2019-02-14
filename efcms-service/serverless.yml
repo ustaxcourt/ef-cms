@@ -75,6 +75,15 @@ custom:
       - path: 'v1/cases'
         description: 'Path used for creating a case.'
     models:
+      - name: 'user'
+        description: 'a user object'
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              description: the userId
       - name: 'case'
         description: 'a case response'
         contentType: 'application/json'
@@ -298,6 +307,7 @@ provider:
   s3Endpoint: s3.${opt:region}.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
+  userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
@@ -310,8 +320,14 @@ provider:
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
+    USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
 
   iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - cognito-idp:AdminCreateUser
+      Resource:
+        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
       Action:
         - 's3:*'
@@ -469,7 +485,6 @@ functions:
               - statusCode: '422'
                 responseModels:
                   'application/json': 'unprocessableEntityError'
-
 
   createCase:
     handler: src/cases/createCaseLambda.create
@@ -685,3 +700,26 @@ functions:
           path: v1/swagger.json
           method: get
           cors: true
+
+  createUser:
+    handler: src/users/createUserLambda.post
+    events:
+      - http:
+          path: v1/users
+          method: post
+          cors: true
+          documentation:
+            summary: creates a user
+            tags:
+              - user
+            description: >
+              creates a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'user created'
+                responseModels:
+                  'application/json': user
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'

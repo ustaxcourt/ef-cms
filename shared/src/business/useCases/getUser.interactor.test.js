@@ -7,15 +7,16 @@ describe('Get user', () => {
     expect(user.userId).toEqual('taxpayer');
     expect(user.role).toEqual('petitioner');
   });
+
   it('not found', async () => {
-    let result = '😡';
+    let result = 'error';
     try {
-      await getUser('someuser');
+      await getUser({ userId: 'someuser' });
     } catch (e) {
       if (e instanceof UnknownUserError) {
-        result = '😃';
+        result = 'error';
       }
     }
-    expect(result).toEqual('😃');
+    expect(result).toEqual('error');
   });
 });

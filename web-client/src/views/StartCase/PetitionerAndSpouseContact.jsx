@@ -8,8 +8,13 @@ export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
-  function PetitionerAndSpouseContact({ form, updateFormValueSequence }) {
+  function PetitionerAndSpouseContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
@@ -30,6 +35,11 @@ export default connect(
                   });
                 }}
               />
+              {validationErrors.contactPrimary && (
+                <div className="usa-input-error-message beneath">
+                  {validationErrors.contactPrimary.name}
+                </div>
+              )}
             </div>
             <Address type="contactPrimary" />
             <Email type="contactPrimary" />
@@ -50,13 +60,18 @@ export default connect(
                 }}
               />
             </div>
+            {validationErrors.contactPrimary && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
+            )}
           </div>
         </div>
         <div className="usa-form-group">
           <h3>Tell Us About Your Spouse</h3>
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
+              <label htmlFor="secondaryName">Spouse’s Name</label>
               <input
                 id="secondaryName"
                 type="text"

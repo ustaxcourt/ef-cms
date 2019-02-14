@@ -31,7 +31,11 @@ exports.uploadPdf = async ({ applicationContext, policy, file }) => {
 const getUploadPolicy = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/documents/uploadPolicy`);
+    .get(`${applicationContext.getBaseUrl()}/documents/uploadPolicy`, {
+      headers: {
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+      },
+    });
   return response.data;
 };
 
@@ -42,6 +46,11 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
     .getHttpClient()
     .get(
       `${applicationContext.getBaseUrl()}/documents/${documentId}/downloadPolicyUrl`,
+      {
+        headers: {
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
+      },
     );
   return url;
 };

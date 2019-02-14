@@ -18,16 +18,19 @@ const MOCK_CASE = {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       userId: 'taxpayer',
+      role: 'petitioner',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       userId: 'taxpayer',
+      role: 'petitioner',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       userId: 'taxpayer',
+      role: 'petitioner',
     },
   ],
 };
@@ -42,6 +45,12 @@ describe('updateCase', () => {
           saveCase: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
@@ -49,7 +58,6 @@ describe('updateCase', () => {
       await updateCase({
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
-        userId: 'petitionsclerk',
         petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
@@ -69,6 +77,12 @@ describe('updateCase', () => {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
@@ -76,7 +90,6 @@ describe('updateCase', () => {
       await updateCase({
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'documents'),
-        userId: 'petitionsclerk',
         petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
@@ -98,6 +111,12 @@ describe('updateCase', () => {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let updatedCase;
@@ -105,7 +124,6 @@ describe('updateCase', () => {
     updatedCase = await updateCase({
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
-      userId: 'petitionsclerk',
       petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
@@ -130,13 +148,18 @@ describe('updateCase', () => {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
 
     const updatedCase = await updateCase({
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
-      userId: 'petitionsclerk',
       petitioners: [{ name: 'Test Taxpayer' }],
       applicationContext,
     });
@@ -153,6 +176,11 @@ describe('updateCase', () => {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
@@ -160,7 +188,6 @@ describe('updateCase', () => {
       await updateCase({
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
-        userId: 'someuser',
         petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
@@ -171,11 +198,17 @@ describe('updateCase', () => {
     expect(error.message).toContain('Unauthorized for update case');
   });
 
-  it('should throw an error if the user is unauthorized to update a case', async () => {
+  it('should throw an error if the user is unauthorized to update a case part deux', async () => {
     applicationContext = {
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+          role: 'nope',
         };
       },
       environment: { stage: 'local' },
@@ -185,7 +218,6 @@ describe('updateCase', () => {
       await updateCase({
         caseId: '123',
         caseToUpdate: MOCK_CASE,
-        userId: 'someuser',
         applicationContext,
       });
     } catch (err) {

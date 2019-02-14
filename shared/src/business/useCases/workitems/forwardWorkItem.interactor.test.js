@@ -21,9 +21,13 @@ describe('forwardWorkItem', () => {
       getPersistenceGateway: () => ({
         getWorkItemById: async () => mockWorkItem,
         saveWorkItem: async ({ workItemToSave }) => workItemToSave,
+        getUserById: () => {
+          return { userId: 'docketclerk' };
+        },
       }),
       getCurrentUser: () => ({
         userId: 'taxpayer',
+        role: 'petitioner',
         name: 'Tax Payer',
       }),
       environment: { stage: 'local' },
@@ -47,9 +51,17 @@ describe('forwardWorkItem', () => {
       getPersistenceGateway: () => ({
         getWorkItemById: async () => mockWorkItem,
         saveWorkItem: async ({ workItemToSave }) => workItemToSave,
+        getUserById: () => {
+          return {
+            userId: 'docketclerk',
+            role: 'docketclerk',
+            name: 'Test Docketclerk',
+          };
+        },
       }),
       getCurrentUser: () => ({
         userId: 'docketclerk',
+        role: 'docketclerk',
         name: 'Docket Clerk',
       }),
       environment: { stage: 'local' },

@@ -19,12 +19,13 @@ const {
  * @returns {*}
  */
 exports.updateWorkItem = async ({
-  userId,
   workItemToUpdate,
   workItemId,
   applicationContext,
 }) => {
-  if (!isAuthorized(userId, WORKITEM)) {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for update workItem');
   }
 
@@ -32,8 +33,12 @@ exports.updateWorkItem = async ({
     throw new UnprocessableEntityError();
   }
 
-  const user = new User({ userId: workItemToUpdate.assigneeId });
-  workItemToUpdate.assigneeName = user.name;
+  const otherUser = new User(
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ userId: workItemToUpdate.assigneeId }),
+  );
+  workItemToUpdate.assigneeName = otherUser.name;
 
   const updatedWorkItem = new WorkItem(workItemToUpdate)
     .validate()

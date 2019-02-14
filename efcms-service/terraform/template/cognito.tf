@@ -63,6 +63,8 @@ resource "aws_cognito_user_pool" "pool" {
 resource "aws_cognito_user_pool_client" "client" {
   name = "client"
 
+  explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
+
   generate_secret     = false
   refresh_token_validity = 30
   allowed_oauth_flows_user_pool_client = true

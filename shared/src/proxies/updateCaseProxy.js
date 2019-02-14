@@ -6,8 +6,7 @@
  * @param userId
  * @returns {Promise<*>}
  */
-exports.updateCase = async ({ applicationContext, caseToUpdate, userId }) => {
-  const userToken = userId; // TODO: refactor for jwt
+exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const response = await applicationContext
     .getHttpClient()
     .put(
@@ -15,7 +14,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate, userId }) => {
       caseToUpdate,
       {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
         },
       },
     );

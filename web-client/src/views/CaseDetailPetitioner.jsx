@@ -10,6 +10,7 @@ import PartyInformation from './PartyInformation';
 export default connect(
   {
     baseUrl: state.baseUrl,
+    token: state.token,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     helper: state.caseDetailHelper,
@@ -19,6 +20,7 @@ export default connect(
   },
   function CaseDetail({
     baseUrl,
+    token,
     caseDetail,
     currentTab,
     helper,
@@ -185,7 +187,7 @@ export default connect(
                         <a
                           href={`${baseUrl}/documents/${
                             document.documentId
-                          }/documentDownloadUrl`}
+                          }/documentDownloadUrl?token=${token}`}
                           target="_blank"
                           rel="noreferrer noopener"
                           aria-label="View PDF"

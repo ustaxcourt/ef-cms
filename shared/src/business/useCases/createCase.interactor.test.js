@@ -32,14 +32,19 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getUseCases: () => ({
         getUser: () => ({
           address: '123',
           email: 'test@example.com',
-          name: 'test taxpayer',
+          name: 'Test Taxpayer',
           phone: '(123) 456-7890',
+          role: 'petitioner',
         }),
       }),
       environment: { stage: 'local' },
@@ -125,19 +130,9 @@ describe('createCase', () => {
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
-          addressLine1: '111 Orange St.',
-          addressLine2: 'Building 2',
-          barNumber: undefined,
-          city: 'Orlando',
-          email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
-          phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
-          state: 'FL',
-          token: 'taxpayer',
           userId: 'taxpayer',
-          zip: '37208',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
@@ -164,7 +159,11 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -245,19 +244,9 @@ describe('createCase', () => {
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
-          addressLine1: '111 Orange St.',
-          addressLine2: 'Building 2',
-          barNumber: undefined,
-          city: 'Orlando',
-          email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
-          phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
-          state: 'FL',
-          token: 'taxpayer',
           userId: 'taxpayer',
-          zip: '37208',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
@@ -280,7 +269,11 @@ describe('createCase', () => {
         };
       },
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getEntityConstructors: () => ({
         Petition: PetitionWithoutFiles,
@@ -328,7 +321,7 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getUseCases: () => ({
         getUser: () => ({
