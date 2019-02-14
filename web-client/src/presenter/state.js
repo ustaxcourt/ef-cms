@@ -78,6 +78,7 @@ export default {
   cases: [],
   completeForm: {},
   workItemActions: {},
+  validationErrors: {},
 
   alertHelper,
   caseDetailHelper,
