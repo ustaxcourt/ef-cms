@@ -6,6 +6,7 @@ import navigateToDashboard from '../actions/navigateToDashboardAction';
 import setAlertError from '../actions/setAlertErrorAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
+import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsAction';
 import setValidationErrorsAction from '../actions/setValidationErrorsAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import validatePetition from '../actions/validatePetitionAction';
@@ -23,6 +24,11 @@ export default [
       unsetFormSubmitting,
       clearForm,
     ],
-    error: [setAlertError, setValidationErrorsAction, unsetFormSubmitting],
+    error: [
+      setAlertError,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+      unsetFormSubmitting,
+    ],
   },
 ];
