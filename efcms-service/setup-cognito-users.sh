@@ -40,6 +40,7 @@ createAccount() {
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
     --client-id "${CLIENT_ID}" \
+    --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
     --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"') 
 
@@ -49,6 +50,7 @@ createAccount() {
     aws cognito-idp admin-respond-to-auth-challenge \
       --user-pool-id  "${USER_POOL_ID}" \
       --client-id "${CLIENT_ID}" \
+      --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
       --session "${session}"
