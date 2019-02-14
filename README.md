@@ -70,6 +70,32 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 #### Terminal B
 - `cd efcms-service && npm start`
 
+#### Login and Test Users
+- for /mock-login you can login using:
+```
+taxpayer
+petitionsclerk
+docketclerk
+intakeclerk
+respondent
+seniorattorney
+```
+- to run the project locally using the dev cognito:
+```npm run dev:cognito``` 
+You can then login with:
+```
+petitioner1@example.com - petitioner5@example.com
+petitionsclerk1@example.com - petitionsclerk5@example.com
+docketclerk1@example.com - docketclerk5@example.com
+intakeclerk1@example.com - intakeclerk5@example.com
+respondent1@example.com - respondent5@example.com
+seniorattorney1@example.com - seniorattorney5@example.com
+```
+
+all passwords are:
+
+```Testing1234$```
+
 ### CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
