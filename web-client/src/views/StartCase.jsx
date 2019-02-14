@@ -43,6 +43,7 @@ export default connect(
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function StartCase({
     caseTypes,
@@ -60,6 +61,7 @@ export default connect(
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
     validationErrors,
+    validateStartCaseSequence,
   }) {
     return (
       <section className="usa-section usa-grid">
@@ -81,7 +83,7 @@ export default connect(
           <h2>Upload Your Petition to Start Your Case</h2>
           <div className="blue-container">
             <div className="usa-grid-full">
-              <div className="usa-width-one-third">
+              <div className="usa-width-five-twelfths">
                 <div
                   className={
                     'usa-form-group ' +
@@ -118,7 +120,7 @@ export default connect(
                   </div>
                 </div>
               </div>
-              <div className="usa-width-two-thirds">
+              <div className="usa-width-seven-twelfths">
                 <div id="petition-upload-hint" className="alert-gold">
                   <span className="usa-form-hint">
                     <FontAwesomeIcon
@@ -137,7 +139,7 @@ export default connect(
             <h3>Who is Filing This Case?</h3>
             <div className="blue-container">
               <div className="usa-grid-full">
-                <div className="usa-width-one-third">
+                <div className="usa-width-five-twelfths">
                   <fieldset
                     id="filing-type-radios"
                     className="usa-fieldset-inputs usa-sans"
@@ -169,7 +171,7 @@ export default connect(
                     </ul>
                   </fieldset>
                 </div>
-                <div className="usa-width-two-thirds">
+                <div className="usa-width-seven-twelfths">
                   <div id="petition-hint" className="alert-gold">
                     <span className="usa-form-hint">
                       <FontAwesomeIcon
@@ -189,7 +191,7 @@ export default connect(
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-third">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="filing-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -228,7 +230,7 @@ export default connect(
 
               {startCaseHelper.showBusinessFilingTypeOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-half">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="business-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -271,7 +273,7 @@ export default connect(
               )}
               {startCaseHelper.showOtherFilingTypeOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-half">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="other-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -316,7 +318,7 @@ export default connect(
 
               {startCaseHelper.showEstateFilingOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-half">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="estate-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -359,7 +361,7 @@ export default connect(
 
               {startCaseHelper.showMinorIncompetentFilingOptions && (
                 <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-half">
+                  <div className="usa-width-one-whole">
                     <fieldset
                       id="minorIncompetent-type-radios"
                       className="usa-fieldset-inputs usa-sans"
@@ -507,6 +509,9 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group-day">
@@ -528,6 +533,9 @@ export default connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group-year">
@@ -548,6 +556,9 @@ export default connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                        }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
                         }}
                       />
                     </div>
@@ -723,6 +734,9 @@ export default connect(
                     key: e.target.name,
                     value: e.target.checked ? true : undefined,
                   });
+                }}
+                onBlur={() => {
+                  validateStartCaseSequence();
                 }}
               />
               <label htmlFor="signature">
