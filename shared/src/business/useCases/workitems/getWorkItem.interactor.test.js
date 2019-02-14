@@ -22,13 +22,18 @@ describe('getWorkItem', () => {
       getPersistenceGateway: () => ({
         getWorkItemById: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getWorkItem({
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {
@@ -42,13 +47,18 @@ describe('getWorkItem', () => {
       getPersistenceGateway: () => ({
         getWorkItemById: async () => mockWorkItem,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getWorkItem({
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {
@@ -62,11 +72,16 @@ describe('getWorkItem', () => {
       getPersistenceGateway: () => ({
         getWorkItemById: async () => mockWorkItem,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     const result = await getWorkItem({
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      userId: 'docketclerk',
       applicationContext,
     });
     expect(result).toMatchObject({
