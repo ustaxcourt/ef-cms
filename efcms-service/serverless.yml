@@ -325,6 +325,11 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - cognito-idp:AdminCreateUser
+      Resource:
+        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+    - Effect: 'Allow'
+      Action:
         - 's3:*'
       Resource:
         Fn::Join:
