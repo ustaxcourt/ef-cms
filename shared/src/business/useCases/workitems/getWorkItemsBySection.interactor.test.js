@@ -26,7 +26,7 @@ describe('getWorkItemsBySection', () => {
     let error;
     try {
       await getWorkItemsBySection({
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         applicationContext,
       });
     } catch (e) {

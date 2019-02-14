@@ -6,7 +6,7 @@ describe('getSentWorkItemsForUser', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
     const applicationContext = {
       getCurrentUser: () => ({
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         name: 'Tax Payer',
       }),
       environment: { stage: 'local' },

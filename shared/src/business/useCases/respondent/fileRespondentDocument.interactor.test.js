@@ -6,7 +6,7 @@ describe('fileRespondentDocument', () => {
   let applicationContext;
 
   let caseRecord = {
-    userId: 'taxpayer',
+    userId: 'taxpayer', role: 'petitioner',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '45678-18',
     documents: [
@@ -43,7 +43,7 @@ describe('fileRespondentDocument', () => {
     let error;
     try {
       await fileRespondentDocument({
-        userId: 'taxpayer',
+        userId: 'taxpayer', role: 'petitioner',
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',

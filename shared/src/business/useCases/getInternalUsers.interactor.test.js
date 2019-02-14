@@ -26,7 +26,7 @@ describe('Get internal users', () => {
       await getInternalUsers({
         applicationContext: {
           getCurrentUser: () => ({
-            userId: 'taxpayer',
+            userId: 'taxpayer', role: 'petitioner',
           }),
         },
       });

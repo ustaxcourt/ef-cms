@@ -32,7 +32,7 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -87,7 +87,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          userId: 'taxpayer',
+          userId: 'taxpayer', role: 'petitioner',
           workItems: [
             {
               assigneeId: null,
@@ -102,7 +102,7 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Petitioner',
-                userId: 'taxpayer',
+                userId: 'taxpayer', role: 'petitioner',
                 workItems: [],
               },
               messages: [
@@ -136,7 +136,7 @@ describe('createCase', () => {
           section: undefined,
           state: 'FL',
           token: 'taxpayer',
-          userId: 'taxpayer',
+          userId: 'taxpayer', role: 'petitioner',
           zip: '37208',
         },
       ],
@@ -144,7 +144,7 @@ describe('createCase', () => {
       procedureType: 'Small',
       filingType: 'Myself',
       status: 'New',
-      userId: 'taxpayer',
+      userId: 'taxpayer', role: 'petitioner',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -164,7 +164,7 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -207,7 +207,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Petitioner',
-          userId: 'taxpayer',
+          userId: 'taxpayer', role: 'petitioner',
           workItems: [
             {
               assigneeId: null,
@@ -222,7 +222,7 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Petitioner',
-                userId: 'taxpayer',
+                userId: 'taxpayer', role: 'petitioner',
                 workItems: [],
               },
               messages: [
@@ -256,7 +256,7 @@ describe('createCase', () => {
           section: undefined,
           state: 'FL',
           token: 'taxpayer',
-          userId: 'taxpayer',
+          userId: 'taxpayer', role: 'petitioner',
           zip: '37208',
         },
       ],
@@ -264,7 +264,7 @@ describe('createCase', () => {
       procedureType: 'Small',
       filingType: 'Myself',
       status: 'New',
-      userId: 'taxpayer',
+      userId: 'taxpayer', role: 'petitioner',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -280,7 +280,7 @@ describe('createCase', () => {
         };
       },
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getEntityConstructors: () => ({
         Petition: PetitionWithoutFiles,
@@ -328,7 +328,7 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getUseCases: () => ({
         getUser: () => ({
