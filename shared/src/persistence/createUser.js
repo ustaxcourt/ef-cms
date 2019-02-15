@@ -3,6 +3,18 @@ const { getSectionForRole } = require('../business/entities/WorkQueue');
 const client = require('../persistence/dynamodbClientService');
 
 exports.createUser = async ({ user, applicationContext }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+  await client.put({
+    applicationContext,
+    TableName: TABLE,
+    Item: {
+      pk: `${getSectionForRole(user.role)}|user`,
+      sk: user.email,
+      userId: user.email,
+      ...user,
+    },
+  });
+
   const cognito = new AWS.CognitoIdentityServiceProvider({
     region: 'us-east-1',
   });
@@ -32,15 +44,4 @@ exports.createUser = async ({ user, applicationContext }) => {
       ],
     })
     .promise();
-
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-
-  await client.put({
-    applicationContext,
-    TableName: TABLE,
-    Item: {
-      pk: `${getSectionForRole(user.role)}|user`,
-      sk: user.email,
-    },
-  });
 };

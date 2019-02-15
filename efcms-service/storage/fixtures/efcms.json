@@ -1,5 +1,45 @@
 [
   {
+    "pk": "docket|user",
+    "sk": "docketclerk",
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "Test Docketclerk",
+    "userId": "docketclerk",
+    "section": "docket",
+    "email": "docketclerk"
+  },
+  {
+    "pk": "docket|user",
+    "sk": "docketclerk1",
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "Test Docketclerk1",
+    "userId": "docketclerk1",
+    "section": "docket",
+    "email": "docketclerk1"
+  },
+  {
+    "pk": "petitions|user",
+    "sk": "petitionsclerk",
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "name": "Test petitionsclerk",
+    "userId": "petitionsclerk",
+    "section": "petitions",
+    "email": "petitionsclerk"
+  },
+  {
+    "pk": "petitions|user",
+    "sk": "petitionsclerk1",
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "name": "Test Petitionsclerk1",
+    "userId": "petitionsclerk1",
+    "section": "petitions",
+    "email": "petitionsclerk1"
+  },
+  {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "101-18|case"
   },
