@@ -701,6 +701,14 @@ functions:
           method: get
           cors: true
 
+  getUsers:
+    handler: src/users/getUsersLambda.get
+    events:
+      - http:
+          path: v1/users
+          method: get
+          cors: true
+
   createUser:
     handler: src/users/createUserLambda.post
     events:
