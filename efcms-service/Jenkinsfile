@@ -182,8 +182,10 @@ pipeline {
       }
       steps {
         script {
-          dir('efcms-service') {
-            sh "./docker-cognito-users.sh ${branchMap[env.branch_name]}"
+          withCredentials([string(credentialsId: 'USTC_ADMIN_PASS', variable: 'USTC_ADMIN_PASS')]) {
+            dir('efcms-service') {
+              sh "./docker-cognito-users.sh ${branchMap[env.branch_name]}"
+            }
           }
         }
       }
