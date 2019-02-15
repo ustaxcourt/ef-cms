@@ -20,13 +20,13 @@ const goToDashboard = [
       setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      getUsersInSection({ sectionType: 'petitions' }),
+      getUsersInSection({ section: 'petitions' }),
       setUsers,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     docketclerk: [
-      getUsersInSection({ sectionType: 'docket' }),
+      getUsersInSection({ section: 'docket' }),
       setUsers,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardDocketClerk'),

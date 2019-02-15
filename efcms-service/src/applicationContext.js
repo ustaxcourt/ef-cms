@@ -50,6 +50,9 @@ const {
   getCaseByCaseId,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getUsersInSection,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
+const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 
@@ -110,8 +113,14 @@ const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const {
+  getInteractorForGetUsers,
+} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
+const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const {
+  getUsersInSection: getUsersInSectionUC,
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
 const {
   getWorkItems: getWorkItemsUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
@@ -191,6 +200,7 @@ module.exports = (appContextUser = {}) => {
         getDownloadPolicyUrl,
         getUserById,
         createUser,
+        getUsersInSection,
 
         // work items
         getWorkItemsBySection,
@@ -229,6 +239,7 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
+        getUsersInSection: getUsersInSectionUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
@@ -278,5 +289,6 @@ module.exports = (appContextUser = {}) => {
       }
     },
     getInteractorForGettingCases,
+    getInteractorForGetUsers,
   };
 };

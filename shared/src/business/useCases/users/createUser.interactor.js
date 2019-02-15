@@ -17,7 +17,7 @@ exports.createUser = async ({ user, applicationContext }) => {
   // if (!isAuthorized(requestUser, CREATE_USER)) {
   //   throw new UnauthorizedError('Unauthorized');
   // }
-  await applicationContext.getPersistenceGateway().createUser({
+  return await applicationContext.getPersistenceGateway().createUser({
     user,
     applicationContext,
   });

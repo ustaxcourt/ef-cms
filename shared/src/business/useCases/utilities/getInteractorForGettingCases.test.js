@@ -11,13 +11,20 @@ const { getCasesByStatus } = require('../getCasesByStatus.interactor');
 
 describe('getInteractorForGettingCases', () => {
   it('throws an error with a bad user', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'anybillybobthorntoncharacter',
+          role: 'anybillybobthorntonrole',
+        };
+      },
+    };
     let error;
-    const user = { userId: 'baduser' };
 
     try {
       await getInteractorForGettingCases({
         documentId: '123',
-        user,
+        applicationContext,
       });
     } catch (e) {
       error = e;
@@ -26,17 +33,31 @@ describe('getInteractorForGettingCases', () => {
   });
 
   it('returns the correct interactor for the taxpayer', async () => {
-    const user = { userId: 'taxpayer', role: 'petitioner' };
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
+    };
     const result = await getInteractorForGettingCases({
-      user,
+      applicationContext,
     });
     expect(result).toEqual(getCasesByUser);
   });
 
   it('returns the correct interactor for the respondent', async () => {
-    const user = { userId: 'respondent', role: 'respondent' };
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'respondent',
+          role: 'respondent',
+        };
+      },
+    };
     const result = await getInteractorForGettingCases({
-      user,
+      applicationContext,
     });
     expect(result).toEqual(getCasesForRespondent);
   });
@@ -48,9 +69,16 @@ describe('getInteractorForGettingCases', () => {
     ['intakeclerk', getCasesByStatus],
   ].map(([testUserId, expectedUserCase]) => {
     it('returns the correct interactor for the docketclerk', async () => {
-      const user = { userId: testUserId, role: testUserId };
+      const applicationContext = {
+        getCurrentUser: () => {
+          return {
+            userId: testUserId,
+            role: testUserId,
+          };
+        },
+      };
       const result = await getInteractorForGettingCases({
-        user,
+        applicationContext,
       });
       expect(result).toEqual(expectedUserCase);
     });
@@ -62,11 +90,18 @@ describe('getInteractorForGettingCases', () => {
     ['seniorattorney', getCasesByDocumentId],
     ['intakeclerk', getCasesByDocumentId],
   ].map(([testUserId, expectedUserCase]) => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: testUserId,
+          role: testUserId,
+        };
+      },
+    };
     it('returns the correct interactor for the users when documentId is set', async () => {
-      const user = { userId: testUserId, role: testUserId };
       const result = await getInteractorForGettingCases({
         documentId: 'abc',
-        user,
+        applicationContext,
       });
       expect(result).toEqual(expectedUserCase);
     });
