@@ -182,6 +182,9 @@ export default connect(
                                 value: e.target.value,
                               });
                             }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
                           />
                           <label id={`filing-type-${idx}`} htmlFor={filingType}>
                             {filingType}
@@ -215,6 +218,9 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                              }}
+                              onBlur={() => {
+                                validateStartCaseSequence();
                               }}
                             />
                             <label
@@ -260,6 +266,9 @@ export default connect(
                                   value: e.target.value,
                                 });
                               }}
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
                             />
                             <label
                               id={`is-business-type-${idx}`}
@@ -304,6 +313,9 @@ export default connect(
                                   value: e.target.value,
                                 });
                               }}
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
                             />
                             <label
                               id={`is-other-type-${idx}`}
@@ -346,6 +358,9 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                              }}
+                              onBlur={() => {
+                                validateStartCaseSequence();
                               }}
                             />
                             <label
@@ -470,6 +485,9 @@ export default connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                    }}
+                    onBlur={() => {
+                      validateStartCaseSequence();
                     }}
                   >
                     <option value="">-- Select --</option>
@@ -633,6 +651,9 @@ export default connect(
                             value: e.currentTarget.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateStartCaseSequence();
+                        }}
                       />
                       <label id={`proc-type-${idx}`} htmlFor={procedureType}>
                         {procedureType} case
@@ -675,6 +696,9 @@ export default connect(
                       key: e.target.name,
                       value: e.target.value || null,
                     });
+                  }}
+                  onBlur={() => {
+                    validateStartCaseSequence();
                   }}
                   value={form.preferredTrialCity || ''}
                 >

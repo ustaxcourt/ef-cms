@@ -9,11 +9,13 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function PetitionerContact({
     form,
     updateFormValueSequence,
     validationErrors,
+    validateStartCaseSequence,
   }) {
     return (
       <div className="usa-form-group">
@@ -32,6 +34,9 @@ export default connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+              }}
+              onBlur={() => {
+                validateStartCaseSequence();
               }}
             />
             {validationErrors.contactPrimary && (
@@ -57,7 +62,15 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            {validationErrors.contactPrimary && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
+            )}
           </div>
         </div>
       </div>
