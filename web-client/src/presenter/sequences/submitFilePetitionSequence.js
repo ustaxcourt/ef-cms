@@ -16,10 +16,11 @@ import validatePetition from '../actions/validatePetitionAction';
 
 export default [
   clearAlerts,
-  set(state.showValidation, false),
+  set(state.showValidation, true),
   validatePetition,
   {
     success: [
+      set(state.showValidation, false),
       setFormSubmitting,
       createCase,
       getCreateCaseAlertSuccess,
@@ -29,7 +30,6 @@ export default [
       clearForm,
     ],
     error: [
-      set(state.showValidation, true),
       setAlertError,
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
