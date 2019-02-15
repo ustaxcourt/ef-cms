@@ -763,10 +763,6 @@ functions:
           path: v1/swagger
           method: get
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
 
   swaggerJson:
     handler: src/swagger/swaggerLambda.json
@@ -775,10 +771,6 @@ functions:
           path: v1/swagger.json
           method: get
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
 
   getUsers:
     handler: src/users/getUsersLambda.get
