@@ -48,6 +48,8 @@ export default async ({ store, props }) => {
         break;
     }
   } else if (props.key === 'estateType') {
+    store.set(state.form.otherType, 'An estate or trust');
+
     switch (props.value) {
       case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
         partyType =
@@ -62,6 +64,8 @@ export default async ({ store, props }) => {
         break;
     }
   } else if (props.key === 'minorIncompetentType') {
+    store.set(state.form.otherType, 'A minor or incompetent person');
+
     switch (props.value) {
       case 'Conservator':
         partyType = 'Conservator';
