@@ -331,97 +331,99 @@ export default connect(
                 </div>
               )}
 
-              {startCaseHelper.showEstateFilingOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-whole">
-                    <fieldset
-                      id="estate-type-radios"
-                      className="usa-fieldset-inputs usa-sans"
-                    >
-                      <legend htmlFor="estate-type-radios">
-                        What type of estate or trust are you filing for?
-                      </legend>
-                      <ul className="ustc-unstyled-list">
-                        {[
-                          'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-                          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-                          'Trust',
-                        ].map((estateType, idx) => (
-                          <li key={estateType}>
-                            <input
-                              id={`estateType-${estateType}`}
-                              type="radio"
-                              name="estateType"
-                              value={estateType}
-                              onChange={e => {
-                                updateStartCaseFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                              onBlur={() => {
-                                validateStartCaseSequence();
-                              }}
-                            />
-                            <label
-                              id={`is-estate-type-${idx}`}
-                              htmlFor={`estateType-${estateType}`}
-                            >
-                              {estateType}
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
-                    </fieldset>
+              {startCaseHelper.showOtherFilingTypeOptions &&
+                startCaseHelper.showEstateFilingOptions && (
+                  <div className="usa-grid-full ustc-secondary-question">
+                    <div className="usa-width-one-whole">
+                      <fieldset
+                        id="estate-type-radios"
+                        className="usa-fieldset-inputs usa-sans"
+                      >
+                        <legend htmlFor="estate-type-radios">
+                          What type of estate or trust are you filing for?
+                        </legend>
+                        <ul className="ustc-unstyled-list">
+                          {[
+                            'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+                            'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+                            'Trust',
+                          ].map((estateType, idx) => (
+                            <li key={estateType}>
+                              <input
+                                id={`estateType-${estateType}`}
+                                type="radio"
+                                name="estateType"
+                                value={estateType}
+                                onChange={e => {
+                                  updateStartCaseFormValueSequence({
+                                    key: e.target.name,
+                                    value: e.target.value,
+                                  });
+                                }}
+                                onBlur={() => {
+                                  validateStartCaseSequence();
+                                }}
+                              />
+                              <label
+                                id={`is-estate-type-${idx}`}
+                                htmlFor={`estateType-${estateType}`}
+                              >
+                                {estateType}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </fieldset>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {startCaseHelper.showMinorIncompetentFilingOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
-                  <div className="usa-width-one-whole">
-                    <fieldset
-                      id="minorIncompetent-type-radios"
-                      className="usa-fieldset-inputs usa-sans"
-                    >
-                      <legend htmlFor="minorIncompetent-type-radios">
-                        What is your role in filing for this minor or
-                        incompetent person?
-                      </legend>
-                      <ul className="ustc-unstyled-list">
-                        {[
-                          'Conservator',
-                          'Guardian',
-                          'Custodian',
-                          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-                          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
-                        ].map((minorIncompetentType, idx) => (
-                          <li key={minorIncompetentType}>
-                            <input
-                              id={`minorIncompetentType-${minorIncompetentType}`}
-                              type="radio"
-                              name="minorIncompetentType"
-                              value={minorIncompetentType}
-                              onChange={e => {
-                                updateStartCaseFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                            <label
-                              id={`is-minorIncompetent-type-${idx}`}
-                              htmlFor={`minorIncompetentType-${minorIncompetentType}`}
-                            >
-                              {minorIncompetentType}
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
-                    </fieldset>
+              {startCaseHelper.showOtherFilingTypeOptions &&
+                startCaseHelper.showMinorIncompetentFilingOptions && (
+                  <div className="usa-grid-full ustc-secondary-question">
+                    <div className="usa-width-one-whole">
+                      <fieldset
+                        id="minorIncompetent-type-radios"
+                        className="usa-fieldset-inputs usa-sans"
+                      >
+                        <legend htmlFor="minorIncompetent-type-radios">
+                          What is your role in filing for this minor or
+                          incompetent person?
+                        </legend>
+                        <ul className="ustc-unstyled-list">
+                          {[
+                            'Conservator',
+                            'Guardian',
+                            'Custodian',
+                            'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+                            'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                          ].map((minorIncompetentType, idx) => (
+                            <li key={minorIncompetentType}>
+                              <input
+                                id={`minorIncompetentType-${minorIncompetentType}`}
+                                type="radio"
+                                name="minorIncompetentType"
+                                value={minorIncompetentType}
+                                onChange={e => {
+                                  updateStartCaseFormValueSequence({
+                                    key: e.target.name,
+                                    value: e.target.value,
+                                  });
+                                }}
+                              />
+                              <label
+                                id={`is-minorIncompetent-type-${idx}`}
+                                htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                              >
+                                {minorIncompetentType}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </fieldset>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
 
