@@ -20,11 +20,7 @@ joiValidationDecorator(
  * @constructor
  */
 function User(user) {
-  if (typeof user === 'string') {
-    user = { userId: user, role: 'petitioner' };
-  }
   Object.assign(this, user);
-
   this.section = getSectionForRole(this.role);
 }
 
@@ -34,10 +30,6 @@ function User(user) {
  */
 User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
-};
-
-User.prototype.getDocketRecordName = function getDocketRecordName() {
-  return this.role === 'petitioner' ? `Petitioner ${this.name}` : this.name;
 };
 
 module.exports = User;
