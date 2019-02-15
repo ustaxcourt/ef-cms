@@ -11,6 +11,7 @@ import {
   faPaperclip,
   faPlusCircle,
   faShareSquare,
+  faSignOutAlt,
   faSlash,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -70,6 +71,7 @@ const app = {
       faPaperclip,
       faPlusCircle,
       faShareSquare,
+      faSignOutAlt,
       faSlash,
       faTimesCircle,
     );

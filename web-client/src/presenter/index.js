@@ -23,6 +23,7 @@ import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setModalDialogNameSequence from './sequences/setModalDialogNameSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
+import signOutSequence from './sequences/signOutSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
 import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
 import submitCaseDetailEditSaveSequence from './sequences/submitCaseDetailEditSaveSequence';
@@ -93,6 +94,7 @@ export default {
     setFocusedWorkItemSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
+    signOutSequence,
     startACaseConfirmCancelSequence,
     startACaseToggleCancelSequence,
     submitCaseDetailEditSaveSequence,
