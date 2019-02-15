@@ -4,6 +4,7 @@ const {
 const joi = require('joi-browser');
 const PetitionerPrimaryContact = require('./Contacts/PetitionerPrimaryContact');
 const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationContact');
+const PetitionerIntermediaryContact = require('./Contacts/PetitionerIntermediaryContact');
 const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSpouseContact');
 const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 
@@ -45,6 +46,15 @@ function Petition(rawPetition) {
         this.contactPrimary || {},
       );
       this.contactSecondary = new PetitionerCorporationContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
+    case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+      this.contactPrimary = new PetitionerPrimaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerIntermediaryContact(
         this.contactSecondary || {},
       );
       break;
