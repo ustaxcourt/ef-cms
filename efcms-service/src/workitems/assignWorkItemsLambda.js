@@ -5,8 +5,8 @@ const createApplicationContext = require('../applicationContext');
 /**
  * assigns a list of work item ids to an assignee
  *
- * @param event
- * @returns {Promise<*|undefined>}
+ * @param {Object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.assign = event =>
   handle(() => {
