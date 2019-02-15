@@ -1,22 +1,100 @@
+const { UnauthorizedError, NotFoundError } = require('../../../errors/errors');
 const { getUsersInSection } = require('./getUsersInSection.interactor');
 
-describe('getUsersInSection', () => {
-  beforeEach(() => {});
+const MOCK_SECTION = [
+  {
+    userId: 'petitioner1@example.com',
+    role: 'petitions',
+    name: 'Test Petitioner',
+  },
+  {
+    userId: 'petitioner2@example.com',
+    role: 'petitions',
+    name: 'Test Petitioner',
+  },
+];
+describe('Get users in section', () => {
+  it('retrieves the users in the petitions section', async () => {
+    const applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    const sectionToGet = { section: 'petitions' };
+    const section = await getUsersInSection({
+      sectionToGet,
+      applicationContext,
+    });
+    expect(section.length).toEqual(2);
+    expect(section[0].userId).toEqual('petitioner1@example.com');
+  });
 
-  it('should not allow users without GET_USERS_IN_SECTION permission to access the use case', async () => {
-    let error;
+  it('returns notfounderror when section not found', async () => {
+    const applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let result = 'error';
     try {
+      const sectionToGet = { section: 'unknown' };
       await getUsersInSection({
-        section: 'docket',
-        applicationContext: {
-          getCurrentUser: () => ({
-            role: 'petitioner',
-          }),
-        },
+        sectionToGet,
+        applicationContext,
       });
-    } catch (err) {
-      error = err;
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        result = 'error';
+      }
     }
-    expect(error).toBeDefined();
+    expect(result).toEqual('error');
+  });
+
+  it('returns unauthorizederror when user not authorized', async () => {
+    const applicationContext = {
+      getPersistenceGateway: () => {
+        return {
+          getUsersInSection: () => Promise.resolve(MOCK_SECTION),
+        };
+      },
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
+      environment: { stage: 'local' },
+    };
+    let result = 'error';
+    try {
+      const sectionToGet = { section: 'unknown' };
+      await getUsersInSection({
+        sectionToGet,
+        applicationContext,
+      });
+    } catch (e) {
+      if (e instanceof UnauthorizedError) {
+        result = 'error';
+      }
+    }
+    expect(result).toEqual('error');
   });
 });

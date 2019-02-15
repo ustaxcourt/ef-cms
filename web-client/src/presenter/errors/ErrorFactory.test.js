@@ -19,7 +19,7 @@ describe('ErrorFactory', () => {
     const error = new Error();
     error.response = { data: 'Unauthorized', status: 404 };
     const result = ErrorFactory.getError(error);
-    expect(result.className).toEqual('UnauthorizedRequestError');
+    expect(result.className).toEqual('NotFoundError');
     expect(result.title).toEqual('We cannot find the page you requested');
   });
   it('creates InvalidRequestError errors for status code 400', () => {

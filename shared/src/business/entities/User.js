@@ -10,6 +10,8 @@ joiValidationDecorator(
   joi.object().keys({
     userId: joi.string().required(),
     token: joi.string().optional(),
+    name: joi.string().optional(),
+    email: joi.string().optional(),
   }),
 );
 /**
