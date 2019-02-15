@@ -4,8 +4,8 @@ const createApplicationContext = require('../applicationContext');
 /**
  * returns all work items associated with a user
  *
- * @param event
- * @returns {Promise<*|undefined>}
+ * @param {Object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.get = event =>
   handle(() => {
