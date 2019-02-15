@@ -15,6 +15,7 @@ import gotoLoginSequence from './sequences/gotoLoginSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import notFoundErrorSequence from './sequences/notFoundErrorSequence';
 import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
@@ -60,6 +61,7 @@ import { InvalidRequestError } from './errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+import { NotFoundError } from './errors/NotFoundError';
 
 import state from './state';
 
@@ -130,7 +132,8 @@ export default {
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [NotFoundError, notFoundErrorSequence], //404
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
