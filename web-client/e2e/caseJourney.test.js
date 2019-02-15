@@ -12,6 +12,7 @@ import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+import taxPayerSignsOut from './journey/taxpayerSignsOut';
 
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
@@ -84,6 +85,7 @@ describe('Case journey', async () => {
     global.window = {
       localStorage: {
         setItem: () => null,
+        removeItem: () => null,
       },
     };
   });
@@ -96,6 +98,7 @@ describe('Case journey', async () => {
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
+  taxPayerSignsOut(test);
 
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
