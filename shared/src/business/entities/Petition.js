@@ -11,8 +11,8 @@ function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 
   switch (this.partyType) {
-    case 'Surviving Spouse':
     case 'Petitioner & Deceased Spouse':
+    case 'Surviving Spouse':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );
@@ -31,6 +31,15 @@ function Petition(rawPetition) {
     case 'Corporation':
       this.contactPrimary = new PetitionerCorporationContact(
         this.contactPrimary || {},
+      );
+      break;
+    case 'Partnership (as the tax matters partner)':
+    case 'Partnership (as a partner other than tax matters partner)':
+      this.contactPrimary = new PetitionerPrimaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerCorporationContact(
+        this.contactSecondary || {},
       );
       break;
   }

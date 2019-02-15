@@ -2,6 +2,20 @@ const Petition = require('./Petition');
 
 describe('Petition', () => {
   describe('for Petitioner And Deceased Spouse Contacts', () => {
+    it('should not validate without contacts', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        procedureType: 'Small',
+        filingType: 'Myself',
+        preferredTrialCity: 'Chattanooga, TN',
+        irsNoticeDate: '2009-10-13',
+        petitionFile: {},
+        signature: true,
+        partyType: 'Petitioner & Deceased Spouse',
+      });
+      expect(petition.isValid()).toEqual(false);
+    });
+
     it('can validate primary contact name', () => {
       const petition = new Petition({
         caseType: 'other',
