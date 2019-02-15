@@ -259,3 +259,8 @@ iframe {
     }
   }
 }
+
+input.ustc-input-error,
+select.ustc-input-error {
+  border: 3px solid $color-red !important;
+}
