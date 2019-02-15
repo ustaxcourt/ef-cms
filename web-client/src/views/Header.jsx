@@ -2,6 +2,7 @@ import { connect } from '@cerebral/react';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 import SearchBox from './SearchBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import close from '../../node_modules/uswds/dist/img/close.svg';
 
@@ -9,10 +10,11 @@ export default connect(
   {
     mobileMenu: state.mobileMenu,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+    signOutSequence: sequences.signOutSequence,
     user: state.user,
   },
 
-  function Header({ user, mobileMenu, toggleMobileMenuSequence }) {
+  function Header({ user, mobileMenu, toggleMobileMenuSequence, signOutSequence }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
@@ -101,7 +103,18 @@ export default connect(
                   <li role="search" className="usa-search">
                     <SearchBox />
                   </li>
-                  {user.userId && <li>Hello, {user.name}</li>}
+                  {user.userId && (
+                    <li>
+                      Hello, {user.name}
+                      <button
+                        type="button"
+                        className="usa-button-secondary sign-out"
+                        onClick={() => signOutSequence()}
+                      >
+                        <FontAwesomeIcon icon="sign-out-alt" />
+                      </button>{' '}
+                    </li>
+                  )}
                 </ul>
               </div>
             )}
