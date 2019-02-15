@@ -7,6 +7,8 @@ const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationCo
 const PetitionerIntermediaryContact = require('./Contacts/PetitionerIntermediaryContact');
 const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSpouseContact');
 const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
+const PetitionerEstateExecutorContact = require('./Contacts/PetitionerEstateExecutorContact');
+const PetitionerEstateWithExecutorPrimaryContact = require('./Contacts/PetitionerEstateWithExecutorPrimaryContact');
 
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
@@ -36,6 +38,7 @@ function Petition(rawPetition) {
       );
       break;
     case 'Corporation':
+    case 'Estate without Executor/Personal Representative/Etc.':
       this.contactPrimary = new PetitionerCorporationContact(
         this.contactPrimary || {},
       );
@@ -55,6 +58,26 @@ function Petition(rawPetition) {
         this.contactPrimary || {},
       );
       this.contactSecondary = new PetitionerIntermediaryContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Estate with Executor/Personal Representative/Etc.':
+      this.contactPrimary = new PetitionerEstateWithExecutorPrimaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerEstateExecutorContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Partnership (BBA Regime)':
+    case 'Trust & Trustee':
+    case 'Conservator':
+    case 'Guardian':
+    case 'Custodian':
+      this.contactPrimary = new PetitionerIntermediaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerPrimaryContact(
         this.contactSecondary || {},
       );
       break;
