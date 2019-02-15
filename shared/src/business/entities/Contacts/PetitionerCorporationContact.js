@@ -3,12 +3,13 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
-function PetitionerPrimaryContact(raw) {
+function PetitionerCorporationContact(raw) {
   Object.assign(this, raw);
 }
 
-PetitionerPrimaryContact.errorToMessageMap = {
+PetitionerCorporationContact.errorToMessageMap = {
   name: 'Name is a required field.',
+  inCareOf: 'In Care Of has errors.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State is a required field.',
@@ -19,9 +20,10 @@ PetitionerPrimaryContact.errorToMessageMap = {
 };
 
 joiValidationDecorator(
-  PetitionerPrimaryContact,
+  PetitionerCorporationContact,
   joi.object().keys({
     name: joi.string().required(),
+    inCareOf: joi.string().optional(),
     address1: joi.string().required(),
     city: joi.string().required(),
     state: joi.string().required(),
@@ -31,7 +33,7 @@ joiValidationDecorator(
     phone: joi.string().required(),
   }),
   undefined,
-  PetitionerPrimaryContact.errorToMessageMap,
+  PetitionerCorporationContact.errorToMessageMap,
 );
 
-module.exports = PetitionerPrimaryContact;
+module.exports = PetitionerCorporationContact;
