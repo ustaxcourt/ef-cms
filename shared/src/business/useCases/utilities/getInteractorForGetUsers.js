@@ -1,4 +1,5 @@
 const { getUsersInSection } = require('../users/getUsersInSection.interactor');
+const { getInternalUsers } = require('../users/getInternalUsers.interactor');
 const {
   isAuthorized,
   CASE_METADATA,
@@ -14,6 +15,6 @@ exports.getInteractorForGetUsers = ({ section, applicationContext }) => {
   if (section) {
     return getUsersInSection;
   } else {
-    throw new Error('invalid use case');
+    return getInternalUsers;
   }
 };
