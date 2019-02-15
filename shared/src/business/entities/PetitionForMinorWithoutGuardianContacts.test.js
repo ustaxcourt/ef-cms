@@ -1,7 +1,7 @@
 const Petition = require('./Petition');
 
 describe('Petition', () => {
-  describe('for Petitioner And Spouse Contacts', () => {
+  describe('for Minor without Guardian Contacts', () => {
     it('should not validate without contacts', () => {
       const petition = new Petition({
         caseType: 'other',
@@ -11,12 +11,13 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
-        partyType: 'Petitioner & Spouse',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
       });
       expect(petition.isValid()).toEqual(false);
     });
 
-    it('can validate primary contact name', () => {
+    it('can validate contacts', () => {
       const petition = new Petition({
         caseType: 'other',
         procedureType: 'Small',
@@ -25,7 +26,8 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
-        partyType: 'Petitioner & Spouse',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         contactPrimary: {
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
@@ -37,11 +39,13 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
         contactSecondary: {
-          name: 'Betty Crocker',
-          address1: '1599 Pennsylvania Ave',
-          city: 'Walla Walla',
-          state: 'WA',
-          zip: '78774',
+          name: 'Jimmy Dean',
+          inCareOf: 'USTC',
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          state: 'AK',
+          zip: '05198',
+          country: 'USA',
           phone: '1234567890',
           email: 'someone@example.com',
         },

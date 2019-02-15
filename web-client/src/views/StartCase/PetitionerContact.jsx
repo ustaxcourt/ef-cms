@@ -21,7 +21,15 @@ export default connect(
       <div className="usa-form-group">
         <h3>Tell Us About Yourself</h3>
         <div className="blue-container">
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary &&
+              validationErrors.contactPrimary.name
+                ? 'usa-input-error'
+                : '')
+            }
+          >
             <label htmlFor="name">Name</label>
             <input
               id="name"
@@ -47,7 +55,15 @@ export default connect(
           </div>
           <Address type="contactPrimary" />
           <Email type="contactPrimary" />
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary &&
+              validationErrors.contactPrimary.phone
+                ? 'usa-input-error'
+                : '')
+            }
+          >
             <label htmlFor="phone">Phone Number</label>
             <input
               id="phone"
