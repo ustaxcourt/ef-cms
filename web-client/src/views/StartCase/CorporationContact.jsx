@@ -8,13 +8,26 @@ export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function CorporationContact({ form, updateFormValueSequence }) {
+  function CorporationContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+    validateStartCaseSequence,
+  }) {
+    validationErrors.contactPrimary = validationErrors.contactPrimary || {};
     return (
       <div className="usa-form-group">
         <h3>Tell Us About the Corporation You Are Filing For</h3>
         <div className="blue-container">
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary.name ? 'usa-input-error' : '')
+            }
+          >
             <label htmlFor="name">Business Name</label>
             <input
               id="name"
@@ -28,9 +41,22 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            <div className="usa-input-error-message beneath">
+              {validationErrors.contactPrimary.name}
+            </div>
           </div>
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary.inCareOf
+                ? 'usa-input-error'
+                : '')
+            }
+          >
             <label htmlFor="inCareOf">
               In Care Of <span className="usa-form-hint">(optional)</span>
             </label>
@@ -46,11 +72,22 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            <div className="usa-input-error-message beneath">
+              {validationErrors.contactPrimary.inCareOf}
+            </div>
           </div>
           <Address type="contactPrimary" />
           <Email type="contactPrimary" />
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary.phone ? 'usa-input-error' : '')
+            }
+          >
             <label htmlFor="phone">Phone Number</label>
             <input
               id="phone"
@@ -65,7 +102,13 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            <div className="usa-input-error-message beneath">
+              {validationErrors.contactPrimary.phone}
+            </div>
           </div>
         </div>
       </div>

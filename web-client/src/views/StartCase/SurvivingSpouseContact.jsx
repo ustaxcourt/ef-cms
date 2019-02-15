@@ -9,18 +9,27 @@ export default connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function SurvivingSpouseContact({
     form,
     updateFormValueSequence,
     validationErrors,
+    validateStartCaseSequence,
   }) {
+    validationErrors.contactPrimary = validationErrors.contactPrimary || {};
+    validationErrors.contactSecondary = validationErrors.contactSecondary || {};
     return (
       <React.Fragment>
         <div className="usa-form-group">
           <h3>Tell Us About Yourself as the Surviving Spouse</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.name ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="name">Name</label>
               <input
                 id="name"
@@ -34,6 +43,9 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
               <div className="usa-input-error-message beneath">
                 {validationErrors.contactPrimary.name}
@@ -41,7 +53,12 @@ export default connect(
             </div>
             <Address type="contactPrimary" />
             <Email type="contactPrimary" />
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.phone ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="phone">Phone Number</label>
               <input
                 id="phone"
@@ -56,14 +73,27 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
             </div>
           </div>
         </div>
         <div className="usa-form-group">
           <h3>Tell Us About Your Deceased Spouse</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.name
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryName">Spouse&#39;s Name</label>
               <input
                 id="secondaryName"
@@ -77,7 +107,13 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.name}
+              </div>
             </div>
             <Address type="contactSecondary" />
           </div>
