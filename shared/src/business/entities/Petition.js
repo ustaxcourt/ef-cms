@@ -3,6 +3,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const PetitionerPrimaryContact = require('./Contacts/PetitionerPrimaryContact');
+const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationContact');
 const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSpouseContact');
 const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 
@@ -10,6 +11,7 @@ function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 
   switch (this.partyType) {
+    case 'Surviving Spouse':
     case 'Petitioner & Deceased Spouse':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
@@ -24,6 +26,11 @@ function Petition(rawPetition) {
       );
       this.contactSecondary = new PetitionerSpouseContact(
         this.contactSecondary || {},
+      );
+      break;
+    case 'Corporation':
+      this.contactPrimary = new PetitionerCorporationContact(
+        this.contactPrimary || {},
       );
       break;
   }
