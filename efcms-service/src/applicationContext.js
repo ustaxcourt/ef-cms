@@ -52,6 +52,7 @@ const {
 const {
   getUsersInSection,
 } = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
+const { getInternalUsers} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
 const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
@@ -85,6 +86,9 @@ const {
 const {
   getCasesByUser: getCasesByUserUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
+const {
+  getInternalUsers: getInternalUsersUC,
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
@@ -201,6 +205,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         createUser,
         getUsersInSection,
+        getInternalUsers,
 
         // work items
         getWorkItemsBySection,
@@ -240,6 +245,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
         getUsersInSection: getUsersInSectionUC,
+        getInternalUsers: getInternalUsersUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
