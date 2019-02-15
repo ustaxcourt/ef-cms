@@ -14,7 +14,12 @@ export default connect(
     user: state.user,
   },
 
-  function Header({ user, mobileMenu, toggleMobileMenuSequence, signOutSequence }) {
+  function Header({
+    user,
+    mobileMenu,
+    toggleMobileMenuSequence,
+    signOutSequence,
+  }) {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">
@@ -109,6 +114,7 @@ export default connect(
                       <button
                         type="button"
                         className="usa-button-secondary sign-out"
+                        aria-label="logout"
                         onClick={() => signOutSequence()}
                       >
                         <FontAwesomeIcon icon="sign-out-alt" />
