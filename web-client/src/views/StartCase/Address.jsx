@@ -5,13 +5,26 @@ import React from 'react';
 export default connect(
   {
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     type: props.type,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validationErrors: state.validationErrors,
   },
-  function Address({ form, updateFormValueSequence, type }) {
+  function Address({
+    form,
+    type,
+    updateFormValueSequence,
+    validateStartCaseSequence,
+    validationErrors,
+  }) {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (validationErrors[type].address1 ? 'usa-input-error' : '')
+          }
+        >
           <label htmlFor={`${type}.address1`}>Street Address</label>
           <input
             id={`${type}.address1`}
@@ -25,7 +38,15 @@ export default connect(
                 value: e.target.value,
               });
             }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
           />
+          {validationErrors[type] && (
+            <div className="usa-input-error-message beneath">
+              {validationErrors[type].address1}
+            </div>
+          )}
         </div>
         <div className="usa-form-group">
           <label htmlFor={`${type}.address2`}>
@@ -43,9 +64,19 @@ export default connect(
                 value: e.target.value,
               });
             }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
           />
         </div>
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (validationErrors[type].city || validationErrors[type].state
+              ? 'usa-input-error'
+              : '')
+          }
+        >
           <fieldset>
             <div className="ustc-form-group-city">
               <label htmlFor={`${type}.city`}>City</label>
@@ -53,7 +84,10 @@ export default connect(
                 id={`${type}.city`}
                 type="text"
                 name={`${type}.city`}
-                className="usa-input-inline"
+                className={
+                  'usa-input-inline ' +
+                  (validationErrors[type].city ? 'ustc-input-error' : '')
+                }
                 autoCapitalize="none"
                 value={form[type].city || ''}
                 onChange={e => {
@@ -62,12 +96,18 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
             </div>
             <div className="ustc-form-group-state">
               <label htmlFor={`${type}.state`}>State</label>
               <select
-                className="usa-input-inline"
+                className={
+                  'usa-input-inline ' +
+                  (validationErrors[type].state ? 'ustc-input-error' : '')
+                }
                 id={`${type}.state`}
                 name={`${type}.state`}
                 value={form[type].state || ''}
@@ -77,8 +117,11 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               >
-                <option>- Select -</option>
+                <option value="">- Select -</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>
@@ -139,8 +182,23 @@ export default connect(
               </select>
             </div>
           </fieldset>
+          {validationErrors[type] && (
+            <>
+              <div className="usa-input-error-message beneath">
+                {validationErrors[type].city}
+              </div>
+              <div className="usa-input-error-message beneath">
+                {validationErrors[type].state}
+              </div>
+            </>
+          )}
         </div>
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (validationErrors[type].zip ? 'usa-input-error' : '')
+          }
+        >
           <label htmlFor={`${type}.zip`}>ZIP Code</label>
           <input
             id={`${type}.zip`}
@@ -155,7 +213,15 @@ export default connect(
                 value: e.target.value,
               });
             }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
           />
+          {validationErrors[type] && (
+            <div className="usa-input-error-message beneath">
+              {validationErrors.contactPrimary.zip}
+            </div>
+          )}
         </div>
       </React.Fragment>
     );
