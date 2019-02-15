@@ -6,6 +6,7 @@ import validatePetitionAction from '../actions/validatePetitionAction';
 export default [
   shouldValidateAction,
   {
+    ignore: [],
     validate: [
       validatePetitionAction,
       {

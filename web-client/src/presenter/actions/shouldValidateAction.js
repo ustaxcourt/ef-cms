@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 
-export default ({ path }) => {
-  if (state.showValidation) return path.validate();
+export default ({ path, get }) => {
+  if (get(state.showValidation)) return path.validate();
+  return path.ignore();
 };
