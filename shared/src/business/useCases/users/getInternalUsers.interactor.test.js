@@ -1,5 +1,4 @@
 const { getInternalUsers } = require('./getInternalUsers.interactor');
-const User = require('../../entities/User');
 
 describe('Get internal users', () => {
   const applicationContext = {
