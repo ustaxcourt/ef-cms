@@ -104,13 +104,6 @@ function Case(rawCase) {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
       status: rawCase.status || 'New',
-      caseTitle:
-        rawCase.caseTitle ||
-        (rawCase.petitioners && rawCase.petitioners.length
-          ? `${
-              rawCase.petitioners[0].name
-            }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`
-          : ''),
     },
     {
       docketNumberSuffix:
@@ -150,7 +143,6 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
-    caseTitle: joi.string().required(),
     caseType: joi.string().required(),
     createdAt: joi
       .date()
@@ -193,7 +185,6 @@ joiValidationDecorator(
       .string()
       .valid(STATUSES)
       .optional(),
-    petitioners: joi.array().optional(),
     documents: joi
       .array()
       .min(1)
@@ -218,11 +209,9 @@ joiValidationDecorator(
     );
   },
   {
-    caseTitle: 'A case title is required.',
     docketNumber: 'Docket number is required.',
     documents: 'At least one valid document is required.',
     caseType: 'Case Type is required.',
-    petitioners: 'At least one valid petitioner is required.',
     irsNoticeDate: [
       {
         contains: 'must be less than or equal to',
@@ -233,6 +222,7 @@ joiValidationDecorator(
     ],
     procedureType: 'Procedure Type is required.',
     filingType: 'Filing Type is required.',
+    partyType: 'Party Type is required.',
     preferredTrialCity: 'Preferred Trial City is required.',
     yearAmounts: [
       {
@@ -252,6 +242,107 @@ joiValidationDecorator(
     ],
   },
 );
+
+Case.getCaseTitle = function(rawCase) {
+  let caseCaption;
+  switch (rawCase.partyType) {
+    case 'Petitioner':
+      caseCaption = `${
+        rawCase.contactPrimary.name
+      }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Petitioner & Spouse':
+      caseCaption = `${rawCase.contactPrimary.name} & ${
+        rawCase.contactSecondary.name
+      }, Petitioners v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Petitioner & Deceased Spouse':
+      caseCaption = `${rawCase.contactPrimary.name} & ${
+        rawCase.contactSecondary.name
+      }, Deceased, ${
+        rawCase.contactPrimary.name
+      }, Surviving Spouse, Petitioners v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
+      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${
+        rawCase.contactPrimary.name
+      }, ${
+        rawCase.contactPrimary.title
+      }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
+      caseCaption = `Estate of ${
+        rawCase.contactPrimary.name
+      }, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Trust':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Corporation':
+      caseCaption = `${
+        rawCase.contactPrimary.name
+      }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Partnership (as the tax matters partner)':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Partnership (as a partner other than tax matters partner)':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, A Partner Other Than the Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Partnership (as a partnership representative under the BBA regime)':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Conservator':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Conservator, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Guardian':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Guardian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Custodian':
+      caseCaption = `${rawCase.contactSecondary.name}, ${
+        rawCase.contactPrimary.name
+      }, Custodian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
+      caseCaption = `${rawCase.contactSecondary.name}, Minor, ${
+        rawCase.contactPrimary.name
+      }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
+        rawCase.contactPrimary.name
+      }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Donor':
+      caseCaption = `${
+        rawCase.contactPrimary.name
+      }, Donor, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Transferee':
+      caseCaption = `${
+        rawCase.contactPrimary.name
+      }, Transferee, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+    case 'Surviving Spouse':
+      caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${
+        rawCase.contactPrimary.name
+      }, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      break;
+  }
+  return caseCaption;
+};
 
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {

@@ -50,13 +50,13 @@ export default connect(
             )}{' '}
           </div>
           <div className="usa-width-one-sixth">
-            <p className="label" id="primary-label">
+            <p className="label" id="secondary-label">
               Secondary Contact
             </p>
             {caseDetail.contactSecondary && (
               <React.Fragment>
                 <div>
-                  <address aria-labelledby="primary-label">
+                  <address aria-labelledby="secondary-label">
                     <p>{caseDetail.contactSecondary.name}</p>
                     <p>
                       <span className="address-line">
