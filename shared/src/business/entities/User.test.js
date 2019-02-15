@@ -13,20 +13,6 @@ describe('User entity', () => {
     assert.ok(user.isValid());
   });
 
-  it('Generates valid docket record names', () => {
-    let user = new User({
-      userId: 'taxpayer',
-      role: 'petitioner',
-    });
-    assert.ok(user.isValid());
-    expect(user.getDocketRecordName()).toEqual('Petitioner Test Taxpayer');
-    user = new User({
-      userId: 'intakeclerk',
-    });
-    assert.ok(user.isValid());
-    expect(user.getDocketRecordName()).toEqual('Test Intakeclerk');
-  });
-
   it('Creates a valid petitioner user', () => {
     const user = new User({
       userId: 'petitioner',
