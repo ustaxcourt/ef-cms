@@ -18,6 +18,8 @@ export default ({ props, store }) => {
               }`;
             });
           });
+        } else if (typeof error === 'object') {
+          return Object.keys(error).map(k => error[k]);
         } else {
           return error;
         }

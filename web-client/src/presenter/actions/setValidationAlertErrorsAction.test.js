@@ -34,4 +34,22 @@ describe('setValidationAlertErrors', async () => {
       ],
     });
   });
+
+  it('creates messages for errors with nested objects', async () => {
+    const { state } = await runAction(setValidationAlertErrors, {
+      state: {},
+      modules: {
+        presenter,
+      },
+      props: {
+        errors: {
+          green: 'green is incorrect',
+          blues: { cobalt: 'cobalt is incorrect' },
+        },
+      },
+    });
+    expect(state.alertError).toMatchObject({
+      messages: ['green is incorrect', 'cobalt is incorrect'],
+    });
+  });
 });
