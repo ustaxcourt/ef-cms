@@ -1,3 +1,4 @@
+import clearAlertsAction from '../actions/clearAlertsAction';
 import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsAction';
 import setValidationErrorsAction from '../actions/setValidationErrorsAction';
 import shouldValidateAction from '../actions/shouldValidateAction';
@@ -10,7 +11,7 @@ export default [
     validate: [
       validatePetitionAction,
       {
-        success: [],
+        success: [clearAlertsAction],
         error: [setValidationErrorsAction, setValidationAlertErrorsAction],
       },
     ],
