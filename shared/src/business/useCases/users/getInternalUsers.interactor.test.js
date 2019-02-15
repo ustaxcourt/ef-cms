@@ -1,23 +1,39 @@
 const { getInternalUsers } = require('./getInternalUsers.interactor');
-const User = require('../entities/User');
+const User = require('../../entities/User');
 
 describe('Get internal users', () => {
   const applicationContext = {
     getCurrentUser: () => {
       return { userId: 'docketclerk', role: 'docketclerk' };
     },
+    getPersistenceGateway: () => ({
+      getInternalUsers: () => [
+        {
+          userId: 'abc',
+        },
+        {
+          userId: '123',
+        },
+        {
+          userId: 'gg',
+        },
+      ],
+    }),
   };
 
-  it('returns all users', async () => {
+  it('returns the same users that were returned from mocked persistence', async () => {
     const users = await getInternalUsers({ applicationContext });
-    expect(users.length).toEqual(3);
-    let error;
-    try {
-      User.validateRawCollection(users);
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeUndefined();
+    expect(users).toEqual([
+      {
+        userId: 'abc',
+      },
+      {
+        userId: '123',
+      },
+      {
+        userId: 'gg',
+      },
+    ]);
   });
 
   it('throws unauthorized error for unauthorized users', async () => {
