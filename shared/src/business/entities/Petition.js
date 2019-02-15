@@ -10,6 +10,12 @@ const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 
+  if (this.filingType === 'Myself') {
+    this.contactPrimary = new PetitionerPrimaryContact(
+      this.contactPrimary || {},
+    );
+  }
+
   switch (this.partyType) {
     case 'Petitioner & Deceased Spouse':
     case 'Surviving Spouse':
@@ -51,6 +57,7 @@ Petition.errorToMessageMap = {
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
+  partyType: 'Party Type is a required field.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   signature: 'You must review the form before submitting.',
 };
@@ -65,6 +72,7 @@ joiValidationDecorator(
       .iso()
       .required(),
     petitionFile: joi.object().required(),
+    partyType: joi.string().required(),
     procedureType: joi.string().required(),
     filingType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
