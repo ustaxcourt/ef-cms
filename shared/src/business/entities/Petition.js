@@ -4,15 +4,22 @@ const {
 const joi = require('joi-browser');
 const PetitionerPrimaryContact = require('./Contacts/PetitionerPrimaryContact');
 const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationContact');
+const PetitionerIntermediaryContact = require('./Contacts/PetitionerIntermediaryContact');
 const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSpouseContact');
 const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 
+  if (this.filingType === 'Myself') {
+    this.contactPrimary = new PetitionerPrimaryContact(
+      this.contactPrimary || {},
+    );
+  }
+
   switch (this.partyType) {
-    case 'Surviving Spouse':
     case 'Petitioner & Deceased Spouse':
+    case 'Surviving Spouse':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );
@@ -33,6 +40,24 @@ function Petition(rawPetition) {
         this.contactPrimary || {},
       );
       break;
+    case 'Partnership (as the tax matters partner)':
+    case 'Partnership (as a partner other than tax matters partner)':
+      this.contactPrimary = new PetitionerPrimaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerCorporationContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
+    case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+      this.contactPrimary = new PetitionerPrimaryContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerIntermediaryContact(
+        this.contactSecondary || {},
+      );
+      break;
   }
 }
 
@@ -42,6 +67,7 @@ Petition.errorToMessageMap = {
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
+  // partyType: 'Party Type is a required field.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   signature: 'You must review the form before submitting.',
 };

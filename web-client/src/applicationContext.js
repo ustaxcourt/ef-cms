@@ -23,7 +23,7 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
-import { getInternalUsers } from '../../shared/src/business/useCases/getInternalUsers.interactor';
+import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
