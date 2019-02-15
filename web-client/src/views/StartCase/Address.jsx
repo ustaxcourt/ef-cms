@@ -22,7 +22,9 @@ export default connect(
         <div
           className={
             'usa-form-group ' +
-            (validationErrors[type].address1 ? 'usa-input-error' : '')
+            (validationErrors[type] && validationErrors[type].address1
+              ? 'usa-input-error'
+              : '')
           }
         >
           <label htmlFor={`${type}.address1`}>Street Address</label>
@@ -72,7 +74,8 @@ export default connect(
         <div
           className={
             'usa-form-group ' +
-            (validationErrors[type].city || validationErrors[type].state
+            (validationErrors[type] &&
+            (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-input-error'
               : '')
           }
@@ -86,7 +89,9 @@ export default connect(
                 name={`${type}.city`}
                 className={
                   'usa-input-inline ' +
-                  (validationErrors[type].city ? 'ustc-input-error' : '')
+                  (validationErrors[type] && validationErrors[type].city
+                    ? 'ustc-input-error'
+                    : '')
                 }
                 autoCapitalize="none"
                 value={form[type].city || ''}
@@ -106,7 +111,9 @@ export default connect(
               <select
                 className={
                   'usa-input-inline ' +
-                  (validationErrors[type].state ? 'ustc-input-error' : '')
+                  (validationErrors[type] && validationErrors[type].state
+                    ? 'ustc-input-error'
+                    : '')
                 }
                 id={`${type}.state`}
                 name={`${type}.state`}
@@ -196,7 +203,9 @@ export default connect(
         <div
           className={
             'usa-form-group ' +
-            (validationErrors[type].zip ? 'usa-input-error' : '')
+            (validationErrors[type] && validationErrors[type].zip
+              ? 'usa-input-error'
+              : '')
           }
         >
           <label htmlFor={`${type}.zip`}>ZIP Code</label>
@@ -217,7 +226,7 @@ export default connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors[type] && (
+          {validationErrors[type] && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
               {validationErrors.contactPrimary.zip}
             </div>
