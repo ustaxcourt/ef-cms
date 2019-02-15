@@ -81,6 +81,11 @@ test = CerebralTest(presenter);
 describe('Case journey', async () => {
   beforeEach(() => {
     jest.setTimeout(30000);
+    global.window = {
+      localStorage: {
+        setItem: () => null,
+      },
+    };
   });
 
   taxpayerLogin(test);

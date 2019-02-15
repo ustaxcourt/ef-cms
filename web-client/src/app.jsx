@@ -37,20 +37,17 @@ import presenter from './presenter';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    if (process.env.USTC_ENV === 'dev') {
-      // TODO remove this so users can reload pages
-      const user =
-        JSON.parse(window.localStorage.getItem('user') || 'null') ||
-        presenter.state.user;
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
+    const user =
+      JSON.parse(window.localStorage.getItem('user') || 'null') ||
+      presenter.state.user;
+    presenter.state.user = user;
+    applicationContext.setCurrentUser(user);
 
-      const token =
-        JSON.parse(window.localStorage.getItem('token') || 'null') ||
-        presenter.state.token;
-      presenter.state.token = token;
-      applicationContext.setCurrentUserToken(token);
-    }
+    const token =
+      JSON.parse(window.localStorage.getItem('token') || 'null') ||
+      presenter.state.token;
+    presenter.state.token = token;
+    applicationContext.setCurrentUserToken(token);
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
