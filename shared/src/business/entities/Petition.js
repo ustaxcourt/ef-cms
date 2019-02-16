@@ -90,7 +90,8 @@ Petition.errorToMessageMap = {
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
-  // partyType: 'Party Type is a required field.',
+  partyType: 'Party Type is a required field.',
+  ownershipDisclosure: 'Ownership Disclosure Statement is required.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   signature: 'You must review the form before submitting.',
 };
@@ -105,13 +106,22 @@ joiValidationDecorator(
       .iso()
       .required(),
     petitionFile: joi.object().required(),
+    partyType: joi.string().required(),
+    ownershipDisclosureFile: joi.object().optional(),
     procedureType: joi.string().required(),
     filingType: joi.string().required(),
+    businessType: joi.string().optional(),
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),
   function() {
-    return !this.getFormattedValidationErrors();
+    if (this.businessType) {
+      return (
+        !this.getFormattedValidationErrors() && !this.ownershipDisclosureFile
+      );
+    } else {
+      return !this.getFormattedValidationErrors();
+    }
   },
   Petition.errorToMessageMap,
 );
