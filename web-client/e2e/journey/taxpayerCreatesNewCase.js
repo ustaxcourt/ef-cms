@@ -165,6 +165,7 @@ export default (test, fakeFile) => {
       state: test.getState(),
     });
     expect(result.showPartnershipTaxMattersContact).toBeTruthy();
+    expect(result.showOwnershipDisclosure).toBeTruthy();
 
     // showPartnershipOtherContact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -241,6 +242,7 @@ export default (test, fakeFile) => {
       state: test.getState(),
     });
     expect(result.showOtherFilingTypeOptions).toBeTruthy();
+    expect(result.showOwnershipDisclosure).toBeFalsy();
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
@@ -656,7 +658,6 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('submitFilePetitionSequence');
-
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({

@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 import { omit } from 'lodash';
 
 export default async ({ applicationContext, get, store }) => {
-  const { petitionFile } = get(state.petition);
+  const { petitionFile, ownershipDisclosureFile } = get(state.petition);
 
   const fileHasUploaded = () => {
     store.set(
@@ -25,6 +25,7 @@ export default async ({ applicationContext, get, store }) => {
     applicationContext,
     petitionMetadata: form,
     petitionFile,
+    ownershipDisclosureFile,
     fileHasUploaded,
   });
 };

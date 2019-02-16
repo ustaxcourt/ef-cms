@@ -83,22 +83,6 @@
             "isInitializeCase": true
           }
         ]
-      },
-      {
-        "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "e9b4aa68-3663-4e86-8bd3-bde38af06983",
-        "documentType": "Request for Place of Trial",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "0b80ce52-89fb-4a53-b72d-121187f6b77c",
-        "documentType": "Statement of Taxpayer Identification Number",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
       }
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
@@ -180,24 +164,6 @@
         "filedBy": "Petitioner Test Taxpayer",
         "workItems": [],
         "documentId": "36bf0a37-6d75-4ea5-85ee-eea07bf9ed99",
-        "userId": "taxpayer",
-        "status": "Served"
-      },
-      {
-        "createdAt": "2018-12-27T17:26:36.948Z",
-        "documentType": "Request for Place of Trial",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [],
-        "documentId": "d4b00ffe-a36d-4452-b696-7f21bcb0dff1",
-        "userId": "taxpayer",
-        "status": "Served"
-      },
-      {
-        "createdAt": "2018-12-27T17:26:36.948Z",
-        "documentType": "Statement of Taxpayer Identification Number",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [],
-        "documentId": "204b7563-05e0-42df-b1c5-e77edec2e11e",
         "userId": "taxpayer",
         "status": "Served"
       },
@@ -418,22 +384,6 @@
         "createdAt": "2018-12-27T18:23:07.975Z",
         "documentId": "c36354f7-696e-4e61-b8cb-177cec967d2d",
         "documentType": "Petition",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:23:07.975Z",
-        "documentId": "d9ed9986-47b1-43c4-9d77-3f74fd14cd51",
-        "documentType": "Request for Place of Trial",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:23:07.975Z",
-        "documentId": "7cb442cc-bda5-4c5d-8f92-668229fbd8f8",
-        "documentType": "Statement of Taxpayer Identification Number",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
         "workItems": []
