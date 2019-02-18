@@ -2,18 +2,34 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Address from './Address';
+import Email from './Email';
 
 export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function PetitionerContact({ form, updateFormValueSequence }) {
+  function PetitionerContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+    validateStartCaseSequence,
+  }) {
     return (
       <div className="usa-form-group">
         <h3>Tell Us About Yourself</h3>
         <div className="blue-container">
-          <div className="usa-form-group">
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary &&
+              validationErrors.contactPrimary.name
+                ? 'usa-input-error'
+                : '')
+            }
+          >
             <label htmlFor="name">Name</label>
             <input
               id="name"
@@ -27,14 +43,27 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            {validationErrors.contactPrimary && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.name}
+              </div>
+            )}
           </div>
           <Address type="contactPrimary" />
-          <div className="usa-form-group">
-            <label htmlFor="email">Email Address</label>
-            {form.contactPrimary.email || 'test@test.com'}
-          </div>
-          <div className="usa-form-group">
+          <Email />
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.contactPrimary &&
+              validationErrors.contactPrimary.phone
+                ? 'usa-input-error'
+                : '')
+            }
+          >
             <label htmlFor="phone">Phone Number</label>
             <input
               id="phone"
@@ -49,7 +78,15 @@ export default connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
             />
+            {validationErrors.contactPrimary && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
+            )}
           </div>
         </div>
       </div>

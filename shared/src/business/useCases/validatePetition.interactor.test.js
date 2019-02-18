@@ -71,7 +71,7 @@ describe('validatePetition', () => {
     });
 
     expect(errors).toEqual({
-      irsNoticeDate: 'IRS Notice Date is a required field.',
+      irsNoticeDate: 'Notice Date is a required field.',
     });
   });
 });

@@ -62,13 +62,7 @@ function getFormattedValidationErrors(entity) {
         })
         .filter(v => v);
       if (obj[key].length === 0) {
-        if (errors && errors[key]) {
-          obj[key] =
-            (entity.getErrorToMessageMap() || {})[key] ||
-            'An invalid value was found';
-        } else {
-          delete obj[key];
-        }
+        delete obj[key];
       }
     } else if (
       typeof value === 'object' &&

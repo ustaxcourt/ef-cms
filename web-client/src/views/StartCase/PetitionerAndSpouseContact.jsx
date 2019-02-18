@@ -2,19 +2,34 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Address from './Address';
+import Email from './Email';
 
 export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function PetitionerAndSpouseContact({ form, updateFormValueSequence }) {
+  function PetitionerAndSpouseContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+    validateStartCaseSequence,
+  }) {
+    validationErrors.contactPrimary = validationErrors.contactPrimary || {};
+    validationErrors.contactSecondary = validationErrors.contactSecondary || {};
     return (
-      <div>
+      <React.Fragment>
         <div className="usa-form-group">
           <h3>Tell Us About Yourself</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.name ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="name">Name</label>
               <input
                 id="name"
@@ -28,14 +43,22 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.name}
+              </div>
             </div>
             <Address type="contactPrimary" />
-            <div className="usa-form-group">
-              <label htmlFor="email">Email Address</label>
-              {form.contactPrimary.email || 'test@test.com'}
-            </div>
-            <div className="usa-form-group">
+            <Email />
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.phone ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="phone">Phone Number</label>
               <input
                 id="phone"
@@ -50,15 +73,28 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
             </div>
           </div>
         </div>
         <div className="usa-form-group">
           <h3>Tell Us About Your Spouse</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
-              <label htmlFor="secondaryName">Spouse&#39;s Name</label>
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.name
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
+              <label htmlFor="secondaryName">Spouse’s Name</label>
               <input
                 id="secondaryName"
                 type="text"
@@ -71,26 +107,23 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
-            </div>
-            <Address type="contactSecondary" />
-            <div className="usa-form-group">
-              <label htmlFor="secondaryEmail">Email Address</label>
-              <input
-                id="secondaryEmail"
-                type="email"
-                name="contactSecondary.email"
-                autoCapitalize="none"
-                value={form.contactSecondary.email || ''}
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
+                onBlur={() => {
+                  validateStartCaseSequence();
                 }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.name}
+              </div>
             </div>
-            <div className="usa-form-group">
+            <Address type="contactSecondary" />
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.phone
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryPhone">Phone Number</label>
               <input
                 id="secondaryPhone"
@@ -105,11 +138,17 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.phone}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   },
 );

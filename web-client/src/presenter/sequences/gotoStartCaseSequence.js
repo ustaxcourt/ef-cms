@@ -1,3 +1,6 @@
+import { state } from 'cerebral';
+import { set } from 'cerebral/factories';
+
 import clearAlerts from '../actions/clearAlertsAction';
 import clearForm from '../actions/clearFormAction';
 import prepareForm from '../actions/prepareFormAction';
@@ -15,6 +18,7 @@ export default [
   clearPetition,
   clearForm,
   prepareForm,
+  set(state.showValidation, false),
   getCaseTypes,
   setCaseTypes,
   getFilingTypes,
