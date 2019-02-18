@@ -202,10 +202,10 @@ export default connect(
                 <div className="usa-grid-full ustc-secondary-question">
                   <div className="usa-width-one-whole">
                     <fieldset
-                      id="filing-type-radios"
+                      id="deceased-spouse-radios"
                       className="usa-fieldset-inputs usa-sans"
                     >
-                      <legend htmlFor="filing-type-radios">
+                      <legend htmlFor="deceased-spouse-radios">
                         Is your spouse deceased?
                       </legend>
                       <ul className="usa-unstyled-list">
@@ -467,6 +467,52 @@ export default connect(
           {startCaseHelper.showTransfereeContact && <TransfereeContact />}
           {startCaseHelper.showSurvivingSpouseContact && (
             <SurvivingSpouseContact />
+          )}
+
+          {/*start ods*/}
+          {startCaseHelper.showOwnershipDisclosure && (
+            <div className="usa-form-group">
+              <h2>Ownership Disclosure Statement</h2>
+              <p>
+                Tax Court Rules of Practice and Procedure (Rule 60) requires a
+                corporation, partnership, or limited liability company, filing a
+                Petition with the Court to also file an Ownership Disclosure
+                Statement (ODS). Complete your{' '}
+                <a
+                  href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ownership Disclosure Statement Form 6
+                </a>
+                .
+              </p>
+              <div className="blue-container">
+                <label
+                  htmlFor="ownership-disclosure-file"
+                  className={
+                    startCaseHelper.showOwnershipDisclosureValid && 'validated'
+                  }
+                >
+                  Upload your Ownership Disclosure Statement
+                </label>
+                <span className="usa-form-hint">
+                  File must be in PDF format (.pdf).
+                </span>
+                <input
+                  id="ownership-disclosure-file"
+                  type="file"
+                  accept=".pdf"
+                  name="ownershipDisclosureFile"
+                  onChange={e => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                  }}
+                />
+              </div>
+            </div>
           )}
 
           <div className="usa-form-group">
