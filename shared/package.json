@@ -26,7 +26,8 @@
     "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
-      "!src/proxies/**/*.js"
+      "!src/proxies/**/*.js",
+      "!src/**/ContactFactory.js"
     ],
     "coverageThreshold": {
       "global": {
