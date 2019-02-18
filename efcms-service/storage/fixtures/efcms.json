@@ -481,7 +481,7 @@
   },
   {
     "sk": "docketNumberCounter",
-    "id": 3,
+    "id": 4,
     "pk": "docketNumberCounter"
   },
   {
@@ -550,7 +550,7 @@
       }
     ],
     "pk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "updatedAt": "2019-01-06T22:49:42.981Z"
   },
   {
@@ -576,7 +576,7 @@
   },
   {
     "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "199-18|case"
+    "pk": "104-18|case"
   },
   {
     "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
@@ -586,6 +586,11 @@
     "procedureType": "Small",
     "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -627,7 +632,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -671,7 +676,7 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   },
   {
@@ -711,7 +716,7 @@
                 "sentBy": "Test Taxpayer"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -740,6 +745,12 @@
         "filedBy": "Petitioner"
       }
     ],
+
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
@@ -755,13 +766,18 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "New"
   },
   {
     "procedureType": "Small",
     "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -803,7 +819,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -847,7 +863,7 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   }
 ]
