@@ -47,7 +47,7 @@ export default connect(
             />
           </div>
           <Address type="contactPrimary" />
-          <Email type="contactPrimary" />
+          <Email />
           <div className="usa-form-group">
             <label htmlFor="phone">Phone Number</label>
             <input

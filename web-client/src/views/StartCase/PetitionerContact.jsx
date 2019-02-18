@@ -54,7 +54,7 @@ export default connect(
             )}
           </div>
           <Address type="contactPrimary" />
-          <Email type="contactPrimary" />
+          <Email />
           <div
             className={
               'usa-form-group ' +

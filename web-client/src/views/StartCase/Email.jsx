@@ -1,20 +1,19 @@
 import { connect } from '@cerebral/react';
-import { state, props } from 'cerebral';
+import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export default connect(
   {
-    form: state.form,
-    type: props.type,
+    email: state.user.email,
   },
-  function Email({ form, type }) {
+  function Email({ email }) {
     return (
       <React.Fragment>
         <div className="usa-form-group">
           <div className="usa-width-five-twelfths">
             <label htmlFor="email">Email Address</label>
-            {form[type].email}
+            {email}
           </div>
           <div className="usa-width-seven-twelfths">
             <div
