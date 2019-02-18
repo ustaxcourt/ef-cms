@@ -19,12 +19,6 @@ const statusMap = {
   new: 'New',
   recalled: 'Recalled',
 };
-const STATUSES = [
-  statusMap.general,
-  statusMap.batchedForIRS,
-  statusMap.new,
-  statusMap.recalled,
-];
 
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
@@ -189,7 +183,7 @@ joiValidationDecorator(
       .optional(),
     status: joi
       .string()
-      .valid(STATUSES)
+      .valid(Object.keys(statusMap).map(key => statusMap[key]))
       .optional(),
     petitioners: joi.array().optional(),
     documents: joi
