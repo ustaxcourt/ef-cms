@@ -488,7 +488,6 @@ export default connect(
                 .
               </p>
               <div className="blue-container">
-                <h3>Upload Your Ownership Disclosure Statement</h3>
                 <label
                   htmlFor="ownership-disclosure-file"
                   className={
