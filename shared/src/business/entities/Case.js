@@ -481,12 +481,11 @@ Case.stripLeadingZeros = docketNumber => {
  */
 Case.documentTypes = {
   petitionFile: 'Petition',
-  requestForPlaceOfTrial: 'Request for Place of Trial',
-  statementOfTaxpayerIdentificationNumber:
-    'Statement of Taxpayer Identification Number',
+  // statementOfTaxpayerIdentificationNumber:
+  //   'Statement of Taxpayer Identification Number',
+  ownershipDisclosure: 'Ownership Disclosure Statement',
   answer: 'Answer',
   stipulatedDecision: 'Stipulated Decision',
-  irsNotice: 'IRS Notice',
 };
 
 /**
