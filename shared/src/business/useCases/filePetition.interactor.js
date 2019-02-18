@@ -1,3 +1,4 @@
+//TODO remove
 const {
   isAuthorized,
   PETITION,
@@ -7,6 +8,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 exports.filePetition = async ({
   petitionMetadata,
   petitionFile,
+  ownershipDisclosureFile,
   fileHasUploaded,
   applicationContext,
 }) => {
@@ -22,11 +24,22 @@ exports.filePetition = async ({
       applicationContext,
       document: petitionFile,
     });
-
   fileHasUploaded();
+
+  let ownershipDisclosureFileId;
+  if (ownershipDisclosureFile) {
+    ownershipDisclosureFileId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: ownershipDisclosureFile,
+      });
+    fileHasUploaded();
+  }
 
   await applicationContext.getUseCases().createCase({
     petitionFileId,
+    ownershipDisclosureFileId,
     petitionMetadata,
     applicationContext,
   });
