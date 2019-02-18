@@ -18,9 +18,9 @@ export default connect(
     validateStartCaseSequence,
   }) {
     return (
-      <div className="usa-form-group">
+      <div className="usa-form-group contact-group">
         <h3>Tell Us About Yourself</h3>
-        <div className="blue-container">
+        <div className="blue-container usa-grid-full">
           <div
             className={
               'usa-form-group ' +
