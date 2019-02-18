@@ -8,6 +8,7 @@ describe('formattedCaseDetail', () => {
       state: {
         caseDetail: {
           status: 'general',
+          petitioners: [{ name: 'bob' }],
         },
       },
     });

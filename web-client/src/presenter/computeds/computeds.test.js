@@ -7,6 +7,7 @@ describe('formatted case details computed', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
+          petitioners: [{ name: 'bob' }],
           irsDate: '2018-11-21T20:49:28.192Z',
           documents: [
             {
@@ -29,6 +30,7 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
+            petitioners: [{ name: 'bob' }],
             irsDate: '2018-11-21T20:49:28.192Z',
             documents: [
               {
@@ -48,7 +50,12 @@ describe('formatted case details computed', () => {
   it('formats the respondent name to include barnumber', () => {
     const result = runCompute(formattedCases, {
       state: {
-        cases: [{ respondent: { name: 'test', barNumber: '123' } }],
+        cases: [
+          {
+            petitioners: [{ name: 'bob' }],
+            respondent: { name: 'test', barNumber: '123' },
+          },
+        ],
       },
     });
     expect(result[0].respondent.formattedName).toContain('test 123');
