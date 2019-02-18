@@ -32,7 +32,7 @@ describe('syncDocuments', () => {
     client.put.restore();
   });
 
-  it('should get the internal users', async () => {
+  it('should sync the documents with none', async () => {
     await syncDocuments({
       applicationContext,
       currentCaseState: currentCase,
@@ -43,5 +43,34 @@ describe('syncDocuments', () => {
       pk: 'docId|case',
       sk: 'caseId',
     });
+  });
+
+  it('sync the documents with more than one', async () => {
+    currentCase.documents.push({
+      documentId: 'anotherdocId',
+    });
+    await syncDocuments({
+      applicationContext,
+      currentCaseState: currentCase,
+      caseToSave,
+    });
+
+    expect(client.put.getCall(0).args[0].Item).toEqual({
+      pk: 'docId|case',
+      sk: 'caseId',
+    });
+  });
+
+  it('sync the documents with same docId', async () => {
+    currentCase.documents.push({
+      documentId: 'docId',
+    });
+    await syncDocuments({
+      applicationContext,
+      currentCaseState: currentCase,
+      caseToSave,
+    });
+
+    expect(client.put.notCalled).toBeTruthy();
   });
 });
