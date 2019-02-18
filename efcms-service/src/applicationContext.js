@@ -166,14 +166,14 @@ const getCurrentUser = () => {
   return user;
 };
 const setCurrentUser = newUser => {
-  user = newUser;
+  user = new User(newUser);
 };
 
 /**
  * 
  */
 module.exports = (appContextUser = {}) => {
-  setCurrentUser(new User(appContextUser));
+  setCurrentUser(appContextUser);
 
   return {
     getStorageClient: () => {
