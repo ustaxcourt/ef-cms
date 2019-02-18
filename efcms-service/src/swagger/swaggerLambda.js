@@ -4,7 +4,6 @@ const { headers } = require('../middleware/apiGatewayHelper');
 /**
  * Renders a simple HTML page that loads up the swagger-ui package and consumes the swagger.json file found at the root of this project.
  *
- * @param {Error} err
  * @returns {Object} the api-gateway response object where body contains the HTML
  */
 exports.handler = async () => {

@@ -4,8 +4,8 @@ const createApplicationContext = require('../applicationContext');
 /**
  * used for sending the case to the irs
  *
- * @param {Object} event
- * @returns {Promise<*|undefined>}
+ * @param {Object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.delete = event =>
   handle(() => {
