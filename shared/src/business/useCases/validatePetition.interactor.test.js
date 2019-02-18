@@ -13,7 +13,9 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(Petition.errorToMessageMap);
+    expect(errors).toEqual(
+      omit(Petition.errorToMessageMap, ['ownershipDisclosureFile']),
+    );
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -27,7 +29,9 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(omit(Petition.errorToMessageMap, ['caseType']));
+    expect(errors).toEqual(
+      omit(Petition.errorToMessageMap, ['caseType', 'ownershipDisclosureFile']),
+    );
   });
 
   it('returns the expected errors object', () => {
