@@ -107,6 +107,8 @@ label.validated::after {
   width: 25rem;
 }
 
-.ustc-is-spouse-deceased {
-  margin-top: 20px;
+.usa-grid-full {
+  &.ustc-secondary-question {
+    margin-top: 20px;
+  }
 }

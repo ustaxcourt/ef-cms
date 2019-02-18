@@ -67,8 +67,6 @@ describe('createCase', () => {
 
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-      caseTitle:
-        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       caseType: 'other',
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
@@ -193,8 +191,6 @@ describe('createCase', () => {
 
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-      caseTitle:
-        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       caseType: 'other',
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',

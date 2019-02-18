@@ -105,21 +105,19 @@
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "userId": "taxpayer",
     "docketNumber": "102-18",
     "docketNumberSuffix": "SL",
@@ -290,8 +288,8 @@
       "barNumber": "12345",
       "phone": "111-111-1111",
       "name": "Test Respondent",
-      "addressLine1": "111 Orange St.",
-      "addressLine2": "Building 2",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
       "state": "FL",
       "email": "testrespondent@example.com"
     },
@@ -306,21 +304,19 @@
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "sk": "0",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "docketNumber": "101-18",
     "docketNumberSuffix": "W",
     "status": "General"
@@ -450,21 +446,19 @@
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "userId": "taxpayer",
     "docketNumber": "103-18",
     "docketNumberSuffix": "X",
@@ -649,21 +643,19 @@
     ],
     "sk": "0",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "docketNumber": "199-18",
     "status": "Batched for IRS"
   },
@@ -735,21 +727,19 @@
     ],
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "docketNumber": "199-18",
     "status": "New"
   },
@@ -829,21 +819,19 @@
     ],
     "sk": "2",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "docketNumber": "199-18",
     "status": "Batched for IRS"
   }

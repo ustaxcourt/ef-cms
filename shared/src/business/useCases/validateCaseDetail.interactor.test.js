@@ -7,7 +7,6 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      caseTitle: 'A case title is required.',
       caseType: 'Case Type is required.',
       docketNumber: 'Docket number is required.',
       documents: 'At least one valid document is required.',

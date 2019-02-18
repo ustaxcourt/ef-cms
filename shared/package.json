@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint ./src && stylelint ./src/**/*.scss;",
     "test": "jest",
+    "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",
     "docker:lint": "./docker-lint.sh",
     "docker:shellcheck": "./docker-shellcheck.sh",
@@ -25,7 +26,8 @@
     "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
-      "!src/proxies/**/*.js"
+      "!src/proxies/**/*.js",
+      "!src/**/ContactFactory.js"
     ],
     "coverageThreshold": {
       "global": {
@@ -47,7 +49,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-string": "^1.5.0",
-    "eslint": "^5.14.0",
+    "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-cypress": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",

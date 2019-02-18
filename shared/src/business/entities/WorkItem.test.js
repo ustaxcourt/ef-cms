@@ -78,8 +78,10 @@ describe('WorkItem', () => {
       });
       assert.ok(workItem.isValid());
     });
+  });
 
-    it('addMessage', () => {
+  describe('acquires messages', () => {
+    it('when calling add message', () => {
       const workItem = new WorkItem({
         sentBy: 'bob',
         assigneeId: 'bob',
@@ -100,6 +102,24 @@ describe('WorkItem', () => {
         }),
       );
       assert.ok(workItem.messages.length === 1);
+    });
+
+    it('when set as completed', () => {
+      const workItem = new WorkItem({
+        sentBy: 'bob',
+        assigneeId: 'bob',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        assigneeName: 'bob',
+        caseTitle: 'testing',
+        caseStatus: 'new',
+        document: {},
+        messages: [],
+      });
+      workItem.setAsCompleted('jane');
+      expect(workItem.messages.length === 1).toBe(true);
+      expect(workItem.messages[0].message).toEqual('work item completed');
     });
   });
 });
