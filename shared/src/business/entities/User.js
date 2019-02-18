@@ -22,6 +22,7 @@ joiValidationDecorator(
 function User(user) {
   Object.assign(this, user);
   this.section = getSectionForRole(this.role);
+  this.role = this.role || 'petitioner';
 }
 
 /**
