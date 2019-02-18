@@ -453,10 +453,6 @@ functions:
           path: v1/documents/{documentId}/documentDownloadUrl
           method: get
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
           documentation:
             summary: redirects to the s3 url for downloading a document
             tags:
