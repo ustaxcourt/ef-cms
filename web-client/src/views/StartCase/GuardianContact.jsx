@@ -12,7 +12,7 @@ export default connect(
   function GuardianContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>Tell Us About the Guardian for This Taxpayer</h3>
           <div className="blue-container">
             <div className="usa-form-group">
@@ -34,9 +34,9 @@ export default connect(
             <Address type="contactPrimary" />
             <Email />
             <div className="usa-form-group">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="secondaryPhone">Phone Number</label>
               <input
-                id="phone"
+                id="secondaryPhone"
                 type="tel"
                 name="contactPrimary.phone"
                 className="ustc-input-phone"

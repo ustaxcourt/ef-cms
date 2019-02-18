@@ -202,10 +202,10 @@ export default connect(
                 <div className="usa-grid-full ustc-secondary-question">
                   <div className="usa-width-one-whole">
                     <fieldset
-                      id="filing-type-radios"
+                      id="deceased-spouse-radios"
                       className="usa-fieldset-inputs usa-sans"
                     >
-                      <legend htmlFor="filing-type-radios">
+                      <legend htmlFor="deceased-spouse-radios">
                         Is your spouse deceased?
                       </legend>
                       <ul className="usa-unstyled-list">
