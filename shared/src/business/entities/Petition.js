@@ -91,7 +91,7 @@ Petition.errorToMessageMap = {
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
   partyType: 'Party Type is a required field.',
-  ownershipDisclosure: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   signature: 'You must review the form before submitting.',
 };
@@ -106,22 +106,20 @@ joiValidationDecorator(
       .iso()
       .required(),
     petitionFile: joi.object().required(),
+    businessType: joi.string().optional(),
     partyType: joi.string().required(),
-    ownershipDisclosureFile: joi.object().optional(),
+    ownershipDisclosureFile: joi.object().when('businessType', {
+      is: joi.exist(),
+      then: joi.required(),
+      otherwise: joi.optional(),
+    }),
     procedureType: joi.string().required(),
     filingType: joi.string().required(),
-    businessType: joi.string().optional(),
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),
   function() {
-    if (this.businessType) {
-      return (
-        !this.getFormattedValidationErrors() && !this.ownershipDisclosureFile
-      );
-    } else {
-      return !this.getFormattedValidationErrors();
-    }
+    return !this.getFormattedValidationErrors();
   },
   Petition.errorToMessageMap,
 );

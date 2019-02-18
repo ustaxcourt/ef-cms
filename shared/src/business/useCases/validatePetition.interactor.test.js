@@ -13,7 +13,9 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(Petition.errorToMessageMap);
+    expect(errors).toEqual(
+      omit(Petition.errorToMessageMap, ['ownershipDisclosureFile']),
+    );
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -27,7 +29,9 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(omit(Petition.errorToMessageMap, ['caseType']));
+    expect(errors).toEqual(
+      omit(Petition.errorToMessageMap, ['caseType', 'ownershipDisclosureFile']),
+    );
   });
 
   it('returns the expected errors object', () => {
@@ -47,7 +51,7 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(null);
+    expect(errors).toEqual({ partyType: 'Party Type is a required field.' });
   });
 
   it('returns an error for a irs notice date in the future', () => {
@@ -72,6 +76,7 @@ describe('validatePetition', () => {
 
     expect(errors).toEqual({
       irsNoticeDate: 'IRS Notice Date is a required field.',
+      partyType: 'Party Type is a required field.',
     });
   });
 });
