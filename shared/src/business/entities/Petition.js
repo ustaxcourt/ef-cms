@@ -9,17 +9,23 @@ const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSp
 const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 const PetitionerEstateExecutorContact = require('./Contacts/PetitionerEstateExecutorContact');
 const PetitionerEstateWithExecutorPrimaryContact = require('./Contacts/PetitionerEstateWithExecutorPrimaryContact');
+const PetitionerTaxpayerContact = require('./Contacts/PetitionerTaxpayerContact');
+const PetitionerConservatorContact = require('./Contacts/PetitionerConservatorContact');
+const PetitionerGuardianContact = require('./Contacts/PetitionerGuardianContact');
+const PetitionerCustodianContact = require('./Contacts/PetitionerCustodianContact');
+const PetitionerPartnershipRepContact = require('./Contacts/PetitionerPartnershipRepContact');
+const PetitionerTrustContact = require('./Contacts/PetitionerTrustContact');
+const PetitionerTrusteeContact = require('./Contacts/PetitionerTrusteeContact');
 
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 
-  if (this.filingType === 'Myself') {
-    this.contactPrimary = new PetitionerPrimaryContact(
-      this.contactPrimary || {},
-    );
-  }
-
   switch (this.partyType) {
+    case 'Petitioner':
+      this.contactPrimary = new PetitionerPrimaryContact(
+        this.contactPrimary || {},
+      );
+      break;
     case 'Petitioner & Deceased Spouse':
     case 'Surviving Spouse':
       this.contactPrimary = new PetitionerPrimaryContact(
@@ -70,14 +76,42 @@ function Petition(rawPetition) {
       );
       break;
     case 'Partnership (BBA Regime)':
-    case 'Trust & Trustee':
-    case 'Conservator':
-    case 'Guardian':
-    case 'Custodian':
       this.contactPrimary = new PetitionerIntermediaryContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerPrimaryContact(
+      this.contactSecondary = new PetitionerPartnershipRepContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Trust & Trustee':
+      this.contactPrimary = new PetitionerTrustContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerTrusteeContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Conservator':
+      this.contactPrimary = new PetitionerTaxpayerContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerConservatorContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Guardian':
+      this.contactPrimary = new PetitionerTaxpayerContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerGuardianContact(
+        this.contactSecondary || {},
+      );
+      break;
+    case 'Custodian':
+      this.contactPrimary = new PetitionerTaxpayerContact(
+        this.contactPrimary || {},
+      );
+      this.contactSecondary = new PetitionerCustodianContact(
         this.contactSecondary || {},
       );
       break;
