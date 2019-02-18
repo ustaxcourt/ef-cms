@@ -3,6 +3,7 @@ const PetitionerDeceasedSpouseContact = require('./PetitionerDeceasedSpouseConta
 const PetitionerSpouseContact = require('./PetitionerSpouseContact');
 const PetitionerCorporationContact = require('./PetitionerCorporationContact');
 
+// TODO; currently ignored in package.json jest config
 const ContactFactory = {
   addContacts: (partyType, obj) => {
     const contactProps = ['contactPrimary', 'contactSecondary'];
