@@ -351,7 +351,7 @@ describe('createCase', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'docketclerk' });
+        return {};
       },
     };
     let error;

@@ -5,7 +5,7 @@ export default ({ props }) => {
   decoded.userId = decoded.email;
   decoded.role = decoded['custom:role'];
   return {
-    user: decoded ? decoded : props.token, // TODO remove ternary
-    token: decoded ? props.token : undefined, // TODO remove ternary
+    user: decoded,
+    token: props.token,
   };
 };
