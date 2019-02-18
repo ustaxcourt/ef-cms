@@ -13,7 +13,13 @@ PetitionerCorporationContact.errorToMessageMap = {
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State is a required field.',
-  zip: 'Zip Code is a required field.',
+  zip: [
+    {
+      contains: 'match',
+      message: 'Please enter a valid zip code.',
+    },
+    'Zip Code is a required field.',
+  ],
   // country: '',
   // email: '',
   phone: 'Phone is a required field.',
@@ -27,7 +33,10 @@ joiValidationDecorator(
     address1: joi.string().required(),
     city: joi.string().required(),
     state: joi.string().required(),
-    zip: joi.string().required(),
+    zip: joi
+      .string()
+      .regex(/^\d{5}(-\d{4})?$/)
+      .required(),
     // country: joi.string().required(),
     // email: joi.string().required(),
     phone: joi.string().required(),
