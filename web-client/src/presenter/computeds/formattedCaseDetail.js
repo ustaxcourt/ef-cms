@@ -75,7 +75,6 @@ const formatCase = (caseDetail, caseDetailErrors) => {
       result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
 
-  console.log('result', result);
   result.petitionerName = result.petitioners[0].name;
 
   result.createdAtFormatted = moment(result.createdAt).format('L');
