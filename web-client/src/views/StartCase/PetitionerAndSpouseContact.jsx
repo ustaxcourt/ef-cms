@@ -21,7 +21,7 @@ export default connect(
     validationErrors.contactSecondary = validationErrors.contactSecondary || {};
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>Tell Us About Yourself</h3>
           <div className="blue-container">
             <div

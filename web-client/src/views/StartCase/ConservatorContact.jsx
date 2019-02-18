@@ -12,7 +12,7 @@ export default connect(
   function ConservatorContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>Tell Us About Yourself as the Conservator for This Taxpayer</h3>
           <div className="blue-container">
             <div className="usa-form-group">
@@ -91,9 +91,9 @@ export default connect(
             </div>
             <Address type="contactSecondary" />
             <div className="usa-form-group">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="secondaryPhone">Phone Number</label>
               <input
-                id="phone"
+                id="secondaryPhone"
                 type="tel"
                 name="contactSecondary.phone"
                 className="ustc-input-phone"
