@@ -6,7 +6,7 @@ exports.syncDocuments = async ({
   currentCaseState,
 }) => {
   for (let document of caseToSave.documents || []) {
-    const existing = ((currentCaseState || {}).documents || []).find(
+    const existing = currentCaseState.documents.find(
       i => i.documentId === document.documentId,
     );
     if (!existing) {
