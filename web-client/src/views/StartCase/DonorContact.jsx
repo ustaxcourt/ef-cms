@@ -11,7 +11,7 @@ export default connect(
   },
   function DonorContact({ form, updateFormValueSequence }) {
     return (
-      <div className="usa-form-group">
+      <div className="usa-form-group contact-group">
         <h3>Tell Us About the Donor You Are Filing For</h3>
         <div className="blue-container">
           <div className="usa-form-group">

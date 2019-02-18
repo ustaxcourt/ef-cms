@@ -12,7 +12,7 @@ export default connect(
   function TransfereeContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>Tell Us About the Transferee You Are Filing For</h3>
           <div className="blue-container">
             <div className="usa-form-group">

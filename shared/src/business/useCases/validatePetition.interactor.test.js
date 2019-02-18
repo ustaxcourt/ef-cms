@@ -14,7 +14,7 @@ describe('validatePetition', () => {
       },
     });
     expect(errors).toEqual({
-      ...Petition.errorToMessageMap,
+      ...omit(Petition.errorToMessageMap, ['ownershipDisclosureFile']),
       irsNoticeDate: 'Notice Date is a required field.',
     });
   });
@@ -31,7 +31,10 @@ describe('validatePetition', () => {
       },
     });
     expect(errors).toEqual({
-      ...omit(Petition.errorToMessageMap, ['caseType']),
+      ...omit(Petition.errorToMessageMap, [
+        'caseType',
+        'ownershipDisclosureFile',
+      ]),
       irsNoticeDate: 'Notice Date is a required field.',
     });
   });

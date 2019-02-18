@@ -19,7 +19,7 @@ export default connect(
   }) {
     validationErrors.contactPrimary = validationErrors.contactPrimary || {};
     return (
-      <div className="usa-form-group">
+      <div className="usa-form-group contact-group">
         <h3>Tell Us About the Corporation You Are Filing For</h3>
         <div className="blue-container">
           <div
