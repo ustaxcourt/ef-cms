@@ -12,7 +12,13 @@ PetitionerSpouseContact.errorToMessageMap = {
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State is a required field.',
-  zip: 'Zip code is a required field.',
+  zip: [
+    {
+      contains: 'match',
+      message: 'Please enter a valid zip code.',
+    },
+    'Zip Code is a required field.',
+  ],
   // country: 'Country is required',
   phone: 'Phone is a required field.',
   email: 'Email is a required field.',
