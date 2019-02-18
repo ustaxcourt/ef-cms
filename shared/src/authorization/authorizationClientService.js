@@ -69,7 +69,7 @@ const AUTHORIZATION_MAP = {
  * @returns {boolean}
  */
 exports.isAuthorized = (user, action, owner) => {
-  if (user.userId === owner) {
+  if (user.userId && user.userId === owner) {
     return true;
   }
 
