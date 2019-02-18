@@ -72,9 +72,10 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   if (result.documents) result.documents = result.documents.map(formatDocument);
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber
+      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
 
+  console.log('result', result);
   result.petitionerName = result.petitioners[0].name;
 
   result.createdAtFormatted = moment(result.createdAt).format('L');
