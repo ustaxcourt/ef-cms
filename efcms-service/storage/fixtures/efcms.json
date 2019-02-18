@@ -118,6 +118,11 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
     "docketNumberSuffix": "SL",
@@ -304,6 +309,11 @@
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "sk": "0",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
@@ -446,6 +456,11 @@
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
@@ -466,7 +481,7 @@
   },
   {
     "sk": "docketNumberCounter",
-    "id": 3,
+    "id": 4,
     "pk": "docketNumberCounter"
   },
   {
@@ -535,7 +550,7 @@
       }
     ],
     "pk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "updatedAt": "2019-01-06T22:49:42.981Z"
   },
   {
@@ -561,7 +576,7 @@
   },
   {
     "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "199-18|case"
+    "pk": "104-18|case"
   },
   {
     "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
@@ -571,6 +586,11 @@
     "procedureType": "Small",
     "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -612,7 +632,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -656,7 +676,7 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   },
   {
@@ -696,7 +716,7 @@
                 "sentBy": "Test Taxpayer"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -725,6 +745,12 @@
         "filedBy": "Petitioner"
       }
     ],
+
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
@@ -740,13 +766,18 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "New"
   },
   {
     "procedureType": "Small",
     "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -788,7 +819,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -832,7 +863,7 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   }
 ]
