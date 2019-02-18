@@ -27,7 +27,10 @@ joiValidationDecorator(
     address1: joi.string().required(),
     city: joi.string().required(),
     state: joi.string().required(),
-    zip: joi.string().required(),
+    zip: joi
+      .string()
+      .regex(/^\d{5}(-\d{4})?$/)
+      .required(),
     // country: joi.string().required(),
     // email: joi.string().required(),
     phone: joi.string().required(),
