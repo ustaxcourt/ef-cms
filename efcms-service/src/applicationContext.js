@@ -169,6 +169,9 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
+/**
+ * 
+ */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(new User(appContextUser));
 
