@@ -12,7 +12,13 @@ PetitionerDeceasedSpouseContact.errorToMessageMap = {
   address1: 'Address is required',
   city: 'City is required',
   state: 'State is required',
-  zip: 'Zip code is required',
+  zip: [
+    {
+      contains: 'match',
+      message: 'Please enter a valid zip code.',
+    },
+    'Zip Code is a required field.',
+  ],
 };
 
 joiValidationDecorator(
