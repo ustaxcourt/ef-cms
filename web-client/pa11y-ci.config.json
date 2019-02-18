@@ -255,7 +255,7 @@
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-18",
     {
       "notes": "checks a11y of case information tab panel",
-      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18&info=can-input-pay-id",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18&info=tab-case-info",
       "actions": [
         "wait for #case-info-tab to be visible",
         "click element #case-info-tab"
