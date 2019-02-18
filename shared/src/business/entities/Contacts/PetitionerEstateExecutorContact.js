@@ -21,7 +21,6 @@ PetitionerEstateExecutorContact.errorToMessageMap = {
     'Zip Code is a required field.',
   ],
   phone: 'Phone is a required field.',
-  // email: 'Please provide a valid email address.',
 };
 
 joiValidationDecorator(
@@ -37,7 +36,6 @@ joiValidationDecorator(
       .regex(/^\d{5}(-\d{4})?$/)
       .required(),
     phone: joi.string().required(),
-    // email: joi.string().required(),
   }),
   undefined,
   PetitionerEstateExecutorContact.errorToMessageMap,
