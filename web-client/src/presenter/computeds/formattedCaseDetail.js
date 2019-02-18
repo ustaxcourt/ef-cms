@@ -75,6 +75,8 @@ const formatCase = (caseDetail, caseDetailErrors) => {
       result.respondent.barNumber
     }`;
 
+  result.petitionerName = result.petitioners[0].name;
+
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.irsDateFormatted = moment(result.irsDate).format('L LT');
   result.payGovDateFormatted = moment(result.payGovDate).format('L');
