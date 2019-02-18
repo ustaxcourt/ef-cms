@@ -11,5 +11,6 @@ exports.validatePetition = ({ petition, applicationContext }) => {
     petition,
   ).getFormattedValidationErrors();
   if (!errors) return null;
+
   return errors;
 };
