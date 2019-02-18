@@ -114,6 +114,9 @@ export default connect(
                         value: e.target.files[0],
                       });
                     }}
+                    onBlur={() => {
+                      validateStartCaseSequence();
+                    }}
                   />
                   <div className="usa-input-error-message beneath">
                     {validationErrors.petitionFile}
