@@ -155,11 +155,9 @@ export default connect(
                       <td>
                         <span className="responsive-label">Title</span>
                         <a
-                          href={`${baseUrl}/documents/${
-                            document.documentId
-                          }/documentDownloadUrl?token=${token}`}
-                          target="_blank"
-                          rel="noreferrer noopener"
+                          href={`/case-detail/${
+                            caseDetail.docketNumber
+                          }/documents/${document.documentId}`}
                           aria-label="View PDF"
                         >
                           <FontAwesomeIcon icon="file-pdf" />
