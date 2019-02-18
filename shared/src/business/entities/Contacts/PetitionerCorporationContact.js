@@ -20,8 +20,6 @@ PetitionerCorporationContact.errorToMessageMap = {
     },
     'Zip Code is a required field.',
   ],
-  // country: '',
-  // email: '',
   phone: 'Phone is a required field.',
 };
 
@@ -37,8 +35,6 @@ joiValidationDecorator(
       .string()
       .regex(/^\d{5}(-\d{4})?$/)
       .required(),
-    // country: joi.string().required(),
-    // email: joi.string().required(),
     phone: joi.string().required(),
   }),
   undefined,

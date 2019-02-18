@@ -51,7 +51,7 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual({ partyType: 'Party Type is a required field.' });
+    expect(errors).toEqual(null);
   });
 
   it('returns an error for a irs notice date in the future', () => {
@@ -75,8 +75,7 @@ describe('validatePetition', () => {
     });
 
     expect(errors).toEqual({
-      irsNoticeDate: 'IRS Notice Date is a required field.',
-      partyType: 'Party Type is a required field.',
+      irsNoticeDate: 'Notice Date is a required field.',
     });
   });
 });
