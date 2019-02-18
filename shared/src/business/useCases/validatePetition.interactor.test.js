@@ -13,7 +13,10 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(Petition.errorToMessageMap);
+    expect(errors).toEqual({
+      ...Petition.errorToMessageMap,
+      irsNoticeDate: 'Notice Date is a required field.',
+    });
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -27,7 +30,10 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(omit(Petition.errorToMessageMap, ['caseType']));
+    expect(errors).toEqual({
+      ...omit(Petition.errorToMessageMap, ['caseType']),
+      irsNoticeDate: 'Notice Date is a required field.',
+    });
   });
 
   it('returns the expected errors object', () => {
@@ -71,7 +77,7 @@ describe('validatePetition', () => {
     });
 
     expect(errors).toEqual({
-      irsNoticeDate: 'Notice Date is a required field.',
+      irsNoticeDate: 'Notice Date is in the future. Please enter a valid date.',
     });
   });
 });

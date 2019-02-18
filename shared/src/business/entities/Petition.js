@@ -120,7 +120,13 @@ function Petition(rawPetition) {
 
 Petition.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
-  irsNoticeDate: 'Notice Date is a required field.',
+  irsNoticeDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Notice Date is in the future. Please enter a valid date.',
+    },
+    'Notice Date is a required field.',
+  ],
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
