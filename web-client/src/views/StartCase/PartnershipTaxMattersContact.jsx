@@ -52,7 +52,7 @@ export default connect(
               </div>
             </div>
             <Address type="contactPrimary" />
-            <Email type="contactPrimary" />
+            <Email />
             <div
               className={
                 'usa-form-group ' +
