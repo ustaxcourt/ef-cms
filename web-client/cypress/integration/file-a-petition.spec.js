@@ -42,9 +42,65 @@ describe('File a petition', function() {
       cy.login('taxpayer', 'start-a-case');
     });
 
-    it('has a file a petition file input', () => {
-      cy.get('input#petition-file').should('exist');
-      cy.contains('button[type="submit"]', 'Submit');
+    // it('has a file a petition file input', () => {
+    //   cy.get('input#petition-file').should('exist');
+    //   cy.contains('button[type="submit"]', 'Submit');
+    // });
+
+    it('shows validation checkmark when file is selected', () => {
+      cy.get('form')
+        .find('label[for="petition-file"]')
+        .scrollIntoView()
+        .should('not.have.class', 'validated');
+
+      // select first file
+      cy.upload_file('w3-dummy.pdf', 'form #petition-file');
+
+      cy.get('form')
+        .find('label[for="petition-file"]')
+        .should('have.class', 'validated');
+    });
+
+    it('selects on behalf of myself', () => {
+      cy.get('label[for="Myself"]')
+        .scrollIntoView()
+        .click();
+    });
+
+    it('fill in name', () => {
+      cy.get('input#name')
+        .scrollIntoView()
+        .type('John');
+    });
+
+    it('fill in contactPrimary.address1', () => {
+      cy.get('input[name="contactPrimary.address1"]')
+        .scrollIntoView()
+        .type('111 South West St.');
+    });
+
+    it('fill in contactPrimary.city', () => {
+      cy.get('input[name="contactPrimary.city"]')
+        .scrollIntoView()
+        .type('Orlando');
+    });
+
+    it('selects state', () => {
+      cy.get('select[name="contactPrimary.state"]')
+        .scrollIntoView()
+        .select('Alabama');
+    });
+
+    it('fills in zipcode', () => {
+      cy.get('input[name="contactPrimary.zip"]')
+        .scrollIntoView()
+        .type('12345');
+    });
+
+    it('fills in phone', () => {
+      cy.get('input#phone')
+        .scrollIntoView()
+        .type('1111111111');
     });
 
     it('fill in the case-type select', () => {
@@ -83,20 +139,6 @@ describe('File a petition', function() {
       cy.get('#preferred-trial-city')
         .scrollIntoView()
         .select('Mobile, Alabama');
-    });
-
-    it('shows validation checkmark when file is selected', () => {
-      cy.get('form')
-        .find('label[for="petition-file"]')
-        .scrollIntoView()
-        .should('not.have.class', 'validated');
-
-      // select first file
-      cy.upload_file('w3-dummy.pdf', 'form #petition-file');
-
-      cy.get('form')
-        .find('label[for="petition-file"]')
-        .should('have.class', 'validated');
     });
 
     it('tries to submit the form without clicking the signature', () => {
