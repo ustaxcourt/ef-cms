@@ -66,7 +66,8 @@ export default connect(
                         {caseDetail.contactSecondary.address2}
                       </span>
                       <span className="address-line">
-                        {caseDetail.contactSecondary.city},{' '}
+                        {caseDetail.contactSecondary.city &&
+                          `${caseDetail.contactSecondary.city},`}{' '}
                         {caseDetail.contactSecondary.state}{' '}
                         {caseDetail.contactSecondary.zip}
                       </span>
