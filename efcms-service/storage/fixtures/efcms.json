@@ -118,6 +118,11 @@
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
     },
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
     "docketNumberSuffix": "SL",
@@ -304,6 +309,11 @@
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "sk": "0",
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
@@ -446,6 +456,11 @@
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
