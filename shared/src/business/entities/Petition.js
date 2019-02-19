@@ -22,6 +22,8 @@ function Petition(rawPetition) {
 
   switch (this.partyType) {
     case 'Petitioner':
+    case 'Transferee':
+    case 'Donor':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );
