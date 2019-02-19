@@ -162,7 +162,7 @@ export default connect(
                     aria-disabled="true"
                   />
                 </td>
-                <td colSpan="3" aria-hidden="true" />
+                <td colSpan="4" aria-hidden="true" />
                 <td
                   colSpan="4"
                   className="message-detail"
