@@ -273,7 +273,9 @@ Case.prototype.addDocument = function(document) {
 };
 
 /**
- * markAsSentToIrs
+ *
+ * @param sendDate
+ * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
