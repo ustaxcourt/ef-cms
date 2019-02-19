@@ -16,7 +16,7 @@ export default get => {
 
   return {
     showPetitionFileValid: petition && petition.petitionFile,
-    showOwnershipDisclosure: form.partyType && form.businessType,
+    showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
     showOwnershipDisclosureValid: petition && petition.ownershipDisclosureFile,
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSelectTrial: !!form.procedureType,
