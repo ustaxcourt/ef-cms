@@ -63,12 +63,6 @@ export default test => {
     expect(caseDetailHelperBatched.showServeToIrsButton).toEqual(false);
     expect(caseDetailHelperBatched.showRecallButton).toEqual(true);
 
-    // await test.runSequence('clickRecallPetitionSequence');
-    // expect(test.getState('showModal')).toEqual('RecallModalDialog');
-    // await test.runSequence('dismissModalSequence');
-    // expect(test.getState('showModal')).toEqual('');
-    // // recall the petition
-    // await test.runSequence('clickRecallPetitionSequence');
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueueToDisplay')).toEqual({
