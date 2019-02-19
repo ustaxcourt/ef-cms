@@ -73,11 +73,10 @@ export default connect(
         </div>
         <div
           className={
-            'usa-form-group ' +
-            (validationErrors[type] &&
+            validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-input-error'
-              : '')
+              : ''
           }
         >
           <div className="usa-form-group ustc-form-group-city">
