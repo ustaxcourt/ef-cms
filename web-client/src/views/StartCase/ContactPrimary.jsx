@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences, state, props } from 'cerebral';
 import React from 'react';
 import Address from './Address';
 import Email from './Email';
@@ -7,19 +7,27 @@ import Email from './Email';
 export default connect(
   {
     form: state.form,
+    header: props.header,
+    nameLabel: props.nameLabel,
+    displayTitle: props.displayTitle,
+    displayInCareOf: props.displayInCareOf,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function PetitionerContact({
+  function ContactPrimary({
     form,
+    header,
+    nameLabel,
+    displayTitle,
+    displayInCareOf,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
   }) {
     return (
       <div className="usa-form-group contact-group">
-        <h3>Tell Us About Yourself</h3>
+        <h3>{header}</h3>
         <div className="blue-container usa-grid-full">
           <div
             className={
@@ -30,7 +38,7 @@ export default connect(
                 : '')
             }
           >
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{nameLabel}</label>
             <input
               id="name"
               type="text"
@@ -53,6 +61,47 @@ export default connect(
               </div>
             )}
           </div>
+          {displayTitle && (
+            <div className="usa-form-group">
+              <label htmlFor="title">
+                Title
+                <p className="usa-form-hint">For example, Executor, PR, etc.</p>
+              </label>
+              <input
+                id="title"
+                type="text"
+                name="contactPrimary.title"
+                autoCapitalize="none"
+                value={form.contactPrimary.title || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+          )}
+          {displayInCareOf && (
+            <div className="usa-form-group">
+              <label htmlFor="inCareOf">
+                In Care Of <span className="usa-form-hint">(optional)</span>
+              </label>
+              <input
+                id="inCareOf"
+                type="text"
+                name="contactPrimary.inCareOf"
+                autoCapitalize="none"
+                value={form.contactPrimary.inCareOf || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+          )}
           <Address type="contactPrimary" />
           <Email />
           <div
