@@ -19,7 +19,7 @@ export default connect(
     validationErrors.contactSecondary = validationErrors.contactSecondary || {};
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>Tell Us About Yourself as the Conservator for This Taxpayer</h3>
           <div className="blue-container">
             <div
@@ -142,9 +142,9 @@ export default connect(
                   : '')
               }
             >
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="secondaryPhone">Phone Number</label>
               <input
-                id="phone"
+                id="secondaryPhone"
                 type="tel"
                 name="contactSecondary.phone"
                 className="ustc-input-phone"

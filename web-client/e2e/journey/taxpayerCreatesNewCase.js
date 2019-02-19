@@ -123,6 +123,7 @@ export default (test, fakeFile) => {
       state: test.getState(),
     });
     expect(result.showPetitionerAndDeceasedSpouseContact).toBeTruthy();
+    expect(result.showOwnershipDisclosure).toBeFalsy();
 
     // showCorporationContact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -144,6 +145,7 @@ export default (test, fakeFile) => {
       state: test.getState(),
     });
     expect(result.showCorporationContact).toBeTruthy();
+    expect(result.showOwnershipDisclosure).toBeTruthy();
 
     // showPartnershipTaxMattersContact
     await test.runSequence('updateStartCaseFormValueSequence', {

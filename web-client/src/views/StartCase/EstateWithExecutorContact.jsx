@@ -12,7 +12,7 @@ export default connect(
   function EstateWithExecutorContact({ form, updateFormValueSequence }) {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div className="usa-form-group contact-group">
           <h3>
             Tell Us About Yourself as the Executor/Personal Representative For
             This Estate
