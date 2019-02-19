@@ -22,7 +22,7 @@ export default connect(
     return (
       <React.Fragment>
         <div className="usa-form-group contact-group">
-          <h3>Tell Us About Yourself the Tax Matters Partner</h3>
+          <h3>Tell Us About Yourself as the Tax Matters Partner</h3>
           <div className="blue-container">
             <div
               className={

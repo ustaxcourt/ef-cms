@@ -13,7 +13,7 @@ export default connect(
     return (
       <React.Fragment>
         <div className="usa-form-group contact-group">
-          <h3>Tell Us About Yourself the Partner</h3>
+          <h3>Tell Us About Yourself as the Partnership Representative</h3>
           <div className="blue-container">
             <div className="usa-form-group">
               <label htmlFor="name">Name of Partnership Representative</label>

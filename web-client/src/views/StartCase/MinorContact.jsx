@@ -22,7 +22,7 @@ export default connect(
     return (
       <React.Fragment>
         <div className="usa-form-group contact-group">
-          <h3>Tell Us About the Next Friend for This Minor</h3>
+          <h3>Tell Us About Yourself as the Next Friend for This Minor</h3>
           <div className="blue-container">
             <div
               className={
