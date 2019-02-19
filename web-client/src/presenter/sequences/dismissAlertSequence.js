@@ -1,3 +1,3 @@
-import clearAlertsAction from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 
 export default [clearAlertsAction];

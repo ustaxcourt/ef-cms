@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import fileRespondentDocument from '../actions/fileRespondentDocumentAction';
 import getCase from '../actions/getCaseAction';
 import getDocumentType from '../actions/getDocumentTypeAction';
@@ -11,7 +11,7 @@ import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 export default [
-  clearAlerts,
+  clearAlertsAction,
   setFormSubmitting,
   getDocumentType,
   {
