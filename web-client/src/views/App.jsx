@@ -55,7 +55,8 @@ class App extends React.Component {
   }
   focusMain(e) {
     e && e.preventDefault();
-    document.querySelector('#main-content h1').focus();
+    const header = document.querySelector('#main-content h1');
+    if (header) header.focus();
     return false;
   }
   render() {
