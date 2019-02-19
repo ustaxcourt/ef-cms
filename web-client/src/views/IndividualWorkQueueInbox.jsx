@@ -53,8 +53,7 @@ export default connect(
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
                       className={item.statusIcon}
-                      aria-label={item.caseStatus}
-                      title={item.caseStatus}
+                      aria-hidden="true"
                     />
                   )}
                 </td>
@@ -86,7 +85,7 @@ export default connect(
                       aria-disabled="true"
                     />
                   </td>
-                  <td colSpan="2" aria-hidden="true" />
+                  <td colSpan="3" aria-hidden="true" />
                   <td
                     colSpan="4"
                     className="message-detail"

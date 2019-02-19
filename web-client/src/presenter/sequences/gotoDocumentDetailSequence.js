@@ -12,6 +12,7 @@ import setFormForCaseAction from '../actions/setFormForCaseAction';
 import setInternalUsers from '../actions/setInternalUsersAction';
 
 export default [
+  setCurrentPage('Loading'),
   clearAlertsAction,
   clearWorkItemActionMap,
   clearForms,

@@ -83,6 +83,20 @@ export default connect(
           <h2>Upload Your Petition to Start Your Case</h2>
           <div className="blue-container">
             <div className="usa-grid-full">
+              <div className="usa-width-seven-twelfths push-right">
+                <div id="petition-upload-hint" className="alert-gold">
+                  <span className="usa-form-hint">
+                    <FontAwesomeIcon
+                      icon={['far', 'arrow-alt-circle-left']}
+                      className="fa-icon-gold"
+                      size="sm"
+                    />
+                    This should include your petition form and any IRS notice
+                    <span aria-hidden="true">(s)</span> you received.
+                  </span>
+                </div>
+              </div>
+
               <div className="usa-width-five-twelfths">
                 <div
                   className={
@@ -121,19 +135,6 @@ export default connect(
                   <div className="usa-input-error-message beneath">
                     {validationErrors.petitionFile}
                   </div>
-                </div>
-              </div>
-              <div className="usa-width-seven-twelfths">
-                <div id="petition-upload-hint" className="alert-gold">
-                  <span className="usa-form-hint">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="sm"
-                    />
-                    This should include your petition form and any IRS notice
-                    <span aria-hidden="true">(s)</span> you received.
-                  </span>
                 </div>
               </div>
             </div>
@@ -189,8 +190,6 @@ export default connect(
                                 key: e.target.name,
                                 value: e.target.value,
                               });
-                            }}
-                            onBlur={() => {
                               validateStartCaseSequence();
                             }}
                           />
@@ -226,8 +225,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -273,8 +270,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -320,8 +315,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -367,8 +360,6 @@ export default connect(
                                     key: e.target.name,
                                     value: e.target.value,
                                   });
-                                }}
-                                onBlur={() => {
                                   validateStartCaseSequence();
                                 }}
                               />
@@ -417,6 +408,7 @@ export default connect(
                                     key: e.target.name,
                                     value: e.target.value,
                                   });
+                                  validateStartCaseSequence();
                                 }}
                               />
                               <label
@@ -541,8 +533,6 @@ export default connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
                       validateStartCaseSequence();
                     }}
                   >
@@ -706,8 +696,6 @@ export default connect(
                           getTrialCities({
                             value: e.currentTarget.value,
                           });
-                        }}
-                        onBlur={() => {
                           validateStartCaseSequence();
                         }}
                       />
@@ -752,8 +740,6 @@ export default connect(
                       key: e.target.name,
                       value: e.target.value || null,
                     });
-                  }}
-                  onBlur={() => {
                     validateStartCaseSequence();
                   }}
                   value={form.preferredTrialCity || ''}
@@ -778,9 +764,11 @@ export default connect(
             <div className="usa-input-error-message beneath">
               {validationErrors.procedureType}
             </div>
-            <div className="usa-input-error-message beneath">
-              {validationErrors.preferredTrialCity}
-            </div>
+            {!validationErrors.procedureType && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.preferredTrialCity}
+              </div>
+            )}
           </div>
           <h2>Review Your Information</h2>
           <p>

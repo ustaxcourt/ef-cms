@@ -3,17 +3,17 @@ const uuidv4 = require('uuid/v4');
 
 const {
   incrementCounter,
-} = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
   getUserById,
-} = require('ef-cms-shared/src/persistence/getUserById');
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUserById');
 const {
   createUser,
-} = require('ef-cms-shared/src/persistence/createUser');
+} = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -57,18 +57,14 @@ const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 
-const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
+const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 
 const {
-  uploadPdfsForNewCase,
-  uploadPdf,
-} = require('ef-cms-shared/src/persistence/awsS3Persistence');
-const {
   getUploadPolicy,
-} = require('ef-cms-shared/src/persistence/getUploadPolicy');
+} = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
 const {
   getDownloadPolicyUrl,
-} = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
+} = require('ef-cms-shared/src/persistence/s3/getDownloadPolicyUrl');
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
@@ -201,8 +197,6 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         incrementCounter,
-        uploadPdfsForNewCase,
-        uploadPdf,
         getUploadPolicy,
         getDownloadPolicyUrl,
         getUserById,

@@ -23,12 +23,6 @@ export default test => {
       },
       {
         assigneeId: null,
-        message:
-          'A Ownership Disclosure Statement filed by Petitioner is ready for review.',
-        sentBy: 'Test Petitioner',
-      },
-      {
-        assigneeId: null,
         message: 'A Answer filed by Respondent is ready for review.',
         sentBy: 'Test Respondent',
       },
