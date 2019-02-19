@@ -3,10 +3,7 @@ const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-const {
-  createRespondentCaseMapping,
-  getRecordViaMapping,
-} = require('./awsDynamoPersistence');
+const { getRecordViaMapping } = require('./dynamo/helpers/getRecordViaMapping');
 
 const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
 const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
@@ -84,22 +81,6 @@ describe('awsDynamoPersistence', function() {
       );
       */
       expect(client.get.getCall(0).args[0].Key.sk).not.to.equal('0');
-    });
-  });
-
-  describe('createRespondentCaseMapping', () => {
-    it('should map respondent to active case', async () => {
-      const respondentId = '5678';
-      const caseId = '234';
-      await createRespondentCaseMapping({
-        applicationContext,
-        caseId,
-        respondentId,
-      });
-      expect(client.put.getCall(0).args[0].Item.pk).to.equal(
-        `${respondentId}|activeCase`,
-      );
-      expect(client.put.getCall(0).args[0].Item.sk).to.equal(caseId);
     });
   });
 

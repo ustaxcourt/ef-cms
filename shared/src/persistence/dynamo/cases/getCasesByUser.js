@@ -1,4 +1,6 @@
-const { getRecordsViaMapping } = require('../../awsDynamoPersistence');
+const {
+  getRecordsViaMapping,
+} = require('../../dynamo/helpers/getRecordsViaMapping');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');

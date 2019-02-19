@@ -3,7 +3,6 @@ const expect = require('chai').expect;
 chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('../../dynamodbClientService');
-const persistence = require('../../awsDynamoPersistence');
 const mappings = require('../../dynamo/helpers/createMappingRecord');
 
 const sync = require('./syncWorkItems');
@@ -13,7 +12,6 @@ const applicationContext = {
   environment: {
     stage: 'local',
   },
-  getDynamoClient: () => client,
 };
 
 describe('syncWorkItems', function() {
