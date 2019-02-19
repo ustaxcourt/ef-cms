@@ -339,6 +339,14 @@ describe('Petition', () => {
       partyType: 'Custodian',
       contactPrimary: {
         name: 'Jimmy Dean',
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        state: 'AK',
+        zip: '05198',
+        phone: '1234567890',
+      },
+      contactSecondary: {
+        name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -347,14 +355,6 @@ describe('Petition', () => {
         country: 'USA',
         phone: '1234567890',
         email: 'someone@example.com',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
       },
     });
     expect(petition.isValid()).toEqual(true);

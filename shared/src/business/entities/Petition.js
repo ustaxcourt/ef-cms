@@ -110,10 +110,10 @@ function Petition(rawPetition) {
       );
       break;
     case 'Custodian':
-      this.contactPrimary = new PetitionerTaxpayerContact(
+      this.contactPrimary = new PetitionerCustodianContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerCustodianContact(
+      this.contactSecondary = new PetitionerTaxpayerContact(
         this.contactSecondary || {},
       );
       break;
