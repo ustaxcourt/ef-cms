@@ -43,10 +43,10 @@ describe('Authorization client service', () => {
   });
 
   it('should authorize a respondent for getCase', () => {
-    expect(isAuthorized('respondent', UPDATE_CASE)).to.be.true;
+    expect(isAuthorized('respondent', GET_CASE)).to.be.true;
   });
 
-  it('should authorize a docketclerk for ', () => {
+  it('should authorize a docketclerk for updateCase', () => {
     expect(isAuthorized('respondent', UPDATE_CASE)).to.be.true;
   });
 });
