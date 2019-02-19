@@ -1,3 +1,9 @@
+/**
+ *
+ * @param applicationContext
+ * @param userId
+ * @returns {Promise<*>}
+ */
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
   const userToken = userId; //TODO refactor for jwt
 

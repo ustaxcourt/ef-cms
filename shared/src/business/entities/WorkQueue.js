@@ -7,6 +7,11 @@ exports.CHIEF_JUDGE_SECTION = 'chiefjudge';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 
+/**
+ *
+ * @param role
+ * @returns {string}
+ */
 exports.getSectionForRole = role => {
   if (role === 'docketclerk') {
     return exports.DOCKET_SECTION;

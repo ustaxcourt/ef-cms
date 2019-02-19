@@ -242,7 +242,10 @@ joiValidationDecorator(
     ],
   },
 );
-
+/**
+ *
+ * @param user
+ */
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {
     ...user,
@@ -251,7 +254,10 @@ Case.prototype.attachRespondent = function({ user }) {
 
   this.respondent = respondent;
 };
-
+/**
+ *
+ * @param document
+ */
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
@@ -267,7 +273,9 @@ Case.prototype.addDocument = function(document) {
 };
 
 /**
- * markAsSentToIrs
+ *
+ * @param sendDate
+ * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
