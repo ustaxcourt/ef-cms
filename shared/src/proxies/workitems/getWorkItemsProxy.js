@@ -1,3 +1,8 @@
+/**
+ *
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 exports.getWorkItems = async ({ applicationContext }) => {
   const userToken = applicationContext.getCurrentUser().userId; //TODO refactor for jwt
 
