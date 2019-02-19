@@ -200,7 +200,7 @@ exports.createMappingRecord = async ({
   skId,
   type,
 }) => {
-  return client.put({
+  return applicationContext.getDynamoClient().put({
     applicationContext,
     TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {

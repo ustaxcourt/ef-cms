@@ -7,6 +7,7 @@ const applicationContext = {
   environment: {
     stage: 'local',
   },
+  getDynamoClient: () => client,
   filterCaseMetadata: ({ cases }) => cases,
   isAuthorizedForWorkItems: () => true,
 };
