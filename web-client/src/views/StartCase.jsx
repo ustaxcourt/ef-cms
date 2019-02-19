@@ -189,8 +189,6 @@ export default connect(
                                 key: e.target.name,
                                 value: e.target.value,
                               });
-                            }}
-                            onBlur={() => {
                               validateStartCaseSequence();
                             }}
                           />
@@ -226,8 +224,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -273,8 +269,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -320,8 +314,6 @@ export default connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
                                 validateStartCaseSequence();
                               }}
                             />
@@ -367,8 +359,6 @@ export default connect(
                                     key: e.target.name,
                                     value: e.target.value,
                                   });
-                                }}
-                                onBlur={() => {
                                   validateStartCaseSequence();
                                 }}
                               />
@@ -417,6 +407,7 @@ export default connect(
                                     key: e.target.name,
                                     value: e.target.value,
                                   });
+                                  validateStartCaseSequence();
                                 }}
                               />
                               <label
@@ -541,8 +532,6 @@ export default connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
                       validateStartCaseSequence();
                     }}
                   >
@@ -706,8 +695,6 @@ export default connect(
                           getTrialCities({
                             value: e.currentTarget.value,
                           });
-                        }}
-                        onBlur={() => {
                           validateStartCaseSequence();
                         }}
                       />
@@ -752,8 +739,6 @@ export default connect(
                       key: e.target.name,
                       value: e.target.value || null,
                     });
-                  }}
-                  onBlur={() => {
                     validateStartCaseSequence();
                   }}
                   value={form.preferredTrialCity || ''}
