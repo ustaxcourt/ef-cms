@@ -1,6 +1,4 @@
 config:
-  plugins:
-    fuzzer: { badUser }
   target: 'https://{{$processEnvironment.API_TARGET}}.execute-api.{{$processEnvironment.API_REGION}}.amazonaws.com'
   phases:
     - duration: 5
@@ -12,21 +10,5 @@ config:
       name: 'max load'
 scenarios:
   - flow:
-#      - get:
-#          url: '/{{$processEnvironment.API_STAGE}}/v1/cases'
-#          headers:
-#            Authorization: "Bearer {{ naughtyString }}"
-      - post:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/cases'
-          headers:
-            Authorization: "Bearer {{ naughtyString }}"
-          json:
-             documents:
-             - documentId: a6b81f4d-1e47-423a-8caf-6d2fdc3d3859
-               documentType: stin
-             - documentId: b6b81f4d-1e47-423a-8caf-6d2fdc3d3859
-               documentType: petition
-             - documentId: c6b81f4d-1e47-423a-8caf-6d2fdc3d3859
-               documentType: rfpot
-#      - get:
-#          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/uploadPolicy'
+      - get:
+          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/uploadPolicy'
