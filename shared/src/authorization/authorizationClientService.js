@@ -53,7 +53,11 @@ const AUTHORIZATION_MAP = {
   ],
   taxpayer: [exports.PETITION],
 };
-
+/**
+ *
+ * @param userId
+ * @returns {*}
+ */
 const getRole = userId => {
   // TODO
   return userId.replace(/\d+/g, '');
