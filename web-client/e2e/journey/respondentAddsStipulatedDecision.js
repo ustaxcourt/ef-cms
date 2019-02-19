@@ -11,6 +11,6 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
     await test.runSequence('submitDocumentSequence');
-    expect(test.getState('caseDetail.documents').length).toEqual(4);
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
 };
