@@ -242,7 +242,10 @@ joiValidationDecorator(
     ],
   },
 );
-
+/**
+ *
+ * @param user
+ */
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {
     ...user,
@@ -251,7 +254,10 @@ Case.prototype.attachRespondent = function({ user }) {
 
   this.respondent = respondent;
 };
-
+/**
+ *
+ * @param document
+ */
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
