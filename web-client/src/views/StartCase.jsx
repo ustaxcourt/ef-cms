@@ -412,25 +412,17 @@ export default connect(
           </div>
 
           {startCaseHelper.showPetitionerContact && (
-            <ContactPrimary
-              header="Tell Us About Yourself"
-              nameLabel="Name"
-              displayTitle={false}
-              displayInCareOf={false}
-            />
+            <ContactPrimary header="Tell Us About Yourself" nameLabel="Name" />
           )}
           {startCaseHelper.showPetitionerAndSpouseContact && (
             <React.Fragment>
               <ContactPrimary
                 header="Tell Us About Yourself"
                 nameLabel="Name"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About Your Spouse"
                 nameLabel="Spouse's Name"
-                displayInCareOf={false}
                 displayPhone={true}
               />
             </React.Fragment>
@@ -440,14 +432,10 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself"
                 nameLabel="Name"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About Your Deceased Spouse"
                 nameLabel="Spouse's Name"
-                displayInCareOf={false}
-                displayPhone={false}
               />
             </React.Fragment>
           )}
@@ -457,13 +445,10 @@ export default connect(
                 header="Tell Us About Yourself as the Executor/Personal Representative For This Estate"
                 nameLabel="Name of Executor/Personal Representative"
                 displayTitle={true}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Estate You Are Filing For"
                 nameLabel="Name of Decedent"
-                displayInCareOf={false}
-                displayPhone={false}
               />
             </React.Fragment>
           )}
@@ -471,7 +456,6 @@ export default connect(
             <ContactPrimary
               header="Tell Us About the Estate You Are Filing For"
               nameLabel="Name of Decedent"
-              displayTitle={false}
               displayInCareOf={true}
             />
           )}
@@ -480,8 +464,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Trustee"
                 nameLabel="Name of Trustee"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Trust You Are Filing For"
@@ -495,7 +477,6 @@ export default connect(
             <ContactPrimary
               header="Tell Us About the Corporation You Are Filing For"
               nameLabel="Business Name"
-              displayTitle={false}
               displayInCareOf={true}
             />
           )}
@@ -504,8 +485,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Tax Matters Partner"
                 nameLabel="Name of Tax Matters Partner"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Partnership You Are Filing For"
@@ -520,8 +499,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Partner (Other than Tax Matters Partner)"
                 nameLabel="Name of Partner"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Partnership You Are Filing For"
@@ -536,8 +513,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Partnership Representative"
                 nameLabel="Name of Partnership Representative"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Partnership You Are Filing For"
@@ -556,8 +531,6 @@ export default connect(
                   form.partyType
                 } for This Taxpayer`}
                 nameLabel={`Name of ${form.partyType}`}
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Taxpayer You Are Filing For"
@@ -572,8 +545,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Next Friend for This Minor"
                 nameLabel="Name of Next Friend"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Minor You Are Filing For"
@@ -588,8 +559,6 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Next Friend for This Incompetent Person"
                 nameLabel="Name of Next Friend"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About the Incompetent Person You Are Filing For"
@@ -603,16 +572,12 @@ export default connect(
             <ContactPrimary
               header="Tell Us About the Donor You Are Filing For"
               nameLabel="Name of Petitioner"
-              displayTitle={false}
-              displayInCareOf={false}
             />
           )}
           {startCaseHelper.showTransfereeContact && (
             <ContactPrimary
               header="Tell Us About the Transferee You Are Filing For"
               nameLabel="Name of Petitioner"
-              displayTitle={false}
-              displayInCareOf={false}
             />
           )}
           {startCaseHelper.showSurvivingSpouseContact && (
@@ -620,14 +585,10 @@ export default connect(
               <ContactPrimary
                 header="Tell Us About Yourself as the Surviving Spouse"
                 nameLabel="Name"
-                displayTitle={false}
-                displayInCareOf={false}
               />
               <ContactSecondary
                 header="Tell Us About Your Deceased Spouse"
                 nameLabel="Spouse's Name"
-                displayInCareOf={false}
-                displayPhone={false}
               />
             </React.Fragment>
           )}
