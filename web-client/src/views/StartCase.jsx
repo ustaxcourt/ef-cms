@@ -158,11 +158,16 @@ export default connect(
                       Tax Court Rules of Practice and Procedure (Rule 60).
                       Enrolled agents, certified public accountants, and powers
                       of attorney who are not admitted to practice before the
-                      Court are not eligible to represent taxpayers.{' '}
+                      Court are not eligible to represent taxpayers.
                     </span>
                   </div>
                 </div>
-                <div className="usa-width-five-twelfths">
+                <div
+                  className={
+                    'usa-width-five-twelfths ' +
+                    (validationErrors.filingType ? 'usa-input-error' : '')
+                  }
+                >
                   <fieldset
                     id="filing-type-radios"
                     className="usa-fieldset-inputs usa-sans"
