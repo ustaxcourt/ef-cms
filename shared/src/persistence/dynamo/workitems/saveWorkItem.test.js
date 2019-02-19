@@ -57,6 +57,7 @@ describe('saveWorkItem', () => {
       environment: {
         stage: 'dev',
       },
+      getDynamoClient: () => client,
       filterCaseMetadata: ({ cases }) => cases,
       isAuthorizedForWorkItems: () => true,
     };
