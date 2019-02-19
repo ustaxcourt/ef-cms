@@ -11,6 +11,7 @@ import setUsers from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [
+  setCurrentPage('Loading'),
   clearErrorAlerts,
   getUserRole,
   {
