@@ -169,6 +169,22 @@ export default (test, fakeFile) => {
     expect(result.showPartnershipTaxMattersContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
+    await test.runSequence('submitFilePetitionSequence');
+
+    expect(test.getState('alertError').messages).toContain(
+      'Ownership Disclosure Statement is required.',
+    );
+
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'ownershipDisclosureFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('submitFilePetitionSequence');
+    expect(test.getState('alertError').messages[0]).not.toContain(
+      'Ownership Disclosure Statement is required.',
+    );
+
     // showPartnershipOtherContact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
@@ -245,6 +261,7 @@ export default (test, fakeFile) => {
     });
     expect(result.showOtherFilingTypeOptions).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeFalsy();
+    expect(test.getState('petition.ownershipDisclosureFile')).toBeUndefined();
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
@@ -549,18 +566,6 @@ export default (test, fakeFile) => {
     });
     expect(result.showSurvivingSpouseContact).toBeTruthy();
 
-    // try without checking the signature
-    await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertError.title')).toEqual(
-      'Please correct the following errors on the page:',
-    );
-
-    // click the signature and try again
-    await test.runSequence('updateFormValueSequence', {
-      key: 'signature',
-      value: true,
-    });
-
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError.title')).toEqual(
@@ -659,18 +664,19 @@ export default (test, fakeFile) => {
       phone: '1234567890',
     });
 
+    // try without checking the signature
     await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertError').messages[0]).toEqual(
-      'Ownership Disclosure Statement is required.',
+    expect(test.getState('alertError.title')).toEqual(
+      'Please correct the following errors on the page:',
     );
 
-    await test.runSequence('updatePetitionValueSequence', {
-      key: 'ownershipDisclosureFile',
-      value: fakeFile,
+    // click the signature and try again
+    await test.runSequence('updateFormValueSequence', {
+      key: 'signature',
+      value: true,
     });
 
     await test.runSequence('submitFilePetitionSequence');
-    console.log(test.getState('alertError'))
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({
