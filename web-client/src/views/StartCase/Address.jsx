@@ -121,8 +121,6 @@ export default connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
-              }}
-              onBlur={() => {
                 validateStartCaseSequence();
               }}
             >
