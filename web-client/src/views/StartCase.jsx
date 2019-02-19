@@ -778,9 +778,11 @@ export default connect(
             <div className="usa-input-error-message beneath">
               {validationErrors.procedureType}
             </div>
-            <div className="usa-input-error-message beneath">
-              {validationErrors.preferredTrialCity}
-            </div>
+            {!validationErrors.procedureType && (
+              <div className="usa-input-error-message beneath">
+                {validationErrors.preferredTrialCity}
+              </div>
+            )}
           </div>
           <h2>Review Your Information</h2>
           <p>
