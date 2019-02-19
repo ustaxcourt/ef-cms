@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
-const { getSectionForRole } = require('../business/entities/WorkQueue');
-const client = require('../persistence/dynamodbClientService');
+const { getSectionForRole } = require('../../../business/entities/WorkQueue');
+const client = require('../../dynamodbClientService');
 
 exports.createUser = async ({ user, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;

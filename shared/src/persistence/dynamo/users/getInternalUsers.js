@@ -1,4 +1,4 @@
-const { stripInternalKeys } = require('../../awsDynamoPersistence');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { getUsersInSection } = require('./getUsersInSection');
 const {
   DOCKET_SECTION,

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
+const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+
 const {
-  getDocument,
   uploadDocument,
-  uploadPdf,
-  uploadPdfsForNewCase,
-} = require('../../shared/src/persistence/awsS3Persistence');
+} = require('../../shared/src/persistence/s3/uploadDocument');
 
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
@@ -127,7 +127,6 @@ const applicationContext = {
       saveCase: updateCase,
       uploadDocument,
       uploadPdf,
-      uploadPdfsForNewCase,
     };
   },
   getUseCases: () => allUseCases,
