@@ -1,4 +1,11 @@
-const persistence = require('../../awsDynamoPersistence');
+const {
+  createMappingRecord,
+} = require('../../dynamo/helpers/createMappingRecord');
+
+const {
+  deleteMappingRecord,
+} = require('../../dynamo/helpers/deleteMappingRecord');
+
 const client = require('../../dynamodbClientService');
 
 exports.syncWorkItems = async ({
@@ -23,7 +30,7 @@ exports.syncWorkItems = async ({
     );
     if (!existing) {
       if (workItem.assigneeId) {
-        await persistence.createMappingRecord({
+        await createMappingRecord({
           pkId: workItem.assigneeId,
           skId: workItem.workItemId,
           type: 'workItem',
@@ -31,7 +38,7 @@ exports.syncWorkItems = async ({
         });
       }
 
-      await persistence.createMappingRecord({
+      await createMappingRecord({
         applicationContext,
         pkId: workItem.section,
         skId: workItem.workItemId,
@@ -59,7 +66,7 @@ exports.syncWorkItems = async ({
       }
 
       if (!existing.completedAt && workItem.completedAt) {
-        await persistence.createSortMappingRecord({
+        await createMappingRecord({
           applicationContext,
           pkId: workItem.section,
           skId: workItem.completedAt,
@@ -82,7 +89,7 @@ exports.syncWorkItems = async ({
           );
           const { userId, createdAt } = batchedMessage;
 
-          await persistence.createSortMappingRecord({
+          await createMappingRecord({
             applicationContext,
             pkId: userId,
             skId: createdAt,
@@ -92,7 +99,7 @@ exports.syncWorkItems = async ({
             type: 'sentWorkItem',
           });
 
-          await persistence.createSortMappingRecord({
+          await createMappingRecord({
             applicationContext,
             pkId: existing.section,
             skId: createdAt,
@@ -111,13 +118,13 @@ exports.syncWorkItems = async ({
             userId = batchedMessage.userId;
             createdAt = batchedMessage.createdAt;
 
-            await persistence.deleteMappingRecord({
+            await deleteMappingRecord({
               applicationContext,
               pkId: userId,
               skId: createdAt,
               type: 'sentWorkItem',
             });
-            await persistence.deleteMappingRecord({
+            await deleteMappingRecord({
               applicationContext,
               pkId: 'petitions', // TODO: this probably shouldn't be hard coded
               skId: createdAt,
@@ -140,7 +147,7 @@ exports.reassignWorkItem = async ({
   workItemToSave,
 }) => {
   if (existingWorkItem.assigneeId) {
-    await persistence.deleteMappingRecord({
+    await deleteMappingRecord({
       applicationContext,
       pkId: existingWorkItem.assigneeId,
       skId: workItemToSave.workItemId,
@@ -149,14 +156,14 @@ exports.reassignWorkItem = async ({
   }
 
   if (existingWorkItem.section !== workItemToSave.section) {
-    await persistence.deleteMappingRecord({
+    await deleteMappingRecord({
       applicationContext,
       pkId: existingWorkItem.section,
       skId: existingWorkItem.workItemId,
       type: 'workItem',
     });
 
-    await persistence.createMappingRecord({
+    await createMappingRecord({
       applicationContext,
       pkId: workItemToSave.section,
       skId: workItemToSave.workItemId,
@@ -164,7 +171,7 @@ exports.reassignWorkItem = async ({
     });
   }
 
-  await persistence.createMappingRecord({
+  await createMappingRecord({
     applicationContext,
     pkId: workItemToSave.assigneeId,
     skId: workItemToSave.workItemId,

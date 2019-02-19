@@ -8,14 +8,26 @@ export default connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
-  function GuardianContact({ form, updateFormValueSequence }) {
+  function GuardianContact({
+    form,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
+    validationErrors.contactPrimary = validationErrors.contactPrimary || {};
+    validationErrors.contactSecondary = validationErrors.contactSecondary || {};
     return (
       <React.Fragment>
         <div className="usa-form-group contact-group">
-          <h3>Tell Us About the Guardian for This Taxpayer</h3>
+          <h3>Tell Us About Yourself as the Guardian for This Taxpayer</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.name ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="name">Name of Guardian</label>
               <input
                 id="name"
@@ -29,14 +41,22 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
+              />{' '}
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.name}
+              </div>
             </div>
             <Address type="contactPrimary" />
             <Email />
-            <div className="usa-form-group">
-              <label htmlFor="secondaryPhone">Phone Number</label>
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary.phone ? 'usa-input-error' : '')
+              }
+            >
+              <label htmlFor="phone">Phone Number</label>
               <input
-                id="secondaryPhone"
+                id="phone"
                 type="tel"
                 name="contactPrimary.phone"
                 className="ustc-input-phone"
@@ -48,14 +68,24 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
+              />{' '}
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactPrimary.phone}
+              </div>
             </div>
           </div>
         </div>
         <div className="usa-form-group">
           <h3>Tell Us About the Taxpayer You Are Filing For</h3>
           <div className="blue-container">
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.name
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryName">Name of Taxpayer</label>
               <input
                 id="secondaryName"
@@ -69,9 +99,19 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
-            </div>
-            <div className="usa-form-group">
+              />{' '}
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.name}
+              </div>
+            </div>{' '}
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.inCareOf
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryInCareOf">
                 In Care Of <span className="usa-form-hint">(optional)</span>
               </label>
@@ -87,13 +127,23 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
+              />{' '}
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.inCareOf}
+              </div>
             </div>
             <Address type="contactSecondary" />
-            <div className="usa-form-group">
-              <label htmlFor="phone">Phone Number</label>
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary.phone
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
+              <label htmlFor="secondaryPhone">Phone Number</label>
               <input
-                id="phone"
+                id="secondaryPhone"
                 type="tel"
                 name="contactSecondary.phone"
                 className="ustc-input-phone"
@@ -105,7 +155,10 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
-              />
+              />{' '}
+              <div className="usa-input-error-message beneath">
+                {validationErrors.contactSecondary.phone}
+              </div>
             </div>
           </div>
         </div>

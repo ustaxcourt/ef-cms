@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearForm from '../actions/clearFormAction';
 import createCase from '../actions/createCaseAction';
 import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccessAction';
 import navigateToDashboard from '../actions/navigateToDashboardAction';
@@ -25,9 +24,8 @@ export default [
       createCase,
       getCreateCaseAlertSuccess,
       setAlertSuccess,
-      navigateToDashboard,
       unsetFormSubmitting,
-      clearForm,
+      navigateToDashboard,
     ],
     error: [
       setAlertError,

@@ -9,6 +9,7 @@ import setCase from '../actions/setCaseAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [
+  setCurrentPage('Loading'),
   clearAlertsAction,
   getCase,
   setCase,
