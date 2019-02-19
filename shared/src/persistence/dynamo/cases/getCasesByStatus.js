@@ -1,9 +1,7 @@
-const {
-  getRecordsViaMapping,
-  stripWorkItems,
-  stripInternalKeys,
-} = require('../../awsDynamoPersistence');
+const { getRecordsViaMapping } = require('../../awsDynamoPersistence');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 /**
  * getCasesByStatus
  * @param status
