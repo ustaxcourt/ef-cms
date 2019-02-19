@@ -200,7 +200,9 @@ export default connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.zip`}>ZIP Code</label>
+          <label htmlFor={`${type}.zip`} aria-label="zip code">
+            ZIP Code
+          </label>
           <input
             id={`${type}.zip`}
             type="text"
