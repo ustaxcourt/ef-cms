@@ -94,10 +94,10 @@ function Petition(rawPetition) {
       );
       break;
     case 'Conservator':
-      this.contactPrimary = new PetitionerTaxpayerContact(
+      this.contactPrimary = new PetitionerConservatorContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerConservatorContact(
+      this.contactSecondary = new PetitionerTaxpayerContact(
         this.contactSecondary || {},
       );
       break;
