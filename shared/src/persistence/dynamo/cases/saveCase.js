@@ -1,4 +1,3 @@
-const { createRespondentCaseMapping } = require('../../awsDynamoPersistence');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 const {
   createMappingRecord,
@@ -85,10 +84,11 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     !currentCaseState.respondent &&
     caseToSave.respondent
   ) {
-    await createRespondentCaseMapping({
+    await createMappingRecord({
       applicationContext,
-      caseId: caseToSave.caseId,
-      respondentId: caseToSave.respondent.respondentId,
+      pkId: caseToSave.respondent.respondentId,
+      skId: caseToSave.caseId,
+      type: 'activeCase',
     });
   }
 

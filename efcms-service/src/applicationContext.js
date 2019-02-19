@@ -5,8 +5,6 @@ const {
   incrementCounter,
 } = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
-const dynamoDbClient = require('ef-cms-shared/src/persistence/dynamodbClientService');
-
 const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
@@ -196,7 +194,6 @@ module.exports = (appContextUser = {}) => {
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
     }),
-    getDynamoClient: () => dynamoDbClient,
     getPersistenceGateway: () => {
       return {
         incrementCounter,
