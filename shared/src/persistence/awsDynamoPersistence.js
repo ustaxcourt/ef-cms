@@ -55,7 +55,14 @@ const getSortRecordsViaMapping = async ({
 };
 
 exports.getSortRecordsViaMapping = getSortRecordsViaMapping;
-
+/**
+ *
+ * @param applicationContext
+ * @param key
+ * @param type
+ * @param isVersioned
+ * @returns {Promise<*>}
+ */
 const getRecordsViaMapping = async ({
   applicationContext,
   key,
@@ -91,7 +98,14 @@ const getRecordsViaMapping = async ({
 };
 
 exports.getRecordsViaMapping = getRecordsViaMapping;
-
+/**
+ *
+ * @param applicationContext
+ * @param key
+ * @param type
+ * @param isVersioned
+ * @returns {Promise<*>}
+ */
 const getRecordViaMapping = async ({
   applicationContext,
   key,
@@ -160,7 +174,13 @@ exports.incrementCounter = ({ applicationContext }) => {
     ReturnValues: 'UPDATED_NEW',
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param caseId
+ * @param respondentId
+ * @returns {Promise<*>}
+ */
 const createRespondentCaseMapping = async ({
   applicationContext,
   caseId,
@@ -177,7 +197,14 @@ const createRespondentCaseMapping = async ({
 };
 
 exports.createRespondentCaseMapping = createRespondentCaseMapping;
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param type
+ * @returns {Promise<void>}
+ */
 exports.deleteMappingRecord = async ({
   applicationContext,
   pkId,
@@ -193,7 +220,14 @@ exports.deleteMappingRecord = async ({
     },
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param type
+ * @returns {Promise<*>}
+ */
 exports.createMappingRecord = async ({
   applicationContext,
   pkId,
@@ -209,7 +243,15 @@ exports.createMappingRecord = async ({
     },
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param item
+ * @param type
+ * @returns {Promise<*>}
+ */
 exports.createSortMappingRecord = async ({
   applicationContext,
   pkId,
@@ -227,7 +269,12 @@ exports.createSortMappingRecord = async ({
     },
   });
 };
-
+/**
+ *
+ * @param casesToModify
+ * @param isAuthorizedForWorkItems
+ * @returns {*}
+ */
 const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
   if (isAuthorizedForWorkItems) return casesToModify;
   if (!casesToModify) return casesToModify;
