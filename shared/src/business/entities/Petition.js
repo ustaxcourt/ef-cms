@@ -147,14 +147,17 @@ joiValidationDecorator(
       .iso()
       .required(),
     petitionFile: joi.object().required(),
-    businessType: joi.string().optional(),
-    ownershipDisclosureFile: joi.object().when('businessType', {
-      is: joi.exist(),
-      then: joi.required(),
-      otherwise: joi.optional(),
-    }),
+    businessType: joi
+      .string()
+      .optional()
+      .allow(null),
     procedureType: joi.string().required(),
     filingType: joi.string().required(),
+    ownershipDisclosureFile: joi.object().when('filingType', {
+      is: 'A business',
+      then: joi.required(),
+      otherwise: joi.optional().allow(null),
+    }),
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),
