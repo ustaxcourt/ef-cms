@@ -73,11 +73,10 @@ export default connect(
         </div>
         <div
           className={
-            'usa-form-group ' +
-            (validationErrors[type] &&
+            validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-input-error'
-              : '')
+              : ''
           }
         >
           <div className="usa-form-group ustc-form-group-city">
@@ -181,16 +180,17 @@ export default connect(
               <option value="WY">Wyoming</option>
             </select>
           </div>
-          {validationErrors[type] && (
-            <>
-              <div className="usa-input-error-message beneath">
-                {validationErrors[type].city}
-              </div>
-              <div className="usa-input-error-message beneath">
-                {validationErrors[type].state}
-              </div>
-            </>
-          )}
+          {validationErrors[type] &&
+            (validationErrors[type].city || validationErrors[type].state) && (
+              <React.Fragment>
+                <div className="usa-input-error-message beneath">
+                  {validationErrors[type].city}
+                </div>
+                <div className="usa-input-error-message beneath">
+                  {validationErrors[type].state}
+                </div>
+              </React.Fragment>
+            )}
         </div>
         <div
           className={
