@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ store, props }) => {
+export default async ({ store, props, get }) => {
   let partyType = '';
   if (props.key === 'filingType') {
     switch (props.value) {
@@ -87,6 +87,11 @@ export default async ({ store, props }) => {
     }
   }
   store.set(state.form.partyType, partyType);
+  if (get(state.form.filingType) !== 'A business') {
+    //clear the ownership disclosure file and business type
+    store.set(state.petition.ownershipDisclosureFile, undefined);
+    store.set(state.form.businessType, undefined);
+  }
   // ask UI
   store.set(state.form.contactPrimary, {});
   store.set(state.form.contactSecondary, {});
