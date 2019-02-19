@@ -182,14 +182,14 @@ export default connect(
           </div>
           {validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state) && (
-              <>
+              <React.Fragment>
                 <div className="usa-input-error-message beneath">
                   {validationErrors[type].city}
                 </div>
                 <div className="usa-input-error-message beneath">
                   {validationErrors[type].state}
                 </div>
-              </>
+              </React.Fragment>
             )}
         </div>
         <div
