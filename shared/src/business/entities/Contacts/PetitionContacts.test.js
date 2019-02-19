@@ -69,7 +69,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate without Executor/Personal Representative/Etc. contact', () => {
+  it('can validate Estate without an Executor/Personal Representative/Fiduciary/etc. contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -78,7 +78,8 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       petitionFile: {},
       signature: true,
-      partyType: 'Estate without Executor/Personal Representative/Etc.',
+      partyType:
+        'Estate without an Executor/Personal Representative/Fiduciary/etc.',
       contactPrimary: {
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
@@ -94,7 +95,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate with Executor/Personal Representative/Etc. contact', () => {
+  it('can validate Estate with an Executor/Personal Representative/Fiduciary/etc. contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -103,7 +104,8 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       petitionFile: {},
       signature: true,
-      partyType: 'Estate with Executor/Personal Representative/Etc.',
+      partyType:
+        'Estate with an Executor/Personal Representative/Fiduciary/etc.',
     });
     expect(petition.isValid()).toEqual(false);
     petition = new Petition({
@@ -114,7 +116,8 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       petitionFile: {},
       signature: true,
-      partyType: 'Estate with Executor/Personal Representative/Etc.',
+      partyType:
+        'Estate with an Executor/Personal Representative/Fiduciary/etc.',
       contactPrimary: {
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
@@ -179,7 +182,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Trust & Trustee contact', () => {
+  it('can validate Trust', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -188,7 +191,7 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       petitionFile: {},
       signature: true,
-      partyType: 'Trust & Trustee',
+      partyType: 'Trust',
     });
     expect(petition.isValid()).toEqual(false);
     petition = new Petition({
@@ -199,7 +202,7 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       petitionFile: {},
       signature: true,
-      partyType: 'Trust & Trustee',
+      partyType: 'Trust',
       contactPrimary: {
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
