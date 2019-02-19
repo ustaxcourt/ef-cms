@@ -77,11 +77,7 @@ describe('awsDynamoPersistence', function() {
         type,
         isVersioned,
       });
-      /*
-      expect(client.query.getCall(0).args[0].Item.pk).to.equal(
-        `${respondentId}|activeCase`,
-      );
-      */
+
       expect(client.get.getCall(0).args[0].Key.sk).not.to.equal('0');
     });
   });
