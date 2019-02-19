@@ -46,7 +46,7 @@ function Petition(rawPetition) {
       );
       break;
     case 'Corporation':
-    case 'Estate without Executor/Personal Representative/Etc.':
+    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
       this.contactPrimary = new PetitionerCorporationContact(
         this.contactPrimary || {},
       );
@@ -69,7 +69,7 @@ function Petition(rawPetition) {
         this.contactSecondary || {},
       );
       break;
-    case 'Estate with Executor/Personal Representative/Etc.':
+    case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
       this.contactPrimary = new PetitionerEstateWithExecutorPrimaryContact(
         this.contactPrimary || {},
       );
@@ -85,7 +85,7 @@ function Petition(rawPetition) {
         this.contactSecondary || {},
       );
       break;
-    case 'Trust & Trustee':
+    case 'Trust':
       this.contactPrimary = new PetitionerTrustContact(
         this.contactPrimary || {},
       );
