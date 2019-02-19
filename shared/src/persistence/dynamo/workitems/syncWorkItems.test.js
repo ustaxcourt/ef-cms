@@ -4,6 +4,7 @@ chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('../../dynamodbClientService');
 const persistence = require('../../awsDynamoPersistence');
+const mappings = require('../../dynamo/helpers/createMappingRecord');
 
 const sync = require('./syncWorkItems');
 const { syncWorkItems } = require('./syncWorkItems');
@@ -12,25 +13,24 @@ const applicationContext = {
   environment: {
     stage: 'local',
   },
+  getDynamoClient: () => client,
 };
 
 describe('syncWorkItems', function() {
   beforeEach(() => {
-    sinon.stub(persistence, 'createMappingRecord').resolves(null);
+    sinon.stub(mappings, 'createMappingRecord').resolves(null);
     sinon.stub(client, 'put').resolves(null);
+    sinon.stub(client, 'delete').resolves(null);
     sinon.stub(sync, 'reassignWorkItem').resolves(null);
     sinon.stub(sync, 'updateWorkItem').resolves(null);
-    sinon.stub(persistence, 'createSortMappingRecord').resolves(null);
-    sinon.stub(persistence, 'deleteMappingRecord').resolves(null);
   });
 
   afterEach(() => {
-    persistence.createMappingRecord.restore();
+    mappings.createMappingRecord.restore();
     client.put.restore();
+    client.delete.restore();
     sync.reassignWorkItem.restore();
     sync.updateWorkItem.restore();
-    persistence.createSortMappingRecord.restore();
-    persistence.deleteMappingRecord.restore();
   });
 
   it('creates a new work item record for the work item and the mapping record for the assignee when a new work item is added to a case', async () => {
@@ -49,9 +49,6 @@ describe('syncWorkItems', function() {
       },
       currentCaseState: {},
     });
-    expect(persistence.createMappingRecord.getCall(0).args[0].skId).to.equal(
-      'abc',
-    );
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
   });
 
@@ -81,9 +78,6 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(persistence.createMappingRecord.getCall(0).args[0].skId).to.equal(
-      'abc',
-    );
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
   });
 
@@ -197,18 +191,14 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(
-      persistence.createSortMappingRecord.getCall(0).args[0].pkId,
-    ).to.equal('petitionsclerk1');
-    expect(
-      persistence.createSortMappingRecord.getCall(0).args[0].skId,
-    ).to.equal('123');
-    expect(
-      persistence.createSortMappingRecord.getCall(1).args[0].pkId,
-    ).to.equal('petitions');
-    expect(
-      persistence.createSortMappingRecord.getCall(1).args[0].skId,
-    ).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
+      'petitionsclerk1|sentWorkItem',
+    );
+    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(1).args[0].Item.pk).to.equal(
+      'petitions|sentWorkItem',
+    );
+    expect(client.put.getCall(1).args[0].Item.sk).to.equal('123');
   });
 
   it('creates a mapping record when the work item is completed', async () => {
@@ -261,12 +251,10 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(
-      persistence.createSortMappingRecord.getCall(0).args[0].pkId,
-    ).to.equal('petitions');
-    expect(
-      persistence.createSortMappingRecord.getCall(0).args[0].skId,
-    ).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
+      'petitions|sentWorkItem',
+    );
+    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
   });
 
   it('deletes the mapping records for the sent box items when the status changes to Recalled', async () => {
@@ -319,17 +307,13 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(persistence.deleteMappingRecord.getCall(0).args[0].pkId).to.equal(
-      'petitionsclerk1',
+    expect(client.delete.getCall(0).args[0].key.pk).to.equal(
+      'petitionsclerk1|sentWorkItem',
     );
-    expect(persistence.deleteMappingRecord.getCall(0).args[0].skId).to.equal(
-      '123',
+    expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
+    expect(client.delete.getCall(1).args[0].key.pk).to.equal(
+      'petitions|sentWorkItem',
     );
-    expect(persistence.deleteMappingRecord.getCall(1).args[0].pkId).to.equal(
-      'petitions',
-    );
-    expect(persistence.deleteMappingRecord.getCall(1).args[0].skId).to.equal(
-      '123',
-    );
+    expect(client.delete.getCall(1).args[0].key.sk).to.equal('123');
   });
 });

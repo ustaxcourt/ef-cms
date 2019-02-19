@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { stripInternalKeys } = require('../../awsDynamoPersistence');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getWorkItemById = async ({ workItemId, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;

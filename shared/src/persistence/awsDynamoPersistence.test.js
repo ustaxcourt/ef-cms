@@ -6,9 +6,10 @@ const sinon = require('sinon');
 const {
   createRespondentCaseMapping,
   getRecordViaMapping,
-  incrementCounter,
-  stripWorkItems,
 } = require('./awsDynamoPersistence');
+
+const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
+const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
 
 chai.use(require('chai-string'));
 

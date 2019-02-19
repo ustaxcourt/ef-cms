@@ -1,11 +1,12 @@
+const { createRespondentCaseMapping } = require('../../awsDynamoPersistence');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 const {
-  createRespondentCaseMapping,
-  stripInternalKeys,
-  stripWorkItems,
   createMappingRecord,
-} = require('../../awsDynamoPersistence');
+} = require('../../dynamo/helpers/createMappingRecord');
+
 const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 const client = require('../../dynamodbClientService');
 

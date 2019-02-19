@@ -3,7 +3,7 @@ const uuidv4 = require('uuid/v4');
 
 const {
   incrementCounter,
-} = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const dynamoDbClient = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
