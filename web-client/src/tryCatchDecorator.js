@@ -1,6 +1,18 @@
 import ErrorFactory from './presenter/errors/ErrorFactory';
 
+/**
+ * Decorates a list of use cases so that they return cerebral specific errors from the ErrorFactory when exceptions occur
+ *
+ * @param {Array} useCases the use case funnctions to decorate
+ * @returns {Undefined} does not return anything
+ */
 export default function tryCatchDecorator(useCases) {
+  /**
+   * catches and throws any exceptions produced from method with a new error based on what the ErrorFactory.getError returns
+   *
+   * @param {*} method the use case method to decorate
+   * @returns {*} the result of method
+   */
   function decorate(method) {
     return function() {
       const response = method.apply(
