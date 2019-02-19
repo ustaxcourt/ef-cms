@@ -4,24 +4,8 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
-import ConservatorContact from './StartCase/ConservatorContact';
-import CorporationContact from './StartCase/CorporationContact';
-import CustodianContact from './StartCase/CustodianContact';
-import DonorContact from './StartCase/DonorContact';
-import EstateWithExecutorContact from './StartCase/EstateWithExecutorContact';
-import EstateWithoutExecutorContact from './StartCase/EstateWithoutExecutorContact';
-import GuardianContact from './StartCase/GuardianContact';
-import IncompetentPersonContact from './StartCase/IncompetentPersonContact';
-import MinorContact from './StartCase/MinorContact';
-import PartnershipBBAContact from './StartCase/PartnershipBBAContact';
-import PartnershipOtherContact from './StartCase/PartnershipOtherContact';
-import PartnershipTaxMattersContact from './StartCase/PartnershipTaxMattersContact';
-import PetitionerAndDeceasedSpouseContact from './StartCase/PetitionerAndDeceasedSpouseContact';
-import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
-import PetitionerContact from './StartCase/PetitionerContact';
-import SurvivingSpouseContact from './StartCase/SurvivingSpouseContact';
-import TransfereeContact from './StartCase/TransfereeContact';
-import TrustAndTrusteeContact from './StartCase/TrustAndTrusteeContact';
+import ContactPrimary from './StartCase/ContactPrimary';
+import ContactSecondary from './StartCase/ContactSecondary';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -427,43 +411,225 @@ export default connect(
             </div>
           </div>
 
-          {startCaseHelper.showPetitionerContact && <PetitionerContact />}
+          {startCaseHelper.showPetitionerContact && (
+            <ContactPrimary
+              header="Tell Us About Yourself"
+              nameLabel="Name"
+              displayTitle={false}
+              displayInCareOf={false}
+            />
+          )}
           {startCaseHelper.showPetitionerAndSpouseContact && (
-            <PetitionerAndSpouseContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself"
+                nameLabel="Name"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About Your Spouse"
+                nameLabel="Spouse's Name"
+                displayInCareOf={false}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
           {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
-            <PetitionerAndDeceasedSpouseContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself"
+                nameLabel="Name"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About Your Deceased Spouse"
+                nameLabel="Spouse's Name"
+                displayInCareOf={false}
+                displayPhone={false}
+              />
+            </React.Fragment>
           )}
           {startCaseHelper.showEstateWithExecutorContact && (
-            <EstateWithExecutorContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Executor/Personal Representative For This Estate"
+                nameLabel="Name of Executor/Personal Representative"
+                displayTitle={true}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Estate You Are Filing For"
+                nameLabel="Name of Decedent"
+                displayInCareOf={false}
+                displayPhone={false}
+              />
+            </React.Fragment>
           )}
           {startCaseHelper.showEstateWithoutExecutorContact && (
-            <EstateWithoutExecutorContact />
+            <ContactPrimary
+              header="Tell Us About the Estate You Are Filing For"
+              nameLabel="Name of Decedent"
+              displayTitle={false}
+              displayInCareOf={true}
+            />
           )}
           {startCaseHelper.showTrustAndTrusteeContact && (
-            <TrustAndTrusteeContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Trustee"
+                nameLabel="Name of Trustee"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Trust You Are Filing For"
+                nameLabel="Name of Trust"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
-          {startCaseHelper.showCorporationContact && <CorporationContact />}
+          {startCaseHelper.showCorporationContact && (
+            <ContactPrimary
+              header="Tell Us About the Corporation You Are Filing For"
+              nameLabel="Business Name"
+              displayTitle={false}
+              displayInCareOf={true}
+            />
+          )}
           {startCaseHelper.showPartnershipTaxMattersContact && (
-            <PartnershipTaxMattersContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Tax Matters Partner"
+                nameLabel="Name of Tax Matters Partner"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Partnership You Are Filing For"
+                nameLabel="Business Name"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
           {startCaseHelper.showPartnershipOtherContact && (
-            <PartnershipOtherContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Partner (Other than Tax Matters Partner)"
+                nameLabel="Name of Partner"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Partnership You Are Filing For"
+                nameLabel="Business Name"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
           {startCaseHelper.showPartnershipBBAContact && (
-            <PartnershipBBAContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Partnership Representative"
+                nameLabel="Name of Partnership Representative"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Partnership You Are Filing For"
+                nameLabel="Business Name"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
-          {startCaseHelper.showConservatorContact && <ConservatorContact />}
-          {startCaseHelper.showGuardianContact && <GuardianContact />}
-          {startCaseHelper.showCustodianContact && <CustodianContact />}
-          {startCaseHelper.showMinorContact && <MinorContact />}
+          {(startCaseHelper.showConservatorContact ||
+            startCaseHelper.showGuardianContact ||
+            startCaseHelper.showCustodianContact) && (
+            <React.Fragment>
+              <ContactPrimary
+                header={`Tell Us About Yourself as the ${
+                  form.partyType
+                } for This Taxpayer`}
+                nameLabel={`Name of ${form.partyType}`}
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Taxpayer You Are Filing For"
+                nameLabel="Name of Taxpayer"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
+          )}
+          {startCaseHelper.showMinorContact && (
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Next Friend for This Minor"
+                nameLabel="Name of Next Friend"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Minor You Are Filing For"
+                nameLabel="Name of Minor"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
+          )}
           {startCaseHelper.showIncompetentPersonContact && (
-            <IncompetentPersonContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Next Friend for This Incompetent Person"
+                nameLabel="Name of Next Friend"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About the Incompetent Person You Are Filing For"
+                nameLabel="Name of Incompetent Person"
+                displayInCareOf={true}
+                displayPhone={true}
+              />
+            </React.Fragment>
           )}
-          {startCaseHelper.showDonorContact && <DonorContact />}
-          {startCaseHelper.showTransfereeContact && <TransfereeContact />}
+          {startCaseHelper.showDonorContact && (
+            <ContactPrimary
+              header="Tell Us About the Donor You Are Filing For"
+              nameLabel="Name of Petitioner"
+              displayTitle={false}
+              displayInCareOf={false}
+            />
+          )}
+          {startCaseHelper.showTransfereeContact && (
+            <ContactPrimary
+              header="Tell Us About the Transferee You Are Filing For"
+              nameLabel="Name of Petitioner"
+              displayTitle={false}
+              displayInCareOf={false}
+            />
+          )}
           {startCaseHelper.showSurvivingSpouseContact && (
-            <SurvivingSpouseContact />
+            <React.Fragment>
+              <ContactPrimary
+                header="Tell Us About Yourself as the Surviving Spouse"
+                nameLabel="Name"
+                displayTitle={false}
+                displayInCareOf={false}
+              />
+              <ContactSecondary
+                header="Tell Us About Your Deceased Spouse"
+                nameLabel="Spouse's Name"
+                displayInCareOf={false}
+                displayPhone={false}
+              />
+            </React.Fragment>
           )}
 
           {/*start ods*/}
