@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import { ActionError } from '../src/presenter/errors/ActionError';
+import { UnidentifiedUserError } from '../src/presenter/errors/UnidentifiedUserError';
 
 import presenter from '../src/presenter';
 import applicationContext from '../src/applicationContext';
@@ -71,7 +71,7 @@ describe('Log in', async () => {
     try {
       await test.runSequence('submitLogInSequence');
     } catch (e) {
-      if (e instanceof ActionError) {
+      if (e instanceof UnidentifiedUserError) {
         result = '😃';
       }
     }
