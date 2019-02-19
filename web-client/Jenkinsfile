@@ -38,15 +38,16 @@ pipeline {
         }
       }
     }
-    stage('Audit') {
-      steps {
-        script {
-          dir('web-client') {
-            sh "./docker-audit.sh"
-          }
-        }
-      }
-    }
+    // temp remove until audit is fixed
+    // stage('Audit') {
+    //   steps {
+    //     script {
+    //       dir('web-client') {
+    //         sh "./docker-audit.sh"
+    //       }
+    //     }
+    //   }
+    // }
     stage('Lint') {
       steps {
         script {
