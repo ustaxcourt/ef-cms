@@ -77,6 +77,10 @@ User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
 };
 
+/**
+ *
+ * @returns {string}
+ */
 User.prototype.getDocketRecordName = function getDocketRecordName() {
   return this.role === 'petitioner' ? `Petitioner ${this.name}` : this.name;
 };

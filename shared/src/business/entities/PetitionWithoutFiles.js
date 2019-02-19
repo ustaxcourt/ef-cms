@@ -3,6 +3,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
+/**
+ *
+ * @param rawPetition
+ * @constructor
+ */
 function PetitionWithoutFiles(rawPetition) {
   Object.assign(this, rawPetition, {
     irsNoticeDate: rawPetition.irsNoticeDate

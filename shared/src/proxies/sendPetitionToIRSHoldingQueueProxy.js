@@ -1,3 +1,9 @@
+/**
+ *
+ * @param caseId
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 exports.sendPetitionToIRSHoldingQueue = async ({
   caseId,
   applicationContext,
