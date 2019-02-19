@@ -22,6 +22,8 @@ function Petition(rawPetition) {
 
   switch (this.partyType) {
     case 'Petitioner':
+    case 'Transferee':
+    case 'Donor':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );
@@ -44,7 +46,7 @@ function Petition(rawPetition) {
       );
       break;
     case 'Corporation':
-    case 'Estate without Executor/Personal Representative/Etc.':
+    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
       this.contactPrimary = new PetitionerCorporationContact(
         this.contactPrimary || {},
       );
@@ -67,7 +69,7 @@ function Petition(rawPetition) {
         this.contactSecondary || {},
       );
       break;
-    case 'Estate with Executor/Personal Representative/Etc.':
+    case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
       this.contactPrimary = new PetitionerEstateWithExecutorPrimaryContact(
         this.contactPrimary || {},
       );
@@ -83,7 +85,7 @@ function Petition(rawPetition) {
         this.contactSecondary || {},
       );
       break;
-    case 'Trust & Trustee':
+    case 'Trust':
       this.contactPrimary = new PetitionerTrustContact(
         this.contactPrimary || {},
       );
@@ -92,26 +94,26 @@ function Petition(rawPetition) {
       );
       break;
     case 'Conservator':
-      this.contactPrimary = new PetitionerTaxpayerContact(
+      this.contactPrimary = new PetitionerConservatorContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerConservatorContact(
+      this.contactSecondary = new PetitionerTaxpayerContact(
         this.contactSecondary || {},
       );
       break;
     case 'Guardian':
-      this.contactPrimary = new PetitionerTaxpayerContact(
+      this.contactPrimary = new PetitionerGuardianContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerGuardianContact(
+      this.contactSecondary = new PetitionerTaxpayerContact(
         this.contactSecondary || {},
       );
       break;
     case 'Custodian':
-      this.contactPrimary = new PetitionerTaxpayerContact(
+      this.contactPrimary = new PetitionerCustodianContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerCustodianContact(
+      this.contactSecondary = new PetitionerTaxpayerContact(
         this.contactSecondary || {},
       );
       break;
