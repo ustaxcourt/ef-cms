@@ -1,4 +1,4 @@
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearForms from '../actions/clearFormsAction';
 import clearWorkItemActionMap from '../actions/clearWorkItemActionMapAction';
 import getCase from '../actions/getCaseAction';
@@ -12,7 +12,7 @@ import setFormForCaseAction from '../actions/setFormForCaseAction';
 import setInternalUsers from '../actions/setInternalUsersAction';
 
 export default [
-  clearAlerts,
+  clearAlertsAction,
   clearWorkItemActionMap,
   clearForms,
   setDocumentId,
