@@ -8,6 +8,12 @@ const {
 const { getCasesByDocumentId } = require('../getCasesByDocumentId.interactor');
 const { getCasesByStatus } = require('../getCasesByStatus.interactor');
 
+/**
+ *
+ * @param documentId
+ * @param userId
+ * @returns {*}
+ */
 exports.getInteractorForGettingCases = ({ documentId, userId }) => {
   let user;
   try {

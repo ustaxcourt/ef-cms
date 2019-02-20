@@ -9,9 +9,11 @@ import {
   faFilePdf,
   faFlag,
   faListUl,
+  faPlusCircle,
   faShareSquare,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
@@ -27,17 +29,27 @@ import presenter from './presenter';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
+    if (process.env.USTC_ENV === 'dev') {
+      const user =
+        JSON.parse(window.localStorage.getItem('user') || 'null') ||
+        presenter.state.user;
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+    }
+
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
       faCheckCircle,
+      faClock,
       faCloudUploadAlt,
       faExclamationTriangle,
       faFilePdf,
       faFlag,
       faListUl,
+      faPlusCircle,
       faShareSquare,
       faTimesCircle,
     );

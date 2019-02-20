@@ -8,7 +8,7 @@ const uuidVersions = {
 };
 const uuid = require('uuid');
 const Message = require('./Message');
-const { getSectionForRole } = require('./WorkQueue');
+const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 
 /**
  * constructor
@@ -71,17 +71,30 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    isInitializeCase: joi.boolean().optional(),
   }),
   function() {
     return Message.validateCollection(this.messages);
   },
 );
 
+/**
+ *
+ * @param message
+ * @returns {WorkItem}
+ */
 WorkItem.prototype.addMessage = function(message) {
-  this.messages = [...(this.messages || []), message];
+  this.messages = [...this.messages, message];
   return this;
 };
 
+/**
+ *
+ * @param assigneeId
+ * @param assigneeName
+ * @param role
+ * @returns {WorkItem}
+ */
 WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
   Object.assign(this, {
     assigneeId,
@@ -89,6 +102,63 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
     section: getSectionForRole(role),
   });
   return this;
+};
+
+/**
+ *
+ * @param userId
+ */
+WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
+  this.assignToUser({
+    assigneeId: 'irsBatchSystem',
+    role: 'irsBatchSystem',
+    assigneeName: 'IRS Holding Queue',
+  });
+  this.addMessage(
+    new Message({
+      message: 'Petition batched for IRS',
+      sentBy: userId,
+      userId: userId,
+      sentTo: 'IRS Holding Queue',
+    }),
+  );
+};
+
+/**
+ *
+ * @param user
+ */
+WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
+  this.assignToUser({
+    assigneeId: user.userId,
+    role: user.role,
+    assigneeName: user.name,
+  });
+  this.section = PETITIONS_SECTION;
+  this.addMessage(
+    new Message({
+      message: 'Petition recalled from IRS Holding Queue',
+      sentBy: 'IRS Holding Queue',
+      userId: 'irsBatchSystem',
+      sentTo: user.name,
+    }),
+  );
+};
+
+/**
+ *
+ * @param userId
+ */
+WorkItem.prototype.setAsCompleted = function(userId) {
+  this.completedAt = new Date().toISOString();
+
+  this.addMessage(
+    new Message({
+      message: 'work item completed',
+      sentBy: userId,
+      userId: userId,
+    }),
+  );
 };
 
 module.exports = WorkItem;

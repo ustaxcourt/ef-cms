@@ -1,3 +1,8 @@
+/**
+ * returns a generic success alert for when a file is successfully uploaded.
+ *
+ * @returns {Object} the alertSuccess object containing the generic messages.
+ */
 export default () => {
   return {
     alertSuccess: {

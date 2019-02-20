@@ -28,7 +28,10 @@ function Document(rawDocument) {
 }
 
 Document.name = 'Document';
-
+/**
+ *
+ * @returns {boolean}
+ */
 Document.prototype.isPetitionDocument = function() {
   return petitionDocumentTypes.includes(this.documentType);
 };
@@ -69,9 +72,12 @@ joiValidationDecorator(
     return WorkItem.validateCollection(this.workItems);
   },
 );
-
+/**
+ *
+ * @param workItem
+ */
 Document.prototype.addWorkItem = function(workItem) {
-  this.workItems = [...(this.workItems || []), workItem];
+  this.workItems = [...this.workItems, workItem];
 };
 
 module.exports = Document;

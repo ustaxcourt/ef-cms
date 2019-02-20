@@ -20,26 +20,26 @@ describe('saveCase', () => {
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'put').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
       pk: '123',
       sk: '123',
       caseId: '123',
-      status: 'new',
+      status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
         pk: '123',
         sk: '123',
         caseId: '123',
-        status: 'new',
+        status: 'New',
       },
     ]);
     sinon.stub(client, 'query').resolves([
@@ -66,26 +66,43 @@ describe('saveCase', () => {
     const result = await saveCase({
       caseToSave: {
         caseId: '123',
-        status: 'new',
+        status: 'New',
       },
       applicationContext,
     });
-    expect(result).to.deep.equal({ caseId: '123', status: 'new' });
+    expect(result).to.deep.equal({ caseId: '123', status: 'New' });
   });
 
   it('should attempt to delete and put a new status mapping if the status changes', async () => {
     await saveCase({
       caseToSave: {
         caseId: '123',
-        status: 'general',
+        status: 'General',
       },
       applicationContext,
     });
-    expect(client.delete.getCall(0).args[0].key.pk).to.equal('new|case-status');
+    expect(client.delete.getCall(0).args[0].key.pk).to.equal('New|case-status');
     expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
     expect(client.put.getCall(0).args[0].Item.pk).to.equal(
-      'general|case-status',
+      'General|case-status',
     );
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+  });
+
+  it('creates a docket number mapping if this is the first time a case was created', async () => {
+    client.get.resolves(null);
+    await saveCase({
+      caseToSave: {
+        caseId: '123',
+        userId: 'taxpayer',
+        status: 'General',
+        docketNumber: '101-18',
+      },
+      applicationContext,
+    });
+    expect(client.put.getCall(0).args[0].Item.pk).to.equal('taxpayer|case');
+    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(1).args[0].Item.pk).to.equal('101-18|case');
+    expect(client.put.getCall(1).args[0].Item.sk).to.equal('123');
   });
 });

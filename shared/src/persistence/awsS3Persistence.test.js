@@ -46,6 +46,43 @@ describe('uploadPdf', () => {
       headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
     });
   });
+  it('makes use of defaults when not provided', async () => {
+    let postSpy = sinon.spy();
+    const applicationContext = {
+      getHttpClient: () => ({
+        post: postSpy,
+      }),
+      getUniqueId: () => '123',
+    };
+    await uploadPdf({
+      policy: {
+        fields: {
+          'X-Amz-Algorithm': '1',
+          'X-Amz-Credential': '2',
+          'X-Amz-Date': '3',
+          Policy: 'gg',
+          'X-Amz-Signature': '5',
+        },
+        url: 'http://test.com',
+      },
+      file: new Blob([]),
+      applicationContext,
+    });
+    expect([...postSpy.getCall(0).args[1].entries()]).toMatchObject([
+      ['key', '123'],
+      ['X-Amz-Algorithm', '1'],
+      ['X-Amz-Credential', '2'],
+      ['X-Amz-Date', '3'],
+      ['X-Amz-Security-Token', ''],
+      ['Policy', 'gg'],
+      ['X-Amz-Signature', '5'],
+      ['Content-Type', 'application/pdf'],
+      ['file', {}],
+    ]);
+    expect(postSpy.getCall(0).args[2]).toEqual({
+      headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
+    });
+  });
 });
 
 describe('uploadDocument', () => {

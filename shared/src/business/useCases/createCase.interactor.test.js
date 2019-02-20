@@ -67,6 +67,18 @@ describe('createCase', () => {
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
+      docketRecord: [
+        {
+          filingDate: '2018-11-21T20:49:28.192Z',
+          description: 'Request for Place of Trial at Chattanooga, TN',
+        },
+        {
+          description: 'Petition',
+          filedBy: 'Petitioner',
+          filingDate: '2018-11-21T20:49:28.192Z',
+          status: undefined,
+        },
+      ],
       documents: [
         {
           caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -80,7 +92,7 @@ describe('createCase', () => {
               assigneeId: null,
               assigneeName: null,
               caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
+              caseStatus: 'New',
               createdAt: '2018-11-21T20:49:28.192Z',
               docketNumber: '101-18',
               docketNumberSuffix: 'S',
@@ -129,7 +141,7 @@ describe('createCase', () => {
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
-      status: 'new',
+      status: 'New',
       userId: 'taxpayer',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
@@ -198,7 +210,7 @@ describe('createCase', () => {
               assigneeId: null,
               assigneeName: null,
               caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-              caseStatus: 'new',
+              caseStatus: 'New',
               createdAt: '2018-11-21T20:49:28.192Z',
               docketNumber: '101-18',
               docketNumberSuffix: 'S',
@@ -247,7 +259,7 @@ describe('createCase', () => {
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
-      status: 'new',
+      status: 'New',
       userId: 'taxpayer',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]

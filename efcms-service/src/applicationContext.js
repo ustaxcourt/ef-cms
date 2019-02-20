@@ -6,6 +6,12 @@ const {
 } = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
 
 const {
+  getSentWorkItemsForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
+const {
+  getSentWorkItemsForSection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
+const {
   getWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
 const {
@@ -56,6 +62,9 @@ const {
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
+  getSentWorkItemsForUser: getSentWorkItemsForUserUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUser.interactor');
+const {
   getCase,
 } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
 const {
@@ -71,8 +80,8 @@ const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
 const {
-  sendPetitionToIRS,
-} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRS.interactor');
+  sendPetitionToIRSHoldingQueue,
+} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueue.interactor');
 const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
@@ -98,8 +107,17 @@ const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 const {
+  getWorkItems: getWorkItemsUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
+const {
+  getSentWorkItemsForSection: getSentWorkItemsForSectionUC
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
+const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
+const {
+  recallPetitionFromIRSHoldingQueue
+} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
 
 const {
   forwardWorkItem
@@ -108,13 +126,11 @@ const {
 const {
   isAuthorized,
   WORKITEM,
-  CASE_METADATA,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
 const User = require('ef-cms-shared/src/business/entities/User');
-const Case = require('ef-cms-shared/src/business/entities/Case');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -171,6 +187,8 @@ module.exports = ({ userId } = {}) => {
         getWorkItemsForUser,
         getWorkItemById,
         saveWorkItem,
+        getSentWorkItemsForUser,
+        getSentWorkItemsForSection,
 
         // cases
         getCasesByStatus,
@@ -194,7 +212,6 @@ module.exports = ({ userId } = {}) => {
     getCurrentUser,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
-    isAuthorizedForCaseMetadata: () => isAuthorized(userId, CASE_METADATA),
     getUseCases: () => {
       return {
         createCase,
@@ -203,15 +220,19 @@ module.exports = ({ userId } = {}) => {
         getCasesByUser: getCasesByUserUC,
         getUser,
         forwardWorkItem,
-        sendPetitionToIRS,
+        sendPetitionToIRSHoldingQueue,
         updateCase,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,
+        getWorkItemsUC,
         updateWorkItem,
         createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
+        getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
+        getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         assignWorkItems: assignWorkItemsUC,
+        recallPetitionFromIRSHoldingQueue,
       };
     },
     getUpdateCaseInteractorQueryParam: event => {
@@ -234,13 +255,17 @@ module.exports = ({ userId } = {}) => {
     },
     getWorkItemsInteractor: event => {
       const section = (event.queryStringParameters || {}).section;
-      if (section) {
-        return getWorkItemsBySection;
+      const completed = (event.queryStringParameters || {}).completed;
+      if (section && completed) {
+        return getSentWorkItemsForSectionUC;
+      } else if (section) {
+        return getWorkItemsBySectionUC;
+      } else if (completed) {
+        return getSentWorkItemsForUserUC;
       } else {
-        return getWorkItemsForUser;
+        return getWorkItemsUC;
       }
     },
-    filterCaseMetadata: Case.filterMetadata,
     getInteractorForGettingCases,
   };
 };

@@ -1,18 +1,18 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path }) => {
-  const useCases = applicationContext.getUseCases();
-  const procedureTypes = await useCases.getProcedureTypes({
-    userId: get(state.user.userId),
-  });
-  if (procedureTypes) {
-    return path.success({ procedureTypes });
-  } else {
-    return path.error({
-      alertError: {
-        title: 'Procedure types not found',
-        message: 'There was an error retrieving the procedure types.',
-      },
+/**
+ * fetch the procedure types that can be used when starting a case (Regular, Small)
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context used for getting the getInternalUsers use case
+ * @param {Function} providers.get the cerebral get function  application context used for getting the getInternalUsers use case
+ * @returns {Object} the list of procedureTypes
+ */
+export default async ({ applicationContext, get }) => {
+  const procedureTypes = await applicationContext
+    .getUseCases()
+    .getProcedureTypes({
+      userId: get(state.user.userId),
     });
-  }
+  return { procedureTypes };
 };
