@@ -107,7 +107,7 @@ exports.createCase = async ({
       userId: user.userId,
       filedBy: 'Petitioner',
     });
-    addDocumentToCase(user, caseToAdd, odsDocumentEntity);
+    caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().saveCase({
