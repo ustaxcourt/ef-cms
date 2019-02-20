@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-exports.clearAlertsAction = ({ store }) => {
+export const clearAlertsAction = ({ store }) => {
   store.set(state.alertError, null);
   store.set(state.alertSuccess, null);
   store.set(state.caseDetailErrors, {});
