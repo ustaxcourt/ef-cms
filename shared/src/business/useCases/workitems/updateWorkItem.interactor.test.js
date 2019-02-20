@@ -14,7 +14,7 @@ describe('updateWorkItem', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxyaper',
+      sentBy: 'taxpayer',
     },
   };
 
@@ -23,12 +23,17 @@ describe('updateWorkItem', () => {
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await updateWorkItem({
-        userId: 'taxpayer',
         workItemToUpdate: mockWorkItem,
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
@@ -44,12 +49,17 @@ describe('updateWorkItem', () => {
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await updateWorkItem({
-        userId: 'docketclerk',
         workItemToUpdate: null,
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
@@ -65,6 +75,12 @@ describe('updateWorkItem', () => {
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
@@ -85,11 +101,24 @@ describe('updateWorkItem', () => {
     applicationContext = {
       getPersistenceGateway: () => ({
         saveWorkItem: async () => mockWorkItem,
+        getUserById: () => {
+          return {
+            userId: 'docketclerk',
+            role: 'docketclerk',
+            name: 'Test Docketclerk',
+          };
+        },
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'docketclerk',
+          role: 'docketclerk',
+        };
+      },
+
       environment: { stage: 'local' },
     };
     const result = await updateWorkItem({
-      userId: 'docketclerk',
       workItemToUpdate: mockWorkItem,
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       applicationContext,
@@ -100,7 +129,7 @@ describe('updateWorkItem', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
-      document: { sentBy: 'taxyaper' },
+      document: { sentBy: 'taxpayer' },
       messages: [],
       section: 'docket',
       sentBy: 'docketclerk',

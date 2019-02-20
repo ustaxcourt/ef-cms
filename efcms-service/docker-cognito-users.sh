@@ -1,0 +1,4 @@
+#!/bin/bash -e
+ENV=$1
+docker build -t efcms-build -f ../Dockerfile.build ..
+docker run -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms-build /bin/sh -c "cd efcms-service && ./setup-cognito-users.sh $ENV"

@@ -17,10 +17,15 @@ describe('Get case', () => {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     const caseRecord = await getCase({
-      userId: 'petitionsclerk',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       applicationContext,
     });
@@ -34,18 +39,22 @@ describe('Get case', () => {
           getCaseByCaseId: () => Promise.resolve(null),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     try {
       await getCase({
-        userId: 'petitionsclerk',
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         petitioners: [{ name: 'Test Taxpayer' }],
         applicationContext,
       });
     } catch (error) {
-      assert.equal(
-        error.message,
+      expect(error.message).toEqual(
         'Case c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.',
       );
     }
@@ -57,10 +66,16 @@ describe('Get case', () => {
       getPersistenceGateway: () => ({
         getCaseByDocketNumber: getCaseByDocketNumberStub,
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
+
     const caseRecord = await getCase({
-      userId: 'petitionsclerk',
       caseId: '00101-00',
       applicationContext,
     });
@@ -86,11 +101,16 @@ describe('Get case', () => {
             documents,
           }),
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'petitionsclerk',
+          role: 'petitionsclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     try {
       await getCase({
-        userId: 'petitionsclerk',
         caseId: '00-11111',
         applicationContext,
       });
@@ -116,11 +136,15 @@ describe('Get case', () => {
             },
           ]),
       }),
+      getCurrentUser: () => {
+        return {
+          userId: 'someone',
+        };
+      },
       environment: { stage: 'local' },
     };
     try {
       await getCase({
-        userId: 'someone',
         caseId: '00101-00',
         applicationContext,
       });
@@ -145,12 +169,17 @@ describe('Get case', () => {
             }),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'intakeclerk',
+          role: 'intakeclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getCase({
-        userId: 'intakeclerk',
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
       });
@@ -178,12 +207,17 @@ describe('Get case', () => {
             }),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'intakeclerk',
+          role: 'intakeclerk',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getCase({
-        userId: 'intakeclerk',
         caseId: '00101-08',
         applicationContext,
       });

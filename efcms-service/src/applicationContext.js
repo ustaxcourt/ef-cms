@@ -3,11 +3,17 @@ const uuidv4 = require('uuid/v4');
 
 const {
   incrementCounter,
-} = require('ef-cms-shared/src/persistence/awsDynamoPersistence');
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
+const {
+  getUserById,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUserById');
+const {
+  createUser,
+} = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -44,21 +50,21 @@ const {
   getCaseByCaseId,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getUsersInSection,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
+const { getInternalUsers} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
+const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 
-const docketNumberGenerator = require('ef-cms-shared/src/persistence/docketNumberGenerator');
+const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 
 const {
-  uploadPdfsForNewCase,
-  uploadPdf,
-} = require('ef-cms-shared/src/persistence/awsS3Persistence');
-const {
   getUploadPolicy,
-} = require('ef-cms-shared/src/persistence/getUploadPolicy');
+} = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
 const {
   getDownloadPolicyUrl,
-} = require('ef-cms-shared/src/persistence/getDownloadPolicyUrl');
+} = require('ef-cms-shared/src/persistence/s3/getDownloadPolicyUrl');
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
@@ -76,6 +82,9 @@ const {
 const {
   getCasesByUser: getCasesByUserUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
+const {
+  getInternalUsers: getInternalUsersUC,
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
@@ -104,8 +113,14 @@ const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const {
+  getInteractorForGetUsers,
+} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
+const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const {
+  getUsersInSection: getUsersInSectionUC,
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
 const {
   getWorkItems: getWorkItemsUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
@@ -118,6 +133,9 @@ const {
 const {
   recallPetitionFromIRSHoldingQueue
 } = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
+const {
+  createUser: createUserUC
+} = require('ef-cms-shared/src/business/useCases/users/createUser.interactor');
 
 const {
   forwardWorkItem
@@ -144,13 +162,15 @@ const getCurrentUser = () => {
   return user;
 };
 const setCurrentUser = newUser => {
-  user = newUser;
+  user = new User(newUser);
 };
 
-module.exports = ({ userId } = {}) => {
-  if (userId) {
-    setCurrentUser(new User({ userId }));
-  }
+/**
+ * 
+ */
+module.exports = (appContextUser = {}) => {
+  setCurrentUser(appContextUser);
+
   return {
     getStorageClient: () => {
       return new S3({
@@ -177,10 +197,12 @@ module.exports = ({ userId } = {}) => {
     getPersistenceGateway: () => {
       return {
         incrementCounter,
-        uploadPdfsForNewCase,
-        uploadPdf,
         getUploadPolicy,
         getDownloadPolicyUrl,
+        getUserById,
+        createUser,
+        getUsersInSection,
+        getInternalUsers,
 
         // work items
         getWorkItemsBySection,
@@ -211,13 +233,16 @@ module.exports = ({ userId } = {}) => {
     },
     getCurrentUser,
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(userId, WORKITEM),
+    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
     getUseCases: () => {
       return {
         createCase,
+        createUser: createUserUC,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
+        getUsersInSection: getUsersInSectionUC,
+        getInternalUsers: getInternalUsersUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
@@ -267,5 +292,6 @@ module.exports = ({ userId } = {}) => {
       }
     },
     getInteractorForGettingCases,
+    getInteractorForGetUsers,
   };
 };

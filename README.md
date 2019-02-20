@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source Electronic Filing / Case Management System (EF-CMS) — software that allows case documents to be filed with the court, and for the court to manage cases. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
 
 <a href="docs/images/screenshot_new_petition.png"><img src="docs/images/screenshot_new_petition.png" width="32%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot_petitioner.png"><img src="docs/images/screenshot_petitioner.png" width="32%" style="float: left;" /></a>
@@ -70,6 +70,32 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 #### Terminal B
 - `cd efcms-service && npm start`
 
+#### Login and Test Users
+- for /mock-login you can login using:
+```
+taxpayer
+petitionsclerk
+docketclerk
+intakeclerk
+respondent
+seniorattorney
+```
+- to run the project locally using the dev cognito:
+```npm run dev:cognito``` 
+You can then login with:
+```
+petitioner1@example.com - petitioner5@example.com
+petitionsclerk1@example.com - petitionsclerk5@example.com
+docketclerk1@example.com - docketclerk5@example.com
+intakeclerk1@example.com - intakeclerk5@example.com
+respondent1@example.com - respondent5@example.com
+seniorattorney1@example.com - seniorattorney5@example.com
+```
+
+all passwords are:
+
+```Testing1234$```
+
 ### CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
@@ -110,3 +136,17 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
 
+## Sprint PRs
+
+Follow these steps for creating the end of sprint PRs for the court.
+
+1. Create a PR from develop -> staging
+2. Verify PR passed
+3. Merge PR and verify staging deployed correctly in Jenkins
+4. Create a PR from staging -> master
+5. Verify PR passed
+6. Merge PR and verify prod deployed correctly in Jenkins
+7. Create a PR from flexion/ef-cms master -> ustaxcourt/ef-cms staging
+8. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
+9. When PR comments come in, make changes to master to fix the comments
+10. Back merge master into develop after all changes are fixed

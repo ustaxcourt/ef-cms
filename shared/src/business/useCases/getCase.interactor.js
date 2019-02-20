@@ -8,12 +8,12 @@ const Case = require('../entities/Case');
 /**
  * getCase
  *
- * @param userId
+ * @param user
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ userId, caseId, applicationContext }) => {
+exports.getCase = async ({ caseId, applicationContext }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {
@@ -36,9 +36,17 @@ exports.getCase = async ({ userId, caseId, applicationContext }) => {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  if (!isAuthorized(userId, GET_CASE, caseRecord.userId)) {
+  if (
+    !isAuthorized(
+      applicationContext.getCurrentUser(),
+      GET_CASE,
+      caseRecord.userId,
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new Case(caseRecord).validate().toRawObject();
+  const caseDetail = new Case(caseRecord).validate();
+  caseDetail.caseTitle = Case.getCaseTitle(caseDetail);
+  return caseDetail.toRawObject();
 };

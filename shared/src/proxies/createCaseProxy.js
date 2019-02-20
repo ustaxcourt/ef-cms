@@ -8,18 +8,19 @@
 exports.createCase = async ({
   petitionMetadata,
   petitionFileId,
+  ownershipDisclosureFileId,
   applicationContext,
 }) => {
-  const userToken = applicationContext.getCurrentUser().userId; // TODO temp until jwt
   const response = await applicationContext.getHttpClient().post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
       petitionFileId,
+      ownershipDisclosureFileId,
       petitionMetadata,
     },
     {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
     },
   );

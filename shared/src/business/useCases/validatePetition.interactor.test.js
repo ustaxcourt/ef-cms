@@ -13,7 +13,10 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(Petition.errorToMessageMap);
+    expect(errors).toEqual({
+      ...omit(Petition.errorToMessageMap, ['ownershipDisclosureFile']),
+      irsNoticeDate: 'Notice Date is a required field.',
+    });
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -27,7 +30,13 @@ describe('validatePetition', () => {
         }),
       },
     });
-    expect(errors).toEqual(omit(Petition.errorToMessageMap, ['caseType']));
+    expect(errors).toEqual({
+      ...omit(Petition.errorToMessageMap, [
+        'caseType',
+        'ownershipDisclosureFile',
+      ]),
+      irsNoticeDate: 'Notice Date is a required field.',
+    });
   });
 
   it('returns the expected errors object', () => {
@@ -35,6 +44,7 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
@@ -56,6 +66,7 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         petitionFile: new File([], 'test.png'),
         preferredTrialCity: 'defined',
         irsNoticeDate: futureDate.toDate().toISOString(),
@@ -69,7 +80,7 @@ describe('validatePetition', () => {
     });
 
     expect(errors).toEqual({
-      irsNoticeDate: 'IRS Notice Date is a required field.',
+      irsNoticeDate: 'Notice Date is in the future. Please enter a valid date.',
     });
   });
 });

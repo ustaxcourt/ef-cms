@@ -18,7 +18,7 @@ describe('Get trial cities', () => {
   it('returns a collection of trial cities', async () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'taxpayer' };
+        return { userId: 'taxpayer', role: 'petitioner' };
       },
     };
     const trialCities = await getTrialCities({
@@ -39,7 +39,7 @@ describe('Get trial cities', () => {
   it('throws a UnauthorizedError if user is unauthorized', async () => {
     const applicationContext = {
       getCurrentUser: () => {
-        return { userId: 'nottaxpayer' };
+        return { userId: 'notauser' };
       },
     };
 

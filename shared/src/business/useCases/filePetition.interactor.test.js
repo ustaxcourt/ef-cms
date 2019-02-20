@@ -47,6 +47,7 @@ describe('filePetition', () => {
       applicationContext: createApplicationContext({
         getCurrentUser: () => ({
           userId: 'taxpayer',
+          role: 'petitioner',
         }),
       }),
     });

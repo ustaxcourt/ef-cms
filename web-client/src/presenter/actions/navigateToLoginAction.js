@@ -5,5 +5,5 @@
  * @param {Object} providers.router the riot.router object that is used for changing the route
  */
 export default async ({ router }) => {
-  await router.route('/log-in');
+  await router.route('/mock-log-in');
 };

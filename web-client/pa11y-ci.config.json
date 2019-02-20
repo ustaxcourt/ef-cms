@@ -18,13 +18,15 @@
   },
   "urls": [
     "http://localhost:1234/",
-    "http://localhost:1234/log-in",
-    "http://localhost:1234/log-in?token=taxpayer&path=/",
+    "http://localhost:1234/mock-login",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/",
 
-    "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/before-starting-a-case",
+
+    "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case",
     {
       "notes": "expose all hidden elements on start-a-case",
-      "url": "http://localhost:1234/log-in?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
       "actions": [
         "wait for button.case-difference to be visible",
         "click element button.case-difference",
@@ -34,28 +36,240 @@
         "wait for #preferred-trial-city to be visible"
       ]
     },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Petitioner",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner",
+      "actions": [
+        "wait for element label#filing-type-0 to be visible",
+        "click element label#filing-type-0",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse",
+      "actions": [
+        "wait for element label#filing-type-1 to be visible",
+        "click element label#filing-type-1",
+        "wait for element label#is-spouse-deceased-0 to be visible",
+        "click element label#is-spouse-deceased-0",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Petitioner & Spouse",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-spouse",
+      "actions": [
+        "wait for element label#filing-type-1 to be visible",
+        "click element label#filing-type-1",
+        "wait for element label#is-spouse-deceased-1 to be visible",
+        "click element label#is-spouse-deceased-1",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Corporation",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-corporation",
+      "actions": [
+        "wait for element label#filing-type-2 to be visible",
+        "click element label#filing-type-2",
+        "wait for element label#is-business-type-0 to be visible",
+        "click element label#is-business-type-0",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Partnership (Tax Matters)",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-tax-matters",
+      "actions": [
+        "wait for element label#filing-type-2 to be visible",
+        "click element label#filing-type-2",
+        "wait for element label#is-business-type-1 to be visible",
+        "click element label#is-business-type-1",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Partnership (Other Than Tax Matters)",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-other",
+      "actions": [
+        "wait for element label#filing-type-2 to be visible",
+        "click element label#filing-type-2",
+        "wait for element label#is-business-type-2 to be visible",
+        "click element label#is-business-type-2",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Partnership (BBA)",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-bba",
+      "actions": [
+        "wait for element label#filing-type-2 to be visible",
+        "click element label#filing-type-2",
+        "wait for element label#is-business-type-3 to be visible",
+        "click element label#is-business-type-3",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Estate With Executor",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-estate-with-executor",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-0 to be visible",
+        "click element label#is-other-type-0",
+        "wait for element label#is-estate-type-0 to be visible",
+        "click element label#is-estate-type-0",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Estate Without Executor",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-estate-without-executor",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-0 to be visible",
+        "click element label#is-other-type-0",
+        "wait for element label#is-estate-type-1 to be visible",
+        "click element label#is-estate-type-1",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Trust",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-trust",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-0 to be visible",
+        "click element label#is-other-type-0",
+        "wait for element label#is-estate-type-2 to be visible",
+        "click element label#is-estate-type-2",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Conservator",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-conservator",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-1 to be visible",
+        "click element label#is-other-type-1",
+        "wait for element label#is-minorIncompetent-type-0 to be visible",
+        "click element label#is-minorIncompetent-type-0",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Guardian",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-guardian",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-1 to be visible",
+        "click element label#is-other-type-1",
+        "wait for element label#is-minorIncompetent-type-1 to be visible",
+        "click element label#is-minorIncompetent-type-1",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Custodian",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-custodian",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-1 to be visible",
+        "click element label#is-other-type-1",
+        "wait for element label#is-minorIncompetent-type-2 to be visible",
+        "click element label#is-minorIncompetent-type-2",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Minor",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-minor",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-1 to be visible",
+        "click element label#is-other-type-1",
+        "wait for element label#is-minorIncompetent-type-3 to be visible",
+        "click element label#is-minorIncompetent-type-3",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Incompetent Person",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-incompetent-person",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-1 to be visible",
+        "click element label#is-other-type-1",
+        "wait for element label#is-minorIncompetent-type-4 to be visible",
+        "click element label#is-minorIncompetent-type-4",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Donor",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-donor",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-2 to be visible",
+        "click element label#is-other-type-2",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Transferee",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-transferee",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-3 to be visible",
+        "click element label#is-other-type-3",
+        "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Surviving Spouse",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-surviving-spouse",
+      "actions": [
+        "wait for element label#filing-type-3 to be visible",
+        "click element label#filing-type-3",
+        "wait for element label#is-other-type-4 to be visible",
+        "click element label#is-other-type-4",
+        "wait for element .contact-group to be visible"
+      ]
+    },
 
-    "http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-18",
 
-    "http://localhost:1234/log-in?token=petitionsclerk&path=/",
-    "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-18",
     {
       "notes": "checks a11y of case information tab panel",
-      "url": "http://localhost:1234/log-in?token=petitionsclerk&path=/case-detail/102-18&info=can-input-pay-id",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18&info=tab-case-info",
       "actions": [
         "wait for #case-info-tab to be visible",
         "click element #case-info-tab"
       ]
     },
 
-    "http://localhost:1234/log-in?token=intakeclerk&path=/",
-    "http://localhost:1234/log-in?token=intakeclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=intakeclerk&path=/",
+    "http://localhost:1234/mock-login?token=intakeclerk&path=/case-detail/101-18",
 
-    "http://localhost:1234/log-in?token=respondent&path=/",
-    "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=respondent&path=/",
+    "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-18",
     {
       "notes": "checks a11y of revealed form for filing document",
-      "url": "http://localhost:1234/log-in?token=respondent&path=/case-detail/101-18&info=can-file-document",
+      "url": "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-18&info=can-file-document",
       "actions": [
         "wait for #button-file-document to be visible",
         "click element #button-file-document",
@@ -63,10 +277,10 @@
       ]
     },
 
-    "http://localhost:1234/log-in?token=docketclerk&path=/",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/",
     {
       "notes": "checks a11y of section queue tab panel, may become brittle if element IDs change",
-      "url": "http://localhost:1234/log-in?token=docketclerk&path=/&info=section-queue-tab",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/&info=section-queue-tab",
       "actions": [
         "wait for #tab-work-queue to be visible",
         "click element #tab-work-queue",
@@ -76,11 +290,11 @@
         "wait for td.action-bar to be visible"
       ]
     },
-    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
     {
       "notes": "checks a11y of forward form",
-      "url": "http://localhost:1234/log-in?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=forwarding-form",
       "actions": [
         "wait for #tab-pending-messages to be visible",
         "click element #tab-pending-messages",
@@ -90,9 +304,9 @@
       ]
     },
 
-    "http://localhost:1234/log-in?token=seniorattorney&path=/",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18",
-    "http://localhost:1234/log-in?token=seniorattorney&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-18",
+    "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd",
     "http://localhost:1234/request-for-page-that-doesnt-exist"
   ]
 }

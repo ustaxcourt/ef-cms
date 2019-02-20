@@ -38,7 +38,7 @@ pipeline {
         }
       }
     }
-    // temp remove until audit is fixed
+    // TODO: temp remove until dynamodb-local can be replaced
     // stage('Audit') {
     //   steps {
     //     script {

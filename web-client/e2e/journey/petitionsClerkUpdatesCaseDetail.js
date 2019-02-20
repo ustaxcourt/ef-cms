@@ -190,7 +190,7 @@ export default test => {
     });
     expect(test.getState('alertError')).toEqual({
       messages: ['Case Type is required.', 'Procedure Type is required.'],
-      title: 'There is an error with this page.',
+      title: 'Please correct the following errors on the page:',
     });
 
     //user changes value and hits save

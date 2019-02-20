@@ -1,7 +1,5 @@
-const {
-  stripWorkItems,
-  stripInternalKeys,
-} = require('../../awsDynamoPersistence');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 const client = require('../../dynamodbClientService');
 /**
