@@ -104,6 +104,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
 - [ ] review static code analysis results
+- [ ] examine OWASP ZAP output in `docs/`, ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] critically read all new code, in the context of existing code, [looking for problems](#what-we-look-for), e.g.:
 	- [ ] make sure names of methods and variables are sensible
 	- [ ] make sure code does not contain secrets
