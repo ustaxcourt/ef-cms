@@ -2,6 +2,7 @@ service: ef-cms
 plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
+  - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   - serverless-aws-documentation
@@ -75,6 +76,15 @@ custom:
       - path: 'v1/cases'
         description: 'Path used for creating a case.'
     models:
+      - name: 'user'
+        description: 'a user object'
+        contentType: 'application/json'
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              description: the userId
       - name: 'case'
         description: 'a case response'
         contentType: 'application/json'
@@ -283,6 +293,9 @@ custom:
     stage: ${self:provider.stage}
     createRoute53Record: false
     enabled: true
+  splitStacks:
+    perFunction: true
+    perType: false
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   vars: ${file(./config/${self:custom.stage}.yml)}
@@ -298,6 +311,7 @@ provider:
   s3Endpoint: s3.${opt:region}.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
+  userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
@@ -310,8 +324,14 @@ provider:
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
+    USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
 
   iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - cognito-idp:AdminCreateUser
+      Resource:
+        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
       Action:
         - 's3:*'
@@ -348,6 +368,17 @@ package:
 
 resources:
   Resources:
+    ApiGatewayAuthorizer: 
+      Type: AWS::ApiGateway::Authorizer
+      Properties: 
+        Name: CognitoUserPool
+        Type: COGNITO_USER_POOLS
+        IdentitySource: method.request.header.Authorization
+        RestApiId: 
+          Ref: ApiGatewayRestApi
+        ProviderARNs: 
+          - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+
     #####
     # Begin Stage for API Gateway Logging
     #####
@@ -374,6 +405,10 @@ functions:
           path: v1/cases/{caseId}/documents
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: create a new document inside of a case
             tags:
@@ -394,6 +429,10 @@ functions:
           path: v1/documents/uploadPolicy
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: create a pre-signed url for uploads
             tags:
@@ -434,6 +473,10 @@ functions:
           path: v1/documents/{documentId}/downloadPolicyUrl
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: create a pre-signed url for downloads
             tags:
@@ -454,6 +497,10 @@ functions:
           path: v1/cases/{caseId}
           method: put
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: update a case
             tags:
@@ -470,7 +517,6 @@ functions:
                 responseModels:
                   'application/json': 'unprocessableEntityError'
 
-
   createCase:
     handler: src/cases/createCaseLambda.create
     events:
@@ -478,6 +524,10 @@ functions:
           path: v1/cases
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: create a case
             tags:
@@ -507,6 +557,10 @@ functions:
           path: v1/cases
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: get all cases for a user
             tags:
@@ -531,6 +585,10 @@ functions:
               paths:
                 caseId: true
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: get a case by caseId
             tags:
@@ -551,6 +609,10 @@ functions:
           path: v1/cases/{caseId}/irsPetitionPackage
           method: post
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: sends the case to the holding queue
             tags:
@@ -574,6 +636,10 @@ functions:
           path: v1/cases/{caseId}/irsPetitionPackage
           method: delete
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: deletes the petition on the case from the holding queue
             tags:
@@ -597,6 +663,10 @@ functions:
           path: v1/workitems
           method: put
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: assigns an assigneId to a list of work item ids
             tags:
@@ -617,6 +687,10 @@ functions:
           path: v1/workitems/{workItemId}
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: get a workitem by workItemId
             tags:
@@ -637,6 +711,10 @@ functions:
           path: v1/workitems/{workItemId}
           method: put
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: update a workitem by workItemId
             tags:
@@ -657,6 +735,10 @@ functions:
           path: v1/workitems
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
           documentation:
             summary: get all workitems for a user
             tags:
@@ -685,3 +767,42 @@ functions:
           path: v1/swagger.json
           method: get
           cors: true
+
+  getUsers:
+    handler: src/users/getUsersLambda.get
+    events:
+      - http:
+          path: v1/users
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createUser:
+    handler: src/users/createUserLambda.post
+    events:
+      - http:
+          path: v1/users
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: creates a user
+            tags:
+              - user
+            description: >
+              creates a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'user created'
+                responseModels:
+                  'application/json': user
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'

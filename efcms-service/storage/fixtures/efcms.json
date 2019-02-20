@@ -1,5 +1,45 @@
 [
   {
+    "pk": "docket|user",
+    "sk": "docketclerk",
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "Test Docketclerk",
+    "userId": "docketclerk",
+    "section": "docket",
+    "email": "docketclerk"
+  },
+  {
+    "pk": "docket|user",
+    "sk": "docketclerk1",
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "name": "Test Docketclerk1",
+    "userId": "docketclerk1",
+    "section": "docket",
+    "email": "docketclerk1"
+  },
+  {
+    "pk": "petitions|user",
+    "sk": "petitionsclerk",
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "name": "Test petitionsclerk",
+    "userId": "petitionsclerk",
+    "section": "petitions",
+    "email": "petitionsclerk"
+  },
+  {
+    "pk": "petitions|user",
+    "sk": "petitionsclerk1",
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "name": "Test Petitionsclerk1",
+    "userId": "petitionsclerk1",
+    "section": "petitions",
+    "email": "petitionsclerk1"
+  },
+  {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "pk": "101-18|case"
   },
@@ -43,47 +83,35 @@
             "isInitializeCase": true
           }
         ]
-      },
-      {
-        "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "e9b4aa68-3663-4e86-8bd3-bde38af06983",
-        "documentType": "Request for Place of Trial",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "0b80ce52-89fb-4a53-b72d-121187f6b77c",
-        "documentType": "Statement of Taxpayer Identification Number",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
       }
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "petitioners": [
       {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
+        "name": "Test Petitioner"
       }
     ],
     "userId": "taxpayer",
     "docketNumber": "102-18",
     "docketNumberSuffix": "SL",
-    "procedureType": "small",
+    "procedureType": "Small",
+    "filingType": "Myself",
     "caseType": "CDP (Lien/Levy)",
     "status": "New"
   },
@@ -141,24 +169,6 @@
         "filedBy": "Petitioner Test Taxpayer",
         "workItems": [],
         "documentId": "36bf0a37-6d75-4ea5-85ee-eea07bf9ed99",
-        "userId": "taxpayer",
-        "status": "Served"
-      },
-      {
-        "createdAt": "2018-12-27T17:26:36.948Z",
-        "documentType": "Request for Place of Trial",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [],
-        "documentId": "d4b00ffe-a36d-4452-b696-7f21bcb0dff1",
-        "userId": "taxpayer",
-        "status": "Served"
-      },
-      {
-        "createdAt": "2018-12-27T17:26:36.948Z",
-        "documentType": "Statement of Taxpayer Identification Number",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [],
-        "documentId": "204b7563-05e0-42df-b1c5-e77edec2e11e",
         "userId": "taxpayer",
         "status": "Served"
       },
@@ -249,8 +259,8 @@
       "barNumber": "12345",
       "phone": "111-111-1111",
       "name": "Test Respondent",
-      "addressLine1": "111 Orange St.",
-      "addressLine2": "Building 2",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
       "state": "FL",
       "email": "testrespondent@example.com"
     },
@@ -259,6 +269,7 @@
     "createdAt": "2018-12-27T17:26:36.948Z",
     "payGovId": "1234",
     "procedureType": "Small",
+    "filingType": "Myself",
     "preferredTrialCity": "Hartford, CT",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
@@ -266,19 +277,22 @@
     "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
     "petitioners": [
       {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
+        "name": "Test Petitioner"
       }
     ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "docketNumber": "101-18",
     "docketNumberSuffix": "W",
     "status": "General"
@@ -383,25 +397,10 @@
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
         "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:23:07.975Z",
-        "documentId": "d9ed9986-47b1-43c4-9d77-3f74fd14cd51",
-        "documentType": "Request for Place of Trial",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      },
-      {
-        "createdAt": "2018-12-27T18:23:07.975Z",
-        "documentId": "7cb442cc-bda5-4c5d-8f92-668229fbd8f8",
-        "documentType": "Statement of Taxpayer Identification Number",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
       }
     ],
-    "procedureType": "regular",
+    "procedureType": "Regular",
+    "filingType": "Myself",
     "caseType": "Exempt Organization",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "0",
@@ -409,19 +408,22 @@
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "petitioners": [
       {
-        "zip": "37208",
-        "role": "taxpayer",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
+        "name": "Test Petitioner"
       }
     ],
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "taxpayer",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
     "userId": "taxpayer",
     "docketNumber": "103-18",
     "docketNumberSuffix": "X",
@@ -429,7 +431,7 @@
   },
   {
     "sk": "docketNumberCounter",
-    "id": 3,
+    "id": 4,
     "pk": "docketNumberCounter"
   },
   {
@@ -498,7 +500,7 @@
       }
     ],
     "pk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "docketNumber": "199-18",
+    "docketNumber": "104-18",
     "updatedAt": "2019-01-06T22:49:42.981Z"
   },
   {
@@ -524,7 +526,7 @@
   },
   {
     "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "199-18|case"
+    "pk": "104-18|case"
   },
   {
     "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
@@ -532,7 +534,13 @@
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -574,7 +582,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -605,26 +613,25 @@
     ],
     "sk": "0",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
-    "docketNumber": "199-18",
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -659,7 +666,7 @@
                 "sentBy": "Test Taxpayer"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -688,29 +695,39 @@
         "filedBy": "Petitioner"
       }
     ],
-    "sk": "1",
-    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+
     "petitioners": [
       {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
+        "name": "Test Petitioner"
       }
     ],
-    "docketNumber": "199-18",
+    "sk": "1",
+    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
+    "docketNumber": "104-18",
     "status": "New"
   },
   {
     "procedureType": "Small",
+    "filingType": "Myself",
     "docketNumberSuffix": "S",
+    "petitioners": [
+      {
+        "name": "Test Petitioner"
+      }
+    ],
     "documents": [
       {
         "createdAt": "2019-01-06T22:49:42.980Z",
@@ -752,7 +769,7 @@
                 "sentBy": "petitionsclerk"
               }
             ],
-            "docketNumber": "199-18",
+            "docketNumber": "104-18",
             "updatedAt": "2019-01-06T22:49:42.981Z"
           }
         ],
@@ -783,22 +800,20 @@
     ],
     "sk": "2",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "petitioners": [
-      {
-        "zip": "37208",
-        "role": "petitioner",
-        "city": "Orlando",
-        "phone": "111-111-1111",
-        "name": "Test Taxpayer",
-        "addressLine1": "111 Orange St.",
-        "addressLine2": "Building 2",
-        "state": "FL",
-        "userId": "taxpayer",
-        "email": "testtaxpayer@example.com",
-        "token": "taxpayer"
-      }
-    ],
-    "docketNumber": "199-18",
+    "contactPrimary": {
+      "zip": "37208",
+      "role": "petitioner",
+      "city": "Orlando",
+      "phone": "111-111-1111",
+      "name": "Test Taxpayer",
+      "address1": "111 Orange St.",
+      "address2": "Building 2",
+      "state": "FL",
+      "userId": "taxpayer",
+      "email": "testtaxpayer@example.com",
+      "token": "taxpayer"
+    },
+    "docketNumber": "104-18",
     "status": "Batched for IRS"
   }
 ]

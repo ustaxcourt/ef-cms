@@ -12,6 +12,7 @@ const MOCK_CASE = {
   status: 'New',
   caseType: 'Other',
   procedureType: 'Regular',
+  filingType: 'Myself',
   createdAt: new Date().toISOString(),
   preferredTrialCity: 'Washington, D.C.',
   documents: [],
@@ -45,7 +46,11 @@ describe('createDocument', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'respondent' });
+        return new User({
+          userId: 'respondent',
+          role: 'respondent',
+          name: 'Test Respondent',
+        });
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {
@@ -103,7 +108,7 @@ describe('createDocument', () => {
     });
   });
 
-  it('should create a document when a use is not a respondent', async () => {
+  it('should create a document when a user is not a respondent', async () => {
     const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
     applicationContext = {
       getPersistenceGateway: () => {
@@ -116,7 +121,11 @@ describe('createDocument', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       environment: { stage: 'local' },
       docketNumberGenerator: {

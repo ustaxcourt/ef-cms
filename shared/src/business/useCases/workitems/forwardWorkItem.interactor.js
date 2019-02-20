@@ -7,6 +7,14 @@ const WorkItem = require('../../entities/WorkItem');
 const Message = require('../../entities/Message');
 const User = require('../../entities/User');
 
+/**
+ *
+ * @param workItemId
+ * @param assigneeId
+ * @param message
+ * @param applicationContext
+ * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
+ */
 exports.forwardWorkItem = async ({
   workItemId,
   assigneeId,
@@ -15,11 +23,15 @@ exports.forwardWorkItem = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user.userId, WORKITEM)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for assign work item');
   }
 
-  const userToForwardTo = new User({ userId: assigneeId });
+  const userToForwardTo = new User(
+    await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ userId: assigneeId }),
+  );
 
   const workItemToForward = await applicationContext
     .getPersistenceGateway()

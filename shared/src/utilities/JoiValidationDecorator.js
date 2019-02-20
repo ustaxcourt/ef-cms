@@ -1,5 +1,9 @@
 const joi = require('joi-browser');
 
+/**
+ *
+ * @param entity
+ */
 function toRawObject(entity) {
   const keys = Object.keys(entity);
   const obj = {};
@@ -16,6 +20,11 @@ function toRawObject(entity) {
   return obj;
 }
 
+/**
+ *
+ * @param entity
+ * @returns {*}
+ */
 function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
@@ -40,6 +49,11 @@ function getFormattedValidationErrorsHelper(entity) {
   return errors;
 }
 
+/**
+ *
+ * @param entity
+ * @returns {null}
+ */
 function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
   const obj = {};
@@ -62,13 +76,7 @@ function getFormattedValidationErrors(entity) {
         })
         .filter(v => v);
       if (obj[key].length === 0) {
-        if (errors && errors[key]) {
-          obj[key] =
-            (entity.getErrorToMessageMap() || {})[key] ||
-            'An invalid value was found';
-        } else {
-          delete obj[key];
-        }
+        delete obj[key];
       }
     } else if (
       typeof value === 'object' &&
@@ -82,6 +90,13 @@ function getFormattedValidationErrors(entity) {
   return Object.keys(obj).length === 0 ? null : obj;
 }
 
+/**
+ *
+ * @param entityConstructor
+ * @param schema
+ * @param customValidate
+ * @param errorToMessageMap
+ */
 exports.joiValidationDecorator = function(
   entityConstructor,
   schema,

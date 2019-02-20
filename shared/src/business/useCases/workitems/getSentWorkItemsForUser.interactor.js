@@ -4,10 +4,15 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+/**
+ *
+ * @param applicationContext
+ * @returns {Promise<*|*>}
+ */
 exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user.userId, WORKITEM)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );

@@ -11,6 +11,55 @@ export const formatDocument = document => {
   return result;
 };
 
+const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
+  const yearAmountError = (caseDetailErrors.yearAmounts || []).find(error => {
+    return error.index === idx;
+  });
+
+  if (yearAmountError) {
+    yearAmount.showError = true;
+    yearAmount.errorMessage = yearAmountError.year;
+  }
+};
+
+const processDuplicateError = (caseDetail, caseDetailErrors) => {
+  const duplicates = _.filter(caseDetail.yearAmounts, (val, i, iteratee) =>
+    _.find(iteratee, (val2, i2) => {
+      return val.formattedYear === val2.formattedYear && i !== i2;
+    }),
+  );
+
+  duplicates.forEach(duplicate => {
+    duplicate.showError = true;
+    duplicate.errorMessage = caseDetailErrors.yearAmounts;
+  });
+};
+
+const formatYearAmount = (caseDetailErrors, caseDetail) => (
+  yearAmount,
+  idx,
+) => {
+  const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
+  yearAmount.formattedYear = formattedYear;
+  yearAmount.showError = false;
+  yearAmount.amountFormatted = yearAmount.amount
+    ? Number(yearAmount.amount).toLocaleString('en-US')
+    : yearAmount.amount;
+  if (Array.isArray(caseDetailErrors.yearAmounts)) {
+    processArrayErrors(yearAmount, caseDetailErrors, idx);
+  } else if (typeof caseDetailErrors.yearAmounts === 'string') {
+    processDuplicateError(caseDetail, caseDetailErrors);
+  }
+
+  return {
+    ...yearAmount,
+    year:
+      formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+        ? yearAmount.year
+        : formattedYear,
+  };
+};
+
 export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   caseDetail.canAddYearAmount =
     (caseDetail.yearAmounts || []).filter(yearAmount => {
@@ -21,44 +70,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
     caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      (yearAmount, idx) => {
-        const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
-        yearAmount.formattedYear = formattedYear;
-        yearAmount.showError = false;
-        if (Array.isArray(caseDetailErrors.yearAmounts)) {
-          const yearAmountError = (caseDetailErrors.yearAmounts || []).find(
-            error => {
-              return error.index === idx;
-            },
-          );
-
-          if (yearAmountError) {
-            yearAmount.showError = true;
-            yearAmount.errorMessage = yearAmountError.year;
-          }
-        } else if (typeof caseDetailErrors.yearAmounts === 'string') {
-          const duplicates = _.filter(
-            caseDetail.yearAmounts,
-            (val, i, iteratee) =>
-              _.find(iteratee, (val2, i2) => {
-                return val.formattedYear === val2.formattedYear && i !== i2;
-              }),
-          );
-
-          duplicates.forEach(duplicate => {
-            duplicate.showError = true;
-            duplicate.errorMessage = caseDetailErrors.yearAmounts;
-          });
-        }
-
-        return {
-          ...yearAmount,
-          year:
-            formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
-              ? yearAmount.year
-              : formattedYear,
-        };
-      },
+      formatYearAmount(caseDetailErrors, caseDetail),
     );
   }
 };
@@ -69,8 +81,10 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   if (result.documents) result.documents = result.documents.map(formatDocument);
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber
+      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+
+  result.petitionerName = result.petitioners[0].name;
 
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.irsDateFormatted = moment(result.irsDate).format('L LT');

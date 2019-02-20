@@ -1,4 +1,6 @@
-const { getRecordsViaMapping } = require('../../awsDynamoPersistence');
+const {
+  getRecordsViaMapping,
+} = require('../../dynamo/helpers/getRecordsViaMapping');
 
 exports.getWorkItemsForUser = ({ userId, applicationContext }) => {
   return getRecordsViaMapping({

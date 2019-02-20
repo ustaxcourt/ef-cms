@@ -35,7 +35,7 @@ export default connect(
               </td>
               <td>
                 <span className="responsive-label">Petitioner name</span>
-                {item.userId}
+                {item.petitionerName}
               </td>
             </tr>
           ))}

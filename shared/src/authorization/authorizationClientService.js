@@ -8,6 +8,8 @@ exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
+exports.CREATE_USER = 'createUser';
+exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 
 const AUTHORIZATION_MAP = {
   docketclerk: [
@@ -17,6 +19,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.WORKITEM,
     exports.UPDATE_CASE,
+    exports.GET_USERS_IN_SECTION,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
@@ -25,6 +28,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
   petitioner: [exports.PETITION],
   petitionsclerk: [
@@ -34,6 +38,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
   respondent: [
     exports.GET_CASE,
@@ -50,29 +55,25 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_USERS_IN_SECTION,
   ],
+  admin: [exports.CREATE_USER],
   taxpayer: [exports.PETITION],
 };
 
-const getRole = userId => {
-  // TODO
-  return userId.replace(/\d+/g, '');
-};
-
 /**
- * isAuthorized
  *
  * @param userId
  * @param action
  * @param owner
  * @returns {boolean}
  */
-exports.isAuthorized = (userId, action, owner) => {
-  if (userId && userId === owner) {
+exports.isAuthorized = (user, action, owner) => {
+  if (user.userId && user.userId === owner) {
     return true;
   }
 
-  const userRole = getRole(userId);
+  const userRole = user.role;
   if (!AUTHORIZATION_MAP[userRole]) {
     return false;
   }

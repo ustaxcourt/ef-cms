@@ -17,8 +17,16 @@ describe('Get case types', () => {
   beforeEach(() => {});
 
   it('returns a collection of case types', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'taxpayer',
+          role: 'petitioner',
+        };
+      },
+    };
     const caseTypes = await getCaseTypes({
-      userId: 'taxpayer',
+      applicationContext,
     });
     expect(caseTypes.length).toBeGreaterThan(0);
     expect(caseTypes[0].type).not.toBeUndefined();
@@ -36,10 +44,17 @@ describe('Get case types', () => {
   });
 
   it('throws a UnauthorizedError if user is unauthorized', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          userId: 'notarealboy',
+        };
+      },
+    };
     let error;
     try {
       await getCaseTypes({
-        userId: 'notataxpayer',
+        applicationContext,
       });
     } catch (err) {
       error = err;

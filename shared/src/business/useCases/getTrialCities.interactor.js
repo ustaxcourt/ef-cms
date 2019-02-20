@@ -6,13 +6,13 @@ const { UnauthorizedError } = require('../../errors/errors');
 const Case = require('../entities/Case');
 
 /**
- * getTrialCities
+ *
  * @param userId
  * @param procedureType
  * @returns {Promise<[{state, city}]>}
  */
 exports.getTrialCities = async ({ procedureType, applicationContext }) => {
-  if (!isAuthorized(applicationContext.getCurrentUser().userId, PETITION)) {
+  if (!isAuthorized(applicationContext.getCurrentUser(), PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

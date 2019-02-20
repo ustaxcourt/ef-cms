@@ -1,5 +1,16 @@
 import { state } from 'cerebral';
 
+/**
+ * sets a work item who matches the workItemId of props.workItemId as completed.
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.get the cerebral store object used for setting workQueue
+ * @param {Object} providers.store the cerebral store object used for setting workQueue
+ * @param {Object} providers.applicationContext the cerebral store object used for setting workQueue
+ * @param {Object} providers.props the cerebral props object
+ * @param {Object} providers.props.workItemId the workItemId to set as completed
+ * @returns {undefined} doesn't return anything
+ */
 export default async ({ get, store, applicationContext, props }) => {
   const completeWorkItemDate = new Date().toISOString();
 
@@ -22,14 +33,14 @@ export default async ({ get, store, applicationContext, props }) => {
     ...workItemToUpdate.messages,
     {
       message,
-      sentBy: get(state.user.token),
-      userId: get(state.user.token),
+      sentBy: applicationContext.getCurrentUser().userId,
+      userId: applicationContext.getCurrentUser().userId,
     },
   ];
 
   if (!workItemToUpdate.assigneeId) {
-    workItemToUpdate.assigneeId = get(state.user.token);
-    workItemToUpdate.assigneeName = get(state.user.name);
+    workItemToUpdate.assigneeId = applicationContext.getCurrentUser().userId;
+    workItemToUpdate.assigneeName = applicationContext.getCurrentUser().name;
   }
 
   store.set(state.caseDetail, caseDetail);
@@ -38,6 +49,6 @@ export default async ({ get, store, applicationContext, props }) => {
     applicationContext,
     workItemToUpdate,
     workItemId: props.workItemId,
-    userId: get(state.user.token),
+    userId: applicationContext.getCurrentUser().userId,
   });
 };

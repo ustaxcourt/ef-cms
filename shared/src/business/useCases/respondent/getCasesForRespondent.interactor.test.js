@@ -2,7 +2,7 @@ const { getCasesForRespondent } = require('./getCasesForRespondent.interactor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('Send petition to IRS', () => {
+describe('Get cases for respondent', () => {
   let applicationContext;
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
@@ -13,12 +13,17 @@ describe('Send petition to IRS', () => {
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
+      getCurrentUser: () => {
+        return {
+          userId: 'respondent',
+          role: 'respondent',
+        };
+      },
       environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesForRespondent({
-        respondentId: 'respondent',
         applicationContext,
       });
     } catch (err) {

@@ -80,8 +80,15 @@ export default test => {
     await generatePromise(1000, true); // TODO: remove sleep statements
 
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    const recalledWorkItem = test
+      .getState('workQueue')
+      .find(
+        workItem =>
+          workItem.docketNumber === test.docketNumber &&
+          workItem.document.documentType === 'Petition',
+      );
 
-    const foundMessage = test.getState('workQueue.0.messages').find(message => {
+    const foundMessage = recalledWorkItem.messages.find(message => {
       return message.message === 'Petition recalled from IRS Holding Queue';
     });
     expect(foundMessage.message).toEqual(

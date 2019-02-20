@@ -1,13 +1,14 @@
 const {
   getRecordsViaMapping,
-  stripInternalKeys,
-  stripWorkItems,
-} = require('../../awsDynamoPersistence');
+} = require('../../dynamo/helpers/getRecordsViaMapping');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
-exports.getCasesByUser = async ({ userId, applicationContext }) => {
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
+
+exports.getCasesByUser = async ({ user, applicationContext }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
-    key: userId,
+    key: user.userId,
     type: 'case',
     isVersioned: true,
   });

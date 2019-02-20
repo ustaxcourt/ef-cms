@@ -7,6 +7,7 @@ describe('getSentWorkItemsForSection', () => {
     const applicationContext = {
       getCurrentUser: () => ({
         userId: 'taxpayer',
+        role: 'petitioner',
         name: 'Tax Payer',
       }),
       environment: { stage: 'local' },
@@ -21,12 +22,16 @@ describe('getSentWorkItemsForSection', () => {
       error = err;
     }
     expect(error).toBeDefined();
+    expect(error.message).toEqual(
+      'Unauthorized for getting completed work items',
+    );
   });
 
   it('returns the work items that is returned from the persistence', async () => {
     const applicationContext = {
       getCurrentUser: () => ({
         userId: 'petitionsclerk',
+        role: 'petitionsclerk',
         name: 'Tax Payer',
       }),
       getPersistenceGateway: () => ({

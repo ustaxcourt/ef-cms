@@ -1,10 +1,12 @@
-exports.createDocument = async ({
-  applicationContext,
-  caseId,
-  document,
-  userId,
-}) => {
-  const userToken = userId;
+/**
+ *
+ * @param applicationContext
+ * @param caseId
+ * @param document
+ * @param userId
+ * @returns {Promise<*>}
+ */
+exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const response = await applicationContext
     .getHttpClient()
     .post(
@@ -12,7 +14,7 @@ exports.createDocument = async ({
       document,
       {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
         },
       },
     );

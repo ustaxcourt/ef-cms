@@ -1,20 +1,29 @@
-const User = require('../../entities/User');
-const { UnauthorizedError } = require('../../../errors/errors');
-
 const { getCasesByUser } = require('../getCasesByUser.interactor');
 const {
   getCasesForRespondent,
 } = require('../respondent/getCasesForRespondent.interactor');
 const { getCasesByDocumentId } = require('../getCasesByDocumentId.interactor');
 const { getCasesByStatus } = require('../getCasesByStatus.interactor');
+const {
+  isAuthorized,
+  GET_CASE,
+  PETITION,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.getInteractorForGettingCases = ({ documentId, userId }) => {
-  let user;
-  try {
-    user = new User({ userId });
-  } catch (err) {
+/**
+ *
+ * @param documentId
+ * @param userId
+ * @returns {*}
+ */
+exports.getInteractorForGettingCases = ({ documentId, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, GET_CASE) && !isAuthorized(user, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
   switch (user.role) {
     case 'petitioner':
       return getCasesByUser;

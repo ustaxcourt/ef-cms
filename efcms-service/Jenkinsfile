@@ -45,7 +45,7 @@ pipeline {
         }
       }
     }
-    // temp remove until dynamodb-local can be replaced
+    // TODO: temp remove until dynamodb-local can be replaced
     //stage('Audit') {
     //  steps {
     //    script {
@@ -156,6 +156,36 @@ pipeline {
         script {
           dir('efcms-service') {
             sh "./docker-globaltables.sh ${branchMap[env.branch_name]} ${regions.join(',')}"
+          }
+        }
+      }
+    }
+    stage('Setup Cognito UI Configuration') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          dir('efcms-service') {
+            sh "./docker-cognito-customize.sh ${branchMap[env.branch_name]}"
+          }
+        }
+      }
+    }
+    stage('Setup Cognito Default Users') {
+      when {
+        expression {
+          shouldDeploy(env.branch_name)
+        }
+      }
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'USTC_ADMIN_PASS', variable: 'USTC_ADMIN_PASS')]) {
+            dir('efcms-service') {
+              sh "./docker-cognito-users.sh ${branchMap[env.branch_name]}"
+            }
           }
         }
       }
