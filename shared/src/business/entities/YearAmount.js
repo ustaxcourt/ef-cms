@@ -3,6 +3,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
+/**
+ *
+ * @param yearAmount
+ * @constructor
+ */
 function YearAmount(yearAmount) {
   Object.assign(this, yearAmount);
 }

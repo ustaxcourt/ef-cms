@@ -7,6 +7,14 @@ const WorkItem = require('../../entities/WorkItem');
 const Message = require('../../entities/Message');
 const User = require('../../entities/User');
 
+/**
+ *
+ * @param workItemId
+ * @param assigneeId
+ * @param message
+ * @param applicationContext
+ * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
+ */
 exports.forwardWorkItem = async ({
   workItemId,
   assigneeId,

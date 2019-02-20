@@ -1,3 +1,8 @@
+/**
+ * creates the default success alert object
+ *
+ * @returns {Object} the alertSuccess object with default strings
+ */
 export default () => {
   return {
     alertSuccess: {

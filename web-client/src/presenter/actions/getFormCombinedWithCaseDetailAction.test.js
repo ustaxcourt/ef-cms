@@ -74,7 +74,7 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
     });
   });
 
-  it('should leave the dates as blank if they are invalid', async () => {
+  it('should leave the dates as -1 if they are invalid', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         form: {
