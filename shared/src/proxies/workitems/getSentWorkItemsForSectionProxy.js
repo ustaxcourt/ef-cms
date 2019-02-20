@@ -1,3 +1,9 @@
+/**
+ *
+ * @param applicationContext
+ * @param section
+ * @returns {Promise<*>}
+ */
 exports.getSentWorkItemsForSection = async ({
   applicationContext,
   section,

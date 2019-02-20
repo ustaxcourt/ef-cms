@@ -1,5 +1,4 @@
 /**
- * getDownloadPolicyURL
  * @param applicationContext
  * @returns {Promise<*>}
  */

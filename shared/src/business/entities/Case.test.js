@@ -75,7 +75,7 @@ describe('Case entity', () => {
           },
           {
             year: '2000',
-            amount: '34.50',
+            amount: '100.50',
           },
         ],
       }).isValid();

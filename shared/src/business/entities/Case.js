@@ -19,12 +19,6 @@ const statusMap = {
   new: 'New',
   recalled: 'Recalled',
 };
-const STATUSES = [
-  statusMap.general,
-  statusMap.batchedForIRS,
-  statusMap.new,
-  statusMap.recalled,
-];
 
 const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
@@ -183,7 +177,7 @@ joiValidationDecorator(
       .optional(),
     status: joi
       .string()
-      .valid(STATUSES)
+      .valid(Object.keys(statusMap).map(key => statusMap[key]))
       .optional(),
     documents: joi
       .array()
@@ -352,7 +346,10 @@ Case.prototype.attachRespondent = function({ user }) {
 
   this.respondent = respondent;
 };
-
+/**
+ *
+ * @param document
+ */
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
@@ -368,7 +365,9 @@ Case.prototype.addDocument = function(document) {
 };
 
 /**
- * markAsSentToIrs
+ *
+ * @param sendDate
+ * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');

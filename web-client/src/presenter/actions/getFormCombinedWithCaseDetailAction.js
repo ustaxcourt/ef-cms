@@ -2,6 +2,12 @@ import { state } from 'cerebral';
 import { omit } from 'lodash';
 import moment from 'moment';
 
+/**
+ * returns a generic success alert for when a file is successfully uploaded.
+ *
+ * @param {string} dateString the date string to cast to an ISO string
+ * @returns {string} the ISO string.
+ */
 export const castToISO = dateString => {
   dateString = dateString
     .split('-')
@@ -20,6 +26,13 @@ export const castToISO = dateString => {
   }
 };
 
+/**
+ * checks if the new date contains all expected parts; otherwise, it returns the originalDate
+ *
+ * @param {string} updatedDateString the new date string to verify
+ * @param {string} originalDate the original date to return if the updatedDateString is bad
+ * @returns {string} the updatedDateString if everything is correct.
+ */
 const checkDate = (updatedDateString, originalDate) => {
   const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
@@ -42,6 +55,13 @@ const checkDate = (updatedDateString, originalDate) => {
   return updatedDateString;
 };
 
+/**
+ * combines the dates in the form with the caseDetails
+ *
+ * @param {Object} providers the cerebral providers
+ * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
+ * @returns {Object} the combinedCaseDetailWithForm
+ */
 export default ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
