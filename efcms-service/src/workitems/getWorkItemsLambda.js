@@ -12,9 +12,11 @@ exports.get = event =>
     const userId = getAuthHeader(event);
     const applicationContext = createApplicationContext({ userId });
     const section = (event.queryStringParameters || {}).section;
+    const completed = (event.queryStringParameters || {}).completed;
     return applicationContext.getWorkItemsInteractor(event)({
       userId: userId,
       section,
+      completed,
       applicationContext,
     });
   });

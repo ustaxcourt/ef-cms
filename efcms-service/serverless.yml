@@ -7,7 +7,13 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-prune-plugin
 custom:
+
+  prune:
+    automatic: true
+    number: 3
+
   serverless-offline:
     host: 0.0.0.0
 
@@ -90,7 +96,7 @@ custom:
             respondent:
               type: string
               description: the respondent who is associated with the case
-            irsSendDate: 
+            irsSendDate:
               type: string
               description: the date the case was sent to the IRS
             payGovId:
@@ -104,7 +110,7 @@ custom:
               description: the status of the case
             petitioners:
               type: array
-              items: 
+              items:
                 type: object
                 properties:
                   userId:
@@ -123,7 +129,7 @@ custom:
                     items:
                       type: object
               description: array of rawDocument ids and types associated with the case
-            
+
       - name: 'document'
         description: 'a document response'
         contentType: 'application/json'
@@ -139,10 +145,10 @@ custom:
             userId:
               type: string
               description: id of user who created the document
-            filedBy: 
+            filedBy:
               type: boolean
               description: the user name who filed the document
-            validated: 
+            validated:
               type: boolean
               description: if the document has been validated
             reviewDate:
@@ -194,7 +200,7 @@ custom:
             caseId:
               type: string
               description: the case id
-            document: 
+            document:
               type: object
               properties:
                 documentId:
@@ -313,7 +319,7 @@ provider:
         Fn::Join:
           - ''
           - - 'arn:aws:s3:::'
-            - Ref: DocumentsBucket
+            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
             - '/*'
     - Effect: 'Allow'
       Action:
@@ -342,26 +348,6 @@ package:
 
 resources:
   Resources:
-    #####
-    # Begin S3
-    #####
-    DocumentsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-        CorsConfiguration:
-          CorsRules:
-            - AllowedHeaders:
-                - Authorization
-              AllowedMethods:
-                - GET
-                - POST
-              AllowedOrigins:
-                - '*'
-              MaxAge: 3000
-        VersioningConfiguration:
-          Status: Enabled
-
     #####
     # Begin Stage for API Gateway Logging
     #####
@@ -559,14 +545,14 @@ functions:
                   'application/json': case
 
   sendToIRS:
-    handler: src/cases/sendPetitionToIRSLambda.post
+    handler: src/cases/sendPetitionToIRSHoldingQueueLambda.post
     events:
       - http:
           path: v1/cases/{caseId}/irsPetitionPackage
           method: post
           cors: true
           documentation:
-            summary: send a case package to the respondent
+            summary: sends the case to the holding queue
             tags:
               - cases
             description: >
@@ -575,6 +561,29 @@ functions:
               - statusCode: '200'
                 responseBody:
                   description: 'updated case including send date'
+                responseModels:
+                  'application/json': case
+              - statusCode: '422'
+                responseModels:
+                  'application/json': 'unprocessableEntityError'
+
+  recallFromIRS:
+    handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.delete
+    events:
+      - http:
+          path: v1/cases/{caseId}/irsPetitionPackage
+          method: delete
+          cors: true
+          documentation:
+            summary: deletes the petition on the case from the holding queue
+            tags:
+              - cases
+            description: >
+              Deletes the petition on the case from the holding queue.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'case status set to recalled and petition workitem updated'
                 responseModels:
                   'application/json': case
               - statusCode: '422'
@@ -666,5 +675,13 @@ functions:
     events:
       - http:
           path: v1/swagger
+          method: get
+          cors: true
+
+  swaggerJson:
+    handler: src/swagger/swaggerLambda.json
+    events:
+      - http:
+          path: v1/swagger.json
           method: get
           cors: true

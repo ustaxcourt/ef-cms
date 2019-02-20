@@ -1,4 +1,4 @@
-import { toggle } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
-export default [toggle(state.showModal)];
+export default [set(state.showModal, 'StartCaseCancelModalDialog')];

@@ -16,6 +16,53 @@ const stripInternalKeys = items => {
 };
 exports.stripInternalKeys = stripInternalKeys;
 
+const getSortRecordsViaMapping = async ({
+  applicationContext,
+  key,
+  type,
+  foreignKey,
+  afterDate,
+  isVersioned = false,
+}) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+
+  const mapping = await client.query({
+    applicationContext,
+    TableName: TABLE,
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `${key}|${type}`,
+      ':afterDate': afterDate,
+    },
+    KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+  });
+
+  const ids = mapping.map(metadata => metadata[foreignKey]);
+
+  const results = await client.batchGet({
+    applicationContext,
+    tableName: TABLE,
+    keys: ids.map(id => ({
+      pk: id,
+      sk: isVersioned ? '0' : id,
+    })),
+  });
+
+  return stripInternalKeys(results);
+};
+
+exports.getSortRecordsViaMapping = getSortRecordsViaMapping;
+/**
+ *
+ * @param applicationContext
+ * @param key
+ * @param type
+ * @param isVersioned
+ * @returns {Promise<*>}
+ */
 const getRecordsViaMapping = async ({
   applicationContext,
   key,
@@ -51,7 +98,14 @@ const getRecordsViaMapping = async ({
 };
 
 exports.getRecordsViaMapping = getRecordsViaMapping;
-
+/**
+ *
+ * @param applicationContext
+ * @param key
+ * @param type
+ * @param isVersioned
+ * @returns {Promise<*>}
+ */
 const getRecordViaMapping = async ({
   applicationContext,
   key,
@@ -120,7 +174,13 @@ exports.incrementCounter = ({ applicationContext }) => {
     ReturnValues: 'UPDATED_NEW',
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param caseId
+ * @param respondentId
+ * @returns {Promise<*>}
+ */
 const createRespondentCaseMapping = async ({
   applicationContext,
   caseId,
@@ -137,7 +197,14 @@ const createRespondentCaseMapping = async ({
 };
 
 exports.createRespondentCaseMapping = createRespondentCaseMapping;
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param type
+ * @returns {Promise<void>}
+ */
 exports.deleteMappingRecord = async ({
   applicationContext,
   pkId,
@@ -153,7 +220,14 @@ exports.deleteMappingRecord = async ({
     },
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param type
+ * @returns {Promise<*>}
+ */
 exports.createMappingRecord = async ({
   applicationContext,
   pkId,
@@ -169,7 +243,38 @@ exports.createMappingRecord = async ({
     },
   });
 };
-
+/**
+ *
+ * @param applicationContext
+ * @param pkId
+ * @param skId
+ * @param item
+ * @param type
+ * @returns {Promise<*>}
+ */
+exports.createSortMappingRecord = async ({
+  applicationContext,
+  pkId,
+  skId,
+  item,
+  type,
+}) => {
+  return client.put({
+    applicationContext,
+    TableName: `efcms-${applicationContext.environment.stage}`,
+    Item: {
+      pk: `${pkId}|${type}`,
+      sk: skId,
+      ...item,
+    },
+  });
+};
+/**
+ *
+ * @param casesToModify
+ * @param isAuthorizedForWorkItems
+ * @returns {*}
+ */
 const stripWorkItems = (casesToModify, isAuthorizedForWorkItems) => {
   if (isAuthorizedForWorkItems) return casesToModify;
   if (!casesToModify) return casesToModify;

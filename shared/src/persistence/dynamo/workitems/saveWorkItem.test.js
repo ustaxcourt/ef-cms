@@ -30,6 +30,8 @@ describe('saveWorkItem', () => {
 
   afterEach(() => {
     client.put.restore();
+    client.get.restore();
+    client.delete.restore();
   });
 
   it('makes a post request to the expected endpoint with the expected data', async () => {
@@ -43,6 +45,7 @@ describe('saveWorkItem', () => {
     const result = await saveWorkItem({
       workItemToSave: {
         workItemId: '123',
+        assigneeId: 'bob',
       },
       applicationContext,
     });

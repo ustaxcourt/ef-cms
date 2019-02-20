@@ -1,62 +1,30 @@
 import { state } from 'cerebral';
-import { omit } from 'lodash';
 
-export default ({ applicationContext, store, path, get }) => {
-  const caseDetail = get(state.caseDetail);
-
-  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = get(
-    state.form,
-  );
-
-  const form = omit(
-    {
-      ...get(state.form),
-      irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
-      payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
-    },
-    [
-      'irsYear',
-      'irsMonth',
-      'irsDay',
-      'payGovYear',
-      'payGovMonth',
-      'payGovDay',
-      'trialCities',
-    ],
-  );
-
-  if (irsYear && irsMonth && irsDay) {
-    form.irsNoticeDate = form.irsNoticeDate
-      .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
-      .join('-');
-  } else {
-    form.irsNoticeDate = null;
-  }
-
-  if (payGovYear && payGovMonth && payGovDay) {
-    form.payGovDate = form.payGovDate
-      .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
-      .join('-');
-  } else {
-    form.payGovDate = null;
-  }
+/**
+ * validates the case detail form and sets state.caseDetailErrors when errors occur.
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store used for setting the state.caseDetailErrors when validation errors occur
+ * @param {Object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
+ * @param {Object} providers.path the cerebral path which contains the next path in the sequence (path of success or failure)
+ * @param {Object} providers.props the cerebral store used for getting the props.combinedCaseDetailWithForm
+ * @returns {Object} the alertSuccess and the generated docketNumber
+ */
+export default ({ store, applicationContext, path, props }) => {
+  const { combinedCaseDetailWithForm } = props;
 
   const errors = applicationContext.getUseCases().validateCaseDetail({
-    caseDetail: { ...caseDetail, ...form },
+    caseDetail: combinedCaseDetailWithForm,
     applicationContext,
   });
 
-  store.set(state.caseDetailErrors, errors);
+  store.set(state.caseDetailErrors, errors || {});
 
   if (!errors) {
-    return path.success();
-  } else {
-    return path.error({
-      alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
-      },
+    return path.success({
+      combinedCaseDetailWithForm,
     });
+  } else {
+    return path.error({ errors });
   }
 };

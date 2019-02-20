@@ -10,7 +10,7 @@ pipeline {
   agent any
 
   options {
-    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) 
+    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3'))
     disableConcurrentBuilds()
   }
 
@@ -45,15 +45,16 @@ pipeline {
         }
       }
     }
-    stage('Audit') {
-      steps {
-        script {
-          dir('efcms-service') {
-            sh "./docker-audit.sh"
-          }
-        }
-      }
-    }
+    // temp remove until dynamodb-local can be replaced
+    //stage('Audit') {
+    //  steps {
+    //    script {
+    //      dir('efcms-service') {
+    //        sh "./docker-audit.sh"
+    //      }
+    //    }
+    //  }
+    //}
     stage('Lint') {
       steps {
         script {
@@ -75,7 +76,7 @@ pipeline {
       post {
         success {
           dir('efcms-service') {
-            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
+            publishHTML allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code Coverage Report', reportTitles: ''
           }
         }
       }

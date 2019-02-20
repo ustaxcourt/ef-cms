@@ -3,6 +3,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
+/**
+ *
+ * @param rawPetition
+ * @constructor
+ */
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 }
@@ -30,7 +35,7 @@ joiValidationDecorator(
     preferredTrialCity: joi.string().required(),
     signature: joi.boolean().required(),
   }),
-  () => true,
+  undefined,
   Petition.errorToMessageMap,
 );
 

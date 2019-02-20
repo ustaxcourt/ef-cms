@@ -1,17 +1,15 @@
-export default async ({ applicationContext, path, props }) => {
-  const useCases = applicationContext.getUseCases();
-  const trialCities = await useCases.getTrialCities({
+/**
+ * gets the trial cities for the specified procedureType pass in as props.value
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context used for getting the getTrialCities use case
+ * @param {Object} providers.props the cerebral props object which contains props.value
+ * @returns {Object} a list of trial cities
+ */
+export default async ({ applicationContext, props }) => {
+  const trialCities = await applicationContext.getUseCases().getTrialCities({
     procedureType: props.value,
     applicationContext: applicationContext,
   });
-  if (trialCities) {
-    return path.success({ trialCities });
-  } else {
-    return path.error({
-      alertError: {
-        title: 'Problem retrieving trial cities',
-        message: 'There was an error retrieving the trial cities.',
-      },
-    });
-  }
+  return { trialCities };
 };

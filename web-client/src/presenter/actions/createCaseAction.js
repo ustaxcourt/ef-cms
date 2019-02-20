@@ -1,42 +1,38 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
 
-export default async ({ applicationContext, get, store, path }) => {
-  try {
-    const { petitionFile } = get(state.petition);
-    const useCases = applicationContext.getUseCases();
+/**
+ * invokes the filePetition useCase.
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function used for getting petition
+ * @param {Object} providers.store the cerebral store object used for getting petition
+ */
+export default async ({ applicationContext, get, store }) => {
+  const { petitionFile } = get(state.petition);
 
-    const fileHasUploaded = () => {
-      store.set(
-        state.petition.uploadsFinished,
-        get(state.petition.uploadsFinished) + 1,
-      );
-    };
-
-    const form = omit(
-      {
-        ...get(state.form),
-        irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
-          state.form.day,
-        )}`,
-      },
-      ['year', 'month', 'day', 'trialCities', 'signature'],
+  const fileHasUploaded = () => {
+    store.set(
+      state.petition.uploadsFinished,
+      get(state.petition.uploadsFinished) + 1,
     );
+  };
 
-    await useCases.filePetition({
-      applicationContext,
-      petitionMetadata: form,
-      petitionFile,
-      fileHasUploaded,
-    });
+  const form = omit(
+    {
+      ...get(state.form),
+      irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
+        state.form.day,
+      )}`,
+    },
+    ['year', 'month', 'day', 'trialCities', 'signature'],
+  );
 
-    return path.success();
-  } catch (err) {
-    return path.error({
-      alertError: {
-        title: 'An server error has occured trying to create the case',
-        message: err.message,
-      },
-    });
-  }
+  await applicationContext.getUseCases().filePetition({
+    applicationContext,
+    petitionMetadata: form,
+    petitionFile,
+    fileHasUploaded,
+  });
 };

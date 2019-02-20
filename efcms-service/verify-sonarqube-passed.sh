@@ -2,15 +2,30 @@
 FULL_URL="https://sonarcloud.io"
 branch_name=$branch_name
 OUTPUT=$(sonar-scanner -Dsonar.projectKey="${SONAR_KEY}" -Dsonar.branch.name="${branch_name}" -Dsonar.organization="${SONAR_ORG}" -Dsonar.projectBaseDir=. -Dsonar.login="${SONAR_TOKEN}" -Dsonar.host.url="${FULL_URL}")
-sleep 10
-PROJECT_KEY=$(grep sonar.projectKey sonar-project.properties | sed 's/sonar.projectKey=\(.*\)/\1/')
-CURL_URL="${FULL_URL}/api/qualitygates/project_status?projectKey=${PROJECT_KEY}&branch=${branch_name}"
-JSON=$(curl -u "admin:${SONAR_PASSWORD}" -X GET -H 'Accept: application/json' "${CURL_URL}")
-STATUS=$(echo "${JSON}" | jq -r ".projectStatus.status")
-set +e
-CONTAINS_FAILURE=$(echo "${OUTPUT}" | grep 'EXECUTION FAILURE')
-set -e
-if [[ $STATUS == 'ERROR' ]] || [[ $CONTAINS_FAILURE != '' ]] ; then
+echo "${OUTPUT}"
+regex="(https:\/\/sonarcloud\.io\/api\/ce\/task\?id=[a-zA-Z0-9_-]+)"
+if [[ $OUTPUT =~ $regex ]] ; then
+  STATUS_URL="${BASH_REMATCH[1]}"
+else
+  exit 1;
+fi
+
+while true
+do
+  STATUS_JSON=$(curl -u "${SONAR_TOKEN}:" -X GET -H 'Accept: application/json' "${STATUS_URL}")
+  STATUS=$(echo "${STATUS_JSON}" | jq -r ".task.status")
+  echo ""
+  echo "${STATUS_JSON}"
+  echo "${STATUS}"
+  echo ""
+  if [ "$STATUS" != "IN_PROGRESS" ] && [ "$STATUS" != "PENDING" ] ; then
+    break
+  fi
+  echo "$STATUS - sleeping"
+  sleep 5
+done
+
+if [[ $STATUS != 'SUCCESS' ]] ; then
   echo "SonarQube Failed"
   exit 1;
 fi

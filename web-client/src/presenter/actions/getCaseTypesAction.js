@@ -1,18 +1,16 @@
 import { state } from 'cerebral';
 
-export default async ({ applicationContext, get, path }) => {
-  const useCases = applicationContext.getUseCases();
-  const caseTypes = await useCases.getCaseTypes({
+/**
+ *  Gets a list of the types of cases, such as Deficiency, Innocent Spouse, etc
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext needed for getting the getCaseTypes use case
+ * @param {Function} providers.get the cerebral get function used for getting state.user.userId
+ * @returns {Object} contains the caseTypes array returned from the getCaseTypes use case
+ */
+export default async ({ applicationContext, get }) => {
+  const caseTypes = await applicationContext.getUseCases().getCaseTypes({
     userId: get(state.user.userId),
   });
-  if (caseTypes) {
-    return path.success({ caseTypes });
-  } else {
-    return path.error({
-      alertError: {
-        title: 'Case types not found',
-        message: 'There was an error retrieving the case types.',
-      },
-    });
-  }
+  return { caseTypes };
 };

@@ -15,7 +15,6 @@ export default connect(
     currentTab: state.currentTab,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
-    submitSendToIrsSequence: sequences.submitToIrsSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
@@ -27,7 +26,6 @@ export default connect(
     currentTab,
     extractedPendingMessages,
     helper,
-    submitSendToIrsSequence,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
@@ -139,15 +137,6 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="" role="tabpanel">
-              {!helper.showIrsServedDate && (
-                <button
-                  className="usa-button"
-                  id="send-to-irs"
-                  onClick={() => submitSendToIrsSequence()}
-                >
-                  Send to IRS
-                </button>
-              )}
               <table className="responsive-table">
                 <thead>
                   <tr>

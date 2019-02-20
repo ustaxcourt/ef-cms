@@ -70,7 +70,7 @@ describe('getCasesByDocumentId', () => {
             workItems: [],
           },
         ],
-        status: 'new',
+        status: 'New',
       },
     ]);
   });

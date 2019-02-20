@@ -1,13 +1,14 @@
-import { state } from 'cerebral';
-import _ from 'lodash';
-
-export default async ({ applicationContext, get }) => {
+/**
+ * action for fetching all the work items associated with a user account.
+ *
+ * @param {Object} applicationContext object that contains all the context specific methods
+ * @returns {Promise<{workItems: Array}>} a list of work items
+ */
+export default async ({ applicationContext }) => {
   const useCases = applicationContext.getUseCases();
-  const userId = get(state.user.userId);
-  let workItems = await useCases.getWorkItems({
+  const workItems = await useCases.getWorkItems({
     applicationContext,
-    userId,
   });
-  workItems = _.orderBy(workItems, 'createdAt', 'desc');
+
   return { workItems };
 };

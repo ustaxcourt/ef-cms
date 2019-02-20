@@ -5,7 +5,7 @@ const User = require('../../entities/User');
 const MOCK_WORK_ITEM = {
   createdAt: '2018-12-27T18:06:02.971Z',
   assigneeName: 'bob',
-  caseStatus: 'general',
+  caseStatus: 'General',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
   document: {
     documentType: 'Stipulated Decision',
@@ -33,10 +33,16 @@ const MOCK_WORK_ITEM = {
 
 describe('assignWorkItems', () => {
   it('unauthorized user tries to assign a work item', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        userId: 'baduser',
+      }),
+      environment: { stage: 'local' },
+    };
     let error;
     try {
       await assignWorkItems({
-        userId: 'baduser',
+        applicationContext,
       });
     } catch (err) {
       error = err;
