@@ -12,15 +12,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {Promise<*>}
  */
 exports.getWorkItems = async ({ applicationContext }) => {
-  const userId = applicationContext.getCurrentUser().userId;
-  if (!isAuthorized(userId, WORKITEM)) {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   let workItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsForUser({
-      userId,
+      userId: user.userId,
       applicationContext,
     });
 

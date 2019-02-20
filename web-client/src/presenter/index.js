@@ -7,13 +7,15 @@ import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
 import dismissAlertSequence from './sequences/dismissAlertSequence';
 import dismissModalSequence from './sequences/dismissModalSequence';
 import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
+import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence';
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoLogInSequence from './sequences/gotoLogInSequence';
+import gotoLoginSequence from './sequences/gotoLoginSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';
+import notFoundErrorSequence from './sequences/notFoundErrorSequence';
 import removeYearAmountSequence from './sequences/removeYearAmountSequence';
 import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
@@ -21,6 +23,7 @@ import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
 import setModalDialogNameSequence from './sequences/setModalDialogNameSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
+import signOutSequence from './sequences/signOutSequence';
 import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
 import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
 import submitCaseDetailEditSaveSequence from './sequences/submitCaseDetailEditSaveSequence';
@@ -28,7 +31,7 @@ import submitCompleteSequence from './sequences/submitCompleteSequence';
 import submitDocumentSequence from './sequences/submitDocumentSequence';
 import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
 import submitForwardSequence from './sequences/submitForwardSequence';
-import submitLogInSequence from './sequences/submitLogInSequence';
+import submitLoginSequence from './sequences/submitLoginSequence';
 import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import submitRecallPetitionFromIRSHoldingQueueSequence from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import submitSearchSequence from './sequences/submitSearchSequence';
@@ -49,7 +52,9 @@ import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
+import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
+import validateStartCaseSequence from './sequences/validateStartCaseSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
 
 import { ActionError } from './errors/ActionError';
@@ -57,6 +62,7 @@ import { InvalidRequestError } from './errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+import { NotFoundError } from './errors/NotFoundError';
 
 import state from './state';
 
@@ -75,10 +81,11 @@ export default {
     dismissAlertSequence,
     dismissModalSequence,
     getTrialCitiesSequence,
+    gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
-    gotoLogInSequence,
+    gotoLoginSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
@@ -88,6 +95,7 @@ export default {
     setFocusedWorkItemSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
+    signOutSequence,
     startACaseConfirmCancelSequence,
     startACaseToggleCancelSequence,
     submitCaseDetailEditSaveSequence,
@@ -95,7 +103,7 @@ export default {
     submitDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
-    submitLogInSequence,
+    submitLoginSequence,
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
@@ -116,7 +124,9 @@ export default {
     updateForwardFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
+    updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
+    validateStartCaseSequence,
     viewDocumentSequence,
   },
   state,
@@ -124,7 +134,8 @@ export default {
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403, 404
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [NotFoundError, notFoundErrorSequence], //404
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],

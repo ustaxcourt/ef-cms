@@ -14,9 +14,9 @@ export default connect(
     formattedCaseDetail: state.formattedCaseDetail,
     removeYearAmountSequence: sequences.removeYearAmountSequence,
     showModal: state.showModal,
-    submitting: state.submitting,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
+    submitting: state.submitting,
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,8 +30,8 @@ export default connect(
     formattedCaseDetail,
     removeYearAmountSequence,
     showModal,
-    submitting,
     submitCaseDetailEditSaveSequence,
+    submitting,
     unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
@@ -71,7 +71,7 @@ export default connect(
                     aria-describedby="date-of-notice-legend"
                     aria-label="month, two digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input-inline ' +
                       (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
                     }
                     id="date-of-notice-month"

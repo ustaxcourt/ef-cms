@@ -78,11 +78,23 @@ joiValidationDecorator(
   },
 );
 
+/**
+ *
+ * @param message
+ * @returns {WorkItem}
+ */
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...this.messages, message];
   return this;
 };
 
+/**
+ *
+ * @param assigneeId
+ * @param assigneeName
+ * @param role
+ * @returns {WorkItem}
+ */
 WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
   Object.assign(this, {
     assigneeId,
@@ -92,6 +104,10 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
   return this;
 };
 
+/**
+ *
+ * @param userId
+ */
 WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
   this.assignToUser({
     assigneeId: 'irsBatchSystem',
@@ -108,6 +124,10 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
   );
 };
 
+/**
+ *
+ * @param user
+ */
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.assignToUser({
     assigneeId: user.userId,
@@ -125,6 +145,10 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   );
 };
 
+/**
+ *
+ * @param userId
+ */
 WorkItem.prototype.setAsCompleted = function(userId) {
   this.completedAt = new Date().toISOString();
 

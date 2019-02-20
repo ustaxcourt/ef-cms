@@ -4,14 +4,24 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+/**
+ *
+ * @param userId
+ * @param caseToUpdate
+ * @param document
+ * @param documentType
+ * @param applicationContext
+ * @returns {Promise<void>}
+ */
 exports.fileRespondentDocument = async ({
-  userId,
   caseToUpdate,
   document,
   documentType,
   applicationContext,
 }) => {
-  if (!isAuthorized(userId, FILE_RESPONDENT_DOCUMENT)) {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, FILE_RESPONDENT_DOCUMENT)) {
     throw new UnauthorizedError(`Unauthorized to upload a ${documentType}`);
   }
 
@@ -23,7 +33,6 @@ exports.fileRespondentDocument = async ({
     });
 
   await applicationContext.getUseCases().createDocument({
-    userId,
     document: {
       documentType,
       documentId,

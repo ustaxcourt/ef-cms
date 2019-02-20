@@ -4,7 +4,7 @@ import presenter from '..';
 import setValidationAlertErrors from './setValidationAlertErrorsAction';
 
 describe('setValidationAlertErrors', async () => {
-  it('does stuff well', async () => {
+  it('state.alertError contains 3 errors, one from the irsNoticeDate error, and two from the yearAmounts array', async () => {
     const { state } = await runAction(setValidationAlertErrors, {
       state: {},
       modules: {
@@ -32,6 +32,24 @@ describe('setValidationAlertErrors', async () => {
         'yearAmounts #1 - year field - A year can not be in the future',
         'yearAmounts #6 - amount field - An amount must exist',
       ],
+    });
+  });
+
+  it('creates messages for errors with nested objects', async () => {
+    const { state } = await runAction(setValidationAlertErrors, {
+      state: {},
+      modules: {
+        presenter,
+      },
+      props: {
+        errors: {
+          green: 'green is incorrect',
+          blues: { cobalt: 'cobalt is incorrect' },
+        },
+      },
+    });
+    expect(state.alertError).toMatchObject({
+      messages: ['green is incorrect', 'cobalt is incorrect'],
     });
   });
 });

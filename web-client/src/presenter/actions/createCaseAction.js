@@ -1,8 +1,16 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
 
+/**
+ * invokes the filePetition useCase.
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function used for getting petition
+ * @param {Object} providers.store the cerebral store object used for getting petition
+ */
 export default async ({ applicationContext, get, store }) => {
-  const { petitionFile } = get(state.petition);
+  const { petitionFile, ownershipDisclosureFile } = get(state.petition);
 
   const fileHasUploaded = () => {
     store.set(
@@ -25,6 +33,7 @@ export default async ({ applicationContext, get, store }) => {
     applicationContext,
     petitionMetadata: form,
     petitionFile,
+    ownershipDisclosureFile,
     fileHasUploaded,
   });
 };

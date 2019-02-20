@@ -14,7 +14,7 @@ const removeAWSGlobalFields = item => {
 };
 
 /**
- * put
+ *
  * @param params
  * @returns {*}
  */
@@ -99,7 +99,11 @@ exports.batchGet = ({ applicationContext, tableName, keys }) => {
 };
 
 /**
- * batchWrite
+ *
+ * @param applicationContext
+ * @param tableName
+ * @param items
+ * @returns {*}
  */
 exports.batchWrite = ({ applicationContext, tableName, items }) => {
   return applicationContext

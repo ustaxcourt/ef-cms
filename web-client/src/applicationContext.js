@@ -1,12 +1,12 @@
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
+const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+
 const {
-  getDocument,
   uploadDocument,
-  uploadPdf,
-  uploadPdfsForNewCase,
-} = require('../../shared/src/persistence/awsS3Persistence');
+} = require('../../shared/src/persistence/s3/uploadDocument');
 
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
@@ -18,11 +18,12 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
 import { filePetition } from '../../shared/src/business/useCases/filePetition.interactor';
+import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypes.interactor';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypes.interactor';
 import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
-import { getUsersInSection } from '../../shared/src/business/useCases/getUsersInSection.interactor';
-import { getInternalUsers } from '../../shared/src/business/useCases/getInternalUsers.interactor';
+import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
@@ -52,6 +53,14 @@ const setCurrentUser = newUser => {
   user = newUser;
 };
 
+let token;
+const getCurrentUserToken = () => {
+  return token;
+};
+const setCurrentUserToken = newToken => {
+  token = newToken;
+};
+
 const allUseCases = {
   assignWorkItems,
   createDocument,
@@ -65,6 +74,7 @@ const allUseCases = {
   getCasesByUser,
   getCasesForRespondent,
   getCaseTypes,
+  getFilingTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
   getInternalUsers,
@@ -88,6 +98,19 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
+  getEnvironment: () => {
+    return process.env.USTC_ENV;
+  },
+  getCognitoLoginUrl: () => {
+    if (process.env.COGNITO) {
+      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
+    } else {
+      return (
+        process.env.COGNITO_LOGIN_URL ||
+        'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
+      );
+    }
+  },
   getError: e => {
     return ErrorFactory.getError(e);
   },
@@ -104,12 +127,13 @@ const applicationContext = {
       saveCase: updateCase,
       uploadDocument,
       uploadPdf,
-      uploadPdfsForNewCase,
     };
   },
   getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,
+  getCurrentUserToken,
+  setCurrentUserToken,
 };
 
 export default applicationContext;

@@ -1,17 +1,17 @@
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearErrorAlerts from '../actions/clearErrorAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
 import isLoggedIn from '../actions/isLoggedInAction';
-import navigateToLogin from '../actions/navigateToLoginAction';
+import redirectToCognito from '../actions/redirectToCognitoAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
-import setPath from '../actions/setPathAction';
 import setUsers from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [
+  setCurrentPage('Loading'),
   clearErrorAlerts,
   getUserRole,
   {
@@ -21,26 +21,26 @@ const goToDashboard = [
       setCurrentPage('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      getUsersInSection({ sectionType: 'petitions' }),
+      getUsersInSection({ section: 'petitions' }),
       setUsers,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardPetitionsClerk'),
     ],
     docketclerk: [
-      getUsersInSection({ sectionType: 'docket' }),
+      getUsersInSection({ section: 'docket' }),
       setUsers,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardDocketClerk'),
     ],
-    intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
+    intakeclerk: [clearAlertsAction, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
-      clearAlerts,
+      clearAlertsAction,
       getCasesByUser,
       setCases,
       setCurrentPage('DashboardRespondent'),
     ],
     seniorattorney: [
-      clearAlerts,
+      clearAlertsAction,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardSeniorAttorney'),
     ],
@@ -50,7 +50,7 @@ const goToDashboard = [
 export default [
   isLoggedIn,
   {
-    unauthorized: [setPath, navigateToLogin],
+    unauthorized: [redirectToCognito],
     isLoggedIn: goToDashboard,
   },
 ];

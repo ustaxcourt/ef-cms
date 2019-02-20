@@ -52,8 +52,7 @@ export default connect(
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
                       className={item.statusIcon}
-                      aria-label={item.caseStatus}
-                      title={item.caseStatus}
+                      aria-hidden="true"
                     />
                   )}
                 </td>
