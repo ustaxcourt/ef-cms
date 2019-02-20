@@ -4,6 +4,15 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+/**
+ *
+ * @param userId
+ * @param caseToUpdate
+ * @param document
+ * @param documentType
+ * @param applicationContext
+ * @returns {Promise<void>}
+ */
 exports.fileRespondentDocument = async ({
   caseToUpdate,
   document,

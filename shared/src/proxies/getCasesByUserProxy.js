@@ -1,3 +1,9 @@
+/**
+ *
+ * @param applicationContext
+ * @param userId
+ * @returns {Promise<*>}
+ */
 exports.getCasesByUser = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()

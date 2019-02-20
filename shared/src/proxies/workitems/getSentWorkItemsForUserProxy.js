@@ -1,3 +1,8 @@
+/**
+ *
+ * @param applicationContext
+ * @returns {Promise<*>}
+ */
 exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()

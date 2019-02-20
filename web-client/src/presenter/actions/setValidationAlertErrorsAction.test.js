@@ -4,7 +4,7 @@ import presenter from '..';
 import setValidationAlertErrors from './setValidationAlertErrorsAction';
 
 describe('setValidationAlertErrors', async () => {
-  it('does stuff well', async () => {
+  it('state.alertError contains 3 errors, one from the irsNoticeDate error, and two from the yearAmounts array', async () => {
     const { state } = await runAction(setValidationAlertErrors, {
       state: {},
       modules: {
