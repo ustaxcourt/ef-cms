@@ -1,5 +1,5 @@
 /**
- * getDownloadPolicyUrl
+ *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<any>}

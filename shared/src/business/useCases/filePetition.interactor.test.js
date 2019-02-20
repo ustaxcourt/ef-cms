@@ -24,7 +24,7 @@ describe('filePetition', () => {
     fileHasUploadedStub = sinon.stub();
   });
 
-  it('throws an error when an unauthorized user tries to access the case', async () => {
+  it('throws an error when a null user tries to access the case', async () => {
     let error;
     try {
       await filePetition({

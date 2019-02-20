@@ -6,7 +6,7 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
   ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress'],
+  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jsdoc'],
   rules: {
     quotes: ['error', 'single'],
     'no-console': ['error', { allow: ['warn', 'error'] }],
@@ -30,6 +30,9 @@ module.exports = {
         allowChildren: false,
       },
     ],
+    "jsdoc/require-param": 1,
+    "jsdoc/require-param-name": 1,
+    "jsdoc/check-types": 1,
   },
   settings: {
     react: {

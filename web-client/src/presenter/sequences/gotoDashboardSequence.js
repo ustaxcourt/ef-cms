@@ -1,4 +1,4 @@
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearErrorAlerts from '../actions/clearErrorAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
@@ -32,15 +32,15 @@ const goToDashboard = [
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardDocketClerk'),
     ],
-    intakeclerk: [clearAlerts, setCurrentPage('DashboardIntakeClerk')],
+    intakeclerk: [clearAlertsAction, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
-      clearAlerts,
+      clearAlertsAction,
       getCasesByUser,
       setCases,
       setCurrentPage('DashboardRespondent'),
     ],
     seniorattorney: [
-      clearAlerts,
+      clearAlertsAction,
       ...chooseWorkQueueSequence,
       setCurrentPage('DashboardSeniorAttorney'),
     ],
