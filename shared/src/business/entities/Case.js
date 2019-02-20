@@ -237,6 +237,12 @@ joiValidationDecorator(
   },
 );
 
+/**
+ * builds the case title from case contact name(s) based on party type
+ *
+ * @param rawCase
+ * @returns {string}
+ */
 Case.getCaseTitle = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
