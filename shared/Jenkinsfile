@@ -38,15 +38,15 @@ pipeline {
         }
       }
     }
-    // stage('Audit') {
-    //   steps {
-    //     script {
-    //       dir('shared') {
-    //         sh "./docker-audit.sh"
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Audit') {
+      steps {
+        script {
+          dir('shared') {
+            sh "./docker-audit.sh"
+          }
+        }
+      }
+    }
     stage('Lint') {
       steps {
         script {
