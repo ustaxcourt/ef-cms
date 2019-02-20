@@ -6,7 +6,7 @@ import _ from 'lodash';
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext needed for getting the getCasesByStatus use case
- * @param {Functionn} providers.get the cerebral get function used for getting state.user.token
+ * @param {Function} providers.get the cerebral get function used for getting state.user.token
  * @returns {Object} contains the caseList returned from the getCasesByStatus use case
  */
 export default async ({ applicationContext, get }) => {
