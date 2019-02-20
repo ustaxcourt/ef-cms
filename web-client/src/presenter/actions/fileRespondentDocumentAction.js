@@ -1,5 +1,13 @@
 import { state } from 'cerebral';
 
+/**
+ * Used for uploading a respondent related document (Answer, StipulatedDecision).
+ * Gets the selected documentType, file, and user from state and invokes the fileRespondentDocument use case
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context used for getting the fileRespondentDocument use case
+ * @param {Function} providers.get the cerebral get function used for getting caseDetail, document, user
+ */
 export default async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
 

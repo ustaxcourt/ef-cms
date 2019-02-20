@@ -1,3 +1,11 @@
+/**
+ *
+ * @param applicationContext
+ * @param caseId
+ * @param document
+ * @param userId
+ * @returns {Promise<*>}
+ */
 exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const response = await applicationContext
     .getHttpClient()

@@ -11,6 +11,12 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+/**
+ *
+ * @param documentId
+ * @param userId
+ * @returns {*}
+ */
 exports.getInteractorForGettingCases = ({ documentId, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 

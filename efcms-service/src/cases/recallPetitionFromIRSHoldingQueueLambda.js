@@ -2,7 +2,7 @@ const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelpe
 const createApplicationContext = require('../applicationContext');
 
 /**
- * used for sending the case to the irs
+ * used for recalling the case from the irs holding queue
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
