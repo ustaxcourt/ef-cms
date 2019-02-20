@@ -1,4 +1,4 @@
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import getUser from '../actions/getUserAction';
 import decodeToken from '../actions/decodeTokenAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
@@ -15,7 +15,7 @@ export default [
   setToken,
   getUser,
   setUser,
-  clearAlerts,
+  clearAlertsAction,
   navigateToPath,
   unsetFormSubmitting,
 ];

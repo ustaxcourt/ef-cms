@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearForm from '../actions/clearFormAction';
 import prepareForm from '../actions/prepareFormAction';
 import clearPetition from '../actions/clearPetitionAction';
@@ -14,7 +14,7 @@ import setCurrentPage from '../actions/setCurrentPageAction';
 import setProcedureTypes from '../actions/setProcedureTypesAction';
 
 export default [
-  clearAlerts,
+  clearAlertsAction,
   clearPetition,
   clearForm,
   prepareForm,

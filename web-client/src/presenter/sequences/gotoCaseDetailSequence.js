@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import getCase from '../actions/getCaseAction';
 import getUserRole from '../actions/getUserRoleAction';
 import setBaseUrl from '../actions/setBaseUrlAction';
@@ -10,7 +10,7 @@ import setCurrentPage from '../actions/setCurrentPageAction';
 
 export default [
   setCurrentPage('Loading'),
-  clearAlerts,
+  clearAlertsAction,
   getCase,
   setCase,
   set(state.currentTab, 'Docket Record'),
