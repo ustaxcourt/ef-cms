@@ -100,5 +100,8 @@
     "stylelint-config-standard": "^18.2.0",
     "uswds": "^1.6.9",
     "webdriver-manager": "^12.1.1"
+  },
+  "devDependencies": {
+    "eslint-plugin-jsdoc": "^4.1.0"
   }
 }
