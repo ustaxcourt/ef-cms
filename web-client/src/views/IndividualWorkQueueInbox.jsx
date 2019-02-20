@@ -48,7 +48,7 @@ export default connect(
                     aria-controls={`detail-${item.workItemId}`}
                   />
                 </td>
-                <td>
+                <td className="has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
