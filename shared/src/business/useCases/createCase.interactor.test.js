@@ -62,6 +62,7 @@ describe('createCase', () => {
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
+      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
       applicationContext,
     });
 
@@ -78,6 +79,12 @@ describe('createCase', () => {
         },
         {
           description: 'Petition',
+          filedBy: 'Petitioner',
+          filingDate: '2018-11-21T20:49:28.192Z',
+          status: undefined,
+        },
+        {
+          description: 'Ownership Disclosure Statement',
           filedBy: 'Petitioner',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
@@ -123,6 +130,15 @@ describe('createCase', () => {
               workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
             },
           ],
+        },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
+          documentType: 'Ownership Disclosure Statement',
+          filedBy: 'Petitioner',
+          userId: 'taxpayer',
+          workItems: [],
         },
       ],
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
