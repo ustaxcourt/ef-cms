@@ -10,7 +10,11 @@ export default test => {
     });
     const workItem = test
       .getState('workQueue')
-      .find(workItem => workItem.docketNumber === test.docketNumber);
+      .find(
+        workItem =>
+          workItem.docketNumber === test.docketNumber &&
+          workItem.document.documentType === 'Petition',
+      );
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual('New');
     expect(workItem.messages[0].message).toEqual(

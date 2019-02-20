@@ -6,13 +6,12 @@
  * @param status
  * @returns {Promise<*>}
  */
-exports.getCasesByStatus = async ({ applicationContext, userId, status }) => {
-  const userToken = userId; //TODO refactor for jwt
+exports.getCasesByStatus = async ({ applicationContext, status }) => {
   return await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {
-        Authorization: `Bearer ${userToken}`,
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
       params: {
         status,

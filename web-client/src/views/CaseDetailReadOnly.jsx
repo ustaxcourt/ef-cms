@@ -35,7 +35,7 @@ export default connect(
                       aria-label="IRS Notice Amount in whole dollars"
                       id="amount"
                     />
-                    {yearAmount.amount}
+                    {yearAmount.amountFormatted}
                     <span aria-hidden="true" role="presentation">
                       .00
                     </span>

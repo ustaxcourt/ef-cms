@@ -12,7 +12,7 @@ const Case = require('../entities/Case');
  * @returns {Promise<[{state, city}]>}
  */
 exports.getTrialCities = async ({ procedureType, applicationContext }) => {
-  if (!isAuthorized(applicationContext.getCurrentUser().userId, PETITION)) {
+  if (!isAuthorized(applicationContext.getCurrentUser(), PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

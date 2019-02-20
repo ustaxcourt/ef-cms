@@ -1,5 +1,6 @@
-/* istanbul ignore file */
-const persistence = require('../../awsDynamoPersistence');
+const {
+  createMappingRecord,
+} = require('../../dynamo/helpers/createMappingRecord');
 
 exports.syncDocuments = async ({
   applicationContext,
@@ -11,7 +12,7 @@ exports.syncDocuments = async ({
       i => i.documentId === document.documentId,
     );
     if (!existing) {
-      await persistence.createMappingRecord({
+      await createMappingRecord({
         applicationContext,
         pkId: document.documentId,
         skId: caseToSave.caseId,

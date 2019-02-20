@@ -37,6 +37,7 @@ export default ({ applicationContext, path, get }) => {
     return path.success();
   } else {
     return path.error({
+      errors,
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },

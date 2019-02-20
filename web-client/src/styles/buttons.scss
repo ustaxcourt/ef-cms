@@ -69,6 +69,12 @@ button.text-style {
   float: right;
 }
 
+.sign-out {
+  width: 17px;
+  padding: 4px 20px 4px 4px;
+  margin: 4px;
+}
+
 #file-a-petition .usa-button-active:disabled {
   background-color: $color-primary-darkest;
 }

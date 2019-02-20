@@ -6,9 +6,12 @@ module.exports = {
     global: {
       branches: 50,
       functions: 40,
-      lines: 50,
-      statements: 50,
+      lines: 45,
+      statements: 45,
     },
+  },
+  globals: {
+    window: true,
   },
   collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
 };

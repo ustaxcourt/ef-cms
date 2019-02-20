@@ -12,7 +12,7 @@ import { flattenDeep } from 'lodash';
  */
 export default ({ props, store }) => {
   const alertError = {
-    title: 'There is an error with this page.',
+    title: 'Please correct the following errors on the page:',
     messages: flattenDeep(
       Object.keys(props.errors).map(key => {
         const error = props.errors[key];
@@ -27,6 +27,8 @@ export default ({ props, store }) => {
               }`;
             });
           });
+        } else if (typeof error === 'object') {
+          return Object.keys(error).map(k => error[k]);
         } else {
           return error;
         }

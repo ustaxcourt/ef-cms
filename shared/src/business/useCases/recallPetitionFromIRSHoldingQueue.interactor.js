@@ -21,7 +21,8 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user.userId, UPDATE_CASE)) {
+
+  if (!isAuthorized(user, UPDATE_CASE)) {
     throw new UnauthorizedError(
       'Unauthorized for recall from IRS Holding Queue',
     );

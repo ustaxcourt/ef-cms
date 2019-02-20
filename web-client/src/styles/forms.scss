@@ -9,6 +9,9 @@ label {
 label.with-hint {
   margin-bottom: 5px;
 }
+label p.usa-form-hint {
+  display: block;
+}
 
 legend {
   margin-bottom: 12px;
@@ -87,5 +90,32 @@ label.validated::after {
   span {
     display: inline-block;
     margin-right: 5px;
+  }
+}
+
+.ustc-form-group-city {
+  width: 25rem;
+  margin-right: 3rem;
+  clear: none;
+  float: left;
+}
+
+.ustc-form-group-state {
+  width: 18rem;
+  clear: none;
+  float: left;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.ustc-input-phone {
+  width: 25rem;
+}
+
+.usa-grid-full {
+  &.ustc-secondary-question {
+    margin-top: 20px;
   }
 }

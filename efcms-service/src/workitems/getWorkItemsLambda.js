@@ -1,20 +1,19 @@
-const { getAuthHeader, handle } = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader, handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
  * returns all work items associated with a user
  *
- * @param event
- * @returns {Promise<*|undefined>}
+ * @param {Object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.get = event =>
   handle(() => {
-    const userId = getAuthHeader(event);
-    const applicationContext = createApplicationContext({ userId });
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
     const section = (event.queryStringParameters || {}).section;
     const completed = (event.queryStringParameters || {}).completed;
     return applicationContext.getWorkItemsInteractor(event)({
-      userId: userId,
       section,
       completed,
       applicationContext,
