@@ -2,6 +2,7 @@ const {
   isAuthorized,
   GET_CASES_BY_DOCUMENT_ID,
   GET_CASES_BY_STATUS,
+  GET_CASES_BY_USER,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const Case = require('../../entities/Case');
@@ -19,7 +20,7 @@ exports.queryForCases = async ({ status, documentId, applicationContext }) => {
 
   if (documentId) {
     if (!isAuthorized(user, GET_CASES_BY_DOCUMENT_ID)) {
-      throw new UnauthorizedError('Unauthorized for getCasesByDocument');
+      throw new UnauthorizedError('Unauthorized');
     }
     cases = await applicationContext
       .getPersistenceGateway()
@@ -29,7 +30,7 @@ exports.queryForCases = async ({ status, documentId, applicationContext }) => {
       });
   } else if (status) {
     if (!isAuthorized(user, GET_CASES_BY_STATUS)) {
-      throw new UnauthorizedError('Unauthorized for getCasesByStatus');
+      throw new UnauthorizedError('Unauthorized');
     }
 
     status = status.toLowerCase();
@@ -38,6 +39,10 @@ exports.queryForCases = async ({ status, documentId, applicationContext }) => {
       applicationContext,
     });
   } else {
+    if (!isAuthorized(user, GET_CASES_BY_USER)) {
+      throw new UnauthorizedError('Unauthorized');
+    }
+
     cases = await applicationContext.getPersistenceGateway().getCasesByUser({
       user,
       applicationContext,
