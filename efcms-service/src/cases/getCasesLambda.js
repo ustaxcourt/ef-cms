@@ -14,7 +14,12 @@ exports.get = event =>
     const documentId = (event.queryStringParameters || {}).documentId;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().queryForCases({
+    const useCase = applicationContext.getInteractorForGettingCases({
+      user,
+      documentId,
+      applicationContext,
+    });
+    return useCase({
       documentId,
       user,
       status: status,

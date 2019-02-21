@@ -15,7 +15,7 @@ export default ({ section }) =>
   async ({ applicationContext }) => {
     const users = await applicationContext
       .getUseCases()
-      .queryForUsers({ section, applicationContext });
+      .getUsersInSection({ section, applicationContext });
     return {
       users,
     };
