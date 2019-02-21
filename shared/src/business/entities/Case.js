@@ -137,7 +137,11 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
-    caseType: joi.string().required(),
+    caseType: joi.string().when('hasIrsNotice', {
+      is: true,
+      then: joi.required(),
+      otherwise: joi.optional().allow(null),
+    }),
     createdAt: joi
       .date()
       .iso()
@@ -158,9 +162,12 @@ joiValidationDecorator(
     irsNoticeDate: joi
       .date()
       .iso()
-      .allow(null)
       .max('now')
-      .optional(),
+      .when('hasIrsNotice', {
+        is: true,
+        then: joi.required(),
+        otherwise: joi.optional().allow(null),
+      }),
     irsSendDate: joi
       .date()
       .iso()
@@ -175,6 +182,7 @@ joiValidationDecorator(
       .max('now')
       .allow(null)
       .optional(),
+    hasIrsNotice: joi.boolean().required(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
@@ -205,6 +213,7 @@ joiValidationDecorator(
   {
     docketNumber: 'Docket number is required.',
     documents: 'At least one valid document is required.',
+    hasIrsNotice: 'You must indicate whether you received an IRS notice.',
     caseType: 'Case Type is required.',
     irsNoticeDate: [
       {

@@ -24,6 +24,7 @@ const createMockCase = caseId => {
         workItems: [],
       },
     ],
+    hasIrsNotice: true,
     irsNoticeDate: '2018-11-21T20:49:28.192Z',
     petitioners: [
       {
