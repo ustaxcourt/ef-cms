@@ -54,4 +54,28 @@ describe('start a case computed', () => {
     });
     expect(result.showOwnershipDisclosure).toBeFalsy();
   });
+
+  it('sets showHasIrsNoticeOptions when hasIrsNotice is Yes', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: true,
+        },
+      },
+    });
+    expect(result.showHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
+  });
+
+  it('sets showNotHasIrsNoticeOptions when hasIrsNotice is No', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          hasIrsNotice: false,
+        },
+      },
+    });
+    expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showHasIrsNoticeOptions).toBeFalsy();
+  });
 });
