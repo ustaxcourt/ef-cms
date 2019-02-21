@@ -27,6 +27,11 @@
 
 .usa-alert {
   margin-bottom: 2rem;
+  .usa-alert-body {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
 }
 
 .usa-nav-secondary-links li:not(:last-child)::after {
@@ -84,8 +89,8 @@
 
   button {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 0px;
+    right: 0px;
   }
 }
 
