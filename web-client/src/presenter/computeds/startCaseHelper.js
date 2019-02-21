@@ -33,43 +33,52 @@ export default get => {
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse',
 
-    showPetitionerContact: form.partyType === 'Petitioner',
-    showPetitionerAndSpouseContact: form.partyType === 'Petitioner & Spouse',
-    showPetitionerAndDeceasedSpouseContact:
-      form.partyType === 'Petitioner & Deceased Spouse',
+    showPrimaryContact:
+      form.partyType === 'Petitioner' ||
+      form.partyType === 'Petitioner & Spouse' ||
+      form.partyType === 'Petitioner & Deceased Spouse' ||
+      form.partyType ===
+        'Estate with an Executor/Personal Representative/Fiduciary/etc.' ||
+      form.partyType ===
+        'Estate without an Executor/Personal Representative/Fiduciary/etc.' ||
+      form.partyType === 'Trust' ||
+      form.partyType === 'Corporation' ||
+      form.partyType === 'Partnership (as the tax matters partner)' ||
+      form.partyType ===
+        'Partnership (as a partner other than tax matters partner)' ||
+      form.partyType ===
+        'Partnership (as a partnership representative under the BBA regime)' ||
+      form.partyType === 'Conservator' ||
+      form.partyType === 'Guardian' ||
+      form.partyType === 'Custodian' ||
+      form.partyType ===
+        'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
+      form.partyType ===
+        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+      form.partyType === 'Donor' ||
+      form.partyType === 'Transferee' ||
+      form.partyType === 'Surviving Spouse',
 
-    showEstateWithExecutorContact:
+    showSecondaryContact:
+      form.partyType === 'Petitioner & Spouse' ||
+      form.partyType === 'Petitioner & Deceased Spouse' ||
       form.partyType ===
-      'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-    showEstateWithoutExecutorContact:
+        'Estate with an Executor/Personal Representative/Fiduciary/etc.' ||
+      form.partyType === 'Trust' ||
+      form.partyType === 'Partnership (as the tax matters partner)' ||
       form.partyType ===
-      'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-    showTrustAndTrusteeContact: form.partyType === 'Trust',
-
-    showCorporationContact: form.partyType === 'Corporation',
-    showPartnershipTaxMattersContact:
-      form.partyType === 'Partnership (as the tax matters partner)',
-    showPartnershipOtherContact:
+        'Partnership (as a partner other than tax matters partner)' ||
       form.partyType ===
-      'Partnership (as a partner other than tax matters partner)',
-    showPartnershipBBAContact:
+        'Partnership (as a partnership representative under the BBA regime)' ||
+      form.partyType === 'Conservator' ||
+      form.partyType === 'Guardian' ||
+      form.partyType === 'Custodian' ||
       form.partyType ===
-      'Partnership (as a partnership representative under the BBA regime)',
-
-    showConservatorContact: form.partyType === 'Conservator',
-    showGuardianContact: form.partyType === 'Guardian',
-    showCustodianContact: form.partyType === 'Custodian',
-    showMinorContact:
+        'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType ===
-      'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-    showIncompetentPersonContact:
-      form.partyType ===
-      'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
-
-    showDonorContact: form.partyType === 'Donor',
-    showTransfereeContact: form.partyType === 'Transferee',
-    showSurvivingSpouseContact: form.partyType === 'Surviving Spouse',
-
+        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+      form.partyType === 'Surviving Spouse',
+    
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
   };

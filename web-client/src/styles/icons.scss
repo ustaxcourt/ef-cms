@@ -1,5 +1,6 @@
 .fa-file-pdf {
-  margin-right: 1rem;
+  margin-right: 0.5em;
+  color: $color-blue;
 }
 
 .fa-caret-left {
@@ -22,4 +23,9 @@
 .fa-icon-gold {
   margin-right: 6px;
   color: $color-gold;
+}
+
+.fa-share-square {
+  margin-left: 0.5em;
+  color: $color-blue;
 }
