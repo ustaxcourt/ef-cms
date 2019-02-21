@@ -15,7 +15,7 @@ exports.getCasesForRespondent = async ({ userId, applicationContext }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
     key: userId,
-    type: 'activeCase',
+    type: 'case',
     isVersioned: true,
   });
 
