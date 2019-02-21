@@ -93,9 +93,9 @@ We use this list when performing a code review to ensure that all tasks have bee
 	- [ ] read the description of every commit that comprises the pull request
 - [ ] stand up the site locally
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-		- [ ] perform the most thorough testing in Chrome and Internet Explorer 11, on Windows 7 and 10
-		- [ ] test in Edge and Firefox
-		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all functionality will be necessary on these platforms
+		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
+		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/), including Internet Explorer 11
+		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility
