@@ -103,7 +103,14 @@ describe('File a petition', function() {
         .type('1111111111');
     });
 
-    it('fill in the case-type select', () => {
+    it('clicks the Yes notice radio button', () => {
+      cy.get('#notice-radios').scrollIntoView();
+      cy.get('#notice-radios label')
+        .first()
+        .click();
+    });
+
+    it('selects the Notice of Deficiency case type', () => {
       cy.get('#case-type')
         .scrollIntoView()
         .select('Notice of Deficiency');

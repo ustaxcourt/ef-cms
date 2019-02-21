@@ -28,6 +28,8 @@
       "notes": "expose all hidden elements on start-a-case",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
       "actions": [
+        "wait for element label#hasNotice-0 to be visible",
+        "click element label#hasNotice-0",
         "wait for button.case-difference to be visible",
         "click element button.case-difference",
         "wait for #case-difference-container to be visible",
@@ -246,6 +248,24 @@
         "wait for element label#is-other-type-4 to be visible",
         "click element label#is-other-type-4",
         "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for Yes notice",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-yes-notice",
+      "actions": [
+        "wait for element label#hasNotice-0 to be visible",
+        "click element label#hasNotice-0",
+        "wait for .case-type-select to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for No notice",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-no-notice",
+      "actions": [
+        "wait for element label#hasNotice-1 to be visible",
+        "click element label#hasNotice-1",
+        "wait for .case-type-select to be visible"
       ]
     },
 
