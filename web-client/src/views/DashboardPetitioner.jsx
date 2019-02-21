@@ -3,34 +3,22 @@ import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-import { CaseList } from './CaseList';
+import { CaseListPetitioner } from './CaseListPetitioner';
+import { WhatToExpect } from './WhatToExpect';
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 
 export const DashboardPetitioner = connect(
-  { user: state.user },
-  ({ user }) => {
+  { user: state.user, helper: state.dashboardPetitionerHelper },
+  ({ user, helper }) => {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Welcome, {user.name}</h1>
         <SuccessNotification />
         <ErrorNotification />
         <div className="usa-width-two-thirds">
-          <div className="usa-grid-full subsection">
-            <div className="usa-width-one-half">
-              <h2>Your Cases</h2>
-            </div>
-            <div className="usa-width-one-half">
-              <a
-                className="usa-button new-case"
-                href="/before-starting-a-case"
-                id="init-file-petition"
-              >
-                Start a New Case
-              </a>
-            </div>
-          </div>
-          <CaseList />
+          {helper.showWhatToExpect && <WhatToExpect />}
+          {helper.showCaseList && <CaseListPetitioner />}
         </div>
         <div className="usa-width-one-third">
           <div className="blue-container">
