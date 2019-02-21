@@ -10,7 +10,7 @@ import CaseDetailPublic from './CaseDetailPublic';
 import CaseDetailRespondent from './CaseDetailRespondent';
 import DashboardDocketClerk from './DashboardDocketClerk';
 import DashboardIntakeClerk from './DashboardIntakeClerk';
-import DashboardPetitioner from './DashboardPetitioner';
+import { DashboardPetitioner } from './DashboardPetitioner';
 import DashboardPetitionsClerk from './DashboardPetitionsClerk';
 import DashboardPublic from './DashboardPublic';
 import DashboardRespondent from './DashboardRespondent';
@@ -53,12 +53,14 @@ class App extends React.Component {
   componentDidUpdate() {
     this.focusMain();
   }
+
   focusMain(e) {
     e && e.preventDefault();
     const header = document.querySelector('#main-content h1');
     if (header) header.focus();
     return false;
   }
+
   render() {
     const CurrentPage = pages[this.props.currentPage];
     return (
@@ -82,6 +84,7 @@ class App extends React.Component {
     );
   }
 }
+
 App.propTypes = {
   currentPage: PropTypes.string,
 };
