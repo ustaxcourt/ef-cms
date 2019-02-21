@@ -515,38 +515,38 @@ export default connect(
             <h3>What Kind of Case Are You Filing?</h3>
             <div className="blue-container">
               <fieldset
-                id="notice-radios"
+                id="irs-notice-radios"
                 className="usa-form-group usa-fieldset-inputs usa-sans"
               >
                 <legend>Did you receive a Notice from the IRS?</legend>
                 <ul className="usa-unstyled-list">
-                  {['Yes', 'No'].map((hasNotice, idx) => (
-                    <li key={hasNotice}>
+                  {['Yes', 'No'].map((hasIrsNotice, idx) => (
+                    <li key={hasIrsNotice}>
                       <input
-                        id={`hasNotice-${hasNotice}`}
+                        id={`hasIrsNotice-${hasIrsNotice}`}
                         type="radio"
-                        name="hasNotice"
-                        value={hasNotice}
+                        name="hasIrsNotice"
+                        value={hasIrsNotice === 'Yes'}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
-                            value: e.target.value,
+                            value: e.target.value === 'true',
                           });
                           validateStartCaseSequence();
                         }}
                       />
                       <label
-                        id={`hasNotice-${idx}`}
-                        htmlFor={`hasNotice-${hasNotice}`}
+                        id={`hasIrsNotice-${idx}`}
+                        htmlFor={`hasIrsNotice-${hasIrsNotice}`}
                       >
-                        {hasNotice}
+                        {hasIrsNotice}
                       </label>
                     </li>
                   ))}
                 </ul>
               </fieldset>
 
-              {startCaseHelper.showHasNoticeOptions && (
+              {startCaseHelper.showHasIrsNoticeOptions && (
                 <React.Fragment>
                   <CaseTypeSelect legend="Type of Notice / Case" />
                   <div
@@ -647,7 +647,7 @@ export default connect(
                   </div>
                 </React.Fragment>
               )}
-              {startCaseHelper.showNotHasNoticeOptions && (
+              {startCaseHelper.showNotHasIrsNoticeOptions && (
                 <CaseTypeSelect
                   legend="Which topic most closely matches your complaint with the
                 IRS?"

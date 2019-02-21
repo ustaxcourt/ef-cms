@@ -70,7 +70,7 @@ export default get => {
     showTransfereeContact: form.partyType === 'Transferee',
     showSurvivingSpouseContact: form.partyType === 'Surviving Spouse',
 
-    showHasNoticeOptions: form.hasNotice === 'Yes',
-    showNotHasNoticeOptions: form.hasNotice === 'No',
+    showHasIrsNoticeOptions: form.hasIrsNotice === true,
+    showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
   };
 };

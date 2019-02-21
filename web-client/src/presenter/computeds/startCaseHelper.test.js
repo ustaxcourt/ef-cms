@@ -55,27 +55,27 @@ describe('start a case computed', () => {
     expect(result.showOwnershipDisclosure).toBeFalsy();
   });
 
-  it('sets showHasNoticeOptions when hasNotice is Yes', () => {
+  it('sets showHasIrsNoticeOptions when hasIrsNotice is Yes', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
-          hasNotice: 'Yes',
+          hasIrsNotice: true,
         },
       },
     });
-    expect(result.showHasNoticeOptions).toBeTruthy();
-    expect(result.showNotHasNoticeOptions).toBeFalsy();
+    expect(result.showHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
   });
 
-  it('sets showNotHasNoticeOptions when hasNotice is No', () => {
+  it('sets showNotHasIrsNoticeOptions when hasIrsNotice is No', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         form: {
-          hasNotice: 'No',
+          hasIrsNotice: false,
         },
       },
     });
-    expect(result.showNotHasNoticeOptions).toBeTruthy();
-    expect(result.showHasNoticeOptions).toBeFalsy();
+    expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showHasIrsNoticeOptions).toBeFalsy();
   });
 });
