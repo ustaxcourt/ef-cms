@@ -1,10 +1,10 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
 import { state } from 'cerebral';
 import moment from 'moment';
+import React from 'react';
 
 /**
- * Footer
+ * Case List
  */
 export default connect(
   {
@@ -12,7 +12,7 @@ export default connect(
   },
   function CaseList({ caseList }) {
     return (
-      <table className="responsive-table case-list" id="case-list">
+      <table className="responsive-table work-queue" id="case-list">
         <thead>
           <tr>
             <th>Docket number</th>
