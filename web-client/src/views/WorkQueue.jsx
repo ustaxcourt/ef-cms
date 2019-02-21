@@ -23,11 +23,15 @@ export default connect(
             })
           }
         >
-          <Tab tabName="my" title="My Queue" id="tab-individual-panel">
-            <IndividualWorkQueue />
+          <Tab tabName="my" title="My Queue" id="tab-my-queue">
+            <div id="tab-individual-panel">
+              <IndividualWorkQueue />
+            </div>
           </Tab>
-          <Tab tabName="section" title="Section Queue" id="tab-section-panel">
-            <SectionWorkQueue />
+          <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+            <div id="tab-section-panel">
+              <SectionWorkQueue />
+            </div>
           </Tab>
         </Tabs>
       </React.Fragment>

@@ -51,7 +51,6 @@ export default {
   workItemActions: {},
   workQueue: [],
   workQueueToDisplay: { queue: 'my', box: 'inbox' },
-  'uswds-ui': {},
 
   alertHelper,
   caseDetailHelper,

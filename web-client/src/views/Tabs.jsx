@@ -4,6 +4,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import { forEach, map } from './utils/ElementChildren';
 import classNames from 'classnames';
+import { camelCase } from 'lodash';
 
 function getDefaultActiveKey(children) {
   let defaultActiveKey;
@@ -48,11 +49,10 @@ export const Tabs = connect(function Tabs(props) {
   })(setTab);
 
   function renderTab(child) {
-    const { title, tabName } = child.props;
+    const { title, tabName, id } = child.props;
 
     const isActiveTab = tabName === activeKey;
-    const tabId = `tab-${tabName}`;
-    const tabContentId = `tabContent-${tabName}`;
+    const tabContentId = `tabContent-${camelCase(tabName)}`;
 
     var liClass = classNames({
       active: isActiveTab,
@@ -67,7 +67,7 @@ export const Tabs = connect(function Tabs(props) {
         <button
           role="tab"
           className="tab-link"
-          id={tabId}
+          id={id}
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
           onClick={() => setTab(tabName)}
@@ -81,7 +81,7 @@ export const Tabs = connect(function Tabs(props) {
   function renderTabContent(child) {
     const { children, tabName } = child.props;
     const isActiveTab = tabName === activeKey;
-    const tabContentId = `tabContent-${tabName}`;
+    const tabContentId = `tabContent-${camelCase(tabName)}`;
 
     if (isActiveTab) {
       return (

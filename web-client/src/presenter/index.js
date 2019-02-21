@@ -53,7 +53,7 @@ import updateForwardFormValueSequence from './sequences/updateForwardFormValueSe
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
-import uswdsUiSetStateSequence from './sequences/uswdsUiSetStateSequence';
+import cerebralBindSimpleSetStateSequence from './sequences/cerebralBindSimpleSetStateSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import validateStartCaseSequence from './sequences/validateStartCaseSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
@@ -76,6 +76,7 @@ export default {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
+    cerebralBindSimpleSetStateSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
     clickServeToIrsSequence,
@@ -126,7 +127,6 @@ export default {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
-    uswdsUiSetStateSequence,
     validateCaseDetailSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
