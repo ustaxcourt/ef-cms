@@ -21,6 +21,7 @@ import selectAssigneeSequence from './sequences/selectAssigneeSequence';
 import selectWorkItemSequence from './sequences/selectWorkItemSequence';
 import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
 import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
+import setIrsNoticeFalseSequence from './sequences/setIrsNoticeFalseSequence';
 import setModalDialogNameSequence from './sequences/setModalDialogNameSequence';
 import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
 import signOutSequence from './sequences/signOutSequence';
@@ -93,6 +94,7 @@ export default {
     selectAssigneeSequence,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
+    setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
     signOutSequence,
