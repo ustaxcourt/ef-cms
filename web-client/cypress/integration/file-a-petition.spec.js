@@ -104,8 +104,8 @@ describe('File a petition', function() {
     });
 
     it('clicks the Yes notice radio button', () => {
-      cy.get('#notice-radios').scrollIntoView();
-      cy.get('#notice-radios label')
+      cy.get('#irs-notice-radios').scrollIntoView();
+      cy.get('#irs-notice-radios label')
         .first()
         .click();
     });
