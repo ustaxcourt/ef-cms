@@ -20,6 +20,7 @@ export default connect(
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
   },
   function PetitionEdit({
     appendNewYearAmountSequence,
@@ -35,126 +36,160 @@ export default connect(
     unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
+    setIrsNoticeFalseSequence,
   }) {
-    return (
-      <form
-        id="case-edit-form"
-        noValidate
-        onSubmit={e => {
-          e.preventDefault();
-          submitCaseDetailEditSaveSequence();
-        }}
-        role="form"
-        onFocus={() => {
-          unsetFormSaveSuccessSequence();
-        }}
-      >
-        {showModal === 'UpdateCaseCancelModalDialog' && (
-          <UpdateCaseCancelModalDialog />
-        )}
-        <div className="blue-container">
-          <h3>IRS Notice(s)</h3>
-          <span className="label">Type of Case</span>
-          <p>{caseDetail.caseType}</p>
+    const renderIrsNoticeRadios = () => {
+      return (
+        <fieldset
+          id="irs-notice-radios"
+          className="usa-fieldset-inputs usa-sans usa-form-group"
+        >
+          <legend htmlFor="irs-notice-radios">
+            Notice Attached to Petition
+          </legend>
+          <ul className="usa-unstyled-list">
+            {['Yes', 'No'].map((hasIrsNotice, idx) => (
+              <li key={hasIrsNotice}>
+                <input
+                  id={`hasIrsNotice-${hasIrsNotice}`}
+                  type="radio"
+                  name="hasIrsNotice"
+                  checked={
+                    hasIrsNotice === 'Yes'
+                      ? caseDetail.hasIrsNotice
+                      : !caseDetail.hasIrsNotice
+                  }
+                  value={hasIrsNotice}
+                  onChange={e => {
+                    if (hasIrsNotice === 'Yes') {
+                      updateCaseValueSequence({
+                        key: e.target.name,
+                        value: hasIrsNotice === 'Yes',
+                      });
+                    } else {
+                      setIrsNoticeFalseSequence();
+                    }
+                  }}
+                />
+                <label
+                  id={`has-irs-notice-${idx}`}
+                  htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                >
+                  {hasIrsNotice}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      );
+    };
 
-          <div
-            className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
-          >
-            <fieldset>
-              <legend id="date-of-notice-legend">Date of Notice</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month" aria-hidden="true">
-                    MM
-                  </label>
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="month, two digits"
-                    className={
-                      'usa-input-inline ' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                    }
-                    id="date-of-notice-month"
-                    max="12"
-                    min="1"
-                    name="irsMonth"
-                    type="number"
-                    value={form.irsMonth || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day" aria-hidden="true">
-                    DD
-                  </label>
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="day, two digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                    }
-                    id="date-of-notice-day"
-                    max="31"
-                    min="1"
-                    name="irsDay"
-                    type="number"
-                    value={form.irsDay || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year" aria-hidden="true">
-                    YYYY
-                  </label>
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="year, four digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
-                    }
-                    id="date-of-notice-year"
-                    max="2100"
-                    min="1900"
-                    name="irsYear"
-                    type="number"
-                    value={form.irsYear || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
+    const renderIrsNoticeDate = () => {
+      return (
+        <div
+          className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
+        >
+          <fieldset>
+            <legend id="date-of-notice-legend">Date of Notice</legend>
+            <div className="usa-date-of-birth">
+              <div className="usa-form-group usa-form-group-month">
+                <label htmlFor="date-of-notice-month" aria-hidden="true">
+                  MM
+                </label>
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="month, two digits"
+                  className={
+                    'usa-input-inline ' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
+                  id="date-of-notice-month"
+                  max="12"
+                  min="1"
+                  name="irsMonth"
+                  type="number"
+                  value={form.irsMonth || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
               </div>
-            </fieldset>
-            {caseDetailErrors.irsNoticeDate && (
-              <div className="usa-input-error-message beneath" role="alert">
-                {caseDetailErrors.irsNoticeDate}
+              <div className="usa-form-group usa-form-group-day">
+                <label htmlFor="date-of-notice-day" aria-hidden="true">
+                  DD
+                </label>
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="day, two digits"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
+                  id="date-of-notice-day"
+                  max="31"
+                  min="1"
+                  name="irsDay"
+                  type="number"
+                  value={form.irsDay || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
               </div>
-            )}
-          </div>
+              <div className="usa-form-group usa-form-group-year">
+                <label htmlFor="date-of-notice-year" aria-hidden="true">
+                  YYYY
+                </label>
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="year, four digits"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                  }
+                  id="date-of-notice-year"
+                  max="2100"
+                  min="1900"
+                  name="irsYear"
+                  type="number"
+                  value={form.irsYear || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </fieldset>
+          {caseDetailErrors.irsNoticeDate && (
+            <div className="usa-input-error-message beneath" role="alert">
+              {caseDetailErrors.irsNoticeDate}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const renderYearAmounts = () => {
+      return (
+        <React.Fragment>
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
               key={idx}
@@ -244,6 +279,41 @@ export default connect(
               Add Another
             </span>
           </button>
+        </React.Fragment>
+      );
+    };
+
+    return (
+      <form
+        id="case-edit-form"
+        noValidate
+        onSubmit={e => {
+          e.preventDefault();
+          submitCaseDetailEditSaveSequence();
+        }}
+        role="form"
+        onFocus={() => {
+          unsetFormSaveSuccessSequence();
+        }}
+      >
+        {showModal === 'UpdateCaseCancelModalDialog' && (
+          <UpdateCaseCancelModalDialog />
+        )}
+        <div className="blue-container">
+          <h3>IRS Notice</h3>
+
+          {renderIrsNoticeRadios()}
+
+          <span className="label">Type of Case</span>
+          <p>{caseDetail.caseType}</p>
+
+          {formattedCaseDetail.hasIrsNotice && (
+            <React.Fragment>
+              {renderIrsNoticeDate()}
+              <hr />
+              {renderYearAmounts()}
+            </React.Fragment>
+          )}
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>

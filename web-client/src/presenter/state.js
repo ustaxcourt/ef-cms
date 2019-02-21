@@ -9,6 +9,7 @@ import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendi
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
+import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
 import alertHelper from './computeds/alertHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
 import documentDetailHelper from './computeds/documentDetailHelper';
@@ -56,6 +57,7 @@ export default {
   alertHelper,
   caseDetailHelper,
   contactsHelper,
+  dashboardPetitionerHelper,
   documentDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

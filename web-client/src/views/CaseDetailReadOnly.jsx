@@ -12,7 +12,11 @@ export default connect(
     return (
       <React.Fragment>
         <div className="blue-container">
-          <h3>IRS Notice(s)</h3>
+          <h3>IRS Notice</h3>
+
+          <span className="label">Notice Attached to Petition</span>
+          <p>{caseDetail.hasIrsNotice ? 'Yes' : 'No'}</p>
+
           <span className="label">Type of Case</span>
           <p>{caseDetail.caseType}</p>
 
