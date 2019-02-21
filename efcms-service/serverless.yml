@@ -566,15 +566,15 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
           documentation:
-            summary: query endpoint for getting cases based on search criteria
+            summary: get a case by caseId
             tags:
               - cases
             description: >
-              query endpoint for getting cases based on search criteria
+              Get a case by caseId.
             methodResponses:
               - statusCode: '200'
                 responseBody:
-                  description: 'array of cases'
+                  description: 'a case'
                 responseModels:
                   'application/json': case
 
