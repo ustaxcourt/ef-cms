@@ -7,6 +7,6 @@
 export default async ({ applicationContext }) => {
   const users = await applicationContext
     .getUseCases()
-    .queryForUsers({ applicationContext });
+    .getInternalUsers({ applicationContext });
   return { users };
 };
