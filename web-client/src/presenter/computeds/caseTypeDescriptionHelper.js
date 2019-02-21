@@ -109,18 +109,3 @@ export const caseTypeDescriptionHelper = get => {
   }
   return { caseTypes: caseTypesWithDescriptions };
 };
-/*
-
-          'CDP (Lien/Levy)',
-          'Innocent Spouse',
-          'Partnership (Section 6226)',
-          'Partnership (Section 6228)',
-          'Partnership (BBA Section 1101)',
-          'Whistleblower',
-          'Worker Classification',
-          'Declaratory Judgment (Retirement Plan)',
-          'Declaratory Judgment (Exempt Organization)',
-          'Passport',
-          'Interest Abatement',
-          'Other',
-*/
