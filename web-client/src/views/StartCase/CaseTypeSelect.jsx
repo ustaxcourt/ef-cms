@@ -20,7 +20,7 @@ export const CaseTypeSelect = connect(
     return (
       <div
         className={
-          'usa-form-group ' +
+          'usa-form-group case-type-select ' +
           (validationErrors.caseType ? 'usa-input-error' : '')
         }
       >
