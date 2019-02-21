@@ -42,7 +42,7 @@ export default connect(
       return (
         <fieldset
           id="deceased-spouse-radios"
-          className="usa-fieldset-inputs usa-sans"
+          className="usa-fieldset-inputs usa-sans usa-form-group"
         >
           <legend htmlFor="deceased-spouse-radios">
             Notice Attached to Petition
