@@ -53,6 +53,7 @@ import updateForwardFormValueSequence from './sequences/updateForwardFormValueSe
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
+import uswdsUiSetStateSequence from './sequences/uswdsUiSetStateSequence';
 import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
 import validateStartCaseSequence from './sequences/validateStartCaseSequence';
 import viewDocumentSequence from './sequences/viewDocumentSequence';
@@ -125,6 +126,7 @@ export default {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
+    uswdsUiSetStateSequence,
     validateCaseDetailSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
