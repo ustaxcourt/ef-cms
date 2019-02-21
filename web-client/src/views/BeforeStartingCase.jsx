@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+
 import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export default connect(
