@@ -4,24 +4,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
-import ConservatorContact from './StartCase/ConservatorContact';
-import CorporationContact from './StartCase/CorporationContact';
-import CustodianContact from './StartCase/CustodianContact';
-import DonorContact from './StartCase/DonorContact';
-import EstateWithExecutorContact from './StartCase/EstateWithExecutorContact';
-import EstateWithoutExecutorContact from './StartCase/EstateWithoutExecutorContact';
-import GuardianContact from './StartCase/GuardianContact';
-import IncompetentPersonContact from './StartCase/IncompetentPersonContact';
-import MinorContact from './StartCase/MinorContact';
-import PartnershipBBAContact from './StartCase/PartnershipBBAContact';
-import PartnershipOtherContact from './StartCase/PartnershipOtherContact';
-import PartnershipTaxMattersContact from './StartCase/PartnershipTaxMattersContact';
-import PetitionerAndDeceasedSpouseContact from './StartCase/PetitionerAndDeceasedSpouseContact';
-import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
-import PetitionerContact from './StartCase/PetitionerContact';
-import SurvivingSpouseContact from './StartCase/SurvivingSpouseContact';
-import TransfereeContact from './StartCase/TransfereeContact';
-import TrustAndTrusteeContact from './StartCase/TrustAndTrusteeContact';
+import Contacts from './StartCase/Contacts';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -427,44 +410,7 @@ export default connect(
             </div>
           </div>
 
-          {startCaseHelper.showPetitionerContact && <PetitionerContact />}
-          {startCaseHelper.showPetitionerAndSpouseContact && (
-            <PetitionerAndSpouseContact />
-          )}
-          {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
-            <PetitionerAndDeceasedSpouseContact />
-          )}
-          {startCaseHelper.showEstateWithExecutorContact && (
-            <EstateWithExecutorContact />
-          )}
-          {startCaseHelper.showEstateWithoutExecutorContact && (
-            <EstateWithoutExecutorContact />
-          )}
-          {startCaseHelper.showTrustAndTrusteeContact && (
-            <TrustAndTrusteeContact />
-          )}
-          {startCaseHelper.showCorporationContact && <CorporationContact />}
-          {startCaseHelper.showPartnershipTaxMattersContact && (
-            <PartnershipTaxMattersContact />
-          )}
-          {startCaseHelper.showPartnershipOtherContact && (
-            <PartnershipOtherContact />
-          )}
-          {startCaseHelper.showPartnershipBBAContact && (
-            <PartnershipBBAContact />
-          )}
-          {startCaseHelper.showConservatorContact && <ConservatorContact />}
-          {startCaseHelper.showGuardianContact && <GuardianContact />}
-          {startCaseHelper.showCustodianContact && <CustodianContact />}
-          {startCaseHelper.showMinorContact && <MinorContact />}
-          {startCaseHelper.showIncompetentPersonContact && (
-            <IncompetentPersonContact />
-          )}
-          {startCaseHelper.showDonorContact && <DonorContact />}
-          {startCaseHelper.showTransfereeContact && <TransfereeContact />}
-          {startCaseHelper.showSurvivingSpouseContact && (
-            <SurvivingSpouseContact />
-          )}
+          <Contacts />
 
           {/*start ods*/}
           {startCaseHelper.showOwnershipDisclosure && (
