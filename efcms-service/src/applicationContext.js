@@ -77,9 +77,6 @@ const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
 const {
-  getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
-const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
 const {
@@ -98,20 +95,17 @@ const {
   getWorkItems,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const {
+  queryForUsers
+} = require('ef-cms-shared/src/business/useCases/users/queryForUsers.interactor');
+const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
   createDocument,
 } = require('ef-cms-shared/src/business/useCases/createDocument.interactor');
 const {
-  getInteractorForGetUsers,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
-const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
-const {
-  getUsersInSection: getUsersInSectionUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
 const {
   getWorkItems: getWorkItemsUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
@@ -230,8 +224,6 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createUser: createUserUC,
         getCase,
-        getUsersInSection: getUsersInSectionUC,
-        getInternalUsers: getInternalUsersUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
@@ -242,6 +234,7 @@ module.exports = (appContextUser = {}) => {
         updateWorkItem,
         queryForCases,
         createDocument,
+        queryForUsers,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
@@ -280,6 +273,5 @@ module.exports = (appContextUser = {}) => {
         return getWorkItemsUC;
       }
     },
-    getInteractorForGetUsers,
   };
 };
