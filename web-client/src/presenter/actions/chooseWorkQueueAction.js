@@ -15,8 +15,7 @@ import { state } from 'cerebral';
 export default ({ store, props, path, get }) => {
   if (props && props.queue && props.box) {
     store.set(state.workQueueToDisplay, { queue: props.queue, box: props.box });
-  }
-  if (props && props.box) {
+  } else if (props && props.box) {
     store.set(state.workQueueToDisplay.box, props.box);
   }
   let queuePrefs = get(state.workQueueToDisplay);
