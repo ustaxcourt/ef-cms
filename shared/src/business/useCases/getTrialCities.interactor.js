@@ -6,7 +6,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 const Case = require('../entities/Case');
 
 /**
- * getTrialCities
+ *
  * @param userId
  * @param procedureType
  * @returns {Promise<[{state, city}]>}

@@ -3,6 +3,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
+/**
+ *
+ * @param docketRecord
+ * @constructor
+ */
 function DocketRecord(docketRecord) {
   Object.assign(this, docketRecord);
 }

@@ -17,6 +17,11 @@ const PetitionerPartnershipRepContact = require('./Contacts/PetitionerPartnershi
 const PetitionerTrustContact = require('./Contacts/PetitionerTrustContact');
 const PetitionerTrusteeContact = require('./Contacts/PetitionerTrusteeContact');
 
+/**
+ *
+ * @param rawPetition
+ * @constructor
+ */
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
 

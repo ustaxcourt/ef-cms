@@ -1,10 +1,7 @@
 /**
- * createDocketNumber
  *
- * creates a docket number by incrementing the value
- * in the datastore
- *
- * @returns {Promise.<string>}
+ * @param applicationContext
+ * @returns {Promise<string>}
  */
 exports.createDocketNumber = async ({ applicationContext }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
