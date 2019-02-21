@@ -29,7 +29,7 @@ export const Tabs = connect(function Tabs(props) {
   if (bind) {
     activeKey = get(state[bind]);
     setTab = newTab => {
-      get(sequences.uswdsUiSetStateSequence)({
+      get(sequences.cerebralBindSimpleSetStateSequence)({
         key: bind,
         value: newTab,
       });
