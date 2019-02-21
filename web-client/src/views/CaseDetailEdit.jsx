@@ -187,32 +187,9 @@ export default connect(
       );
     };
 
-    return (
-      <form
-        id="case-edit-form"
-        noValidate
-        onSubmit={e => {
-          e.preventDefault();
-          submitCaseDetailEditSaveSequence();
-        }}
-        role="form"
-        onFocus={() => {
-          unsetFormSaveSuccessSequence();
-        }}
-      >
-        {showModal === 'UpdateCaseCancelModalDialog' && (
-          <UpdateCaseCancelModalDialog />
-        )}
-        <div className="blue-container">
-          <h3>IRS Notice</h3>
-
-          {renderIrsNoticeRadios()}
-
-          <span className="label">Type of Case</span>
-          <p>{caseDetail.caseType}</p>
-
-          {formattedCaseDetail.hasIrsNotice && renderIrsNoticeDate()}
-
+    const renderYearAmounts = () => {
+      return (
+        <React.Fragment>
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
               key={idx}
@@ -302,6 +279,41 @@ export default connect(
               Add Another
             </span>
           </button>
+        </React.Fragment>
+      );
+    };
+
+    return (
+      <form
+        id="case-edit-form"
+        noValidate
+        onSubmit={e => {
+          e.preventDefault();
+          submitCaseDetailEditSaveSequence();
+        }}
+        role="form"
+        onFocus={() => {
+          unsetFormSaveSuccessSequence();
+        }}
+      >
+        {showModal === 'UpdateCaseCancelModalDialog' && (
+          <UpdateCaseCancelModalDialog />
+        )}
+        <div className="blue-container">
+          <h3>IRS Notice</h3>
+
+          {renderIrsNoticeRadios()}
+
+          <span className="label">Type of Case</span>
+          <p>{caseDetail.caseType}</p>
+
+          {formattedCaseDetail.hasIrsNotice && (
+            <React.Fragment>
+              {renderIrsNoticeDate()}
+              <hr />
+              {renderYearAmounts()}
+            </React.Fragment>
+          )}
         </div>
         <div className="blue-container">
           <h3>Case Information</h3>
