@@ -9,6 +9,9 @@ import moment from 'moment';
  * @returns {string} the ISO string.
  */
 export const castToISO = dateString => {
+  if (dateString === '') {
+    return null;
+  }
   dateString = dateString
     .split('-')
     .map(segment => segment.padStart(2, '0'))
@@ -88,12 +91,14 @@ export default ({ get }) => {
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
-  caseDetail.yearAmounts = caseDetail.yearAmounts.map(yearAmount => ({
-    amount: !yearAmount.amount
-      ? null
-      : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-    year: castToISO(yearAmount.year),
-  }));
+  caseDetail.yearAmounts = caseDetail.yearAmounts
+    .map(yearAmount => ({
+      amount: !yearAmount.amount
+        ? null
+        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+      year: castToISO(yearAmount.year),
+    }))
+    .filter(yearAmount => yearAmount.year || yearAmount.amount);
 
   return {
     combinedCaseDetailWithForm: {

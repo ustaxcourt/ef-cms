@@ -89,6 +89,7 @@
     "sk": "0",
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
+    "hasIrsNotice": false,
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
@@ -452,7 +453,7 @@
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "respondent|case"
+    "pk": "respondent|activeCase"
   },
   {
     "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",

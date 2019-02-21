@@ -29,3 +29,35 @@
   margin-left: 0.5em;
   color: $color-blue;
 }
+
+.bullet-icon {
+  padding-top: 4px;
+  margin: 5px;
+  color: $color-primary-alt;
+}
+
+.bullet-icon-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 2px solid $color-primary-alt;
+  border-radius: 25px;
+  color: $color-primary-alt;
+  float: left;
+  text-align: center;
+  .fa-laptop {
+    padding-right: 2px;
+  }
+  .fa-file-pdf {
+    color: $color-primary-alt;
+  }
+}
+
+.icon-description {
+  position: relative;
+  padding-left: 60px;
+  margin-bottom: 50px;
+  vertical-align: middle;
+}
