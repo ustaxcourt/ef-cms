@@ -1,21 +1,15 @@
 /**
- * getCaseProxy
  *
  * @param applicationContext
- * @param caseId
- * @param userToken
+ * @param userId
  * @returns {Promise<*>}
  */
-exports.queryForCases = async ({ applicationContext, status, documentId }) => {
+exports.getCasesByUser = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}/cases`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-      params: {
-        status,
-        documentId,
       },
     });
   return response.data;

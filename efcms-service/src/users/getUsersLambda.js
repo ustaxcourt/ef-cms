@@ -7,13 +7,17 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
+exports.get = event =>
   handle(() => {
     const section = (event.queryStringParameters || {}).section;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().queryForUsers({
+    const useCase = applicationContext.getInteractorForGetUsers({
       section,
       applicationContext,
     });
+    return useCase({
+      section,
+      applicationContext,
+    })
   });
