@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
-import CaseTypeSelect from './StartCase/CaseTypeSelect';
+import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
 import ConservatorContact from './StartCase/ConservatorContact';
 import CorporationContact from './StartCase/CorporationContact';
@@ -28,7 +28,6 @@ import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    caseTypes: state.caseTypes,
     filingTypes: state.filingTypes,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
@@ -47,7 +46,6 @@ export default connect(
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function StartCase({
-    caseTypes,
     filingTypes,
     form,
     getTrialCities,

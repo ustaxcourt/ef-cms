@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const CaseTypeSelect = connect(
   {
     caseTypes: state.caseTypes,
     legend: props.legend,
