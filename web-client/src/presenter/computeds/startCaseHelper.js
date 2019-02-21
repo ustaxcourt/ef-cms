@@ -78,5 +78,8 @@ export default get => {
       form.partyType ===
         'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType === 'Surviving Spouse',
+
+    showHasIrsNoticeOptions: form.hasIrsNotice === true,
+    showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
   };
 };
