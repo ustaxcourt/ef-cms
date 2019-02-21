@@ -3,13 +3,13 @@ import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-import CaseList from './CaseList';
+import { CaseList } from './CaseList';
 import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 
-export default connect(
+export const DashboardPetitioner = connect(
   { user: state.user },
-  function DashboardPetitioner({ user }) {
+  ({ user }) => {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Welcome, {user.name}</h1>

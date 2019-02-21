@@ -1,16 +1,15 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import moment from 'moment';
 import React from 'react';
 
 /**
- * Case List
+ * Case List Component
  */
-export default connect(
+export const CaseList = connect(
   {
     caseList: state.formattedCases,
   },
-  function CaseList({ caseList }) {
+  ({ caseList }) => {
     return (
       <table className="responsive-table work-queue" id="case-list">
         <thead>
@@ -31,7 +30,7 @@ export default connect(
               </td>
               <td>
                 <span className="responsive-label">Date filed</span>
-                {moment(item.createdAt).format('LLL')}
+                {item.createdAtFormatted}
               </td>
               <td>
                 <span className="responsive-label">Petitioner name</span>
