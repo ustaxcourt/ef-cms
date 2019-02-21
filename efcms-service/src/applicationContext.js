@@ -83,9 +83,6 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
 const {
-  getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
-const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
 const {
@@ -104,6 +101,9 @@ const {
   getWorkItems,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const {
+  queryForUsers
+} = require('ef-cms-shared/src/business/useCases/users/queryForUsers.interactor');
+const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
@@ -113,14 +113,8 @@ const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const {
-  getInteractorForGetUsers,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
-const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
-const {
-  getUsersInSection: getUsersInSectionUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
 const {
   getWorkItems: getWorkItemsUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
@@ -241,8 +235,6 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
-        getUsersInSection: getUsersInSectionUC,
-        getInternalUsers: getInternalUsersUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
@@ -253,6 +245,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsUC,
         updateWorkItem,
         createDocument,
+        queryForUsers,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
@@ -292,6 +285,5 @@ module.exports = (appContextUser = {}) => {
       }
     },
     getInteractorForGettingCases,
-    getInteractorForGetUsers,
   };
 };

@@ -768,8 +768,8 @@ functions:
           method: get
           cors: true
 
-  getUsers:
-    handler: src/users/getUsersLambda.get
+  queryForUsers:
+    handler: src/users/queryForUsersLambda.handler
     events:
       - http:
           path: v1/users
