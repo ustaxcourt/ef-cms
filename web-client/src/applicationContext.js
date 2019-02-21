@@ -13,7 +13,9 @@ import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
-import { queryForCases } from '../../shared/src/proxies/cases/queryForCasesProxy';
+import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
+import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
 import { filePetition } from '../../shared/src/business/useCases/filePetition.interactor';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypes.interactor';
@@ -68,6 +70,9 @@ const allUseCases = {
   filePetition,
   forwardWorkItem,
   getCase,
+  getCasesByStatus,
+  getCasesByUser,
+  getCasesForRespondent,
   getCaseTypes,
   getFilingTypes,
   getSentWorkItemsForSection,
@@ -80,7 +85,6 @@ const allUseCases = {
   getWorkItem,
   getWorkItems,
   getWorkItemsBySection,
-  queryForCases,
   recallPetitionFromIRSHoldingQueue,
   sendPetitionToIRSHoldingQueue,
   updateCase,
