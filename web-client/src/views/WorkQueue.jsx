@@ -1,30 +1,35 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
-import { WorkQueueTabs } from './WorkQueueTabs';
 import IndividualWorkQueue from './IndividualWorkQueue';
 import SectionWorkQueue from './SectionWorkQueue';
+import { Tabs, Tab } from './Tabs';
 
 export default connect(
   {
-    workQueueHelper: state.workQueueHelper,
+    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
   },
-  function WorkQueue({ workQueueHelper }) {
+  function WorkQueue({ chooseWorkQueueSequence }) {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
-        <WorkQueueTabs />
-        {workQueueHelper.showIndividualWorkQueue && (
-          <div role="tabpanel" id="tab-individual-panel">
+        <Tabs
+          defaultActiveTab="my"
+          bind="workQueueToDisplay.queue"
+          onSelect={() =>
+            chooseWorkQueueSequence({
+              box: 'inbox',
+            })
+          }
+        >
+          <Tab tabName="my" title="My Queue" id="tab-individual-panel">
             <IndividualWorkQueue />
-          </div>
-        )}
-        {workQueueHelper.showSectionWorkQueue && (
-          <div role="tabpanel" id="tab-section-panel">
+          </Tab>
+          <Tab tabName="section" title="Section Queue" id="tab-section-panel">
             <SectionWorkQueue />
-          </div>
-        )}
+          </Tab>
+        </Tabs>
       </React.Fragment>
     );
   },
