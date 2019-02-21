@@ -768,11 +768,23 @@ functions:
           method: get
           cors: true
 
-  getUsers:
-    handler: src/users/getUsersLambda.get
+  getInternalUsers:
+    handler: src/users/getInternalUsersLambda.handler
     events:
       - http:
-          path: v1/users
+          path: v1/users/internal
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getUsersInSection:
+    handler: src/users/getUsersInSectionLambda.handler
+    events:
+      - http:
+          path: v1/sections/{section}/users
           method: get
           cors: true
           authorizer:
