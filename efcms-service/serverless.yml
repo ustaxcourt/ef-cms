@@ -550,31 +550,27 @@ functions:
                 responseModels:
                   'application/json': case
 
-  queryForCases:
-    handler: src/cases/queryForCasesLambda.get
+  getCases:
+    handler: src/cases/getCasesLambda.get
     events:
       - http:
           path: v1/cases
           method: get
-          request:
-            parameters:
-              paths:
-                caseId: true
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
           documentation:
-            summary: get a case by caseId
+            summary: get all cases for a user
             tags:
               - cases
             description: >
-              Get a case by caseId.
+              Get all cases for a user.
             methodResponses:
               - statusCode: '200'
                 responseBody:
-                  description: 'a case'
+                  description: 'array of cases'
                 responseModels:
                   'application/json': case
 
