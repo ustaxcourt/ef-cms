@@ -69,5 +69,8 @@ export default get => {
     showDonorContact: form.partyType === 'Donor',
     showTransfereeContact: form.partyType === 'Transferee',
     showSurvivingSpouseContact: form.partyType === 'Surviving Spouse',
+
+    showHasNoticeOptions: form.hasNotice === 'Yes',
+    showNotHasNoticeOptions: form.hasNotice === 'No',
   };
 };

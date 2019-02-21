@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
+import CaseTypeSelect from './StartCase/CaseTypeSelect';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
 import ConservatorContact from './StartCase/ConservatorContact';
 import CorporationContact from './StartCase/CorporationContact';
@@ -513,128 +514,147 @@ export default connect(
           )}
 
           <div className="usa-form-group">
-            <h3>Did you receive a notice from the IRS?</h3>
+            <h3>What Kind of Case Are You Filing?</h3>
             <div className="blue-container">
-              <h3>IRS Notice</h3>
-              <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.caseType ? 'usa-input-error' : '')
-                }
+              <fieldset
+                id="notice-radios"
+                className="usa-form-group usa-fieldset-inputs usa-sans"
               >
-                <fieldset>
-                  <legend>Type of Notice</legend>
-                  <select
-                    name="caseType"
-                    id="case-type"
-                    aria-labelledby="case-type"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateStartCaseSequence();
-                    }}
+                <legend>Did you receive a Notice from the IRS?</legend>
+                <ul className="usa-unstyled-list">
+                  {['Yes', 'No'].map((hasNotice, idx) => (
+                    <li key={hasNotice}>
+                      <input
+                        id={`hasNotice-${hasNotice}`}
+                        type="radio"
+                        name="hasNotice"
+                        value={hasNotice}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateStartCaseSequence();
+                        }}
+                      />
+                      <label
+                        id={`hasNotice-${idx}`}
+                        htmlFor={`hasNotice-${hasNotice}`}
+                      >
+                        {hasNotice}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </fieldset>
+
+              {startCaseHelper.showHasNoticeOptions && (
+                <React.Fragment>
+                  <CaseTypeSelect legend="Type of Notice / Case" />
+                  <div
+                    className={
+                      'usa-form-group ' +
+                      (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    }
                   >
-                    <option value="">-- Select --</option>
-                    {caseTypes.map(caseType => (
-                      <option key={caseType.type} value={caseType.type}>
-                        {caseType.description}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-                <div className="usa-input-error-message beneath">
-                  {validationErrors.caseType}
-                </div>
-              </div>
-              <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
-                }
-              >
-                <fieldset>
-                  <legend id="date-of-notice-legend">Date of Notice</legend>
-                  <div className="usa-date-of-birth">
-                    <div className="usa-form-group usa-form-group-month">
-                      <label htmlFor="date-of-notice-month" aria-hidden="true">
-                        MM
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        id="date-of-notice-month"
-                        name="month"
-                        aria-label="month, two digits"
-                        type="number"
-                        min="1"
-                        max="12"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group-day">
-                      <label htmlFor="date-of-notice-day" aria-hidden="true">
-                        DD
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="day, two digits"
-                        id="date-of-notice-day"
-                        name="day"
-                        type="number"
-                        min="1"
-                        max="31"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group-year">
-                      <label htmlFor="date-of-notice-year" aria-hidden="true">
-                        YYYY
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="year, four digits"
-                        id="date-of-notice-year"
-                        name="year"
-                        type="number"
-                        min="1900"
-                        max="2100"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-input-error-message beneath">
-                      {validationErrors.irsNoticeDate}
-                    </div>
+                    <fieldset>
+                      <legend id="date-of-notice-legend">Date of Notice</legend>
+                      <div className="usa-date-of-birth">
+                        <div className="usa-form-group usa-form-group-month">
+                          <label
+                            htmlFor="date-of-notice-month"
+                            aria-hidden="true"
+                          >
+                            MM
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            id="date-of-notice-month"
+                            name="month"
+                            aria-label="month, two digits"
+                            type="number"
+                            min="1"
+                            max="12"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-form-group usa-form-group-day">
+                          <label
+                            htmlFor="date-of-notice-day"
+                            aria-hidden="true"
+                          >
+                            DD
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            aria-label="day, two digits"
+                            id="date-of-notice-day"
+                            name="day"
+                            type="number"
+                            min="1"
+                            max="31"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-form-group usa-form-group-year">
+                          <label
+                            htmlFor="date-of-notice-year"
+                            aria-hidden="true"
+                          >
+                            YYYY
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            aria-label="year, four digits"
+                            id="date-of-notice-year"
+                            name="year"
+                            type="number"
+                            min="1900"
+                            max="2100"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors.irsNoticeDate}
+                        </div>
+                      </div>
+                    </fieldset>
                   </div>
-                </fieldset>
-              </div>
+                </React.Fragment>
+              )}
+              {startCaseHelper.showNotHasNoticeOptions && (
+                <CaseTypeSelect
+                  legend="Which topic most closely matches your complaint with the
+                IRS?"
+                />
+              )}
             </div>
           </div>
           <h2>How Do You Want This Case Handled?</h2>
