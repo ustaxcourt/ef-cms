@@ -22,7 +22,9 @@ export default connect(
         <div
           className={
             'usa-form-group ' +
-            (validationErrors[type] && validationErrors[type].address1
+            (validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].address1
               ? 'usa-input-error'
               : '')
           }
@@ -44,7 +46,7 @@ export default connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors[type] && (
+          {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
               {validationErrors[type].address1}
             </div>
@@ -73,6 +75,7 @@ export default connect(
         </div>
         <div
           className={
+            validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-input-error'
@@ -87,7 +90,9 @@ export default connect(
               name={`${type}.city`}
               className={
                 'usa-input-inline ' +
-                (validationErrors[type] && validationErrors[type].city
+                (validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].city
                   ? 'ustc-input-error'
                   : '')
               }
@@ -109,7 +114,9 @@ export default connect(
             <select
               className={
                 'usa-input-inline ' +
-                (validationErrors[type] && validationErrors[type].state
+                (validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].state
                   ? 'ustc-input-error'
                   : '')
               }
@@ -178,7 +185,8 @@ export default connect(
               <option value="WY">Wyoming</option>
             </select>
           </div>
-          {validationErrors[type] &&
+          {validationErrors &&
+            validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state) && (
               <React.Fragment>
                 <div className="usa-input-error-message beneath">
@@ -193,7 +201,9 @@ export default connect(
         <div
           className={
             'usa-form-group clear-both ' +
-            (validationErrors[type] && validationErrors[type].zip
+            (validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].zip
               ? 'usa-input-error'
               : '')
           }
@@ -218,9 +228,9 @@ export default connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors[type] && validationErrors[type] && (
+          {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
-              {validationErrors.contactPrimary.zip}
+              {validationErrors[type].zip}
             </div>
           )}
         </div>
