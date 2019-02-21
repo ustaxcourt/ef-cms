@@ -41,10 +41,10 @@ export default connect(
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset
-          id="deceased-spouse-radios"
+          id="irs-notice-radios"
           className="usa-fieldset-inputs usa-sans usa-form-group"
         >
-          <legend htmlFor="deceased-spouse-radios">
+          <legend htmlFor="irs-notice-radios">
             Notice Attached to Petition
           </legend>
           <ul className="usa-unstyled-list">
@@ -204,7 +204,7 @@ export default connect(
           <UpdateCaseCancelModalDialog />
         )}
         <div className="blue-container">
-          <h3>IRS Notice(s)</h3>
+          <h3>IRS Notice</h3>
 
           {renderIrsNoticeRadios()}
 
