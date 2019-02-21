@@ -127,6 +127,7 @@ function Petition(rawPetition) {
 
 Petition.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
+  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
@@ -145,12 +146,21 @@ Petition.errorToMessageMap = {
 joiValidationDecorator(
   Petition,
   joi.object().keys({
-    caseType: joi.string().required(),
+    caseType: joi.string().when('hasIrsNotice', {
+      is: true,
+      then: joi.required(),
+      otherwise: joi.optional().allow(null),
+    }),
+    hasIrsNotice: joi.boolean().required(),
     irsNoticeDate: joi
       .date()
-      .max('now')
       .iso()
-      .required(),
+      .max('now')
+      .when('hasIrsNotice', {
+        is: true,
+        then: joi.required(),
+        otherwise: joi.optional().allow(null),
+      }),
     petitionFile: joi.object().required(),
     businessType: joi
       .string()
