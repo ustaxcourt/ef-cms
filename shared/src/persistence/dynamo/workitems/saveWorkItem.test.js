@@ -51,23 +51,4 @@ describe('saveWorkItem', () => {
     });
     expect(result).toEqual([{ workItemId: 'abc' }]);
   });
-
-  it('makes a post request to the expected endpoint with unexpected data', async () => {
-    const applicationContext = {
-      environment: {
-        stage: 'dev',
-      },
-      getDynamoClient: () => client,
-      filterCaseMetadata: ({ cases }) => cases,
-      isAuthorizedForWorkItems: () => true,
-    };
-    const result = await saveWorkItem({
-      workItemToSave: {
-        workItemId: '456',
-        assigneeId: 'jose',
-      },
-      applicationContext,
-    });
-    expect(result).toEqual([{ workItemId: 'abc' }]);
-  });
 });

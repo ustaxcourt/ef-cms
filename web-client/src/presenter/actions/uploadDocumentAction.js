@@ -1,5 +1,13 @@
 import { state } from 'cerebral';
 
+/**
+ * uploads the document file and metadata via the getUseCaseForDocumentUpload use case.
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
+ * @param {Object} providers.get the cerebral store used for getting state.caseDetail and state.document
+ * @returns {Object} the alertSuccess and the generated docketNumber
+ */
 export default async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
 

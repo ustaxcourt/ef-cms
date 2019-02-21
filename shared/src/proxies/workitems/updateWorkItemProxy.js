@@ -1,8 +1,8 @@
 /**
- * updateWorkItem
  *
  * @param applicationContext
  * @param workItemToUpdate
+ * @param workItemId
  * @param userId
  * @returns {Promise<*>}
  */

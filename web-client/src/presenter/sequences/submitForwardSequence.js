@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearForwardFormAction from '../actions/clearForwardFormAction';
 import forwardWorkItemAction from '../actions/forwardWorkItemAction';
 import navigateToDashboardAction from '../actions/navigateToDashboardAction';
@@ -11,7 +11,7 @@ import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
 export default [
   setFormSubmitting,
-  clearAlerts,
+  clearAlertsAction,
   forwardWorkItemAction,
   clearForwardFormAction,
   set(state.document.showForwardInputs, false),
