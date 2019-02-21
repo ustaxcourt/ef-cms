@@ -175,6 +175,7 @@ joiValidationDecorator(
       .max('now')
       .allow(null)
       .optional(),
+    hasIrsNotice: joi.boolean().optional(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
