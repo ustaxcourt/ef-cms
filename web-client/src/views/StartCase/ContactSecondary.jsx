@@ -6,38 +6,34 @@ import Address from './Address';
 export default connect(
   {
     form: state.form,
-    header: props.header,
-    nameLabel: props.nameLabel,
-    displayInCareOf: props.displayInCareOf,
-    displayPhone: props.displayPhone,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
+    contactsHelper: state.contactsHelper,
   },
   function ContactSecondary({
     form,
-    header,
-    nameLabel,
-    displayPhone,
-    displayInCareOf,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
+    contactsHelper,
   }) {
-    validationErrors.contactPrimary = validationErrors.contactPrimary || {};
-    validationErrors.contactSecondary = validationErrors.contactSecondary || {};
-
     return (
       <div className="usa-form-group">
-        <h3>{header}</h3>
+        <h3>{contactsHelper.contactSecondary.header}</h3>
         <div className="blue-container">
           <div
             className={
               'usa-form-group ' +
-              (validationErrors.contactSecondary.name ? 'usa-input-error' : '')
+              (validationErrors.contactSecondary &&
+              validationErrors.contactSecondary.name
+                ? 'usa-input-error'
+                : '')
             }
           >
-            <label htmlFor="secondaryName">{nameLabel}</label>
+            <label htmlFor="secondaryName">
+              {contactsHelper.contactSecondary.nameLabel}
+            </label>
             <input
               id="secondaryName"
               type="text"
@@ -55,10 +51,11 @@ export default connect(
               }}
             />
             <div className="usa-input-error-message beneath">
-              {validationErrors.contactSecondary.name}
+              {validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.name}
             </div>
           </div>
-          {displayInCareOf && (
+          {contactsHelper.contactSecondary.displayInCareOf && (
             <div className="usa-form-group">
               <label htmlFor="secondaryInCareOf">
                 In Care Of <span className="usa-form-hint">(optional)</span>
@@ -79,11 +76,12 @@ export default connect(
             </div>
           )}
           <Address type="contactSecondary" />
-          {displayPhone && (
+          {contactsHelper.contactSecondary.displayPhone && (
             <div
               className={
                 'usa-form-group ' +
-                (validationErrors.contactSecondary.phone
+                (validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.phone
                   ? 'usa-input-error'
                   : '')
               }
@@ -107,7 +105,8 @@ export default connect(
                 }}
               />
               <div className="usa-input-error-message beneath">
-                {validationErrors.contactSecondary.phone}
+                {validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.phone}
               </div>
             </div>
           )}

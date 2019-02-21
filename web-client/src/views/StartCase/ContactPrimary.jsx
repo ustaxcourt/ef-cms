@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import Address from './Address';
 import Email from './Email';
@@ -7,27 +7,21 @@ import Email from './Email';
 export default connect(
   {
     form: state.form,
-    header: props.header,
-    nameLabel: props.nameLabel,
-    displayTitle: props.displayTitle,
-    displayInCareOf: props.displayInCareOf,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
+    contactsHelper: state.contactsHelper,
   },
   function ContactPrimary({
     form,
-    header,
-    nameLabel,
-    displayTitle,
-    displayInCareOf,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
+    contactsHelper,
   }) {
     return (
       <div className="usa-form-group contact-group">
-        <h3>{header}</h3>
+        <h3>{contactsHelper.contactPrimary.header}</h3>
         <div className="blue-container usa-grid-full">
           <div
             className={
@@ -38,7 +32,9 @@ export default connect(
                 : '')
             }
           >
-            <label htmlFor="name">{nameLabel}</label>
+            <label htmlFor="name">
+              {contactsHelper.contactPrimary.nameLabel}
+            </label>
             <input
               id="name"
               type="text"
@@ -61,7 +57,7 @@ export default connect(
               </div>
             )}
           </div>
-          {displayTitle && (
+          {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
               <label htmlFor="title">
                 Title
@@ -82,7 +78,7 @@ export default connect(
               />
             </div>
           )}
-          {displayInCareOf && (
+          {contactsHelper.contactPrimary.displayInCareOf && (
             <div className="usa-form-group">
               <label htmlFor="inCareOf">
                 In Care Of <span className="usa-form-hint">(optional)</span>
