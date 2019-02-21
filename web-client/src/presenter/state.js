@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
@@ -55,6 +56,7 @@ export default {
 
   alertHelper,
   caseDetailHelper,
+  caseTypeDescriptionHelper,
   contactsHelper,
   documentDetailHelper,
   extractedDocument,

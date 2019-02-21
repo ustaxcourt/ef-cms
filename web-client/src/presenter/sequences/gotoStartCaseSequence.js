@@ -5,7 +5,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import clearForm from '../actions/clearFormAction';
 import prepareForm from '../actions/prepareFormAction';
 import clearPetition from '../actions/clearPetitionAction';
-import getCaseTypes from '../actions/getCaseTypesAction';
+import { getCaseTypes } from '../actions/getCaseTypesAction';
 import getFilingTypes from '../actions/getFilingTypesAction';
 import setFilingTypes from '../actions/setFilingTypesAction';
 import getProcedureTypes from '../actions/getProcedureTypesAction';
