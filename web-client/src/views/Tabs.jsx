@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
 import { forEach, map } from './utils/ElementChildren';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
+import {
+  useCerebralState,
+  decorateWithPostCallback,
+  decorateWithPreemptiveCallback,
+} from './utils/useCerebralState';
 
+// maybe no default search is needed
 function getDefaultActiveKey(children) {
   let defaultActiveKey;
   forEach(children, child => {
     if (defaultActiveKey == null) {
-      defaultActiveKey = child.props.eventKey;
+      defaultActiveKey = child.props.tabName;
     }
   });
 
   return defaultActiveKey;
 }
+
 export function Tab() {}
 
 export const Tabs = connect(function Tabs(props) {
@@ -24,29 +29,20 @@ export const Tabs = connect(function Tabs(props) {
   let activeKey, setTab;
 
   defaultActiveTab = defaultActiveTab || getDefaultActiveKey(children);
-  onSelect = onSelect || (() => {});
 
   if (bind) {
-    activeKey = get(state[bind]);
-    setTab = newTab => {
-      get(sequences.cerebralBindSimpleSetStateSequence)({
-        key: bind,
-        value: newTab,
-      });
-    };
-    if (!activeKey) {
-      setTab((activeKey = defaultActiveTab));
-    }
+    [activeKey, setTab] = useCerebralState(get, bind, defaultActiveTab);
   } else {
     [activeKey, setTab] = useState(defaultActiveTab);
   }
 
-  setTab = (setterFn => {
-    return (...args) => {
-      setterFn(...args);
-      onSelect(...args);
-    };
-  })(setTab);
+  setTab = decorateWithPostCallback(setTab, onSelect);
+
+  function tabHasChanged(tabName) {
+    return activeKey !== tabName;
+  }
+
+  setTab = decorateWithPreemptiveCallback(setTab, tabHasChanged);
 
   function renderTab(child) {
     const { title, tabName, id } = child.props;
