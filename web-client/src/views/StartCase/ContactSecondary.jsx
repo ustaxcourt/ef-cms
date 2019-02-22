@@ -58,7 +58,20 @@ export default connect(
           {contactsHelper.contactSecondary.displayInCareOf && (
             <div className="usa-form-group">
               <label htmlFor="secondaryInCareOf">
-                In Care Of <span className="usa-form-hint">(optional)</span>
+                {contactsHelper.contactSecondary.inCareOfLabel ? (
+                  <span>
+                    {contactsHelper.contactSecondary.inCareOfLabel}{' '}
+                    {contactsHelper.contactSecondary.inCareOfLabelHint && (
+                      <span className="usa-form-hint">
+                        ({contactsHelper.contactSecondary.inCareOfLabelHint})
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span>
+                    In Care Of <span className="usa-form-hint">(optional)</span>
+                  </span>
+                )}
               </label>
               <input
                 id="secondaryInCareOf"
@@ -72,7 +85,15 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              {validationErrors.contactSecondary && (
+                <div className="usa-input-error-message beneath">
+                  {validationErrors.contactSecondary.inCareOf}
+                </div>
+              )}
             </div>
           )}
           <Address type="contactSecondary" />
