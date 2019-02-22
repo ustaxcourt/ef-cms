@@ -89,11 +89,14 @@ export default connect(
                   <label
                     htmlFor="petition-file"
                     className={
-                      'with-hint ' +
+                      'ustc-upload-petition with-hint ' +
                       (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                     }
                   >
-                    Upload Your Petition
+                    Upload Your Petition{' '}
+                    <span className="success-message">
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    </span>
                   </label>
                   <span className="usa-form-hint">
                     File must be in PDF format (.pdf)
