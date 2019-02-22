@@ -13,13 +13,12 @@ describe('validatePetition', () => {
         }),
       },
     });
+
     expect(errors).toEqual({
       ...omit(Petition.errorToMessageMap, [
         'ownershipDisclosureFile',
         'irsNoticeDate',
-        'caseType',
       ]),
-      hasIrsNotice: 'You must indicate whether you received an IRS notice.',
     });
   });
 

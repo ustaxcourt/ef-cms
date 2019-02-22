@@ -137,11 +137,7 @@ joiValidationDecorator(
       .string()
       // .uuid(uuidVersions)
       .optional(),
-    caseType: joi.string().when('hasIrsNotice', {
-      is: true,
-      then: joi.required(),
-      otherwise: joi.optional().allow(null),
-    }),
+    caseType: joi.string().required(),
     createdAt: joi
       .date()
       .iso()
