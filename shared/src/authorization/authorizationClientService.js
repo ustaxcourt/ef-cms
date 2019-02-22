@@ -5,7 +5,6 @@ exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.GET_CASE = 'getCase';
 exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
-exports.GET_CASES_BY_USER = 'getCasesByUser';
 exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
@@ -31,7 +30,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
   ],
-  petitioner: [exports.PETITION, exports.GET_CASES_BY_USER],
+  petitioner: [exports.PETITION],
   petitionsclerk: [
     exports.CASE_METADATA,
     exports.GET_CASE,
@@ -45,7 +44,6 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
     exports.FILE_ANSWER,
-    exports.GET_CASES_BY_USER,
     exports.FILE_RESPONDENT_DOCUMENT,
     exports.FILE_STIPULATED_DECISION,
     exports.UPDATE_CASE,
