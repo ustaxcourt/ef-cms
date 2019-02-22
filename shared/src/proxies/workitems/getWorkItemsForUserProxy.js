@@ -3,10 +3,10 @@
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItems = async ({ applicationContext }) => {
+exports.getWorkItemsForUser = async ({ userId, applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/workitems`, {
+    .get(`${applicationContext.getBaseUrl()}/users/${userId}/inbox`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },

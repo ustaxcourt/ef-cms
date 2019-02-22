@@ -98,9 +98,6 @@ const {
   getWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
 const {
-  getWorkItems,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
-const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
@@ -110,11 +107,12 @@ const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 const {
+  getWorkItemsForUser: getWorkItemsForUserUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsForUser.interactor');
+
+const {
   getUsersInSection: getUsersInSectionUC,
 } = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
-const {
-  getWorkItems: getWorkItemsUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
@@ -239,47 +237,15 @@ module.exports = (appContextUser = {}) => {
         updateCase,
         getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
-        getWorkItems,
-        getWorkItemsUC,
         updateWorkItem,
         createDocument,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getWorkItemsForUser: getWorkItemsForUserUC,
         assignWorkItems: assignWorkItemsUC,
         recallPetitionFromIRSHoldingQueue,
       };
-    },
-    getUpdateCaseInteractorQueryParam: event => {
-      const interactorName =
-        (event.queryStringParameters || {}).interactorName || 'updateCase';
-      switch (interactorName) {
-      default:
-        return updateCase;
-      }
-    },
-    getUpdateWorkItemInteractor: event => {
-      const interactorName =
-        (event.queryStringParameters || {}).interactorName || 'updateWorkItem';
-      switch (interactorName) {
-      case 'forwardWorkItem':
-        return forwardWorkItem;
-      default:
-        return updateWorkItem;
-      }
-    },
-    getWorkItemsInteractor: event => {
-      const section = (event.queryStringParameters || {}).section;
-      const completed = (event.queryStringParameters || {}).completed;
-      if (section && completed) {
-        return getSentWorkItemsForSectionUC;
-      } else if (section) {
-        return getWorkItemsBySectionUC;
-      } else if (completed) {
-        return getSentWorkItemsForUserUC;
-      } else {
-        return getWorkItemsUC;
-      }
     },
   };
 };

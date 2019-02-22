@@ -1,7 +1,7 @@
-const { getWorkItems } = require('./getWorkItems.interactor');
+const { getWorkItemsForUser } = require('./getWorkItemsForUser.interactor');
 const User = require('../../entities/User');
 
-describe('getWorkItems', () => {
+describe('getWorkItemsForUser', () => {
   let applicationContext;
 
   let mockWorkItem = {
@@ -29,7 +29,7 @@ describe('getWorkItems', () => {
     };
     let error;
     try {
-      await getWorkItems({
+      await getWorkItemsForUser({
         applicationContext,
       });
     } catch (e) {
@@ -48,7 +48,7 @@ describe('getWorkItems', () => {
       }),
       environment: { stage: 'local' },
     };
-    const result = await getWorkItems({
+    const result = await getWorkItemsForUser({
       userId: 'docketclerk',
       applicationContext,
     });
@@ -65,7 +65,7 @@ describe('getWorkItems', () => {
       }),
       environment: { stage: 'local' },
     };
-    const result = await getWorkItems({
+    const result = await getWorkItemsForUser({
       userId: 'docketclerk',
       applicationContext,
     });
