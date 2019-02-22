@@ -13,6 +13,11 @@ export default test => {
 
     expect(caseDetailFormatted.yearAmountsFormatted.length).toEqual(1);
 
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
+    });
+
     //yearAmounts
     //valid with comma
     await test.runSequence('updateCaseValueSequence', {
@@ -71,6 +76,10 @@ export default test => {
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
     });
@@ -86,6 +95,10 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - invalid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: 'twentyoughteight',
@@ -104,6 +117,10 @@ export default test => {
     });
 
     // irsNoticeDate - valid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
@@ -137,6 +154,10 @@ export default test => {
     );
 
     // irsNoticeDate - valid
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
