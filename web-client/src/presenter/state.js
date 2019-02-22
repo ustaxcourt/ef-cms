@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
 import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
@@ -57,6 +58,7 @@ export default {
 
   alertHelper,
   caseDetailHelper,
+  caseTypeDescriptionHelper,
   contactsHelper,
   dashboardPetitionerHelper,
   dashboardRespondentHelper,

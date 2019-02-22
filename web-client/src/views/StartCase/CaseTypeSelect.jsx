@@ -4,14 +4,14 @@ import React from 'react';
 
 export const CaseTypeSelect = connect(
   {
-    caseTypes: state.caseTypes,
+    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     legend: props.legend,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function CorporationContact({
-    caseTypes,
+    caseTypeDescriptionHelper,
     legend,
     updateFormValueSequence,
     validationErrors,
@@ -39,7 +39,7 @@ export const CaseTypeSelect = connect(
             }}
           >
             <option value="">-- Select --</option>
-            {caseTypes.map(caseType => (
+            {caseTypeDescriptionHelper.caseTypes.map(caseType => (
               <option key={caseType.type} value={caseType.type}>
                 {caseType.description}
               </option>
