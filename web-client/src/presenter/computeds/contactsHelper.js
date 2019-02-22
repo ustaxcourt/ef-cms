@@ -80,12 +80,12 @@ export const contactsHelper = get => {
     case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
       contactPrimary = {
         header:
-          'Tell Us About Yourself as the Next Friend for This Incompetent Person',
+          'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
         nameLabel: 'Name of Next Friend',
       };
       contactSecondary = {
         header: 'Tell Us About the Incompetent Person You Are Filing For',
-        nameLabel: 'Name of Incompetent Person',
+        nameLabel: 'Name of Legally Incompetent Person',
         displayInCareOf: true,
         displayPhone: true,
       };
