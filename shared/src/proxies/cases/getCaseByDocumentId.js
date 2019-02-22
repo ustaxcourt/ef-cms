@@ -9,7 +9,7 @@
 exports.getCaseByDocumentId = async ({ applicationContext, documentId }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/cases?documentId=${documentId}`, {
+    .get(`${applicationContext.getBaseUrl()}/documents/${documentId}/cases`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },

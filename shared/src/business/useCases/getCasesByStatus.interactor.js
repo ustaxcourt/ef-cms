@@ -12,7 +12,7 @@ const Case = require('../entities/Case');
  * @param applicationContext
  * @returns {Promise<Promise<*>|*>}
  */
-exports.getCasesByStatus = async ({ status = 'new', applicationContext }) => {
+exports.getCasesByStatus = async ({ status, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, GET_CASES_BY_STATUS)) {
