@@ -8,6 +8,7 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-plugin-warmup
   - serverless-prune-plugin
 custom:
 
@@ -23,6 +24,12 @@ custom:
     port: 9000
     directory: ./storage/s3
     cors: cors-policy.xml
+
+  warmup:
+    enabled: 
+      - dev
+      - stg
+      - prod
 
   dynamodb:
     start:
