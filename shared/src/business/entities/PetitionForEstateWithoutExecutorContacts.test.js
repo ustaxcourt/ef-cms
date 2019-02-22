@@ -1,7 +1,7 @@
 const Petition = require('./Petition');
 
 describe('Petition', () => {
-  describe('for Corporation Contacts', () => {
+  describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
       const petition = new Petition({
         caseType: 'other',
@@ -12,12 +12,13 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
-        partyType: 'Corporation',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
       });
       expect(petition.isValid()).toEqual(false);
     });
 
-    it('should not validate without inCareOf', () => {
+    it('should validate without inCareOf', () => {
       const petition = new Petition({
         caseType: 'other',
         procedureType: 'Small',
@@ -27,7 +28,8 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
-        partyType: 'Corporation',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         contactPrimary: {
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
@@ -39,7 +41,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(petition.isValid()).toEqual(true);
     });
 
     it('can validate primary contact', () => {
@@ -52,7 +54,8 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
-        partyType: 'Corporation',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         contactPrimary: {
           name: 'Jimmy Dean',
           inCareOf: 'USTC',
