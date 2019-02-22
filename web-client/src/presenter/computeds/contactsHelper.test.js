@@ -151,7 +151,8 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header: 'Tell Us About the Legally Incompetent Person You Are Filing For',
+        header:
+          'Tell Us About the Legally Incompetent Person You Are Filing For',
         nameLabel: 'Name of Legally Incompetent Person',
         displayInCareOf: true,
         displayPhone: true,
