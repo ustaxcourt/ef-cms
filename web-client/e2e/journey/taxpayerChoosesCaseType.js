@@ -1,10 +1,10 @@
 export default test => {
   it('taxpayer chooses the case type', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'hasNotice',
+      key: 'hasIrsNotice',
       value: true,
     });
-    expect(test.getState('form.hasNotice')).toEqual(true);
+    expect(test.getState('form.hasIrsNotice')).toEqual(true);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',

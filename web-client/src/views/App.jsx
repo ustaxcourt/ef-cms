@@ -3,13 +3,13 @@ import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { BeforeStartingCase } from './BeforeStartingCase';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
-import BeforeStartingCase from './BeforeStartingCase';
 import CaseDetailInternal from './CaseDetailInternal';
 import CaseDetailPetitioner from './CaseDetailPetitioner';
 import CaseDetailPublic from './CaseDetailPublic';
