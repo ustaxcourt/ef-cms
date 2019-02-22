@@ -87,6 +87,7 @@
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "sk": "0",
+    "hasIrsNotice": false,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "hasIrsNotice": false,
@@ -249,6 +250,7 @@
         "userId": "respondent"
       }
     ],
+    "hasIrsNotice": false,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "respondent": {
       "zip": "37208",
@@ -405,6 +407,7 @@
     "caseType": "Declaratory Judgment (Exempt Organization)",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "0",
+    "hasIrsNotice": false,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "petitioners": [
@@ -593,6 +596,7 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "2",
@@ -677,6 +681,7 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "1",
@@ -780,6 +785,7 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "2",

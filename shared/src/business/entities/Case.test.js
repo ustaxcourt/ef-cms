@@ -3,7 +3,7 @@ const assert = require('assert');
 const Case = require('./Case');
 const DocketRecord = require('./DocketRecord');
 const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
-const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -100,6 +100,56 @@ describe('Case entity', () => {
   });
 
   describe('validate', () => {
+    it('should do nothing if valid', () => {
+      let error = null;
+      try {
+        new Case(MOCK_CASE).validate();
+      } catch (err) {
+        error = err;
+      }
+      assert.ok(error === null);
+    });
+
+    it('should pass when hasIRSnotice is true', () => {
+      let error = null;
+      try {
+        new Case(MOCK_CASE).validate();
+      } catch (err) {
+        error = err;
+      }
+      assert.ok(error === null);
+    });
+
+    describe('should fail when hasIRSnotice is true', () => {
+      it('and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { hasIrsNotice: true, caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+
+      it('and is missing caseType', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { irsNoticeDate: '2018-03-01T00:00:00.000Z', caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+    });
+
     it('should do nothing if valid', () => {
       let error = null;
       try {
