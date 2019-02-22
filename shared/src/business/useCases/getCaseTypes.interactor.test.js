@@ -1,5 +1,4 @@
 const { getCaseTypes } = require('./getCaseTypes.interactor');
-const joi = require('joi-browser');
 
 describe('Get case types', () => {
   beforeEach(() => {});
