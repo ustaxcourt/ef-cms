@@ -6,9 +6,6 @@ const {
 } = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
-  getCasesForRespondent
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesForRespondent');
-const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
@@ -44,6 +41,9 @@ const {
   getCasesByUser,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
+  getCasesForRespondent,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesForRespondent');
+const {
   saveCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
 const {
@@ -74,8 +74,17 @@ const {
   getCase,
 } = require('ef-cms-shared/src/business/useCases/getCase.interactor');
 const {
+  getCasesByStatus: getCasesByStatusUC,
+} = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
+const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCase.interactor');
+const {
+  getCasesByUser: getCasesByUserUC,
+} = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
+const {
+  getInternalUsers: getInternalUsersUC,
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsers.interactor')
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
@@ -86,8 +95,8 @@ const {
   updateCase,
 } = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
 const {
-  queryForCases,
-} = require('ef-cms-shared/src/business/useCases/cases/queryForCases.interactor');
+  getCasesForRespondent: getCasesForRespondentUC,
+} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
 const {
   getWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
@@ -95,17 +104,20 @@ const {
   getWorkItems,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
 const {
-  queryForUsers
-} = require('ef-cms-shared/src/business/useCases/users/queryForUsers.interactor');
-const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
 const {
   createDocument,
 } = require('ef-cms-shared/src/business/useCases/createDocument.interactor');
 const {
+  getInteractorForGettingCases,
+} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
+const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+const {
+  getUsersInSection: getUsersInSectionUC,
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
 const {
   getWorkItems: getWorkItemsUC
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
@@ -224,17 +236,20 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createUser: createUserUC,
         getCase,
+        getCasesByStatus: getCasesByStatusUC,
+        getCasesByUser: getCasesByUserUC,
+        getUsersInSection: getUsersInSectionUC,
+        getInternalUsers: getInternalUsersUC,
         getUser,
         forwardWorkItem,
         sendPetitionToIRSHoldingQueue,
         updateCase,
+        getCasesForRespondent: getCasesForRespondentUC,
         getWorkItem,
         getWorkItems,
         getWorkItemsUC,
         updateWorkItem,
-        queryForCases,
         createDocument,
-        queryForUsers,
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
@@ -273,5 +288,6 @@ module.exports = (appContextUser = {}) => {
         return getWorkItemsUC;
       }
     },
+    getInteractorForGettingCases,
   };
 };

@@ -13,17 +13,20 @@ import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
-import { queryForCases } from '../../shared/src/proxies/cases/queryForCasesProxy';
+import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
+import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
 import { filePetition } from '../../shared/src/business/useCases/filePetition.interactor';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypes.interactor';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypes.interactor';
 import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
 import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
+import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { queryForUsers } from '../../shared/src/proxies/users/queryForUsersProxy';
 
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
@@ -67,18 +70,21 @@ const allUseCases = {
   filePetition,
   forwardWorkItem,
   getCase,
+  getCasesByStatus,
+  getCasesByUser,
+  getCasesForRespondent,
   getCaseTypes,
   getFilingTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getInternalUsers,
   getProcedureTypes,
   getTrialCities,
   getUser,
+  getUsersInSection,
   getWorkItem,
   getWorkItems,
-  queryForUsers,
   getWorkItemsBySection,
-  queryForCases,
   recallPetitionFromIRSHoldingQueue,
   sendPetitionToIRSHoldingQueue,
   updateCase,

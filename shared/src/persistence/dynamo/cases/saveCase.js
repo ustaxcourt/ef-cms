@@ -88,7 +88,7 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
       applicationContext,
       pkId: caseToSave.respondent.respondentId,
       skId: caseToSave.caseId,
-      type: 'case',
+      type: 'activeCase',
     });
   }
 

@@ -9,11 +9,9 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.handler = event =>
   handle(() => {
-    const section = (event.queryStringParameters || {}).section;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().queryForUsers({
-      section,
+    return applicationContext.getUseCases().getInternalUsers({
       applicationContext,
     });
   });
