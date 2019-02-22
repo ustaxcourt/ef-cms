@@ -84,8 +84,8 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header:
-          'Tell Us About Yourself as the Executor/Personal Representative For This Estate',
-        nameLabel: 'Name of Executor/Personal Representative',
+          'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
+        nameLabel: 'Name of Executor/Personal Representative, etc.',
         displayTitle: true,
       },
       contactSecondary: {
@@ -216,8 +216,7 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header:
-          'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
+        header: 'Name of Partner (Other than a Tax Matters Partner)',
         nameLabel: 'Name of Partner',
       },
       contactSecondary: {
