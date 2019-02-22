@@ -60,6 +60,7 @@ describe('createCase', () => {
         procedureType: 'Small',
         filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: DATE,
       },
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
@@ -141,6 +142,7 @@ describe('createCase', () => {
           workItems: [],
         },
       ],
+      hasIrsNotice: true,
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
@@ -200,6 +202,7 @@ describe('createCase', () => {
         procedureType: 'Small',
         filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: DATE,
       },
       applicationContext,
@@ -253,6 +256,7 @@ describe('createCase', () => {
           ],
         },
       ],
+      hasIrsNotice: true,
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
@@ -309,6 +313,7 @@ describe('createCase', () => {
           procedureType: 'Small',
           filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
+          hasIrsNotice: true,
           irsNoticeDate: DATE,
         },
         applicationContext,
@@ -354,6 +359,7 @@ describe('createCase', () => {
           procedureType: 'Small',
           filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
+          hasIrsNotice: true,
           irsNoticeDate: DATE,
         },
         applicationContext,
@@ -379,6 +385,7 @@ describe('createCase', () => {
           procedureType: 'Small',
           filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
+          hasIrsNotice: true,
           irsNoticeDate: DATE,
         },
         applicationContext,
