@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object used for setting the form
  */
-export default ({ store }) => {
+export const clearLoginFormAction = ({ store }) => {
   store.set(state.form, {
     name: '',
   });

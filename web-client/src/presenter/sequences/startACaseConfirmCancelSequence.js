@@ -1,4 +1,4 @@
 import navigateToDashboardAction from '../actions/navigateToDashboardAction';
-import clearModal from '../actions/clearModalAction';
+import { clearModalAction } from '../actions/clearModalAction';
 
-export default [clearModal, navigateToDashboardAction];
+export default [clearModalAction, navigateToDashboardAction];

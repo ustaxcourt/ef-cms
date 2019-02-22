@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearErrorAlerts from '../actions/clearErrorAlertsAction';
 import getCasesForRespondent from '../actions/getCasesForRespondentAction';
+import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
 import getUsersInSection from '../actions/getUsersInSectionAction';
@@ -13,7 +13,7 @@ import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [
   setCurrentPage('Loading'),
-  clearErrorAlerts,
+  clearErrorAlertsAction,
   getUserRole,
   {
     petitioner: [
