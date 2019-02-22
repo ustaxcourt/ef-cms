@@ -5,7 +5,7 @@ import ErrorNotification from './ErrorNotification';
 import SuccessNotification from './SuccessNotification';
 import WorkQueue from './WorkQueue';
 
-export const DashboardPetitionsClerkClerk = connect(
+export const DashboardPetitionsClerk = connect(
   {},
   () => {
     return (
