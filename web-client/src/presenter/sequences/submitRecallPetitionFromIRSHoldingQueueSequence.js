@@ -2,13 +2,13 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import navigateToDashboard from '../actions/navigateToDashboardAction';
 import recallPetitionFromIRSHoldingQueue from '../actions/recallPetitionFromIRSHoldingQueueAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
-import clearModal from '../actions/clearModalAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import getCase from '../actions/getCaseAction';
 import setCase from '../actions/setCaseAction';
 
 export default [
   clearAlertsAction,
-  clearModal,
+  clearModalAction,
   recallPetitionFromIRSHoldingQueue,
   getCase,
   setCase,
