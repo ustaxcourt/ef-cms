@@ -109,7 +109,7 @@ class DocumentDetail extends React.Component {
               </ul>
             </nav>
 
-            <div style={{ position: 'absolute', right: 0 }}>
+            <div className="button-wrapper">
               {caseHelper.showServeToIrsButton &&
                 helper.formattedDocument.isPetition && (
                   <button
