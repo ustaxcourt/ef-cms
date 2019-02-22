@@ -25,7 +25,7 @@ import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { getWorkItems } from '../../shared/src/proxies/workitems/getWorkItemsProxy';
+import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
@@ -83,7 +83,7 @@ const allUseCases = {
   getUser,
   getUsersInSection,
   getWorkItem,
-  getWorkItems,
+  getWorkItemsForUser,
   getWorkItemsBySection,
   recallPetitionFromIRSHoldingQueue,
   sendPetitionToIRSHoldingQueue,
