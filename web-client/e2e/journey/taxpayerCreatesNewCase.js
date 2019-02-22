@@ -182,7 +182,7 @@ export default (test, fakeFile) => {
       value: 'A business',
     });
 
-    await test.runSequence('updateStartCaseFormValueSequence', {
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
@@ -648,7 +648,7 @@ export default (test, fakeFile) => {
       phone: '1234567890',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
@@ -659,7 +659,7 @@ export default (test, fakeFile) => {
     expect(result.showHasIrsNoticeOptions).toBeFalsy();
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });

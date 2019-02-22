@@ -1,21 +1,20 @@
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**
- * used for updating a case
+ * returns all work items in a particular section
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event => {
-  return handle(event, () => {
+exports.handler = event =>
+  handle(event, () => {
+    const section = event.pathParameters.section;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().updateCase({
-      caseId: event.pathParameters.caseId,
-      caseToUpdate: JSON.parse(event.body),
-      ...JSON.parse(event.body),
+    return applicationContext.getUseCases().getWorkItemsBySection({
+      section,
       applicationContext,
     });
   });
-};
