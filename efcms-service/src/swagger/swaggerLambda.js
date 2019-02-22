@@ -1,4 +1,3 @@
-const swagger = require('../../swagger.json');
 const { headers } = require('../middleware/apiGatewayHelper');
 
 /**
