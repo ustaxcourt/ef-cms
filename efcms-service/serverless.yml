@@ -801,22 +801,6 @@ functions:
                 responseModels:
                   'application/json': workItem
 
-  swagger:
-    handler: src/swagger/swaggerLambda.handler
-    events:
-      - http:
-          path: v1/swagger
-          method: get
-          cors: true
-
-  swaggerJson:
-    handler: src/swagger/swaggerJsonLambda.handler
-    events:
-      - http:
-          path: v1/swagger.json
-          method: get
-          cors: true
-
   getInternalUsers:
     handler: src/users/getInternalUsersLambda.handler
     events:
@@ -867,3 +851,19 @@ functions:
               - statusCode: '422'
                 responseModels:
                   'application/json': 'unprocessableEntityError'
+
+  swagger:
+    handler: src/swagger/swaggerLambda.handler
+    events:
+      - http:
+          path: v1/swagger
+          method: get
+          cors: true
+
+  swaggerJson:
+    handler: src/swagger/swaggerJsonLambda.handler
+    events:
+      - http:
+          path: v1/swagger.json
+          method: get
+          cors: true
