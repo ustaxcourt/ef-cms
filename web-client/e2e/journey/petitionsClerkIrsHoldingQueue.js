@@ -77,7 +77,7 @@ export default test => {
       box: 'inbox',
     });
 
-    await generatePromise(1000, true); // TODO: remove sleep statements
+    await generatePromise(3000, true); // TODO: remove sleep statements
 
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     const recalledWorkItem = test
@@ -156,7 +156,7 @@ export default test => {
 
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
-    await generatePromise(1000, true); // TODO: remove sleep statements
+    await generatePromise(3000, true); // TODO: remove sleep statements
 
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
 
