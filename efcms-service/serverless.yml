@@ -760,6 +760,30 @@ functions:
                 responseModels:
                   'application/json': workItem
 
+  forwardWorkItem:
+    handler: src/workitems/forwardWorkItemLambda.handler
+    events:
+      - http:
+          path: v1/workitems/{workItemId}/assignee
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: sets the assigneeId of the workitem to a new user
+            tags:
+              - workitems
+            description: >
+              sets the assigneeId of the workitem to a new user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
   updateWorkItem:
     handler: src/workitems/updateWorkItemLambda.handler
     events:
@@ -784,11 +808,11 @@ functions:
                 responseModels:
                   'application/json': workItem
 
-  getWorkItems:
-    handler: src/workitems/getWorkItemsLambda.handler
+  getSentWorkItemsForSection:
+    handler: src/workitems/getSentWorkItemsForSectionLambda.handler
     events:
       - http:
-          path: v1/workitems
+          path: v1/sections/{section}/outbox
           method: get
           cors: true
           authorizer:
@@ -796,11 +820,83 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
           documentation:
-            summary: get all workitems for a user
+            summary: get all workitems in the sections outbox
             tags:
               - workitems
             description: >
-              Get all workitems for a user.
+              Get all workitems in the sections outbox.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getWorkItemsBySection:
+    handler: src/workitems/getWorkItemsBySectionLambda.handler
+    events:
+      - http:
+          path: v1/sections/{section}/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all workitems in the sections inbox
+            tags:
+              - workitems
+            description: >
+              Get all workitems in the sections inbox.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getSentWorkItemsForUser:
+    handler: src/workitems/getSentWorkItemsForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/outbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get a users work item outbox
+            tags:
+              - workitems
+            description: >
+              get a users work item outbox
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getWorkItemsForUser:
+    handler: src/workitems/getWorkItemsForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get a users work item inbox
+            tags:
+              - workitems
+            description: >
+              get a users work item inbox
             methodResponses:
               - statusCode: '200'
                 responseBody:
