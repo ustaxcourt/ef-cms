@@ -7,7 +7,7 @@
 exports.getWorkItemsBySection = async ({ applicationContext, section }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/workitems?section=${section}`, {
+    .get(`${applicationContext.getBaseUrl()}/sections/${section}/inbox`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
