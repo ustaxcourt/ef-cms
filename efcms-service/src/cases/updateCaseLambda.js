@@ -11,7 +11,7 @@ exports.handler = event => {
   return handle(() => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUpdateCaseInteractorQueryParam(event)({
+    return applicationContext.getUseCases().updateCase({
       caseId: event.pathParameters.caseId,
       caseToUpdate: JSON.parse(event.body),
       ...JSON.parse(event.body),

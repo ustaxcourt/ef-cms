@@ -25,6 +25,8 @@ export default connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence:
+      sequences.updateHasIrsNoticeFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
@@ -42,6 +44,7 @@ export default connect(
     updateFormValueSequence,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
   }) {
@@ -480,7 +483,7 @@ export default connect(
                         name="hasIrsNotice"
                         value={hasIrsNotice === 'Yes'}
                         onChange={e => {
-                          updateFormValueSequence({
+                          updateHasIrsNoticeFormValueSequence({
                             key: e.target.name,
                             value: e.target.value === 'true',
                           });
