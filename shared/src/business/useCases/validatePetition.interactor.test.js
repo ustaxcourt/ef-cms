@@ -13,9 +13,12 @@ describe('validatePetition', () => {
         }),
       },
     });
+
     expect(errors).toEqual({
-      ...omit(Petition.errorToMessageMap, ['ownershipDisclosureFile']),
-      irsNoticeDate: 'Notice Date is a required field.',
+      ...omit(Petition.errorToMessageMap, [
+        'ownershipDisclosureFile',
+        'irsNoticeDate',
+      ]),
     });
   });
 
@@ -23,6 +26,7 @@ describe('validatePetition', () => {
     const errors = validatePetition({
       petition: {
         caseType: 'defined',
+        hasIrsNotice: true,
       },
       applicationContext: {
         getEntityConstructors: () => ({
@@ -33,6 +37,7 @@ describe('validatePetition', () => {
     expect(errors).toEqual({
       ...omit(Petition.errorToMessageMap, [
         'caseType',
+        'hasIrsNotice',
         'ownershipDisclosureFile',
       ]),
       irsNoticeDate: 'Notice Date is a required field.',
@@ -42,6 +47,7 @@ describe('validatePetition', () => {
   it('returns the expected errors object', () => {
     const errors = validatePetition({
       petition: {
+        hasIrsNotice: true,
         caseType: 'defined',
         procedureType: 'defined',
         filingType: 'defined',
@@ -64,6 +70,7 @@ describe('validatePetition', () => {
 
     const errors = validatePetition({
       petition: {
+        hasIrsNotice: true,
         caseType: 'defined',
         procedureType: 'defined',
         filingType: 'defined',

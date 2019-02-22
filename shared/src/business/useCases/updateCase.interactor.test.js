@@ -6,6 +6,7 @@ const MOCK_CASE = {
   userId: 'userId',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '56789-18',
+  hasIrsNotice: false,
   status: 'New',
   caseType: 'Other',
   procedureType: 'Regular',
