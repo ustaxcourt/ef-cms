@@ -135,12 +135,12 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
+  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
           partyType:
-            'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+            'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
         },
       },
     });

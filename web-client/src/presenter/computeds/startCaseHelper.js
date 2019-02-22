@@ -54,7 +54,7 @@ export default get => {
       form.partyType ===
         'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType ===
-        'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+        'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType === 'Donor' ||
       form.partyType === 'Transferee' ||
       form.partyType === 'Surviving Spouse',
@@ -76,7 +76,7 @@ export default get => {
       form.partyType ===
         'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType ===
-        'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+        'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType === 'Surviving Spouse',
 
     showHasIrsNoticeOptions: form.hasIrsNotice === true,

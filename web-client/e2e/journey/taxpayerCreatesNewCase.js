@@ -477,7 +477,7 @@ export default (test, fakeFile) => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
       value:
-        'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
     });
 
     result = runCompute(startCaseHelper, {
