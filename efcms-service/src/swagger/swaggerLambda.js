@@ -34,11 +34,3 @@ exports.handler = async () => {
     },
   };
 };
-
-exports.json = async () => {
-  return {
-    statusCode: '200',
-    body: JSON.stringify(swagger),
-    headers,
-  };
-};
