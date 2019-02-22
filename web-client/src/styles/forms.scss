@@ -119,3 +119,20 @@ label.validated::after {
     margin-top: 20px;
   }
 }
+
+label.ustc-upload-petition {
+  .success-message {
+    display: none;
+    color: $color-green;
+  }
+
+  &.validated {
+    &::after {
+      display: none;
+    }
+
+    .success-message {
+      display: inline-block;
+    }
+  }
+}

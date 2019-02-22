@@ -18,7 +18,7 @@ hr {
 
 .label {
   display: block;
-  margin-bottom: 0;
+  margin-bottom: 12px;
   font-weight: $font-semibold;
 }
 
@@ -152,7 +152,7 @@ iframe {
 
 .small-case-features {
   h4 {
-    color: $color-cool-blue;
+    color: $color-base;
   }
 
   .warning {
