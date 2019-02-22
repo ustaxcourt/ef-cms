@@ -285,7 +285,7 @@ Case.getCaseTitle = function(rawCase) {
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+    case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;

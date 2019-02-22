@@ -80,9 +80,9 @@ export default async ({ store, props, get }) => {
         partyType =
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)';
         break;
-      case 'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+      case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
         partyType =
-          'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)';
+          'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)';
         break;
     }
   }

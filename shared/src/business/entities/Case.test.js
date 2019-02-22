@@ -381,7 +381,7 @@ describe('Case entity', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
         partyType:
-          'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+          'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },

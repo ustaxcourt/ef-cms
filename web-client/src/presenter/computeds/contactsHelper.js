@@ -73,7 +73,7 @@ export const contactsHelper = get => {
         displayPhone: true,
       };
       break;
-    case 'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+    case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
       contactPrimary = {
         header:
           'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
