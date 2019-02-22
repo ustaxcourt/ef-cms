@@ -87,10 +87,14 @@
   max-width: 700px;
   min-height: 75px;
 
+  .usa-alert-heading {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
   button {
-    position: absolute;
-    top: 0px;
-    right: 0px;
+    margin-top: 5px;
+    float: right;
   }
 }
 
