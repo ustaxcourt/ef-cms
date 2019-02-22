@@ -123,7 +123,7 @@ label.validated::after {
 label.ustc-upload-petition {
   .success-message {
     display: none;
-    color: #2e8540;
+    color: $color-green;
   }
 
   &.validated {
