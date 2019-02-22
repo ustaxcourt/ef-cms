@@ -7,7 +7,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      caseType: 'Case Type is required.',
+      hasIrsNotice: 'You must indicate whether you received an IRS notice.',
       docketNumber: 'Docket number is required.',
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
@@ -24,7 +24,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      caseType: 'Case Type is required.',
+      hasIrsNotice: 'You must indicate whether you received an IRS notice.',
       docketNumber: 'Docket number is required.',
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
@@ -37,6 +37,7 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
+        hasIrsNotice: true,
         procedureType: 'defined',
         docketNumber: '101-18',
         documents: [
@@ -194,6 +195,7 @@ describe('validate case detail', () => {
           },
         ],
         petitioners: [{ name: 'user' }],
+        hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         signature: true,
         yearAmounts: [
@@ -244,6 +246,7 @@ describe('validate case detail', () => {
           },
         ],
         petitioners: [{ name: 'user' }],
+        hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         signature: true,
         yearAmounts: [
@@ -296,6 +299,7 @@ describe('validate case detail', () => {
           },
         ],
         petitioners: [{ name: 'user' }],
+        hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         signature: true,
         yearAmounts: [
@@ -348,6 +352,7 @@ describe('validate case detail', () => {
           },
         ],
         petitioners: [{ name: 'user' }],
+        hasIrsNotice: false,
         irsNoticeDate: null,
         payGovDate: '2018-12-24T00:00:00.000Z',
         yearAmounts: [],

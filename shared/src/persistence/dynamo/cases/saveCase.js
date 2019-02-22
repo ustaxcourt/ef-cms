@@ -4,7 +4,6 @@ const {
 } = require('../../dynamo/helpers/createMappingRecord');
 
 const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
-const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 const client = require('../../dynamodbClientService');
@@ -93,12 +92,6 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
   }
 
   await syncWorkItems({
-    applicationContext,
-    caseToSave,
-    currentCaseState,
-  });
-
-  await syncDocuments({
     applicationContext,
     caseToSave,
     currentCaseState,

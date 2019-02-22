@@ -9,19 +9,6 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '00',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2001',
-    });
-
     let result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
@@ -193,6 +180,11 @@ export default (test, fakeFile) => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
+    });
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
     });
 
     result = runCompute(startCaseHelper, {
@@ -654,6 +646,46 @@ export default (test, fakeFile) => {
       zip: '12345',
       email: 'test@example.com',
       phone: '1234567890',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showHasIrsNoticeOptions).toBeFalsy();
+    expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseType',
+      value: 'Whistleblower',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'month',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'day',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'year',
+      value: '2001',
     });
 
     // try without checking the signature

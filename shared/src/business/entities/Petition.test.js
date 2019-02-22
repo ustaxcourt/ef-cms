@@ -9,6 +9,7 @@ describe('Petition entity', () => {
         procedureType: 'Small',
         filingType: 'A business',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
       });
       expect(
@@ -20,6 +21,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         procedureType: 'Small',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
       });
       expect(
@@ -32,6 +34,7 @@ describe('Petition entity', () => {
         procedureType: 'Small',
         filingType: 'not a biz',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
       });
       expect(
@@ -49,6 +52,7 @@ describe('Petition entity', () => {
         preferredTrialCity: 'Chattanooga, TN',
         petitionFile: {},
         signature: true,
+        hasIrsNotice: true,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
       });
@@ -63,6 +67,7 @@ describe('Petition entity', () => {
         procedureType: 'Small',
         filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '3009-10-13',
         petitionFile: {},
         signature: true,
