@@ -21,7 +21,8 @@ export const contactsHelper = get => {
       contactPrimary = {
         header: 'Tell Us About the Corporation You Are Filing For',
         nameLabel: 'Business Name',
-        inCareOfLabel: 'In Care Of (Your Name)',
+        inCareOfLabel: 'In Care Of',
+        inCareOfLabelHint: 'Your Name',
         displayInCareOf: true,
       };
       break;
@@ -59,7 +60,8 @@ export const contactsHelper = get => {
       contactPrimary = {
         header: 'Tell Us About the Estate You Are Filing For',
         nameLabel: 'Name of Decedent',
-        inCareOfLabel: 'In Care Of (Your Name)',
+        inCareOfLabel: 'In Care Of',
+        inCareOfLabelHint: 'Your Name',
         displayInCareOf: true,
       };
       break;
