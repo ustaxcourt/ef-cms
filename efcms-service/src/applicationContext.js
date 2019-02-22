@@ -84,7 +84,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
 const {
   getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsers.interactor')
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUser.interactor');
@@ -112,9 +112,6 @@ const {
 const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
-const {
-  getInteractorForGetUsers,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
 const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
@@ -292,6 +289,5 @@ module.exports = (appContextUser = {}) => {
       }
     },
     getInteractorForGettingCases,
-    getInteractorForGetUsers,
   };
 };
