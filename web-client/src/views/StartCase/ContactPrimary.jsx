@@ -90,7 +90,14 @@ export default connect(
             >
               <label htmlFor="inCareOf">
                 {contactsHelper.contactPrimary.inCareOfLabel ? (
-                  contactsHelper.contactPrimary.inCareOfLabel
+                  <span>
+                    {contactsHelper.contactPrimary.inCareOfLabel}{' '}
+                    {contactsHelper.contactPrimary.inCareOfLabelHint && (
+                      <span className="usa-form-hint">
+                        ({contactsHelper.contactPrimary.inCareOfLabelHint})
+                      </span>
+                    )}
+                  </span>
                 ) : (
                   <span>
                     In Care Of <span className="usa-form-hint">(optional)</span>
