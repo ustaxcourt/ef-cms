@@ -284,7 +284,7 @@ export default connect(
                       <ul className="ustc-unstyled-list">
                         {[
                           'An estate or trust',
-                          'A minor or incompetent person',
+                          'A minor or legally incompetent person',
                           'Donor',
                           'Transferee',
                           'Deceased Spouse',
@@ -380,7 +380,7 @@ export default connect(
                             'Guardian',
                             'Custodian',
                             'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-                            'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                            'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input
