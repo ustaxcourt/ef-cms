@@ -195,6 +195,11 @@ export default (test, fakeFile) => {
       value: 'A business',
     });
 
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
+    });
+
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
