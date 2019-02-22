@@ -18,10 +18,14 @@ exports.headers = headers;
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
+ * @param {Function} event the api gateway event
  * @param {Function} fun an function which either returns a promise containing payload data, or throws an exception
  * @returns {Object} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handle = async fun => {
+exports.handle = async (event, fun) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    return exports.sendOk('Lambda is warm!');
+  }
   try {
     const response = await fun();
     return exports.sendOk(response);
@@ -40,11 +44,15 @@ exports.handle = async fun => {
 };
 
 /**
+ * @param {Function} event the api gateway event
  * @param {Function} fun an async function which returns an object containing a url property to redirect the user to
  * @param {number} statusCode the statusCode to return in the api gateway response object (deaults to 302)
  * @returns {Object} the api gateway response object with the Location set to the url returned from fun
  */
-exports.redirect = async (fun, statusCode = 302) => {
+exports.redirect = async (event, fun, statusCode = 302) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    return exports.sendOk('Lambda is warm!');
+  }
   try {
     const { url } = await fun();
     return {

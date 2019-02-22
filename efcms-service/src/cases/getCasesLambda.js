@@ -9,7 +9,7 @@ const createApplicationContext = require('../applicationContext');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.get = event =>
-  handle(() => {
+  handle(event, () => {
     const status = (event.queryStringParameters || {}).status;
     const documentId = (event.queryStringParameters || {}).documentId;
     const user = getUserFromAuthHeader(event);
