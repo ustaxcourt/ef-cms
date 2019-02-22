@@ -6,7 +6,8 @@
  */
 export default async ({ applicationContext }) => {
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getWorkItems({
+  const workItems = await useCases.getWorkItemsForUser({
+    userId: applicationContext.getCurrentUser().userId,
     applicationContext,
   });
 
