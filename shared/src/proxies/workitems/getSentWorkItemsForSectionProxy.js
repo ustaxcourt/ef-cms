@@ -10,13 +10,10 @@ exports.getSentWorkItemsForSection = async ({
 }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(
-      `${applicationContext.getBaseUrl()}/workitems?completed=true&section=${section}`,
-      {
-        headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
+    .get(`${applicationContext.getBaseUrl()}/sections/${section}/outbox`, {
+      headers: {
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
-    );
+    });
   return response.data;
 };
