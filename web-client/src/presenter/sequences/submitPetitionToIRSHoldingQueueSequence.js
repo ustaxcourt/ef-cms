@@ -4,11 +4,11 @@ import navigateToDashboard from '../actions/navigateToDashboardAction';
 import sendPetitionToIRSHoldingQueueAction from '../actions/sendPetitionToIRSHoldingQueueAction';
 import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
-import clearModal from '../actions/clearModalAction';
+import { clearModalAction } from '../actions/clearModalAction';
 
 export default [
   clearAlertsAction,
-  clearModal,
+  clearModalAction,
   sendPetitionToIRSHoldingQueueAction,
   setAlertSuccess,
   getCase,

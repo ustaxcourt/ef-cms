@@ -465,7 +465,10 @@ export default connect(
             <div className="blue-container">
               <fieldset
                 id="irs-notice-radios"
-                className="usa-form-group usa-fieldset-inputs usa-sans"
+                className={
+                  'usa-form-group usa-fieldset-inputs usa-sans ' +
+                  (validationErrors.hasIrsNotice ? 'usa-input-error' : '')
+                }
               >
                 <legend>Did you receive a Notice from the IRS?</legend>
                 <ul className="usa-unstyled-list">
@@ -493,6 +496,9 @@ export default connect(
                     </li>
                   ))}
                 </ul>
+                <div className="usa-input-error-message">
+                  {validationErrors.hasIrsNotice}
+                </div>
               </fieldset>
 
               {startCaseHelper.showHasIrsNoticeOptions && (
