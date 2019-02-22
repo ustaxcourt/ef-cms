@@ -24,6 +24,30 @@ table.small-case-qualifications-table {
   }
 }
 
+table.dashboard {
+  border: 1px solid $color-gray-light;
+  thead {
+    border-bottom: 2px solid $color-gray-light;
+    th {
+      border: none;
+      background-color: $color-white;
+    }
+  }
+
+  tr {
+    border-bottom: 1px solid $color-gray-light;
+  }
+
+  td {
+    border: none;
+    font-size: 14px;
+
+    label {
+      margin: 0;
+    }
+  }
+}
+
 table.work-queue {
   td,
   th {
