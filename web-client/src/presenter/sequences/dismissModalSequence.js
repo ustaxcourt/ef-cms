@@ -1,3 +1,3 @@
-import clearModal from '../actions/clearModalAction';
+import { clearModalAction } from '../actions/clearModalAction';
 
-export default [clearModal];
+export default [clearModalAction];
