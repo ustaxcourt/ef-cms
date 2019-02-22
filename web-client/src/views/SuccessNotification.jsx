@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 class SuccessNotification extends React.Component {
   componentDidUpdate() {
     this.focusNotification();
@@ -32,15 +31,17 @@ class SuccessNotification extends React.Component {
             ref={this.notificationRef}
           >
             <div className="usa-alert-body">
-              <h3 className="usa-alert-heading">{alertSuccess.title}</h3>
+              <p className="heading-3 usa-alert-heading">
+                <button
+                  type="button"
+                  className="modal-close-button text-style"
+                  onClick={() => dismissAlert()}
+                >
+                  Dismiss <FontAwesomeIcon icon="times-circle" />
+                </button>
+                {alertSuccess.title}
+              </p>
               <p className="usa-alert-text">{alertSuccess.message}</p>
-              <button
-                type="button"
-                className="modal-close-button text-style"
-                onClick={() => dismissAlert()}
-              >
-                Dismiss <FontAwesomeIcon icon="times-circle" />
-              </button>
             </div>
           </div>
         )}
