@@ -3,13 +3,15 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
+import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
-import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
 import alertHelper from './computeds/alertHelper';
 import caseDetailHelper from './computeds/caseDetailHelper';
 import documentDetailHelper from './computeds/documentDetailHelper';
@@ -56,8 +58,10 @@ export default {
 
   alertHelper,
   caseDetailHelper,
+  caseTypeDescriptionHelper,
   contactsHelper,
   dashboardPetitionerHelper,
+  dashboardRespondentHelper,
   documentDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

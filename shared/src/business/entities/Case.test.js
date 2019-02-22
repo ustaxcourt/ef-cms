@@ -498,8 +498,13 @@ describe('Case entity', () => {
   });
 
   describe('getCaseTypes', () => {
-    it('returns the case types', () => {
-      const caseTypes = Case.getCaseTypes();
+    it('returns the case types for hasIrsNotice true', () => {
+      const caseTypes = Case.getCaseTypes(true);
+      expect(caseTypes).not.toBeNull();
+      expect(caseTypes.length).toBeGreaterThan(1);
+    });
+    it('returns the case types for hasIrsNotice false', () => {
+      const caseTypes = Case.getCaseTypes(false);
       expect(caseTypes).not.toBeNull();
       expect(caseTypes.length).toBeGreaterThan(1);
     });
