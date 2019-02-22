@@ -1,4 +1,3 @@
-const swagger = require('../../swagger.json');
 const { headers } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -32,13 +31,5 @@ exports.handler = async () => {
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',
     },
-  };
-};
-
-exports.json = async () => {
-  return {
-    statusCode: '200',
-    body: JSON.stringify(swagger),
-    headers,
   };
 };
