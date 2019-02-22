@@ -100,8 +100,8 @@ export default connect(
                   aria-describedby="date-of-notice-legend"
                   aria-label="month, two digits"
                   className={
-                    'usa-input-inline ' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    'usa-input-inline' +
+                    (caseDetailErrors.irsNoticeDate ? '-error' : '')
                   }
                   id="date-of-notice-month"
                   max="12"
@@ -129,7 +129,7 @@ export default connect(
                   aria-label="day, two digits"
                   className={
                     'usa-input-inline' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    (caseDetailErrors.irsNoticeDate ? '-error' : '')
                   }
                   id="date-of-notice-day"
                   max="31"
@@ -157,7 +157,7 @@ export default connect(
                   aria-label="year, four digits"
                   className={
                     'usa-input-inline' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    (caseDetailErrors.irsNoticeDate ? '-error' : '')
                   }
                   id="date-of-notice-year"
                   max="2100"
