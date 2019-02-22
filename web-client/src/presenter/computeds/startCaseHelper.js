@@ -26,7 +26,7 @@ export default get => {
 
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showMinorIncompetentFilingOptions:
-      form.otherType === 'A minor or incompetent person',
+      form.otherType === 'A minor or legally incompetent person',
 
     showOtherFilingTypeOptions: form.filingType === 'Other',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
@@ -54,7 +54,7 @@ export default get => {
       form.partyType ===
         'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType ===
-        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+        'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType === 'Donor' ||
       form.partyType === 'Transferee' ||
       form.partyType === 'Surviving Spouse',
@@ -76,7 +76,7 @@ export default get => {
       form.partyType ===
         'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType ===
-        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
+        'Next Friend for an Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)' ||
       form.partyType === 'Surviving Spouse',
 
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
