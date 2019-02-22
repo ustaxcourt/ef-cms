@@ -6,16 +6,12 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.queryForCases = async ({ applicationContext, status, documentId }) => {
+exports.getInternalUsers = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/cases`, {
+    .get(`${applicationContext.getBaseUrl()}/users/internal`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-      params: {
-        status,
-        documentId,
       },
     });
   return response.data;

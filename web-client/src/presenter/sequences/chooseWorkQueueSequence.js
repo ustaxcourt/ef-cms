@@ -1,4 +1,4 @@
-import clearWorkQueue from '../actions/clearWorkQueueAction';
+import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
 import setWorkItems from '../actions/setWorkItemsAction';
 import chooseWorkQueue from '../actions/chooseWorkQueueAction';
 import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
@@ -7,7 +7,7 @@ import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
 import getSentWorkItemsForUser from '../actions/getSentWorkItemsForUserAction';
 
 export default [
-  clearWorkQueue,
+  clearWorkQueueAction,
   chooseWorkQueue,
   {
     sectioninbox: [getWorkItemsForSection, setWorkItems],

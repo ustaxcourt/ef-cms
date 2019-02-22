@@ -1,11 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearLoginForm from '../actions/clearLoginFormAction';
-import clearUser from '../actions/clearUserAction';
+import { clearLoginFormAction } from '../actions/clearLoginFormAction';
+import { clearUserAction } from '../actions/clearUserAction';
 import navigateToCognito from '../actions/navigateToCognitoAction';
 
 export default [
   clearAlertsAction,
-  clearUser,
-  clearLoginForm,
+  clearUserAction,
+  clearLoginFormAction,
   navigateToCognito,
 ];
