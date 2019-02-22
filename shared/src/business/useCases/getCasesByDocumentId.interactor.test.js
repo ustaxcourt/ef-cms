@@ -41,6 +41,8 @@ describe('getCasesByDocumentId', () => {
               docketNumber: '101-18',
               petitioners: [{ name: 'Test Taxpayer' }],
               caseType: 'Other',
+              hasIrsNotice: true,
+              irsNoticeDate: '2019-02-04T06:00:00.000Z',
               procedureType: 'Regular',
               filingType: 'Myself',
               preferredTrialCity: 'Washington, D.C.',
