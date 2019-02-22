@@ -10,6 +10,7 @@ const MOCK_CASE = {
   docketNumber: '56789-18',
   petitioners: [{ name: 'Test Taxpayer' }],
   status: 'New',
+  hasIrsNotice: false,
   caseType: 'Other',
   procedureType: 'Regular',
   filingType: 'Myself',
