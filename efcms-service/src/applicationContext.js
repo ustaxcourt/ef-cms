@@ -32,9 +32,6 @@ const {
 
 // cases
 const {
-  getCasesByDocumentId,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByDocumentId');
-const {
   getCasesByStatus,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByStatus');
 const {
@@ -208,7 +205,6 @@ module.exports = (appContextUser = {}) => {
 
         // cases
         getCasesByStatus,
-        getCasesByDocumentId,
         getCasesByUser,
         getCasesForRespondent,
         saveCase,
