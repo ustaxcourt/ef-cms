@@ -11,10 +11,13 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
  * @param applicationContext
  * @returns {*}
  */
-exports.getCasesForRespondent = async ({ userId, applicationContext }) => {
+exports.getCasesForRespondent = async ({
+  respondentId,
+  applicationContext,
+}) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
-    key: userId,
+    key: respondentId,
     type: 'activeCase',
     isVersioned: true,
   });
