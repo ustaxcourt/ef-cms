@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import getCasesForRespondent from '../actions/getCasesForRespondentAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import getCasesByUser from '../actions/getCasesByUserAction';
 import getUserRole from '../actions/getUserRoleAction';
@@ -35,7 +36,7 @@ const goToDashboard = [
     intakeclerk: [clearAlertsAction, setCurrentPage('DashboardIntakeClerk')],
     respondent: [
       clearAlertsAction,
-      getCasesByUser,
+      getCasesForRespondent,
       setCases,
       setCurrentPage('DashboardRespondent'),
     ],

@@ -550,6 +550,79 @@ functions:
                 responseModels:
                   'application/json': case
 
+  getCasesByUser:
+    handler: src/cases/getCasesByUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all cases for a user
+            tags:
+              - cases
+            description: >
+              Get all cases for a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of cases'
+                responseModels:
+                  'application/json': case
+
+  getCasesForRespondent:
+    handler: src/cases/getCasesForRespondentLambda.handler
+    events:
+      - http:
+          path: v1/respondents/{respondentId}/cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all cases for a user
+            tags:
+              - cases
+            description: >
+              Get all cases for a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of cases'
+                responseModels:
+                  'application/json': case
+
+
+  getCasesByStatus:
+    handler: src/cases/getCasesByStatusLambda.handler
+    events:
+      - http:
+          path: v1/statuses/{status}/cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all cases by a status
+            tags:
+              - cases
+            description: >
+              get all cases by a status
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of cases'
+                responseModels:
+                  'application/json': case
+
   getCases:
     handler: src/cases/getCasesLambda.get
     events:
