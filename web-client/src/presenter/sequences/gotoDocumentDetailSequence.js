@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearForms from '../actions/clearFormsAction';
-import clearWorkItemActionMap from '../actions/clearWorkItemActionMapAction';
+import { clearFormsAction } from '../actions/clearFormsAction';
+import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
 import getCase from '../actions/getCaseAction';
 import getInternalUsers from '../actions/getInternalUsersAction';
 import setBaseUrl from '../actions/setBaseUrlAction';
@@ -14,8 +14,8 @@ import setInternalUsers from '../actions/setInternalUsersAction';
 export default [
   setCurrentPage('Loading'),
   clearAlertsAction,
-  clearWorkItemActionMap,
-  clearForms,
+  clearWorkItemActionMapAction,
+  clearFormsAction,
   setDocumentId,
   getCase,
   setCase,
