@@ -113,9 +113,6 @@ const {
   getInteractorForGettingCases,
 } = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
 const {
-  getInteractorForGetUsers,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
-const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
 const {
