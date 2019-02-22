@@ -11,7 +11,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItems = async ({ applicationContext }) => {
+exports.getWorkItemsForUser = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, WORKITEM)) {
