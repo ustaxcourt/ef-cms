@@ -336,6 +336,11 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
+    - Effect: 'Allow'
+      Action:
         - cognito-idp:AdminCreateUser
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
