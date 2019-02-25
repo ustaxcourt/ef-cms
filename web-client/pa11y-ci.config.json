@@ -206,7 +206,7 @@
       ]
     },
     {
-      "notes": "expose hidden elements on start-a-case for party type Incompetent Person",
+      "notes": "expose hidden elements on start-a-case for party type Legally Incompetent Person",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-incompetent-person",
       "actions": [
         "wait for element label#filing-type-3 to be visible",
