@@ -79,9 +79,30 @@ export default connect(
             </div>
           )}
           {contactsHelper.contactPrimary.displayInCareOf && (
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.inCareOf
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="inCareOf">
-                In Care Of <span className="usa-form-hint">(optional)</span>
+                {contactsHelper.contactPrimary.inCareOfLabel ? (
+                  <span>
+                    {contactsHelper.contactPrimary.inCareOfLabel}{' '}
+                    {contactsHelper.contactPrimary.inCareOfLabelHint && (
+                      <span className="usa-form-hint">
+                        ({contactsHelper.contactPrimary.inCareOfLabelHint})
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span>
+                    In Care Of <span className="usa-form-hint">(optional)</span>
+                  </span>
+                )}
               </label>
               <input
                 id="inCareOf"
@@ -95,7 +116,15 @@ export default connect(
                     value: e.target.value,
                   });
                 }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
               />
+              {validationErrors.contactPrimary && (
+                <div className="usa-input-error-message beneath">
+                  {validationErrors.contactPrimary.inCareOf}
+                </div>
+              )}
             </div>
           )}
           <Address type="contactPrimary" />
