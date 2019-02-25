@@ -337,7 +337,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -369,7 +369,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -401,7 +401,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -433,7 +433,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -453,7 +453,7 @@ export default (test, fakeFile) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeTruthy();
 
-    // incompetent person party type primary/secondary contact
+    // legally incompetent person party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -466,7 +466,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -477,7 +477,7 @@ export default (test, fakeFile) => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
       value:
-        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
     });
 
     result = runCompute(startCaseHelper, {
