@@ -1,4 +1,4 @@
-const { getUser } = require('./getUser.interactor');
+const { getUser } = require('./getUserInteractor');
 
 describe('Get user', () => {
   it('returns the same user passed in with section defined', async () => {

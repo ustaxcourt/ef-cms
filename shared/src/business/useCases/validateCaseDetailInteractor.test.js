@@ -1,4 +1,4 @@
-const { validateCaseDetail } = require('./validateCaseDetail.interactor');
+const { validateCaseDetail } = require('./validateCaseDetailInteractor');
 
 describe('validate case detail', () => {
   it('returns the expected errors object on an empty case', () => {

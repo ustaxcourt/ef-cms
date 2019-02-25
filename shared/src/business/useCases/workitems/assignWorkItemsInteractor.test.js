@@ -1,4 +1,4 @@
-const { assignWorkItems } = require('./assignWorkItems.interactor');
+const { assignWorkItems } = require('./assignWorkItemsInteractor');
 const _ = require('lodash');
 const User = require('../../entities/User');
 
