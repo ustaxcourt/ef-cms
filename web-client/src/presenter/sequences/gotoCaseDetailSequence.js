@@ -8,7 +8,7 @@ import setBaseUrl from '../actions/setBaseUrlAction';
 import setCase from '../actions/setCaseAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 
-export default [
+export const gotoCaseDetailSequence = [
   setCurrentPage('Loading'),
   clearAlertsAction,
   getCase,

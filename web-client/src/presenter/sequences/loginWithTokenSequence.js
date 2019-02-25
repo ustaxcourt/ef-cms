@@ -10,7 +10,7 @@ import setToken from '../actions/setTokenAction';
  * and navigating to dashboard
  *
  */
-export default [
+export const loginWithTokenSequence = [
   decodeTokenAction,
   setToken,
   getUser,

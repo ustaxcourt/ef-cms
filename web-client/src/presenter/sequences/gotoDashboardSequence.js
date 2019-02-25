@@ -9,7 +9,7 @@ import redirectToCognito from '../actions/redirectToCognitoAction';
 import setCases from '../actions/setCasesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setUsers from '../actions/setUsersAction';
-import chooseWorkQueueSequence from './chooseWorkQueueSequence';
+import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 
 const goToDashboard = [
   setCurrentPage('Loading'),
@@ -48,7 +48,7 @@ const goToDashboard = [
   },
 ];
 
-export default [
+export const gotoDashboardSequence = [
   isLoggedIn,
   {
     unauthorized: [redirectToCognito],

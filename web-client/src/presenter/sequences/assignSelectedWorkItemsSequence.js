@@ -2,7 +2,7 @@ import { assignSelectedWorkItemsAction } from '../actions/assignSelectedWorkItem
 import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
 import setWorkItems from '../actions/setWorkItemsAction';
 
-export default [
+export const assignSelectedWorkItemsSequence = [
   assignSelectedWorkItemsAction,
   getWorkItemsForSection,
   setWorkItems,

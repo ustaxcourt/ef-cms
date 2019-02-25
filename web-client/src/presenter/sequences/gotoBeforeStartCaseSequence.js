@@ -1,3 +1,5 @@
 import setCurrentPage from '../actions/setCurrentPageAction';
 
-export default [setCurrentPage('BeforeStartingCase')];
+export const gotoBeforeStartCaseSequence = [
+  setCurrentPage('BeforeStartingCase'),
+];

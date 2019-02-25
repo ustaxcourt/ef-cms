@@ -13,7 +13,7 @@ import setCaseTypes from '../actions/setCaseTypesAction';
 import setCurrentPage from '../actions/setCurrentPageAction';
 import setProcedureTypes from '../actions/setProcedureTypesAction';
 
-export default [
+export const gotoStartCaseSequence = [
   clearAlertsAction,
   clearPetitionAction,
   clearFormAction,
