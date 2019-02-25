@@ -1,4 +1,4 @@
-const { getCasesByStatus } = require('./getCasesByStatus.interactor');
+const { getCasesByStatus } = require('./getCasesByStatusInteractor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 

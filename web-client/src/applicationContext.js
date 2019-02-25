@@ -10,18 +10,18 @@ const {
 
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
-import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFile.interactor';
-import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocument.interactor';
+import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
+import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
-import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypes.interactor';
-import { filePetition } from '../../shared/src/business/useCases/filePetition.interactor';
-import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypes.interactor';
-import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypes.interactor';
-import { getTrialCities } from '../../shared/src/business/useCases/getTrialCities.interactor';
-import { getUser } from '../../shared/src/business/useCases/getUser.interactor';
+import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
+import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
+import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
+import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
+import { getTrialCities } from '../../shared/src/business/useCases/getTrialCitiesInteractor';
+import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -36,8 +36,8 @@ import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPeti
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
-import { validatePetition } from '../../shared/src/business/useCases/validatePetition.interactor';
-import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetail.interactor';
+import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
+import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 
 import Petition from '../../shared/src/business/entities/Petition';

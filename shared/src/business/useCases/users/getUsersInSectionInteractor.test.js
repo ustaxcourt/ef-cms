@@ -1,5 +1,5 @@
 const { UnauthorizedError, NotFoundError } = require('../../../errors/errors');
-const { getUsersInSection } = require('./getUsersInSection.interactor');
+const { getUsersInSection } = require('./getUsersInSectionInteractor');
 
 const MOCK_SECTION = [
   {
