@@ -128,6 +128,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    partyType: joi.string().required(),
     payGovId: joi
       .string()
       .allow(null)
