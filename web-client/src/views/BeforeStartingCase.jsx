@@ -25,7 +25,7 @@ export default connect(
               <p>
                 If youʼve received an IRS notice, such as a Notice of Deficiency
                 or Notice of Determination, youʼll need to include a copy of
-                those with your Petition. The U.S. Tax Court must receive all
+                that with your Petition. The U.S. Tax Court must receive all
                 Petitions in a timely manner. The IRS notice shows the last date
                 to file or the number of days you have to file a petition.{' '}
                 <strong>
@@ -94,7 +94,7 @@ export default connect(
             <div className="before-explanation">
               <h3>Combine Your Petition and IRS Notice(s) Into a Single PDF</h3>
               <p>
-                Scan your petition and IRS notice into one Petition PDF or
+                Scan your petition and IRS notice into one Petition PDF, or
                 combine them digitally. This is what youʼll upload to the Court
                 to start your case.{' '}
                 <a href="/">
