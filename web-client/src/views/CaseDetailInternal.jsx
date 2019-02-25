@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { CaseInformationInternal } from './CaseInformationInternal';
 import DocketRecord from './DocketRecord';
 import ErrorNotification from './ErrorNotification';
 import PartyInformation from './PartyInformation';
-import { CaseInformationInternal } from './CaseInformationInternal';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(

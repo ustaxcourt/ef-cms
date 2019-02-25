@@ -25,6 +25,8 @@ export default connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence:
+      sequences.updateHasIrsNoticeFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
@@ -42,6 +44,7 @@ export default connect(
     updateFormValueSequence,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
   }) {
@@ -89,11 +92,14 @@ export default connect(
                   <label
                     htmlFor="petition-file"
                     className={
-                      'with-hint ' +
+                      'ustc-upload-petition with-hint ' +
                       (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                     }
                   >
-                    Upload Your Petition
+                    Upload Your Petition{' '}
+                    <span className="success-message">
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    </span>
                   </label>
                   <span className="usa-form-hint">
                     File must be in PDF format (.pdf)
@@ -136,8 +142,8 @@ export default connect(
                         className="fa-icon-gold"
                         size="sm"
                       />
-                      To file a Petition on behalf of another taxpayer, you must
-                      be authorized to litigate in this Court as provided by the
+                      To file a case on behalf of another taxpayer, you must be
+                      authorized to litigate in this Court as provided by the
                       Tax Court Rules of Practice and Procedure (Rule 60).
                       Enrolled agents, certified public accountants, and powers
                       of attorney who are not admitted to practice before the
@@ -281,7 +287,7 @@ export default connect(
                       <ul className="ustc-unstyled-list">
                         {[
                           'An estate or trust',
-                          'A minor or incompetent person',
+                          'A minor or legally incompetent person',
                           'Donor',
                           'Transferee',
                           'Deceased Spouse',
@@ -369,7 +375,7 @@ export default connect(
                       >
                         <legend htmlFor="minorIncompetent-type-radios">
                           What is your role in filing for this minor or
-                          incompetent person?
+                          legally incompetent person?
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
@@ -377,7 +383,7 @@ export default connect(
                             'Guardian',
                             'Custodian',
                             'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-                            'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                            'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input
@@ -477,7 +483,7 @@ export default connect(
                         name="hasIrsNotice"
                         value={hasIrsNotice === 'Yes'}
                         onChange={e => {
-                          updateFormValueSequence({
+                          updateHasIrsNoticeFormValueSequence({
                             key: e.target.name,
                             value: e.target.value === 'true',
                           });
@@ -624,6 +630,7 @@ export default connect(
               onClick={() => toggleCaseDifferenceSequence()}
             >
               <span className="usa-banner-button-text">
+                <FontAwesomeIcon icon="question-circle" size="sm" />
                 How is a small case different than a regular case, and do I
                 qualify?
                 {form.showCaseDifference ? (
@@ -746,7 +753,7 @@ export default connect(
             your information appears the way you want it to.
           </p>
           <div className="blue-container">
-            <h3>Your Petition is Ready to Submit If&nbsp;…</h3>
+            <h3>Your Case is Ready to Submit If&nbsp;…</h3>
             <ol>
               <li>You have confirmed the timeliness of your Petition.</li>
               <li>
@@ -781,8 +788,9 @@ export default connect(
                 }}
               />
               <label htmlFor="signature">
-                Checking this box acknowledges that you’ve verified all
-                information is correct.
+                Checking this box acts as your digital signature, acknowledging
+                that you’ve verified all information is correct. You won’t be
+                able to edit your case once it’s submitted.
               </label>
               <div className="usa-input-error-message beneath">
                 {validationErrors.signature}

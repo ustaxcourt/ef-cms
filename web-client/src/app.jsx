@@ -13,6 +13,7 @@ import {
   faPaperclip,
   faPlusCircle,
   faShareSquare,
+  faQuestionCircle,
   faSignOutAlt,
   faSlash,
   faTimesCircle,
@@ -78,6 +79,7 @@ const app = {
       faSignOutAlt,
       faSlash,
       faTimesCircle,
+      faQuestionCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
