@@ -4,7 +4,7 @@ import { clearUserAction } from '../actions/clearUserAction';
 import { navigateToCognito } from '../actions/navigateToCognitoAction';
 import { setCurrentPage } from '../actions/setCurrentPageAction';
 
-export default [
+export const signOutSequence = [
   setCurrentPage('Loading'),
   clearAlertsAction,
   clearUserAction,

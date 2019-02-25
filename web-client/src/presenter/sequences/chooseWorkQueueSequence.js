@@ -6,7 +6,7 @@ import { getSentWorkItemsForSection } from '../actions/getSentWorkItemsForSectio
 import { getWorkItemsByUser } from '../actions/getWorkItemsByUserAction';
 import { getSentWorkItemsForUser } from '../actions/getSentWorkItemsForUserAction';
 
-export default [
+export const chooseWorkQueueSequence = [
   clearWorkQueueAction,
   chooseWorkQueueAction,
   {
