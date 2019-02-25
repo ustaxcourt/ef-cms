@@ -1,4 +1,4 @@
-import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
+import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
 import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
 import chooseWorkQueueSequence from './sequences/chooseWorkQueueSequence';
@@ -11,7 +11,7 @@ import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence
 import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
 import gotoDashboardSequence from './sequences/gotoDashboardSequence';
 import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoLoginSequence from './sequences/gotoLoginSequence';
+import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
 import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
 import loginWithTokenSequence from './sequences/loginWithTokenSequence';

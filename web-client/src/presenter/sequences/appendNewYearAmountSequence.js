@@ -1,3 +1,3 @@
 import { appendNewYearAmountAction } from '../actions/appendNewYearAmountAction';
 
-export default [appendNewYearAmountAction];
+export const appendNewYearAmountSequence = [appendNewYearAmountAction];
