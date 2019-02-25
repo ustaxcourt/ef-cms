@@ -1,4 +1,4 @@
-const { getTrialCities } = require('./getTrialCities.interactor');
+const { getTrialCities } = require('./getTrialCitiesInteractor');
 const joi = require('joi-browser');
 
 const schema = joi.object().keys({

@@ -920,6 +920,18 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all internal users
+            tags:
+              - workitems
+            description: >
+              get all internal users
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of users'
+                responseModels:
+                  'application/json': user
 
   getUsersInSection:
     handler: src/users/getUsersInSectionLambda.handler
@@ -932,6 +944,18 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all users in a section
+            tags:
+              - workitems
+            description: >
+              get all users in a section
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of users in the section'
+                responseModels:
+                  'application/json': user
 
   createUser:
     handler: src/users/createUserLambda.handler

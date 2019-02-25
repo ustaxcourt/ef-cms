@@ -1,4 +1,4 @@
-const { getWorkItem } = require('./getWorkItem.interactor');
+const { getWorkItem } = require('./getWorkItemInteractor');
 
 describe('getWorkItem', () => {
   let applicationContext;

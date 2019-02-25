@@ -1,5 +1,12 @@
 import { state } from 'cerebral';
 
+/**
+ * returns array of valid case types and descriptions based
+ * on whether there is an IRS notice or not
+ *
+ * @param {*} get cerebral get function
+ * @returns {Object} array of case types with descriptions
+ */
 export const caseTypeDescriptionHelper = get => {
   const form = get(state.form);
   const caseTypes = get(state.caseTypes);

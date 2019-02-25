@@ -1,4 +1,4 @@
-const { createUser } = require('./createUser.interactor');
+const { createUser } = require('./createUserInteractor');
 
 describe('create user', () => {
   it('creates the user', async () => {

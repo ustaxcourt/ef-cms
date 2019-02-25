@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import createCase from '../actions/createCaseAction';
+import { createCaseAction } from '../actions/createCaseAction';
 import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccessAction';
 import navigateToDashboard from '../actions/navigateToDashboardAction';
 import setAlertError from '../actions/setAlertErrorAction';
@@ -21,7 +21,7 @@ export default [
     success: [
       set(state.showValidation, false),
       setFormSubmitting,
-      createCase,
+      createCaseAction,
       getCreateCaseAlertSuccess,
       setAlertSuccess,
       unsetFormSubmitting,

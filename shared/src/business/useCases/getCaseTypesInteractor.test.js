@@ -1,4 +1,4 @@
-const { getCaseTypes } = require('./getCaseTypes.interactor');
+const { getCaseTypes } = require('./getCaseTypesInteractor');
 
 describe('Get case types', () => {
   beforeEach(() => {});

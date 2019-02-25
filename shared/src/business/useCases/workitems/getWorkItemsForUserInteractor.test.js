@@ -1,4 +1,4 @@
-const { getWorkItemsForUser } = require('./getWorkItemsForUser.interactor');
+const { getWorkItemsForUser } = require('./getWorkItemsForUserInteractor');
 const User = require('../../entities/User');
 
 describe('getWorkItemsForUser', () => {
