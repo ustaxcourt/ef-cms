@@ -1,7 +1,5 @@
 const swagger = require('../../swagger.json');
-const { headers } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-
 
 /**
  * return the swagger.json file
