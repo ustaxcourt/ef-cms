@@ -1,4 +1,4 @@
-const { updateWorkItem } = require('./updateWorkItem.interactor');
+const { updateWorkItem } = require('./updateWorkItemInteractor');
 
 describe('updateWorkItem', () => {
   let applicationContext;

@@ -1,4 +1,4 @@
-const { createCase } = require('./createCase.interactor');
+const { createCase } = require('./createCaseInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
 const User = require('../entities/User');
