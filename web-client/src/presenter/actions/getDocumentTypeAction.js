@@ -9,7 +9,7 @@ import Case from '../../../../shared/src/business/entities/Case';
  * @param {Object} providers.path the cerebral path object that contains the next possible sequence path to invoke
  * @returns {Object} the next path in the sequence which should be ran
  */
-export default async ({ get, path }) => {
+export const getDocumentTypeAction = async ({ get, path }) => {
   const documentType = get(state.document.documentType);
   switch (documentType) {
     case Case.documentTypes.answer:

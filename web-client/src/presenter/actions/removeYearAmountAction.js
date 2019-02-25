@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object needed for setting the state.caseDetails.yearAmounts
  * @returns {undefined} doesn't return anything
  */
-export default async ({ store, get, props }) => {
+export const removeYearAmountAction = async ({ store, get, props }) => {
   const caseDetail = get(state.caseDetail);
   const { index } = props;
   store.set(

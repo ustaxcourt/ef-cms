@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import getCasesForRespondent from '../actions/getCasesForRespondentAction';
+import { getCasesForRespondent } from '../actions/getCasesForRespondentAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import getCasesByUser from '../actions/getCasesByUserAction';
-import getUserRole from '../actions/getUserRoleAction';
-import getUsersInSection from '../actions/getUsersInSectionAction';
-import isLoggedIn from '../actions/isLoggedInAction';
-import redirectToCognito from '../actions/redirectToCognitoAction';
-import setCases from '../actions/setCasesAction';
-import setCurrentPage from '../actions/setCurrentPageAction';
-import setUsers from '../actions/setUsersAction';
+import { getCasesByUser } from '../actions/getCasesByUserAction';
+import { getUserRole } from '../actions/getUserRoleAction';
+import { getUsersInSection } from '../actions/getUsersInSectionAction';
+import { isLoggedIn } from '../actions/isLoggedInAction';
+import { redirectToCognito } from '../actions/redirectToCognitoAction';
+import { setCases } from '../actions/setCasesAction';
+import { setCurrentPage } from '../actions/setCurrentPageAction';
+import { setUsers } from '../actions/setUsersAction';
 import chooseWorkQueueSequence from './chooseWorkQueueSequence';
 
 const goToDashboard = [

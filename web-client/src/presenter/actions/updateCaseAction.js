@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral store used for getting props.combinedCaseDetailWithForm
  * @returns {Object} the alertSuccess and the caseDetail
  */
-export default async ({ applicationContext, get, props }) => {
+export const updateCaseAction = async ({ applicationContext, get, props }) => {
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 

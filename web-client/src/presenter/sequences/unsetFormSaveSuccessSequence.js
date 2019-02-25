@@ -1,2 +1,2 @@
-import unsetFormSaveSuccess from '../actions/unsetFormSaveSuccessAction';
+import { unsetFormSaveSuccess } from '../actions/unsetFormSaveSuccessAction';
 export const unsetFormSaveSuccessSequence = [unsetFormSaveSuccess];

@@ -1,6 +1,6 @@
 import { runAction } from 'cerebral/test';
 
-import setDefaultDocumentDetailTab from './setDefaultDocumentDetailTabAction';
+import { setDefaultDocumentDetailTab } from './setDefaultDocumentDetailTabAction';
 
 describe('setDefaultDocumentDetailTab', async () => {
   it('returns "Document Info" when showDocumentInfoTab is true', async () => {

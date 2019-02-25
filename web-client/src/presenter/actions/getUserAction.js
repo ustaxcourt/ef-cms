@@ -6,7 +6,7 @@
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {Object} the user
  */
-export default async ({ applicationContext, props }) => {
+export const getUserAction = async ({ applicationContext, props }) => {
   const user = await applicationContext.getUseCases().getUser(props.user);
   return { user };
 };

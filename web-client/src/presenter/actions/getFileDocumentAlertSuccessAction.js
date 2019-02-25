@@ -3,7 +3,7 @@
  *
  * @returns {Object} the alertSuccess object containing the generic messages.
  */
-export default () => {
+export const getFileDocumentAlertSuccessAction = () => {
   return {
     alertSuccess: {
       title: 'Your document was uploaded successfully.',

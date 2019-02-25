@@ -2,11 +2,11 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import getCase from '../actions/getCaseAction';
-import getUserRole from '../actions/getUserRoleAction';
-import setBaseUrl from '../actions/setBaseUrlAction';
-import setCase from '../actions/setCaseAction';
-import setCurrentPage from '../actions/setCurrentPageAction';
+import { getCase } from '../actions/getCaseAction';
+import { getUserRole } from '../actions/getUserRoleAction';
+import { setBaseUrl } from '../actions/setBaseUrlAction';
+import { setCase } from '../actions/setCaseAction';
+import { setCurrentPage } from '../actions/setCurrentPageAction';
 
 export default [
   setCurrentPage('Loading'),
