@@ -2,7 +2,7 @@ import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAct
 import { unsetFormSubmitting } from '../actions/unsetFormSubmittingAction';
 import { setCurrentPage } from '../actions/setCurrentPageAction';
 
-export default [
+export const notFoundErrorSequence = [
   unsetFormSubmitting,
   setAlertFromExceptionAction,
   setCurrentPage('Error'),

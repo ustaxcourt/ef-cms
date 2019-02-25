@@ -6,7 +6,7 @@ import { getFormCombinedWithCaseDetail } from '../actions/getFormCombinedWithCas
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { validateCaseDetail } from '../actions/validateCaseDetailAction';
 
-export default [
+export const clickServeToIrsSequence = [
   clearAlertsAction,
   getFormCombinedWithCaseDetail,
   validateCaseDetail,

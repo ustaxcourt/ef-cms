@@ -1,3 +1,3 @@
 import { setFocusedWorkItemAction } from '../actions/setFocusedWorkItemAction';
 
-export default [setFocusedWorkItemAction];
+export const setFocusedWorkItemSequence = [setFocusedWorkItemAction];
