@@ -1,7 +1,5 @@
 const swagger = require('../../swagger.json');
-const { headers } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-
 
 /**
  * return the swagger.json file
@@ -16,8 +14,4 @@ exports.handler = event =>
    * @param {Object} event the AWS event object
    * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
    */
-  handle(event, () => ({
-    statusCode: '200',
-    body: JSON.stringify(swagger),
-    headers,
-  }))
+  handle(event, () => swagger)
