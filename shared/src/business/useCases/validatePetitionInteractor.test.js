@@ -1,4 +1,4 @@
-const { validatePetition } = require('./validatePetition.interactor');
+const { validatePetition } = require('./validatePetitionInteractor');
 const Petition = require('../entities/Petition');
 const { omit } = require('lodash');
 const moment = require('moment');
@@ -18,6 +18,7 @@ describe('validatePetition', () => {
       ...omit(Petition.errorToMessageMap, [
         'ownershipDisclosureFile',
         'irsNoticeDate',
+        'caseType',
       ]),
     });
   });

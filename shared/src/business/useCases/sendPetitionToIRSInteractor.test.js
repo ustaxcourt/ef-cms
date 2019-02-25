@@ -1,7 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
-const { sendPetitionToIRS } = require('./sendPetitionToIRS.interactor');
-const { getCase } = require('./getCase.interactor');
+const { sendPetitionToIRS } = require('./sendPetitionToIRSInteractor');
+const { getCase } = require('./getCaseInteractor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 

@@ -1,4 +1,4 @@
-const { getWorkItemsBySection } = require('./getWorkItemsBySection.interactor');
+const { getWorkItemsBySection } = require('./getWorkItemsBySectionInteractor');
 
 describe('getWorkItemsBySection', () => {
   let applicationContext;

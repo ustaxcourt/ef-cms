@@ -1,4 +1,4 @@
-const { createDocument } = require('./createDocument.interactor');
+const { createDocument } = require('./createDocumentInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
 const User = require('../entities/User');
