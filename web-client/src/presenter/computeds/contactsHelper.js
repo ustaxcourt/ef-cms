@@ -21,6 +21,8 @@ export const contactsHelper = get => {
       contactPrimary = {
         header: 'Tell Us About the Corporation You Are Filing For',
         nameLabel: 'Business Name',
+        inCareOfLabel: 'In Care Of',
+        inCareOfLabelHint: 'Your Name',
         displayInCareOf: true,
       };
       break;
@@ -45,8 +47,8 @@ export const contactsHelper = get => {
     case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
       contactPrimary = {
         header:
-          'Tell Us About Yourself as the Executor/Personal Representative For This Estate',
-        nameLabel: 'Name of Executor/Personal Representative',
+          'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
+        nameLabel: 'Name of Executor/Personal Representative, etc.',
         displayTitle: true,
       };
       contactSecondary = {
@@ -58,6 +60,8 @@ export const contactsHelper = get => {
       contactPrimary = {
         header: 'Tell Us About the Estate You Are Filing For',
         nameLabel: 'Name of Decedent',
+        inCareOfLabel: 'In Care Of',
+        inCareOfLabelHint: 'Your Name',
         displayInCareOf: true,
       };
       break;
@@ -113,8 +117,7 @@ export const contactsHelper = get => {
       break;
     case 'Partnership (as a partner other than tax matters partner)':
       contactPrimary = {
-        header:
-          'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
+        header: 'Name of Partner (Other than a Tax Matters Partner)',
         nameLabel: 'Name of Partner',
       };
       contactSecondary = {
