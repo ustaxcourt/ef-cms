@@ -14,8 +14,17 @@ const EXPECTED_HEADERS = {
 };
 
 describe('handle', () => {
+  it('should return warm up string if warm up source is passed in', async () => {
+    const response = await handle({source: 'serverless-plugin-warmup'}, async () => 'success');
+    expect(response).to.deep.equal({
+      statusCode: '200',
+      body: '\"Lambda is warm!\"',
+      headers: EXPECTED_HEADERS
+    });
+  });
+
   it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
-    const response = await handle(async () => 'success');
+    const response = await handle({}, async () => 'success');
     expect(response).to.deep.equal({
       statusCode: '200',
       body: JSON.stringify('success'),
@@ -24,7 +33,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 404 status if the function returns a NotFoundError', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new NotFoundError('not-found error');
     });
     expect(response).to.deep.equal({
@@ -35,7 +44,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 403 status if the function returns an UnauthorizedError', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new UnauthorizedError('unauthorized error');
     });
     expect(response).to.deep.equal({
@@ -46,7 +55,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 400 status if the function returns an Error', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new Error('other error');
     });
     expect(response).to.deep.equal({
@@ -136,8 +145,18 @@ describe('getUserFromAuthHeader', () => {
 });
 
 describe('redirect', () => {
+  
+  it('should return warm up string if warm up source is passed in', async () => {
+    const response = await redirect({source: 'serverless-plugin-warmup'}, async () => 'success');
+    expect(response).to.deep.equal({
+      statusCode: '200',
+      body: '\"Lambda is warm!\"',
+      headers: EXPECTED_HEADERS
+    });
+  });
+
   it('should return a redirect status in the header', async () => {
-    const response = await redirect(async () => ({ url: 'example.com' }));
+    const response = await redirect({}, async () => ({ url: 'example.com' }));
     expect(response).to.deep.equal({
       statusCode: 302,
       headers: {
@@ -147,7 +166,7 @@ describe('redirect', () => {
   });
 
   it('should return error object on errors', async () => {
-    const response = await redirect(async () => {
+    const response = await redirect({}, async () => {
       throw new Error('an error');
     });
     expect(response).to.deep.equal({
