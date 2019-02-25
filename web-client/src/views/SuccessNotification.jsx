@@ -30,8 +30,14 @@ class SuccessNotification extends React.Component {
             role="alert"
             ref={this.notificationRef}
           >
-            <div className="usa-alert-body">
-              <p className="heading-3 usa-alert-heading">
+            <div className="usa-grid-full">
+              <div className="usa-alert-body usa-width-five-sixths">
+                <p className="heading-3 usa-alert-heading">
+                  {alertSuccess.title}
+                </p>
+                <p className="usa-alert-text">{alertSuccess.message}</p>
+              </div>
+              <div className="usa-alert-action usa-width-one-sixth">
                 <button
                   type="button"
                   className="modal-close-button text-style"
@@ -39,9 +45,7 @@ class SuccessNotification extends React.Component {
                 >
                   Dismiss <FontAwesomeIcon icon="times-circle" />
                 </button>
-                {alertSuccess.title}
-              </p>
-              <p className="usa-alert-text">{alertSuccess.message}</p>
+              </div>
             </div>
           </div>
         )}
