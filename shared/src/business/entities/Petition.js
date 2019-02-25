@@ -152,15 +152,15 @@ joiValidationDecorator(
   joi.object().keys({
     caseType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .when('hasIrsNotice', {
-        is: true,
-        then: joi.required(),
-        otherwise: joi.optional().allow(null),
-      }),
+    irsNoticeDate: joi.when('hasIrsNotice', {
+      is: true,
+      then: joi
+        .date()
+        .iso()
+        .max('now')
+        .required(),
+      otherwise: joi.optional().allow(null),
+    }),
     petitionFile: joi.object().required(),
     businessType: joi
       .string()
