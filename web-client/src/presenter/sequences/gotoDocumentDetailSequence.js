@@ -11,7 +11,7 @@ import setDocumentId from '../actions/setDocumentIdAction';
 import setFormForCaseAction from '../actions/setFormForCaseAction';
 import setInternalUsers from '../actions/setInternalUsersAction';
 
-export default [
+export const gotoDocumentDetailSequence = [
   setCurrentPage('Loading'),
   clearAlertsAction,
   clearWorkItemActionMapAction,

@@ -1,3 +1,3 @@
 import setAssigneeId from '../actions/setAssigneeIdAction';
 
-export default [setAssigneeId];
+export const selectAssigneeSequence = [setAssigneeId];

@@ -3,7 +3,7 @@ import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDet
 import updateCase from '../actions/updateCaseAction';
 import validateCaseDetail from '../actions/validateCaseDetailAction';
 
-export default [
+export const autoSaveCaseSequence = [
   clearAlertsAction,
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
