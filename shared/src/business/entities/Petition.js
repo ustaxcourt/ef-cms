@@ -51,8 +51,12 @@ function Petition(rawPetition) {
       );
       break;
     case 'Corporation':
-    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
       this.contactPrimary = new PetitionerCorporationContact(
+        this.contactPrimary || {},
+      );
+      break;
+    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
+      this.contactPrimary = new PetitionerIntermediaryContact(
         this.contactPrimary || {},
       );
       break;
@@ -61,7 +65,7 @@ function Petition(rawPetition) {
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );
-      this.contactSecondary = new PetitionerCorporationContact(
+      this.contactSecondary = new PetitionerIntermediaryContact(
         this.contactSecondary || {},
       );
       break;

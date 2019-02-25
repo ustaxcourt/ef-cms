@@ -9,7 +9,7 @@ function PetitionerCorporationContact(raw) {
 
 PetitionerCorporationContact.errorToMessageMap = {
   name: 'Name is a required field.',
-  inCareOf: 'In Care Of has errors.',
+  inCareOf: 'In Care Of is a required field.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State is a required field.',
@@ -27,7 +27,7 @@ joiValidationDecorator(
   PetitionerCorporationContact,
   joi.object().keys({
     name: joi.string().required(),
-    inCareOf: joi.string().optional(),
+    inCareOf: joi.string().required(),
     address1: joi.string().required(),
     city: joi.string().required(),
     state: joi.string().required(),
