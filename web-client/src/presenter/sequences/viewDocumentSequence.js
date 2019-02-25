@@ -1,3 +1,3 @@
-import { getDocument } from '../actions/getDocumentAction';
+import { getDocumentAction } from '../actions/getDocumentAction';
 
-export const viewDocumentSequence = [getDocument];
+export const viewDocumentSequence = [getDocumentAction];

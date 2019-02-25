@@ -1,11 +1,11 @@
 import { runAction } from 'cerebral/test';
 
 import presenter from '..';
-import { setValidationAlertErrors } from './setValidationAlertErrorsAction';
+import { setValidationAlertErrorsAction } from './setValidationAlertErrorsAction';
 
 describe('setValidationAlertErrors', async () => {
   it('state.alertError contains 3 errors, one from the irsNoticeDate error, and two from the yearAmounts array', async () => {
-    const { state } = await runAction(setValidationAlertErrors, {
+    const { state } = await runAction(setValidationAlertErrorsAction, {
       state: {},
       modules: {
         presenter,
@@ -36,7 +36,7 @@ describe('setValidationAlertErrors', async () => {
   });
 
   it('creates messages for errors with nested objects', async () => {
-    const { state } = await runAction(setValidationAlertErrors, {
+    const { state } = await runAction(setValidationAlertErrorsAction, {
       state: {},
       modules: {
         presenter,

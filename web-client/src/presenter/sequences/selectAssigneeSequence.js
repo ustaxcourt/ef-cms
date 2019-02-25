@@ -1,3 +1,3 @@
-import { setAssigneeId } from '../actions/setAssigneeIdAction';
+import { setAssigneeIdAction } from '../actions/setAssigneeIdAction';
 
-export const selectAssigneeSequence = [setAssigneeId];
+export const selectAssigneeSequence = [setAssigneeIdAction];

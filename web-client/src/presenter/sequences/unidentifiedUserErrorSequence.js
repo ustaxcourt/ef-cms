@@ -1,9 +1,9 @@
-import { redirectToCognito } from '../actions/redirectToCognitoAction';
+import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { unsetFormSubmitting } from '../actions/unsetFormSubmittingAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
 export const unidentifiedUserErrorSequence = [
-  unsetFormSubmitting,
+  unsetFormSubmittingAction,
   setAlertFromExceptionAction,
-  redirectToCognito,
+  redirectToCognitoAction,
 ];

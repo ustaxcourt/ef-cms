@@ -1,3 +1,3 @@
-import { setCurrentPage } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export const gotoStyleGuideSequence = [setCurrentPage('StyleGuide')];
+export const gotoStyleGuideSequence = [setCurrentPageAction('StyleGuide')];
