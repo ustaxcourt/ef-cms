@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 
-import completeWorkItem from './completeWorkItemAction';
+import { completeWorkItemAction } from './completeWorkItemAction';
 
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
@@ -23,7 +23,7 @@ presenter.providers.path = {
 
 describe('completeWorkItem', async () => {
   it('should attach an assignee id if one does not already exist', async () => {
-    const result = await runAction(completeWorkItem, {
+    const result = await runAction(completeWorkItemAction, {
       state: {
         user: {
           userId: 'docketclerk',
