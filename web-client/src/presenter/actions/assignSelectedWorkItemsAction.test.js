@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 
-import assignSelectedWorkItemsAction from './assignSelectedWorkItemsAction';
+import { assignSelectedWorkItemsAction } from './assignSelectedWorkItemsAction';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({

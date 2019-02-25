@@ -1,4 +1,4 @@
-const { forwardWorkItem } = require('./forwardWorkItem.interactor');
+const { forwardWorkItem } = require('./forwardWorkItemInteractor');
 
 describe('forwardWorkItem', () => {
   let applicationContext;
