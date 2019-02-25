@@ -65,7 +65,7 @@ const checkDate = (updatedDateString, originalDate) => {
  * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
  * @returns {Object} the combinedCaseDetailWithForm
  */
-export default ({ get }) => {
+export const getFormCombinedWithCaseDetailAction = ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),

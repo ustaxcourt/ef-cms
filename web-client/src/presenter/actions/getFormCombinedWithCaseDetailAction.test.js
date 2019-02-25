@@ -1,5 +1,5 @@
 import { runAction } from 'cerebral/test';
-import getFormCombinedWithCaseDetailAction from './getFormCombinedWithCaseDetailAction';
+import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
 import { castToISO } from './getFormCombinedWithCaseDetailAction';
 
 describe('castToISO', () => {

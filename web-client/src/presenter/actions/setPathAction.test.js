@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
-import setPathAction from './setPathAction';
+import { setPathAction } from './setPathAction';
 
 presenter.providers.applicationContext = applicationContext;
 

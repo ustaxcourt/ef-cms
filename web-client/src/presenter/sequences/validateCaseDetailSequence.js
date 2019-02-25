@@ -1,5 +1,5 @@
-import validateCaseDetail from '../actions/validateCaseDetailAction';
-import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDetailAction';
+import { validateCaseDetail } from '../actions/validateCaseDetailAction';
+import { getFormCombinedWithCaseDetail } from '../actions/getFormCombinedWithCaseDetailAction';
 
 export const validateCaseDetailSequence = [
   getFormCombinedWithCaseDetail,

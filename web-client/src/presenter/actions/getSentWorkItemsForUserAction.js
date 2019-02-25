@@ -7,7 +7,7 @@ import _ from 'lodash';
  * @param {Object} providers.applicationContext the application context used for getting the getSentWorkItemsForUser use case
  * @returns {Object} a list of sent work items for that user who sent them
  */
-export default async ({ applicationContext }) => {
+export const getSentWorkItemsForUserAction = async ({ applicationContext }) => {
   let workItems = await applicationContext
     .getUseCases()
     .getSentWorkItemsForUser({

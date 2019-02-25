@@ -1,6 +1,6 @@
 import { runAction } from 'cerebral/test';
 import presenter from '..';
-import getDocumentType from './getDocumentTypeAction';
+import { getDocumentType } from './getDocumentTypeAction';
 import sinon from 'sinon';
 
 describe('getDocumentType', async () => {

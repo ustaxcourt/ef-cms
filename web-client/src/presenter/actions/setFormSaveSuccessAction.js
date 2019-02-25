@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Function} providers.store the cerebral store used for setting the state.showSaveSuccess
  */
-export default ({ store }) => {
+export const setFormSaveSuccessAction = ({ store }) => {
   store.set(state.form.showSaveSuccess, true);
 };

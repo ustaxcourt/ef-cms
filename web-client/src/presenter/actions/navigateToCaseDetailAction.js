@@ -5,6 +5,6 @@
  * @param {Object} providers.router the riot.router object that is used for changing the route
  * @param {Object} providers.props the cerebral props that contain the props.caseId
  */
-export default async ({ router, props }) => {
+export const navigateToCaseDetailAction = async ({ router, props }) => {
   await router.route(`/case-detail/${props.caseId}`);
 };

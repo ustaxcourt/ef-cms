@@ -7,7 +7,7 @@
  * @param {Object} providers.props the cerebral props object containing props.docketNumber
  * @returns {Object} contains the caseDetail returned from the use case
  */
-export default async ({ applicationContext, props }) => {
+export const getCaseAction = async ({ applicationContext, props }) => {
   const caseDetail = await applicationContext.getUseCases().getCase({
     applicationContext,
     docketNumber: props.docketNumber,

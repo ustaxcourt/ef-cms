@@ -1,3 +1,3 @@
-import setWorkItemActionMap from '../actions/setWorkItemActionMapAction';
+import { setWorkItemActionMap } from '../actions/setWorkItemActionMapAction';
 
 export default [setWorkItemActionMap];

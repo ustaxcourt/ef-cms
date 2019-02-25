@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.get the cerebral store used for getting state.caseDetail and state.document
  * @returns {Object} the alertSuccess and the generated docketNumber
  */
-export default async ({ applicationContext, get }) => {
+export const uploadDocumentAction = async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
 
   const documentType = get(state.document.documentType);
