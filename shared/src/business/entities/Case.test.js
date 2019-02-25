@@ -110,14 +110,30 @@ describe('Case entity', () => {
       assert.ok(error === null);
     });
 
-    it('should pass when hasIRSnotice is true', () => {
-      let error = null;
-      try {
-        new Case(MOCK_CASE).validate();
-      } catch (err) {
-        error = err;
-      }
-      assert.ok(error === null);
+    describe('should pass when hasIrsNotice is provided', () => {
+      it('and hasIrsNotice is true and all required fields are provided', () => {
+        let error = null;
+        try {
+          new Case(MOCK_CASE).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
+
+      it('and hasIrsNotice is false and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { hasIrsNotice: false, caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
     });
 
     describe('should fail when hasIRSnotice is true', () => {
@@ -135,7 +151,7 @@ describe('Case entity', () => {
         expect(error).toBeDefined();
       });
 
-      it('and is missing caseType', () => {
+      it('and is missing hasIrsNotice', () => {
         let error = null;
         let rawCase = Object.assign(
           { irsNoticeDate: '2018-03-01T00:00:00.000Z', caseType: 'Other' },
