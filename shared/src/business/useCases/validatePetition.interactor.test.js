@@ -18,6 +18,7 @@ describe('validatePetition', () => {
       ...omit(Petition.errorToMessageMap, [
         'ownershipDisclosureFile',
         'irsNoticeDate',
+        'caseType',
       ]),
     });
   });

@@ -150,7 +150,11 @@ Petition.errorToMessageMap = {
 joiValidationDecorator(
   Petition,
   joi.object().keys({
-    caseType: joi.string().required(),
+    caseType: joi.when('hasIrsNotice', {
+      is: joi.exist(),
+      then: joi.string().required(),
+      otherwise: joi.optional().allow(null),
+    }),
     hasIrsNotice: joi.boolean().required(),
     irsNoticeDate: joi.when('hasIrsNotice', {
       is: true,

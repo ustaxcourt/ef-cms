@@ -78,6 +78,20 @@ describe('Petition entity', () => {
       ).toBeUndefined();
     });
 
+    it('should not require case type without indicating they have a notice ', () => {
+      const petition = new Petition({
+        hasIrsNotice: undefined,
+        procedureType: 'Small',
+        filingType: 'Myself',
+        preferredTrialCity: 'Chattanooga, TN',
+        petitionFile: {},
+        signature: true,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+      });
+      expect(petition.getFormattedValidationErrors().caseType).toBeUndefined();
+    });
+
     it('should inform you if notice date is in the future', () => {
       const petition = new Petition({
         caseType: 'other',
