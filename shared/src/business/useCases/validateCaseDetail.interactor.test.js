@@ -75,6 +75,7 @@ describe('validate case detail', () => {
   it('returns the expected errors when passed bad date objects', () => {
     const errors = validateCaseDetail({
       caseDetail: {
+        hasIrsNotice: true,
         irsNoticeDate: 'aa',
         payGovDate: '12',
       },
@@ -114,6 +115,7 @@ describe('validate case detail', () => {
           },
         ],
         petitioners: [{ name: 'user' }],
+        hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         signature: true,
         yearAmounts: [

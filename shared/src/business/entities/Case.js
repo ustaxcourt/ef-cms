@@ -115,15 +115,15 @@ joiValidationDecorator(
       .object()
       .allow(null)
       .optional(),
-    irsNoticeDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .when('hasIrsNotice', {
-        is: true,
-        then: joi.required(),
-        otherwise: joi.optional().allow(null),
-      }),
+    irsNoticeDate: joi.when('hasIrsNotice', {
+      is: true,
+      then: joi
+        .date()
+        .iso()
+        .max('now')
+        .required(),
+      otherwise: joi.optional().allow(null),
+    }),
     irsSendDate: joi
       .date()
       .iso()

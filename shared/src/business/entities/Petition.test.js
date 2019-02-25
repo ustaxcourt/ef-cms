@@ -61,6 +61,23 @@ describe('Petition entity', () => {
       );
     });
 
+    it('should not require notice date', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        procedureType: 'Small',
+        filingType: 'Myself',
+        preferredTrialCity: 'Chattanooga, TN',
+        petitionFile: {},
+        signature: true,
+        hasIrsNotice: false,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+      });
+      expect(
+        petition.getFormattedValidationErrors().irsNoticeDate,
+      ).toBeUndefined();
+    });
+
     it('should inform you if notice date is in the future', () => {
       const petition = new Petition({
         caseType: 'other',
