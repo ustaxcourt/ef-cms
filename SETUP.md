@@ -59,7 +59,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Create a “secret text” type. Provide an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `SHARED_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
-   - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` that is the value of ustc admin password created in cognito.
+   - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` that is the value of USTC admin password created in Cognito.
 
 10. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
 
@@ -68,7 +68,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
 - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
 - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
-- `COGNITO_SUFFIX` / your suffix to use for the cognito url, e.g. `flexion-efcms`
+- `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
