@@ -59,7 +59,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Create a “secret text” type. Provide an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `SHARED_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
-   - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` that is the value of USTC admin password created in Cognito.
+   - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` of your choice.  When the deploy runs, a Cognito user with the email of 'ustcadmin@example.com' will be created with the password you supplied in `secret`.  This ustcadmin@example.com user is currently only used for hitting the POST@v1/users endpoint for creating users.
 
 10. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
 
