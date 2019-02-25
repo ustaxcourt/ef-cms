@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default ({ props }) => {
+export const decodeTokenAction = ({ props }) => {
   const decoded = jwt.decode(props.token);
   decoded.userId = decoded.email;
   decoded.role = decoded['custom:role'];

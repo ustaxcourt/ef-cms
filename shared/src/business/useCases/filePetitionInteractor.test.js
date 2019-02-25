@@ -1,4 +1,4 @@
-const { filePetition } = require('./filePetition.interactor');
+const { filePetition } = require('./filePetitionInteractor');
 const sinon = require('sinon');
 
 describe('filePetition', () => {

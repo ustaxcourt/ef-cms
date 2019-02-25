@@ -1,4 +1,4 @@
-const { downloadDocumentFile } = require('./downloadDocumentFile.interactor');
+const { downloadDocumentFile } = require('./downloadDocumentFileInteractor');
 
 describe('downloadDocumentFile', () => {
   let applicationContext;
