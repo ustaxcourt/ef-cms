@@ -1,18 +1,23 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { expireFormSaveSuccess } from '../actions/expireFormSaveSuccessAction';
-import { getFormCombinedWithCaseDetail } from '../actions/getFormCombinedWithCaseDetailAction';
-import { setCase } from '../actions/setCaseAction';
-import { setFormSaveSuccess } from '../actions/setFormSaveSuccessAction';
+import { expireFormSaveSuccessAction } from '../actions/expireFormSaveSuccessAction';
+import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setFormSaveSuccessAction } from '../actions/setFormSaveSuccessAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { updateCase } from '../actions/updateCaseAction';
-import { validateCaseDetail } from '../actions/validateCaseDetailAction';
+import { updateCaseAction } from '../actions/updateCaseAction';
+import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const submitCaseDetailEditSaveSequence = [
   clearAlertsAction,
-  getFormCombinedWithCaseDetail,
-  validateCaseDetail,
+  getFormCombinedWithCaseDetailAction,
+  validateCaseDetailAction,
   {
-    success: [updateCase, setCase, setFormSaveSuccess, expireFormSaveSuccess],
+    success: [
+      updateCaseAction,
+      setCaseAction,
+      setFormSaveSuccessAction,
+      expireFormSaveSuccessAction,
+    ],
     error: [setValidationAlertErrorsAction],
   },
 ];

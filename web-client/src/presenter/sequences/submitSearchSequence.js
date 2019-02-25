@@ -1,4 +1,7 @@
-import { setCaseIdFromSearch } from '../actions/setCaseIdFromSearchAction';
-import { navigateToCaseDetail } from '../actions/navigateToCaseDetailAction';
+import { setCaseIdFromSearchAction } from '../actions/setCaseIdFromSearchAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 
-export const submitSearchSequence = [setCaseIdFromSearch, navigateToCaseDetail];
+export const submitSearchSequence = [
+  setCaseIdFromSearchAction,
+  navigateToCaseDetailAction,
+];

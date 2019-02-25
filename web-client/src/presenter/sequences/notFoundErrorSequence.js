@@ -1,9 +1,9 @@
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { unsetFormSubmitting } from '../actions/unsetFormSubmittingAction';
-import { setCurrentPage } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
 export const notFoundErrorSequence = [
-  unsetFormSubmitting,
+  unsetFormSubmittingAction,
   setAlertFromExceptionAction,
-  setCurrentPage('Error'),
+  setCurrentPageAction('Error'),
 ];

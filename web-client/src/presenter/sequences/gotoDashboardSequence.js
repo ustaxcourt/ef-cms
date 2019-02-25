@@ -1,57 +1,60 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getCasesForRespondent } from '../actions/getCasesForRespondentAction';
-import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { getCasesByUser } from '../actions/getCasesByUserAction';
-import { getUserRole } from '../actions/getUserRoleAction';
-import { getUsersInSection } from '../actions/getUsersInSectionAction';
-import { isLoggedIn } from '../actions/isLoggedInAction';
-import { redirectToCognito } from '../actions/redirectToCognitoAction';
-import { setCases } from '../actions/setCasesAction';
-import { setCurrentPage } from '../actions/setCurrentPageAction';
-import { setUsers } from '../actions/setUsersAction';
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { getCasesByUserAction } from '../actions/getCasesByUserAction';
+import { getCasesForRespondentAction } from '../actions/getCasesForRespondentAction';
+import { getUserRoleAction } from '../actions/getUserRoleAction';
+import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { setCasesAction } from '../actions/setCasesAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setUsersAction } from '../actions/setUsersAction';
 
 const goToDashboard = [
-  setCurrentPage('Loading'),
+  setCurrentPageAction('Loading'),
   clearErrorAlertsAction,
-  getUserRole,
+  getUserRoleAction,
   {
     petitioner: [
-      getCasesByUser,
-      setCases,
-      setCurrentPage('DashboardPetitioner'),
+      getCasesByUserAction,
+      setCasesAction,
+      setCurrentPageAction('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      getUsersInSection({ section: 'petitions' }),
-      setUsers,
+      getUsersInSectionAction({ section: 'petitions' }),
+      setUsersAction,
       ...chooseWorkQueueSequence,
-      setCurrentPage('DashboardPetitionsClerk'),
+      setCurrentPageAction('DashboardPetitionsClerk'),
     ],
     docketclerk: [
-      getUsersInSection({ section: 'docket' }),
-      setUsers,
+      getUsersInSectionAction({ section: 'docket' }),
+      setUsersAction,
       ...chooseWorkQueueSequence,
-      setCurrentPage('DashboardDocketClerk'),
+      setCurrentPageAction('DashboardDocketClerk'),
     ],
-    intakeclerk: [clearAlertsAction, setCurrentPage('DashboardIntakeClerk')],
+    intakeclerk: [
+      clearAlertsAction,
+      setCurrentPageAction('DashboardIntakeClerk'),
+    ],
     respondent: [
       clearAlertsAction,
-      getCasesForRespondent,
-      setCases,
-      setCurrentPage('DashboardRespondent'),
+      getCasesForRespondentAction,
+      setCasesAction,
+      setCurrentPageAction('DashboardRespondent'),
     ],
     seniorattorney: [
       clearAlertsAction,
       ...chooseWorkQueueSequence,
-      setCurrentPage('DashboardSeniorAttorney'),
+      setCurrentPageAction('DashboardSeniorAttorney'),
     ],
   },
 ];
 
 export const gotoDashboardSequence = [
-  isLoggedIn,
+  isLoggedInAction,
   {
-    unauthorized: [redirectToCognito],
+    unauthorized: [redirectToCognitoAction],
     isLoggedIn: goToDashboard,
   },
 ];

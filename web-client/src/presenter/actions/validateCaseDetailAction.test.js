@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import { validateCaseDetail } from './validateCaseDetailAction';
+import { validateCaseDetailAction } from './validateCaseDetailAction';
 
 const validateCaseDetailStub = sinon.stub().returns(null);
 const successStub = sinon.stub();
@@ -21,7 +21,7 @@ presenter.providers.path = {
 
 describe('validateCaseDetail', async () => {
   it('should call the path success when no errors are found', async () => {
-    await runAction(validateCaseDetail, {
+    await runAction(validateCaseDetailAction, {
       state: {},
       modules: {
         presenter,
@@ -44,7 +44,7 @@ describe('validateCaseDetail', async () => {
 
   it('should call the path error when any errors are found', async () => {
     validateCaseDetailStub.returns('error');
-    await runAction(validateCaseDetail, {
+    await runAction(validateCaseDetailAction, {
       state: {
         form: {
           irsYear: '2009',

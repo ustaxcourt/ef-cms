@@ -1,5 +1,5 @@
-import { setCurrentPage } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoBeforeStartCaseSequence = [
-  setCurrentPage('BeforeStartingCase'),
+  setCurrentPageAction('BeforeStartingCase'),
 ];

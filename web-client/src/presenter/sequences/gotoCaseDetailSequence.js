@@ -2,27 +2,27 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getCase } from '../actions/getCaseAction';
-import { getUserRole } from '../actions/getUserRoleAction';
-import { setBaseUrl } from '../actions/setBaseUrlAction';
-import { setCase } from '../actions/setCaseAction';
-import { setCurrentPage } from '../actions/setCurrentPageAction';
+import { getCaseAction } from '../actions/getCaseAction';
+import { getUserRoleAction } from '../actions/getUserRoleAction';
+import { setBaseUrlAction } from '../actions/setBaseUrlAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoCaseDetailSequence = [
-  setCurrentPage('Loading'),
+  setCurrentPageAction('Loading'),
   clearAlertsAction,
-  getCase,
-  setCase,
+  getCaseAction,
+  setCaseAction,
   set(state.currentTab, 'Docket Record'),
-  setBaseUrl,
-  getUserRole,
+  setBaseUrlAction,
+  getUserRoleAction,
   {
-    docketclerk: [setCurrentPage('CaseDetailInternal')],
-    intakeclerk: [setCurrentPage('CaseDetailInternal')],
-    petitionsclerk: [setCurrentPage('CaseDetailInternal')],
-    public: [setCurrentPage('CaseDetailPublic')],
-    respondent: [setCurrentPage('CaseDetailRespondent')],
-    seniorattorney: [setCurrentPage('CaseDetailInternal')],
-    petitioner: [setCurrentPage('CaseDetailPetitioner')],
+    docketclerk: [setCurrentPageAction('CaseDetailInternal')],
+    intakeclerk: [setCurrentPageAction('CaseDetailInternal')],
+    petitionsclerk: [setCurrentPageAction('CaseDetailInternal')],
+    public: [setCurrentPageAction('CaseDetailPublic')],
+    respondent: [setCurrentPageAction('CaseDetailRespondent')],
+    seniorattorney: [setCurrentPageAction('CaseDetailInternal')],
+    petitioner: [setCurrentPageAction('CaseDetailPetitioner')],
   },
 ];

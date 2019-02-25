@@ -1,3 +1,3 @@
-import { setWorkItemActionMap } from '../actions/setWorkItemActionMapAction';
+import { setWorkItemActionMapAction } from '../actions/setWorkItemActionMapAction';
 
-export const setWorkItemActionSequence = [setWorkItemActionMap];
+export const setWorkItemActionSequence = [setWorkItemActionMapAction];

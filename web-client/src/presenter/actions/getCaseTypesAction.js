@@ -6,7 +6,7 @@
  * @param {Function} providers.get the cerebral get function used for getting state.user.userId
  * @returns {Object} contains the caseTypes array returned from the getCaseTypes use case
  */
-export const getCaseTypes = async ({ applicationContext }) => {
+export const getCaseTypesAction = async ({ applicationContext }) => {
   const caseTypes = await applicationContext.getUseCases().getCaseTypes({
     applicationContext,
   });
