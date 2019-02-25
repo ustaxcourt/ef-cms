@@ -1,6 +1,6 @@
 const {
   fileRespondentDocument,
-} = require('./fileRespondentDocument.interactor');
+} = require('./fileRespondentDocumentInteractor');
 
 describe('fileRespondentDocument', () => {
   let applicationContext;

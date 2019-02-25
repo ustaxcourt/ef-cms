@@ -1,6 +1,6 @@
 const {
   getSentWorkItemsForUser,
-} = require('./getSentWorkItemsForUser.interactor');
+} = require('./getSentWorkItemsForUserInteractor');
 
 describe('getSentWorkItemsForUser', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
