@@ -9,7 +9,7 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
-export default [
+export const submitForwardSequence = [
   setFormSubmitting,
   clearAlertsAction,
   forwardWorkItemAction,

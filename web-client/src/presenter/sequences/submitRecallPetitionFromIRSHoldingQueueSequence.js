@@ -6,7 +6,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import getCase from '../actions/getCaseAction';
 import setCase from '../actions/setCaseAction';
 
-export default [
+export const submitRecallPetitionFromIRSHoldingQueueSequence = [
   clearAlertsAction,
   clearModalAction,
   recallPetitionFromIRSHoldingQueue,
