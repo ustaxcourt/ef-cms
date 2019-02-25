@@ -51,6 +51,7 @@ import updateCurrentTabSequence from './sequences/updateCurrentTabSequence';
 import updateDocumentValueSequence from './sequences/updateDocumentValueSequence';
 import updateFormValueSequence from './sequences/updateFormValueSequence';
 import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
+import updateHasIrsNoticeFormValueSequence from './sequences/updateHasIrsNoticeFormValueSequence';
 import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
 import updateSearchTermSequence from './sequences/updateSearchTermSequence';
 import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
@@ -124,6 +125,7 @@ export default {
     updateDocumentValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,

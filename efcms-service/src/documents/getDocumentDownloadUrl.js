@@ -7,8 +7,8 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.get = event =>
-  redirect(() => {
+exports.handler = event =>
+  redirect(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
