@@ -1,4 +1,4 @@
 import setCaseIdFromSearch from '../actions/setCaseIdFromSearchAction';
 import navigateToCaseDetail from '../actions/navigateToCaseDetailAction';
 
-export default [setCaseIdFromSearch, navigateToCaseDetail];
+export const submitSearchSequence = [setCaseIdFromSearch, navigateToCaseDetail];

@@ -4,7 +4,7 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
 import updateCase from '../actions/updateCaseAction';
 
-export default [
+export const submitUpdateCaseSequence = [
   clearAlertsAction,
   clearFormAction,
   updateCase,

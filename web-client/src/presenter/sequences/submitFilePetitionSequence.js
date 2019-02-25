@@ -13,7 +13,7 @@ import setValidationErrorsAction from '../actions/setValidationErrorsAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import validatePetition from '../actions/validatePetitionAction';
 
-export default [
+export const submitFilePetitionSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
   validatePetition,

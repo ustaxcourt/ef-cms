@@ -45,7 +45,6 @@
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
@@ -102,6 +101,8 @@
     "webdriver-manager": "^12.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
     "eslint-plugin-jsdoc": "^4.1.1"
   }
 }
