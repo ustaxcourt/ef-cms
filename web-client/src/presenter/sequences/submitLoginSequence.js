@@ -8,7 +8,7 @@ import setToken from '../actions/setTokenAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 import navigateToPath from '../actions/navigateToPathAction';
 
-export default [
+export const submitLoginSequence = [
   setFormSubmitting,
   createTokenAction,
   decodeTokenAction,

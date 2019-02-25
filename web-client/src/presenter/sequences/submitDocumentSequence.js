@@ -10,7 +10,7 @@ import setCase from '../actions/setCaseAction';
 import setFormSubmitting from '../actions/setFormSubmittingAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
 
-export default [
+export const submitDocumentSequence = [
   clearAlertsAction,
   setFormSubmitting,
   getDocumentType,

@@ -6,7 +6,7 @@ import setAlertSuccess from '../actions/setAlertSuccessAction';
 import setCase from '../actions/setCaseAction';
 import { clearModalAction } from '../actions/clearModalAction';
 
-export default [
+export const submitPetitionToIRSHoldingQueueSequence = [
   clearAlertsAction,
   clearModalAction,
   sendPetitionToIRSHoldingQueueAction,

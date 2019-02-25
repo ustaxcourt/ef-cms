@@ -1,4 +1,6 @@
 import { toggle } from 'cerebral/factories';
 import { state } from 'cerebral';
 
-export default [toggle(state.form.showCaseDifference)];
+export const toggleCaseDifferenceSequence = [
+  toggle(state.form.showCaseDifference),
+];

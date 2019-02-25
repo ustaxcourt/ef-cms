@@ -7,7 +7,7 @@ import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsA
 import updateCase from '../actions/updateCaseAction';
 import validateCaseDetail from '../actions/validateCaseDetailAction';
 
-export default [
+export const submitCaseDetailEditSaveSequence = [
   clearAlertsAction,
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
