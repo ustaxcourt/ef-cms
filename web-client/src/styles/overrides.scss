@@ -92,8 +92,27 @@
   }
 
   button {
-    margin-top: 5px;
     float: right;
+
+    @media only screen and (max-width: $medium-screen) {
+      width: 100%;
+      padding-left: 5rem;
+      text-align: left;
+    }
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    .usa-width-five-sixths {
+      width: 80.5%;
+      margin-right: 2%;
+    }
+    .usa-width-one-sixth {
+      width: 17.5%;
+
+      button {
+        margin-top: 5px;
+      }
+    }
   }
 }
 
