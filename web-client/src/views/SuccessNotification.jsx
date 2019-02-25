@@ -1,9 +1,8 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 
 class SuccessNotification extends React.Component {
   componentDidUpdate() {
