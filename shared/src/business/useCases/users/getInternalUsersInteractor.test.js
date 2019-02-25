@@ -1,4 +1,4 @@
-const { getInternalUsers } = require('./getInternalUsers.interactor');
+const { getInternalUsers } = require('./getInternalUsersInteractor');
 
 describe('Get internal users', () => {
   const applicationContext = {

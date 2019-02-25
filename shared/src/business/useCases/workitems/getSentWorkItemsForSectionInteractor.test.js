@@ -1,6 +1,6 @@
 const {
   getSentWorkItemsForSection,
-} = require('./getSentWorkItemsForSection.interactor');
+} = require('./getSentWorkItemsForSectionInteractor');
 
 describe('getSentWorkItemsForSection', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
