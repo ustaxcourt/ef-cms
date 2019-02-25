@@ -1,4 +1,4 @@
-const { updateCase } = require('./updateCase.interactor');
+const { updateCase } = require('./updateCaseInteractor');
 const { omit } = require('lodash');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 

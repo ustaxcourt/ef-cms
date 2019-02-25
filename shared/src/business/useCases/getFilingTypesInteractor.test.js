@@ -1,17 +1,18 @@
-const { getProcedureTypes } = require('./getProcedureTypes.interactor');
+const { getFilingTypes } = require('./getFilingTypesInteractor');
 const Case = require('../entities/Case');
 
-const validateProcedureTypes = procedureTypes => {
-  procedureTypes.forEach(procedureType => {
-    if (!Case.getProcedureTypes().includes(procedureType)) {
-      throw new Error('invalid procedure type');
+const validateFilingTypes = filingTypes => {
+  filingTypes.forEach(filingType => {
+    if (!Case.getFilingTypes().includes(filingType)) {
+      throw new Error('invalid filing type');
     }
   });
 };
-describe('Get case procedure types', () => {
+
+describe('Get case filing types', () => {
   beforeEach(() => {});
 
-  it('returns a collection of procedure types', async () => {
+  it('returns a collection of filing types', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
@@ -20,15 +21,14 @@ describe('Get case procedure types', () => {
         };
       },
     };
-    const procedureTypes = await getProcedureTypes({
+    const filingTypes = await getFilingTypes({
       applicationContext,
     });
-    expect(procedureTypes.length).toEqual(2);
-    expect(procedureTypes[0]).toEqual('Regular');
-    expect(procedureTypes[1]).toEqual('Small');
+    expect(filingTypes.length).toEqual(4);
+    expect(filingTypes[0]).toEqual('Myself');
     let error;
     try {
-      validateProcedureTypes(procedureTypes);
+      validateFilingTypes(filingTypes);
     } catch (e) {
       error = e;
     }
@@ -45,7 +45,7 @@ describe('Get case procedure types', () => {
     };
     let error;
     try {
-      await getProcedureTypes({
+      await getFilingTypes({
         applicationContext,
       });
     } catch (err) {

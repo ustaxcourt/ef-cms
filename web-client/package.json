@@ -50,20 +50,20 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "@cerebral/react": "^4.0.4",
+    "@cerebral/react": "^4.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-regular-svg-icons": "^5.7.2",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "acorn": "^6.1.0",
-    "ajv": "^6.9.1",
-    "autoprefixer": "^9.4.8",
+    "ajv": "^6.9.2",
+    "autoprefixer": "^9.4.9",
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.16.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-plugin-cerebral": "^1.0.1",
-    "cerebral": "^5.0.4",
+    "cerebral": "^5.1.0",
     "cypress": "^3.1.5",
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.0.0",
@@ -93,7 +93,7 @@
     "regenerator-runtime": "^0.12.1",
     "riot": "^3.13.2",
     "riot-route": "^3.1.4",
-    "sass": "^1.17.1",
+    "sass": "^1.17.2",
     "sinon": "^7.2.4",
     "stylelint": "^9.10.1",
     "stylelint-config-idiomatic-order": "^6.2.0",
@@ -102,6 +102,6 @@
     "webdriver-manager": "^12.1.1"
   },
   "devDependencies": {
-    "eslint-plugin-jsdoc": "^4.1.0"
+    "eslint-plugin-jsdoc": "^4.1.1"
   }
 }
