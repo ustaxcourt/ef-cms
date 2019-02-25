@@ -70,7 +70,7 @@ function Petition(rawPetition) {
       );
       break;
     case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
-    case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+    case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
       this.contactPrimary = new PetitionerPrimaryContact(
         this.contactPrimary || {},
       );

@@ -206,7 +206,7 @@
       ]
     },
     {
-      "notes": "expose hidden elements on start-a-case for party type Incompetent Person",
+      "notes": "expose hidden elements on start-a-case for party type Legally Incompetent Person",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-incompetent-person",
       "actions": [
         "wait for element label#filing-type-3 to be visible",
@@ -280,6 +280,15 @@
       "actions": [
         "wait for #case-info-tab to be visible",
         "click element #case-info-tab"
+      ]
+    },
+    {
+      "notes": "checks a11y of editable fields exposed when Yes notice attached",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/61e96924-ce65-49f4-bebf-780bfc148520&info=reveal-notice-options",
+      "actions": [
+        "wait for #irs-notice-radios to be visible",
+        "click element label#has-irs-notice-0",
+        "wait for #date-of-notice-month to be visible"
       ]
     },
 
