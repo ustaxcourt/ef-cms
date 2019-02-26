@@ -162,15 +162,15 @@ joiValidationDecorator(
     }),
     filingType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi.when('hasIrsNotice', {
-      is: true,
-      then: joi
-        .date()
-        .iso()
-        .max('now')
-        .required(),
-      otherwise: joi.optional().allow(null),
-    }),
+    irsNoticeDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .when('hasIrsNotice', {
+        is: true,
+        then: joi.required(),
+        otherwise: joi.optional().allow(null),
+      }),
     ownershipDisclosureFile: joi.object().when('filingType', {
       is: 'A business',
       then: joi.required(),
