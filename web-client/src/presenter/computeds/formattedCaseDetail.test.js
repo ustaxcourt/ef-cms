@@ -120,4 +120,67 @@ describe('formatYearAmounts', () => {
       },
     ]);
   });
+
+  it('sets shouldShowIrsNoticeDate to true when irsNoticeDate is true and hasVerifiedIrsNotice is undefined', async () => {
+    const caseDetail = {
+      hasIrsNotice: true,
+      hasVerifiedIrsNotice: undefined,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.shouldShowIrsNoticeDate).toBeTruthy();
+  });
+
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when irsNoticeDate is true and hasVerifiedIrsNotice is true', async () => {
+    const caseDetail = {
+      hasIrsNotice: true,
+      hasVerifiedIrsNotice: true,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.shouldShowIrsNoticeDate).toBeTruthy();
+    expect(result.shouldShowYearAmounts).toBeTruthy();
+  });
+
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when irsNoticeDate is false and hasVerifiedIrsNotice is undefined', async () => {
+    const caseDetail = {
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: undefined,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.shouldShowIrsNoticeDate).toBeFalsy();
+    expect(result.shouldShowYearAmounts).toBeFalsy();
+  });
+
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when irsNoticeDate is false and hasVerifiedIrsNotice is false', async () => {
+    const caseDetail = {
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.shouldShowIrsNoticeDate).toBeFalsy();
+    expect(result.shouldShowYearAmounts).toBeFalsy();
+  });
 });
