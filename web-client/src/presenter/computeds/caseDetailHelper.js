@@ -9,8 +9,6 @@ export default get => {
     'CaseDetailRespondent',
   ].includes(currentPage);
 
-  const isRespondentView = ['CaseDetailRespondent'].includes(currentPage);
-
   const isPetitionerView = ['CaseDetailPetitioner'].includes(currentPage);
 
   return {
@@ -26,6 +24,6 @@ export default get => {
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
     showActionRequired: !caseDetail.payGovId,
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
-    showPreferredTrialCity: !isRespondentView && caseDetail.preferredTrialCity,
+    showPreferredTrialCity: caseDetail.preferredTrialCity,
   };
 };
