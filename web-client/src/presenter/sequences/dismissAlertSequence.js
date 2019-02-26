@@ -1,3 +1,3 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 
-export default [clearAlertsAction];
+export const dismissAlertSequence = [clearAlertsAction];

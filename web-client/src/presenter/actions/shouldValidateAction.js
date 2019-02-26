@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default ({ path, get }) => {
+export const shouldValidateAction = ({ path, get }) => {
   if (get(state.showValidation)) return path.validate();
   return path.ignore();
 };

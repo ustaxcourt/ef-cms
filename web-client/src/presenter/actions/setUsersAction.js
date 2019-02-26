@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting state.users
  * @param {Object} providers.props the cerebral props object used for getting the props.users
  */
-export default ({ store, props }) => {
+export const setUsersAction = ({ store, props }) => {
   store.set(state.users, props.users);
 };

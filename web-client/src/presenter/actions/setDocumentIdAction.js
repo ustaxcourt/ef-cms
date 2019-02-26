@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting the state.documentId
  * @param {Object} providers.props the cerebral props object used for passing the props.documentId
  */
-export default ({ store, props }) => {
+export const setDocumentIdAction = ({ store, props }) => {
   store.set(state.documentId, props.documentId);
 };
