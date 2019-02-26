@@ -122,7 +122,7 @@ describe('updatePartyTypeAction', async () => {
     expect(state.form.otherType).toEqual('A minor or incompetent person');
   });
 
-  it('sets the petition.ownershipDisclosureFile and form.businessType when form.filingType is not "A business"', async () => {
+  it('resets the state.petition.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
@@ -132,7 +132,7 @@ describe('updatePartyTypeAction', async () => {
         },
         {
           form: {
-            filingType: 'Not a Business',
+            filingType: 'Not A business',
             businessType: 'some value',
           },
           petition: {
