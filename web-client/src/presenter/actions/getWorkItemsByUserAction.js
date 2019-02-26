@@ -4,7 +4,7 @@
  * @param {Object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{workItems: Array}>} a list of work items
  */
-export default async ({ applicationContext }) => {
+export const getWorkItemsByUserAction = async ({ applicationContext }) => {
   const useCases = applicationContext.getUseCases();
   const workItems = await useCases.getWorkItemsForUser({
     userId: applicationContext.getCurrentUser().userId,

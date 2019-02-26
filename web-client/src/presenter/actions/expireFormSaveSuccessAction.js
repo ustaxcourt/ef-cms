@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object used for setting state.form.showSaveSuccess
  */
-export default ({ store }) => {
+export const expireFormSaveSuccessAction = ({ store }) => {
   const EXPIRE_TIMEOUT_MS = 2000;
   setTimeout(() => {
     store.set(state.form.showSaveSuccess, false);

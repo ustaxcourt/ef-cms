@@ -1,12 +1,12 @@
 import { props, state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
-import getTrialCities from '../actions/getTrialCitiesAction';
-import setTrialCities from '../actions/setTrialCitiesAction';
+import { getTrialCitiesAction } from '../actions/getTrialCitiesAction';
+import { setTrialCitiesAction } from '../actions/setTrialCitiesAction';
 
-export default [
+export const getTrialCitiesSequence = [
   set(state.form.procedureType, props.value),
   set(state.form.preferredTrialCity, ''),
-  getTrialCities,
-  setTrialCities,
+  getTrialCitiesAction,
+  setTrialCitiesAction,
 ];

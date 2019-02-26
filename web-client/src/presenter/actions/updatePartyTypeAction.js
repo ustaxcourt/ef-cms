@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ store, props, get }) => {
+export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
   if (props.key === 'filingType') {
     switch (props.value) {

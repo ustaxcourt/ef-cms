@@ -1,3 +1,3 @@
 import { clearModalAction } from '../actions/clearModalAction';
 
-export default [clearModalAction];
+export const dismissModalSequence = [clearModalAction];

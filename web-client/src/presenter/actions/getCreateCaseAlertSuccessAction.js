@@ -3,7 +3,7 @@
  *
  * @returns {Object} the alertSuccess object with default strings
  */
-export default () => {
+export const getCreateCaseAlertSuccessAction = () => {
   return {
     alertSuccess: {
       title: 'Your petition has been successfully submitted.',

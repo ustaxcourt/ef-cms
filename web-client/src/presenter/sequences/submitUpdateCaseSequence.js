@@ -1,13 +1,13 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import setAlertSuccess from '../actions/setAlertSuccessAction';
-import setCase from '../actions/setCaseAction';
-import updateCase from '../actions/updateCaseAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { updateCaseAction } from '../actions/updateCaseAction';
 
-export default [
+export const submitUpdateCaseSequence = [
   clearAlertsAction,
   clearFormAction,
-  updateCase,
-  setCase,
-  setAlertSuccess,
+  updateCaseAction,
+  setCaseAction,
+  setAlertSuccessAction,
 ];

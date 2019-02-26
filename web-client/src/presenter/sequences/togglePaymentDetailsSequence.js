@@ -1,4 +1,6 @@
 import { toggle } from 'cerebral/factories';
 import { state } from 'cerebral';
 
-export default [toggle(state.paymentInfo.showDetails)];
+export const togglePaymentDetailsSequence = [
+  toggle(state.paymentInfo.showDetails),
+];

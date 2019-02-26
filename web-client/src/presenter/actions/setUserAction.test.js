@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import setUserAction from './setUserAction';
+import { setUserAction } from './setUserAction';
 
 const setCurrentUserStub = sinon.stub().returns(null);
 
