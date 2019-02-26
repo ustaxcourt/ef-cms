@@ -87,7 +87,7 @@ App.propTypes = {
   currentPage: PropTypes.string,
 };
 
-export default connect(
+export const AppComponent = connect(
   {
     currentPage: state.currentPage,
   },
