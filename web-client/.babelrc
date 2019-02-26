@@ -3,6 +3,7 @@
     [
       "@babel/preset-env",
       {
+        "useBuiltIns": "usage",
         "targets": {
           "chrome": "70",
           "edge": "42",
