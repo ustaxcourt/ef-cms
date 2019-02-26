@@ -22,9 +22,6 @@ export const createCaseAction = async ({ applicationContext, get, store }) => {
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
-        state.form.day,
-      )}`,
     },
     ['year', 'month', 'day', 'trialCities', 'signature'],
   );
