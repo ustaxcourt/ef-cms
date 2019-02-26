@@ -1,4 +1,6 @@
 import { set } from 'cerebral/factories';
 import { state, props } from 'cerebral';
 
-export default [set(state.petition[props.key], props.value)];
+export const updatePetitionValueSequence = [
+  set(state.petition[props.key], props.value),
+];

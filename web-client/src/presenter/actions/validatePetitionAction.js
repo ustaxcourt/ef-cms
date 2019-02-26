@@ -10,7 +10,7 @@ import { omit } from 'lodash';
  * @param {Object} providers.get the cerebral get function used for getting state.form
  * @returns {Object} the next path based on if validation was successful or error
  */
-export default ({ applicationContext, path, get }) => {
+export const validatePetitionAction = ({ applicationContext, path, get }) => {
   const petition = get(state.petition);
 
   const form = omit(

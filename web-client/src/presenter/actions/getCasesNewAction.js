@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {Function} providers.get the cerebral get function used for getting state.user.token
  * @returns {Object} contains the caseList returned from the getCasesByStatus use case
  */
-export default async ({ applicationContext, get }) => {
+export const getCasesNewAction = async ({ applicationContext, get }) => {
   let caseList = await applicationContext.getUseCases().getCasesByStatus({
     applicationContext,
     userId: get(state.user.token),

@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store used for setting state.submitting
  */
-export default ({ store }) => {
+export const unsetFormSubmittingAction = ({ store }) => {
   store.set(state.submitting, false);
 };

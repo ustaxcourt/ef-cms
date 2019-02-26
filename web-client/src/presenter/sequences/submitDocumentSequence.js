@@ -2,25 +2,25 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import fileRespondentDocument from '../actions/fileRespondentDocumentAction';
-import getCase from '../actions/getCaseAction';
-import getDocumentType from '../actions/getDocumentTypeAction';
-import setAlertSuccess from '../actions/setAlertSuccessAction';
-import setCase from '../actions/setCaseAction';
-import setFormSubmitting from '../actions/setFormSubmittingAction';
-import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
+import { fileRespondentDocumentAction } from '../actions/fileRespondentDocumentAction';
+import { getCaseAction } from '../actions/getCaseAction';
+import { getDocumentTypeAction } from '../actions/getDocumentTypeAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
-export default [
+export const submitDocumentSequence = [
   clearAlertsAction,
-  setFormSubmitting,
-  getDocumentType,
+  setFormSubmittingAction,
+  getDocumentTypeAction,
   {
-    answer: [fileRespondentDocument],
-    stipulatedDecision: [fileRespondentDocument],
+    answer: [fileRespondentDocumentAction],
+    stipulatedDecision: [fileRespondentDocumentAction],
   },
-  getCase,
-  setCase,
-  setAlertSuccess,
-  unsetFormSubmitting,
+  getCaseAction,
+  setCaseAction,
+  setAlertSuccessAction,
+  unsetFormSubmittingAction,
   set(state.currentTab, 'Docket Record'),
 ];

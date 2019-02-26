@@ -8,7 +8,7 @@ import moment from 'moment';
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
  * @param {Object} providers.store the cerebral store used for setting the state.form
  */
-export default ({ get, store }) => {
+export const setFormForCaseAction = ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
   const irsNoticeDate = moment(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
   if (

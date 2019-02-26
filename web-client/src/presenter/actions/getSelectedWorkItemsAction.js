@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the selectedWorkItems
  * @returns {Object} a list of selected work items
  */
-export default async ({ get }) => {
+export const getSelectedWorkItemsAction = async ({ get }) => {
   return get(state.selectedWorkItems);
 };
