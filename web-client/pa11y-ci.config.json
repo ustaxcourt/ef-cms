@@ -286,8 +286,8 @@
       "notes": "checks a11y of editable fields exposed when Yes notice attached",
       "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/61e96924-ce65-49f4-bebf-780bfc148520&info=reveal-notice-options",
       "actions": [
-        "wait for #irs-notice-radios to be visible",
-        "click element label#has-irs-notice-0",
+        "wait for label#has-irs-verified-notice-yes to be visible",
+        "click element label#has-irs-verified-notice-yes",
         "wait for #date-of-notice-month to be visible"
       ]
     },

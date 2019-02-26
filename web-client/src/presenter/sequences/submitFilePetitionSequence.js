@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeIrsNoticeDateAction } from '../actions/computeIrsNoticeDateAction';
 import { createCaseAction } from '../actions/createCaseAction';
 import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
@@ -16,6 +17,7 @@ import { validatePetitionAction } from '../actions/validatePetitionAction';
 export const submitFilePetitionSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
+  computeIrsNoticeDateAction,
   validatePetitionAction,
   {
     success: [
