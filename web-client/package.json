@@ -45,9 +45,8 @@
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
     "@babel/polyfill": "^7.2.5",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@cerebral/react": "^4.1.0",
@@ -60,15 +59,15 @@
     "autoprefixer": "^9.4.9",
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.16.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.1.0",
     "babel-plugin-cerebral": "^1.0.1",
     "cerebral": "^5.1.0",
     "cypress": "^3.1.5",
     "eslint": "^5.14.1",
-    "eslint-config-prettier": "^4.0.0",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-jest": "^22.3.0",
+    "eslint-plugin-jsdoc": "^4.1.1",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
@@ -76,7 +75,7 @@
     "form-data": "^2.3.3",
     "husky": "^1.3.1",
     "i": "^0.3.6",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "jsonwebtoken": "^8.5.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -87,10 +86,9 @@
     "prettier": "^1.16.4",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
-    "query-string": "^5.1.1",
+    "query-string": "^6.2.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "regenerator-runtime": "^0.12.1",
     "riot": "^3.13.2",
     "riot-route": "^3.1.4",
     "sass": "^1.17.2",
@@ -102,6 +100,6 @@
     "webdriver-manager": "^12.1.1"
   },
   "devDependencies": {
-    "eslint-plugin-jsdoc": "^4.1.1"
+    "@babel/core": "^7.3.4"
   }
 }
