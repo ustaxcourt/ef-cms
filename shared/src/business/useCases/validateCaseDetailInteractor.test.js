@@ -67,6 +67,7 @@ describe('validate case detail', () => {
         irsNoticeDate: new Date().toISOString(),
         signature: true,
         filingType: 'Myself',
+        partyType: 'Petitioner',
       },
     });
     expect(errors).toEqual(null);
@@ -172,6 +173,7 @@ describe('validate case detail', () => {
         caseType: 'defined',
         procedureType: 'defined',
         filingType: 'defined',
+        partyType: 'Petitioner',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -223,6 +225,7 @@ describe('validate case detail', () => {
         caseType: 'defined',
         procedureType: 'defined',
         filingType: 'defined',
+        partyType: 'Petitioner',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -274,6 +277,7 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
+        partyType: 'Petitioner',
         procedureType: 'defined',
         filingType: 'defined',
         docketNumber: '101-18',
@@ -329,6 +333,7 @@ describe('validate case detail', () => {
         caseType: 'defined',
         procedureType: 'defined',
         filingType: 'defined',
+        partyType: 'Petitioner',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
