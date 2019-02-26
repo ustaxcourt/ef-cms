@@ -28,26 +28,26 @@ export const DashboardRespondent = connect(
           <table className="responsive-table dashboard" id="workQueue">
             <thead>
               <tr>
-                <th>Docket number</th>
-                <th>Petitioner name</th>
-                <th>Date filed</th>
+                <th>Docket Number</th>
+                <th>Petitioner Name</th>
+                <th>Date Filed</th>
               </tr>
             </thead>
             <tbody>
               {caseList.map(item => (
                 <tr key={item.docketNumber}>
                   <td className="responsive-title">
-                    <span className="responsive-label">Docket number</span>
+                    <span className="responsive-label">Docket Number</span>
                     <a href={'/case-detail/' + item.docketNumber}>
                       {item.docketNumberWithSuffix}
                     </a>
                   </td>
                   <td>
-                    <span className="responsive-label">Petitioner name</span>
+                    <span className="responsive-label">Petitioner Name</span>
                     {item.petitionerName}
                   </td>
                   <td>
-                    <span className="responsive-label">Date filed</span>
+                    <span className="responsive-label">Date Filed</span>
                     {item.createdAtFormatted}
                   </td>
                 </tr>

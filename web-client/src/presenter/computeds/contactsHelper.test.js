@@ -217,8 +217,9 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Name of Partner (Other than a Tax Matters Partner)',
-        nameLabel: 'Name of Partner',
+        header:
+          'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
+        nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
       },
       contactSecondary: {
         header: 'Tell Us About the Partnership You Are Filing For',
