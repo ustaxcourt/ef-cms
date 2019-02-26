@@ -31,19 +31,19 @@ export default connect(
             <tr>
               <td>
                 <span className="responsive-label">Deficiency</span>
-                less than $50,000 for each year
+                Less than $50,000 for each year
               </td>
               <td>
                 <span className="responsive-label">Collection</span>
-                less than $50,000 for all years
+                Less than $50,000 for all years
               </td>
               <td>
                 <span className="responsive-label">Spousal Relief</span>
-                less than $50,000 for all years
+                Less than $50,000 for all years
               </td>
               <td>
                 <span className="responsive-label">Worker Classification</span>
-                less than $50,000 for any calendar quarter
+                Less than $50,000 for any calendar quarter
               </td>
             </tr>
           </tbody>
