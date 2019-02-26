@@ -90,7 +90,6 @@
     "hasIrsNotice": false,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "hasIrsNotice": false,
     "contactPrimary": {
       "zip": "37208",
       "role": "taxpayer",
@@ -114,6 +113,7 @@
     "docketNumberSuffix": "SL",
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "caseType": "CDP (Lien/Levy)",
     "status": "New"
   },
@@ -273,6 +273,7 @@
     "payGovId": "1234",
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "preferredTrialCity": "Hartford, CT",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
@@ -404,6 +405,7 @@
     ],
     "procedureType": "Regular",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "caseType": "Declaratory Judgment (Exempt Organization)",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "0",
@@ -539,6 +541,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "petitioners": [
       {
@@ -637,6 +640,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -728,6 +732,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "petitioners": [
       {

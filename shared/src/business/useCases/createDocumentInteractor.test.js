@@ -14,6 +14,7 @@ const MOCK_CASE = {
   caseType: 'Other',
   procedureType: 'Regular',
   filingType: 'Myself',
+  partyType: 'Petitioner',
   createdAt: new Date().toISOString(),
   preferredTrialCity: 'Washington, D.C.',
   documents: [],
