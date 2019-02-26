@@ -25,17 +25,18 @@ table.small-case-qualifications-table {
 }
 
 table.dashboard {
-  border: 1px solid $color-gray-light;
+  border: 1px solid $color-gray-lighter;
   thead {
-    border-bottom: 2px solid $color-gray-light;
+    border-bottom: 2px solid $color-gray-lighter;
     th {
       border: none;
       background-color: $color-white;
+      font-weight: $font-semibold;
     }
   }
 
   tr {
-    border-bottom: 1px solid $color-gray-light;
+    border-bottom: 1px solid $color-gray-lighter;
   }
 
   td {
