@@ -33,7 +33,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { router, route } from './router';
-import AppComponent from './views/App';
+import { AppComponent } from './views/AppComponent';
 import presenter from './presenter';
 
 /**

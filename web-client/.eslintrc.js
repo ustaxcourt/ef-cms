@@ -44,7 +44,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16.6.3',
+      version: '16.8.3',
     },
   },
   env: {
