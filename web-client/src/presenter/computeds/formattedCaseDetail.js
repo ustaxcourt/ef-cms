@@ -102,6 +102,15 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     result.irsDateFormatted
   }`;
 
+  result.shouldShowIrsNoticeDate =
+    result.hasVerifiedIrsNotice ||
+    ((result.hasVerifiedIrsNotice === null ||
+      result.hasVerifiedIrsNotice === undefined) &&
+      result.hasIrsNotice);
+
+  result.shouldShowYearAmounts =
+    result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
+
   formatYearAmounts(result, caseDetailErrors);
 
   result.status =
