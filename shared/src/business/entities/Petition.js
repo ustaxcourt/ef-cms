@@ -1,6 +1,10 @@
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { instantiateContacts, DOMESTIC } = require('./Contacts/PetitionContact');
+
+// TODO: rename the folder Contacts to lower case contacts
+
 const joi = require('joi-browser');
 const PetitionerPrimaryContact = require('./Contacts/PetitionerPrimaryContact');
 const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationContact');
@@ -10,7 +14,6 @@ const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
 const PetitionerEstateExecutorContact = require('./Contacts/PetitionerEstateExecutorContact');
 const PetitionerEstateWithExecutorPrimaryContact = require('./Contacts/PetitionerEstateWithExecutorPrimaryContact');
 const PetitionerTaxpayerContact = require('./Contacts/PetitionerTaxpayerContact');
-const PetitionerConservatorContact = require('./Contacts/PetitionerConservatorContact');
 const PetitionerGuardianContact = require('./Contacts/PetitionerGuardianContact');
 const PetitionerCustodianContact = require('./Contacts/PetitionerCustodianContact');
 const PetitionerPartnershipRepContact = require('./Contacts/PetitionerPartnershipRepContact');
@@ -24,6 +27,8 @@ const PetitionerTrusteeContact = require('./Contacts/PetitionerTrusteeContact');
  */
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
+
+  let contacts;
 
   switch (this.partyType) {
     case 'Petitioner':
@@ -103,12 +108,17 @@ function Petition(rawPetition) {
       );
       break;
     case 'Conservator':
-      this.contactPrimary = new PetitionerConservatorContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerTaxpayerContact(
-        this.contactSecondary || {},
-      );
+      contacts = instantiateContacts({
+        partyType: this.partyType,
+        countryType: this.countryType || DOMESTIC,
+        contactInfo: {
+          primary: this.contactPrimary,
+          secondary: this.contactSecondary,
+        },
+      });
+      console.log('contacts', contacts);
+      this.contactPrimary = contacts.primary;
+      this.contactSecondary = contacts.secondary;
       break;
     case 'Guardian':
       this.contactPrimary = new PetitionerGuardianContact(
@@ -176,6 +186,7 @@ joiValidationDecorator(
       then: joi.required(),
       otherwise: joi.optional().allow(null),
     }),
+    countryType: joi.string().required(),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),
