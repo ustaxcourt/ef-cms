@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object which will set the props.docketNumber after sending to the irs holding queue
  * @returns {Object} the success alert
  */
-export default async ({ applicationContext, get, props }) => {
+export const sendPetitionToIRSHoldingQueueAction = async ({
+  applicationContext,
+  get,
+  props,
+}) => {
   await applicationContext.getUseCases().sendPetitionToIRSHoldingQueue({
     applicationContext,
     caseId: get(state.caseDetail).caseId,

@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import updateCaseAction from './updateCaseAction';
+import { updateCaseAction } from './updateCaseAction';
 
 const updateCaseStub = sinon.stub().returns({});
 

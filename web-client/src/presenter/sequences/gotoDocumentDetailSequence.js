@@ -1,28 +1,28 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
-import getCase from '../actions/getCaseAction';
-import getInternalUsers from '../actions/getInternalUsersAction';
-import setBaseUrl from '../actions/setBaseUrlAction';
-import setCase from '../actions/setCaseAction';
-import setCurrentPage from '../actions/setCurrentPageAction';
-import setDefaultDocumentDetailTab from '../actions/setDefaultDocumentDetailTabAction';
-import setDocumentId from '../actions/setDocumentIdAction';
-import setFormForCaseAction from '../actions/setFormForCaseAction';
-import setInternalUsers from '../actions/setInternalUsersAction';
+import { getCaseAction } from '../actions/getCaseAction';
+import { getInternalUsersAction } from '../actions/getInternalUsersAction';
+import { setBaseUrlAction } from '../actions/setBaseUrlAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocumentDetailTabAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setFormForCaseAction } from '../actions/setFormForCaseAction';
+import { setInternalUsersAction } from '../actions/setInternalUsersAction';
 
-export default [
-  setCurrentPage('Loading'),
+export const gotoDocumentDetailSequence = [
+  setCurrentPageAction('Loading'),
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
-  setDocumentId,
-  getCase,
-  setCase,
+  setDocumentIdAction,
+  getCaseAction,
+  setCaseAction,
   setFormForCaseAction,
-  setBaseUrl,
-  getInternalUsers,
-  setInternalUsers,
-  setDefaultDocumentDetailTab,
-  setCurrentPage('DocumentDetail'),
+  setBaseUrlAction,
+  getInternalUsersAction,
+  setInternalUsersAction,
+  setDefaultDocumentDetailTabAction,
+  setCurrentPageAction('DocumentDetail'),
 ];

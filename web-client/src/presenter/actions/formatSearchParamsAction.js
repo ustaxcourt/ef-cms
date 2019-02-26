@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting formattedSearchParams
  */
-export default ({ get }) => {
+export const formatSearchParamsAction = ({ get }) => {
   const formattedCaseId = get(state.formattedSearchParams);
   return { caseId: formattedCaseId };
 };

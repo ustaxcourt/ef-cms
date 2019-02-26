@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props which contains props.workItemId
  * @returns {Object} the work item
  */
-export default async ({ applicationContext, get, props }) => {
+export const getWorkItemAction = async ({ applicationContext, get, props }) => {
   const workItem = await applicationContext.getUseCases().getWorkItem({
     applicationContext,
     workItemId: props.workItemId,
