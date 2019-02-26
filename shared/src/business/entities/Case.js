@@ -115,19 +115,20 @@ joiValidationDecorator(
       .object()
       .allow(null)
       .optional(),
-    irsNoticeDate: joi.when('hasIrsNotice', {
-      is: true,
-      then: joi
-        .date()
-        .iso()
-        .max('now')
-        .required(),
-      otherwise: joi.optional().allow(null),
-    }),
+    irsNoticeDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .when('hasVerifiedIrsNotice', {
+        is: true,
+        then: joi.required(),
+        otherwise: joi.optional().allow(null),
+      }),
     irsSendDate: joi
       .date()
       .iso()
       .optional(),
+    partyType: joi.string().required(),
     payGovId: joi
       .string()
       .allow(null)
@@ -139,6 +140,10 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     hasIrsNotice: joi.boolean().required(),
+    hasVerifiedIrsNotice: joi
+      .boolean()
+      .optional()
+      .allow(null),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))

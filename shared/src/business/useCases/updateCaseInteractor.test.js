@@ -8,6 +8,7 @@ const MOCK_CASE = {
   docketNumber: '56789-18',
   hasIrsNotice: false,
   status: 'New',
+  partyType: 'Petitioner',
   caseType: 'Other',
   procedureType: 'Regular',
   filingType: 'Myself',

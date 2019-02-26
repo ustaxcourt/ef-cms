@@ -191,7 +191,12 @@ export default connect(
                 </div>
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="deceased-spouse-radios"
@@ -231,7 +236,12 @@ export default connect(
               )}
 
               {startCaseHelper.showBusinessFilingTypeOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="business-type-radios"
@@ -275,7 +285,12 @@ export default connect(
                 </div>
               )}
               {startCaseHelper.showOtherFilingTypeOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="other-type-radios"
@@ -322,7 +337,12 @@ export default connect(
 
               {startCaseHelper.showOtherFilingTypeOptions &&
                 startCaseHelper.showEstateFilingOptions && (
-                  <div className="usa-grid-full ustc-secondary-question">
+                  <div
+                    className={
+                      'usa-grid-full ustc-secondary-question ' +
+                      (validationErrors.partyType ? 'usa-input-error' : '')
+                    }
+                  >
                     <div className="usa-width-one-whole">
                       <fieldset
                         id="estate-type-radios"
@@ -367,15 +387,20 @@ export default connect(
 
               {startCaseHelper.showOtherFilingTypeOptions &&
                 startCaseHelper.showMinorIncompetentFilingOptions && (
-                  <div className="usa-grid-full ustc-secondary-question">
+                  <div
+                    className={
+                      'usa-grid-full ustc-secondary-question ' +
+                      (validationErrors.partyType ? 'usa-input-error' : '')
+                    }
+                  >
                     <div className="usa-width-one-whole">
                       <fieldset
                         id="minorIncompetent-type-radios"
                         className="usa-fieldset-inputs usa-sans"
                       >
                         <legend htmlFor="minorIncompetent-type-radios">
-                          What is your role in filing for this minor or
-                          legally incompetent person?
+                          What is your role in filing for this minor or legally
+                          incompetent person?
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
@@ -412,6 +437,9 @@ export default connect(
                     </div>
                   </div>
                 )}
+              <div className="usa-input-error usa-input-error-message beneath padded-left">
+                {validationErrors.partyType}
+              </div>
             </div>
           </div>
 

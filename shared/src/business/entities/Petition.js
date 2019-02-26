@@ -139,6 +139,7 @@ Petition.errorToMessageMap = {
     },
     'Notice Date is a required field.',
   ],
+  partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
   procedureType: 'Procedure Type is a required field.',
   filingType: 'Filing Type is a required field.',
@@ -150,34 +151,35 @@ Petition.errorToMessageMap = {
 joiValidationDecorator(
   Petition,
   joi.object().keys({
+    businessType: joi
+      .string()
+      .optional()
+      .allow(null),
     caseType: joi.when('hasIrsNotice', {
       is: joi.exist(),
       then: joi.string().required(),
       otherwise: joi.optional().allow(null),
     }),
-    hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi.when('hasIrsNotice', {
-      is: true,
-      then: joi
-        .date()
-        .iso()
-        .max('now')
-        .required(),
-      otherwise: joi.optional().allow(null),
-    }),
-    petitionFile: joi.object().required(),
-    businessType: joi
-      .string()
-      .optional()
-      .allow(null),
-    procedureType: joi.string().required(),
     filingType: joi.string().required(),
+    hasIrsNotice: joi.boolean().required(),
+    irsNoticeDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .when('hasIrsNotice', {
+        is: true,
+        then: joi.required(),
+        otherwise: joi.optional().allow(null),
+      }),
     ownershipDisclosureFile: joi.object().when('filingType', {
       is: 'A business',
       then: joi.required(),
       otherwise: joi.optional().allow(null),
     }),
+    partyType: joi.string().required(),
+    petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),
+    procedureType: joi.string().required(),
     signature: joi.boolean().required(),
   }),
   function() {

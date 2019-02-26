@@ -19,7 +19,7 @@ import Error from './Error';
 import Footer from './Footer';
 import Header from './Header';
 import Loading from './Loading';
-import LogIn from './LogIn';
+import { LogIn } from './LogIn';
 import StartCase from './StartCase';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
@@ -87,7 +87,7 @@ App.propTypes = {
   currentPage: PropTypes.string,
 };
 
-export default connect(
+export const AppComponent = connect(
   {
     currentPage: state.currentPage,
   },
