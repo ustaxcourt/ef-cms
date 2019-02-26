@@ -116,7 +116,6 @@ function Petition(rawPetition) {
           secondary: this.contactSecondary,
         },
       });
-      console.log('contacts', contacts);
       this.contactPrimary = contacts.primary;
       this.contactSecondary = contacts.secondary;
       break;
@@ -186,7 +185,7 @@ joiValidationDecorator(
       then: joi.required(),
       otherwise: joi.optional().allow(null),
     }),
-    countryType: joi.string().required(),
+    countryType: joi.string().optional(), // TODO: this should probably be required, but set to optional for now
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),

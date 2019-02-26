@@ -59,11 +59,6 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
   const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
-  console.log('partyType', partyType);
-  console.log('countryType', countryType);
-  console.log('contactType', contactType);
-  console.log(getPetitionerConservatorContact({ countryType }));
-  console.log(getPetitionerTaxpayerContact({ countryType }));
   return {
     [exports.PARTY_TYPES.conservator]: {
       primary: getPetitionerConservatorContact({ countryType }),
