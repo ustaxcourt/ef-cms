@@ -18,14 +18,16 @@ hr {
 
 .label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 .label-inline {
   display: inline-block;
-  margin: 0 8px 0 0;
+  margin: 0 5px 0 0;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 .forward-form {
