@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeIrsNoticeDateAction } from '../actions/computeIrsNoticeDateAction';
 import { createCaseAction } from '../actions/createCaseAction';
 import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccessAction';
 import navigateToDashboard from '../actions/navigateToDashboardAction';
@@ -16,6 +17,7 @@ import validatePetition from '../actions/validatePetitionAction';
 export default [
   clearAlertsAction,
   set(state.showValidation, true),
+  computeIrsNoticeDateAction,
   validatePetition,
   {
     success: [
