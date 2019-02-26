@@ -69,7 +69,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate without an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns true when contactPrimary is defined and everything else is valid', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -95,7 +95,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate with an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns false for isValid if primary contact is missing', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -108,7 +108,10 @@ describe('Petition', () => {
         'Estate with an Executor/Personal Representative/Fiduciary/etc.',
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
+  });
+
+  it('a valid petition returns true for isValid', () => {
+    const petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
       filingType: 'Myself',
