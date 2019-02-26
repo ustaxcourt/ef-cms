@@ -17,6 +17,7 @@ describe('setIrsNoticeFalseSequence', async () => {
     });
     test.setState('caseDetail', {
       hasIrsNotice: true,
+      hasVerifiedIrsNotice: undefined,
       yearAmounts: [
         {
           year: '2000',
@@ -32,7 +33,8 @@ describe('setIrsNoticeFalseSequence', async () => {
       irsYear: '',
     });
     expect(test.getState('caseDetail')).toMatchObject({
-      hasIrsNotice: false,
+      hasIrsNotice: true,
+      hasVerifiedIrsNotice: false,
       yearAmounts: [],
     });
   });
