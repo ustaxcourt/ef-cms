@@ -284,7 +284,7 @@
     },
     {
       "notes": "checks a11y of editable fields exposed when Yes notice attached",
-      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/61e96924-ce65-49f4-bebf-780bfc148520&info=reveal-notice-options",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=reveal-notice-options",
       "actions": [
         "wait for label#has-irs-verified-notice-yes to be visible",
         "click element label#has-irs-verified-notice-yes",
