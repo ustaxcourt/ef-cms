@@ -4,13 +4,13 @@ import React from 'react';
 
 import ErrorNotification from './ErrorNotification';
 
-export default connect(
+export const LogIn = connect(
   {
     form: state.form,
     submitLoginSequence: sequences.submitLoginSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function LogIn({ form, updateFormValueSequence, submitLoginSequence }) {
+  ({ form, updateFormValueSequence, submitLoginSequence }) => {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Log in</h1>
@@ -18,8 +18,7 @@ export default connect(
         <form
           id="log-in"
           noValidate
-          onSubmit={e => {
-            e.preventDefault();
+          onSubmit={() => {
             submitLoginSequence();
           }}
         >
