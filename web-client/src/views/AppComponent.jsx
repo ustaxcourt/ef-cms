@@ -19,7 +19,7 @@ import Error from './Error';
 import Footer from './Footer';
 import Header from './Header';
 import Loading from './Loading';
-import LogIn from './LogIn';
+import { LogIn } from './LogIn';
 import StartCase from './StartCase';
 import StyleGuide from './StyleGuide';
 import UsaBanner from './UsaBanner';
