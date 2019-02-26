@@ -19,7 +19,7 @@ describe('Authorization client service', () => {
     ).to.be.true;
   });
 
-  it('returns true for any user who\'s userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
+  it('returns true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
       isAuthorized(
         { userId: 'someUser', role: 'petitioner' },
