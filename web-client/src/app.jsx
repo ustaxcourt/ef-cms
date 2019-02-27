@@ -1,5 +1,4 @@
 import {
-  faArrowAltCircleLeft,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -9,11 +8,21 @@ import {
   faFilePdf,
   faFlag,
   faListUl,
+  faPaperclip,
   faPlusCircle,
   faShareSquare,
+  faSignOutAlt,
+  faSlash,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { faClock } from '@fortawesome/free-regular-svg-icons';
+import {
+  faArrowAltCircleLeft,
+  faClock,
+  faCopy,
+  faEdit,
+  faFilePdf as faFilePdfRegular,
+  faEyeSlash,
+} from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import App from 'cerebral';
@@ -29,13 +38,19 @@ import presenter from './presenter';
  */
 const app = {
   initialize: (applicationContext, debugTools) => {
-    if (process.env.USTC_ENV === 'dev') {
-      const user =
-        JSON.parse(window.localStorage.getItem('user') || 'null') ||
-        presenter.state.user;
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
-    }
+    const user =
+      JSON.parse(window.localStorage.getItem('user') || 'null') ||
+      presenter.state.user;
+    presenter.state.user = user;
+    applicationContext.setCurrentUser(user);
+
+    const token =
+      JSON.parse(window.localStorage.getItem('token') || 'null') ||
+      presenter.state.token;
+    presenter.state.token = token;
+    applicationContext.setCurrentUserToken(token);
+
+    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     library.add(
       faArrowAltCircleLeft,
@@ -45,12 +60,19 @@ const app = {
       faCheckCircle,
       faClock,
       faCloudUploadAlt,
+      faCopy,
+      faEdit,
       faExclamationTriangle,
+      faEyeSlash,
       faFilePdf,
+      faFilePdfRegular,
       faFlag,
       faListUl,
+      faPaperclip,
       faPlusCircle,
       faShareSquare,
+      faSignOutAlt,
+      faSlash,
       faTimesCircle,
     );
     presenter.providers.applicationContext = applicationContext;

@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  *  Gets a list of the types of cases, such as Deficiency, Innocent Spouse, etc
  *
@@ -8,9 +6,9 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting state.user.userId
  * @returns {Object} contains the caseTypes array returned from the getCaseTypes use case
  */
-export default async ({ applicationContext, get }) => {
+export default async ({ applicationContext }) => {
   const caseTypes = await applicationContext.getUseCases().getCaseTypes({
-    userId: get(state.user.userId),
+    applicationContext,
   });
   return { caseTypes };
 };

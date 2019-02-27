@@ -26,6 +26,7 @@ joiValidationDecorator(
       .iso()
       .optional(),
     procedureType: joi.string().required(),
+    filingType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
   }),
 );

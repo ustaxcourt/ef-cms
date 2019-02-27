@@ -1,7 +1,7 @@
 const client = require('../../dynamodbClientService');
 const { getWorkItemById } = require('./getWorkItemById');
 const { reassignWorkItem } = require('./syncWorkItems');
-const { stripInternalKeys } = require('../../awsDynamoPersistence');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { saveVersionedCase } = require('../cases/saveCase');
 

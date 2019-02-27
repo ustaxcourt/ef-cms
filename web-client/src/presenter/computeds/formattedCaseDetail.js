@@ -42,6 +42,9 @@ const formatYearAmount = (caseDetailErrors, caseDetail) => (
   const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
+  yearAmount.amountFormatted = yearAmount.amount
+    ? Number(yearAmount.amount).toLocaleString('en-US')
+    : yearAmount.amount;
   if (Array.isArray(caseDetailErrors.yearAmounts)) {
     processArrayErrors(yearAmount, caseDetailErrors, idx);
   } else if (typeof caseDetailErrors.yearAmounts === 'string') {
@@ -78,8 +81,10 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   if (result.documents) result.documents = result.documents.map(formatDocument);
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber
+      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+
+  result.petitionerName = result.petitioners[0].name;
 
   result.createdAtFormatted = moment(result.createdAt).format('L');
   result.irsDateFormatted = moment(result.irsDate).format('L LT');

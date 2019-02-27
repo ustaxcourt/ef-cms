@@ -1,15 +1,16 @@
 const PetitionWithoutFiles = require('./PetitionWithoutFiles');
 
-describe('WorkItem', () => {
+describe('PetitionWithoutFiles entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
-      const workItem = new PetitionWithoutFiles({
+      const petition = new PetitionWithoutFiles({
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: null,
       });
-      expect(workItem.isValid()).toEqual(true);
+      expect(petition.isValid()).toEqual(true);
     });
   });
 });

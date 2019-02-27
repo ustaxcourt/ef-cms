@@ -1,4 +1,6 @@
-const { getSortRecordsViaMapping } = require('../../awsDynamoPersistence');
+const {
+  getSortRecordsViaMapping,
+} = require('../../dynamo/helpers/getSortRecordsViaMapping');
 const moment = require('moment');
 
 exports.getSentWorkItemsForSection = ({ section, applicationContext }) => {

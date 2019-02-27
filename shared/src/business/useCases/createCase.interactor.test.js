@@ -32,14 +32,19 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getUseCases: () => ({
         getUser: () => ({
           address: '123',
           email: 'test@example.com',
-          name: 'test taxpayer',
+          name: 'Test Taxpayer',
           phone: '(123) 456-7890',
+          role: 'petitioner',
         }),
       }),
       environment: { stage: 'local' },
@@ -53,16 +58,16 @@ describe('createCase', () => {
       petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
+      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
       applicationContext,
     });
 
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-      caseTitle:
-        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       caseType: 'other',
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
@@ -74,6 +79,12 @@ describe('createCase', () => {
         },
         {
           description: 'Petition',
+          filedBy: 'Petitioner',
+          filingDate: '2018-11-21T20:49:28.192Z',
+          status: undefined,
+        },
+        {
+          description: 'Ownership Disclosure Statement',
           filedBy: 'Petitioner',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
@@ -120,27 +131,27 @@ describe('createCase', () => {
             },
           ],
         },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
+          documentType: 'Ownership Disclosure Statement',
+          filedBy: 'Petitioner',
+          userId: 'taxpayer',
+          workItems: [],
+        },
       ],
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
-          addressLine1: '111 Orange St.',
-          addressLine2: 'Building 2',
-          barNumber: undefined,
-          city: 'Orlando',
-          email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
-          phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
-          state: 'FL',
-          token: 'taxpayer',
           userId: 'taxpayer',
-          zip: '37208',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
+      filingType: 'Myself',
       status: 'New',
       userId: 'taxpayer',
     };
@@ -162,7 +173,11 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -183,6 +198,7 @@ describe('createCase', () => {
       petitionMetadata: {
         caseType: 'other',
         procedureType: 'Small',
+        filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: DATE,
       },
@@ -191,8 +207,6 @@ describe('createCase', () => {
 
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-      caseTitle:
-        'Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
       caseType: 'other',
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
@@ -242,23 +256,14 @@ describe('createCase', () => {
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       petitioners: [
         {
-          addressLine1: '111 Orange St.',
-          addressLine2: 'Building 2',
-          barNumber: undefined,
-          city: 'Orlando',
-          email: 'testtaxpayer@example.com',
           name: 'Test Taxpayer',
-          phone: '111-111-1111',
-          role: 'petitioner',
           section: undefined,
-          state: 'FL',
-          token: 'taxpayer',
           userId: 'taxpayer',
-          zip: '37208',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
+      filingType: 'Myself',
       status: 'New',
       userId: 'taxpayer',
     };
@@ -276,7 +281,11 @@ describe('createCase', () => {
         };
       },
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({
+          userId: 'taxpayer',
+          role: 'petitioner',
+          name: 'Test Taxpayer',
+        });
       },
       getEntityConstructors: () => ({
         Petition: PetitionWithoutFiles,
@@ -298,6 +307,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
@@ -323,7 +333,7 @@ describe('createCase', () => {
         Petition: PetitionWithoutFiles,
       }),
       getCurrentUser: () => {
-        return new User({ userId: 'taxpayer' });
+        return new User({ userId: 'taxpayer', role: 'petitioner' });
       },
       getUseCases: () => ({
         getUser: () => ({
@@ -342,6 +352,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },
@@ -356,7 +367,7 @@ describe('createCase', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
       getCurrentUser: () => {
-        return new User({ userId: 'docketclerk' });
+        return {};
       },
     };
     let error;
@@ -366,6 +377,7 @@ describe('createCase', () => {
         petitionMetadata: {
           caseType: 'other',
           procedureType: 'Small',
+          filingType: 'Myself',
           preferredTrialCity: 'Chattanooga, TN',
           irsNoticeDate: DATE,
         },

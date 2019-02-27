@@ -1,4 +1,4 @@
-import clearAlerts from '../actions/clearAlertsAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import expireFormSaveSuccess from '../actions/expireFormSaveSuccessAction';
 import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDetailAction';
 import setCase from '../actions/setCaseAction';
@@ -8,7 +8,7 @@ import updateCase from '../actions/updateCaseAction';
 import validateCaseDetail from '../actions/validateCaseDetailAction';
 
 export default [
-  clearAlerts,
+  clearAlertsAction,
   getFormCombinedWithCaseDetail,
   validateCaseDetail,
   {

@@ -11,6 +11,7 @@ import SuccessNotification from './SuccessNotification';
 export default connect(
   {
     baseUrl: state.baseUrl,
+    token: state.token,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
@@ -22,6 +23,7 @@ export default connect(
   },
   function CaseDetail({
     baseUrl,
+    token,
     caseDetail,
     currentTab,
     extractedPendingMessages,
@@ -43,10 +45,7 @@ export default connect(
           <h1 className="captioned" tabIndex="-1">
             Docket Number: {caseDetail.docketNumberWithSuffix}
           </h1>
-          <p>
-            {caseDetail.petitioners[0].name} v. Commissioner of Internal
-            Revenue, Respondent
-          </p>
+          <p>{caseDetail.caseTitle}</p>
           <p>
             <span
               className="usa-label case-status-label"
@@ -156,11 +155,9 @@ export default connect(
                       <td>
                         <span className="responsive-label">Title</span>
                         <a
-                          href={`${baseUrl}/documents/${
-                            document.documentId
-                          }/documentDownloadUrl`}
-                          target="_blank"
-                          rel="noreferrer noopener"
+                          href={`/case-detail/${
+                            caseDetail.docketNumber
+                          }/documents/${document.documentId}`}
                           aria-label="View PDF"
                         >
                           <FontAwesomeIcon icon="file-pdf" />

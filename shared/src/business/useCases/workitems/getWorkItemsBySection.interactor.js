@@ -11,12 +11,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItemsBySection = async ({
-  userId,
-  section,
-  applicationContext,
-}) => {
-  if (!isAuthorized(userId, WORKITEM)) {
+exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

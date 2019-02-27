@@ -10,9 +10,7 @@ exports.updateWorkItem = async ({
   applicationContext,
   workItemToUpdate,
   workItemId,
-  userId,
 }) => {
-  const userToken = userId; // TODO: refactor for jwt
   const response = await applicationContext
     .getHttpClient()
     .put(
@@ -20,7 +18,7 @@ exports.updateWorkItem = async ({
       workItemToUpdate,
       {
         headers: {
-          Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
         },
       },
     );

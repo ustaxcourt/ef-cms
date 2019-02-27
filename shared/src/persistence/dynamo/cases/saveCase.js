@@ -1,11 +1,11 @@
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 const {
-  createRespondentCaseMapping,
-  stripInternalKeys,
-  stripWorkItems,
   createMappingRecord,
-} = require('../../awsDynamoPersistence');
+} = require('../../dynamo/helpers/createMappingRecord');
+
 const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 const { syncDocuments } = require('../../dynamo/documents/syncDocuments');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 const client = require('../../dynamodbClientService');
 
@@ -84,10 +84,11 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     !currentCaseState.respondent &&
     caseToSave.respondent
   ) {
-    await createRespondentCaseMapping({
+    await createMappingRecord({
       applicationContext,
-      caseId: caseToSave.caseId,
-      respondentId: caseToSave.respondent.respondentId,
+      pkId: caseToSave.respondent.respondentId,
+      skId: caseToSave.caseId,
+      type: 'activeCase',
     });
   }
 

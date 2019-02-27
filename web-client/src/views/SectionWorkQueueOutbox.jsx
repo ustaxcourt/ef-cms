@@ -45,15 +45,14 @@ export default connect(
                   aria-label="Expand message detail"
                   aria-expanded={item.isFocused}
                   aria-controls={`detail-${item.workItemId}`}
-                />{' '}
+                />
               </td>
-              <td>
+              <td className="has-icon">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
                     className={item.statusIcon}
-                    aria-label={item.caseStatus}
-                    title={item.caseStatus}
+                    aria-hidden="true"
                   />
                 )}
               </td>
