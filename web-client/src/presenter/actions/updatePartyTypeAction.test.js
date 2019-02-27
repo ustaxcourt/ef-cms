@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import updatePartyTypeAction from './updatePartyTypeAction';
+import { updatePartyTypeAction } from './updatePartyTypeAction';
 
 const updateCaseStub = sinon.stub().returns({});
 
@@ -119,7 +119,9 @@ describe('updatePartyTypeAction', async () => {
       }),
     );
     expect(state.form.partyType).toEqual('Any Value');
-    expect(state.form.otherType).toEqual('A minor or incompetent person');
+    expect(state.form.otherType).toEqual(
+      'A minor or legally incompetent person',
+    );
   });
 
   it('resets the state.petition.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
