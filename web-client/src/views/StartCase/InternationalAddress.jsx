@@ -170,15 +170,15 @@ export default connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.postalCode`} aria-label="postal code">
+          <label htmlFor={`${type}.zip`} aria-label="zip code">
             ZIP/Postal Code
           </label>
           <input
-            id={`${type}.postalCode`}
+            id={`${type}.zip`}
             type="text"
-            name={`${type}.postalCode`}
+            name={`${type}.zip`}
             autoCapitalize="none"
-            value={form[type].postalCode || ''}
+            value={form[type].zip || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -191,7 +191,7 @@ export default connect(
           />
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
-              {validationErrors[type].postalCode}
+              {validationErrors[type].zip}
             </div>
           )}
         </div>
