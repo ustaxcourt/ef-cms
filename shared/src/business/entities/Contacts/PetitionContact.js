@@ -168,8 +168,8 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
       secondary: getPetitionerTrusteeContact({ countryType }),
     }[contactType],
     [exports.PARTY_TYPES.conservator]: {
-      primary: getPetitionerConservatorContact({ countryType }),
-      secondary: getPetitionerTaxpayerContact({ countryType }),
+      primary: getPetitionerTaxpayerContact({ countryType }),
+      secondary: getPetitionerConservatorContact({ countryType }),
     }[contactType],
     [exports.PARTY_TYPES.guardian]: {
       primary: getPetitionerGuardianContact({ countryType }),

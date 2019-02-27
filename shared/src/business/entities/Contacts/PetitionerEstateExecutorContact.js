@@ -3,10 +3,8 @@ const joi = require('joi-browser');
 const { createContactFactory } = require('./PetitionContact');
 
 exports.getPetitionerEstateExecutorContact = createContactFactory({
-  additionalErrorMappings: {
-    title: 'Title is a required field.',
-  },
+  additionalErrorMappings: {},
   additionalValidation: {
-    title: joi.string().optional(),
+    phone: joi.optional().allow(null),
   },
 });
