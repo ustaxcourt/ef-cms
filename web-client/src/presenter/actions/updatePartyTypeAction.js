@@ -32,63 +32,17 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
         break;
     }
   } else if (props.key === 'businessType') {
-    switch (props.value) {
-      case 'Corporation':
-        partyType = 'Corporation';
-        break;
-      case 'Partnership (as the tax matters partner)':
-        partyType = 'Partnership (as the tax matters partner)';
-        break;
-      case 'Partnership (as a partner other than tax matters partner)':
-        partyType = 'Partnership (as a partner other than tax matters partner)';
-        break;
-      case 'Partnership (as a partnership representative under the BBA regime)':
-        partyType =
-          'Partnership (as a partnership representative under the BBA regime)';
-        break;
-    }
+    partyType = props.value;
   } else if (props.key === 'estateType') {
     store.set(state.form.otherType, 'An estate or trust');
-
-    switch (props.value) {
-      case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
-        partyType =
-          'Estate with an Executor/Personal Representative/Fiduciary/etc.';
-        break;
-      case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
-        partyType =
-          'Estate without an Executor/Personal Representative/Fiduciary/etc.';
-        break;
-      case 'Trust':
-        partyType = 'Trust';
-        break;
-    }
+    partyType = props.value;
   } else if (props.key === 'minorIncompetentType') {
     store.set(state.form.otherType, 'A minor or legally incompetent person');
-
-    switch (props.value) {
-      case 'Conservator':
-        partyType = 'Conservator';
-        break;
-      case 'Guardian':
-        partyType = 'Guardian';
-        break;
-      case 'Custodian':
-        partyType = 'Custodian';
-        break;
-      case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
-        partyType =
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)';
-        break;
-      case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
-        partyType =
-          'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)';
-        break;
-    }
+    partyType = props.value;
   }
   store.set(state.form.partyType, partyType);
   if (get(state.form.filingType) !== 'A business') {
-    //clear the ownership disclosure file and business type
+    // clear the ownership disclosure file and business type
     store.set(state.petition.ownershipDisclosureFile, undefined);
     store.set(state.form.businessType, undefined);
   }

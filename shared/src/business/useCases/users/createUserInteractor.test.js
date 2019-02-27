@@ -1,4 +1,5 @@
 const { createUser } = require('./createUserInteractor');
+const { UnauthorizedError } = require('ef-cms-shared/src/errors/errors');
 
 describe('create user', () => {
   it('creates the user', async () => {
@@ -29,7 +30,7 @@ describe('create user', () => {
     expect(user).not.toBeUndefined();
   });
 
-  it('throws unauthorized', async () => {
+  it('throws unauthorized for any user without an "admin" role', async () => {
     const mockUser = {
       userId: 'petitioner1@example.com',
       role: 'petitioner',
@@ -60,6 +61,6 @@ describe('create user', () => {
       error = err;
     }
 
-    expect(error).not.toBeUndefined();
+    expect(error instanceof UnauthorizedError).toBeTruthy();
   });
 });
