@@ -11,7 +11,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const documentEntity = new Document({
     userId: user.userId,
     ...document,
-    filedBy: user.role,
+    filedBy: user.name,
   });
 
   const caseToUpdate = await applicationContext
