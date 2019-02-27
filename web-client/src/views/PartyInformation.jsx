@@ -44,6 +44,12 @@ export default connect(
                         {caseDetail.contactPrimary.state}{' '}
                         {caseDetail.contactPrimary.zip}
                       </span>
+                      <span className="address-line">
+                        {caseDetail.contactPrimary.countryType === 'domestic' &&
+                          'USA'}
+                        {caseDetail.contactPrimary.countryType ===
+                          'international' && caseDetail.contactPrimary.country}
+                      </span>
                     </p>
                     {caseDetail.contactPrimary.phone && (
                       <p>{caseDetail.contactPrimary.phone}</p>
@@ -75,6 +81,13 @@ export default connect(
                           `${caseDetail.contactSecondary.city},`}{' '}
                         {caseDetail.contactSecondary.state}{' '}
                         {caseDetail.contactSecondary.zip}
+                      </span>
+                      <span className="address-line">
+                        {caseDetail.contactSecondary.countryType ===
+                          'domestic' && 'USA'}
+                        {caseDetail.contactSecondary.countryType ===
+                          'international' &&
+                          caseDetail.contactSecondary.country}
                       </span>
                     </p>
                     <p>{caseDetail.contactSecondary.phone}</p>
