@@ -72,7 +72,7 @@ export default test => {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'A Petition filed by Petitioner is ready for review.',
+      'A Petition filed by Test petitioner is ready for review.',
     );
   });
 };
