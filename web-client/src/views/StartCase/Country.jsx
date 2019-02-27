@@ -32,7 +32,7 @@ export default connect(
           <label htmlFor={`${type}.countryType`}>Country</label>
           <select
             className={
-              'usa-input-inline ' +
+              `usa-input-inline ${type}-country-type ` +
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].state
