@@ -100,10 +100,10 @@ export default connect(
             </div>
           )}
           {(form.contactSecondary.countryType === undefined ||
-            form.contactSecondary.countryType === 'Domestic') && (
+            form.contactSecondary.countryType === 'domestic') && (
             <Address type="contactSecondary" />
           )}
-          {form.contactSecondary.countryType === 'International' && (
+          {form.contactSecondary.countryType === 'international' && (
             <InternationalAddress type="contactSecondary" />
           )}
           {contactsHelper.contactSecondary.displayPhone && (

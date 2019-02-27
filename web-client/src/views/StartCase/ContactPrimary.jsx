@@ -131,10 +131,10 @@ export default connect(
             </div>
           )}
           {(form.contactPrimary.countryType === undefined ||
-            form.contactPrimary.countryType === 'Domestic') && (
+            form.contactPrimary.countryType === 'domestic') && (
             <Address type="contactPrimary" />
           )}
-          {form.contactPrimary.countryType === 'International' && (
+          {form.contactPrimary.countryType === 'international' && (
             <InternationalAddress type="contactPrimary" />
           )}
           <Email />
