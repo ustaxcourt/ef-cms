@@ -96,7 +96,7 @@ exports.createCase = async ({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
     userId: user.userId,
-    filedBy: 'Petitioner',
+    filedBy: user.name,
   });
   addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
 
@@ -105,7 +105,7 @@ exports.createCase = async ({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
       userId: user.userId,
-      filedBy: 'Petitioner',
+      filedBy: user.name,
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
