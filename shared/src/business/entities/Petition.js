@@ -6,19 +6,6 @@ const { instantiateContacts, DOMESTIC } = require('./Contacts/PetitionContact');
 // TODO: rename the folder Contacts to lower case contacts
 
 const joi = require('joi-browser');
-const PetitionerPrimaryContact = require('./Contacts/PetitionerPrimaryContact');
-const PetitionerCorporationContact = require('./Contacts/PetitionerCorporationContact');
-const PetitionerIntermediaryContact = require('./Contacts/PetitionerIntermediaryContact');
-const PetitionerDeceasedSpouseContact = require('./Contacts/PetitionerDeceasedSpouseContact');
-const PetitionerSpouseContact = require('./Contacts/PetitionerSpouseContact');
-const PetitionerEstateExecutorContact = require('./Contacts/PetitionerEstateExecutorContact');
-const PetitionerEstateWithExecutorPrimaryContact = require('./Contacts/PetitionerEstateWithExecutorPrimaryContact');
-const PetitionerTaxpayerContact = require('./Contacts/PetitionerTaxpayerContact');
-const PetitionerGuardianContact = require('./Contacts/PetitionerGuardianContact');
-const PetitionerCustodianContact = require('./Contacts/PetitionerCustodianContact');
-const PetitionerPartnershipRepContact = require('./Contacts/PetitionerPartnershipRepContact');
-const PetitionerTrustContact = require('./Contacts/PetitionerTrustContact');
-const PetitionerTrusteeContact = require('./Contacts/PetitionerTrusteeContact');
 
 /**
  *
@@ -27,115 +14,16 @@ const PetitionerTrusteeContact = require('./Contacts/PetitionerTrusteeContact');
  */
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
-
-  let contacts;
-
-  switch (this.partyType) {
-    case 'Petitioner':
-    case 'Transferee':
-    case 'Donor':
-      this.contactPrimary = new PetitionerPrimaryContact(
-        this.contactPrimary || {},
-      );
-      break;
-    case 'Petitioner & Deceased Spouse':
-    case 'Surviving Spouse':
-      this.contactPrimary = new PetitionerPrimaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerDeceasedSpouseContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Petitioner & Spouse':
-      this.contactPrimary = new PetitionerPrimaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerSpouseContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Corporation':
-      this.contactPrimary = new PetitionerCorporationContact(
-        this.contactPrimary || {},
-      );
-      break;
-    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
-      this.contactPrimary = new PetitionerIntermediaryContact(
-        this.contactPrimary || {},
-      );
-      break;
-    case 'Partnership (as the tax matters partner)':
-    case 'Partnership (as a partner other than tax matters partner)':
-      this.contactPrimary = new PetitionerPrimaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerIntermediaryContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
-    case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
-      this.contactPrimary = new PetitionerPrimaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerIntermediaryContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
-      this.contactPrimary = new PetitionerEstateWithExecutorPrimaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerEstateExecutorContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Partnership (BBA Regime)':
-      this.contactPrimary = new PetitionerIntermediaryContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerPartnershipRepContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Trust':
-      this.contactPrimary = new PetitionerTrustContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerTrusteeContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Conservator':
-      contacts = instantiateContacts({
-        partyType: this.partyType,
-        countryType: this.countryType || DOMESTIC,
-        contactInfo: {
-          primary: this.contactPrimary,
-          secondary: this.contactSecondary,
-        },
-      });
-      this.contactPrimary = contacts.primary;
-      this.contactSecondary = contacts.secondary;
-      break;
-    case 'Guardian':
-      this.contactPrimary = new PetitionerGuardianContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerTaxpayerContact(
-        this.contactSecondary || {},
-      );
-      break;
-    case 'Custodian':
-      this.contactPrimary = new PetitionerCustodianContact(
-        this.contactPrimary || {},
-      );
-      this.contactSecondary = new PetitionerTaxpayerContact(
-        this.contactSecondary || {},
-      );
-      break;
-  }
+  const contacts = instantiateContacts({
+    partyType: this.partyType,
+    countryType: this.countryType || DOMESTIC,
+    contactInfo: {
+      primary: this.contactPrimary,
+      secondary: this.contactSecondary,
+    },
+  });
+  this.contactPrimary = contacts.primary;
+  this.contactSecondary = contacts.secondary;
 }
 
 Petition.errorToMessageMap = {
