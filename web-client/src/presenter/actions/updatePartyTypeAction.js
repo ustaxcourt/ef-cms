@@ -48,7 +48,54 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
     store.set(state.petition.ownershipDisclosureFile, undefined);
     store.set(state.form.businessType, undefined);
   }
-  // ask UI
-  store.set(state.form.contactPrimary, {});
-  store.set(state.form.contactSecondary, {});
+
+  const hasPrimaryContact =
+    partyType === PARTY_TYPES.petitioner ||
+    partyType === PARTY_TYPES.petitionerSpouse ||
+    partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
+    partyType === PARTY_TYPES.estate ||
+    partyType === PARTY_TYPES.estateWithoutExecutor ||
+    partyType === PARTY_TYPES.trust ||
+    partyType === PARTY_TYPES.corporation ||
+    partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
+    partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
+    partyType === PARTY_TYPES.partnershipBBA ||
+    partyType === PARTY_TYPES.conservator ||
+    partyType === PARTY_TYPES.guardian ||
+    partyType === PARTY_TYPES.custodian ||
+    partyType === PARTY_TYPES.nextFriendForMinor ||
+    partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+    partyType === PARTY_TYPES.donor ||
+    partyType === PARTY_TYPES.transferee ||
+    partyType === PARTY_TYPES.survivingSpouse;
+
+  const hasSecondaryContact =
+    partyType === PARTY_TYPES.petitionerSpouse ||
+    partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
+    partyType === PARTY_TYPES.estate ||
+    partyType === PARTY_TYPES.trust ||
+    partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
+    partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
+    partyType === PARTY_TYPES.partnershipBBA ||
+    partyType === PARTY_TYPES.conservator ||
+    partyType === PARTY_TYPES.guardian ||
+    partyType === PARTY_TYPES.custodian ||
+    partyType === PARTY_TYPES.nextFriendForMinor ||
+    partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+    partyType === PARTY_TYPES.survivingSpouse;
+
+  store.set(
+    state.form.contactPrimary,
+    (hasPrimaryContact && {
+      countryType: 'domestic',
+    }) ||
+      {},
+  );
+  store.set(
+    state.form.contactSecondary,
+    (hasSecondaryContact && {
+      countryType: 'domestic',
+    }) ||
+      {},
+  );
 };

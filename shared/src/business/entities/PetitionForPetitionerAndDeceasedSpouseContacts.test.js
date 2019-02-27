@@ -29,6 +29,7 @@ describe('Petition', () => {
         signature: true,
         partyType: 'Petitioner & Deceased Spouse',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -39,6 +40,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
         contactSecondary: {
+          countryType: 'domestic',
           name: 'Betty Crocker',
           address1: '1599 Pennsylvania Ave',
           city: 'Walla Walla',
@@ -46,7 +48,7 @@ describe('Petition', () => {
           zip: '78774',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

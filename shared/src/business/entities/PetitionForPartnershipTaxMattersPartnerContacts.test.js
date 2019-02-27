@@ -29,6 +29,7 @@ describe('Petition', () => {
         signature: true,
         partyType: 'Partnership (as the tax matters partner)',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -39,6 +40,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
         contactSecondary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           inCareOf: 'USTC',
           address1: '876 12th Ave',
@@ -50,7 +52,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

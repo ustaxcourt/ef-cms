@@ -99,8 +99,7 @@ export default connect(
               )}
             </div>
           )}
-          {(form.contactSecondary.countryType === undefined ||
-            form.contactSecondary.countryType === 'domestic') && (
+          {form.contactSecondary.countryType === 'domestic' && (
             <Address type="contactSecondary" />
           )}
           {form.contactSecondary.countryType === 'international' && (
