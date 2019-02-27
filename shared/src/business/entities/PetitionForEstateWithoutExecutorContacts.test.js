@@ -31,6 +31,7 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -41,7 +42,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('can validate primary contact', () => {
@@ -57,6 +58,7 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           inCareOf: 'USTC',
           address1: '876 12th Ave',
@@ -68,7 +70,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

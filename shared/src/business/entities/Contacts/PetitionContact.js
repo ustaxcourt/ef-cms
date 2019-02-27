@@ -32,7 +32,10 @@ const internationalErrorToMessageMap = {
 };
 
 const domesticValidationObject = {
-  countryType: joi.string().valid(['domestic', 'international']),
+  countryType: joi
+    .string()
+    .valid('domestic')
+    .required(),
   name: joi.string().required(),
   address1: joi.string().required(),
   address2: joi.string().optional(),
@@ -47,6 +50,10 @@ const domesticValidationObject = {
 };
 
 const internationalValidationObject = {
+  countryType: joi
+    .string()
+    .valid('international')
+    .required(),
   country: joi.string().required(),
   name: joi.string().required(),
   address1: joi.string().required(),

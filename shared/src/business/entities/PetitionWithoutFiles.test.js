@@ -10,7 +10,7 @@ describe('PetitionWithoutFiles entity', () => {
         preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: null,
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });
