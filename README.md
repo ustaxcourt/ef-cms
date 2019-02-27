@@ -70,6 +70,32 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 #### Terminal B
 - `cd efcms-service && npm start`
 
+#### Login and Test Users
+- for /mock-login you can login using:
+```
+taxpayer
+petitionsclerk
+docketclerk
+intakeclerk
+respondent
+seniorattorney
+```
+- to run the project locally using the dev cognito:
+```npm run dev:cognito``` 
+You can then login with:
+```
+petitioner1@example.com - petitioner5@example.com
+petitionsclerk1@example.com - petitionsclerk5@example.com
+docketclerk1@example.com - docketclerk5@example.com
+intakeclerk1@example.com - intakeclerk5@example.com
+respondent1@example.com - respondent5@example.com
+seniorattorney1@example.com - seniorattorney5@example.com
+```
+
+all passwords are:
+
+```Testing1234$```
+
 ### CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
@@ -110,3 +136,17 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
 
+## Sprint PRs
+
+Follow these steps for creating the end of sprint PRs for the court.
+
+1. Create a PR from develop -> staging
+2. Verify PR passed
+3. Merge PR and verify staging deployed correctly in Jenkins
+4. Create a PR from staging -> master
+5. Verify PR passed
+6. Merge PR and verify prod deployed correctly in Jenkins
+7. Create a PR from flexion/ef-cms master -> ustaxcourt/ef-cms staging
+8. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
+9. When PR comments come in, make changes to master to fix the comments
+10. Back merge master into develop after all changes are fixed

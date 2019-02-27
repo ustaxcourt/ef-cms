@@ -60,7 +60,7 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
 });
 
 Cypress.Commands.add('login', (username, route = '/') => {
-  const url = `/log-in?token=${username}&path=${route}`;
+  const url = `/mock-login?token=${username}&path=${route}`;
   cy.visit(url);
   cy.url().should('include', route);
   cy.showsErrorMessage(false);

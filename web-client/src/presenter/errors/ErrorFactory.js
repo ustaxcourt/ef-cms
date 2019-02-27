@@ -1,3 +1,4 @@
+import { NotFoundError } from './NotFoundError';
 import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { ActionError } from './ActionError';
 import { InvalidRequestError } from './InvalidRequestError';
@@ -7,8 +8,10 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 export default {
   getError: e => {
     let responseCode = (e.response && e.response.status) || e.statusCode;
-    if ([403, 404].includes(responseCode)) {
+    if (403 === responseCode) {
       return new UnauthorizedRequestError(e);
+    } else if (404 === responseCode) {
+      return new NotFoundError(e);
     } else if (401 === responseCode) {
       return new UnidentifiedUserError();
     } else if (/^4/.test(responseCode)) {

@@ -45,7 +45,7 @@ export default connect(
           <tbody className="action-bar">
             <tr>
               <td
-                colSpan="8"
+                colSpan="9"
                 className="action-bar"
                 aria-label="Action bar: choose an assignee."
                 aria-live="polite"
@@ -101,7 +101,7 @@ export default connect(
                   aria-controls={`detail-${item.workItemId}`}
                 />{' '}
               </td>
-              <td className="queue-width-44">
+              <td className="has-icon">
                 <input
                   id={item.workItemId}
                   type="checkbox"
@@ -119,13 +119,12 @@ export default connect(
                   id={`label-${item.workItemId}`}
                 />
               </td>
-              <td className="section-queue-row queue-width-44">
+              <td className="section-queue-row has-icon">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
                     className={item.statusIcon}
-                    aria-label={item.caseStatus}
-                    title={item.caseStatus}
+                    aria-hidden="true"
                   />
                 )}
               </td>
@@ -163,7 +162,7 @@ export default connect(
                     aria-disabled="true"
                   />
                 </td>
-                <td colSpan="3" aria-hidden="true" />
+                <td colSpan="4" aria-hidden="true" />
                 <td
                   colSpan="4"
                   className="message-detail"

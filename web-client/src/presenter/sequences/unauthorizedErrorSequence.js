@@ -1,9 +1,9 @@
 import setAlertFromExceptionAction from '../actions/setAlertFromExceptionAction';
-import setCurrentPage from '../actions/setCurrentPageAction';
 import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
+import redirectToCognito from '../actions/redirectToCognitoAction';
 
 export default [
   unsetFormSubmitting,
   setAlertFromExceptionAction,
-  setCurrentPage('Error'),
+  redirectToCognito,
 ];

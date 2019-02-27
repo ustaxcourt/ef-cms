@@ -7,12 +7,12 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      caseTitle: 'A case title is required.',
       caseType: 'Case Type is required.',
       docketNumber: 'Docket number is required.',
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
       procedureType: 'Procedure Type is required.',
+      filingType: 'Filing Type is required.',
     });
   });
 
@@ -29,6 +29,7 @@ describe('validate case detail', () => {
       documents: 'At least one valid document is required.',
       preferredTrialCity: 'Preferred Trial City is required.',
       procedureType: 'Procedure Type is required.',
+      filingType: 'Filing Type is required.',
     });
   });
 
@@ -44,6 +45,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -53,6 +55,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -62,6 +65,7 @@ describe('validate case detail', () => {
         preferredTrialCity: 'defined',
         irsNoticeDate: new Date().toISOString(),
         signature: true,
+        filingType: 'Myself',
       },
     });
     expect(errors).toEqual(null);
@@ -84,6 +88,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         documents: [
           {
@@ -91,6 +96,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -100,6 +106,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -161,6 +168,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -169,6 +177,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -178,6 +187,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -208,6 +218,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -216,6 +227,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -225,6 +237,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -257,6 +270,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -265,6 +279,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -274,6 +289,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -306,6 +322,7 @@ describe('validate case detail', () => {
       caseDetail: {
         caseType: 'defined',
         procedureType: 'defined',
+        filingType: 'defined',
         docketNumber: '101-18',
         preferredTrialCity: 'Chattanooga, TN',
         documents: [
@@ -314,6 +331,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],
@@ -323,6 +341,7 @@ describe('validate case detail', () => {
             documentType: 'Petition',
             createdAt: '2018-11-21T20:49:28.192Z',
             userId: 'taxpayer',
+            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
             workItems: [],

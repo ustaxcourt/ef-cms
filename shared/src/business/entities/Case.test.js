@@ -152,6 +152,235 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getCaseTitle', () => {
+    it('party type Petitioner', () => {
+      const caseTitle = Case.getCaseTitle(MOCK_CASE);
+      expect(caseTitle).toEqual(
+        'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Petitioner & Spouse', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Petitioner & Spouse',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer & Test Taxpayer 2, Petitioners v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Petitioner & Deceased Spouse', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Petitioner & Deceased Spouse',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer & Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioners v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType:
+          'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+      });
+      expect(caseTitle).toEqual(
+        'Estate of Test Taxpayer, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Trust', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Trust',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Corporation', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Corporation',
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Partnership Tax Matters', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Partnership (as the tax matters partner)',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Partnership Other Than Tax Matters', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Partnership (as a partner other than tax matters partner)',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, A Partner Other Than the Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Partnership BBA', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType:
+          'Partnership (as a partnership representative under the BBA regime)',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Conservator', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Conservator',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Conservator, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Guardian', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Guardian',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Guardian, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Custodian', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Custodian',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Test Taxpayer, Custodian, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Minor', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Minor, Test Taxpayer, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Incompetent Person', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType:
+          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Incompetent, Test Taxpayer, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Donor', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Donor',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer, Donor, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Transferee', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Transferee',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer, Transferee, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+
+    it('party type Surviving Spouse', () => {
+      const caseTitle = Case.getCaseTitle({
+        ...MOCK_CASE,
+        partyType: 'Surviving Spouse',
+        contactSecondary: {
+          name: 'Test Taxpayer 2',
+        },
+      });
+      expect(caseTitle).toEqual(
+        'Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+  });
+
   describe('sendToIRSHoldingQueue', () => {
     it('sets status for irs batch', () => {
       const caseRecord = new Case(MOCK_CASE);
@@ -263,6 +492,15 @@ describe('Case entity', () => {
       expect(procedureTypes.length).toEqual(2);
       expect(procedureTypes[0]).toEqual('Regular');
       expect(procedureTypes[1]).toEqual('Small');
+    });
+  });
+
+  describe('getFilingTypes', () => {
+    it('returns the filing types', () => {
+      const filingTypes = Case.getFilingTypes();
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
     });
   });
 

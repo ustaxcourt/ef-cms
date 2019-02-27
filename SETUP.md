@@ -56,8 +56,11 @@ The end result of this is not a dev, staging, or production website, but is inst
      - After restarting, the modal will pop up again — just click the `x` again.
 9. Create 3 global credentials in Jenkins, so that Jenkins has permission to interact with GitHub and SonarCloud, using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
    - Create a “username with password” type. Provide an ID of `GITHUB_USER`, and enter the username and password for the GitHub account that you created.
-   - Create a “secret text” type. Provide an an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
-   - Create a “secret text” type. Provide an an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “secret text” type. Provide an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “secret text” type. Provide an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “secret text” type. Provide an ID of `SHARED_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
+   - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` of your choice.  When the deploy runs, a Cognito user with the email of 'ustcadmin@example.com' will be created with the password you supplied in `secret`.  This ustcadmin@example.com user is currently only used for hitting the POST@v1/users endpoint for creating users.
+
 10. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
 
 - `SONAR_ORG` / your sonar organization’s name
@@ -65,6 +68,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
 - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
 - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
+- `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.

@@ -1,8 +1,7 @@
 #!/bin/bash -e
 ENV=$1
-API_URL="https://efcms-${ENV}.${EFCMS_DOMAIN}/v1"
 docker build -t web-client-build -f ../Dockerfile.web-client ..
-docker run --name "${CONTAINER_NAME}" web-client-build /bin/sh -c "cd web-client && API_URL=${API_URL} npm run dist"
+docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "API_URL=${API_URL}" --name "${CONTAINER_NAME}" web-client-build /bin/sh -c "cd web-client && ./build-dist.sh $ENV"
 CODE="$?"
 docker cp "${CONTAINER_NAME}:/home/app/web-client/dist" dist
 docker rm "${CONTAINER_NAME}"
