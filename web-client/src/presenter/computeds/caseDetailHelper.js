@@ -9,13 +9,10 @@ export default get => {
     'CaseDetailRespondent',
   ].includes(currentPage);
 
-  const isPetitionerView = ['CaseDetailPetitioner'].includes(currentPage);
-
   return {
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showDocumentStatus: !caseDetail.irsSendDate,
-    showDocketRecordActionColumn: isPetitionerView,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showFileDocumentButton: ['CaseDetailRespondent'].includes(currentPage),
