@@ -1,20 +1,22 @@
 import { state } from 'cerebral';
 
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
   if (props.key === 'filingType') {
     switch (props.value) {
       case 'Myself':
-        partyType = 'Petitioner';
+        partyType = PARTY_TYPES.petitioner;
         break;
     }
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
       case 'Yes':
-        partyType = 'Petitioner & Deceased Spouse';
+        partyType = PARTY_TYPES.petitionerDeceasedSpouse;
         break;
       case 'No':
-        partyType = 'Petitioner & Spouse';
+        partyType = PARTY_TYPES.petitionerSpouse;
         break;
     }
   } else if (props.key === 'otherType') {
@@ -22,13 +24,13 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
 
     switch (props.value) {
       case 'Donor':
-        partyType = 'Donor';
+        partyType = PARTY_TYPES.donor;
         break;
       case 'Transferee':
-        partyType = 'Transferee';
+        partyType = PARTY_TYPES.transferee;
         break;
       case 'Deceased Spouse':
-        partyType = 'Surviving Spouse';
+        partyType = PARTY_TYPES.survivingSpouse;
         break;
     }
   } else if (props.key === 'businessType') {

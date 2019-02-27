@@ -64,7 +64,7 @@ exports.INTERNATIONAL = 'international';
 exports.PARTY_TYPES = {
   petitioner: 'Petitioner',
   transferee: 'Transferee',
-  donar: 'Donor',
+  donor: 'Donor',
   petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
   survivingSpouse: 'Surviving Spouse',
   petitionerSpouse: 'Petitioner & Spouse',
@@ -74,6 +74,8 @@ exports.PARTY_TYPES = {
   partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than tax matters partner)',
+  partnershipBBA:
+    'Partnership (as a partnership representative under the BBA regime)',
   nextFriendForMinor:
     'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
   nextFriendForIncomponentPerson:
@@ -84,6 +86,30 @@ exports.PARTY_TYPES = {
   conservator: 'Conservator',
   guardian: 'Guardian',
   custodian: 'Custodian',
+};
+
+exports.BUSINESS_TYPES = {
+  corporation: exports.PARTY_TYPES.corporation,
+  partnershipAsTaxMattersPartner:
+    exports.PARTY_TYPES.partnershipAsTaxMattersPartner,
+  partnershipOtherThanTaxMatters:
+    exports.PARTY_TYPES.partnershipOtherThanTaxMatters,
+  partnershipBBA: exports.PARTY_TYPES.partnershipBBA,
+};
+
+exports.ESTATE_TYPES = {
+  estate: exports.PARTY_TYPES.estate,
+  estateWithoutExecutor: exports.PARTY_TYPES.estateWithoutExecutor,
+  trust: exports.PARTY_TYPES.trust,
+};
+
+exports.OTHER_TYPES = {
+  nextFriendForMinor: exports.PARTY_TYPES.nextFriendForMinor,
+  nextFriendForIncomponentPerson:
+    exports.PARTY_TYPES.nextFriendForIncomponentPerson,
+  conservator: exports.PARTY_TYPES.conservator,
+  guardian: exports.PARTY_TYPES.guardian,
+  custodian: exports.PARTY_TYPES.custodian,
 };
 
 exports.getValidationObject = ({ countryType = exports.DOMESTIC }) => {
@@ -142,7 +168,7 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.donar]: {
+    [exports.PARTY_TYPES.donor]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: null,
     }[contactType],

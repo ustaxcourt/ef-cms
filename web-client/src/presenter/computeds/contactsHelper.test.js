@@ -1,12 +1,13 @@
 import { runCompute } from 'cerebral/test';
 
 import { contactsHelper } from './contactsHelper';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: 'Conservator' },
+        form: { partyType: PARTY_TYPES.conservator },
       },
     });
     expect(result).toMatchObject({
@@ -26,7 +27,7 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Corporation', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: 'Corporation' },
+        form: { partyType: PARTY_TYPES.corporation },
       },
     });
     expect(result).toMatchObject({
@@ -41,7 +42,7 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Custodian', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: 'Custodian' },
+        form: { partyType: PARTY_TYPES.custodian },
       },
     });
     expect(result).toMatchObject({
@@ -61,7 +62,7 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Donor', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: 'Donor' },
+        form: { partyType: PARTY_TYPES.donor },
       },
     });
     expect(result).toMatchObject({
@@ -76,8 +77,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
@@ -99,8 +99,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
@@ -117,7 +116,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Guardian',
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -139,8 +138,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+          partyType: PARTY_TYPES.nextFriendForIncomponentPerson,
         },
       },
     });
@@ -164,8 +162,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -187,8 +184,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Partnership (as a partnership representative under the BBA regime)',
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -210,8 +206,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType:
-            'Partnership (as a partner other than tax matters partner)',
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -234,7 +229,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Partnership (as the tax matters partner)',
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -256,7 +251,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -272,7 +267,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Petitioner & Spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -294,7 +289,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Petitioner & Deceased Spouse',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -314,7 +309,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Surviving Spouse',
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -334,7 +329,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Transferee',
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -350,7 +345,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: 'Trust',
+          partyType: PARTY_TYPES.trust,
         },
       },
     });
