@@ -702,10 +702,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('submitFilePetitionSequence');
 
-    console.log(test.getState('form'));
-    console.log(test.getState('form'));
-    console.log(test.getState('form'));
-
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({
