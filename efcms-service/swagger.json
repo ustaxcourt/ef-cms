@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2019-02-25T17:16:48Z",
+    "version" : "2019-02-27T17:02:41Z",
     "title" : "dev-ef-cms",
     "contact" : {
       "url" : "https://www.ustaxcourt.gov",

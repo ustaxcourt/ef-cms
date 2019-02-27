@@ -1,7 +1,7 @@
 const { getDocument } = require('./getDocument');
 
 describe('getDocument', () => {
-  it('returns the expected documentId after when the upload was successful', async () => {
+  it('returns the expected file Blob which is returned from persistence', async () => {
     const BLOB_DATA = 'abc';
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
