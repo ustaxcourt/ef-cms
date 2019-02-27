@@ -134,6 +134,8 @@ describe('Petition', () => {
         state: 'AK',
         zip: '05198',
         country: 'USA',
+        title: 'Some Title',
+        phone: '4444444444',
       },
       contactSecondary: {
         name: 'Jimmy Dean',
@@ -141,7 +143,6 @@ describe('Petition', () => {
         city: 'Nashville',
         state: 'AK',
         zip: '05198',
-        phone: '1234567890',
       },
     });
     expect(petition.isValid()).toEqual(true);

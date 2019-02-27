@@ -1,6 +1,11 @@
+const joi = require('joi-browser');
 const { createContactFactory } = require('./PetitionContact');
 
 exports.getPetitionerEstateWithExecutorPrimaryContact = createContactFactory({
-  additionalErrorMappings: {},
-  additionalValidation: {},
+  additionalErrorMappings: {
+    title: 'Title is a required field.',
+  },
+  additionalValidation: {
+    title: joi.string().optional(),
+  },
 });
