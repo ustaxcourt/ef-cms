@@ -50,8 +50,8 @@ export default connect(
               validateStartCaseSequence();
             }}
           >
-            <option value="Domestic">- United States -</option>
-            <option value="International">- International -</option>
+            <option value="domestic">- United States -</option>
+            <option value="international">- International -</option>
           </select>
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
@@ -59,7 +59,7 @@ export default connect(
             </div>
           )}
         </div>
-        {form[type].countryType === 'International' && (
+        {form[type].countryType === 'international' && (
           <div
             className={
               'usa-form-group ' +
