@@ -91,7 +91,7 @@
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "contactPrimary": {
-      "countryType": "Domestic",
+      "countryType": "domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -287,7 +287,7 @@
       }
     ],
     "contactPrimary": {
-      "countryType": "Domestic",
+      "countryType": "domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -422,7 +422,7 @@
       }
     ],
     "contactPrimary": {
-      "countryType": "International",
+      "countryType": "international",
       "country": "England",
       "zip": "123FunnyCode",
       "role": "taxpayer",
@@ -628,7 +628,7 @@
     "sk": "0",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
-      "countryType": "Domestic",
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -722,7 +722,7 @@
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
-      "countryType": "Domestic",
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -822,7 +822,7 @@
     "sk": "2",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
-      "countryType": "Domestic",
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
