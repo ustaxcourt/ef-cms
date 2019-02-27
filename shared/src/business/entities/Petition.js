@@ -1,7 +1,7 @@
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { instantiateContacts, DOMESTIC } = require('./Contacts/PetitionContact');
+const { instantiateContacts } = require('./Contacts/PetitionContact');
 
 // TODO: rename the folder Contacts to lower case contacts
 
@@ -16,7 +16,6 @@ function Petition(rawPetition) {
   Object.assign(this, rawPetition);
   const contacts = instantiateContacts({
     partyType: this.partyType,
-    countryType: this.countryType || DOMESTIC,
     contactInfo: {
       primary: this.contactPrimary,
       secondary: this.contactSecondary,

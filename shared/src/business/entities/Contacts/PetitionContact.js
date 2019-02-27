@@ -209,15 +209,15 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
   }[partyType];
 };
 
-exports.instantiateContacts = ({ partyType, countryType, contactInfo }) => {
+exports.instantiateContacts = ({ partyType, contactInfo }) => {
   const primaryConstructor = getContactConstructor({
     partyType,
-    countryType,
+    countryType: (contactInfo.primary || {}).countryType,
     contactType: 'primary',
   });
   const secondaryConstructor = getContactConstructor({
     partyType,
-    countryType,
+    countryType: (contactInfo.secondary || {}).countryType,
     contactType: 'secondary',
   });
   return {
