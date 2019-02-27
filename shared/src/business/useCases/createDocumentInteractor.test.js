@@ -78,7 +78,7 @@ describe('createDocument', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
-          filedBy: 'respondent',
+          filedBy: 'Test Respondent',
           userId: 'respondent',
           workItems: [
             {
@@ -153,7 +153,7 @@ describe('createDocument', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
-          filedBy: 'petitioner',
+          filedBy: 'Test Taxpayer',
           userId: 'taxpayer',
           workItems: [
             {

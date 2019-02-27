@@ -2,7 +2,9 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Address from './Address';
+import Country from './Country';
 import Email from './Email';
+import InternationalAddress from './InternationalAddress';
 
 export default connect(
   {
@@ -23,6 +25,7 @@ export default connect(
       <div className="usa-form-group contact-group">
         <h3>{contactsHelper.contactPrimary.header}</h3>
         <div className="blue-container usa-grid-full">
+          <Country type="contactPrimary" />
           <div
             className={
               'usa-form-group ' +
@@ -127,7 +130,13 @@ export default connect(
               )}
             </div>
           )}
-          <Address type="contactPrimary" />
+          {(form.contactPrimary.countryType === undefined ||
+            form.contactPrimary.countryType === 'Domestic') && (
+            <Address type="contactPrimary" />
+          )}
+          {form.contactPrimary.countryType === 'International' && (
+            <InternationalAddress type="contactPrimary" />
+          )}
           <Email />
           <div
             className={

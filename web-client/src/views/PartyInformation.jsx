@@ -34,6 +34,11 @@ export default connect(
                       <span className="address-line">
                         {caseDetail.contactPrimary.address2}
                       </span>
+                      {caseDetail.contactPrimary.address3 && (
+                        <span className="address-line">
+                          {caseDetail.contactPrimary.address3}
+                        </span>
+                      )}
                       <span className="address-line">
                         {caseDetail.contactPrimary.city},{' '}
                         {caseDetail.contactPrimary.state}{' '}

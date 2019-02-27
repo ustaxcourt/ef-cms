@@ -49,7 +49,7 @@
     "documents": [
       {
         "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "61e96924-ce65-49f4-bebf-780bfc148520",
+        "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd",
         "documentType": "Petition",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
@@ -62,7 +62,7 @@
             "document": {
               "documentType": "Petition",
               "createdAt": "2018-12-27T18:22:57.418Z",
-              "documentId": "61e96924-ce65-49f4-bebf-780bfc148520"
+              "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
             },
             "messages": [
               {

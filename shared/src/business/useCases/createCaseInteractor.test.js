@@ -81,13 +81,13 @@ describe('createCase', () => {
         },
         {
           description: 'Petition',
-          filedBy: 'Petitioner',
+          filedBy: 'Test Taxpayer',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
         },
         {
           description: 'Ownership Disclosure Statement',
-          filedBy: 'Petitioner',
+          filedBy: 'Test Taxpayer',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
         },
@@ -98,7 +98,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
-          filedBy: 'Petitioner',
+          filedBy: 'Test Taxpayer',
           userId: 'taxpayer',
           workItems: [
             {
@@ -113,7 +113,7 @@ describe('createCase', () => {
                 createdAt: '2018-11-21T20:49:28.192Z',
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
-                filedBy: 'Petitioner',
+                filedBy: 'Test Taxpayer',
                 userId: 'taxpayer',
                 workItems: [],
               },
@@ -138,7 +138,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
           documentType: 'Ownership Disclosure Statement',
-          filedBy: 'Petitioner',
+          filedBy: 'Test Taxpayer',
           userId: 'taxpayer',
           workItems: [],
         },
@@ -223,7 +223,7 @@ describe('createCase', () => {
           createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
-          filedBy: 'Petitioner',
+          filedBy: 'Test Taxpayer',
           userId: 'taxpayer',
           workItems: [
             {
@@ -238,7 +238,7 @@ describe('createCase', () => {
                 createdAt: '2018-11-21T20:49:28.192Z',
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
-                filedBy: 'Petitioner',
+                filedBy: 'Test Taxpayer',
                 userId: 'taxpayer',
                 workItems: [],
               },
