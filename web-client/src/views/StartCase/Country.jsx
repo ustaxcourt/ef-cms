@@ -35,7 +35,7 @@ export default connect(
               `usa-input-inline ${type}-country-type ` +
               (validationErrors &&
               validationErrors[type] &&
-              validationErrors[type].state
+              validationErrors[type].countryType
                 ? 'ustc-input-error'
                 : '')
             }

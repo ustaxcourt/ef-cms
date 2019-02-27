@@ -130,8 +130,7 @@ export default connect(
               )}
             </div>
           )}
-          {(form.contactPrimary.countryType === undefined ||
-            form.contactPrimary.countryType === 'domestic') && (
+          {form.contactPrimary.countryType === 'domestic' && (
             <Address type="contactPrimary" />
           )}
           {form.contactPrimary.countryType === 'international' && (

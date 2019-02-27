@@ -5,6 +5,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 const domesticErrorToMessageMap = {
+  countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
@@ -19,15 +20,48 @@ const domesticErrorToMessageMap = {
   phone: 'Phone is a required field.',
 };
 
+const internationalErrorToMessageMap = {
+  countryType: 'Country Type is a required field.',
+  country: 'Country is a required field.',
+  name: 'Name is a required field.',
+  address1: 'Address is a required field.',
+  city: 'City is a required field.',
+  state: 'State/Province/Region is a required field.',
+  zip: 'Postal Code is a required field.',
+  phone: 'Phone is a required field.',
+};
+
 const domesticValidationObject = {
+  countryType: joi
+    .string()
+    .valid('domestic')
+    .required(),
   name: joi.string().required(),
   address1: joi.string().required(),
+  address2: joi.string().optional(),
+  address3: joi.string().optional(),
   city: joi.string().required(),
   state: joi.string().required(),
   zip: joi
     .string()
     .regex(/^\d{5}(-\d{4})?$/)
     .required(),
+  phone: joi.string().required(),
+};
+
+const internationalValidationObject = {
+  countryType: joi
+    .string()
+    .valid('international')
+    .required(),
+  country: joi.string().required(),
+  name: joi.string().required(),
+  address1: joi.string().required(),
+  address2: joi.string().optional(),
+  address3: joi.string().optional(),
+  city: joi.string().required(),
+  state: joi.string().optional(),
+  zip: joi.string().required(),
   phone: joi.string().required(),
 };
 
@@ -88,13 +122,13 @@ exports.OTHER_TYPES = {
 exports.getValidationObject = ({ countryType = exports.DOMESTIC }) => {
   return countryType === exports.DOMESTIC
     ? domesticValidationObject
-    : domesticValidationObject;
+    : internationalValidationObject;
 };
 
 exports.getErrorToMessageMap = ({ countryType = exports.DOMESTIC }) => {
   return countryType === exports.DOMESTIC
     ? domesticErrorToMessageMap
-    : domesticErrorToMessageMap;
+    : internationalErrorToMessageMap;
 };
 
 const getContactConstructor = ({ partyType, countryType, contactType }) => {
@@ -208,15 +242,15 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
   }[partyType];
 };
 
-exports.instantiateContacts = ({ partyType, countryType, contactInfo }) => {
+exports.instantiateContacts = ({ partyType, contactInfo }) => {
   const primaryConstructor = getContactConstructor({
     partyType,
-    countryType,
+    countryType: (contactInfo.primary || {}).countryType,
     contactType: 'primary',
   });
   const secondaryConstructor = getContactConstructor({
     partyType,
-    countryType,
+    countryType: (contactInfo.secondary || {}).countryType,
     contactType: 'secondary',
   });
   return {

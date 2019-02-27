@@ -31,6 +31,7 @@ describe('Petition', () => {
         signature: true,
         partyType: 'Corporation',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           inCareOf: 'USTC',
           address1: '876 12th Ave',
@@ -42,7 +43,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
@@ -58,6 +59,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Petitioner',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -69,7 +71,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('returns true when contactPrimary is defined and everything else is valid', () => {
@@ -85,6 +87,7 @@ describe('Petition', () => {
       partyType:
         'Estate without an Executor/Personal Representative/Fiduciary/etc.',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -96,7 +99,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('returns false for isValid if primary contact is missing', () => {
@@ -128,6 +131,7 @@ describe('Petition', () => {
       partyType:
         'Estate with an Executor/Personal Representative/Fiduciary/etc.',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -138,6 +142,7 @@ describe('Petition', () => {
         phone: '4444444444',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -145,7 +150,7 @@ describe('Petition', () => {
         zip: '05198',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Partnership (BBA Regime) contact', () => {
@@ -175,6 +180,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Partnership (BBA Regime)',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -186,6 +192,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -194,7 +201,7 @@ describe('Petition', () => {
         phone: '1234567890',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Trust contact', () => {
@@ -224,6 +231,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Trust',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -235,6 +243,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -243,7 +252,7 @@ describe('Petition', () => {
         phone: '1234567890',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Conservator contact', () => {
@@ -273,6 +282,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Conservator',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -281,6 +291,7 @@ describe('Petition', () => {
         phone: '1234567890',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -292,7 +303,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Guardian contact', () => {
@@ -322,6 +333,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Guardian',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -330,6 +342,7 @@ describe('Petition', () => {
         phone: '1234567890',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -341,7 +354,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Custodian contact', () => {
@@ -371,6 +384,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Custodian',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -379,6 +393,7 @@ describe('Petition', () => {
         phone: '1234567890',
       },
       contactSecondary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         inCareOf: 'USTC',
         address1: '876 12th Ave',
@@ -390,7 +405,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Donor contact', () => {
@@ -420,6 +435,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Donor',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -430,7 +446,7 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Transferee contact', () => {
@@ -460,6 +476,7 @@ describe('Petition', () => {
       signature: true,
       partyType: 'Transferee',
       contactPrimary: {
+        countryType: 'domestic',
         name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -470,6 +487,6 @@ describe('Petition', () => {
         email: 'someone@example.com',
       },
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 });
