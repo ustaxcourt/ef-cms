@@ -60,6 +60,20 @@
       ]
     },
     {
+      "notes": "expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international",
+      "actions": [
+        "wait for label#filing-type-1 to be visible",
+        "click element label#filing-type-1",
+        "wait for label#is-spouse-deceased-0 to be visible",
+        "click element label#is-spouse-deceased-0",
+        "wait for .contactPrimary-country-type to be visible",
+        "set field .contactPrimary-country-type to International",
+        "wait for .contactSecondary-country-type to be visible",
+        "set field .contactSecondary-country-type to International"
+      ]
+    },
+    {
       "notes": "expose hidden elements on start-a-case for party type Petitioner & Spouse",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-spouse",
       "actions": [
@@ -284,7 +298,7 @@
     },
     {
       "notes": "checks a11y of editable fields exposed when Yes notice attached",
-      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/61e96924-ce65-49f4-bebf-780bfc148520&info=reveal-notice-options",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=reveal-notice-options",
       "actions": [
         "wait for label#has-irs-verified-notice-yes to be visible",
         "click element label#has-irs-verified-notice-yes",
