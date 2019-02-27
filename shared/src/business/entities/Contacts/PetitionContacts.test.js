@@ -72,7 +72,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate without an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns true when contactPrimary is defined and everything else is valid', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -99,7 +99,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Estate with an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns false for isValid if primary contact is missing', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -113,7 +113,10 @@ describe('Petition', () => {
         'Estate with an Executor/Personal Representative/Fiduciary/etc.',
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
+  });
+
+  it('a valid petition returns true for isValid', () => {
+    const petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
       filingType: 'Myself',
@@ -144,7 +147,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Partnership (BBA Regime) contact', () => {
+  it('can validate invalid Partnership (BBA Regime) contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -157,6 +160,9 @@ describe('Petition', () => {
       partyType: 'Partnership (BBA Regime)',
     });
     expect(petition.isValid()).toEqual(false);
+  });
+
+  it('can validate valid Partnership (BBA Regime) contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -190,7 +196,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Trust', () => {
+  it('can validate invalid Trust contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -203,6 +209,9 @@ describe('Petition', () => {
       partyType: 'Trust',
     });
     expect(petition.isValid()).toEqual(false);
+  });
+
+  it('can validate valid Trust contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -236,7 +245,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Conservator contact', () => {
+  it('can validate invalid Conservator contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -249,6 +258,9 @@ describe('Petition', () => {
       partyType: 'Conservator',
     });
     expect(petition.isValid()).toEqual(false);
+  });
+
+  it('can validate valid Conservator contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -282,7 +294,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Guardian contact', () => {
+  it('can validate invalid Guardian contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -295,7 +307,9 @@ describe('Petition', () => {
       partyType: 'Guardian',
     });
     expect(petition.isValid()).toEqual(false);
+  });
 
+  it('can validate valid Guardian contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -329,7 +343,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Custodian contact', () => {
+  it('can validate invalid Custodian contact', () => {
     let petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -342,7 +356,9 @@ describe('Petition', () => {
       partyType: 'Custodian',
     });
     expect(petition.isValid()).toEqual(false);
+  });
 
+  it('can validate valid Custodian contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -376,7 +392,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Donor contact', () => {
+  it('can validate invalid Donor contact', () => {
     let petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -389,7 +405,9 @@ describe('Petition', () => {
       partyType: 'Donor',
     });
     expect(petition.isValid()).toEqual(false);
+  });
 
+  it('can validate valid Donor contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -414,7 +432,7 @@ describe('Petition', () => {
     expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Transferee contact', () => {
+  it('can validate invalid Transferee contact', () => {
     let petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
@@ -427,7 +445,9 @@ describe('Petition', () => {
       partyType: 'Transferee',
     });
     expect(petition.isValid()).toEqual(false);
+  });
 
+  it('can validate valid Transferee contact', () => {
     petition = new Petition({
       caseType: 'other',
       procedureType: 'Small',
