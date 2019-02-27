@@ -15,8 +15,8 @@ export default connect(
   function DocketRecord({
     baseUrl,
     caseDetail,
-    helper,
     clearDocumentSequence,
+    helper,
     token,
     updateCurrentTabSequence,
   }) {
@@ -46,7 +46,7 @@ export default connect(
               <th>Title</th>
               <th>Filed by</th>
               <th>Status</th>
-              {helper.showDocketRecordActionColumn && <th>Action</th>}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -94,7 +94,7 @@ export default connect(
                   )}
                   {helper.showDocumentStatus && <span>{document.status}</span>}
                 </td>
-                {helper.showDocketRecordActionColumn && <td />}
+                <td />
               </tr>
             ))}
             {helper.showPaymentRecord && (
