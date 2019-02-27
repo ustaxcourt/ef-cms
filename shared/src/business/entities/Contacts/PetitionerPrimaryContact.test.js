@@ -1,9 +1,12 @@
-const PetitionerPrimaryContact = require('./PetitionerPrimaryContact');
+const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
 
 describe('Petition', () => {
   describe('for Petitioner Primary contact', () => {
     it('can validate primary contact name', () => {
-      const petition = new PetitionerPrimaryContact({
+      const entityConstructor = getPetitionerPrimaryContact({
+        countryType: 'domestic',
+      });
+      const petition = new entityConstructor({
         name: 'Eric',
         address1: '123 Deming Way',
         city: 'Los Angeles',
