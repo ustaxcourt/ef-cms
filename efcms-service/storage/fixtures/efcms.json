@@ -91,6 +91,7 @@
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "contactPrimary": {
+      "countryType": "Domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -286,6 +287,7 @@
       }
     ],
     "contactPrimary": {
+      "countryType": "Domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -420,14 +422,15 @@
       }
     ],
     "contactPrimary": {
-      "zip": "37208",
+      "countryType": "International",
+      "country": "England",
+      "zip": "123FunnyCode",
       "role": "taxpayer",
-      "city": "Orlando",
+      "city": "London",
       "phone": "111-111-1111",
       "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
+      "address1": "111 Fish and Chips St.",
+      "address2": "Mushy Peas",
       "userId": "taxpayer",
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
@@ -625,6 +628,7 @@
     "sk": "0",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "Domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -718,6 +722,7 @@
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "Domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -817,6 +822,7 @@
     "sk": "2",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "Domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
