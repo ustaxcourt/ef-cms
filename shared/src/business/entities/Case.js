@@ -8,6 +8,7 @@ const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const YearAmount = require('./YearAmount');
 const DocketRecord = require('./DocketRecord');
+const { PARTY_TYPES } = require('./Contacts/PetitionContact');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -216,96 +217,96 @@ joiValidationDecorator(
 Case.getCaseTitle = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
-    case 'Petitioner':
+    case PARTY_TYPES.petitioner:
       caseCaption = `${
         rawCase.contactPrimary.name
       }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Petitioner & Spouse':
+    case PARTY_TYPES.petitionerSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
       }, Petitioners v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Petitioner & Deceased Spouse':
+    case PARTY_TYPES.petitionerDeceasedSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
       }, Deceased, ${
         rawCase.contactPrimary.name
       }, Surviving Spouse, Petitioners v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
+    case PARTY_TYPES.estate:
       caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
       }, ${
         rawCase.contactPrimary.title
       }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
+    case PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${
         rawCase.contactPrimary.name
       }, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Trust':
+    case PARTY_TYPES.trust:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Corporation':
+    case PARTY_TYPES.corporation:
       caseCaption = `${
         rawCase.contactPrimary.name
       }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Partnership (as the tax matters partner)':
+    case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Partnership (as a partner other than tax matters partner)':
+    case PARTY_TYPES.partnershipOtherThanTaxMatters:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, A Partner Other Than the Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Partnership (as a partnership representative under the BBA regime)':
+    case PARTY_TYPES.partnershipBBA:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Conservator':
+    case PARTY_TYPES.conservator:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Conservator, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Guardian':
+    case PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Guardian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Custodian':
+    case PARTY_TYPES.custodian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Custodian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
+    case PARTY_TYPES.nextFriendForMinor:
       caseCaption = `${rawCase.contactSecondary.name}, Minor, ${
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
+    case PARTY_TYPES.nextFriendForIncomponentPerson:
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Donor':
+    case PARTY_TYPES.donor:
       caseCaption = `${
         rawCase.contactPrimary.name
       }, Donor, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Transferee':
+    case PARTY_TYPES.transferee:
       caseCaption = `${
         rawCase.contactPrimary.name
       }, Transferee, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case 'Surviving Spouse':
+    case PARTY_TYPES.survivingSpouse:
       caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
       }, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent`;

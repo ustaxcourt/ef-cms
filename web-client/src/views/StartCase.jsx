@@ -6,6 +6,12 @@ import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
 import Contacts from './StartCase/Contacts';
+import {
+  PARTY_TYPES,
+  OTHER_TYPES,
+  ESTATE_TYPES,
+  BUSINESS_TYPES,
+} from '../../../shared/src/business/entities/Contacts/PetitionContact';
 
 import ErrorNotification from './ErrorNotification';
 
@@ -252,10 +258,10 @@ export default connect(
                       </legend>
                       <ul className="ustc-unstyled-list">
                         {[
-                          'Corporation',
-                          'Partnership (as the tax matters partner)',
-                          'Partnership (as a partner other than tax matters partner)',
-                          'Partnership (as a partnership representative under the BBA regime)',
+                          BUSINESS_TYPES.corporation,
+                          BUSINESS_TYPES.partnershipAsTaxMattersPartner,
+                          BUSINESS_TYPES.partnershipOtherThanTaxMatters,
+                          BUSINESS_TYPES.partnershipBBA,
                         ].map((businessType, idx) => (
                           <li key={businessType}>
                             <input
@@ -353,9 +359,9 @@ export default connect(
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-                            'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-                            'Trust',
+                            ESTATE_TYPES.estate,
+                            ESTATE_TYPES.estateWithoutExecutor,
+                            ESTATE_TYPES.trust,
                           ].map((estateType, idx) => (
                             <li key={estateType}>
                               <input
@@ -404,11 +410,11 @@ export default connect(
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            'Conservator',
-                            'Guardian',
-                            'Custodian',
-                            'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-                            'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                            OTHER_TYPES.conservator,
+                            OTHER_TYPES.guardian,
+                            OTHER_TYPES.custodian,
+                            OTHER_TYPES.nextFriendForMinor,
+                            OTHER_TYPES.nextFriendForIncomponentPerson,
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input
