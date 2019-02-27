@@ -26,6 +26,8 @@ export const createCaseAction = async ({ applicationContext, get, store }) => {
     ['year', 'month', 'day', 'trialCities', 'signature'],
   );
 
+  form.contactPrimary.email = get(state.user.email);
+
   await applicationContext.getUseCases().filePetition({
     applicationContext,
     petitionMetadata: form,
