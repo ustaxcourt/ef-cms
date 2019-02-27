@@ -15,7 +15,7 @@ export default (test, fakeFile) => {
     expect(result.showPrimaryContact).toBeFalsy();
     expect(result.showSecondaryContact).toBeFalsy();
 
-    // Petitioner party type primary contact
+    // Petitioner party type primary contact with international address
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Myself',
@@ -26,6 +26,64 @@ export default (test, fakeFile) => {
     });
     expect(result.showPrimaryContact).toBeTruthy();
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.countryType',
+      value: 'international',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.country',
+      value: 'Switzerland',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.name',
+      value: 'Test Person',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address1',
+      value: '123 Abc Ln',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.city',
+      value: 'Cityville',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.zip',
+      value: '23-skidoo',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.email',
+      value: 'test@example.com',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.phone',
+      value: '1234567890',
+    });
+
+    expect(test.getState('form.contactPrimary')).toEqual({
+      name: 'Test Person',
+      address1: '123 Abc Ln',
+      countryType: 'international',
+      country: 'Switzerland',
+      city: 'Cityville',
+      zip: '23-skidoo',
+      email: 'test@example.com',
+      phone: '1234567890',
+    });
+
+    // Petitioner party type primary contact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPrimaryContact).toBeTruthy();
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.countryType',
+      value: 'domestic',
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Test Person',
@@ -60,6 +118,7 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('form.contactPrimary')).toEqual({
+      countryType: 'domestic',
       name: 'Test Person',
       address1: '123 Abc Ln',
       address2: 'Apt 2',
