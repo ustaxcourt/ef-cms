@@ -9,7 +9,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 
-export const CaseDetail = connect(
+export const CaseDetailInternal = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,

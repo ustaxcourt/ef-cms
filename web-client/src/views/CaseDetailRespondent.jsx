@@ -9,7 +9,7 @@ import { FileDocument } from './FileDocument';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 
-export const CaseDetail = connect(
+export const CaseDetailRespondent = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,

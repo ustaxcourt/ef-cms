@@ -5,7 +5,7 @@ import React from 'react';
 
 import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 
-export const PetitionEdit = connect(
+export const CaseDetailEdit = connect(
   {
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
