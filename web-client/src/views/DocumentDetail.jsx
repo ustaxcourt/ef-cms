@@ -4,14 +4,14 @@ import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import ErrorNotification from './ErrorNotification';
-import SuccessNotification from './SuccessNotification';
-import CaseDetailEdit from './CaseDetailEdit';
-import CaseDetailReadOnly from './CaseDetailReadOnly';
-import ServeToIrsModalDialog from './ServeToIrsModalDialog';
-import RecallPetitionModalDialog from './RecallPetitionModalDialog';
+import { CaseDetailEdit } from './CaseDetailEdit';
+import { CaseDetailReadOnly } from './CaseDetailReadOnly';
+import { ErrorNotification } from './ErrorNotification';
+import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
+import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
+import { SuccessNotification } from './SuccessNotification';
 
-class DocumentDetail extends React.Component {
+class DocumentDetailComponent extends React.Component {
   render() {
     const {
       baseUrl,
@@ -452,7 +452,7 @@ class DocumentDetail extends React.Component {
   }
 }
 
-DocumentDetail.propTypes = {
+DocumentDetailComponent.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   caseHelper: PropTypes.object,
@@ -471,7 +471,7 @@ DocumentDetail.propTypes = {
   workItemActions: PropTypes.object,
 };
 
-export default connect(
+export const DocumentDetail = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
@@ -490,5 +490,5 @@ export default connect(
     users: state.internalUsers,
     workItemActions: state.workItemActions,
   },
-  DocumentDetail,
+  DocumentDetailComponent,
 );

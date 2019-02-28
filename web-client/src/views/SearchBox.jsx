@@ -1,18 +1,14 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
 import { sequences, state } from 'cerebral';
+import React from 'react';
 
-export default connect(
+export const SearchBox = connect(
   {
     searchTerm: state.searchTerm,
     submitSearchSequence: sequences.submitSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  function SearchBox({
-    searchTerm,
-    submitSearchSequence,
-    updateSearchTermSequence,
-  }) {
+  ({ searchTerm, submitSearchSequence, updateSearchTermSequence }) => {
     return (
       <form
         className="usa-search"

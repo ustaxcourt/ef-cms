@@ -1,8 +1,9 @@
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
-import ModalDialog from './ModalDialog';
 
-class StartCaseCancelModalDialog extends ModalDialog {
+import { ModalDialog } from './ModalDialog';
+
+class StartCaseCancelModalDialogComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
@@ -15,10 +16,10 @@ class StartCaseCancelModalDialog extends ModalDialog {
   }
 }
 
-export default connect(
+export const StartCaseCancelModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.startACaseConfirmCancelSequence,
   },
-  StartCaseCancelModalDialog,
+  StartCaseCancelModalDialogComponent,
 );

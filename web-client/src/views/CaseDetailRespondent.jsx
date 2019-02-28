@@ -3,19 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import DocketRecord from './DocketRecord';
-import ErrorNotification from './ErrorNotification';
-import FileDocument from './FileDocument';
-import PartyInformation from './PartyInformation';
-import SuccessNotification from './SuccessNotification';
+import { DocketRecord } from './DocketRecord';
+import { ErrorNotification } from './ErrorNotification';
+import { FileDocument } from './FileDocument';
+import { PartyInformation } from './PartyInformation';
+import { SuccessNotification } from './SuccessNotification';
 
-export default connect(
+export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
-  function CaseDetail({ caseDetail, currentTab, updateCurrentTabSequence }) {
+  ({ caseDetail, currentTab, updateCurrentTabSequence }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
