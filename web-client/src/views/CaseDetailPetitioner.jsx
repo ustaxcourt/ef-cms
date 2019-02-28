@@ -8,7 +8,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 
-export default connect(
+export const CaseDetailPetitioner = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,

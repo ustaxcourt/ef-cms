@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 
-export const IndividualWorkQueue = connect(
+export const IndividualWorkQueueInbox = connect(
   {
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,

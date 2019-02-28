@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseDetail = connect(
+export const CaseDetailPublic = connect(
   {
     caseDetail: state.formattedCaseDetail,
   },
