@@ -43,7 +43,7 @@ export const PartyInformation = connect(
                       <span className="address-line">
                         {caseDetail.contactPrimary.city},{' '}
                         {caseDetail.contactPrimary.state}{' '}
-                        {caseDetail.contactPrimary.zip}
+                        {caseDetail.contactPrimary.postalCode}
                       </span>
                       <span className="address-line">
                         {caseDetail.contactPrimary.countryType ===
@@ -82,7 +82,7 @@ export const PartyInformation = connect(
                         {caseDetail.contactSecondary.city &&
                           `${caseDetail.contactSecondary.city},`}{' '}
                         {caseDetail.contactSecondary.state}{' '}
-                        {caseDetail.contactSecondary.zip}
+                        {caseDetail.contactSecondary.postalCode}
                       </span>
                       <span className="address-line">
                         {caseDetail.contactSecondary.countryType ===
@@ -117,7 +117,8 @@ export const PartyInformation = connect(
                     </span>
                     <span className="address-line">
                       {caseDetail.respondent.city},{' '}
-                      {caseDetail.respondent.state} {caseDetail.respondent.zip}
+                      {caseDetail.respondent.state}{' '}
+                      {caseDetail.respondent.postalCode}
                     </span>
                   </p>
                   <p>{caseDetail.respondent.phone}</p>

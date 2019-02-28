@@ -50,7 +50,7 @@ export default (test, fakeFile) => {
       value: 'Cityville',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.zip',
+      key: 'contactPrimary.postalCode',
       value: '23-skidoo',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -68,7 +68,7 @@ export default (test, fakeFile) => {
       countryType: 'international',
       country: 'Switzerland',
       city: 'Cityville',
-      zip: '23-skidoo',
+      postalCode: '23-skidoo',
       email: 'test@example.com',
       phone: '1234567890',
     });
@@ -108,7 +108,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.zip',
+      key: 'contactPrimary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -127,7 +127,7 @@ export default (test, fakeFile) => {
       address2: 'Apt 2',
       city: 'Cityville',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
     });
@@ -643,7 +643,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.zip',
+      key: 'contactSecondary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -662,7 +662,7 @@ export default (test, fakeFile) => {
       city: 'Cityville',
       countryType: 'domestic',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
     });
@@ -688,7 +688,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.zip',
+      key: 'contactPrimary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -706,7 +706,7 @@ export default (test, fakeFile) => {
       city: 'Cityville',
       countryType: 'domestic',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
     });
