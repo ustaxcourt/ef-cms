@@ -104,7 +104,10 @@ export default connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.state`}>State/Province/Region</label>
+          <label htmlFor={`${type}.state`}>
+            State/Province/Region{' '}
+            <span className="usa-form-hint">(optional)</span>
+          </label>
           <input
             id={`${type}.state`}
             type="text"
@@ -171,7 +174,7 @@ export default connect(
           }
         >
           <label htmlFor={`${type}.postalCode`} aria-label="postal code">
-            ZIP/Postal Code
+            Postal Code
           </label>
           <input
             id={`${type}.postalCode`}

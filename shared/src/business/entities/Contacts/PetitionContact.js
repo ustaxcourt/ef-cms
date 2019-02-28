@@ -4,6 +4,11 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+exports.COUNTRY_TYPES = {
+  DOMESTIC: 'domestic',
+  INTERNATIONAL: 'international',
+};
+
 const domesticErrorToMessageMap = {
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
@@ -34,7 +39,7 @@ const internationalErrorToMessageMap = {
 const domesticValidationObject = {
   countryType: joi
     .string()
-    .valid('domestic')
+    .valid(exports.COUNTRY_TYPES.DOMESTIC)
     .required(),
   name: joi.string().required(),
   address1: joi.string().required(),
@@ -52,7 +57,7 @@ const domesticValidationObject = {
 const internationalValidationObject = {
   countryType: joi
     .string()
-    .valid('international')
+    .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
   country: joi.string().required(),
   name: joi.string().required(),
@@ -64,9 +69,6 @@ const internationalValidationObject = {
   postalCode: joi.string().required(),
   phone: joi.string().required(),
 };
-
-exports.DOMESTIC = 'domestic';
-exports.INTERNATIONAL = 'international';
 
 exports.PARTY_TYPES = {
   petitioner: 'Petitioner',
@@ -119,14 +121,18 @@ exports.OTHER_TYPES = {
   custodian: exports.PARTY_TYPES.custodian,
 };
 
-exports.getValidationObject = ({ countryType = exports.DOMESTIC }) => {
-  return countryType === exports.DOMESTIC
+exports.getValidationObject = ({
+  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+}) => {
+  return countryType === exports.COUNTRY_TYPES.DOMESTIC
     ? domesticValidationObject
     : internationalValidationObject;
 };
 
-exports.getErrorToMessageMap = ({ countryType = exports.DOMESTIC }) => {
-  return countryType === exports.DOMESTIC
+exports.getErrorToMessageMap = ({
+  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+}) => {
+  return countryType === exports.COUNTRY_TYPES.DOMESTIC
     ? domesticErrorToMessageMap
     : internationalErrorToMessageMap;
 };
