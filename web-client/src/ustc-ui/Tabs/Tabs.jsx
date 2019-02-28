@@ -1,34 +1,22 @@
 import React, { useState } from 'react';
 import { connect } from '@cerebral/react';
-import { forEach, map } from './utils/ElementChildren';
+import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import {
   useCerebralState,
   decorateWithPostCallback,
-  decorateWithPreemptiveCallback,
-} from './utils/useCerebralState';
-
-// maybe no default search is needed
-function getDefaultActiveKey(children) {
-  let defaultActiveKey;
-  forEach(children, child => {
-    if (defaultActiveKey == null) {
-      defaultActiveKey = child.props.tabName;
-    }
-  });
-
-  return defaultActiveKey;
-}
+} from '../utils/useCerebralState';
 
 export function Tab() {}
 
-export const Tabs = connect(function Tabs(props) {
+export function TabsComponent(props) {
   let { get, bind, onSelect, children, defaultActiveTab } = props;
 
   let activeKey, setTab;
 
-  defaultActiveTab = defaultActiveTab || getDefaultActiveKey(children);
+  defaultActiveTab =
+    defaultActiveTab || getDefaultAttribute(children, 'tabName');
 
   if (bind) {
     [activeKey, setTab] = useCerebralState(get, bind, defaultActiveTab);
@@ -37,12 +25,6 @@ export const Tabs = connect(function Tabs(props) {
   }
 
   setTab = decorateWithPostCallback(setTab, onSelect);
-
-  function tabHasChanged(tabName) {
-    return activeKey !== tabName;
-  }
-
-  setTab = decorateWithPreemptiveCallback(setTab, tabHasChanged);
 
   function renderTab(child) {
     const { title, tabName, id } = child.props;
@@ -53,10 +35,6 @@ export const Tabs = connect(function Tabs(props) {
     var liClass = classNames({
       active: isActiveTab,
     });
-
-    if (title == null) {
-      return null;
-    }
 
     return (
       <li className={liClass}>
@@ -99,4 +77,6 @@ export const Tabs = connect(function Tabs(props) {
       {map(children, renderTabContent)}
     </>
   );
-});
+}
+
+export const Tabs = connect(TabsComponent);
