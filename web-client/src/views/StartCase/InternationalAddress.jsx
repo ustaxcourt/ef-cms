@@ -104,7 +104,10 @@ export default connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.state`}>State/Province/Region</label>
+          <label htmlFor={`${type}.state`}>
+            State/Province/Region{' '}
+            <span className="usa-form-hint">(optional)</span>
+          </label>
           <input
             id={`${type}.state`}
             type="text"
@@ -165,20 +168,20 @@ export default connect(
             'usa-form-group clear-both ' +
             (validationErrors &&
             validationErrors[type] &&
-            validationErrors[type].zip
+            validationErrors[type].postalCode
               ? 'usa-input-error'
               : '')
           }
         >
-          <label htmlFor={`${type}.zip`} aria-label="zip code">
-            ZIP/Postal Code
+          <label htmlFor={`${type}.postalCode`} aria-label="postal code">
+            Postal Code
           </label>
           <input
-            id={`${type}.zip`}
+            id={`${type}.postalCode`}
             type="text"
-            name={`${type}.zip`}
+            name={`${type}.postalCode`}
             autoCapitalize="none"
-            value={form[type].zip || ''}
+            value={form[type].postalCode || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -191,7 +194,7 @@ export default connect(
           />
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
-              {validationErrors[type].zip}
+              {validationErrors[type].postalCode}
             </div>
           )}
         </div>

@@ -413,7 +413,7 @@ export default connect(
                             constants.OTHER_TYPES.custodian,
                             constants.OTHER_TYPES.nextFriendForMinor,
                             constants.OTHER_TYPES
-                              .nextFriendForincompetentPerson,
+                              .nextFriendForIncompetentPerson,
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input
