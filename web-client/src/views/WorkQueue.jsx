@@ -4,7 +4,7 @@ import React from 'react';
 
 import IndividualWorkQueue from './IndividualWorkQueue';
 import SectionWorkQueue from './SectionWorkQueue';
-import { Tabs, Tab } from './Tabs';
+import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
 
 export default connect(
   {

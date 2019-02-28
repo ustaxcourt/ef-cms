@@ -1,6 +1,7 @@
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
+import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
@@ -77,6 +78,7 @@ export default {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
+    cerebralBindSimpleSetStateSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
     clickServeToIrsSequence,

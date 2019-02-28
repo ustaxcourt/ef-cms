@@ -7,6 +7,8 @@ import React from 'react';
  * The mapFunction provided index will be normalised to the components mapped,
  * so an invalid component would not increase the index.
  *
+ * @param children
+ * @param func
  */
 function map(children, func) {
   let index = 0;
@@ -21,6 +23,9 @@ function map(children, func) {
  *
  * The provided forEachFunc(child, index) will be called for each
  * leaf child with the index reflecting the position relative to "valid components".
+ *
+ * @param children
+ * @param func
  */
 function forEach(children, func) {
   let index = 0;
@@ -29,4 +34,21 @@ function forEach(children, func) {
   });
 }
 
-export { map, forEach };
+/**
+ * Finds the default attribute from children
+ *
+ * @param children
+ * @param attrName
+ */
+function getDefaultAttribute(children, attrName) {
+  let defaultActiveKey;
+  forEach(children, child => {
+    if (defaultActiveKey == null) {
+      defaultActiveKey = child.props[attrName];
+    }
+  });
+
+  return defaultActiveKey;
+}
+
+export { map, forEach, getDefaultAttribute };
