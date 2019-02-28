@@ -2,8 +2,7 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 const {
   PARTY_TYPES,
-  DOMESTIC,
-  INTERNATIONAL,
+  COUNTRY_TYPES,
 } = require('../../shared/src/business/entities/Contacts/PetitionContact');
 
 import applicationContext from '../src/applicationContext';
@@ -96,8 +95,7 @@ describe('Case journey', async () => {
 
     test.setState('constants', {
       PARTY_TYPES,
-      DOMESTIC,
-      INTERNATIONAL,
+      COUNTRY_TYPES,
     });
   });
 

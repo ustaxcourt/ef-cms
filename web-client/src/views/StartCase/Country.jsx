@@ -52,8 +52,12 @@ export default connect(
               validateStartCaseSequence();
             }}
           >
-            <option value={constants.DOMESTIC}>- United States -</option>
-            <option value={constants.INTERNATIONAL}>- International -</option>
+            <option value={constants.COUNTRY_TYPES.DOMESTIC}>
+              - United States -
+            </option>
+            <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
+              - International -
+            </option>
           </select>
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">

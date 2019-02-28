@@ -5,8 +5,7 @@ import sinon from 'sinon';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
 import {
   PARTY_TYPES,
-  DOMESTIC,
-  INTERNATIONAL,
+  COUNTRY_TYPES,
 } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 const updateCaseStub = sinon.stub().returns({});
@@ -22,8 +21,7 @@ const getFixtures = (props, state = {}) => ({
     ...state,
     constants: {
       PARTY_TYPES,
-      DOMESTIC,
-      INTERNATIONAL,
+      COUNTRY_TYPES,
     },
   },
   modules: {
@@ -154,8 +152,7 @@ describe('updatePartyTypeAction', async () => {
           },
           constants: {
             PARTY_TYPES: [],
-            DOMESTIC: 'domestic',
-            INTERNATIONAL: 'international',
+            COUNTRY_TYPES,
           },
         },
       ),
@@ -182,8 +179,7 @@ describe('updatePartyTypeAction', async () => {
           },
           constants: {
             PARTY_TYPES: [],
-            DOMESTIC: 'domestic',
-            INTERNATIONAL: 'international',
+            COUNTRY_TYPES,
           },
         },
       ),
@@ -207,8 +203,7 @@ describe('updatePartyTypeAction', async () => {
           },
           constants: {
             PARTY_TYPES: [],
-            DOMESTIC: 'domestic',
-            INTERNATIONAL: 'international',
+            COUNTRY_TYPES,
           },
         },
       ),
