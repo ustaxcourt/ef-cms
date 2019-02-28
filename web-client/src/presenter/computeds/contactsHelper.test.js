@@ -138,7 +138,7 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: PARTY_TYPES.nextFriendForIncomponentPerson,
+          partyType: PARTY_TYPES.nextFriendForincompetentPerson,
         },
       },
     });
