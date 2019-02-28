@@ -101,10 +101,12 @@ export default connect(
               )}
             </div>
           )}
-          {form.contactSecondary.countryType === constants.DOMESTIC && (
+          {form.contactSecondary.countryType ===
+            constants.COUNTRY_TYPES.DOMESTIC && (
             <Address type="contactSecondary" />
           )}
-          {form.contactSecondary.countryType === constants.INTERNATIONAL && (
+          {form.contactSecondary.countryType ===
+            constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress type="contactSecondary" />
           )}
           {contactsHelper.contactSecondary.displayPhone && (

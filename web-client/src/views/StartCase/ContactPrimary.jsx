@@ -132,10 +132,12 @@ export default connect(
               )}
             </div>
           )}
-          {form.contactPrimary.countryType === constants.DOMESTIC && (
+          {form.contactPrimary.countryType ===
+            constants.COUNTRY_TYPES.DOMESTIC && (
             <Address type="contactPrimary" />
           )}
-          {form.contactPrimary.countryType === constants.INTERNATIONAL && (
+          {form.contactPrimary.countryType ===
+            constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress type="contactPrimary" />
           )}
           <Email />

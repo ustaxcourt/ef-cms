@@ -47,9 +47,9 @@ export default connect(
                       </span>
                       <span className="address-line">
                         {caseDetail.contactPrimary.countryType ===
-                          constants.DOMESTIC && 'USA'}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
                         {caseDetail.contactPrimary.countryType ===
-                          constants.INTERNATIONAL &&
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
                           caseDetail.contactPrimary.country}
                       </span>
                     </p>
@@ -86,9 +86,9 @@ export default connect(
                       </span>
                       <span className="address-line">
                         {caseDetail.contactSecondary.countryType ===
-                          constants.DOMESTIC && 'USA'}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
                         {caseDetail.contactSecondary.countryType ===
-                          constants.INTERNATIONAL &&
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
                           caseDetail.contactSecondary.country}
                       </span>
                     </p>

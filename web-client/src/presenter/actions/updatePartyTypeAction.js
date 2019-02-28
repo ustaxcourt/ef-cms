@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
-  const { PARTY_TYPES, DOMESTIC } = get(state.constants);
+  const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
   if (props.key === 'filingType') {
     switch (props.value) {
       case 'Myself':
@@ -86,14 +86,14 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
   store.set(
     state.form.contactPrimary,
     (hasPrimaryContact && {
-      countryType: DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
     }) ||
       {},
   );
   store.set(
     state.form.contactSecondary,
     (hasSecondaryContact && {
-      countryType: DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
     }) ||
       {},
   );
