@@ -9,6 +9,7 @@ import React from 'react';
  *
  * @param children
  * @param func
+ * @returns []
  */
 function map(children, func) {
   let index = 0;

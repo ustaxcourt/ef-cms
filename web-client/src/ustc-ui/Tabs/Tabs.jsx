@@ -4,9 +4,10 @@ import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import {
-  useCerebralState,
+  useCerebralStateFactory,
   decorateWithPostCallback,
 } from '../utils/useCerebralState';
+import { sequences, state } from 'cerebral';
 
 export function Tab() {}
 
@@ -19,7 +20,11 @@ export function TabsComponent(props) {
     defaultActiveTab || getDefaultAttribute(children, 'tabName');
 
   if (bind) {
-    [activeKey, setTab] = useCerebralState(get, bind, defaultActiveTab);
+    /* istanbul ignore next */
+    [activeKey, setTab] = useCerebralStateFactory(get, sequences, state)(
+      bind,
+      defaultActiveTab,
+    );
   } else {
     [activeKey, setTab] = useState(defaultActiveTab);
   }
