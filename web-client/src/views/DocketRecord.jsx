@@ -103,7 +103,7 @@ export default connect(
                 <td>Filing fee paid</td>
                 <td />
                 <td />
-                {helper.showDocketRecordActionColumn && <td />}
+                <td />
               </tr>
             )}
             {helper.showPreferredTrialCity && (
@@ -114,7 +114,7 @@ export default connect(
                 </td>
                 <td />
                 <td />
-                {helper.showDocketRecordActionColumn && <td />}
+                <td />
               </tr>
             )}
           </tbody>

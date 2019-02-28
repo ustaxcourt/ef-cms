@@ -44,6 +44,13 @@ import Petition from '../../shared/src/business/entities/Petition';
 import ErrorFactory from './presenter/errors/ErrorFactory';
 import decorateWithTryCatch from './tryCatchDecorator';
 
+import {
+  PARTY_TYPES,
+  OTHER_TYPES,
+  ESTATE_TYPES,
+  BUSINESS_TYPES,
+} from '../../shared/src/business/entities/Contacts/PetitionContact';
+
 let user;
 
 const getCurrentUser = () => {
@@ -129,6 +136,12 @@ const applicationContext = {
       uploadPdf,
     };
   },
+  getConstants: () => ({
+    PARTY_TYPES,
+    OTHER_TYPES,
+    ESTATE_TYPES,
+    BUSINESS_TYPES,
+  }),
   getUseCases: () => allUseCases,
   getCurrentUser,
   setCurrentUser,

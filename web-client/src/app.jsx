@@ -55,6 +55,8 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
+    presenter.state.constants = applicationContext.getConstants();
+
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,
