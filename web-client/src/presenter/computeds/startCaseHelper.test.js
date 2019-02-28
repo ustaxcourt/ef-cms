@@ -1,11 +1,15 @@
 import { runCompute } from 'cerebral/test';
 
 import startCaseHelper from './startCaseHelper';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 describe('start a case computed', () => {
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         petition: {},
         form: {},
       },
@@ -16,6 +20,9 @@ describe('start a case computed', () => {
   it('sets showPetitionFileValid when the petition file is added to the petition', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         petition: {
           petitionFile: true,
         },
@@ -28,6 +35,9 @@ describe('start a case computed', () => {
   it('sets showOwnershipDisclosure when the party is business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         petition: {
           petitionFile: true,
         },
@@ -43,6 +53,9 @@ describe('start a case computed', () => {
   it('clears showOwnershipDisclosure when the party is not business', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         petition: {
           petitionFile: true,
         },
@@ -58,6 +71,9 @@ describe('start a case computed', () => {
   it('sets showHasIrsNoticeOptions when hasIrsNotice is Yes', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           hasIrsNotice: true,
         },
@@ -70,6 +86,9 @@ describe('start a case computed', () => {
   it('sets showNotHasIrsNoticeOptions when hasIrsNotice is No', () => {
     const result = runCompute(startCaseHelper, {
       state: {
+        constants: {
+          PARTY_TYPES,
+        },
         form: {
           hasIrsNotice: false,
         },

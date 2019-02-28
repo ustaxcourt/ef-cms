@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import { showContactsHelper } from '../helpers/showContactsHelper';
 
 export default get => {
   const form = get(state.form);
@@ -14,6 +14,9 @@ export default get => {
         getTrialCityName(trialCity),
       ]),
   );
+  const { PARTY_TYPES } = get(state.constants);
+
+  const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
   return {
     showPetitionFileValid: petition && petition.petitionFile,
@@ -34,40 +37,8 @@ export default get => {
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse',
 
-    showPrimaryContact:
-      form.partyType === PARTY_TYPES.petitioner ||
-      form.partyType === PARTY_TYPES.petitionerSpouse ||
-      form.partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
-      form.partyType === PARTY_TYPES.estate ||
-      form.partyType === PARTY_TYPES.estateWithoutExecutor ||
-      form.partyType === PARTY_TYPES.trust ||
-      form.partyType === PARTY_TYPES.corporation ||
-      form.partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
-      form.partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
-      form.partyType === PARTY_TYPES.partnershipBBA ||
-      form.partyType === PARTY_TYPES.conservator ||
-      form.partyType === PARTY_TYPES.guardian ||
-      form.partyType === PARTY_TYPES.custodian ||
-      form.partyType === PARTY_TYPES.nextFriendForMinor ||
-      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
-      form.partyType === PARTY_TYPES.donor ||
-      form.partyType === PARTY_TYPES.transferee ||
-      form.partyType === PARTY_TYPES.survivingSpouse,
-
-    showSecondaryContact:
-      form.partyType === PARTY_TYPES.petitionerSpouse ||
-      form.partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
-      form.partyType === PARTY_TYPES.estate ||
-      form.partyType === PARTY_TYPES.trust ||
-      form.partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
-      form.partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
-      form.partyType === PARTY_TYPES.partnershipBBA ||
-      form.partyType === PARTY_TYPES.conservator ||
-      form.partyType === PARTY_TYPES.guardian ||
-      form.partyType === PARTY_TYPES.custodian ||
-      form.partyType === PARTY_TYPES.nextFriendForMinor ||
-      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
-      form.partyType === PARTY_TYPES.survivingSpouse,
+    showPrimaryContact: showContacts.contactPrimary,
+    showSecondaryContact: showContacts.contactSecondary,
 
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showNotHasIrsNoticeOptions: form.hasIrsNotice === false,

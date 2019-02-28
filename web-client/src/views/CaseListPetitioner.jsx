@@ -2,9 +2,6 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-/**
- * Case List Component
- */
 export const CaseListPetitioner = connect(
   {
     caseList: state.formattedCases,

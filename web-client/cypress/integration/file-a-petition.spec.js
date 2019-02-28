@@ -92,7 +92,7 @@ describe('File a petition', function() {
     });
 
     it('fills in zipcode', () => {
-      cy.get('input[name="contactPrimary.zip"]')
+      cy.get('input[name="contactPrimary.postalCode"]')
         .scrollIntoView()
         .type('12345');
     });

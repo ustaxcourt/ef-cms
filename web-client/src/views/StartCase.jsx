@@ -2,23 +2,18 @@ import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
+
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
-import CaseDifferenceExplained from './CaseDifferenceExplained';
-import Contacts from './StartCase/Contacts';
-import {
-  PARTY_TYPES,
-  OTHER_TYPES,
-  ESTATE_TYPES,
-  BUSINESS_TYPES,
-} from '../../../shared/src/business/entities/Contacts/PetitionContact';
+import { CaseDifferenceExplained } from './CaseDifferenceExplained';
+import { Contacts } from './StartCase/Contacts';
+import { ErrorNotification } from './ErrorNotification';
+import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 
-import ErrorNotification from './ErrorNotification';
-
-export default connect(
+export const StartCase = connect(
   {
     filingTypes: state.filingTypes,
     form: state.form,
+    constants: state.constants,
     getTrialCities: sequences.getTrialCitiesSequence,
     procedureTypes: state.procedureTypes,
     showModal: state.showModal,
@@ -36,9 +31,10 @@ export default connect(
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function StartCase({
+  ({
     filingTypes,
     form,
+    constants,
     getTrialCities,
     procedureTypes,
     showModal,
@@ -53,7 +49,7 @@ export default connect(
     updateHasIrsNoticeFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
-  }) {
+  }) => {
     return (
       <section className="usa-section usa-grid">
         <form
@@ -258,10 +254,12 @@ export default connect(
                       </legend>
                       <ul className="ustc-unstyled-list">
                         {[
-                          BUSINESS_TYPES.corporation,
-                          BUSINESS_TYPES.partnershipAsTaxMattersPartner,
-                          BUSINESS_TYPES.partnershipOtherThanTaxMatters,
-                          BUSINESS_TYPES.partnershipBBA,
+                          constants.BUSINESS_TYPES.corporation,
+                          constants.BUSINESS_TYPES
+                            .partnershipAsTaxMattersPartner,
+                          constants.BUSINESS_TYPES
+                            .partnershipOtherThanTaxMatters,
+                          constants.BUSINESS_TYPES.partnershipBBA,
                         ].map((businessType, idx) => (
                           <li key={businessType}>
                             <input
@@ -359,9 +357,9 @@ export default connect(
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            ESTATE_TYPES.estate,
-                            ESTATE_TYPES.estateWithoutExecutor,
-                            ESTATE_TYPES.trust,
+                            constants.ESTATE_TYPES.estate,
+                            constants.ESTATE_TYPES.estateWithoutExecutor,
+                            constants.ESTATE_TYPES.trust,
                           ].map((estateType, idx) => (
                             <li key={estateType}>
                               <input
@@ -410,11 +408,12 @@ export default connect(
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            OTHER_TYPES.conservator,
-                            OTHER_TYPES.guardian,
-                            OTHER_TYPES.custodian,
-                            OTHER_TYPES.nextFriendForMinor,
-                            OTHER_TYPES.nextFriendForIncomponentPerson,
+                            constants.OTHER_TYPES.conservator,
+                            constants.OTHER_TYPES.guardian,
+                            constants.OTHER_TYPES.custodian,
+                            constants.OTHER_TYPES.nextFriendForMinor,
+                            constants.OTHER_TYPES
+                              .nextFriendForIncompetentPerson,
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input

@@ -4,13 +4,18 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+exports.COUNTRY_TYPES = {
+  DOMESTIC: 'domestic',
+  INTERNATIONAL: 'international',
+};
+
 const domesticErrorToMessageMap = {
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State is a required field.',
-  zip: [
+  postalCode: [
     {
       contains: 'match',
       message: 'Please enter a valid zip code.',
@@ -27,14 +32,14 @@ const internationalErrorToMessageMap = {
   address1: 'Address is a required field.',
   city: 'City is a required field.',
   state: 'State/Province/Region is a required field.',
-  zip: 'Postal Code is a required field.',
+  postalCode: 'Postal Code is a required field.',
   phone: 'Phone is a required field.',
 };
 
 const domesticValidationObject = {
   countryType: joi
     .string()
-    .valid('domestic')
+    .valid(exports.COUNTRY_TYPES.DOMESTIC)
     .required(),
   name: joi.string().required(),
   address1: joi.string().required(),
@@ -42,7 +47,7 @@ const domesticValidationObject = {
   address3: joi.string().optional(),
   city: joi.string().required(),
   state: joi.string().required(),
-  zip: joi
+  postalCode: joi
     .string()
     .regex(/^\d{5}(-\d{4})?$/)
     .required(),
@@ -52,7 +57,7 @@ const domesticValidationObject = {
 const internationalValidationObject = {
   countryType: joi
     .string()
-    .valid('international')
+    .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
   country: joi.string().required(),
   name: joi.string().required(),
@@ -61,12 +66,9 @@ const internationalValidationObject = {
   address3: joi.string().optional(),
   city: joi.string().required(),
   state: joi.string().optional(),
-  zip: joi.string().required(),
+  postalCode: joi.string().required(),
   phone: joi.string().required(),
 };
-
-exports.DOMESTIC = 'domestic';
-exports.INTERNATIONAL = 'international';
 
 exports.PARTY_TYPES = {
   petitioner: 'Petitioner',
@@ -85,7 +87,7 @@ exports.PARTY_TYPES = {
     'Partnership (as a partnership representative under the BBA regime)',
   nextFriendForMinor:
     'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-  nextFriendForIncomponentPerson:
+  nextFriendForIncompetentPerson:
     'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
   estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
   partnership: 'Partnership (BBA Regime)',
@@ -112,21 +114,25 @@ exports.ESTATE_TYPES = {
 
 exports.OTHER_TYPES = {
   nextFriendForMinor: exports.PARTY_TYPES.nextFriendForMinor,
-  nextFriendForIncomponentPerson:
-    exports.PARTY_TYPES.nextFriendForIncomponentPerson,
+  nextFriendForIncompetentPerson:
+    exports.PARTY_TYPES.nextFriendForIncompetentPerson,
   conservator: exports.PARTY_TYPES.conservator,
   guardian: exports.PARTY_TYPES.guardian,
   custodian: exports.PARTY_TYPES.custodian,
 };
 
-exports.getValidationObject = ({ countryType = exports.DOMESTIC }) => {
-  return countryType === exports.DOMESTIC
+exports.getValidationObject = ({
+  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+}) => {
+  return countryType === exports.COUNTRY_TYPES.DOMESTIC
     ? domesticValidationObject
     : internationalValidationObject;
 };
 
-exports.getErrorToMessageMap = ({ countryType = exports.DOMESTIC }) => {
-  return countryType === exports.DOMESTIC
+exports.getErrorToMessageMap = ({
+  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+}) => {
+  return countryType === exports.COUNTRY_TYPES.DOMESTIC
     ? domesticErrorToMessageMap
     : internationalErrorToMessageMap;
 };
@@ -211,7 +217,7 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.nextFriendForIncomponentPerson]: {
+    [exports.PARTY_TYPES.nextFriendForIncompetentPerson]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],

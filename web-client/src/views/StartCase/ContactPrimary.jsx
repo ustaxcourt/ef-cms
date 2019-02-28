@@ -1,26 +1,29 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Address from './Address';
-import Country from './Country';
-import Email from './Email';
-import InternationalAddress from './InternationalAddress';
 
-export default connect(
+import { Address } from './Address';
+import { Country } from './Country';
+import { Email } from './Email';
+import { InternationalAddress } from './InternationalAddress';
+
+export const ContactPrimary = connect(
   {
     form: state.form,
+    constants: state.constants,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
     contactsHelper: state.contactsHelper,
   },
-  function ContactPrimary({
+  ({
     form,
+    constants,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
     contactsHelper,
-  }) {
+  }) => {
     return (
       <div className="usa-form-group contact-group">
         <h3>{contactsHelper.contactPrimary.header}</h3>
@@ -130,10 +133,12 @@ export default connect(
               )}
             </div>
           )}
-          {form.contactPrimary.countryType === 'domestic' && (
+          {form.contactPrimary.countryType ===
+            constants.COUNTRY_TYPES.DOMESTIC && (
             <Address type="contactPrimary" />
           )}
-          {form.contactPrimary.countryType === 'international' && (
+          {form.contactPrimary.countryType ===
+            constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress type="contactPrimary" />
           )}
           <Email />

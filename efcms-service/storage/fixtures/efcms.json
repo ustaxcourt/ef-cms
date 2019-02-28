@@ -92,7 +92,7 @@
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "contactPrimary": {
       "countryType": "domestic",
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "taxpayer",
       "city": "Orlando",
       "phone": "111-111-1111",
@@ -255,7 +255,7 @@
     "hasVerifiedIrsNotice": null,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "respondent": {
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "respondent",
       "city": "Orlando",
       "userId": "respondent",
@@ -288,7 +288,7 @@
     ],
     "contactPrimary": {
       "countryType": "domestic",
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "taxpayer",
       "city": "Orlando",
       "phone": "111-111-1111",
@@ -424,7 +424,7 @@
     "contactPrimary": {
       "countryType": "international",
       "country": "England",
-      "zip": "123FunnyCode",
+      "postalCode": "123FunnyCode",
       "role": "taxpayer",
       "city": "London",
       "phone": "111-111-1111",
@@ -629,7 +629,7 @@
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
       "countryType": "domestic",
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "petitioner",
       "city": "Orlando",
       "phone": "111-111-1111",
@@ -723,7 +723,7 @@
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
       "countryType": "domestic",
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "petitioner",
       "city": "Orlando",
       "phone": "111-111-1111",
@@ -823,7 +823,7 @@
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
       "countryType": "domestic",
-      "zip": "37208",
+      "postalCode": "37208",
       "role": "petitioner",
       "city": "Orlando",
       "phone": "111-111-1111",
