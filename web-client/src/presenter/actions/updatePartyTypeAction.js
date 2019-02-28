@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import { showContactsHelper } from '../helpers/showContactsHelper';
 
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
@@ -49,51 +50,18 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
     store.set(state.form.businessType, undefined);
   }
 
-  const hasPrimaryContact =
-    partyType === PARTY_TYPES.petitioner ||
-    partyType === PARTY_TYPES.petitionerSpouse ||
-    partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
-    partyType === PARTY_TYPES.estate ||
-    partyType === PARTY_TYPES.estateWithoutExecutor ||
-    partyType === PARTY_TYPES.trust ||
-    partyType === PARTY_TYPES.corporation ||
-    partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
-    partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
-    partyType === PARTY_TYPES.partnershipBBA ||
-    partyType === PARTY_TYPES.conservator ||
-    partyType === PARTY_TYPES.guardian ||
-    partyType === PARTY_TYPES.custodian ||
-    partyType === PARTY_TYPES.nextFriendForMinor ||
-    partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
-    partyType === PARTY_TYPES.donor ||
-    partyType === PARTY_TYPES.transferee ||
-    partyType === PARTY_TYPES.survivingSpouse;
-
-  const hasSecondaryContact =
-    partyType === PARTY_TYPES.petitionerSpouse ||
-    partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
-    partyType === PARTY_TYPES.estate ||
-    partyType === PARTY_TYPES.trust ||
-    partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
-    partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
-    partyType === PARTY_TYPES.partnershipBBA ||
-    partyType === PARTY_TYPES.conservator ||
-    partyType === PARTY_TYPES.guardian ||
-    partyType === PARTY_TYPES.custodian ||
-    partyType === PARTY_TYPES.nextFriendForMinor ||
-    partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
-    partyType === PARTY_TYPES.survivingSpouse;
+  const showContacts = showContactsHelper(partyType);
 
   store.set(
     state.form.contactPrimary,
-    (hasPrimaryContact && {
+    (showContacts.contactPrimary && {
       countryType: 'domestic',
     }) ||
       {},
   );
   store.set(
     state.form.contactSecondary,
-    (hasSecondaryContact && {
+    (showContacts.contactSecondary && {
       countryType: 'domestic',
     }) ||
       {},
