@@ -393,7 +393,7 @@ describe('Case entity', () => {
     it('party type Legally Incompetent Person', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.nextFriendForIncomponentPerson,
+        partyType: PARTY_TYPES.nextFriendForincompetentPerson,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },

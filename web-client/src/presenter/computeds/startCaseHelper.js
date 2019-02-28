@@ -49,7 +49,7 @@ export default get => {
       form.partyType === PARTY_TYPES.guardian ||
       form.partyType === PARTY_TYPES.custodian ||
       form.partyType === PARTY_TYPES.nextFriendForMinor ||
-      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+      form.partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
       form.partyType === PARTY_TYPES.donor ||
       form.partyType === PARTY_TYPES.transferee ||
       form.partyType === PARTY_TYPES.survivingSpouse,
@@ -66,7 +66,7 @@ export default get => {
       form.partyType === PARTY_TYPES.guardian ||
       form.partyType === PARTY_TYPES.custodian ||
       form.partyType === PARTY_TYPES.nextFriendForMinor ||
-      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+      form.partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
       form.partyType === PARTY_TYPES.survivingSpouse,
 
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
