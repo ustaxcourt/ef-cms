@@ -90,7 +90,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
-	- [ ] read the description of every commit that comprises the pull request
+	- [ ] read the description of the commits that comprise the pull request
 - [ ] stand up the site locally
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
 		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
@@ -105,17 +105,11 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
 - [ ] review static code analysis results
 - [ ] examine OWASP ZAP output in `docs/`, ensure that any errors are known to be false positives or have been previously declared to be acceptable
-- [ ] critically read all new code, in the context of existing code, [looking for problems](#what-we-look-for), e.g.:
-	- [ ] make sure names of methods and variables are sensible
-	- [ ] make sure code does not contain secrets
-	- [ ] be suspicious of commented-out code
-	- [ ] any code with a purpose that isn’t immediately clear should have a comment explaining it
-	- [ ] check that code style is consistent
-	- [ ] be suspicious of any code that accepts input from the outside world, ensure that it doesn’t enable any kind of buffer overflows or SQL injection attacks
-- [ ] tests
+- [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
+- [ ] review all tests
 	- [ ] look at code coverage of tests in SonarCloud
-	- [ ] review all new tests for correctness, quality of naming
-	- [ ] determine what code isn’t tested, review that especially carefully
+	- [ ] methodically review all new tests for correctness, quality of naming
+- [ ] determine what code isn’t tested, review that rigorously
 - [ ] review documentation to ensure that it matches changes
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
