@@ -6,8 +6,9 @@ import { state } from 'cerebral';
 export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    constants: state.constants,
   },
-  ({ caseDetail }) => {
+  ({ caseDetail, constants }) => {
     return (
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
@@ -45,10 +46,11 @@ export const PartyInformation = connect(
                         {caseDetail.contactPrimary.zip}
                       </span>
                       <span className="address-line">
-                        {caseDetail.contactPrimary.countryType === 'domestic' &&
-                          'USA'}
                         {caseDetail.contactPrimary.countryType ===
-                          'international' && caseDetail.contactPrimary.country}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
+                        {caseDetail.contactPrimary.countryType ===
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
+                          caseDetail.contactPrimary.country}
                       </span>
                     </p>
                     {caseDetail.contactPrimary.phone && (
@@ -84,9 +86,9 @@ export const PartyInformation = connect(
                       </span>
                       <span className="address-line">
                         {caseDetail.contactSecondary.countryType ===
-                          'domestic' && 'USA'}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
                         {caseDetail.contactSecondary.countryType ===
-                          'international' &&
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
                           caseDetail.contactSecondary.country}
                       </span>
                     </p>

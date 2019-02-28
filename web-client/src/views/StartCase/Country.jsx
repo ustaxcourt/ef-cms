@@ -5,6 +5,7 @@ import React from 'react';
 export const Country = connect(
   {
     form: state.form,
+    constants: state.constants,
     type: props.type,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
@@ -12,6 +13,7 @@ export const Country = connect(
   },
   ({
     form,
+    constants,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
@@ -50,8 +52,12 @@ export const Country = connect(
               validateStartCaseSequence();
             }}
           >
-            <option value="domestic">- United States -</option>
-            <option value="international">- International -</option>
+            <option value={constants.COUNTRY_TYPES.DOMESTIC}>
+              - United States -
+            </option>
+            <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
+              - International -
+            </option>
           </select>
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
@@ -59,7 +65,7 @@ export const Country = connect(
             </div>
           )}
         </div>
-        {form[type].countryType === 'international' && (
+        {form[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
               'usa-form-group ' +
