@@ -1,11 +1,12 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+
 import spinner from '../images/spinner.svg';
 
-export default connect(
+export const Loading = connect(
   { submitting: state.submitting },
-  function Loading({ submitting }) {
+  ({ submitting }) => {
     return (
       submitting && (
         <div className="modal-screen progress-indicator" aria-live="assertive">

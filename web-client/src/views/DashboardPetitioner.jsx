@@ -7,8 +7,8 @@ import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf
 
 import { CaseListPetitioner } from './CaseListPetitioner';
 import { WhatToExpect } from './WhatToExpect';
-import ErrorNotification from './ErrorNotification';
-import SuccessNotification from './SuccessNotification';
+import { ErrorNotification } from './ErrorNotification';
+import { SuccessNotification } from './SuccessNotification';
 
 export const DashboardPetitioner = connect(
   { user: state.user, helper: state.dashboardPetitionerHelper },
