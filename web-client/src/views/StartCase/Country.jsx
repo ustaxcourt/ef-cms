@@ -65,7 +65,7 @@ export default connect(
             </div>
           )}
         </div>
-        {form[type].countryType === constants.INTERNATIONAL && (
+        {form[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
               'usa-form-group ' +
