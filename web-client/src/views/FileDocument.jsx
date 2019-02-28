@@ -94,7 +94,7 @@ FilePetitionComponent.propTypes = {
   updateDocumentValueSequence: PropTypes.func,
 };
 
-export const FilePetition = connect(
+export const FileDocument = connect(
   {
     document: state.document,
     submitDocumentSequence: sequences.submitDocumentSequence,
