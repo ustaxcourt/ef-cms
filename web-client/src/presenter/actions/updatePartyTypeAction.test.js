@@ -3,6 +3,11 @@ import { runAction } from 'cerebral/test';
 import presenter from '..';
 import sinon from 'sinon';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
+import {
+  PARTY_TYPES,
+  DOMESTIC,
+  INTERNATIONAL,
+} from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 const updateCaseStub = sinon.stub().returns({});
 
@@ -13,7 +18,14 @@ presenter.providers.applicationContext = {
 };
 
 const getFixtures = (props, state = {}) => ({
-  state,
+  state: {
+    ...state,
+    constants: {
+      PARTY_TYPES,
+      DOMESTIC,
+      INTERNATIONAL,
+    },
+  },
   modules: {
     presenter,
   },
@@ -140,6 +152,11 @@ describe('updatePartyTypeAction', async () => {
           petition: {
             ownershipDisclosureFile: 'a file',
           },
+          constants: {
+            PARTY_TYPES: [],
+            DOMESTIC: 'domestic',
+            INTERNATIONAL: 'international',
+          },
         },
       ),
     );
@@ -163,6 +180,11 @@ describe('updatePartyTypeAction', async () => {
           petition: {
             ownershipDisclosureFile: 'a file',
           },
+          constants: {
+            PARTY_TYPES: [],
+            DOMESTIC: 'domestic',
+            INTERNATIONAL: 'international',
+          },
         },
       ),
     );
@@ -182,6 +204,11 @@ describe('updatePartyTypeAction', async () => {
           form: {
             contactPrimary: 'some value',
             contactSecondary: 'some other value',
+          },
+          constants: {
+            PARTY_TYPES: [],
+            DOMESTIC: 'domestic',
+            INTERNATIONAL: 'international',
           },
         },
       ),
