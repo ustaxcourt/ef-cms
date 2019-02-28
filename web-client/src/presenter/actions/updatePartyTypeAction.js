@@ -63,7 +63,7 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
     partyType === PARTY_TYPES.guardian ||
     partyType === PARTY_TYPES.custodian ||
     partyType === PARTY_TYPES.nextFriendForMinor ||
-    partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
+    partyType === PARTY_TYPES.nextFriendForIncompetentPerson ||
     partyType === PARTY_TYPES.donor ||
     partyType === PARTY_TYPES.transferee ||
     partyType === PARTY_TYPES.survivingSpouse;
@@ -80,7 +80,7 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
     partyType === PARTY_TYPES.guardian ||
     partyType === PARTY_TYPES.custodian ||
     partyType === PARTY_TYPES.nextFriendForMinor ||
-    partyType === PARTY_TYPES.nextFriendForincompetentPerson ||
+    partyType === PARTY_TYPES.nextFriendForIncompetentPerson ||
     partyType === PARTY_TYPES.survivingSpouse;
 
   store.set(

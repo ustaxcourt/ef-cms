@@ -12,7 +12,7 @@ describe('Petition', () => {
         address1: '123 Deming Way',
         city: 'Los Angeles',
         state: 'TN',
-        zip: '90210',
+        postalCode: '90210',
         phone: '555-555-1212',
         country: 'USA',
         email: 'taxpayer@example.com',
