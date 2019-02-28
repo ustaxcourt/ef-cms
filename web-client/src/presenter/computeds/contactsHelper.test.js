@@ -8,6 +8,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: { partyType: PARTY_TYPES.conservator },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -28,6 +31,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: { partyType: PARTY_TYPES.corporation },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -43,6 +49,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: { partyType: PARTY_TYPES.custodian },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -63,6 +72,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         form: { partyType: PARTY_TYPES.donor },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -78,6 +90,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.estate,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -101,6 +116,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.estateWithoutExecutor,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -117,6 +135,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.guardian,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -139,6 +160,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -164,6 +188,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.nextFriendForMinor,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -186,6 +213,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.partnershipBBA,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -207,6 +237,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -231,6 +264,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -253,6 +289,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.petitioner,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -268,6 +307,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -291,6 +333,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -310,6 +355,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.survivingSpouse,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });
@@ -331,6 +379,9 @@ describe('contactsHelper', () => {
         form: {
           partyType: PARTY_TYPES.transferee,
         },
+        constants: {
+          PARTY_TYPES,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -346,6 +397,9 @@ describe('contactsHelper', () => {
       state: {
         form: {
           partyType: PARTY_TYPES.trust,
+        },
+        constants: {
+          PARTY_TYPES,
         },
       },
     });

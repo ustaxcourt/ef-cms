@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import { showContactsHelper } from '../helpers/showContactsHelper';
+import { showContactsHelper } from './showContactsHelper';
 
 export default get => {
   const form = get(state.form);
