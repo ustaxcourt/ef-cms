@@ -3,11 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 
+import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+
 export const IRSNotice = connect(
   {
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
+    caseTypes: state.caseTypes,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -20,6 +23,7 @@ export const IRSNotice = connect(
     appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
+    caseTypes,
     caseDetailErrors,
     form,
     formattedCaseDetail,
@@ -289,8 +293,14 @@ export const IRSNotice = connect(
 
         {renderIrsNoticeRadios()}
 
-        <span className="label">Type of Case</span>
-        <p>{caseDetail.caseType}</p>
+        <CaseTypeSelect
+          allowDefaultOption={false}
+          legend="Type of Case"
+          onChange="updateCaseValueSequence"
+          validation="autoSaveCaseSequence"
+          value={caseDetail.caseType}
+          caseTypes={caseTypes}
+        />
 
         {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
         {formattedCaseDetail.shouldShowYearAmounts && (
