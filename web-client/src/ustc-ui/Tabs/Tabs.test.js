@@ -1,5 +1,5 @@
 import React from 'react';
-import TestRenderer from 'react-test-renderer';
+import TestRenderer, { act } from 'react-test-renderer';
 
 import { TabsComponent, Tab } from './Tabs';
 
@@ -21,5 +21,17 @@ describe('TabsComponent', () => {
     expect(
       testInstance.findByProps({ id: 'tab-individual-panel' }).children[0],
     ).toEqual('Indy');
+
+    act(() => {
+      testInstance.findByProps({ id: 'tab-work-queue' }).props.onClick();
+    });
+
+    expect(() =>
+      testInstance.findByProps({ id: 'tab-individual-panel' }),
+    ).toThrow();
+
+    expect(
+      testInstance.findByProps({ id: 'tab-section-panel' }).children[0],
+    ).toEqual('Section');
   });
 });
