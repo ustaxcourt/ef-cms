@@ -4,6 +4,9 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+exports.DOMESTIC = 'domestic';
+exports.INTERNATIONAL = 'international';
+
 const domesticErrorToMessageMap = {
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
@@ -34,7 +37,7 @@ const internationalErrorToMessageMap = {
 const domesticValidationObject = {
   countryType: joi
     .string()
-    .valid('domestic')
+    .valid(exports.DOMESTIC)
     .required(),
   name: joi.string().required(),
   address1: joi.string().required(),
@@ -52,7 +55,7 @@ const domesticValidationObject = {
 const internationalValidationObject = {
   countryType: joi
     .string()
-    .valid('international')
+    .valid(exports.INTERNATIONAL)
     .required(),
   country: joi.string().required(),
   name: joi.string().required(),
@@ -64,9 +67,6 @@ const internationalValidationObject = {
   zip: joi.string().required(),
   phone: joi.string().required(),
 };
-
-exports.DOMESTIC = 'domestic';
-exports.INTERNATIONAL = 'international';
 
 exports.PARTY_TYPES = {
   petitioner: 'Petitioner',
