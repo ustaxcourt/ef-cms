@@ -9,6 +9,7 @@ import { InternationalAddress } from './InternationalAddress';
 export const ContactSecondary = connect(
   {
     form: state.form,
+    constants: state.constants,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
@@ -16,6 +17,7 @@ export const ContactSecondary = connect(
   },
   ({
     form,
+    constants,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
@@ -100,10 +102,12 @@ export const ContactSecondary = connect(
               )}
             </div>
           )}
-          {form.contactSecondary.countryType === 'domestic' && (
+          {form.contactSecondary.countryType ===
+            constants.COUNTRY_TYPES.DOMESTIC && (
             <Address type="contactSecondary" />
           )}
-          {form.contactSecondary.countryType === 'international' && (
+          {form.contactSecondary.countryType ===
+            constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress type="contactSecondary" />
           )}
           {contactsHelper.contactSecondary.displayPhone && (
