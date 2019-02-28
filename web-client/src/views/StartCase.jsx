@@ -2,14 +2,14 @@ import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
+
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
-import CaseDifferenceExplained from './CaseDifferenceExplained';
-import Contacts from './StartCase/Contacts';
+import { CaseDifferenceExplained } from './CaseDifferenceExplained';
+import { Contacts } from './StartCase/Contacts';
+import { ErrorNotification } from './ErrorNotification';
+import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 
-import ErrorNotification from './ErrorNotification';
-
-export default connect(
+export const StartCase = connect(
   {
     filingTypes: state.filingTypes,
     form: state.form,
@@ -31,7 +31,7 @@ export default connect(
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function StartCase({
+  ({
     filingTypes,
     form,
     constants,
@@ -49,7 +49,7 @@ export default connect(
     updateHasIrsNoticeFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
-  }) {
+  }) => {
     return (
       <section className="usa-section usa-grid">
         <form

@@ -4,12 +4,12 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { CaseInformationInternal } from './CaseInformationInternal';
-import DocketRecord from './DocketRecord';
-import ErrorNotification from './ErrorNotification';
-import PartyInformation from './PartyInformation';
-import SuccessNotification from './SuccessNotification';
+import { DocketRecord } from './DocketRecord';
+import { ErrorNotification } from './ErrorNotification';
+import { PartyInformation } from './PartyInformation';
+import { SuccessNotification } from './SuccessNotification';
 
-export default connect(
+export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
@@ -20,7 +20,7 @@ export default connect(
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function CaseDetail({
+  ({
     caseDetail,
     currentTab,
     extractedPendingMessages,
@@ -29,7 +29,7 @@ export default connect(
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
-  }) {
+  }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">

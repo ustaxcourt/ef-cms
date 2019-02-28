@@ -1,14 +1,14 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
-import { state, sequences } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { state, sequences } from 'cerebral';
+import React from 'react';
 
-export default connect(
+export const IndividualWorkQueue = connect(
   {
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
-  function IndividualWorkQueue({ setFocusedWorkItem, workQueue }) {
+  ({ setFocusedWorkItem, workQueue }) => {
     return (
       <React.Fragment>
         <table

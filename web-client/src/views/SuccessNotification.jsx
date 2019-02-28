@@ -4,7 +4,7 @@ import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class SuccessNotification extends React.Component {
+class SuccessNotificationComponent extends React.Component {
   componentDidUpdate() {
     this.focusNotification();
   }
@@ -54,15 +54,15 @@ class SuccessNotification extends React.Component {
   }
 }
 
-SuccessNotification.propTypes = {
+SuccessNotificationComponent.propTypes = {
   alertSuccess: PropTypes.object,
   dismissAlert: PropTypes.func,
 };
 
-export default connect(
+export const SuccessNotification = connect(
   {
     alertSuccess: state.alertSuccess,
     dismissAlert: sequences.dismissAlertSequence,
   },
-  SuccessNotification,
+  SuccessNotificationComponent,
 );

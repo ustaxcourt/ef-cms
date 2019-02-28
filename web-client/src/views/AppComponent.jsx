@@ -4,25 +4,25 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { BeforeStartingCase } from './BeforeStartingCase';
+import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseDetailPetitioner } from './CaseDetailPetitioner';
+import { CaseDetailPublic } from './CaseDetailPublic';
+import { CaseDetailRespondent } from './CaseDetailRespondent';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
+import { DocumentDetail } from './DocumentDetail';
+import { Error } from './Error';
+import { Footer } from './Footer';
+import { Header } from './Header';
+import { Loading } from './Loading';
 import { LogIn } from './LogIn';
-import CaseDetailInternal from './CaseDetailInternal';
-import CaseDetailPetitioner from './CaseDetailPetitioner';
-import CaseDetailPublic from './CaseDetailPublic';
-import CaseDetailRespondent from './CaseDetailRespondent';
-import DocumentDetail from './DocumentDetail';
-import Error from './Error';
-import Footer from './Footer';
-import Header from './Header';
-import Loading from './Loading';
-import StartCase from './StartCase';
-import StyleGuide from './StyleGuide';
-import UsaBanner from './UsaBanner';
+import { StartCase } from './StartCase';
+import { StyleGuide } from './StyleGuide';
+import { UsaBanner } from './UsaBanner';
 
 const pages = {
   BeforeStartingCase,

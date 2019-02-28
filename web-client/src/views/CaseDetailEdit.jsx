@@ -1,10 +1,11 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
-import UpdateCaseCancelModalDialog from './UpdateCaseCancelModalDialog';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default connect(
+import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
+
+export const PetitionEdit = connect(
   {
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
@@ -22,7 +23,7 @@ export default connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
   },
-  function PetitionEdit({
+  ({
     appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
@@ -37,7 +38,7 @@ export default connect(
     updateCaseValueSequence,
     updateFormValueSequence,
     setIrsNoticeFalseSequence,
-  }) {
+  }) => {
     const renderIrsNoticeRadios = () => {
       return (
         <fieldset

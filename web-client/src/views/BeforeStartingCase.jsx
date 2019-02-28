@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
+import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export const BeforeStartingCase = () => (
   <section className="usa-section usa-grid before-starting-case">
