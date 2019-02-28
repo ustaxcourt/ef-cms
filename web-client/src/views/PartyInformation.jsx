@@ -6,8 +6,9 @@ import { state } from 'cerebral';
 export default connect(
   {
     caseDetail: state.formattedCaseDetail,
+    constants: state.constants,
   },
-  function PartyInformation({ caseDetail }) {
+  function PartyInformation({ caseDetail, constants }) {
     return (
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
@@ -42,13 +43,14 @@ export default connect(
                       <span className="address-line">
                         {caseDetail.contactPrimary.city},{' '}
                         {caseDetail.contactPrimary.state}{' '}
-                        {caseDetail.contactPrimary.zip}
+                        {caseDetail.contactPrimary.postalCode}
                       </span>
                       <span className="address-line">
-                        {caseDetail.contactPrimary.countryType === 'domestic' &&
-                          'USA'}
                         {caseDetail.contactPrimary.countryType ===
-                          'international' && caseDetail.contactPrimary.country}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
+                        {caseDetail.contactPrimary.countryType ===
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
+                          caseDetail.contactPrimary.country}
                       </span>
                     </p>
                     {caseDetail.contactPrimary.phone && (
@@ -80,13 +82,13 @@ export default connect(
                         {caseDetail.contactSecondary.city &&
                           `${caseDetail.contactSecondary.city},`}{' '}
                         {caseDetail.contactSecondary.state}{' '}
-                        {caseDetail.contactSecondary.zip}
+                        {caseDetail.contactSecondary.postalCode}
                       </span>
                       <span className="address-line">
                         {caseDetail.contactSecondary.countryType ===
-                          'domestic' && 'USA'}
+                          constants.COUNTRY_TYPES.DOMESTIC && 'USA'}
                         {caseDetail.contactSecondary.countryType ===
-                          'international' &&
+                          constants.COUNTRY_TYPES.INTERNATIONAL &&
                           caseDetail.contactSecondary.country}
                       </span>
                     </p>
@@ -115,7 +117,8 @@ export default connect(
                     </span>
                     <span className="address-line">
                       {caseDetail.respondent.city},{' '}
-                      {caseDetail.respondent.state} {caseDetail.respondent.zip}
+                      {caseDetail.respondent.state}{' '}
+                      {caseDetail.respondent.postalCode}
                     </span>
                   </p>
                   <p>{caseDetail.respondent.phone}</p>
