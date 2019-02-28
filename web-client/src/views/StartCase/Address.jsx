@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const Address = connect(
   {
     form: state.form,
     type: props.type,
@@ -10,13 +10,13 @@ export default connect(
     validateStartCaseSequence: sequences.validateStartCaseSequence,
     validationErrors: state.validationErrors,
   },
-  function Address({
+  ({
     form,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
-  }) {
+  }) => {
     return (
       <React.Fragment>
         <div
@@ -239,21 +239,21 @@ export default connect(
             'usa-form-group clear-both ' +
             (validationErrors &&
             validationErrors[type] &&
-            validationErrors[type].zip
+            validationErrors[type].postalCode
               ? 'usa-input-error'
               : '')
           }
         >
-          <label htmlFor={`${type}.zip`} aria-label="zip code">
+          <label htmlFor={`${type}.postalCode`} aria-label="zip code">
             ZIP Code
           </label>
           <input
-            id={`${type}.zip`}
+            id={`${type}.postalCode`}
             type="text"
-            name={`${type}.zip`}
+            name={`${type}.postalCode`}
             className="usa-input-medium"
             autoCapitalize="none"
-            value={form[type].zip || ''}
+            value={form[type].postalCode || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -266,7 +266,7 @@ export default connect(
           />
           {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
-              {validationErrors[type].zip}
+              {validationErrors[type].postalCode}
             </div>
           )}
         </div>

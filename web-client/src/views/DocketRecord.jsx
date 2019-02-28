@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const DocketRecord = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
@@ -12,14 +12,14 @@ export default connect(
     token: state.token,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
-  function DocketRecord({
+  ({
     baseUrl,
     caseDetail,
     clearDocumentSequence,
     helper,
     token,
     updateCurrentTabSequence,
-  }) {
+  }) => {
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
@@ -103,7 +103,7 @@ export default connect(
                 <td>Filing fee paid</td>
                 <td />
                 <td />
-                {helper.showDocketRecordActionColumn && <td />}
+                <td />
               </tr>
             )}
             {helper.showPreferredTrialCity && (
@@ -114,7 +114,7 @@ export default connect(
                 </td>
                 <td />
                 <td />
-                {helper.showDocketRecordActionColumn && <td />}
+                <td />
               </tr>
             )}
           </tbody>

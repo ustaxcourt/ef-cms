@@ -2,15 +2,15 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-import IndividualWorkQueue from './IndividualWorkQueue';
-import SectionWorkQueue from './SectionWorkQueue';
 import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
+import { IndividualWorkQueue } from './IndividualWorkQueue';
+import { SectionWorkQueue } from './SectionWorkQueue';
 
-export default connect(
+export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
   },
-  function WorkQueue({ chooseWorkQueueSequence }) {
+  ({ chooseWorkQueueSequence }) => {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>

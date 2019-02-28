@@ -2,13 +2,13 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const CaseDetailReadOnly = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  function CaseDetailReadOnly({ caseDetail, formattedCaseDetail }) {
+  ({ caseDetail, formattedCaseDetail }) => {
     return (
       <React.Fragment>
         <div className="blue-container">
