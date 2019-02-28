@@ -2,7 +2,8 @@ import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
-import SearchBox from './SearchBox';
+
+import { SearchBox } from './SearchBox';
 
 import close from '../../node_modules/uswds/dist/img/close.svg';
 
