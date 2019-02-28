@@ -1,10 +1,11 @@
-import { sequences, state } from 'cerebral';
-
-export function useCerebralState(get, bind, defaultValue) {
+export const useCerebralStateFactory = (get, sequences, state) => (
+  bind,
+  defaultValue,
+) => {
   let getter = get(state[bind]);
 
   const setter = newValue => {
-    get(sequences.cerebralBindSimpleSetStateSequence)({
+    return get(sequences.cerebralBindSimpleSetStateSequence)({
       key: bind,
       value: newValue,
     });
@@ -16,7 +17,7 @@ export function useCerebralState(get, bind, defaultValue) {
   }
 
   return [getter, setter];
-}
+};
 
 export function decorateWithPostCallback(delegate, postCallbackFn) {
   if (!postCallbackFn) {
