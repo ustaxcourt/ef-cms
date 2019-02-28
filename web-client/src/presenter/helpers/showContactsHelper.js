@@ -1,6 +1,4 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
-
-export const showContactsHelper = partyType => {
+export const showContactsHelper = (partyType, PARTY_TYPES) => {
   const contactPrimary = [
     PARTY_TYPES.conservator,
     PARTY_TYPES.corporation,
