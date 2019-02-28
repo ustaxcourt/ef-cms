@@ -34,7 +34,7 @@ describe('Petition', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           state: 'AK',
-          zip: '05198',
+          postalCode: '05198',
           country: 'USA',
           phone: '1234567890',
           email: 'someone@example.com',
@@ -45,7 +45,7 @@ describe('Petition', () => {
           address1: '1599 Pennsylvania Ave',
           city: 'Walla Walla',
           state: 'WA',
-          zip: '78774',
+          postalCode: '78774',
         },
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
