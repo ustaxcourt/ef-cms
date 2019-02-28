@@ -291,7 +291,7 @@ Case.getCaseTitle = function(rawCase) {
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
-    case PARTY_TYPES.nextFriendForIncomponentPerson:
+    case PARTY_TYPES.nextFriendForincompetentPerson:
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
         rawCase.contactPrimary.name
       }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;

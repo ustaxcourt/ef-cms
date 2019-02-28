@@ -81,7 +81,7 @@ export const contactsHelper = get => {
         displayPhone: true,
       };
       break;
-    case PARTY_TYPES.nextFriendForIncomponentPerson:
+    case PARTY_TYPES.nextFriendForincompetentPerson:
       contactPrimary = {
         header:
           'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
