@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting state.workItemActions
  * @param {Object} providers.props the cerebral props object used for getting the props.action and props.workItemId
  */
-export default ({ get, store, props }) => {
+export const setWorkItemActionMapAction = ({ get, store, props }) => {
   const actions = get(state.workItemActions);
   const workItemId = props.workItemId;
   if (!props.action) {

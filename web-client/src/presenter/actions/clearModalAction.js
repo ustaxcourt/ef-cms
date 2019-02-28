@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object used for setting showModal
  */
-export default ({ store }) => {
+export const clearModalAction = ({ store }) => {
   store.set(state.showModal, '');
 };

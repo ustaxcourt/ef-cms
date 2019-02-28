@@ -28,6 +28,9 @@
       "notes": "expose all hidden elements on start-a-case",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements",
       "actions": [
+        "wait for element label#hasIrsNotice-0 to be visible",
+        "click element label#hasIrsNotice-0",
+        "wait for .case-type-select to be visible",
         "wait for button.case-difference to be visible",
         "click element button.case-difference",
         "wait for #case-difference-container to be visible",
@@ -54,6 +57,20 @@
         "wait for element label#is-spouse-deceased-0 to be visible",
         "click element label#is-spouse-deceased-0",
         "wait for element .contact-group to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international",
+      "actions": [
+        "wait for label#filing-type-1 to be visible",
+        "click element label#filing-type-1",
+        "wait for label#is-spouse-deceased-0 to be visible",
+        "click element label#is-spouse-deceased-0",
+        "wait for .contactPrimary-country-type to be visible",
+        "set field .contactPrimary-country-type to international",
+        "wait for .contactSecondary-country-type to be visible",
+        "set field .contactSecondary-country-type to international"
       ]
     },
     {
@@ -203,7 +220,7 @@
       ]
     },
     {
-      "notes": "expose hidden elements on start-a-case for party type Incompetent Person",
+      "notes": "expose hidden elements on start-a-case for party type Legally Incompetent Person",
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-incompetent-person",
       "actions": [
         "wait for element label#filing-type-3 to be visible",
@@ -248,6 +265,24 @@
         "wait for element .contact-group to be visible"
       ]
     },
+    {
+      "notes": "expose hidden elements on start-a-case for Yes notice",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-yes-notice",
+      "actions": [
+        "wait for element label#hasIrsNotice-0 to be visible",
+        "click element label#hasIrsNotice-0",
+        "wait for .case-type-select to be visible"
+      ]
+    },
+    {
+      "notes": "expose hidden elements on start-a-case for No notice",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-no-notice",
+      "actions": [
+        "wait for element label#hasIrsNotice-1 to be visible",
+        "click element label#hasIrsNotice-1",
+        "wait for .case-type-select to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-18",
 
@@ -259,6 +294,15 @@
       "actions": [
         "wait for #case-info-tab to be visible",
         "click element #case-info-tab"
+      ]
+    },
+    {
+      "notes": "checks a11y of editable fields exposed when Yes notice attached",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-18/documents/8eef49b4-9d40-4773-84ab-49e1e59e49cd&info=reveal-notice-options",
+      "actions": [
+        "wait for label#has-irs-verified-notice-yes to be visible",
+        "click element label#has-irs-verified-notice-yes",
+        "wait for #date-of-notice-month to be visible"
       ]
     },
 

@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
-export default ({ store }) => {
+export const prepareFormAction = ({ store }) => {
   store.set(state.form, { contactPrimary: {} });
 };

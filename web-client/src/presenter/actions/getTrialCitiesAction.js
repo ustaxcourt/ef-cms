@@ -6,7 +6,7 @@
  * @param {Object} providers.props the cerebral props object which contains props.value
  * @returns {Object} a list of trial cities
  */
-export default async ({ applicationContext, props }) => {
+export const getTrialCitiesAction = async ({ applicationContext, props }) => {
   const trialCities = await applicationContext.getUseCases().getTrialCities({
     procedureType: props.value,
     applicationContext: applicationContext,

@@ -96,11 +96,20 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? moment.utc(result.irsNoticeDate).format('L')
-    : 'No Date Provided';
+    : 'No notice';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
+
+  result.shouldShowIrsNoticeDate =
+    result.hasVerifiedIrsNotice ||
+    ((result.hasVerifiedIrsNotice === null ||
+      result.hasVerifiedIrsNotice === undefined) &&
+      result.hasIrsNotice);
+
+  result.shouldShowYearAmounts =
+    result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
   formatYearAmounts(result, caseDetailErrors);
 

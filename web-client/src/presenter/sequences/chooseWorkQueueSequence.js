@@ -1,18 +1,18 @@
-import clearWorkQueue from '../actions/clearWorkQueueAction';
-import setWorkItems from '../actions/setWorkItemsAction';
-import chooseWorkQueue from '../actions/chooseWorkQueueAction';
-import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
-import getSentWorkItemsForSection from '../actions/getSentWorkItemsForSectionAction';
-import getWorkItemsByUser from '../actions/getWorkItemsByUserAction';
-import getSentWorkItemsForUser from '../actions/getSentWorkItemsForUserAction';
+import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
+import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
+import { getSentWorkItemsForSectionAction } from '../actions/getSentWorkItemsForSectionAction';
+import { getSentWorkItemsForUserAction } from '../actions/getSentWorkItemsForUserAction';
+import { getWorkItemsByUserAction } from '../actions/getWorkItemsByUserAction';
+import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionAction';
+import { setWorkItemsAction } from '../actions/setWorkItemsAction';
 
-export default [
-  clearWorkQueue,
-  chooseWorkQueue,
+export const chooseWorkQueueSequence = [
+  clearWorkQueueAction,
+  chooseWorkQueueAction,
   {
-    sectioninbox: [getWorkItemsForSection, setWorkItems],
-    sectionoutbox: [getSentWorkItemsForSection, setWorkItems],
-    myinbox: [getWorkItemsByUser, setWorkItems],
-    myoutbox: [getSentWorkItemsForUser, setWorkItems],
+    sectioninbox: [getWorkItemsForSectionAction, setWorkItemsAction],
+    sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
+    myinbox: [getWorkItemsByUserAction, setWorkItemsAction],
+    myoutbox: [getSentWorkItemsForUserAction, setWorkItemsAction],
   },
 ];

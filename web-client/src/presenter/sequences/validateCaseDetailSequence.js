@@ -1,8 +1,8 @@
-import validateCaseDetail from '../actions/validateCaseDetailAction';
-import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDetailAction';
+import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
+import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
 
-export default [
-  getFormCombinedWithCaseDetail,
-  validateCaseDetail,
+export const validateCaseDetailSequence = [
+  getFormCombinedWithCaseDetailAction,
+  validateCaseDetailAction,
   { success: [], error: [] }, // TODO: is there a way we don't need to put this here?
 ];

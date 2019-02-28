@@ -3,7 +3,8 @@ const assert = require('assert');
 const Case = require('./Case');
 const DocketRecord = require('./DocketRecord');
 const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
-const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
+const { PARTY_TYPES } = require('./Contacts/PetitionContact');
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -110,6 +111,72 @@ describe('Case entity', () => {
       assert.ok(error === null);
     });
 
+    describe('should pass when hasIrsNotice is provided', () => {
+      it('and hasIrsNotice is true and all required fields are provided', () => {
+        let error = null;
+        try {
+          new Case(MOCK_CASE).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
+
+      it('and hasIrsNotice is false and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { hasIrsNotice: false, caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
+    });
+
+    describe('should fail when hasIRSnotice is true', () => {
+      it('and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { hasIrsNotice: true, caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+
+      it('and is missing hasIrsNotice', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { irsNoticeDate: '2018-03-01T00:00:00.000Z', caseType: 'Other' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+    });
+
+    it('should do nothing if valid', () => {
+      let error = null;
+      try {
+        new Case(MOCK_CASE).validate();
+      } catch (err) {
+        error = err;
+      }
+      assert.ok(error === null);
+    });
+
     it('should throw an error on invalid cases', () => {
       let error = null;
       try {
@@ -163,7 +230,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Petitioner & Spouse',
+        partyType: PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -176,7 +243,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Deceased Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Petitioner & Deceased Spouse',
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -189,8 +256,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+        partyType: PARTY_TYPES.estate,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -203,8 +269,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseTitle).toEqual(
         'Estate of Test Taxpayer, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent',
@@ -214,7 +279,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Trust',
+        partyType: PARTY_TYPES.trust,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -227,7 +292,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Corporation',
+        partyType: PARTY_TYPES.corporation,
       });
       expect(caseTitle).toEqual(
         'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
@@ -237,7 +302,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -250,7 +315,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Partnership (as a partner other than tax matters partner)',
+        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -263,8 +328,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Partnership (as a partnership representative under the BBA regime)',
+        partyType: PARTY_TYPES.partnershipBBA,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -277,7 +341,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Conservator',
+        partyType: PARTY_TYPES.conservator,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -290,7 +354,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Guardian',
+        partyType: PARTY_TYPES.guardian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -303,7 +367,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Custodian',
+        partyType: PARTY_TYPES.custodian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -316,8 +380,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: PARTY_TYPES.nextFriendForMinor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -327,11 +390,10 @@ describe('Case entity', () => {
       );
     });
 
-    it('party type Incompetent Person', () => {
+    it('party type Legally Incompetent Person', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: PARTY_TYPES.nextFriendForIncomponentPerson,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -344,7 +406,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Donor',
+        partyType: PARTY_TYPES.donor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -357,7 +419,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Transferee',
+        partyType: PARTY_TYPES.transferee,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -370,7 +432,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Surviving Spouse',
+        partyType: PARTY_TYPES.survivingSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -448,8 +510,13 @@ describe('Case entity', () => {
   });
 
   describe('getCaseTypes', () => {
-    it('returns the case types', () => {
-      const caseTypes = Case.getCaseTypes();
+    it('returns the case types for hasIrsNotice true', () => {
+      const caseTypes = Case.getCaseTypes(true);
+      expect(caseTypes).not.toBeNull();
+      expect(caseTypes.length).toBeGreaterThan(1);
+    });
+    it('returns the case types for hasIrsNotice false', () => {
+      const caseTypes = Case.getCaseTypes(false);
       expect(caseTypes).not.toBeNull();
       expect(caseTypes.length).toBeGreaterThan(1);
     });

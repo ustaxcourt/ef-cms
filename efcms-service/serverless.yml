@@ -8,6 +8,7 @@ plugins:
   - serverless-aws-documentation
   - serverless-plugin-aws-alerts
   - serverless-offline
+  - serverless-plugin-warmup
   - serverless-prune-plugin
 custom:
 
@@ -23,6 +24,12 @@ custom:
     port: 9000
     directory: ./storage/s3
     cors: cors-policy.xml
+
+  warmup:
+    enabled: 
+      - dev
+      - stg
+      - prod
 
   dynamodb:
     start:
@@ -329,6 +336,11 @@ provider:
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
+    - Effect: 'Allow'
+      Action:
         - cognito-idp:AdminCreateUser
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
@@ -399,7 +411,7 @@ resources:
 
 functions:
   createDocument:
-    handler: src/documents/createDocumentLambda.createDocument
+    handler: src/documents/createDocumentLambda.handler
     events:
       - http:
           path: v1/cases/{caseId}/documents
@@ -423,7 +435,7 @@ functions:
                   'application/json': 'document'
 
   getUploadPolicy:
-    handler: src/documents/getUploadPolicyLambda.create
+    handler: src/documents/getUploadPolicyLambda.handler
     events:
       - http:
           path: v1/documents/uploadPolicy
@@ -447,7 +459,7 @@ functions:
                   'application/json': 'policyUrl'
 
   getDocumentDownloadUrl:
-    handler: src/documents/getDocumentDownloadUrl.get
+    handler: src/documents/getDocumentDownloadUrl.handler
     events:
       - http:
           path: v1/documents/{documentId}/documentDownloadUrl
@@ -467,7 +479,7 @@ functions:
                   'application/json': 'policyUrl'
 
   getDownloadPolicyUrl:
-    handler: src/documents/downloadPolicyUrlLambda.get
+    handler: src/documents/downloadPolicyUrlLambda.handler
     events:
       - http:
           path: v1/documents/{documentId}/downloadPolicyUrl
@@ -491,7 +503,7 @@ functions:
                   'application/json': 'policyUrl'
 
   updateCase:
-    handler: src/cases/updateCaseLambda.put
+    handler: src/cases/updateCaseLambda.handler
     events:
       - http:
           path: v1/cases/{caseId}
@@ -518,7 +530,7 @@ functions:
                   'application/json': 'unprocessableEntityError'
 
   createCase:
-    handler: src/cases/createCaseLambda.create
+    handler: src/cases/createCaseLambda.handler
     events:
       - http:
           path: v1/cases
@@ -550,11 +562,11 @@ functions:
                 responseModels:
                   'application/json': case
 
-  getCases:
-    handler: src/cases/getCasesLambda.get
+  getCasesByUser:
+    handler: src/cases/getCasesByUserLambda.handler
     events:
       - http:
-          path: v1/cases
+          path: v1/users/{userId}/cases
           method: get
           cors: true
           authorizer:
@@ -574,8 +586,57 @@ functions:
                 responseModels:
                   'application/json': case
 
+  getCasesForRespondent:
+    handler: src/cases/getCasesForRespondentLambda.handler
+    events:
+      - http:
+          path: v1/respondents/{respondentId}/cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all cases for a user
+            tags:
+              - cases
+            description: >
+              Get all cases for a user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of cases'
+                responseModels:
+                  'application/json': case
+
+
+  getCasesByStatus:
+    handler: src/cases/getCasesByStatusLambda.handler
+    events:
+      - http:
+          path: v1/statuses/{status}/cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all cases by a status
+            tags:
+              - cases
+            description: >
+              get all cases by a status
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of cases'
+                responseModels:
+                  'application/json': case
+
   getCase:
-    handler: src/cases/getCaseLambda.get
+    handler: src/cases/getCaseLambda.handler
     events:
       - http:
           path: v1/cases/{caseId}
@@ -603,7 +664,7 @@ functions:
                   'application/json': case
 
   sendToIRS:
-    handler: src/cases/sendPetitionToIRSHoldingQueueLambda.post
+    handler: src/cases/sendPetitionToIRSHoldingQueueLambda.handler
     events:
       - http:
           path: v1/cases/{caseId}/irsPetitionPackage
@@ -630,7 +691,7 @@ functions:
                   'application/json': 'unprocessableEntityError'
 
   recallFromIRS:
-    handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.delete
+    handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.handler
     events:
       - http:
           path: v1/cases/{caseId}/irsPetitionPackage
@@ -657,7 +718,7 @@ functions:
                   'application/json': 'unprocessableEntityError'
 
   assignWorkItems:
-    handler: src/workitems/assignWorkItemsLambda.assign
+    handler: src/workitems/assignWorkItemsLambda.handler
     events:
       - http:
           path: v1/workitems
@@ -681,7 +742,7 @@ functions:
                   'application/json': workItem
 
   getWorkItem:
-    handler: src/workitems/getWorkItemLambda.get
+    handler: src/workitems/getWorkItemLambda.handler
     events:
       - http:
           path: v1/workitems/{workItemId}
@@ -704,8 +765,32 @@ functions:
                 responseModels:
                   'application/json': workItem
 
+  forwardWorkItem:
+    handler: src/workitems/forwardWorkItemLambda.handler
+    events:
+      - http:
+          path: v1/workitems/{workItemId}/assignee
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: sets the assigneeId of the workitem to a new user
+            tags:
+              - workitems
+            description: >
+              sets the assigneeId of the workitem to a new user.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'workitem'
+                responseModels:
+                  'application/json': workItem
+
   updateWorkItem:
-    handler: src/workitems/updateWorkItemLambda.put
+    handler: src/workitems/updateWorkItemLambda.handler
     events:
       - http:
           path: v1/workitems/{workItemId}
@@ -728,11 +813,11 @@ functions:
                 responseModels:
                   'application/json': workItem
 
-  getWorkItems:
-    handler: src/workitems/getWorkItemsLambda.get
+  getSentWorkItemsForSection:
+    handler: src/workitems/getSentWorkItemsForSectionLambda.handler
     events:
       - http:
-          path: v1/workitems
+          path: v1/sections/{section}/outbox
           method: get
           cors: true
           authorizer:
@@ -740,11 +825,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
           documentation:
-            summary: get all workitems for a user
+            summary: get all workitems in the sections outbox
             tags:
               - workitems
             description: >
-              Get all workitems for a user.
+              Get all workitems in the sections outbox.
             methodResponses:
               - statusCode: '200'
                 responseBody:
@@ -752,36 +837,128 @@ functions:
                 responseModels:
                   'application/json': workItem
 
-  swagger:
-    handler: src/swagger/swaggerLambda.handler
+  getWorkItemsBySection:
+    handler: src/workitems/getWorkItemsBySectionLambda.handler
     events:
       - http:
-          path: v1/swagger
-          method: get
-          cors: true
-
-  swaggerJson:
-    handler: src/swagger/swaggerLambda.json
-    events:
-      - http:
-          path: v1/swagger.json
-          method: get
-          cors: true
-
-  getUsers:
-    handler: src/users/getUsersLambda.get
-    events:
-      - http:
-          path: v1/users
+          path: v1/sections/{section}/inbox
           method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all workitems in the sections inbox
+            tags:
+              - workitems
+            description: >
+              Get all workitems in the sections inbox.
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getSentWorkItemsForUser:
+    handler: src/workitems/getSentWorkItemsForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/outbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get a users work item outbox
+            tags:
+              - workitems
+            description: >
+              get a users work item outbox
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getWorkItemsForUser:
+    handler: src/workitems/getWorkItemsForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get a users work item inbox
+            tags:
+              - workitems
+            description: >
+              get a users work item inbox
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of workitems'
+                responseModels:
+                  'application/json': workItem
+
+  getInternalUsers:
+    handler: src/users/getInternalUsersLambda.handler
+    events:
+      - http:
+          path: v1/users/internal
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all internal users
+            tags:
+              - workitems
+            description: >
+              get all internal users
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of users'
+                responseModels:
+                  'application/json': user
+
+  getUsersInSection:
+    handler: src/users/getUsersInSectionLambda.handler
+    events:
+      - http:
+          path: v1/sections/{section}/users
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+          documentation:
+            summary: get all users in a section
+            tags:
+              - workitems
+            description: >
+              get all users in a section
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: 'array of users in the section'
+                responseModels:
+                  'application/json': user
 
   createUser:
-    handler: src/users/createUserLambda.post
+    handler: src/users/createUserLambda.handler
     events:
       - http:
           path: v1/users
@@ -806,3 +983,19 @@ functions:
               - statusCode: '422'
                 responseModels:
                   'application/json': 'unprocessableEntityError'
+
+  swagger:
+    handler: src/swagger/swaggerLambda.handler
+    events:
+      - http:
+          path: v1/swagger
+          method: get
+          cors: true
+
+  swaggerJson:
+    handler: src/swagger/swaggerJsonLambda.handler
+    events:
+      - http:
+          path: v1/swagger.json
+          method: get
+          cors: true

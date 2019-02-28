@@ -1,5 +1,6 @@
 .fa-file-pdf {
-  margin-right: 1rem;
+  margin-right: 0.5em;
+  color: $color-blue;
 }
 
 .fa-caret-left {
@@ -22,4 +23,50 @@
 .fa-icon-gold {
   margin-right: 6px;
   color: $color-gold;
+}
+
+.fa-share-square {
+  margin-left: 0.5em;
+  color: $color-blue;
+}
+
+.icon-list {
+  margin-bottom: 20px;
+  .icon-item {
+    display: table;
+    border-spacing: 0 15px 15px 0;
+  }
+
+  .bullet-icon {
+    padding-top: 4px;
+    margin: 5px;
+    color: $color-primary-alt;
+  }
+
+  .bullet-icon-circle {
+    width: 40px;
+    height: 40px;
+    border: 2px solid $color-primary-alt;
+    border-radius: 25px;
+    color: $color-primary-alt;
+  }
+
+  .bullet-icon-wrapper {
+    display: table-cell;
+    padding: 0 10px 20px 0;
+    text-align: center;
+    vertical-align: middle;
+    .fa-laptop {
+      padding-right: 2px;
+    }
+    .fa-file-pdf {
+      color: $color-primary-alt;
+    }
+  }
+
+  .description-wrapper {
+    display: table-cell;
+    padding: 0 0 20px 0;
+    vertical-align: middle;
+  }
 }

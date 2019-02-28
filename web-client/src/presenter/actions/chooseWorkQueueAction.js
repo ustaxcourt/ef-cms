@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {*} returns the next action in the sequence's path
  */
-export default ({ store, props, path, get }) => {
+export const chooseWorkQueueAction = ({ store, props, path, get }) => {
   if (props && props.queue && props.box) {
     store.set(state.workQueueToDisplay, { queue: props.queue, box: props.box });
   } else if (props && props.box) {

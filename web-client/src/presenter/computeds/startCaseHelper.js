@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 export default get => {
   const form = get(state.form);
@@ -26,48 +27,49 @@ export default get => {
 
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showMinorIncompetentFilingOptions:
-      form.otherType === 'A minor or incompetent person',
+      form.otherType === 'A minor or legally incompetent person',
 
     showOtherFilingTypeOptions: form.filingType === 'Other',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse',
 
-    showPetitionerContact: form.partyType === 'Petitioner',
-    showPetitionerAndSpouseContact: form.partyType === 'Petitioner & Spouse',
-    showPetitionerAndDeceasedSpouseContact:
-      form.partyType === 'Petitioner & Deceased Spouse',
+    showPrimaryContact:
+      form.partyType === PARTY_TYPES.petitioner ||
+      form.partyType === PARTY_TYPES.petitionerSpouse ||
+      form.partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
+      form.partyType === PARTY_TYPES.estate ||
+      form.partyType === PARTY_TYPES.estateWithoutExecutor ||
+      form.partyType === PARTY_TYPES.trust ||
+      form.partyType === PARTY_TYPES.corporation ||
+      form.partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
+      form.partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
+      form.partyType === PARTY_TYPES.partnershipBBA ||
+      form.partyType === PARTY_TYPES.conservator ||
+      form.partyType === PARTY_TYPES.guardian ||
+      form.partyType === PARTY_TYPES.custodian ||
+      form.partyType === PARTY_TYPES.nextFriendForMinor ||
+      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+      form.partyType === PARTY_TYPES.donor ||
+      form.partyType === PARTY_TYPES.transferee ||
+      form.partyType === PARTY_TYPES.survivingSpouse,
 
-    showEstateWithExecutorContact:
-      form.partyType ===
-      'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-    showEstateWithoutExecutorContact:
-      form.partyType ===
-      'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-    showTrustAndTrusteeContact: form.partyType === 'Trust',
+    showSecondaryContact:
+      form.partyType === PARTY_TYPES.petitionerSpouse ||
+      form.partyType === PARTY_TYPES.petitionerDeceasedSpouse ||
+      form.partyType === PARTY_TYPES.estate ||
+      form.partyType === PARTY_TYPES.trust ||
+      form.partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
+      form.partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
+      form.partyType === PARTY_TYPES.partnershipBBA ||
+      form.partyType === PARTY_TYPES.conservator ||
+      form.partyType === PARTY_TYPES.guardian ||
+      form.partyType === PARTY_TYPES.custodian ||
+      form.partyType === PARTY_TYPES.nextFriendForMinor ||
+      form.partyType === PARTY_TYPES.nextFriendForIncomponentPerson ||
+      form.partyType === PARTY_TYPES.survivingSpouse,
 
-    showCorporationContact: form.partyType === 'Corporation',
-    showPartnershipTaxMattersContact:
-      form.partyType === 'Partnership (as the tax matters partner)',
-    showPartnershipOtherContact:
-      form.partyType ===
-      'Partnership (as a partner other than tax matters partner)',
-    showPartnershipBBAContact:
-      form.partyType ===
-      'Partnership (as a partnership representative under the BBA regime)',
-
-    showConservatorContact: form.partyType === 'Conservator',
-    showGuardianContact: form.partyType === 'Guardian',
-    showCustodianContact: form.partyType === 'Custodian',
-    showMinorContact:
-      form.partyType ===
-      'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-    showIncompetentPersonContact:
-      form.partyType ===
-      'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
-
-    showDonorContact: form.partyType === 'Donor',
-    showTransfereeContact: form.partyType === 'Transferee',
-    showSurvivingSpouseContact: form.partyType === 'Surviving Spouse',
+    showHasIrsNoticeOptions: form.hasIrsNotice === true,
+    showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
   };
 };

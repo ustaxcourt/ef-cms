@@ -1,5 +1,5 @@
 import { runAction } from 'cerebral/test';
-import removeYearAmountAction from './removeYearAmountAction';
+import { removeYearAmountAction } from './removeYearAmountAction';
 
 import applicationContext from '../../applicationContext';
 import presenter from '..';

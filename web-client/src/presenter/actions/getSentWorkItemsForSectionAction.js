@@ -5,7 +5,9 @@
  * @param {Object} providers.applicationContext the application context used for getting the getSentWorkItemsForSection use case
  * @returns {Object} a list of sent work items
  */
-export default async ({ applicationContext }) => {
+export const getSentWorkItemsForSectionAction = async ({
+  applicationContext,
+}) => {
   const user = applicationContext.getCurrentUser();
   let workItems = await applicationContext
     .getUseCases()

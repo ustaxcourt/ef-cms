@@ -3,31 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import StartCaseCancelModalDialog from './StartCaseCancelModalDialog';
+import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import CaseDifferenceExplained from './CaseDifferenceExplained';
-import ConservatorContact from './StartCase/ConservatorContact';
-import CorporationContact from './StartCase/CorporationContact';
-import CustodianContact from './StartCase/CustodianContact';
-import DonorContact from './StartCase/DonorContact';
-import EstateWithExecutorContact from './StartCase/EstateWithExecutorContact';
-import EstateWithoutExecutorContact from './StartCase/EstateWithoutExecutorContact';
-import GuardianContact from './StartCase/GuardianContact';
-import IncompetentPersonContact from './StartCase/IncompetentPersonContact';
-import MinorContact from './StartCase/MinorContact';
-import PartnershipBBAContact from './StartCase/PartnershipBBAContact';
-import PartnershipOtherContact from './StartCase/PartnershipOtherContact';
-import PartnershipTaxMattersContact from './StartCase/PartnershipTaxMattersContact';
-import PetitionerAndDeceasedSpouseContact from './StartCase/PetitionerAndDeceasedSpouseContact';
-import PetitionerAndSpouseContact from './StartCase/PetitionerAndSpouseContact';
-import PetitionerContact from './StartCase/PetitionerContact';
-import SurvivingSpouseContact from './StartCase/SurvivingSpouseContact';
-import TransfereeContact from './StartCase/TransfereeContact';
-import TrustAndTrusteeContact from './StartCase/TrustAndTrusteeContact';
+import Contacts from './StartCase/Contacts';
+import {
+  PARTY_TYPES,
+  OTHER_TYPES,
+  ESTATE_TYPES,
+  BUSINESS_TYPES,
+} from '../../../shared/src/business/entities/Contacts/PetitionContact';
 
 import ErrorNotification from './ErrorNotification';
 
 export default connect(
   {
-    caseTypes: state.caseTypes,
     filingTypes: state.filingTypes,
     form: state.form,
     getTrialCities: sequences.getTrialCitiesSequence,
@@ -42,11 +31,12 @@ export default connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence:
+      sequences.updateHasIrsNoticeFormValueSequence,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   function StartCase({
-    caseTypes,
     filingTypes,
     form,
     getTrialCities,
@@ -60,6 +50,7 @@ export default connect(
     updateFormValueSequence,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
   }) {
@@ -107,11 +98,14 @@ export default connect(
                   <label
                     htmlFor="petition-file"
                     className={
-                      'with-hint ' +
+                      'ustc-upload-petition with-hint ' +
                       (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                     }
                   >
-                    Upload Your Petition
+                    Upload Your Petition{' '}
+                    <span className="success-message">
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    </span>
                   </label>
                   <span className="usa-form-hint">
                     File must be in PDF format (.pdf)
@@ -154,8 +148,8 @@ export default connect(
                         className="fa-icon-gold"
                         size="sm"
                       />
-                      To file a Petition on behalf of another taxpayer, you must
-                      be authorized to litigate in this Court as provided by the
+                      To file a case on behalf of another taxpayer, you must be
+                      authorized to litigate in this Court as provided by the
                       Tax Court Rules of Practice and Procedure (Rule 60).
                       Enrolled agents, certified public accountants, and powers
                       of attorney who are not admitted to practice before the
@@ -203,7 +197,12 @@ export default connect(
                 </div>
               </div>
               {startCaseHelper.showPetitionerDeceasedSpouseForm && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="deceased-spouse-radios"
@@ -243,7 +242,12 @@ export default connect(
               )}
 
               {startCaseHelper.showBusinessFilingTypeOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="business-type-radios"
@@ -254,10 +258,10 @@ export default connect(
                       </legend>
                       <ul className="ustc-unstyled-list">
                         {[
-                          'Corporation',
-                          'Partnership (as the tax matters partner)',
-                          'Partnership (as a partner other than tax matters partner)',
-                          'Partnership (as a partnership representative under the BBA regime)',
+                          BUSINESS_TYPES.corporation,
+                          BUSINESS_TYPES.partnershipAsTaxMattersPartner,
+                          BUSINESS_TYPES.partnershipOtherThanTaxMatters,
+                          BUSINESS_TYPES.partnershipBBA,
                         ].map((businessType, idx) => (
                           <li key={businessType}>
                             <input
@@ -287,7 +291,12 @@ export default connect(
                 </div>
               )}
               {startCaseHelper.showOtherFilingTypeOptions && (
-                <div className="usa-grid-full ustc-secondary-question">
+                <div
+                  className={
+                    'usa-grid-full ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input-error' : '')
+                  }
+                >
                   <div className="usa-width-one-whole">
                     <fieldset
                       id="other-type-radios"
@@ -299,7 +308,7 @@ export default connect(
                       <ul className="ustc-unstyled-list">
                         {[
                           'An estate or trust',
-                          'A minor or incompetent person',
+                          'A minor or legally incompetent person',
                           'Donor',
                           'Transferee',
                           'Deceased Spouse',
@@ -334,7 +343,12 @@ export default connect(
 
               {startCaseHelper.showOtherFilingTypeOptions &&
                 startCaseHelper.showEstateFilingOptions && (
-                  <div className="usa-grid-full ustc-secondary-question">
+                  <div
+                    className={
+                      'usa-grid-full ustc-secondary-question ' +
+                      (validationErrors.partyType ? 'usa-input-error' : '')
+                    }
+                  >
                     <div className="usa-width-one-whole">
                       <fieldset
                         id="estate-type-radios"
@@ -345,9 +359,9 @@ export default connect(
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-                            'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-                            'Trust',
+                            ESTATE_TYPES.estate,
+                            ESTATE_TYPES.estateWithoutExecutor,
+                            ESTATE_TYPES.trust,
                           ].map((estateType, idx) => (
                             <li key={estateType}>
                               <input
@@ -379,23 +393,28 @@ export default connect(
 
               {startCaseHelper.showOtherFilingTypeOptions &&
                 startCaseHelper.showMinorIncompetentFilingOptions && (
-                  <div className="usa-grid-full ustc-secondary-question">
+                  <div
+                    className={
+                      'usa-grid-full ustc-secondary-question ' +
+                      (validationErrors.partyType ? 'usa-input-error' : '')
+                    }
+                  >
                     <div className="usa-width-one-whole">
                       <fieldset
                         id="minorIncompetent-type-radios"
                         className="usa-fieldset-inputs usa-sans"
                       >
                         <legend htmlFor="minorIncompetent-type-radios">
-                          What is your role in filing for this minor or
+                          What is your role in filing for this minor or legally
                           incompetent person?
                         </legend>
                         <ul className="ustc-unstyled-list">
                           {[
-                            'Conservator',
-                            'Guardian',
-                            'Custodian',
-                            'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-                            'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+                            OTHER_TYPES.conservator,
+                            OTHER_TYPES.guardian,
+                            OTHER_TYPES.custodian,
+                            OTHER_TYPES.nextFriendForMinor,
+                            OTHER_TYPES.nextFriendForIncomponentPerson,
                           ].map((minorIncompetentType, idx) => (
                             <li key={minorIncompetentType}>
                               <input
@@ -424,47 +443,13 @@ export default connect(
                     </div>
                   </div>
                 )}
+              <div className="usa-input-error usa-input-error-message beneath padded-left">
+                {validationErrors.partyType}
+              </div>
             </div>
           </div>
 
-          {startCaseHelper.showPetitionerContact && <PetitionerContact />}
-          {startCaseHelper.showPetitionerAndSpouseContact && (
-            <PetitionerAndSpouseContact />
-          )}
-          {startCaseHelper.showPetitionerAndDeceasedSpouseContact && (
-            <PetitionerAndDeceasedSpouseContact />
-          )}
-          {startCaseHelper.showEstateWithExecutorContact && (
-            <EstateWithExecutorContact />
-          )}
-          {startCaseHelper.showEstateWithoutExecutorContact && (
-            <EstateWithoutExecutorContact />
-          )}
-          {startCaseHelper.showTrustAndTrusteeContact && (
-            <TrustAndTrusteeContact />
-          )}
-          {startCaseHelper.showCorporationContact && <CorporationContact />}
-          {startCaseHelper.showPartnershipTaxMattersContact && (
-            <PartnershipTaxMattersContact />
-          )}
-          {startCaseHelper.showPartnershipOtherContact && (
-            <PartnershipOtherContact />
-          )}
-          {startCaseHelper.showPartnershipBBAContact && (
-            <PartnershipBBAContact />
-          )}
-          {startCaseHelper.showConservatorContact && <ConservatorContact />}
-          {startCaseHelper.showGuardianContact && <GuardianContact />}
-          {startCaseHelper.showCustodianContact && <CustodianContact />}
-          {startCaseHelper.showMinorContact && <MinorContact />}
-          {startCaseHelper.showIncompetentPersonContact && (
-            <IncompetentPersonContact />
-          )}
-          {startCaseHelper.showDonorContact && <DonorContact />}
-          {startCaseHelper.showTransfereeContact && <TransfereeContact />}
-          {startCaseHelper.showSurvivingSpouseContact && (
-            <SurvivingSpouseContact />
-          )}
+          <Contacts />
 
           {/*start ods*/}
           {startCaseHelper.showOwnershipDisclosure && (
@@ -513,128 +498,153 @@ export default connect(
           )}
 
           <div className="usa-form-group">
-            <h3>Did you receive a notice from the IRS?</h3>
+            <h3>What Kind of Case Are You Filing?</h3>
             <div className="blue-container">
-              <h3>IRS Notice</h3>
-              <div
+              <fieldset
+                id="irs-notice-radios"
                 className={
-                  'usa-form-group ' +
-                  (validationErrors.caseType ? 'usa-input-error' : '')
+                  'usa-form-group usa-fieldset-inputs usa-sans ' +
+                  (validationErrors.hasIrsNotice ? 'usa-input-error' : '')
                 }
               >
-                <fieldset>
-                  <legend>Type of Notice</legend>
-                  <select
-                    name="caseType"
-                    id="case-type"
-                    aria-labelledby="case-type"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateStartCaseSequence();
-                    }}
-                  >
-                    <option value="">-- Select --</option>
-                    {caseTypes.map(caseType => (
-                      <option key={caseType.type} value={caseType.type}>
-                        {caseType.description}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-                <div className="usa-input-error-message beneath">
-                  {validationErrors.caseType}
+                <legend>Did you receive a Notice from the IRS?</legend>
+                <ul className="usa-unstyled-list">
+                  {['Yes', 'No'].map((hasIrsNotice, idx) => (
+                    <li key={hasIrsNotice}>
+                      <input
+                        id={`hasIrsNotice-${hasIrsNotice}`}
+                        type="radio"
+                        name="hasIrsNotice"
+                        value={hasIrsNotice === 'Yes'}
+                        onChange={e => {
+                          updateHasIrsNoticeFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value === 'true',
+                          });
+                          validateStartCaseSequence();
+                        }}
+                      />
+                      <label
+                        id={`hasIrsNotice-${idx}`}
+                        htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                      >
+                        {hasIrsNotice}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+                <div className="usa-input-error-message">
+                  {validationErrors.hasIrsNotice}
                 </div>
-              </div>
-              <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
-                }
-              >
-                <fieldset>
-                  <legend id="date-of-notice-legend">Date of Notice</legend>
-                  <div className="usa-date-of-birth">
-                    <div className="usa-form-group usa-form-group-month">
-                      <label htmlFor="date-of-notice-month" aria-hidden="true">
-                        MM
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        id="date-of-notice-month"
-                        name="month"
-                        aria-label="month, two digits"
-                        type="number"
-                        min="1"
-                        max="12"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group-day">
-                      <label htmlFor="date-of-notice-day" aria-hidden="true">
-                        DD
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="day, two digits"
-                        id="date-of-notice-day"
-                        name="day"
-                        type="number"
-                        min="1"
-                        max="31"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-form-group usa-form-group-year">
-                      <label htmlFor="date-of-notice-year" aria-hidden="true">
-                        YYYY
-                      </label>
-                      <input
-                        className="usa-input-inline"
-                        aria-describedby="date-of-notice-legend"
-                        aria-label="year, four digits"
-                        id="date-of-notice-year"
-                        name="year"
-                        type="number"
-                        min="1900"
-                        max="2100"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                        onBlur={() => {
-                          validateStartCaseSequence();
-                        }}
-                      />
-                    </div>
-                    <div className="usa-input-error-message beneath">
-                      {validationErrors.irsNoticeDate}
-                    </div>
+              </fieldset>
+
+              {startCaseHelper.showHasIrsNoticeOptions && (
+                <React.Fragment>
+                  <CaseTypeSelect legend="Type of Notice / Case" />
+                  <div
+                    className={
+                      'usa-form-group ' +
+                      (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                    }
+                  >
+                    <fieldset>
+                      <legend id="date-of-notice-legend">Date of Notice</legend>
+                      <div className="usa-date-of-birth">
+                        <div className="usa-form-group usa-form-group-month">
+                          <label
+                            htmlFor="date-of-notice-month"
+                            aria-hidden="true"
+                          >
+                            MM
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            id="date-of-notice-month"
+                            name="month"
+                            aria-label="month, two digits"
+                            type="number"
+                            min="1"
+                            max="12"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-form-group usa-form-group-day">
+                          <label
+                            htmlFor="date-of-notice-day"
+                            aria-hidden="true"
+                          >
+                            DD
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            aria-label="day, two digits"
+                            id="date-of-notice-day"
+                            name="day"
+                            type="number"
+                            min="1"
+                            max="31"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-form-group usa-form-group-year">
+                          <label
+                            htmlFor="date-of-notice-year"
+                            aria-hidden="true"
+                          >
+                            YYYY
+                          </label>
+                          <input
+                            className="usa-input-inline"
+                            aria-describedby="date-of-notice-legend"
+                            aria-label="year, four digits"
+                            id="date-of-notice-year"
+                            name="year"
+                            type="number"
+                            min="1900"
+                            max="2100"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                            onBlur={() => {
+                              validateStartCaseSequence();
+                            }}
+                          />
+                        </div>
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors.irsNoticeDate}
+                        </div>
+                      </div>
+                    </fieldset>
                   </div>
-                </fieldset>
-              </div>
+                </React.Fragment>
+              )}
+              {startCaseHelper.showNotHasIrsNoticeOptions && (
+                <CaseTypeSelect
+                  legend="Which topic most closely matches your complaint with the
+                IRS?"
+                />
+              )}
             </div>
           </div>
           <h2>How Do You Want This Case Handled?</h2>
@@ -654,6 +664,7 @@ export default connect(
               onClick={() => toggleCaseDifferenceSequence()}
             >
               <span className="usa-banner-button-text">
+                <FontAwesomeIcon icon="question-circle" size="sm" />
                 How is a small case different than a regular case, and do I
                 qualify?
                 {form.showCaseDifference ? (
@@ -776,7 +787,7 @@ export default connect(
             your information appears the way you want it to.
           </p>
           <div className="blue-container">
-            <h3>Your Petition is Ready to Submit If&nbsp;…</h3>
+            <h3>Your Case is Ready to Submit If&nbsp;…</h3>
             <ol>
               <li>You have confirmed the timeliness of your Petition.</li>
               <li>
@@ -811,8 +822,9 @@ export default connect(
                 }}
               />
               <label htmlFor="signature">
-                Checking this box acknowledges that you’ve verified all
-                information is correct.
+                Checking this box acts as your digital signature, acknowledging
+                that you’ve verified all information is correct. You won’t be
+                able to edit your case once it’s submitted.
               </label>
               <div className="usa-input-error-message beneath">
                 {validationErrors.signature}

@@ -49,7 +49,7 @@
     "documents": [
       {
         "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "61e96924-ce65-49f4-bebf-780bfc148520",
+        "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd",
         "documentType": "Petition",
         "userId": "taxpayer",
         "filedBy": "Petitioner Test Taxpayer",
@@ -62,7 +62,7 @@
             "document": {
               "documentType": "Petition",
               "createdAt": "2018-12-27T18:22:57.418Z",
-              "documentId": "61e96924-ce65-49f4-bebf-780bfc148520"
+              "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
             },
             "messages": [
               {
@@ -87,9 +87,11 @@
     ],
     "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "sk": "0",
+    "hasIrsNotice": false,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
     "contactPrimary": {
+      "countryType": "domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -112,6 +114,7 @@
     "docketNumberSuffix": "SL",
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "caseType": "CDP (Lien/Levy)",
     "status": "New"
   },
@@ -248,6 +251,8 @@
         "userId": "respondent"
       }
     ],
+    "hasIrsNotice": false,
+    "hasVerifiedIrsNotice": null,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "respondent": {
       "zip": "37208",
@@ -270,6 +275,7 @@
     "payGovId": "1234",
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "preferredTrialCity": "Hartford, CT",
     "caseType": "Whistleblower",
     "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
@@ -281,6 +287,7 @@
       }
     ],
     "contactPrimary": {
+      "countryType": "domestic",
       "zip": "37208",
       "role": "taxpayer",
       "city": "Orlando",
@@ -401,9 +408,12 @@
     ],
     "procedureType": "Regular",
     "filingType": "Myself",
-    "caseType": "Exempt Organization",
+    "partyType": "Petitioner",
+    "caseType": "Declaratory Judgment (Exempt Organization)",
     "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "sk": "0",
+    "hasIrsNotice": false,
+    "hasVerifiedIrsNotice": null,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
     "petitioners": [
@@ -412,14 +422,15 @@
       }
     ],
     "contactPrimary": {
-      "zip": "37208",
+      "countryType": "international",
+      "country": "England",
+      "zip": "123FunnyCode",
       "role": "taxpayer",
-      "city": "Orlando",
+      "city": "London",
       "phone": "111-111-1111",
       "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
+      "address1": "111 Fish and Chips St.",
+      "address2": "Mushy Peas",
       "userId": "taxpayer",
       "email": "testtaxpayer@example.com",
       "token": "taxpayer"
@@ -535,6 +546,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "petitioners": [
       {
@@ -592,6 +604,8 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
+    "hasVerifiedIrsNotice": null,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "2",
@@ -614,6 +628,7 @@
     "sk": "0",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -632,6 +647,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -676,6 +692,8 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
+    "hasVerifiedIrsNotice": null,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "1",
@@ -704,6 +722,7 @@
     "sk": "1",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",
@@ -722,6 +741,7 @@
   {
     "procedureType": "Small",
     "filingType": "Myself",
+    "partyType": "Petitioner",
     "docketNumberSuffix": "S",
     "petitioners": [
       {
@@ -779,6 +799,7 @@
       }
     ],
     "irsNoticeDate": "2019-02-04T06:00:00.000Z",
+    "hasIrsNotice": true,
     "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "taxpayer",
     "currentVersion": "2",
@@ -801,6 +822,7 @@
     "sk": "2",
     "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
     "contactPrimary": {
+      "countryType": "domestic",
       "zip": "37208",
       "role": "petitioner",
       "city": "Orlando",

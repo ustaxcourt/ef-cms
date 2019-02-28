@@ -1,5 +1,5 @@
 import { runAction } from 'cerebral/test';
-import setCaseIdFromSearchAction from './setCaseIdFromSearchAction';
+import { setCaseIdFromSearchAction } from './setCaseIdFromSearchAction';
 
 describe('setCaseIdFromSearchAction', async () => {
   it('matches a docket number', async () => {
