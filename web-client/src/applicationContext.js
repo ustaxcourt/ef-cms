@@ -49,6 +49,7 @@ import {
   OTHER_TYPES,
   ESTATE_TYPES,
   BUSINESS_TYPES,
+  COUNTRY_TYPES,
 } from '../../shared/src/business/entities/Contacts/PetitionContact';
 
 let user;
@@ -141,6 +142,7 @@ const applicationContext = {
     OTHER_TYPES,
     ESTATE_TYPES,
     BUSINESS_TYPES,
+    COUNTRY_TYPES,
   }),
   getUseCases: () => allUseCases,
   getCurrentUser,
