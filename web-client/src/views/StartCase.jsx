@@ -19,6 +19,7 @@ export const StartCase = connect(
     showModal: state.showModal,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
+    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
@@ -41,6 +42,7 @@ export const StartCase = connect(
     startACaseToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
+    caseTypeDescriptionHelper,
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
@@ -539,7 +541,12 @@ export const StartCase = connect(
 
               {startCaseHelper.showHasIrsNoticeOptions && (
                 <React.Fragment>
-                  <CaseTypeSelect legend="Type of Notice / Case" />
+                  <CaseTypeSelect
+                    caseTypes={caseTypeDescriptionHelper.caseTypes}
+                    validation="validateStartCaseSequence"
+                    onChange="updateFormValueSequence"
+                    legend="Type of Notice / Case"
+                  />
                   <div
                     className={
                       'usa-form-group ' +
@@ -640,6 +647,9 @@ export const StartCase = connect(
               )}
               {startCaseHelper.showNotHasIrsNoticeOptions && (
                 <CaseTypeSelect
+                  caseTypes={caseTypeDescriptionHelper.caseTypes}
+                  validation="validateStartCaseSequence"
+                  onChange="updateFormValueSequence"
                   legend="Which topic most closely matches your complaint with the
                 IRS?"
                 />
