@@ -1,9 +1,9 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-class FilePetition extends React.Component {
+class FilePetitionComponent extends React.Component {
   componentDidMount() {
     this.focusMain();
   }
@@ -86,7 +86,7 @@ class FilePetition extends React.Component {
   }
 }
 
-FilePetition.propTypes = {
+FilePetitionComponent.propTypes = {
   document: PropTypes.object,
   submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
@@ -94,7 +94,7 @@ FilePetition.propTypes = {
   updateDocumentValueSequence: PropTypes.func,
 };
 
-export default connect(
+export const FileDocument = connect(
   {
     document: state.document,
     submitDocumentSequence: sequences.submitDocumentSequence,
@@ -102,5 +102,5 @@ export default connect(
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
   },
-  FilePetition,
+  FilePetitionComponent,
 );

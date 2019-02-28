@@ -1,15 +1,16 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
 import { state, sequences } from 'cerebral';
-import SectionWorkQueue from './SectionWorkQueue';
-import IndividualWorkQueue from './IndividualWorkQueue';
+import React from 'react';
 
-export default connect(
+import { IndividualWorkQueue } from './IndividualWorkQueue';
+import { SectionWorkQueue } from './SectionWorkQueue';
+
+export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  function WorkQueue({ chooseWorkQueueSequence, workQueueHelper }) {
+  ({ chooseWorkQueueSequence, workQueueHelper }) => {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>

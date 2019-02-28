@@ -3,12 +3,12 @@ import React from 'react';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
-export default connect(
+export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
     constants: state.constants,
   },
-  function PartyInformation({ caseDetail, constants }) {
+  ({ caseDetail, constants }) => {
     return (
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
