@@ -4,9 +4,9 @@ import React from 'react';
 import ContactPrimary from './ContactPrimary';
 import ContactSecondary from './ContactSecondary';
 
-export default connect(
+export const Contacts = connect(
   { startCaseHelper: state.startCaseHelper },
-  function Contacts({ startCaseHelper }) {
+  ({ startCaseHelper }) => {
     return (
       <React.Fragment>
         {startCaseHelper.showPrimaryContact && <ContactPrimary />}

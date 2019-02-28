@@ -3,11 +3,11 @@ import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-export default connect(
+export const Email = connect(
   {
     email: state.user.email,
   },
-  function Email({ email }) {
+  ({ email }) => {
     return (
       <React.Fragment>
         <div className="usa-form-group">

@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const Country = connect(
   {
     form: state.form,
     type: props.type,
@@ -10,13 +10,13 @@ export default connect(
     validateStartCaseSequence: sequences.validateStartCaseSequence,
     validationErrors: state.validationErrors,
   },
-  function Country({
+  ({
     form,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
-  }) {
+  }) => {
     return (
       <React.Fragment>
         <div

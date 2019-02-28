@@ -1,12 +1,13 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Address from './Address';
-import Country from './Country';
-import Email from './Email';
-import InternationalAddress from './InternationalAddress';
 
-export default connect(
+import { Address } from './Address';
+import { Country } from './Country';
+import { Email } from './Email';
+import { InternationalAddress } from './InternationalAddress';
+
+export const ContactPrimary = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -14,13 +15,13 @@ export default connect(
     validateStartCaseSequence: sequences.validateStartCaseSequence,
     contactsHelper: state.contactsHelper,
   },
-  function ContactPrimary({
+  ({
     form,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
     contactsHelper,
-  }) {
+  }) => {
     return (
       <div className="usa-form-group contact-group">
         <h3>{contactsHelper.contactPrimary.header}</h3>
