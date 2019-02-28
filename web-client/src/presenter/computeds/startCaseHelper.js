@@ -14,8 +14,9 @@ export default get => {
         getTrialCityName(trialCity),
       ]),
   );
+  const { PARTY_TYPES } = get(state.constants);
 
-  const showContacts = showContactsHelper(form.partyType);
+  const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
   return {
     showPetitionFileValid: petition && petition.petitionFile,

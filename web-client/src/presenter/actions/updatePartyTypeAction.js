@@ -50,7 +50,7 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
     store.set(state.form.businessType, undefined);
   }
 
-  const showContacts = showContactsHelper(partyType);
+  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   store.set(
     state.form.contactPrimary,
