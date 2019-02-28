@@ -10,13 +10,13 @@ export const CaseTypeSelect = connect(
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
-  function CorporationContact({
+  ({
     caseTypeDescriptionHelper,
     legend,
     updateFormValueSequence,
     validationErrors,
     validateStartCaseSequence,
-  }) {
+  }) => {
     return (
       <div
         className={
