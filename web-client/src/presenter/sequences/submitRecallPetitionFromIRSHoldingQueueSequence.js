@@ -1,17 +1,17 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import navigateToDashboard from '../actions/navigateToDashboardAction';
-import recallPetitionFromIRSHoldingQueue from '../actions/recallPetitionFromIRSHoldingQueueAction';
-import setAlertSuccess from '../actions/setAlertSuccessAction';
-import clearModal from '../actions/clearModalAction';
-import getCase from '../actions/getCaseAction';
-import setCase from '../actions/setCaseAction';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { recallPetitionFromIRSHoldingQueueAction } from '../actions/recallPetitionFromIRSHoldingQueueAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { clearModalAction } from '../actions/clearModalAction';
+import { getCaseAction } from '../actions/getCaseAction';
+import { setCaseAction } from '../actions/setCaseAction';
 
-export default [
+export const submitRecallPetitionFromIRSHoldingQueueSequence = [
   clearAlertsAction,
-  clearModal,
-  recallPetitionFromIRSHoldingQueue,
-  getCase,
-  setCase,
-  setAlertSuccess,
-  navigateToDashboard,
+  clearModalAction,
+  recallPetitionFromIRSHoldingQueueAction,
+  getCaseAction,
+  setCaseAction,
+  setAlertSuccessAction,
+  navigateToDashboardAction,
 ];

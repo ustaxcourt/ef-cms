@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting the state.alertSuccess
  * @param {Object} providers.props the cerebral props object used for passing the props.alertSuccess
  */
-export default ({ props, store }) => {
+export const setAlertSuccessAction = ({ props, store }) => {
   store.set(state.alertSuccess, props.alertSuccess);
 };

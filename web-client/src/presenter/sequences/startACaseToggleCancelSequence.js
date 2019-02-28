@@ -1,4 +1,6 @@
 import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
-export default [set(state.showModal, 'StartCaseCancelModalDialog')];
+export const startACaseToggleCancelSequence = [
+  set(state.showModal, 'StartCaseCancelModalDialog'),
+];

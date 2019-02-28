@@ -3,15 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { CaseInformationInternal } from './CaseInformationInternal';
+import DocketRecord from './DocketRecord';
 import ErrorNotification from './ErrorNotification';
 import PartyInformation from './PartyInformation';
-import CaseInformationInternal from './CaseInformationInternal';
 import SuccessNotification from './SuccessNotification';
 
 export default connect(
   {
-    baseUrl: state.baseUrl,
-    token: state.token,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
@@ -22,8 +21,6 @@ export default connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function CaseDetail({
-    baseUrl,
-    token,
     caseDetail,
     currentTab,
     extractedPendingMessages,
@@ -136,70 +133,7 @@ export default connect(
           </nav>
           {currentTab == 'Docket Record' && (
             <div className="" role="tabpanel">
-              <table className="responsive-table">
-                <thead>
-                  <tr>
-                    <th>Date filed</th>
-                    <th>Title</th>
-                    <th>Filed by</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {caseDetail.documents.map((document, idx) => (
-                    <tr key={idx}>
-                      <td className="responsive-title">
-                        <span className="responsive-label">Activity date</span>
-                        {document.createdAtFormatted}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Title</span>
-                        <a
-                          href={`/case-detail/${
-                            caseDetail.docketNumber
-                          }/documents/${document.documentId}`}
-                          aria-label="View PDF"
-                        >
-                          <FontAwesomeIcon icon="file-pdf" />
-                          {document.documentType}
-                        </a>
-                      </td>
-                      <td>
-                        <span className="responsive-label">Filed by</span>
-                        {document.filedBy}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Status</span>
-                        {document.isStatusServed && (
-                          <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                        )}
-                        {helper.showDocumentStatus && (
-                          <span>{document.status}</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                  {helper.showPaymentRecord && (
-                    <tr>
-                      <td>{caseDetail.payGovDateFormatted}</td>
-                      <td>Filing fee paid</td>
-                      <td />
-                      <td />
-                    </tr>
-                  )}
-                  {helper.showPreferredTrialCity && (
-                    <tr>
-                      <td>{caseDetail.createdAtFormatted}</td>
-                      <td>
-                        Request for Place of Trial at{' '}
-                        {caseDetail.preferredTrialCity}
-                      </td>
-                      <td />
-                      <td />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+              <DocketRecord />
             </div>
           )}
           {currentTab == 'Case Information' && (

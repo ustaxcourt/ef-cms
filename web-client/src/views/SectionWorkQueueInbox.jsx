@@ -1,7 +1,7 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { state, sequences } from 'cerebral';
+import React from 'react';
 
 export default connect(
   {

@@ -34,10 +34,21 @@ export default connect(
                       <span className="address-line">
                         {caseDetail.contactPrimary.address2}
                       </span>
+                      {caseDetail.contactPrimary.address3 && (
+                        <span className="address-line">
+                          {caseDetail.contactPrimary.address3}
+                        </span>
+                      )}
                       <span className="address-line">
                         {caseDetail.contactPrimary.city},{' '}
                         {caseDetail.contactPrimary.state}{' '}
                         {caseDetail.contactPrimary.zip}
+                      </span>
+                      <span className="address-line">
+                        {caseDetail.contactPrimary.countryType === 'domestic' &&
+                          'USA'}
+                        {caseDetail.contactPrimary.countryType ===
+                          'international' && caseDetail.contactPrimary.country}
                       </span>
                     </p>
                     {caseDetail.contactPrimary.phone && (
@@ -70,6 +81,13 @@ export default connect(
                           `${caseDetail.contactSecondary.city},`}{' '}
                         {caseDetail.contactSecondary.state}{' '}
                         {caseDetail.contactSecondary.zip}
+                      </span>
+                      <span className="address-line">
+                        {caseDetail.contactSecondary.countryType ===
+                          'domestic' && 'USA'}
+                        {caseDetail.contactSecondary.countryType ===
+                          'international' &&
+                          caseDetail.contactSecondary.country}
                       </span>
                     </p>
                     <p>{caseDetail.contactSecondary.phone}</p>

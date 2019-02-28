@@ -2,36 +2,38 @@ import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import createCase from '../actions/createCaseAction';
-import getCreateCaseAlertSuccess from '../actions/getCreateCaseAlertSuccessAction';
-import navigateToDashboard from '../actions/navigateToDashboardAction';
-import setAlertError from '../actions/setAlertErrorAction';
-import setAlertSuccess from '../actions/setAlertSuccessAction';
-import setFormSubmitting from '../actions/setFormSubmittingAction';
-import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsAction';
-import setValidationErrorsAction from '../actions/setValidationErrorsAction';
-import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import validatePetition from '../actions/validatePetitionAction';
+import { computeIrsNoticeDateAction } from '../actions/computeIrsNoticeDateAction';
+import { createCaseAction } from '../actions/createCaseAction';
+import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { validatePetitionAction } from '../actions/validatePetitionAction';
 
-export default [
+export const submitFilePetitionSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
-  validatePetition,
+  computeIrsNoticeDateAction,
+  validatePetitionAction,
   {
     success: [
       set(state.showValidation, false),
-      setFormSubmitting,
-      createCase,
-      getCreateCaseAlertSuccess,
-      setAlertSuccess,
-      unsetFormSubmitting,
-      navigateToDashboard,
+      setFormSubmittingAction,
+      createCaseAction,
+      getCreateCaseAlertSuccessAction,
+      setAlertSuccessAction,
+      unsetFormSubmittingAction,
+      navigateToDashboardAction,
     ],
     error: [
-      setAlertError,
+      setAlertErrorAction,
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
-      unsetFormSubmitting,
+      unsetFormSubmittingAction,
     ],
   },
 ];

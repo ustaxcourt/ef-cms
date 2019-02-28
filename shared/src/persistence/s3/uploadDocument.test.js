@@ -1,7 +1,7 @@
 const { uploadDocument } = require('./uploadDocument');
 
 describe('uploadDocument', () => {
-  it('returns the expected documentId after when the upload was successful', async () => {
+  it('returns the expected documentId after the upload was successful', async () => {
     const DOCUMENT_ID = 'abc';
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',

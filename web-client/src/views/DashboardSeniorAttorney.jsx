@@ -5,9 +5,9 @@ import SuccessNotification from './SuccessNotification';
 import ErrorNotification from './ErrorNotification';
 import WorkQueue from './WorkQueue';
 
-export default connect(
+export const DashboardSeniorAttorney = connect(
   {},
-  function DashboardSeniorAttorney() {
+  () => {
     return (
       <section className="usa-section usa-grid">
         <SuccessNotification />

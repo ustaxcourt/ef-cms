@@ -1,6 +1,6 @@
 label {
   max-width: 100%;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1.45em;
@@ -14,7 +14,7 @@ label p.usa-form-hint {
 }
 
 legend {
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   font-size: 17px;
   font-weight: $font-semibold;
 }
@@ -26,6 +26,7 @@ input[type='file'] {
 input[type='file'],
 input[type='number'],
 input[type='text'],
+input[type='tel'],
 textarea,
 select {
   padding-top: 0;
@@ -117,5 +118,22 @@ label.validated::after {
 .usa-grid-full {
   &.ustc-secondary-question {
     margin-top: 20px;
+  }
+}
+
+label.ustc-upload-petition {
+  .success-message {
+    display: none;
+    color: $color-green;
+  }
+
+  &.validated {
+    &::after {
+      display: none;
+    }
+
+    .success-message {
+      display: inline-block;
+    }
   }
 }

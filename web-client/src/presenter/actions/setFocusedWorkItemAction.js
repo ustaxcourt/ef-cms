@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting the state.form
  * @param {Object} providers.props the cerebral props object used for passing the props.workItemId
  */
-export default ({ get, store, props }) => {
+export const setFocusedWorkItemAction = ({ get, store, props }) => {
   const queue = get(state[props.queueType]).map(item => {
     if (item.workItemId === props.workItemId) {
       item.isFocused = !item.isFocused;

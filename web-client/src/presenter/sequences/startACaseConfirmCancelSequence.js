@@ -1,4 +1,7 @@
-import navigateToDashboardAction from '../actions/navigateToDashboardAction';
-import clearModal from '../actions/clearModalAction';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { clearModalAction } from '../actions/clearModalAction';
 
-export default [clearModal, navigateToDashboardAction];
+export const startACaseConfirmCancelSequence = [
+  clearModalAction,
+  navigateToDashboardAction,
+];

@@ -13,7 +13,7 @@ exports.forwardWorkItem = async ({
   applicationContext,
 }) => {
   const response = await applicationContext.getHttpClient().put(
-    `${applicationContext.getBaseUrl()}/workitems/${workItemId}?interactorName=forwardWorkItem`,
+    `${applicationContext.getBaseUrl()}/workitems/${workItemId}/assignee`,
     {
       assigneeId,
       message,

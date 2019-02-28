@@ -3,6 +3,10 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { contactsHelper } from './computeds/contactsHelper';
+import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
+import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
@@ -54,6 +58,10 @@ export default {
 
   alertHelper,
   caseDetailHelper,
+  caseTypeDescriptionHelper,
+  contactsHelper,
+  dashboardPetitionerHelper,
+  dashboardRespondentHelper,
   documentDetailHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

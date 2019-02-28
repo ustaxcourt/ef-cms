@@ -21,7 +21,7 @@ export default test => {
       },
       {
         message:
-          'A Stipulated Decision filed by Respondent is ready for review.',
+          'A Stipulated Decision filed by Test respondent is ready for review.',
       },
       {
         message: 'hello world',

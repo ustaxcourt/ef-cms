@@ -8,6 +8,7 @@ describe('Petition', () => {
         procedureType: 'Small',
         filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
@@ -23,12 +24,14 @@ describe('Petition', () => {
         procedureType: 'Small',
         filingType: 'Myself',
         preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
         petitionFile: {},
         signature: true,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         contactPrimary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -39,6 +42,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
         contactSecondary: {
+          countryType: 'domestic',
           name: 'Jimmy Dean',
           inCareOf: 'USTC',
           address1: '876 12th Ave',
@@ -50,7 +54,7 @@ describe('Petition', () => {
           email: 'someone@example.com',
         },
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

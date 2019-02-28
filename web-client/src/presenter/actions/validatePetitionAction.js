@@ -10,23 +10,15 @@ import { omit } from 'lodash';
  * @param {Object} providers.get the cerebral get function used for getting state.form
  * @returns {Object} the next path based on if validation was successful or error
  */
-export default ({ applicationContext, path, get }) => {
+export const validatePetitionAction = ({ applicationContext, path, get }) => {
   const petition = get(state.petition);
 
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate: `${get(state.form.year)}-${get(state.form.month)}-${get(
-        state.form.day,
-      )}`,
     },
     ['year', 'month', 'day', 'trialCities'],
   );
-
-  form.irsNoticeDate = form.irsNoticeDate
-    .split('-')
-    .map(segment => (segment = segment.padStart(2, '0')))
-    .join('-');
 
   const errors = applicationContext.getUseCases().validatePetition({
     petition: { ...petition, ...form },

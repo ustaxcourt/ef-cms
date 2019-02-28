@@ -19,7 +19,7 @@ describe('Authorization client service', () => {
     ).to.be.true;
   });
 
-  it('should authorize a user who is owner always', () => {
+  it('returns true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
       isAuthorized(
         { userId: 'someUser', role: 'petitioner' },
@@ -47,7 +47,7 @@ describe('Authorization client service', () => {
   it('should return false when a user doesnt have a petitionsclerk role', () => {
     expect(
       isAuthorized(
-        { userId: 'intakeclerk', role: 'petitioner' },
+        { userId: 'someUser', role: 'petitioner' },
         GET_CASES_BY_STATUS,
       ),
     ).to.be.false;

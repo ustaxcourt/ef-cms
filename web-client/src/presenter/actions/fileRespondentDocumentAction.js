@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {Object} providers.applicationContext the application context used for getting the fileRespondentDocument use case
  * @param {Function} providers.get the cerebral get function used for getting caseDetail, document, user
  */
-export default async ({ applicationContext, get }) => {
+export const fileRespondentDocumentAction = async ({
+  applicationContext,
+  get,
+}) => {
   const caseToUpdate = get(state.caseDetail);
 
   const documentType = get(state.document.documentType);
