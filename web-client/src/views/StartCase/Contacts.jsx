@@ -1,16 +1,47 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
 import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
 
 export const Contacts = connect(
-  { startCaseHelper: state.startCaseHelper },
-  ({ startCaseHelper }) => {
+  {
+    bind: props.bind,
+    emailBind: props.emailBind,
+    onChange: props.onChange,
+    onBlur: props.onBlur,
+    contactsHelper: props.contactsHelper,
+    showPrimaryContact: props.showPrimaryContact,
+    showSecondaryContact: props.showSecondaryContact,
+  },
+  ({
+    bind,
+    emailBind,
+    onChange,
+    onBlur,
+    contactsHelper,
+    showPrimaryContact,
+    showSecondaryContact,
+  }) => {
     return (
       <React.Fragment>
-        {startCaseHelper.showPrimaryContact && <ContactPrimary />}
-        {startCaseHelper.showSecondaryContact && <ContactSecondary />}
+        {showPrimaryContact && (
+          <ContactPrimary
+            bind={bind}
+            emailBind={emailBind}
+            onChange={onChange}
+            onBlur={onBlur}
+            contactsHelper={contactsHelper}
+          />
+        )}
+        {showSecondaryContact && (
+          <ContactSecondary
+            bind={bind}
+            onChange={onChange}
+            onBlur={onBlur}
+            contactsHelper={contactsHelper}
+          />
+        )}
       </React.Fragment>
     );
   },

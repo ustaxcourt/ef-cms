@@ -4,6 +4,7 @@ import { state, sequences } from 'cerebral';
 import React from 'react';
 
 import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
+import { CaseDetailEditPartyInformation } from './CaseDetailEditPartyInformation';
 
 export const CaseDetailEdit = connect(
   {
@@ -310,6 +311,7 @@ export const CaseDetailEdit = connect(
         {showModal === 'UpdateCaseCancelModalDialog' && (
           <UpdateCaseCancelModalDialog />
         )}
+        <CaseDetailEditPartyInformation />
         <div className="blue-container">
           <h3>IRS Notice</h3>
 

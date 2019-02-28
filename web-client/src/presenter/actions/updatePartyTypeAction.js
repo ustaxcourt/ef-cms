@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-import { showContactsHelper } from '../helpers/showContactsHelper';
+import { showContactsHelper } from '../computeds/showContactsHelper';
 
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
