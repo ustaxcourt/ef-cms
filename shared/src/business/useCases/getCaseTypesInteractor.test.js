@@ -19,24 +19,4 @@ describe('Get case types', () => {
     expect(caseTypes[0]).not.toBeUndefined();
     expect(typeof caseTypes[0]).toEqual('string');
   });
-
-  it('throws a UnauthorizedError if user is unauthorized', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          userId: 'notarealboy',
-        };
-      },
-    };
-    let error;
-    try {
-      await getCaseTypes({
-        applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
-  });
 });
