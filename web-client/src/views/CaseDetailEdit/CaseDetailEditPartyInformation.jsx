@@ -1,5 +1,6 @@
 import { connect } from '@cerebral/react';
 import { state, sequences } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Contacts } from '../StartCase/Contacts';
 
@@ -8,8 +9,16 @@ export const CaseDetailEditPartyInformation = connect(
     caseDetail: state.caseDetail,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    baseUrl: state.baseUrl,
+    token: state.token,
   },
-  ({ caseDetail, updateCasePartyTypeSequence, caseDetailEditHelper }) => {
+  ({
+    caseDetail,
+    updateCasePartyTypeSequence,
+    caseDetailEditHelper,
+    baseUrl,
+    token,
+  }) => {
     return (
       <div className="blue-container document-detail-one-third">
         <div className="usa-form-group">
@@ -36,6 +45,22 @@ export const CaseDetailEditPartyInformation = connect(
             ))}
           </select>
         </div>
+
+        {caseDetailEditHelper.showOwnershipDisclosureStatement &&
+          caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
+            <div className="usa-form-group">
+              <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+              <a
+                href={`${baseUrl}/documents/${
+                  caseDetailEditHelper.ownershipDisclosureStatementDocumentId
+                }/documentDownloadUrl?token=${token}`}
+                aria-label="View PDF"
+              >
+                <FontAwesomeIcon icon="file-pdf" />
+                Ownership Disclosure Statement
+              </a>
+            </div>
+          )}
 
         <Contacts
           parentView="CaseDetail"
