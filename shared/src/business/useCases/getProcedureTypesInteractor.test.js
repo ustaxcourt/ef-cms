@@ -34,24 +34,4 @@ describe('Get case procedure types', () => {
     }
     expect(error).toBeUndefined();
   });
-
-  it('throws a UnauthorizedError if user is unauthorized', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          userId: 'nope',
-        };
-      },
-    };
-    let error;
-    try {
-      await getProcedureTypes({
-        applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
-  });
 });

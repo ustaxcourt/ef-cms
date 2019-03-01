@@ -4,18 +4,22 @@ import React from 'react';
 
 export const CaseTypeSelect = connect(
   {
-    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
+    caseTypes: props.caseTypes,
     legend: props.legend,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    value: props.value,
+    allowDefaultOption: props.allowDefaultOption || true,
+    onChange: sequences[props.onChange],
+    validation: sequences[props.validation],
     validationErrors: state.validationErrors,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
   ({
-    caseTypeDescriptionHelper,
+    caseTypes,
     legend,
-    updateFormValueSequence,
+    value,
+    allowDefaultOption,
+    onChange,
+    validation,
     validationErrors,
-    validateStartCaseSequence,
   }) => {
     return (
       <div
@@ -30,18 +34,22 @@ export const CaseTypeSelect = connect(
             name="caseType"
             id="case-type"
             aria-labelledby="case-type"
+            value={value}
             onChange={e => {
-              updateFormValueSequence({
+              onChange({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateStartCaseSequence();
+              validation();
             }}
           >
-            <option value="">-- Select --</option>
-            {caseTypeDescriptionHelper.caseTypes.map(caseType => (
-              <option key={caseType.type} value={caseType.type}>
-                {caseType.description}
+            {allowDefaultOption && <option value="">-- Select --</option>}
+            {caseTypes.map(caseType => (
+              <option
+                key={caseType.type || caseType}
+                value={caseType.type || caseType}
+              >
+                {caseType.description || caseType}
               </option>
             ))}
           </select>
