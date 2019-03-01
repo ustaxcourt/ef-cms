@@ -452,7 +452,16 @@ export const StartCase = connect(
             </div>
           </div>
 
-          <Contacts />
+          <Contacts
+            parentView="StartCase"
+            bind="form"
+            emailBind="user"
+            onChange="updateFormValueSequence"
+            onBlur="validateStartCaseSequence"
+            contactsHelper="contactsHelper"
+            showPrimaryContact={startCaseHelper.showPrimaryContact}
+            showSecondaryContact={startCaseHelper.showSecondaryContact}
+          />
 
           {/*start ods*/}
           {startCaseHelper.showOwnershipDisclosure && (

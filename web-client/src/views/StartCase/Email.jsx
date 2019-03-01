@@ -1,17 +1,17 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state, props } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export const Email = connect(
   {
-    email: state.user.email,
+    email: state[props.bind].email,
   },
   ({ email }) => {
     return (
       <React.Fragment>
         <div className="usa-form-group">
-          <div className="usa-width-five-twelfths">
+          <div className="usa-width-five-twelfths email-input">
             <label htmlFor="email">Email Address</label>
             {email}
           </div>
