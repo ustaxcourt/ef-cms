@@ -5,6 +5,10 @@
   "dependencies": {
     "ef-cms-shared": "file:../shared",
     "jsonwebtoken": "^8.5.0",
+    "uuid": "^3.3.2"
+  },
+  "license": "CC0-1.0",
+  "devDependencies": {
     "serverless": "^1.38.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-domain-manager": "^2.6.13",
@@ -17,10 +21,6 @@
     "serverless-plugin-warmup": "^4.3.3-rc.1",
     "serverless-prune-plugin": "^1.3.2",
     "serverless-s3-local": "github:ustaxcourt/serverless-s3-local",
-    "uuid": "^3.3.2"
-  },
-  "license": "CC0-1.0",
-  "devDependencies": {
     "artillery": "^1.6.0-27",
     "artillery-plugin-fuzzer": "^1.0.1",
     "aws-sdk": "^2.411.0",
