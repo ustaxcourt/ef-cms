@@ -1,7 +1,10 @@
 import { runAction } from 'cerebral/test';
 
 import { resetContactsAction } from './resetContactsAction';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import {
+  PARTY_TYPES,
+  COUNTRY_TYPES,
+} from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 describe('resetContactsAction', async () => {
   it('clears the contactPrimary except for countryType and email for a domestic address', async () => {
@@ -22,6 +25,7 @@ describe('resetContactsAction', async () => {
         },
         constants: {
           PARTY_TYPES,
+          COUNTRY_TYPES,
         },
       },
     });
@@ -52,6 +56,7 @@ describe('resetContactsAction', async () => {
         },
         constants: {
           PARTY_TYPES,
+          COUNTRY_TYPES,
         },
       },
     });
@@ -90,6 +95,7 @@ describe('resetContactsAction', async () => {
         },
         constants: {
           PARTY_TYPES,
+          COUNTRY_TYPES,
         },
       },
     });
