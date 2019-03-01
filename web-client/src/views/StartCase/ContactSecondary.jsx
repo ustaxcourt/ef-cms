@@ -8,6 +8,7 @@ import { InternationalAddress } from './InternationalAddress';
 
 export const ContactSecondary = connect(
   {
+    parentView: props.parentView,
     bind: props.bind,
     data: state[props.bind],
     constants: state.constants,
@@ -19,6 +20,7 @@ export const ContactSecondary = connect(
     contactsHelper: state[props.contactsHelper],
   },
   ({
+    parentView,
     bind,
     data,
     constants,
@@ -30,8 +32,12 @@ export const ContactSecondary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group">
-        <h3>{contactsHelper.contactSecondary.header}</h3>
+      <div className="usa-form-group contact-group">
+        {parentView === 'CaseDetail' ? (
+          <h4>{contactsHelper.contactSecondary.header}</h4>
+        ) : (
+          <h3>{contactsHelper.contactSecondary.header}</h3>
+        )}
         <div className="blue-container">
           <Country
             type="contactSecondary"

@@ -451,6 +451,7 @@ export const StartCase = connect(
           </div>
 
           <Contacts
+            parentView="StartCase"
             bind="form"
             emailBind="user"
             onChange="updateFormValueSequence"

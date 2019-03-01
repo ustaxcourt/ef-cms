@@ -9,6 +9,7 @@ import { InternationalAddress } from './InternationalAddress';
 
 export const ContactPrimary = connect(
   {
+    parentView: props.parentView,
     bind: props.bind,
     emailBind: props.emailBind,
     data: state[props.bind],
@@ -21,6 +22,7 @@ export const ContactPrimary = connect(
     contactsHelper: state[props.contactsHelper],
   },
   ({
+    parentView,
     bind,
     emailBind,
     data,
@@ -34,7 +36,11 @@ export const ContactPrimary = connect(
   }) => {
     return (
       <div className="usa-form-group contact-group">
-        <h3>{contactsHelper.contactPrimary.header}</h3>
+        {parentView === 'StartCase' ? (
+          <h3>{contactsHelper.contactPrimary.header}</h3>
+        ) : (
+          <h4>{contactsHelper.contactPrimary.header}</h4>
+        )}
         <div className="blue-container usa-grid-full">
           <Country
             type="contactPrimary"
