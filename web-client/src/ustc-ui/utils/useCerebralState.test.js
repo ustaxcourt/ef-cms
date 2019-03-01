@@ -73,15 +73,8 @@ describe('decorateWithPreemptiveCallback', () => {
 });
 
 describe('useCerebralStateFactory', () => {
-  let get, sequences, state, useCerebralState;
-  beforeEach(() => {
-    get = v => v;
-    sequences = { cerebralBindSimpleSetStateSequence: v => v.value };
-    state = { name: 'Bags' };
-    useCerebralState = useCerebralStateFactory(get, sequences, state);
-  });
-
   it('should return value and setter method', () => {
+    const useCerebralState = useCerebralStateFactory(v => v.value, 'Bags');
     const [name, setName] = useCerebralState('name');
 
     expect(name).toEqual('Bags');
@@ -89,6 +82,7 @@ describe('useCerebralStateFactory', () => {
   });
 
   it('should set default value when no value exist in state', () => {
+    const useCerebralState = useCerebralStateFactory(v => v.value);
     const defaultNumber = '867-5309';
     const [number] = useCerebralState('number', defaultNumber);
 
