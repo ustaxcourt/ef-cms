@@ -8,5 +8,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object used for getting the props.trialCities
  */
 export const setTrialCitiesAction = ({ store, props }) => {
-  store.set(state.form.trialCities, props.trialCities);
+  store.set(state.form.trialCities, props.trialCities); // TODO: why are we storing this on the form
+  store.set(state.trialCities, props.trialCities);
 };

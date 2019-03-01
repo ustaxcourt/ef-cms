@@ -1,6 +1,8 @@
 import { connect } from '@cerebral/react';
 import { state, sequences } from 'cerebral';
 import React from 'react';
+import { ProcedureType } from '../StartCase/ProcedureType';
+import { TrialCity } from '../StartCase/TrialCity';
 
 export const CaseInfo = connect(
   {
@@ -8,24 +10,56 @@ export const CaseInfo = connect(
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
+    getTrialCities: sequences.getTrialCitiesSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    trialCitiesHelper: state.trialCitiesHelper,
   },
   ({
     autoSaveCaseSequence,
     caseDetail,
+    trialCitiesHelper,
     caseDetailErrors,
     form,
+    getTrialCities,
     updateCaseValueSequence,
     updateFormValueSequence,
   }) => {
     return (
       <div className="blue-container">
         <h3>Case Information</h3>
-        <span className="label">Case Procedure</span>
-        <p>{caseDetail.procedureType} Tax Case</p>
-        <span className="label">Trial Location</span>
-        <p>{caseDetail.preferredTrialCity}</p>
+        <ProcedureType
+          value={caseDetail.procedureType}
+          onChange={e => {
+            updateCaseValueSequence({
+              key: 'procedureType',
+              value: e.target.value,
+            });
+            autoSaveCaseSequence();
+            getTrialCities({
+              value: e.target.value,
+            });
+          }}
+          legend="Case Procedure"
+        />
+
+        <TrialCity
+          label="Trial Location"
+          showHint={false}
+          showSmallTrialCitiesHint={false}
+          showRegularTrialCitiesHint={false}
+          showDefaultOption={false}
+          value={caseDetail.preferredTrialCity}
+          trialCitiesByState={trialCitiesHelper.trialCitiesByState}
+          onChange={e => {
+            updateCaseValueSequence({
+              key: 'preferredTrialCity',
+              value: e.target.value,
+            });
+            autoSaveCaseSequence();
+          }}
+        />
+
         <div className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}>
           <fieldset>
             <legend id="fee-payment-date-legend">Fee Payment Date</legend>

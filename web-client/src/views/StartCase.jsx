@@ -8,15 +8,16 @@ import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
+import { ProcedureType } from './StartCase/ProcedureType';
+import { TrialCity } from './StartCase/TrialCity';
 
 export const StartCase = connect(
   {
     filingTypes: state.filingTypes,
     form: state.form,
     constants: state.constants,
-    getTrialCities: sequences.getTrialCitiesSequence,
-    procedureTypes: state.procedureTypes,
     showModal: state.showModal,
+    getTrialCities: sequences.getTrialCitiesSequence,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
@@ -36,9 +37,8 @@ export const StartCase = connect(
     filingTypes,
     form,
     constants,
-    getTrialCities,
-    procedureTypes,
     showModal,
+    getTrialCities,
     startACaseToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
@@ -692,94 +692,37 @@ export const StartCase = connect(
             </div>
           </div>
           <div className="blue-container">
-            <div
-              className={
-                'usa-form-group ' +
-                (validationErrors.procedureType ? 'usa-input-error' : '')
-              }
-            >
-              <fieldset
-                id="procedure-type-radios"
-                className="usa-fieldset-inputs usa-sans"
-              >
-                <legend>Select Case Procedure</legend>
-                <ul className="usa-unstyled-list">
-                  {procedureTypes.map((procedureType, idx) => (
-                    <li key={procedureType}>
-                      <input
-                        id={procedureType}
-                        data-type={procedureType}
-                        type="radio"
-                        name="procedureType"
-                        value={procedureType}
-                        onChange={e => {
-                          getTrialCities({
-                            value: e.currentTarget.value,
-                          });
-                          validateStartCaseSequence();
-                        }}
-                      />
-                      <label id={`proc-type-${idx}`} htmlFor={procedureType}>
-                        {procedureType} case
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </fieldset>
-            </div>
+            <ProcedureType
+              value={form.procedureType}
+              onChange={e => {
+                getTrialCities({
+                  value: e.currentTarget.value,
+                });
+                validateStartCaseSequence();
+              }}
+              legend="Select Case Procedure"
+            />
             {startCaseHelper.showSelectTrial && (
-              <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+              <TrialCity
+                showHint={true}
+                label="Select a Trial Location"
+                showSmallTrialCitiesHint={
+                  startCaseHelper.showSmallTrialCitiesHint
                 }
-              >
-                <label htmlFor="preferred-trial-city" className="with-hint">
-                  Select a Trial Location
-                </label>
-                <span className="usa-form-hint">
-                  {startCaseHelper.showSmallTrialCitiesHint && (
-                    <React.Fragment>
-                      Trial locations are unavailable in the following states:
-                      DE, NH, NJ, RI. Please select the next closest location.
-                    </React.Fragment>
-                  )}
-                  {startCaseHelper.showRegularTrialCitiesHint && (
-                    <React.Fragment>
-                      Trial locations are unavailable in the following states:
-                      DE, KS, ME, NH, NJ, ND, RI, SD, VT, WY. Please select the
-                      next closest location.
-                    </React.Fragment>
-                  )}
-                </span>
-                <select
-                  name="preferredTrialCity"
-                  id="preferred-trial-city"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value || null,
-                    });
-                    validateStartCaseSequence();
-                  }}
-                  value={form.preferredTrialCity || ''}
-                >
-                  <option value="">-- Select --</option>
-                  {Object.keys(startCaseHelper.trialCitiesByState).map(
-                    (state, idx) => (
-                      <optgroup key={idx} label={state}>
-                        {startCaseHelper.trialCitiesByState[state].map(
-                          (trialCity, cityIdx) => (
-                            <option key={cityIdx} value={trialCity}>
-                              {trialCity}
-                            </option>
-                          ),
-                        )}
-                      </optgroup>
-                    ),
-                  )}
-                </select>
-              </div>
+                showRegularTrialCitiesHint={
+                  startCaseHelper.showRegularTrialCitiesHint
+                }
+                showDefaultOption={true}
+                value={form.preferredTrialCity}
+                trialCitiesByState={startCaseHelper.trialCitiesByState}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value || null,
+                  });
+                  validateStartCaseSequence();
+                }}
+              />
             )}
             <div className="usa-input-error-message beneath">
               {validationErrors.procedureType}
