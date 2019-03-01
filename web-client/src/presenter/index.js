@@ -6,7 +6,6 @@ import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
-import { getTrialCitiesSequence } from './sequences/getTrialCitiesSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -19,6 +18,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
@@ -79,10 +79,10 @@ export default {
     autoSaveCaseSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
+    clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
     dismissAlertSequence,
     dismissModalSequence,
-    getTrialCitiesSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,

@@ -10,7 +10,6 @@ export const CaseInfo = connect(
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
-    getTrialCities: sequences.getTrialCitiesSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     trialCitiesHelper: state.trialCitiesHelper,
@@ -21,7 +20,6 @@ export const CaseInfo = connect(
     trialCitiesHelper,
     caseDetailErrors,
     form,
-    getTrialCities,
     updateCaseValueSequence,
     updateFormValueSequence,
   }) => {
@@ -35,10 +33,11 @@ export const CaseInfo = connect(
               key: 'procedureType',
               value: e.target.value,
             });
-            autoSaveCaseSequence();
-            getTrialCities({
-              value: e.target.value,
+            updateCaseValueSequence({
+              key: 'preferredTrialCity',
+              value: '',
             });
+            autoSaveCaseSequence();
           }}
           legend="Case Procedure"
         />
@@ -48,9 +47,11 @@ export const CaseInfo = connect(
           showHint={false}
           showSmallTrialCitiesHint={false}
           showRegularTrialCitiesHint={false}
-          showDefaultOption={false}
+          showDefaultOption={true}
           value={caseDetail.preferredTrialCity}
-          trialCitiesByState={trialCitiesHelper.trialCitiesByState}
+          trialCitiesByState={
+            trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
+          }
           onChange={e => {
             updateCaseValueSequence({
               key: 'preferredTrialCity',

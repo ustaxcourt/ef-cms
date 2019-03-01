@@ -497,20 +497,4 @@ Case.getFilingTypes = () => {
   return FILING_TYPES;
 };
 
-/**
- * getTrialCities
- * @param procedureType
- * @returns {*[]}
- */
-Case.getTrialCities = procedureType => {
-  switch (procedureType) {
-    case 'Small':
-      return SMALL_TRIAL_CITIES;
-    case 'Regular':
-      return REGULAR_TRIAL_CITIES;
-    default:
-      return REGULAR_TRIAL_CITIES;
-  }
-};
-
 module.exports = Case;
