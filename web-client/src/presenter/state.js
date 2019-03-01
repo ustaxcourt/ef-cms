@@ -40,6 +40,9 @@ export default {
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
   document: {},
+  documentDetail: {
+    tab: '',
+  },
   documentDetailHelper,
   documentId: null,
   extractedDocument,

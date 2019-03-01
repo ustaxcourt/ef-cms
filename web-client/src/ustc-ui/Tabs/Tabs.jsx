@@ -11,6 +11,7 @@ import { useCerebralStateFactory } from '../utils/useCerebralState';
 export function Tab() {}
 
 export function TabsComponent({
+  id,
   bind,
   value,
   simpleSetter,
@@ -79,7 +80,7 @@ export function TabsComponent({
   }
 
   return (
-    <div className={tabsClass}>
+    <div id={id} className={tabsClass}>
       <nav>
         <ul role="tablist">{map(children, renderTab)}</ul>
       </nav>
@@ -90,6 +91,7 @@ export function TabsComponent({
 }
 
 TabsComponent.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   bind: PropTypes.string,
   value: PropTypes.any,

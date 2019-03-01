@@ -16,6 +16,7 @@ export const chooseWorkQueueAction = ({ store, props, path, get }) => {
   if (props && props.queue && props.box) {
     store.set(state.workQueueToDisplay, { box: props.box, queue: props.queue });
   } else if (props && props.box) {
+    // sometimes it queue is set in another sequence and this is called without a queue.
     store.set(state.workQueueToDisplay.box, props.box);
   }
   let queuePrefs = get(state.workQueueToDisplay);
