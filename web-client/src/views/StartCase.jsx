@@ -30,6 +30,7 @@ export const StartCase = connect(
       sequences.updateStartCaseFormValueSequence,
     updateHasIrsNoticeFormValueSequence:
       sequences.updateHasIrsNoticeFormValueSequence,
+    trialCitiesHelper: state.trialCitiesHelper,
     validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
   },
@@ -43,6 +44,7 @@ export const StartCase = connect(
     startCaseHelper,
     submitFilePetitionSequence,
     caseTypeDescriptionHelper,
+    trialCitiesHelper,
     submitting,
     toggleCaseDifferenceSequence,
     updateFormValueSequence,
@@ -716,7 +718,9 @@ export const StartCase = connect(
                 }
                 showDefaultOption={true}
                 value={form.preferredTrialCity}
-                trialCitiesByState={startCaseHelper.trialCitiesByState}
+                trialCitiesByState={
+                  trialCitiesHelper(form.procedureType).trialCitiesByState
+                }
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
