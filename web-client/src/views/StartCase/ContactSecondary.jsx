@@ -13,10 +13,10 @@ export const ContactSecondary = connect(
     data: state[props.bind],
     constants: state.constants,
     onChange: props.onChange,
-    updateFormValueSequence: sequences[props.onChange],
+    onChangeSequence: sequences[props.onChange],
     validationErrors: state.validationErrors,
     onBlur: props.onBlur,
-    validateStartCaseSequence: sequences[props.onBlur],
+    onBlurSequence: sequences[props.onBlur],
     contactsHelper: state[props.contactsHelper],
   },
   ({
@@ -25,10 +25,10 @@ export const ContactSecondary = connect(
     data,
     constants,
     onChange,
-    updateFormValueSequence,
+    onChangeSequence,
     validationErrors,
     onBlur,
-    validateStartCaseSequence,
+    onBlurSequence,
     contactsHelper,
   }) => {
     return (
@@ -64,13 +64,13 @@ export const ContactSecondary = connect(
               autoCapitalize="none"
               value={data.contactSecondary.name || ''}
               onChange={e => {
-                updateFormValueSequence({
+                onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
               onBlur={() => {
-                validateStartCaseSequence();
+                onBlurSequence();
               }}
             />
             <div className="usa-input-error-message beneath">
@@ -103,13 +103,13 @@ export const ContactSecondary = connect(
                 autoCapitalize="none"
                 value={data.contactSecondary.inCareOf || ''}
                 onChange={e => {
-                  updateFormValueSequence({
+                  onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
                 onBlur={() => {
-                  validateStartCaseSequence();
+                  onBlurSequence();
                 }}
               />
               {validationErrors.contactSecondary && (
@@ -156,13 +156,13 @@ export const ContactSecondary = connect(
                 autoCapitalize="none"
                 value={data.contactSecondary.phone || ''}
                 onChange={e => {
-                  updateFormValueSequence({
+                  onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
                 onBlur={() => {
-                  validateStartCaseSequence();
+                  onBlurSequence();
                 }}
               />
               <div className="usa-input-error-message beneath">
