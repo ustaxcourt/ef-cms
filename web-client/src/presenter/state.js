@@ -45,6 +45,9 @@ export default {
   completeForm: {},
   document: {},
   documentId: null,
+  documentDetail: {
+    tab: '',
+  },
   filingTypes: [],
   form: {},
   petition: {},

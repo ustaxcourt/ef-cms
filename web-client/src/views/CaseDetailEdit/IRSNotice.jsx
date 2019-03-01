@@ -289,8 +289,6 @@ export const IRSNotice = connect(
 
     return (
       <div className="blue-container">
-        <h3>IRS Notice</h3>
-
         {renderIrsNoticeRadios()}
 
         <CaseTypeSelect
