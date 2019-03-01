@@ -8,18 +8,23 @@ export const caseDetailEditHelper = get => {
 
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
-  const showOwnershipDisclosureStatement =
-    partyType === PARTY_TYPES.partnershipAsTaxMattersPartner ||
-    partyType === PARTY_TYPES.partnershipOtherThanTaxMatters ||
-    partyType === PARTY_TYPES.partnershipBBA ||
-    partyType === PARTY_TYPES.corporation;
-
+  let showOwnershipDisclosureStatement = false;
   let ownershipDisclosureStatementDocumentId;
-  if (showOwnershipDisclosureStatement && documents) {
+
+  if (
+    [
+      PARTY_TYPES.partnershipAsTaxMattersPartner,
+      PARTY_TYPES.partnershipOtherThanTaxMatters,
+      PARTY_TYPES.partnershipBBA,
+      PARTY_TYPES.corporation,
+    ].includes(partyType) &&
+    documents
+  ) {
     const odsDocs = documents.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
     if (odsDocs[0]) {
+      showOwnershipDisclosureStatement = true;
       ownershipDisclosureStatementDocumentId = odsDocs[0].documentId;
     }
   }
