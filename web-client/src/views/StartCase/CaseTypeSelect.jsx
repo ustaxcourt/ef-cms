@@ -7,7 +7,7 @@ export const CaseTypeSelect = connect(
     caseTypes: props.caseTypes,
     legend: props.legend,
     value: props.value,
-    allowDefaultOption: props.allowDefaultOption || true,
+    allowDefaultOption: props.allowDefaultOption,
     onChange: sequences[props.onChange],
     validation: sequences[props.validation],
     validationErrors: state.validationErrors,
