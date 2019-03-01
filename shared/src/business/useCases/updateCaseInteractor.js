@@ -57,8 +57,8 @@ exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
   const caseAfterUpdate = await applicationContext
     .getPersistenceGateway()
     .saveCase({
-      caseToSave: paidCase,
       applicationContext,
+      caseToSave: paidCase,
     });
 
   return new Case(caseAfterUpdate).validate().toRawObject();

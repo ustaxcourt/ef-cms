@@ -83,7 +83,6 @@ describe('syncWorkItems', function() {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
-        status: 'General',
         documents: [
           {
             workItems: [
@@ -93,19 +92,20 @@ describe('syncWorkItems', function() {
             ],
           },
         ],
+        status: 'General',
       },
       currentCaseState: {
-        status: 'New',
         documents: [
           {
             workItems: [
               {
-                workItemId: 'abc',
                 caseStatus: 'new',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'New',
       },
     });
     expect(sync.updateWorkItem.called).to.be.true;
@@ -119,8 +119,8 @@ describe('syncWorkItems', function() {
           {
             workItems: [
               {
-                workItemId: 'abc',
                 assigneeId: 'rick',
+                workItemId: 'abc',
               },
             ],
           },
@@ -131,8 +131,8 @@ describe('syncWorkItems', function() {
           {
             workItems: [
               {
-                workItemId: 'abc',
                 assigneeId: 'bob',
+                workItemId: 'abc',
               },
             ],
           },
@@ -146,47 +146,47 @@ describe('syncWorkItems', function() {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
-        status: 'Batched for IRS',
         documents: [
           {
             workItems: [
               {
-                workItemId: 'abc',
                 assigneeId: 'rick',
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'Batched for IRS',
       },
       currentCaseState: {
-        status: 'New',
         documents: [
           {
             workItems: [
               {
-                workItemId: 'abc',
                 assigneeId: 'rick',
-                section: 'petitions',
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                section: 'petitions',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'New',
       },
     });
     expect(client.put.getCall(0).args[0].Item.pk).to.equal(
@@ -203,50 +203,50 @@ describe('syncWorkItems', function() {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
-        status: 'New',
         documents: [
           {
             workItems: [
               {
-                completedAt: '123',
-                workItemId: 'abc',
                 assigneeId: 'rick',
-                section: 'petitions',
+                completedAt: '123',
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                section: 'petitions',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'New',
       },
       currentCaseState: {
-        status: 'New',
         documents: [
           {
             workItems: [
               {
-                completedAt: null,
-                workItemId: 'abc',
                 assigneeId: 'rick',
-                section: 'petitions',
+                completedAt: null,
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                section: 'petitions',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'New',
       },
     });
     expect(client.put.getCall(0).args[0].Item.pk).to.equal(
@@ -259,50 +259,50 @@ describe('syncWorkItems', function() {
     await syncWorkItems({
       applicationContext,
       caseToSave: {
-        status: 'Recalled',
         documents: [
           {
             workItems: [
               {
-                completedAt: '123',
-                workItemId: 'abc',
                 assigneeId: 'rick',
-                section: 'petitions',
+                completedAt: '123',
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                section: 'petitions',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'Recalled',
       },
       currentCaseState: {
-        status: 'New',
         documents: [
           {
             workItems: [
               {
-                completedAt: null,
-                workItemId: 'abc',
                 assigneeId: 'rick',
-                section: 'irsBatchSection',
+                completedAt: null,
                 isInitializeCase: true,
                 messages: [
                   {
+                    createdAt: '123',
                     message: 'Petition batched for IRS',
                     userId: 'petitionsclerk1',
-                    createdAt: '123',
                   },
                 ],
+                section: 'irsBatchSection',
+                workItemId: 'abc',
               },
             ],
           },
         ],
+        status: 'New',
       },
     });
     expect(client.delete.getCall(0).args[0].key.pk).to.equal(

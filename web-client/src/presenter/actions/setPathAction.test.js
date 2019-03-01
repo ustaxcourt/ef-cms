@@ -10,21 +10,21 @@ presenter.providers.applicationContext = applicationContext;
 describe('setPathAction', async () => {
   it('does not changes the existing path if props.path is not set', async () => {
     const result = await runAction(setPathAction, {
+      props: {},
       state: {
         path: '123',
       },
-      props: {},
     });
     expect(result.state.path).toEqual('123');
   });
 
   it('changes the existing path to match the props.path passed in', async () => {
     const result = await runAction(setPathAction, {
-      state: {
-        path: '123',
-      },
       props: {
         path: 'gg',
+      },
+      state: {
+        path: '123',
       },
     });
     expect(result.state.path).toEqual('gg');

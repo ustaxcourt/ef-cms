@@ -13,7 +13,7 @@ describe('Authorization client service', () => {
   it('should authorize a petitions clerk for getCasesByStatus', () => {
     expect(
       isAuthorized(
-        { userId: 'petitionsclerk', role: 'petitionsclerk' },
+        { role: 'petitionsclerk', userId: 'petitionsclerk' },
         GET_CASES_BY_STATUS,
       ),
     ).to.be.true;
@@ -22,7 +22,7 @@ describe('Authorization client service', () => {
   it('returns true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
       isAuthorized(
-        { userId: 'someUser', role: 'petitioner' },
+        { role: 'petitioner', userId: 'someUser' },
         'unknown action',
         'someUser',
       ),
@@ -32,7 +32,7 @@ describe('Authorization client service', () => {
   it('should authorize a petitionsclerk for getCase', () => {
     expect(
       isAuthorized(
-        { userId: 'petitionsclerk', role: 'petitionsclerk' },
+        { role: 'petitionsclerk', userId: 'petitionsclerk' },
         GET_CASE,
       ),
     ).to.be.true;
@@ -40,14 +40,14 @@ describe('Authorization client service', () => {
 
   it('should authorize a intakeclerk for getCase', () => {
     expect(
-      isAuthorized({ userId: 'intakeclerk', role: 'intakeclerk' }, GET_CASE),
+      isAuthorized({ role: 'intakeclerk', userId: 'intakeclerk' }, GET_CASE),
     ).to.be.true;
   });
 
   it('should return false when a user doesnt have a petitionsclerk role', () => {
     expect(
       isAuthorized(
-        { userId: 'someUser', role: 'petitioner' },
+        { role: 'petitioner', userId: 'someUser' },
         GET_CASES_BY_STATUS,
       ),
     ).to.be.false;
@@ -56,7 +56,7 @@ describe('Authorization client service', () => {
   it('should authorize a petitions clerk for workitems', () => {
     expect(
       isAuthorized(
-        { userId: 'petitionsclerk', role: 'petitionsclerk' },
+        { role: 'petitionsclerk', userId: 'petitionsclerk' },
         WORKITEM,
       ),
     ).to.be.true;
@@ -64,14 +64,14 @@ describe('Authorization client service', () => {
 
   it('should authorize a docket clerk for workitems', () => {
     expect(
-      isAuthorized({ userId: 'docketclerk', role: 'docketclerk' }, WORKITEM),
+      isAuthorized({ role: 'docketclerk', userId: 'docketclerk' }, WORKITEM),
     ).to.be.true;
   });
 
   it('should authorize a seniorattorney for workitems', () => {
     expect(
       isAuthorized(
-        { userId: 'seniorattorney', role: 'seniorattorney' },
+        { role: 'seniorattorney', userId: 'seniorattorney' },
         WORKITEM,
       ),
     ).to.be.true;
@@ -79,13 +79,13 @@ describe('Authorization client service', () => {
 
   it('should authorize a respondent for getCase', () => {
     expect(
-      isAuthorized({ userId: 'respondent', role: 'respondent' }, UPDATE_CASE),
+      isAuthorized({ role: 'respondent', userId: 'respondent' }, UPDATE_CASE),
     ).to.be.true;
   });
 
   it('should authorize a docketclerk for updatecase', () => {
     expect(
-      isAuthorized({ userId: 'docketclerk', role: 'docketclerk' }, UPDATE_CASE),
+      isAuthorized({ role: 'docketclerk', userId: 'docketclerk' }, UPDATE_CASE),
     ).to.be.true;
   });
 });

@@ -67,7 +67,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
     }).length !== 1;
 
   if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
-    caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
+    caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
       formatYearAmount(caseDetailErrors, caseDetail),

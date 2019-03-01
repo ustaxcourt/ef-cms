@@ -16,8 +16,8 @@ describe('Get case filing types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          userId: 'taxpayer',
           role: 'petitioner',
+          userId: 'taxpayer',
         };
       },
     };

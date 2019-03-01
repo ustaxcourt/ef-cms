@@ -6,8 +6,8 @@ const Message = require('./Message');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  userId: 'taxpayer',
   role: 'petitioner',
+  userId: 'taxpayer',
 };
 
 describe('Document entity', () => {
@@ -35,20 +35,20 @@ describe('Document entity', () => {
     it('addWorkItem', () => {
       const myDoc = new Document(A_VALID_DOCUMENT);
       const workItem = new WorkItem({
-        sentBy: 'bob',
         assigneeId: 'bob',
-        docketNumber: '101-18',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         assigneeName: 'bob',
-        caseTitle: 'testing',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         caseStatus: 'new',
+        caseTitle: 'testing',
+        docketNumber: '101-18',
         document: {},
+        sentBy: 'bob',
       });
       const message = new Message({
-        messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         message: 'hello world',
-        userId: '123',
+        messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         sentBy: 'gg',
+        userId: '123',
       });
       workItem.addMessage(message);
       myDoc.addWorkItem(new WorkItem({}));

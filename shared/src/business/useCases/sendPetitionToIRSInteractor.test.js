@@ -9,23 +9,23 @@ describe('Send petition to IRS', () => {
   let applicationContext;
   beforeEach(() => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
+      getUseCases: () => ({ getCase }),
       irsGateway: {
         sendToIRS: () => Promise.resolve(),
       },
-      getUseCases: () => ({ getCase }),
     };
   });
 
@@ -36,9 +36,9 @@ describe('Send petition to IRS', () => {
     let error;
     try {
       await sendPetitionToIRS({
+        applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'someuser',
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -50,9 +50,9 @@ describe('Send petition to IRS', () => {
     let error;
     try {
       await sendPetitionToIRS({
+        applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -62,25 +62,25 @@ describe('Send petition to IRS', () => {
 
   it('case not found if caseId does not exist', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(null),
         };
       },
-      environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
     };
     let error;
     try {
       await sendPetitionToIRS({
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
       });
     } catch (err) {
       error = err;
@@ -96,28 +96,28 @@ describe('Send petition to IRS', () => {
     const date = '2018-12-04T18:27:13.370Z';
     const stub = sinon.stub().resolves(date);
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           saveCase: () => Promise.resolve(savedCaseRecord),
         };
       },
-      environment: { stage: 'local' },
+      getUseCases: () => ({ getCase }),
       irsGateway: {
         sendToIRS: stub,
-      },
-      getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
       },
     };
 
     const irsSendDate = await sendPetitionToIRS({
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     assert.ok(irsSendDate);
     assert.equal(irsSendDate, date);
@@ -128,29 +128,29 @@ describe('Send petition to IRS', () => {
     let savedCaseRecord = Object.assign(MOCK_CASE);
     const stub = sinon.stub().throws(new Error('test-error-string'));
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           saveCase: () => Promise.resolve(savedCaseRecord),
         };
       },
-      environment: { stage: 'local' },
+      getUseCases: () => ({ getCase }),
       irsGateway: {
         sendToIRS: stub,
-      },
-      getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
       },
     };
     let error;
     try {
       await sendPetitionToIRS({
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
       });
     } catch (err) {
       error = err;
@@ -163,28 +163,28 @@ describe('Send petition to IRS', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
         };
       },
-      environment: { stage: 'local' },
+      getUseCases: () => ({ getCase }),
       irsGateway: {
         sendToIRS: () => {},
-      },
-      getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
       },
     };
     let error;
     try {
       await sendPetitionToIRS({
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -196,28 +196,28 @@ describe('Send petition to IRS', () => {
 
   it('throws an error if the irs gateway returns an invalid date', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
         };
       },
-      environment: { stage: 'local' },
+      getUseCases: () => ({ getCase }),
       irsGateway: {
         sendToIRS: () => null,
-      },
-      getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
       },
     };
     let error;
     try {
       await sendPetitionToIRS({
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;

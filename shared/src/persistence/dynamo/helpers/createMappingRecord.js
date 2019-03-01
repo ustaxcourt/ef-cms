@@ -9,11 +9,11 @@ exports.createMappingRecord = async ({
 }) => {
   return client.put({
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: `${pkId}|${type}`,
       sk: skId,
       ...item,
     },
+    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

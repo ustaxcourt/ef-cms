@@ -13,7 +13,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().getWorkItem({
-      workItemId: event.pathParameters.workItemId,
       applicationContext,
+      workItemId: event.pathParameters.workItemId,
     });
   });

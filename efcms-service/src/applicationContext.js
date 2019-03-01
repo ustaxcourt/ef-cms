@@ -161,13 +161,14 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
-    getStorageClient: () => {
-      return new S3({
-        endpoint: environment.s3Endpoint,
-        region: environment.region,
-        s3ForcePathStyle: true,
-      });
+    docketNumberGenerator,
+    environment: {
+      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+      region: process.env.AWS_REGION || 'us-east-1',
+      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
+      stage: process.env.STAGE || 'local',
     },
+    getCurrentUser,
     getDocumentClient: () => {
       return new DynamoDB.DocumentClient({
         endpoint: environment.dynamoDbEndpoint,
@@ -177,75 +178,74 @@ module.exports = (appContextUser = {}) => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
-    getUniqueId: () => {
-      return uuidv4();
-    },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
-        incrementCounter,
-        getUploadPolicy,
-        getDownloadPolicyUrl,
-        getUserById,
         createUser,
-        getUsersInSection,
-        getInternalUsers,
-
-        // work items
-        getWorkItemsBySection,
-        getWorkItemsForUser,
-        getWorkItemById,
-        saveWorkItem,
-        getSentWorkItemsForUser,
-        getSentWorkItemsForSection,
-
-        // cases
+        getCaseByCaseId,
+        getCaseByDocketNumber,
         getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
+        getDownloadPolicyUrl,
+
+        // work items
+        getInternalUsers,
+        getSentWorkItemsForSection,
+        getSentWorkItemsForUser,
+        getUploadPolicy,
+        getUserById,
+        getUsersInSection,
+
+        // cases
+        getWorkItemById,
+        getWorkItemsBySection,
+        getWorkItemsForUser,
+        incrementCounter,
         saveCase,
-        getCaseByCaseId,
-        getCaseByDocketNumber,
+        saveWorkItem,
       };
     },
-    docketNumberGenerator,
-    irsGateway,
-    // TODO: replace external calls to environment
-    environment: {
-      stage: process.env.STAGE || 'local',
-      region: process.env.AWS_REGION || 'us-east-1',
-      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+    getStorageClient: () => {
+      return new S3({
+        endpoint: environment.s3Endpoint,
+        region: environment.region,
+        s3ForcePathStyle: true,
+      });
     },
-    getCurrentUser,
-    isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
+    // TODO: replace external calls to environment
+    getUniqueId: () => {
+      return uuidv4();
+    },
     getUseCases: () => {
       return {
+        assignWorkItems: assignWorkItemsUC,
         createCase,
+        createDocument,
         createUser: createUserUC,
+        forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
-        getUsersInSection: getUsersInSectionUC,
-        getInternalUsers: getInternalUsersUC,
-        getUser,
-        forwardWorkItem,
-        sendPetitionToIRSHoldingQueue,
-        updateCase,
         getCasesForRespondent: getCasesForRespondentUC,
-        getWorkItem,
-        updateWorkItem,
-        createDocument,
-        getWorkItemsBySection: getWorkItemsBySectionUC,
+        getInternalUsers: getInternalUsersUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getUser,
+        getUsersInSection: getUsersInSectionUC,
+        getWorkItem,
+        getWorkItemsBySection: getWorkItemsBySectionUC,
         getWorkItemsForUser: getWorkItemsForUserUC,
-        assignWorkItems: assignWorkItemsUC,
         recallPetitionFromIRSHoldingQueue,
+        sendPetitionToIRSHoldingQueue,
+        updateCase,
+        updateWorkItem,
       };
     },
+    irsGateway,
+    isAuthorized,
+    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
   };
 };

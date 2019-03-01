@@ -1,147 +1,147 @@
 const REGULAR = [
   {
-    state: 'Alabama',
     city: 'Birmingham',
-  },
-  {
     state: 'Alabama',
+  },
+  {
     city: 'Mobile',
+    state: 'Alabama',
   },
   {
-    state: 'Alaska',
     city: 'Anchorage',
+    state: 'Alaska',
   },
   {
-    state: 'Arizona',
     city: 'Phoenix',
+    state: 'Arizona',
   },
   {
-    state: 'Arkansas',
     city: 'Little Rock',
+    state: 'Arkansas',
   },
   {
-    state: 'California',
     city: 'Los Angeles',
+    state: 'California',
   },
   {
-    state: 'California',
     city: 'San Diego',
-  },
-  {
     state: 'California',
+  },
+  {
     city: 'San Francisco',
+    state: 'California',
   },
   {
-    state: 'Colorado',
     city: 'Denver',
+    state: 'Colorado',
   },
   {
-    state: 'Connecticut',
     city: 'Hartford',
+    state: 'Connecticut',
   },
   // {
   //   state: 'Delaware',
   //   city: '',
   // },
   {
-    state: 'District of Columbia',
     city: 'Washington',
+    state: 'District of Columbia',
   },
   {
-    state: 'Florida',
     city: 'Jacksonville',
+    state: 'Florida',
   },
   {
-    state: 'Florida',
     city: 'Miami',
-  },
-  {
     state: 'Florida',
+  },
+  {
     city: 'Tampa',
+    state: 'Florida',
   },
   {
-    state: 'Georgia',
     city: 'Atlanta',
+    state: 'Georgia',
   },
   {
-    state: 'Hawaii',
     city: 'Honolulu',
+    state: 'Hawaii',
   },
   {
-    state: 'Idaho',
     city: 'Boise',
+    state: 'Idaho',
   },
   {
-    state: 'Illinois',
     city: 'Chicago',
+    state: 'Illinois',
   },
   {
-    state: 'Indiana',
     city: 'Indianapolis',
+    state: 'Indiana',
   },
   {
-    state: 'Iowa',
     city: 'Des Moines',
+    state: 'Iowa',
   },
   // {
   //   state: 'Kansas',
   //   city: '',
   // },
   {
-    state: 'Kentucky',
     city: 'Louisville',
+    state: 'Kentucky',
   },
   {
-    state: 'Louisiana',
     city: 'New Orleans',
+    state: 'Louisiana',
   },
   // {
   //   state: 'Maine',
   //   city: '',
   // },
   {
-    state: 'Maryland',
     city: 'Baltimore',
+    state: 'Maryland',
   },
   {
-    state: 'Massachusetts',
     city: 'Boston',
+    state: 'Massachusetts',
   },
   {
-    state: 'Michigan',
     city: 'Detroit',
+    state: 'Michigan',
   },
   {
-    state: 'Minnesota',
     city: 'St. Paul',
+    state: 'Minnesota',
   },
   {
-    state: 'Mississippi',
     city: 'Jackson',
+    state: 'Mississippi',
   },
   {
-    state: 'Missouri',
     city: 'Kansas City',
-  },
-  {
     state: 'Missouri',
+  },
+  {
     city: 'St. Louis',
+    state: 'Missouri',
   },
   {
-    state: 'Montana',
     city: 'Helena',
+    state: 'Montana',
   },
   {
-    state: 'Nebraska',
     city: 'Omaha',
+    state: 'Nebraska',
   },
   {
-    state: 'Nevada',
     city: 'Las Vegas',
+    state: 'Nevada',
   },
   {
-    state: 'Nevada',
     city: 'Reno',
+    state: 'Nevada',
   },
   // {
   //   state: 'New Hampshire',
@@ -152,124 +152,124 @@ const REGULAR = [
   //   city: '',
   // },
   {
-    state: 'New Mexico',
     city: 'Albuquerque',
+    state: 'New Mexico',
   },
   {
-    state: 'New York',
     city: 'Buffalo',
-  },
-  {
     state: 'New York',
-    city: 'New York City',
   },
   {
-    state: 'North Carolina',
+    city: 'New York City',
+    state: 'New York',
+  },
+  {
     city: 'Winston-Salem',
+    state: 'North Carolina',
   },
   // {
   //   state: 'North Dakota',
   //   city: '',
   // },
   {
-    state: 'Ohio',
     city: 'Cincinnati',
+    state: 'Ohio',
   },
   {
-    state: 'Ohio',
     city: 'Cleveland',
-  },
-  {
     state: 'Ohio',
+  },
+  {
     city: 'Columbus',
+    state: 'Ohio',
   },
   {
-    state: 'Oklahoma',
     city: 'Oklahoma City',
+    state: 'Oklahoma',
   },
   {
-    state: 'Oregon',
     city: 'Portland',
+    state: 'Oregon',
   },
   {
-    state: 'Pennsylvania',
     city: 'Philadelphia',
+    state: 'Pennsylvania',
   },
   {
-    state: 'Pennsylvania',
     city: 'Pittsburgh',
+    state: 'Pennsylvania',
   },
   // {
   //   state: 'Rhode Island',
   //   city: '',
   // },
   {
-    state: 'South Carolina',
     city: 'Columbia',
+    state: 'South Carolina',
   },
   // {
   //   state: 'South Dakota',
   //   city: '',
   // },
   {
-    state: 'Tennessee',
     city: 'Knoxville',
+    state: 'Tennessee',
   },
   {
-    state: 'Tennessee',
     city: 'Memphis',
-  },
-  {
     state: 'Tennessee',
+  },
+  {
     city: 'Nashville',
+    state: 'Tennessee',
   },
   {
-    state: 'Texas',
     city: 'Dallas',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'El Paso',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'Houston',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'Lubbock',
-  },
-  {
     state: 'Texas',
-    city: 'San Antonio',
   },
   {
-    state: 'Utah',
+    city: 'San Antonio',
+    state: 'Texas',
+  },
+  {
     city: 'Salt Lake City',
+    state: 'Utah',
   },
   // {
   //   state: 'Vermont',
   //   city: '',
   // },
   {
-    state: 'Virginia',
     city: 'Richmond',
+    state: 'Virginia',
   },
   {
-    state: 'Washington',
     city: 'Seattle',
-  },
-  {
     state: 'Washington',
+  },
+  {
     city: 'Spokane',
+    state: 'Washington',
   },
   {
-    state: 'West Virginia',
     city: 'Charleston',
+    state: 'West Virginia',
   },
   {
-    state: 'Wisconsin',
     city: 'Milwaukee',
+    state: 'Wisconsin',
   },
   // {
   //   state: 'Wyoming',
@@ -279,172 +279,172 @@ const REGULAR = [
 
 const SMALL = [
   {
-    state: 'Alabama',
     city: 'Birmingham',
-  },
-  {
     state: 'Alabama',
+  },
+  {
     city: 'Mobile',
+    state: 'Alabama',
   },
   {
-    state: 'Alaska',
     city: 'Anchorage',
+    state: 'Alaska',
   },
   {
-    state: 'Arizona',
     city: 'Phoenix',
+    state: 'Arizona',
   },
   {
-    state: 'Arkansas',
     city: 'Little Rock',
+    state: 'Arkansas',
   },
   {
-    state: 'California',
     city: 'Fresno',
+    state: 'California',
   },
   {
-    state: 'California',
     city: 'Los Angeles',
+    state: 'California',
   },
   {
-    state: 'California',
     city: 'San Diego',
-  },
-  {
     state: 'California',
+  },
+  {
     city: 'San Francisco',
+    state: 'California',
   },
   {
-    state: 'Colorado',
     city: 'Denver',
+    state: 'Colorado',
   },
   {
-    state: 'Connecticut',
     city: 'Hartford',
+    state: 'Connecticut',
   },
   // {
   //   state: 'Delaware',
   //   city: '',
   // },
   {
-    state: 'District of Columbia',
     city: 'Washington',
+    state: 'District of Columbia',
   },
   {
-    state: 'Florida',
     city: 'Jacksonville',
+    state: 'Florida',
   },
   {
-    state: 'Florida',
     city: 'Miami',
+    state: 'Florida',
   },
   {
-    state: 'Florida',
     city: 'Tallahassee',
-  },
-  {
     state: 'Florida',
+  },
+  {
     city: 'Tampa',
+    state: 'Florida',
   },
   {
-    state: 'Georgia',
     city: 'Atlanta',
+    state: 'Georgia',
   },
   {
-    state: 'Hawaii',
     city: 'Honolulu',
+    state: 'Hawaii',
   },
   {
-    state: 'Idaho',
     city: 'Boise',
-  },
-  {
     state: 'Idaho',
+  },
+  {
     city: 'Pocatello',
+    state: 'Idaho',
   },
   {
-    state: 'Illinois',
     city: 'Chicago',
-  },
-  {
     state: 'Illinois',
+  },
+  {
     city: 'Peoria',
+    state: 'Illinois',
   },
   {
-    state: 'Indiana',
     city: 'Indianapolis',
+    state: 'Indiana',
   },
   {
-    state: 'Iowa',
     city: 'Des Moines',
+    state: 'Iowa',
   },
   {
-    state: 'Kansas',
     city: 'Wichita',
+    state: 'Kansas',
   },
   {
-    state: 'Kentucky',
     city: 'Louisville',
+    state: 'Kentucky',
   },
   {
-    state: 'Louisiana',
     city: 'New Orleans',
-  },
-  {
     state: 'Louisiana',
+  },
+  {
     city: 'Shreveport',
+    state: 'Louisiana',
   },
   {
-    state: 'Maine',
     city: 'Portland',
+    state: 'Maine',
   },
   {
-    state: 'Maryland',
     city: 'Baltimore',
+    state: 'Maryland',
   },
   {
-    state: 'Massachusetts',
     city: 'Boston',
+    state: 'Massachusetts',
   },
   {
-    state: 'Michigan',
     city: 'Detroit',
+    state: 'Michigan',
   },
   {
-    state: 'Minnesota',
     city: 'St. Paul',
+    state: 'Minnesota',
   },
   {
-    state: 'Mississippi',
     city: 'Jackson',
+    state: 'Mississippi',
   },
   {
-    state: 'Missouri',
     city: 'Kansas City',
-  },
-  {
     state: 'Missouri',
+  },
+  {
     city: 'St. Louis',
+    state: 'Missouri',
   },
   {
-    state: 'Montana',
     city: 'Billings',
-  },
-  {
     state: 'Montana',
+  },
+  {
     city: 'Helena',
+    state: 'Montana',
   },
   {
-    state: 'Nebraska',
     city: 'Omaha',
+    state: 'Nebraska',
   },
   {
-    state: 'Nevada',
     city: 'Las Vegas',
+    state: 'Nevada',
   },
   {
-    state: 'Nevada',
     city: 'Reno',
+    state: 'Nevada',
   },
   // {
   //   state: 'New Hampshire',
@@ -455,144 +455,144 @@ const SMALL = [
   //   city: '',
   // },
   {
-    state: 'New Mexico',
     city: 'Albuquerque',
+    state: 'New Mexico',
   },
   {
-    state: 'New York',
     city: 'Albany',
+    state: 'New York',
   },
   {
-    state: 'New York',
     city: 'Buffalo',
+    state: 'New York',
   },
   {
-    state: 'New York',
     city: 'New York City',
-  },
-  {
     state: 'New York',
+  },
+  {
     city: 'Syracuse',
+    state: 'New York',
   },
   {
-    state: 'North Carolina',
     city: 'Winston-Salem',
+    state: 'North Carolina',
   },
   {
-    state: 'North Dakota',
     city: 'Bismarck',
+    state: 'North Dakota',
   },
   {
-    state: 'Ohio',
     city: 'Cincinnati',
+    state: 'Ohio',
   },
   {
-    state: 'Ohio',
     city: 'Cleveland',
-  },
-  {
     state: 'Ohio',
+  },
+  {
     city: 'Columbus',
+    state: 'Ohio',
   },
   {
-    state: 'Oklahoma',
     city: 'Oklahoma City',
+    state: 'Oklahoma',
   },
   {
-    state: 'Oregon',
     city: 'Portland',
+    state: 'Oregon',
   },
   {
-    state: 'Pennsylvania',
     city: 'Philadelphia',
+    state: 'Pennsylvania',
   },
   {
-    state: 'Pennsylvania',
     city: 'Pittsburgh',
+    state: 'Pennsylvania',
   },
   // {
   //   state: 'Rhode Island',
   //   city: '',
   // },
   {
-    state: 'South Carolina',
     city: 'Columbia',
+    state: 'South Carolina',
   },
   {
-    state: 'South Dakota',
     city: 'Aberdeen',
+    state: 'South Dakota',
   },
   {
-    state: 'Tennessee',
     city: 'Knoxville',
+    state: 'Tennessee',
   },
   {
-    state: 'Tennessee',
     city: 'Memphis',
-  },
-  {
     state: 'Tennessee',
+  },
+  {
     city: 'Nashville',
+    state: 'Tennessee',
   },
   {
-    state: 'Texas',
     city: 'Dallas',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'El Paso',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'Houston',
+    state: 'Texas',
   },
   {
-    state: 'Texas',
     city: 'Lubbock',
-  },
-  {
     state: 'Texas',
+  },
+  {
     city: 'San Antonio',
+    state: 'Texas',
   },
   {
-    state: 'Utah',
     city: 'Salt Lake City',
+    state: 'Utah',
   },
   {
-    state: 'Vermont',
     city: 'Burlington',
+    state: 'Vermont',
   },
   {
-    state: 'Virginia',
     city: 'Richmond',
-  },
-  {
     state: 'Virginia',
+  },
+  {
     city: 'Roanoke',
+    state: 'Virginia',
   },
   {
-    state: 'Washington',
     city: 'Seattle',
-  },
-  {
     state: 'Washington',
+  },
+  {
     city: 'Spokane',
+    state: 'Washington',
   },
   {
-    state: 'West Virginia',
     city: 'Charleston',
+    state: 'West Virginia',
   },
   {
-    state: 'Wisconsin',
     city: 'Milwaukee',
+    state: 'Wisconsin',
   },
   {
-    state: 'Wyoming',
     city: 'Cheyenne',
+    state: 'Wyoming',
   },
 ];
 
 exports.TRIAL_CITIES = {
-  SMALL,
   REGULAR,
+  SMALL,
 };

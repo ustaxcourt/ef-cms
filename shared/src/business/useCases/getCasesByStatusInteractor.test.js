@@ -7,25 +7,25 @@ describe('getCasesByStatus', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesByStatus: () =>
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesByStatus({
-        status: 'New',
         applicationContext,
+        status: 'New',
       });
     } catch (err) {
       error = err;
@@ -37,18 +37,18 @@ describe('getCasesByStatus', () => {
 
   it('throws an error if the user is unauthorized', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesByStatus: () =>
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'nope',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {

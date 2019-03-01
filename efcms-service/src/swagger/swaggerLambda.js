@@ -23,7 +23,6 @@ exports.handler = async () => {
   </html>`;
 
   return {
-    statusCode: '200',
     body: body,
     headers: {
       ...headers,
@@ -31,5 +30,6 @@ exports.handler = async () => {
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',
     },
+    statusCode: '200',
   };
 }

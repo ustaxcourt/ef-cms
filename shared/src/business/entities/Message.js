@@ -15,8 +15,8 @@ const uuid = require('uuid');
  */
 function Message(rawMessage) {
   Object.assign(this, rawMessage, {
-    messageId: rawMessage.messageId || uuid.v4(),
     createdAt: rawMessage.createdAt || new Date().toISOString(),
+    messageId: rawMessage.messageId || uuid.v4(),
   });
 }
 
@@ -25,23 +25,23 @@ Message.name = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+    message: joi.string().required(),
     messageId: joi
       .string()
       .uuid(uuidVersions)
       .required(),
-    message: joi.string().required(),
-    userId: joi
-      .string()
-      // .uuid(uuidVersions)
-      .optional(),
     sentBy: joi.string().required(),
     sentTo: joi
       .string()
       .allow(null)
       .optional(),
-    createdAt: joi
-      .date()
-      .iso()
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
       .optional(),
   }),
 );

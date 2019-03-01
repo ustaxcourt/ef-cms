@@ -30,9 +30,9 @@ export const createCaseAction = async ({ applicationContext, get, store }) => {
 
   await applicationContext.getUseCases().filePetition({
     applicationContext,
-    petitionMetadata: form,
-    petitionFile,
-    ownershipDisclosureFile,
     fileHasUploaded,
+    ownershipDisclosureFile,
+    petitionFile,
+    petitionMetadata: form,
   });
 };

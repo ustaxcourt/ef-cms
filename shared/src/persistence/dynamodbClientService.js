@@ -112,13 +112,13 @@ exports.batchWrite = ({ applicationContext, tableName, items }) => {
       RequestItems: {
         [tableName]: items.map(item => ({
           PutRequest: {
-            Item: item,
             ConditionExpression:
               'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
             ExpressionAttributeNames: {
               '#pk': item.pk,
               '#sk': item.sk,
             },
+            Item: item,
           },
         })),
       },
@@ -130,8 +130,8 @@ exports.delete = ({ applicationContext, tableName, key }) => {
   return applicationContext
     .getDocumentClient()
     .delete({
-      TableName: tableName,
       Key: key,
+      TableName: tableName,
     })
     .promise();
 };
