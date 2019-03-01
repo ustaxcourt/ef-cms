@@ -4,6 +4,7 @@ const {
   PARTY_TYPES,
   COUNTRY_TYPES,
 } = require('../../shared/src/business/entities/Contacts/PetitionContact');
+import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 import applicationContext from '../src/applicationContext';
 import presenter from '../src/presenter';
@@ -96,6 +97,7 @@ describe('Case journey', async () => {
     test.setState('constants', {
       PARTY_TYPES,
       COUNTRY_TYPES,
+      TRIAL_CITIES,
     });
   });
 
