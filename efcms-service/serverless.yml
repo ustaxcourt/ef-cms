@@ -369,12 +369,10 @@ provider:
 
 package:
   exclude:
-    - ./**
-  include:
-    - src/**
-    - swagger.json
-    - ./package.json
-    - ./node_modules/**
+    - ./storage
+    - ./coverage
+    - ./terraform
+    - ./cognito
 
   excludeDevDependencies: true
 
