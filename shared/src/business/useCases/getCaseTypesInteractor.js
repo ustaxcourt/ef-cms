@@ -1,8 +1,3 @@
-const {
-  isAuthorized,
-  PETITION,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
 const Case = require('../entities/Case');
 
 /**
@@ -11,12 +6,6 @@ const Case = require('../entities/Case');
  * @param userId
  * @returns {Promise<*>}
  */
-exports.getCaseTypes = async ({ applicationContext }) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, PETITION)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
+exports.getCaseTypes = async () => {
   return Case.getCaseTypes();
 };

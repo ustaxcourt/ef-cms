@@ -21,7 +21,6 @@ const statusMap = {
   recalled: 'Recalled',
 };
 
-const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 const CASE_TYPES = [
@@ -495,22 +494,6 @@ Case.getProcedureTypes = () => {
  */
 Case.getFilingTypes = () => {
   return FILING_TYPES;
-};
-
-/**
- * getTrialCities
- * @param procedureType
- * @returns {*[]}
- */
-Case.getTrialCities = procedureType => {
-  switch (procedureType) {
-    case 'Small':
-      return SMALL_TRIAL_CITIES;
-    case 'Regular':
-      return REGULAR_TRIAL_CITIES;
-    default:
-      return REGULAR_TRIAL_CITIES;
-  }
 };
 
 module.exports = Case;

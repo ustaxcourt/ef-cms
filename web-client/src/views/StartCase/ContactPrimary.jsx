@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
 import { Address } from './Address';
@@ -9,26 +9,45 @@ import { InternationalAddress } from './InternationalAddress';
 
 export const ContactPrimary = connect(
   {
-    form: state.form,
+    parentView: props.parentView,
+    bind: props.bind,
+    emailBind: props.emailBind,
+    data: state[props.bind],
     constants: state.constants,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    onChange: props.onChange,
+    updateFormValueSequence: sequences[props.onChange],
     validationErrors: state.validationErrors,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
-    contactsHelper: state.contactsHelper,
+    onBlur: props.onBlur,
+    validateStartCaseSequence: sequences[props.onBlur],
+    contactsHelper: state[props.contactsHelper],
   },
   ({
-    form,
+    parentView,
+    bind,
+    emailBind,
+    data,
     constants,
+    onChange,
     updateFormValueSequence,
     validationErrors,
+    onBlur,
     validateStartCaseSequence,
     contactsHelper,
   }) => {
     return (
       <div className="usa-form-group contact-group">
-        <h3>{contactsHelper.contactPrimary.header}</h3>
+        {parentView === 'StartCase' ? (
+          <h3>{contactsHelper.contactPrimary.header}</h3>
+        ) : (
+          <h4>{contactsHelper.contactPrimary.header}</h4>
+        )}
         <div className="blue-container usa-grid-full">
-          <Country type="contactPrimary" />
+          <Country
+            type="contactPrimary"
+            bind={bind}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
           <div
             className={
               'usa-form-group ' +
@@ -46,7 +65,7 @@ export const ContactPrimary = connect(
               type="text"
               name="contactPrimary.name"
               autoCapitalize="none"
-              value={form.contactPrimary.name || ''}
+              value={data.contactPrimary.name || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -74,7 +93,7 @@ export const ContactPrimary = connect(
                 type="text"
                 name="contactPrimary.title"
                 autoCapitalize="none"
-                value={form.contactPrimary.title || ''}
+                value={data.contactPrimary.title || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -115,7 +134,7 @@ export const ContactPrimary = connect(
                 type="text"
                 name="contactPrimary.inCareOf"
                 autoCapitalize="none"
-                value={form.contactPrimary.inCareOf || ''}
+                value={data.contactPrimary.inCareOf || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -133,18 +152,28 @@ export const ContactPrimary = connect(
               )}
             </div>
           )}
-          {form.contactPrimary.countryType ===
+          {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
-            <Address type="contactPrimary" />
+            <Address
+              type="contactPrimary"
+              bind={bind}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
           )}
-          {form.contactPrimary.countryType ===
+          {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
-            <InternationalAddress type="contactPrimary" />
+            <InternationalAddress
+              type="contactPrimary"
+              bind={bind}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
           )}
-          <Email />
+          <Email bind={emailBind} />
           <div
             className={
-              'usa-form-group ' +
+              'usa-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
                 ? 'usa-input-error'
@@ -158,7 +187,7 @@ export const ContactPrimary = connect(
               name="contactPrimary.phone"
               className="ustc-input-phone"
               autoCapitalize="none"
-              value={form.contactPrimary.phone || ''}
+              value={data.contactPrimary.phone || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
