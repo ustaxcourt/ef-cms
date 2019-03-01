@@ -51,7 +51,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
+          saveCase: () => Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
         };
       },
     };
@@ -68,7 +68,7 @@ describe('updateCase', () => {
     }
     expect(error).not.toBeNull;
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 
@@ -92,7 +92,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        caseToUpdate: omit(MOCK_CASE, 'documents'),
+        caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
         petitioners: [{ name: 'Test Taxpayer' }],
       });
     } catch (err) {
@@ -100,7 +100,7 @@ describe('updateCase', () => {
     }
     expect(error).not.toBeNull();
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 

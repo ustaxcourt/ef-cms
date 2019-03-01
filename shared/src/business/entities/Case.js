@@ -98,7 +98,7 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .optional(),
-    caseType: joi.string().required(),
+    caseType: joi.string().optional(),
     createdAt: joi
       .date()
       .iso()
@@ -112,12 +112,9 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     docketRecord: joi.array().optional(),
-    documents: joi
-      .array()
-      .min(1)
-      .required(),
-    filingType: joi.string().required(),
-    hasIrsNotice: joi.boolean().required(),
+    documents: joi.array().optional(),
+    filingType: joi.string().optional(),
+    hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
       .optional()
@@ -129,13 +126,13 @@ joiValidationDecorator(
       .when('hasVerifiedIrsNotice', {
         is: true,
         otherwise: joi.optional().allow(null),
-        then: joi.required(),
+        then: joi.optional(),
       }),
     irsSendDate: joi
       .date()
       .iso()
       .optional(),
-    partyType: joi.string().required(),
+    partyType: joi.string().optional(),
     payGovDate: joi
       .date()
       .iso()
@@ -146,8 +143,8 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    preferredTrialCity: joi.string().required(),
-    procedureType: joi.string().required(),
+    preferredTrialCity: joi.string().optional(),
+    procedureType: joi.string().optional(),
     respondent: joi
       .object()
       .allow(null)
