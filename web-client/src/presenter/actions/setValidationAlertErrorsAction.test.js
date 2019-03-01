@@ -1,6 +1,5 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
+import { runAction } from 'cerebral/test';
 import { setValidationAlertErrorsAction } from './setValidationAlertErrorsAction';
 
 describe('setValidationAlertErrors', async () => {
@@ -49,7 +48,7 @@ describe('setValidationAlertErrors', async () => {
       state: {},
     });
     expect(state.alertError).toMatchObject({
-      messages: ['green is incorrect', 'cobalt is incorrect'],
+      messages: ['cobalt is incorrect', 'green is incorrect'],
     });
   });
 });
