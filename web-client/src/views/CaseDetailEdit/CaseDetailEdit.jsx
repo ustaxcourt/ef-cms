@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 
-import { CaseDetailEditPartyInformation } from './CaseDetailEdit/CaseDetailEditPartyInformation';
-import { CaseInfo } from './CaseDetailEdit/CaseInfo';
-import { IRSNotice } from './CaseDetailEdit/IRSNotice';
+import { Tabs, Tab } from '../../ustc-ui/Tabs/Tabs';
+import { PartyInformation } from './PartyInformation';
+import { CaseInfo } from './CaseInfo';
+import { IRSNotice } from './IRSNotice';
 import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 
 export const CaseDetailEdit = connect(
@@ -41,15 +42,23 @@ export const CaseDetailEdit = connect(
           <UpdateCaseCancelModalDialog />
         )}
 
-        <CaseDetailEditPartyInformation />
-
-        <div className="blue-container">
-          <IRSNotice />
-        </div>
-
-        <div className="blue-container">
-          <CaseInfo />
-        </div>
+        <Tabs className="container-tabs">
+          <Tab tabName="partyInfo" title="Parties" id="tab-parties">
+            <div className="blue-container">
+              <PartyInformation />
+            </div>
+          </Tab>
+          <Tab tabName="caseInfo" title="Case Info" id="tab-case-info">
+            <div className="blue-container">
+              <CaseInfo />
+            </div>
+          </Tab>
+          <Tab tabName="irsNotice" title="IRS Notice" id="tab-irs-notice">
+            <div className="blue-container">
+              <IRSNotice />
+            </div>
+          </Tab>
+        </Tabs>
 
         <button
           aria-disabled={submitting ? 'true' : 'false'}
