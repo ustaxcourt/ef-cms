@@ -31,8 +31,8 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
-      caseId,
       applicationContext,
+      caseId,
     });
 
   if (!caseRecord) throw new NotFoundError(`Case ${caseId} was not found`);
@@ -58,8 +58,8 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       .validateWithError(invalidEntityError);
 
     return await applicationContext.getPersistenceGateway().saveCase({
-      caseToSave: caseEntity.toRawObject(),
       applicationContext,
+      caseToSave: caseEntity.toRawObject(),
     });
   } else {
     throw new NotFoundError(

@@ -5,19 +5,19 @@ const User = require('../entities/User');
 const PetitionWithoutFiles = require('../entities/PetitionWithoutFiles');
 
 const MOCK_CASE = {
-  userId: 'userId',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  docketNumber: '56789-18',
-  petitioners: [{ name: 'Test Taxpayer' }],
-  status: 'New',
-  hasIrsNotice: false,
   caseType: 'Other',
-  procedureType: 'Regular',
-  filingType: 'Myself',
-  partyType: 'Petitioner',
   createdAt: new Date().toISOString(),
-  preferredTrialCity: 'Washington, D.C.',
+  docketNumber: '56789-18',
   documents: [],
+  filingType: 'Myself',
+  hasIrsNotice: false,
+  partyType: 'Petitioner',
+  petitioners: [{ name: 'Test Taxpayer' }],
+  preferredTrialCity: 'Washington, D.C.',
+  procedureType: 'Regular',
+  status: 'New',
+  userId: 'userId',
 };
 describe('createDocument', () => {
   let applicationContext;
@@ -38,35 +38,35 @@ describe('createDocument', () => {
   it('should create a document', async () => {
     const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
     applicationContext = {
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
+      },
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'Test Respondent',
+          role: 'respondent',
+          userId: 'respondent',
+        });
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => MOCK_CASE,
           saveCase: saveCaseStub,
         };
       },
-      getEntityConstructors: () => ({
-        Petition: PetitionWithoutFiles,
-      }),
-      getCurrentUser: () => {
-        return new User({
-          userId: 'respondent',
-          role: 'respondent',
-          name: 'Test Respondent',
-        });
-      },
-      environment: { stage: 'local' },
-      docketNumberGenerator: {
-        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
-      },
     };
 
     await createDocument({
+      applicationContext,
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       document: {
-        documentType: 'Answer',
         documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        documentType: 'Answer',
       },
-      applicationContext,
     });
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -113,35 +113,35 @@ describe('createDocument', () => {
   it('should create a document when a user is not a respondent', async () => {
     const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
     applicationContext = {
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
+      },
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'Test Taxpayer',
+          role: 'petitioner',
+          userId: 'taxpayer',
+        });
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => MOCK_CASE,
           saveCase: saveCaseStub,
         };
       },
-      getEntityConstructors: () => ({
-        Petition: PetitionWithoutFiles,
-      }),
-      getCurrentUser: () => {
-        return new User({
-          userId: 'taxpayer',
-          role: 'petitioner',
-          name: 'Test Taxpayer',
-        });
-      },
-      environment: { stage: 'local' },
-      docketNumberGenerator: {
-        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
-      },
     };
 
     await createDocument({
+      applicationContext,
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       document: {
-        documentType: 'Answer',
         documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        documentType: 'Answer',
       },
-      applicationContext,
     });
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;

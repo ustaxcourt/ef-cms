@@ -21,8 +21,8 @@ exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
   let workItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsBySection({
-      section,
       applicationContext,
+      section,
     });
 
   if (!workItems) {

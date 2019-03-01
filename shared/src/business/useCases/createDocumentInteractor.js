@@ -17,34 +17,34 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
-      caseId,
       applicationContext,
+      caseId,
     });
 
   const caseEntity = new Case(caseToUpdate);
 
   const workItem = new WorkItem({
-    sentBy: user.userId,
+    assigneeId: null,
+    assigneeName: null,
     caseId: caseId,
+    caseStatus: caseToUpdate.status,
+    docketNumber: caseToUpdate.docketNumber,
+    docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     document: {
       ...documentEntity.toRawObject(),
       createdAt: documentEntity.createdAt,
     },
-    caseStatus: caseToUpdate.status,
-    assigneeId: null,
-    docketNumber: caseToUpdate.docketNumber,
-    docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     section: DOCKET_SECTION,
-    assigneeName: null,
+    sentBy: user.userId,
   });
 
   const message = new Message({
+    createdAt: new Date().toISOString(),
     message: `A ${document.documentType} filed by ${capitalize(
       user.role,
     )} is ready for review.`,
     sentBy: user.name,
     userId: user.userId,
-    createdAt: new Date().toISOString(),
   });
 
   workItem.addMessage(message);
@@ -58,7 +58,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   }
 
   await applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: caseEntity.validate().toRawObject(),
     applicationContext,
+    caseToSave: caseEntity.validate().toRawObject(),
   });
 };

@@ -39,34 +39,34 @@ Document.prototype.isPetitionDocument = function() {
 joiValidationDecorator(
   Document,
   joi.object().keys({
-    documentType: joi
-      .string()
-      .valid(getDocumentTypes())
-      .required(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
     documentId: joi
       .string()
       .uuid(uuidVersions)
       .required(),
-    userId: joi
+    documentType: joi
       .string()
-      // .uuid(uuidVersions)
+      .valid(getDocumentTypes())
       .required(),
     filedBy: joi.string().optional(),
-    validated: joi.boolean().optional(),
     reviewDate: joi
       .date()
       .iso()
       .optional(),
     reviewUser: joi.string().optional(),
-    status: joi.string().optional(),
     servedDate: joi
       .date()
       .iso()
       .optional(),
-    createdAt: joi
-      .date()
-      .iso()
-      .optional(),
+    status: joi.string().optional(),
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
+      .required(),
+    validated: joi.boolean().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);

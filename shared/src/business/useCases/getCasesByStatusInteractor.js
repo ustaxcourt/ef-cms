@@ -24,8 +24,8 @@ exports.getCasesByStatus = async ({ status, applicationContext }) => {
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesByStatus({
-      status,
       applicationContext,
+      status,
     });
   return Case.validateRawCollection(cases);
 };

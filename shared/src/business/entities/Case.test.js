@@ -24,13 +24,13 @@ describe('Case entity', () => {
 
     it('Creates an invalid case with a document', () => {
       const myCase = new Case({
-        petitioners: [{ name: 'Test Taxpayer' }],
         documents: [
           {
             documentId: '123',
             documentType: 'testing',
           },
         ],
+        petitioners: [{ name: 'Test Taxpayer' }],
       });
       assert.ok(!myCase.isValid());
     });
@@ -58,8 +58,8 @@ describe('Case entity', () => {
       const myCase = new Case({
         petitioners: [],
         yearAmounts: [
-          { year: '2000', amount: '34.50' },
-          { year: '2001', amount: '34.50' },
+          { amount: '34.50', year: '2000' },
+          { amount: '34.50', year: '2001' },
         ],
       });
       assert.ok(!myCase.isValid());
@@ -70,12 +70,12 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         yearAmounts: [
           {
-            year: '2000',
             amount: '34.50',
+            year: '2000',
           },
           {
-            year: '2000',
             amount: '100.50',
+            year: '2000',
           },
         ],
       }).isValid();
@@ -87,12 +87,12 @@ describe('Case entity', () => {
     it('will fail validation when having two year amounts with the same year', () => {
       const isValid = Case.areYearsUnique([
         {
-          year: '2000',
           amount: '34.50',
+          year: '2000',
         },
         {
-          year: '2000',
           amount: '34.50',
+          year: '2000',
         },
       ]);
       expect(isValid).toBeFalsy();
@@ -124,7 +124,7 @@ describe('Case entity', () => {
       it('and hasIrsNotice is false and is missing irsNoticeDate', () => {
         let error = null;
         let rawCase = Object.assign(
-          { hasIrsNotice: false, caseType: 'Other' },
+          { caseType: 'Other', hasIrsNotice: false },
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
@@ -140,7 +140,7 @@ describe('Case entity', () => {
       it('and is missing irsNoticeDate', () => {
         let error = null;
         let rawCase = Object.assign(
-          { hasIrsNotice: true, caseType: 'Other' },
+          { caseType: 'Other', hasIrsNotice: true },
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
@@ -154,7 +154,7 @@ describe('Case entity', () => {
       it('and is missing hasIrsNotice', () => {
         let error = null;
         let rawCase = Object.assign(
-          { irsNoticeDate: '2018-03-01T00:00:00.000Z', caseType: 'Other' },
+          { caseType: 'Other', irsNoticeDate: '2018-03-01T00:00:00.000Z' },
           MOCK_CASE_WITHOUT_NOTICE,
         );
         try {
@@ -463,8 +463,8 @@ describe('Case entity', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.addDocketRecord(
         new DocketRecord({
-          filingDate: new Date().toISOString(),
           description: 'test',
+          filingDate: new Date().toISOString(),
         }),
       );
       expect(caseRecord.docketRecord).toHaveLength(1);
@@ -538,14 +538,14 @@ describe('Case entity', () => {
     it('attaches the document to the case', () => {
       const caseToVerify = new Case({});
       caseToVerify.addDocument({
-        documentType: 'Answer',
         documentId: '123',
+        documentType: 'Answer',
         userId: 'respondent',
       });
       expect(caseToVerify.documents.length).toEqual(1);
       expect(caseToVerify.documents[0]).toMatchObject({
-        documentType: 'Answer',
         documentId: '123',
+        documentType: 'Answer',
         userId: 'respondent',
       });
     });

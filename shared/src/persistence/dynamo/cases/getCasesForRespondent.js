@@ -17,9 +17,9 @@ exports.getCasesForRespondent = async ({
 }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
+    isVersioned: true,
     key: respondentId,
     type: 'activeCase',
-    isVersioned: true,
   });
 
   return stripWorkItems(
