@@ -60,8 +60,7 @@ function Case(rawCase) {
       status: rawCase.status || 'New',
     },
     {
-      docketNumberSuffix:
-        rawCase.docketNumberSuffix || getDocketNumberSuffix(rawCase),
+      docketNumberSuffix: getDocketNumberSuffix(rawCase),
     },
   );
 
@@ -74,6 +73,12 @@ function Case(rawCase) {
   } else {
     this.documents = [];
   }
+
+  this.documents.forEach(document => {
+    document.workItems.forEach(workItem => {
+      workItem.docketNumberSuffix = this.docketNumberSuffix;
+    });
+  });
 
   if (Array.isArray(this.docketRecord)) {
     this.docketRecord = this.docketRecord.map(
