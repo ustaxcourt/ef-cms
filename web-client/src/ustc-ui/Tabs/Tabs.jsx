@@ -3,28 +3,29 @@ import { connect } from '@cerebral/react';
 import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
-import {
-  useCerebralStateFactory,
-  decorateWithPostCallback,
-} from '../utils/useCerebralState';
-import { sequences, state } from 'cerebral';
+import { decorateWithPostCallback } from '../utils/useCerebralState';
+import { sequences, state, props } from 'cerebral';
+import PropTypes from 'prop-types';
+import { useCerebralStateFactory } from '../utils/useCerebralState';
 
 export function Tab() {}
 
-export function TabsComponent(props) {
-  let { get, bind, onSelect, children, defaultActiveTab } = props;
-
+export function TabsComponent({
+  bind,
+  value,
+  simpleSetter,
+  onSelect,
+  children,
+  defaultActiveTab,
+}) {
   let activeKey, setTab;
 
   defaultActiveTab =
     defaultActiveTab || getDefaultAttribute(children, 'tabName');
 
   if (bind) {
-    /* istanbul ignore next */
-    [activeKey, setTab] = useCerebralStateFactory(get, sequences, state)(
-      bind,
-      defaultActiveTab,
-    );
+    const useCerebralState = useCerebralStateFactory(simpleSetter, value);
+    [activeKey, setTab] = useCerebralState(bind, defaultActiveTab);
   } else {
     [activeKey, setTab] = useState(defaultActiveTab);
   }
@@ -84,4 +85,20 @@ export function TabsComponent(props) {
   );
 }
 
-export const Tabs = connect(TabsComponent);
+TabsComponent.propTypes = {
+  bind: PropTypes.string,
+  value: PropTypes.any,
+  simpleSetter: PropTypes.string,
+  onSelect: PropTypes.func,
+  children: PropTypes.node,
+  defaultActiveTab: PropTypes.string,
+};
+
+export const Tabs = connect(
+  {
+    bind: props.bind,
+    value: state[props.bind],
+    simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
+  },
+  TabsComponent,
+);
