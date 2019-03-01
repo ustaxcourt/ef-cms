@@ -88,7 +88,7 @@ export function TabsComponent({
 TabsComponent.propTypes = {
   bind: PropTypes.string,
   value: PropTypes.any,
-  simpleSetter: PropTypes.string,
+  simpleSetter: PropTypes.func,
   onSelect: PropTypes.func,
   children: PropTypes.node,
   defaultActiveTab: PropTypes.string,
