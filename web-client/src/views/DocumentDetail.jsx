@@ -4,7 +4,7 @@ import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CaseDetailEdit } from './CaseDetailEdit';
+import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { ErrorNotification } from './ErrorNotification';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';

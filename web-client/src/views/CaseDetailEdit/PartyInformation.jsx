@@ -3,7 +3,7 @@ import { state, sequences } from 'cerebral';
 import React from 'react';
 import { Contacts } from '../StartCase/Contacts';
 
-export const CaseDetailEditPartyInformation = connect(
+export const PartyInformation = connect(
   {
     caseDetail: state.caseDetail,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
