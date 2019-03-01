@@ -3,6 +3,8 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
+import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
@@ -17,6 +19,7 @@ import caseDetailHelper from './computeds/caseDetailHelper';
 import documentDetailHelper from './computeds/documentDetailHelper';
 import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
+import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 
 export default {
   path: '/',
@@ -58,6 +61,8 @@ export default {
 
   alertHelper,
   caseDetailHelper,
+  caseDetailEditContactsHelper,
+  caseDetailEditHelper,
   caseTypeDescriptionHelper,
   contactsHelper,
   dashboardPetitionerHelper,
@@ -72,4 +77,5 @@ export default {
   getTrialCityName,
   startCaseHelper,
   workQueueHelper,
+  trialCitiesHelper,
 };

@@ -3,22 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 
-import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
+import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 
-export const CaseDetailEdit = connect(
+export const IRSNotice = connect(
   {
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
+    caseTypes: state.caseTypes,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     removeYearAmountSequence: sequences.removeYearAmountSequence,
-    showModal: state.showModal,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
-    submitting: state.submitting,
-    unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
@@ -27,14 +23,11 @@ export const CaseDetailEdit = connect(
     appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
+    caseTypes,
     caseDetailErrors,
     form,
     formattedCaseDetail,
     removeYearAmountSequence,
-    showModal,
-    submitCaseDetailEditSaveSequence,
-    submitting,
-    unsetFormSaveSuccessSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
     setIrsNoticeFalseSequence,
@@ -295,177 +288,28 @@ export const CaseDetailEdit = connect(
     };
 
     return (
-      <form
-        id="case-edit-form"
-        noValidate
-        onSubmit={e => {
-          e.preventDefault();
-          submitCaseDetailEditSaveSequence();
-        }}
-        role="form"
-        onFocus={() => {
-          unsetFormSaveSuccessSequence();
-        }}
-      >
-        {showModal === 'UpdateCaseCancelModalDialog' && (
-          <UpdateCaseCancelModalDialog />
+      <div className="blue-container">
+        <h3>IRS Notice</h3>
+
+        {renderIrsNoticeRadios()}
+
+        <CaseTypeSelect
+          allowDefaultOption={false}
+          legend="Type of Case"
+          onChange="updateCaseValueSequence"
+          validation="autoSaveCaseSequence"
+          value={caseDetail.caseType}
+          caseTypes={caseTypes}
+        />
+
+        {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
+        {formattedCaseDetail.shouldShowYearAmounts && (
+          <React.Fragment>
+            <hr />
+            {renderYearAmounts()}
+          </React.Fragment>
         )}
-        <div className="blue-container">
-          <h3>IRS Notice</h3>
-
-          {renderIrsNoticeRadios()}
-
-          <span className="label">Type of Case</span>
-          <p>{caseDetail.caseType}</p>
-
-          {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
-          {formattedCaseDetail.shouldShowYearAmounts && (
-            <React.Fragment>
-              <hr />
-              {renderYearAmounts()}
-            </React.Fragment>
-          )}
-        </div>
-        <div className="blue-container">
-          <h3>Case Information</h3>
-          <span className="label">Case Procedure</span>
-          <p>{caseDetail.procedureType} Tax Case</p>
-          <span className="label">Trial Location</span>
-          <p>{caseDetail.preferredTrialCity}</p>
-          <div className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}>
-            <fieldset>
-              <legend id="fee-payment-date-legend">Fee Payment Date</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="fee-payment-date-month" aria-hidden="true">
-                    MM
-                  </label>
-                  <input
-                    aria-describedby="fee-payment-date-legend"
-                    aria-label="month, two digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                    }
-                    id="fee-payment-date-month"
-                    max="12"
-                    min="1"
-                    name="payGovMonth"
-                    type="number"
-                    value={form.payGovMonth || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="fee-payment-date-day" aria-hidden="true">
-                    DD
-                  </label>
-                  <input
-                    aria-describedby="fee-payment-date-legend"
-                    aria-label="day, two digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                    }
-                    id="fee-payment-date-day"
-                    max="31"
-                    min="1"
-                    name="payGovDay"
-                    type="number"
-                    value={form.payGovDay || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="fee-payment-date-year" aria-hidden="true">
-                    YYYY
-                  </label>
-                  <input
-                    aria-describedby="fee-payment-date-legend"
-                    aria-label="year, four digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                    }
-                    id="fee-payment-date-year"
-                    max="2100"
-                    min="1900"
-                    name="payGovYear"
-                    type="number"
-                    value={form.payGovYear || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              {caseDetailErrors.payGovDate && (
-                <div className="usa-input-error-message beneath" role="alert">
-                  {caseDetailErrors.payGovDate}
-                </div>
-              )}
-            </fieldset>
-          </div>
-
-          <div className="usa-form-group">
-            <label htmlFor="fee-payment-id">Fee Payment ID</label>
-            <input
-              id="fee-payment-id"
-              name="payGovId"
-              type="number"
-              value={caseDetail.payGovId || ''}
-              onBlur={() => {
-                autoSaveCaseSequence();
-              }}
-              onChange={e => {
-                updateCaseValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
-        </div>
-        <button
-          aria-disabled={submitting ? 'true' : 'false'}
-          className={
-            submitting ? 'usa-button-active' : 'usa-button usa-button-secondary'
-          }
-          disabled={submitting}
-          type="submit"
-        >
-          {submitting && <div className="spinner" />}
-          Save
-        </button>
-        {form.showSaveSuccess && (
-          <span className="mini-success">
-            <FontAwesomeIcon icon="check-circle" size="sm" />
-            Your changes have been saved.
-          </span>
-        )}
-      </form>
+      </div>
     );
   },
 );
