@@ -15,7 +15,7 @@ export const getUsersInSectionAction = ({ section }) =>
   async ({ applicationContext }) => {
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSection({ section, applicationContext });
+      .getUsersInSection({ applicationContext, section });
     return {
       users,
     };

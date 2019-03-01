@@ -26,58 +26,58 @@ describe('caseTypeDescriptionHelper', () => {
     });
     expect(result).toMatchObject({
       caseTypes: [
-        { type: 'Deficiency', description: 'Notice of Deficiency' },
+        { description: 'Notice of Deficiency', type: 'Deficiency' },
         {
-          type: 'CDP (Lien/Levy)',
           description: 'Notice of Determination Concerning Collection Action',
+          type: 'CDP (Lien/Levy)',
         },
         {
-          type: 'Innocent Spouse',
           description:
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
+          type: 'Innocent Spouse',
         },
         {
-          type: 'Partnership (Section 6226)',
           description: 'Readjustment of Partnership Items Code Section 6226',
+          type: 'Partnership (Section 6226)',
         },
         {
-          type: 'Partnership (Section 6228)',
           description: 'Adjustment of Partnership Items Code Section 6228',
+          type: 'Partnership (Section 6228)',
         },
         {
-          type: 'Partnership (BBA Section 1101)',
           description: 'Partnership Action Under BBA Section 1101',
+          type: 'Partnership (BBA Section 1101)',
         },
         {
-          type: 'Whistleblower',
           description:
             'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
+          type: 'Whistleblower',
         },
         {
-          type: 'Worker Classification',
           description: 'Notice of Determination of Worker Classification',
+          type: 'Worker Classification',
         },
         {
-          type: 'Declaratory Judgment (Retirement Plan)',
           description: 'Declaratory Judgment (Retirement Plan)',
+          type: 'Declaratory Judgment (Retirement Plan)',
         },
         {
-          type: 'Declaratory Judgment (Exempt Organization)',
           description: 'Declaratory Judgment (Exempt Organization)',
+          type: 'Declaratory Judgment (Exempt Organization)',
         },
         {
-          type: 'Passport',
           description:
             'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
+          type: 'Passport',
         },
         {
-          type: 'Interest Abatement',
           description:
             'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
+          type: 'Interest Abatement',
         },
         {
-          type: 'Other',
           description: 'Other',
+          type: 'Other',
         },
       ],
     });
@@ -106,39 +106,39 @@ describe('caseTypeDescriptionHelper', () => {
     });
     expect(result).toMatchObject({
       caseTypes: [
-        { type: 'Deficiency', description: 'Deficiency' },
+        { description: 'Deficiency', type: 'Deficiency' },
         {
-          type: 'CDP (Lien/Levy)',
           description: 'CDP (Lien/Levy)',
+          type: 'CDP (Lien/Levy)',
         },
         {
-          type: 'Innocent Spouse',
           description: 'Innocent Spouse',
+          type: 'Innocent Spouse',
         },
         {
-          type: 'Whistleblower',
           description: 'Whistleblower',
+          type: 'Whistleblower',
         },
         {
-          type: 'Worker Classification',
           description: 'Worker Classification',
+          type: 'Worker Classification',
         },
         {
-          type: 'Declaratory Judgment (Retirement Plan)',
           description: 'Declaratory Judgment (Retirement Plan)',
+          type: 'Declaratory Judgment (Retirement Plan)',
         },
         {
-          type: 'Declaratory Judgment (Exempt Organization)',
           description: 'Declaratory Judgment (Exempt Organization)',
+          type: 'Declaratory Judgment (Exempt Organization)',
         },
         {
-          type: 'Interest Abatement',
           description:
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement',
+          type: 'Interest Abatement',
         },
         {
-          type: 'Other',
           description: 'Other',
+          type: 'Other',
         },
       ],
     });

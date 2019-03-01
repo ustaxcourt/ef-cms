@@ -49,7 +49,7 @@ const router = {
       const hash = queryString.parse(location.hash); // cognito uses a # instead of ?
       const token = hash.id_token || query.token;
       const path = query.path || '/';
-      app.getSequence('loginWithTokenSequence')({ token, path });
+      app.getSequence('loginWithTokenSequence')({ path, token });
     });
     route('/before-starting-a-case', () => {
       if (checkUserLoggedIn(app)) {
@@ -74,7 +74,7 @@ const router = {
       const { token, path } = query;
       if (token) {
         document.title = `Mock Login ${pageTitleSuffix}`;
-        app.getSequence('submitLoginSequence')({ token, path });
+        app.getSequence('submitLoginSequence')({ path, token });
         return;
       }
 

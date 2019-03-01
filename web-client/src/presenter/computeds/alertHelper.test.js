@@ -13,8 +13,8 @@ describe('alertHelper', () => {
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
-      showSingleMessage: true,
       showMultipleMessages: false,
+      showSingleMessage: true,
       showTitleOnly: false,
     });
   });
@@ -27,8 +27,8 @@ describe('alertHelper', () => {
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
-      showSingleMessage: false,
       showMultipleMessages: false,
+      showSingleMessage: false,
       showTitleOnly: true,
     });
   });
@@ -39,8 +39,8 @@ describe('alertHelper', () => {
     });
     expect(result).toMatchObject({
       showErrorAlert: false,
-      showSingleMessage: false,
       showMultipleMessages: false,
+      showSingleMessage: false,
       showTitleOnly: false,
     });
   });

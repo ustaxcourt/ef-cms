@@ -7,15 +7,15 @@ describe('workQueueHelper', () => {
     const result = await runCompute(workQueueHelper, {
       state: {
         selectedWorkItems: [true],
-        workQueueToDisplay: { queue: 'section', box: 'inbox' },
+        workQueueToDisplay: { box: 'inbox', queue: 'section' },
       },
     });
     expect(result).toMatchObject({
-      showSendToBar: true,
-      showSectionWorkQueue: true,
-      showIndividualWorkQueue: false,
       showInbox: true,
+      showIndividualWorkQueue: false,
       showOutbox: false,
+      showSectionWorkQueue: true,
+      showSendToBar: true,
     });
   });
 
@@ -23,15 +23,15 @@ describe('workQueueHelper', () => {
     const result = await runCompute(workQueueHelper, {
       state: {
         selectedWorkItems: [],
-        workQueueToDisplay: { queue: 'my', box: 'outbox' },
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
     expect(result).toMatchObject({
-      showSendToBar: false,
-      showSectionWorkQueue: false,
-      showIndividualWorkQueue: true,
       showInbox: false,
+      showIndividualWorkQueue: true,
       showOutbox: true,
+      showSectionWorkQueue: false,
+      showSendToBar: false,
     });
   });
 });

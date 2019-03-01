@@ -12,8 +12,8 @@ export const validateStartCaseSequence = [
       computeIrsNoticeDateAction,
       validatePetitionAction,
       {
-        success: [clearAlertsAction],
         error: [setValidationErrorsAction],
+        success: [clearAlertsAction],
       },
     ],
   },
