@@ -38,6 +38,7 @@ export const CaseDetailEditPartyInformation = connect(
         </div>
 
         <Contacts
+          parentView="CaseDetail"
           bind="caseDetail"
           emailBind="caseDetail.contactPrimary"
           onChange="updateCaseValueSequence"

@@ -6,6 +6,7 @@ import { ContactSecondary } from './ContactSecondary';
 
 export const Contacts = connect(
   {
+    parentView: props.parentView,
     bind: props.bind,
     emailBind: props.emailBind,
     onChange: props.onChange,
@@ -15,6 +16,7 @@ export const Contacts = connect(
     showSecondaryContact: props.showSecondaryContact,
   },
   ({
+    parentView,
     bind,
     emailBind,
     onChange,
@@ -27,6 +29,7 @@ export const Contacts = connect(
       <React.Fragment>
         {showPrimaryContact && (
           <ContactPrimary
+            parentView={parentView}
             bind={bind}
             emailBind={emailBind}
             onChange={onChange}
@@ -36,6 +39,7 @@ export const Contacts = connect(
         )}
         {showSecondaryContact && (
           <ContactSecondary
+            parentView={parentView}
             bind={bind}
             onChange={onChange}
             onBlur={onBlur}
