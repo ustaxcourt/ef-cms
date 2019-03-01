@@ -1,5 +1,7 @@
 import { state } from 'cerebral';
 
+import { showContactsHelper } from '../computeds/showContactsHelper';
+
 /**
  * Forwards the workItem associated with props.workItemId to a form.forwardRecipientId and also adds the message set on form.forwardMessage.
  * Displays a success alert on success.
@@ -9,9 +11,15 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store
  */
 export const resetContactsAction = async ({ get, store }) => {
+  const partyType = get(state.caseDetail.partyType);
+  const { PARTY_TYPES } = get(state.constants);
+  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+
   store.set(state.caseDetail.contactPrimary, {
     countryType: 'domestic',
     email: get(state.caseDetail.contactPrimary.email),
   });
-  store.set(state.caseDetail.contactSecondary, { countryType: 'domestic' });
+  if (showContacts.contactSecondary) {
+    store.set(state.caseDetail.contactSecondary, { countryType: 'domestic' });
+  }
 };
