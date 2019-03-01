@@ -17,6 +17,7 @@ import caseDetailHelper from './computeds/caseDetailHelper';
 import documentDetailHelper from './computeds/documentDetailHelper';
 import startCaseHelper from './computeds/startCaseHelper';
 import workQueueHelper from './computeds/workQueueHelper';
+import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 
 export default {
   path: '/',
@@ -72,4 +73,5 @@ export default {
   getTrialCityName,
   startCaseHelper,
   workQueueHelper,
+  trialCitiesHelper,
 };
