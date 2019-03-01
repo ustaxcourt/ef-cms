@@ -1,11 +1,14 @@
-export const useCerebralStateFactory = (get, sequences, state) => (
+// eslint-disable-next-line no-unused-vars
+import { get, sequences, state } from 'cerebral';
+
+export const useCerebralStateFactory = (simpleSetter, value) => (
   bind,
   defaultValue,
 ) => {
-  let getter = get(state[bind]);
+  let getter = value;
 
   const setter = newValue => {
-    return get(sequences.cerebralBindSimpleSetStateSequence)({
+    return simpleSetter({
       key: bind,
       value: newValue,
     });
