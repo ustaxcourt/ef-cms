@@ -10,9 +10,6 @@ export default test => {
     });
     expect(helper.showSmallTrialCitiesHint).toBe(false);
     expect(helper.showRegularTrialCitiesHint).toBe(false);
-    expect(helper.trialCitiesByState['Alabama'][0]).toEqual(
-      'Birmingham, Alabama',
-    );
     expect(test.getState('form.preferredTrialCity')).toEqual(undefined);
     await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',

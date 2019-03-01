@@ -2,22 +2,10 @@ import { state } from 'cerebral';
 import { showContactsHelper } from '../helpers/showContactsHelper';
 
 export default get => {
-  const { PARTY_TYPES, TRIAL_CITIES } = get(state.constants);
+  const { PARTY_TYPES } = get(state.constants);
 
   const form = get(state.form);
   const petition = get(state.petition);
-  const procedureType = get(state.form.procedureType);
-  const trialCities =
-    procedureType === 'Small' ? TRIAL_CITIES.SMALL : TRIAL_CITIES.REGULAR;
-  const getTrialCityName = get(state.getTrialCityName);
-  const states = {};
-  trialCities.forEach(
-    trialCity =>
-      (states[trialCity.state] = [
-        ...(states[trialCity.state] || []),
-        getTrialCityName(trialCity),
-      ]),
-  );
 
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
@@ -28,7 +16,6 @@ export default get => {
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSelectTrial: !!form.procedureType,
     showSmallTrialCitiesHint: form.procedureType === 'Small',
-    trialCitiesByState: states,
 
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showMinorIncompetentFilingOptions:
