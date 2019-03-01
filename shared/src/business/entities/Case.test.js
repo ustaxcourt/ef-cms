@@ -2,7 +2,6 @@ const assert = require('assert');
 
 const Case = require('./Case');
 const DocketRecord = require('./DocketRecord');
-const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./Contacts/PetitionContact');
 
@@ -568,22 +567,6 @@ describe('Case entity', () => {
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
-    });
-  });
-
-  describe('getTrialCities', () => {
-    it('returns the trial cities by procedure type', () => {
-      const procedureTypes = Case.getProcedureTypes();
-      procedureTypes.forEach(procedureType => {
-        const trialCities = Case.getTrialCities(procedureType);
-        expect(trialCities).not.toBeNull();
-        expect(trialCities.length).toBeGreaterThan(1);
-      });
-    });
-    it('returns the regular trial cities for unidentified procedure type', () => {
-      const procedureType = 'unknown';
-      const trialCities = Case.getTrialCities(procedureType);
-      expect(trialCities).toEqual(REGULAR_TRIAL_CITIES);
     });
   });
 });

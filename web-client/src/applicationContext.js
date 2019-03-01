@@ -20,7 +20,6 @@ import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInt
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
-import { getTrialCities } from '../../shared/src/business/useCases/getTrialCitiesInteractor';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
@@ -51,6 +50,7 @@ import {
   BUSINESS_TYPES,
   COUNTRY_TYPES,
 } from '../../shared/src/business/entities/Contacts/PetitionContact';
+import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 let user;
 
@@ -87,7 +87,6 @@ const allUseCases = {
   getSentWorkItemsForUser,
   getInternalUsers,
   getProcedureTypes,
-  getTrialCities,
   getUser,
   getUsersInSection,
   getWorkItem,
@@ -143,6 +142,7 @@ const applicationContext = {
     ESTATE_TYPES,
     BUSINESS_TYPES,
     COUNTRY_TYPES,
+    TRIAL_CITIES,
   }),
   getUseCases: () => allUseCases,
   getCurrentUser,
