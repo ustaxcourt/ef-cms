@@ -2,6 +2,8 @@ import { runCompute } from 'cerebral/test';
 
 import startCaseHelper from './startCaseHelper';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
+import { getTrialCityName } from '../computeds/formattedTrialCity';
 
 describe('start a case computed', () => {
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
@@ -9,7 +11,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         petition: {},
         form: {},
       },
@@ -22,7 +26,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         petition: {
           petitionFile: true,
         },
@@ -37,7 +43,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         petition: {
           petitionFile: true,
         },
@@ -55,7 +63,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         petition: {
           petitionFile: true,
         },
@@ -73,7 +83,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         form: {
           hasIrsNotice: true,
         },
@@ -88,7 +100,9 @@ describe('start a case computed', () => {
       state: {
         constants: {
           PARTY_TYPES,
+          TRIAL_CITIES,
         },
+        getTrialCityName,
         form: {
           hasIrsNotice: false,
         },

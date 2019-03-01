@@ -1,4 +1,4 @@
-const REGULAR_TRIAL_CITIES = [
+const REGULAR = [
   {
     state: 'Alabama',
     city: 'Birmingham',
@@ -277,7 +277,7 @@ const REGULAR_TRIAL_CITIES = [
   // },
 ];
 
-const SMALL_TRIAL_CITIES = [
+const SMALL = [
   {
     state: 'Alabama',
     city: 'Birmingham',
@@ -592,7 +592,7 @@ const SMALL_TRIAL_CITIES = [
   },
 ];
 
-module.exports = {
-  SMALL_TRIAL_CITIES,
-  REGULAR_TRIAL_CITIES,
+exports.TRIAL_CITIES = {
+  SMALL,
+  REGULAR,
 };
