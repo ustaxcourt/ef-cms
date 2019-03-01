@@ -1,7 +1,19 @@
 import { state } from 'cerebral';
 
-import { showContactsHelper } from '../helpers/showContactsHelper';
+import { showContactsHelper } from '../computeds/showContactsHelper';
 
+/**
+ * updates the partyType, filingType, otherType, businessType,
+ * contactPrimary, and/or contactSecondary depending on the
+ * key/value pair passed in via props
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store
+ * @param {Object} providers.props the cerebral store used for
+ * getting props.key and props.value
+ * @param {Object} providers.get the cerebral get function used
+ * for getting state.form.filingType
+ */
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
   const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);

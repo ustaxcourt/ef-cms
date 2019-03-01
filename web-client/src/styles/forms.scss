@@ -105,6 +105,29 @@ label.validated::after {
   width: 18rem;
   clear: none;
   float: left;
+  &.usa-form-group {
+    margin-bottom: 25px;
+  }
+}
+
+.document-detail-one-third .blue-container {
+  padding: 0;
+
+  #change-email-hint {
+    display: none;
+  }
+}
+
+.document-detail-one-third {
+  .phone-input {
+    clear: both;
+  }
+  .email-input {
+    margin-bottom: 25px;
+  }
+  .contact-group {
+    margin-top: 45px;
+  }
 }
 
 .clear-both {

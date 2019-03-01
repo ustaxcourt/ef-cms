@@ -1,11 +1,8 @@
 import { state } from 'cerebral';
 
-const {
-  PARTY_TYPES,
-} = require('../../../../shared/src/business/entities/Contacts/PetitionContact');
-
 export const contactsHelper = get => {
   const form = get(state.form);
+  const { PARTY_TYPES } = get(state.constants);
 
   let contactPrimary, contactSecondary;
   switch (form.partyType) {
