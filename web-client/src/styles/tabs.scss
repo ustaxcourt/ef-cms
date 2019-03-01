@@ -145,6 +145,7 @@ nav.horizontal-tabs,
   &.container-tabs {
     border: 1px solid $color-gray-lighter;
     > nav {
+      border-bottom: 2px solid $color-gray-lighter;
       background-color: $color-gray-lightest;
 
       ul {
