@@ -13,6 +13,8 @@ export const CaseInfo = connect(
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     trialCitiesHelper: state.trialCitiesHelper,
+    submitCaseDetailEditSaveSequence:
+      sequences.submitCaseDetailEditSaveSequence,
   },
   ({
     autoSaveCaseSequence,
@@ -22,6 +24,7 @@ export const CaseInfo = connect(
     form,
     updateCaseValueSequence,
     updateFormValueSequence,
+    submitCaseDetailEditSaveSequence,
   }) => {
     return (
       <div className="blue-container">
@@ -41,6 +44,21 @@ export const CaseInfo = connect(
           }}
           legend="Case Procedure"
         />
+
+        <div className="order-checkbox">
+          <input
+            id="order-to-show-cause"
+            type="checkbox"
+            name="orderToShowCause"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+        </div>
 
         <TrialCity
           label="Trial Location"
@@ -175,6 +193,87 @@ export const CaseInfo = connect(
               });
             }}
           />
+        </div>
+
+        <div className="order-checkbox">
+          <input
+            id="order-for-filing-fee"
+            type="checkbox"
+            name="orderForFilingFee"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+        </div>
+
+        <h3>Orders Needed</h3>
+        <div className="order-checkbox">
+          <input
+            id="order-for-ratification"
+            type="checkbox"
+            name="orderForRatification"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="order-for-ratification">
+            Order for Ratification of Petition
+          </label>
+        </div>
+        <div className="order-checkbox">
+          <input
+            id="notice-of-attachments"
+            type="checkbox"
+            name="noticeOfAttachments"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="notice-of-attachments">
+            Notice of Attachments in the Nature of Evidence
+          </label>
+        </div>
+        <div className="order-checkbox">
+          <input
+            id="order-for-amended-petition"
+            type="checkbox"
+            name="orderForAmendedPetition"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="order-for-amended-petition">
+            Order for Amended Petition
+          </label>
+        </div>
+        <div className="order-checkbox">
+          <input
+            id="order-for-amended-petition-and-filing-fee"
+            type="checkbox"
+            name="orderForAmendedPetitionAndFilingFee"
+            onChange={e => {
+              submitCaseDetailEditSaveSequence({
+                key: e.target.name,
+                value: e.target.checked ? true : undefined,
+              });
+            }}
+          />
+          <label htmlFor="order-for-amended-petition-and-filing-fee">
+            Order for Amended Petition and Filing Fee
+          </label>
         </div>
       </div>
     );

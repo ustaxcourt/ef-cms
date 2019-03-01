@@ -11,6 +11,8 @@ export const PartyInformation = connect(
     caseDetailEditHelper: state.caseDetailEditHelper,
     baseUrl: state.baseUrl,
     token: state.token,
+    submitCaseDetailEditSaveSequence:
+      sequences.submitCaseDetailEditSaveSequence,
   },
   ({
     caseDetail,
@@ -18,6 +20,7 @@ export const PartyInformation = connect(
     caseDetailEditHelper,
     baseUrl,
     token,
+    submitCaseDetailEditSaveSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
@@ -48,18 +51,36 @@ export const PartyInformation = connect(
 
         {caseDetailEditHelper.showOwnershipDisclosureStatement &&
           caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
-            <div className="usa-form-group">
-              <label htmlFor="ods-link">Ownership Disclosure Statement</label>
-              <a
-                href={`${baseUrl}/documents/${
-                  caseDetailEditHelper.ownershipDisclosureStatementDocumentId
-                }/documentDownloadUrl?token=${token}`}
-                aria-label="View PDF"
-              >
-                <FontAwesomeIcon icon="file-pdf" />
-                Ownership Disclosure Statement
-              </a>
-            </div>
+            <React.Fragment>
+              <div className="usa-form-group">
+                <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+                <a
+                  href={`${baseUrl}/documents/${
+                    caseDetailEditHelper.ownershipDisclosureStatementDocumentId
+                  }/documentDownloadUrl?token=${token}`}
+                  aria-label="View PDF"
+                >
+                  <FontAwesomeIcon icon="file-pdf" />
+                  Ownership Disclosure Statement
+                </a>
+              </div>
+              <div className="order-checkbox">
+                <input
+                  id="order-for-ods"
+                  type="checkbox"
+                  name="orderForOds"
+                  onChange={e => {
+                    submitCaseDetailEditSaveSequence({
+                      key: e.target.name,
+                      value: e.target.checked ? true : undefined,
+                    });
+                  }}
+                />
+                <label htmlFor="order-for-ods">
+                  Order for Ownership Disclosure Statement
+                </label>
+              </div>
+            </React.Fragment>
           )}
 
         <Contacts
