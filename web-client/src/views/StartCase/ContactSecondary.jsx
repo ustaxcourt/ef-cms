@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
 import { Address } from './Address';
@@ -8,26 +8,43 @@ import { InternationalAddress } from './InternationalAddress';
 
 export const ContactSecondary = connect(
   {
-    form: state.form,
+    parentView: props.parentView,
+    bind: props.bind,
+    data: state[props.bind],
     constants: state.constants,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    onChange: props.onChange,
+    updateFormValueSequence: sequences[props.onChange],
     validationErrors: state.validationErrors,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
-    contactsHelper: state.contactsHelper,
+    onBlur: props.onBlur,
+    validateStartCaseSequence: sequences[props.onBlur],
+    contactsHelper: state[props.contactsHelper],
   },
   ({
-    form,
+    parentView,
+    bind,
+    data,
     constants,
+    onChange,
     updateFormValueSequence,
     validationErrors,
+    onBlur,
     validateStartCaseSequence,
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group">
-        <h3>{contactsHelper.contactSecondary.header}</h3>
+      <div className="usa-form-group contact-group">
+        {parentView === 'CaseDetail' ? (
+          <h4>{contactsHelper.contactSecondary.header}</h4>
+        ) : (
+          <h3>{contactsHelper.contactSecondary.header}</h3>
+        )}
         <div className="blue-container">
-          <Country type="contactSecondary" />
+          <Country
+            type="contactSecondary"
+            bind={bind}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
           <div
             className={
               'usa-form-group ' +
@@ -45,7 +62,7 @@ export const ContactSecondary = connect(
               type="text"
               name="contactSecondary.name"
               autoCapitalize="none"
-              value={form.contactSecondary.name || ''}
+              value={data.contactSecondary.name || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -84,7 +101,7 @@ export const ContactSecondary = connect(
                 type="text"
                 name="contactSecondary.inCareOf"
                 autoCapitalize="none"
-                value={form.contactSecondary.inCareOf || ''}
+                value={data.contactSecondary.inCareOf || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -102,13 +119,23 @@ export const ContactSecondary = connect(
               )}
             </div>
           )}
-          {form.contactSecondary.countryType ===
+          {data.contactSecondary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
-            <Address type="contactSecondary" />
+            <Address
+              type="contactSecondary"
+              bind={bind}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
           )}
-          {form.contactSecondary.countryType ===
+          {data.contactSecondary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
-            <InternationalAddress type="contactSecondary" />
+            <InternationalAddress
+              type="contactSecondary"
+              bind={bind}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
           )}
           {contactsHelper.contactSecondary.displayPhone && (
             <div
@@ -127,7 +154,7 @@ export const ContactSecondary = connect(
                 name="contactSecondary.phone"
                 className="ustc-input-phone"
                 autoCapitalize="none"
-                value={form.contactSecondary.phone || ''}
+                value={data.contactSecondary.phone || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,

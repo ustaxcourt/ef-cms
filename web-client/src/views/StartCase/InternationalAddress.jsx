@@ -4,14 +4,14 @@ import React from 'react';
 
 export const InternationalAddress = connect(
   {
-    form: state.form,
+    data: state[props.bind],
     type: props.type,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    updateFormValueSequence: sequences[props.onChange],
+    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   ({
-    form,
+    data,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
@@ -35,7 +35,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.address1`}
             autoCapitalize="none"
-            value={form[type].address1 || ''}
+            value={data[type].address1 || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -61,7 +61,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.address2`}
             autoCapitalize="none"
-            value={form[type].address2 || ''}
+            value={data[type].address2 || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -82,7 +82,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.address3`}
             autoCapitalize="none"
-            value={form[type].address3 || ''}
+            value={data[type].address3 || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -113,7 +113,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.state`}
             autoCapitalize="none"
-            value={form[type].state || ''}
+            value={data[type].state || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -146,7 +146,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.city`}
             autoCapitalize="none"
-            value={form[type].city || ''}
+            value={data[type].city || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -181,7 +181,7 @@ export const InternationalAddress = connect(
             type="text"
             name={`${type}.postalCode`}
             autoCapitalize="none"
-            value={form[type].postalCode || ''}
+            value={data[type].postalCode || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,

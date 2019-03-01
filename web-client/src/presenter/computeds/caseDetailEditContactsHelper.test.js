@@ -1,13 +1,13 @@
 import { runCompute } from 'cerebral/test';
 
-import { contactsHelper } from './contactsHelper';
+import { caseDetailEditContactsHelper } from './caseDetailEditContactsHelper';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
-describe('contactsHelper', () => {
+describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Conservator', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.conservator },
+        caseDetail: { partyType: PARTY_TYPES.conservator },
         constants: {
           PARTY_TYPES,
         },
@@ -15,11 +15,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
+        header: 'Conservator Information',
         nameLabel: 'Name of Conservator',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
+        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
@@ -28,9 +28,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Corporation', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.corporation },
+        caseDetail: { partyType: PARTY_TYPES.corporation },
         constants: {
           PARTY_TYPES,
         },
@@ -38,7 +38,7 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About the Corporation You Are Filing For',
+        header: 'Corporation Information',
         nameLabel: 'Business Name',
         displayInCareOf: true,
       },
@@ -46,9 +46,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Custodian', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.custodian },
+        caseDetail: { partyType: PARTY_TYPES.custodian },
         constants: {
           PARTY_TYPES,
         },
@@ -56,11 +56,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
+        header: 'Custodian Information',
         nameLabel: 'Name of Custodian',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
+        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
@@ -69,9 +69,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Donor', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.donor },
+        caseDetail: { partyType: PARTY_TYPES.donor },
         constants: {
           PARTY_TYPES,
         },
@@ -79,16 +79,16 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About the Donor You Are Filing For',
+        header: 'Donor Information',
         nameLabel: 'Name of Petitioner',
       },
     });
   });
 
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc.', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.estate,
         },
         constants: {
@@ -98,22 +98,21 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header:
-          'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
+        header: 'Executor/Personal Representative/Etc.',
         nameLabel: 'Name of Executor/Personal Representative, etc.',
         displayTitle: true,
       },
       contactSecondary: {
-        header: 'Tell Us About the Estate You Are Filing For',
+        header: 'Estate Information',
         nameLabel: 'Name of Decedent',
       },
     });
   });
 
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc.', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.estateWithoutExecutor,
         },
         constants: {
@@ -123,7 +122,7 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About the Estate You Are Filing For',
+        header: 'Estate Information',
         nameLabel: 'Name of Decedent',
         displayInCareOf: true,
       },
@@ -131,9 +130,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Guardian', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.guardian,
         },
         constants: {
@@ -143,11 +142,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
+        header: 'Guardian Information',
         nameLabel: 'Name of Guardian',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
+        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
@@ -156,9 +155,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         constants: {
@@ -168,13 +167,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header:
-          'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
+        header: 'Next Friend Information',
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header:
-          'Tell Us About the Legally Incompetent Person You Are Filing For',
+        header: 'Legally Incompetent Person Information',
         nameLabel: 'Name of Legally Incompetent Person',
         displayInCareOf: true,
         displayPhone: true,
@@ -183,9 +180,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.nextFriendForMinor,
         },
         constants: {
@@ -195,11 +192,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Next Friend for This Minor',
+        header: 'Next Friend Information',
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header: 'Tell Us About the Minor You Are Filing For',
+        header: 'Minor Information',
         nameLabel: 'Name of Minor',
         displayInCareOf: true,
         displayPhone: true,
@@ -208,9 +205,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.partnershipBBA,
         },
         constants: {
@@ -220,11 +217,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Partnership Representative',
+        header: 'Partnership Representative',
         nameLabel: 'Name of Partnership Representative',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
+        header: 'Partnership Information',
         nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
@@ -233,9 +230,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         constants: {
@@ -245,12 +242,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header:
-          'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
+        header: 'Partnership (Other than Tax Matters Partner) Information',
         nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
+        header: 'Partnership Information',
         nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
@@ -259,9 +255,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as the tax matters partner)', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         constants: {
@@ -271,11 +267,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Tax Matters Partner',
+        header: 'Tax Matters Partner Information',
         nameLabel: 'Name of Tax Matters Partner',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
+        header: 'Partnership Information',
         nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
@@ -284,9 +280,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.petitioner,
         },
         constants: {
@@ -296,16 +292,16 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself',
+        header: 'Petitioner Information',
         nameLabel: 'Name',
       },
     });
   });
 
   it('should validate form view information for party type Petitioner & Spouse', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.petitionerSpouse,
         },
         constants: {
@@ -315,12 +311,12 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself',
+        header: 'Petitioner Information',
         nameLabel: 'Name',
         displayPhone: true,
       },
       contactSecondary: {
-        header: 'Tell Us About Your Spouse',
+        header: 'Spouse Information',
         nameLabel: "Spouse's Name",
         displayPhone: true,
       },
@@ -328,9 +324,9 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Deceased Spouse', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
         constants: {
@@ -340,20 +336,20 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself',
+        header: 'Petitioner Information',
         nameLabel: 'Name',
       },
       contactSecondary: {
-        header: 'Tell Us About Your Deceased Spouse',
+        header: 'Spouse Information',
         nameLabel: "Spouse's Name",
       },
     });
   });
 
   it('should validate form view information for party type Surviving Spouse', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.survivingSpouse,
         },
         constants: {
@@ -363,20 +359,20 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Surviving Spouse',
+        header: 'Petitioner Information',
         nameLabel: 'Name',
       },
       contactSecondary: {
-        header: 'Tell Us About Your Deceased Spouse',
+        header: 'Spouse Information',
         nameLabel: "Spouse's Name",
       },
     });
   });
 
   it('should validate form view information for party type Transferee', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.transferee,
         },
         constants: {
@@ -386,16 +382,16 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About the Transferee You Are Filing For',
+        header: 'Transferee Information',
         nameLabel: 'Name of Petitioner',
       },
     });
   });
 
   it('should validate form view information for party type Trust', async () => {
-    const result = await runCompute(contactsHelper, {
+    const result = await runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: {
+        caseDetail: {
           partyType: PARTY_TYPES.trust,
         },
         constants: {
@@ -405,11 +401,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
-        header: 'Tell Us About Yourself as the Trustee',
+        header: 'Trustee Information',
         nameLabel: 'Name of Trustee',
       },
       contactSecondary: {
-        header: 'Tell Us About the Trust You Are Filing For',
+        header: 'Trust Information',
         nameLabel: 'Name of Trust',
         displayInCareOf: true,
         displayPhone: true,
