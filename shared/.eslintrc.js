@@ -6,7 +6,14 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
   ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jsdoc'],
+  plugins: [
+    'prettier',
+    'react',
+    'jsx-a11y',
+    'cypress',
+    'jsdoc',
+    'sort-keys-fix',
+  ],
   rules: {
     quotes: ['error', 'single'],
     'no-console': ['error', { allow: ['warn', 'error'] }],
@@ -30,9 +37,23 @@ module.exports = {
         allowChildren: false,
       },
     ],
-    "jsdoc/require-param": 1,
-    "jsdoc/require-param-name": 1,
-    "jsdoc/check-types": 1,
+    'jsdoc/require-param': 1,
+    'jsdoc/require-param-name': 1,
+    'jsdoc/check-types': 1,
+    'sort-imports': [
+      'warn',
+      {
+        ignoreCase: false,
+        ignoreDeclarationSort: true,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+      },
+    ],
+    'sort-keys-fix/sort-keys-fix': [
+      'warn',
+      'asc',
+      { caseSensitive: false, natural: true },
+    ],
   },
   settings: {
     react: {
@@ -49,6 +70,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 9,
     sourceType: 'module',
-    jsx: true
+    jsx: true,
   },
 };

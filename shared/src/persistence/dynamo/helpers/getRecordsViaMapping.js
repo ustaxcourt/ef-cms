@@ -11,7 +11,6 @@ exports.getRecordsViaMapping = async ({
 
   const mapping = await client.query({
     applicationContext,
-    TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -19,17 +18,18 @@ exports.getRecordsViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    TableName: TABLE,
   });
 
   const ids = mapping.map(metadata => metadata.sk);
 
   const results = await client.batchGet({
     applicationContext,
-    tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
       sk: isVersioned ? '0' : id,
     })),
+    tableName: TABLE,
   });
 
   return stripInternalKeys(results);

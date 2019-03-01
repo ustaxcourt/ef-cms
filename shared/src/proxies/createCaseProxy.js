@@ -14,8 +14,8 @@ exports.createCase = async ({
   const response = await applicationContext.getHttpClient().post(
     `${applicationContext.getBaseUrl()}/cases`,
     {
-      petitionFileId,
       ownershipDisclosureFileId,
+      petitionFileId,
       petitionMetadata,
     },
     {

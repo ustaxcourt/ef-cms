@@ -14,7 +14,7 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     const workItems = JSON.parse(event.body);
     return applicationContext.getUseCases().assignWorkItems({
-      workItems: workItems,
       applicationContext,
+      workItems: workItems,
     });
   });

@@ -16,6 +16,16 @@ const goToDashboard = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
+    docketclerk: [
+      getUsersInSectionAction({ section: 'docket' }),
+      setUsersAction,
+      ...chooseWorkQueueSequence,
+      setCurrentPageAction('DashboardDocketClerk'),
+    ],
+    intakeclerk: [
+      clearAlertsAction,
+      setCurrentPageAction('DashboardIntakeClerk'),
+    ],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
@@ -26,16 +36,6 @@ const goToDashboard = [
       setUsersAction,
       ...chooseWorkQueueSequence,
       setCurrentPageAction('DashboardPetitionsClerk'),
-    ],
-    docketclerk: [
-      getUsersInSectionAction({ section: 'docket' }),
-      setUsersAction,
-      ...chooseWorkQueueSequence,
-      setCurrentPageAction('DashboardDocketClerk'),
-    ],
-    intakeclerk: [
-      clearAlertsAction,
-      setCurrentPageAction('DashboardIntakeClerk'),
     ],
     respondent: [
       clearAlertsAction,
@@ -54,7 +54,7 @@ const goToDashboard = [
 export const gotoDashboardSequence = [
   isLoggedInAction,
   {
-    unauthorized: [redirectToCognitoAction],
     isLoggedIn: goToDashboard,
+    unauthorized: [redirectToCognitoAction],
   },
 ];

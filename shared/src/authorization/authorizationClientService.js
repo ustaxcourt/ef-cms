@@ -11,6 +11,7 @@ exports.CREATE_USER = 'createUser';
 exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 
 const AUTHORIZATION_MAP = {
+  admin: [exports.CREATE_USER],
   docketclerk: [
     exports.CASE_METADATA,
     exports.GET_CASE,
@@ -56,7 +57,6 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
   ],
-  admin: [exports.CREATE_USER],
   taxpayer: [exports.PETITION],
 };
 

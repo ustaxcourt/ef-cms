@@ -52,21 +52,21 @@ const syncChangedCaseStatus = async ({
 
     await createMappingRecord({
       applicationContext,
-      pkId: userId,
-      skId: createdAt,
       item: {
         workItemId: existing.workItemId,
       },
+      pkId: userId,
+      skId: createdAt,
       type: 'sentWorkItem',
     });
 
     await createMappingRecord({
       applicationContext,
-      pkId: existing.section,
-      skId: createdAt,
       item: {
         workItemId: existing.workItemId,
       },
+      pkId: existing.section,
+      skId: createdAt,
       type: 'sentWorkItem',
     });
   } else if (caseToSave.status === 'Recalled') {
@@ -115,7 +115,6 @@ const handleExistingWorkItem = async ({
   }
 
   if (existing.docketNumberSuffix !== workItem.docketNumberSuffix) {
-    console.log('we are here', workItem);
     await exports.updateWorkItem({
       applicationContext,
       workItemToSave: workItem,
@@ -125,11 +124,11 @@ const handleExistingWorkItem = async ({
   if (!existing.completedAt && workItem.completedAt) {
     await createMappingRecord({
       applicationContext,
-      pkId: workItem.section,
-      skId: workItem.completedAt,
       item: {
         workItemId: existing.workItemId,
       },
+      pkId: workItem.section,
+      skId: workItem.completedAt,
       type: 'sentWorkItem',
     });
   }
@@ -232,11 +231,11 @@ exports.reassignWorkItem = async ({
 exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
   await client.put({
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

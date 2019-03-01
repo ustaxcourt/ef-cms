@@ -17,28 +17,28 @@ const applicationContext = {
 describe('saveCase', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
+        caseId: '123',
         pk: '123',
         sk: '123',
-        caseId: '123',
         status: 'New',
       },
     ]);
@@ -64,22 +64,22 @@ describe('saveCase', () => {
 
   it('should strip the pk and sk from the returned case', async () => {
     const result = await saveCase({
+      applicationContext,
       caseToSave: {
         caseId: '123',
         status: 'New',
       },
-      applicationContext,
     });
     expect(result).to.deep.equal({ caseId: '123', status: 'New' });
   });
 
   it('should attempt to delete and put a new status mapping if the status changes', async () => {
     await saveCase({
+      applicationContext,
       caseToSave: {
         caseId: '123',
         status: 'General',
       },
-      applicationContext,
     });
     expect(client.delete.getCall(0).args[0].key.pk).to.equal('New|case-status');
     expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
@@ -92,13 +92,13 @@ describe('saveCase', () => {
   it('creates a docket number mapping if this is the first time a case was created', async () => {
     client.get.resolves(null);
     await saveCase({
+      applicationContext,
       caseToSave: {
         caseId: '123',
-        userId: 'taxpayer',
-        status: 'General',
         docketNumber: '101-18',
+        status: 'General',
+        userId: 'taxpayer',
       },
-      applicationContext,
     });
     expect(client.put.getCall(0).args[0].Item.pk).to.equal('taxpayer|case');
     expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');

@@ -12,8 +12,8 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().createDocument({
+      applicationContext,
       caseId: event.pathParameters.caseId,
       document: JSON.parse(event.body),
-      applicationContext,
     });
   });

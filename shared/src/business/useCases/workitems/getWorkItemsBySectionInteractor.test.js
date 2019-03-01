@@ -4,30 +4,30 @@ describe('getWorkItemsBySection', () => {
   let applicationContext;
 
   let mockWorkItem = {
-    createdAt: '',
-    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    messages: [],
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    sentBy: 'docketclerk',
-    section: 'docket',
+    createdAt: '',
     docketNumber: '101-18',
     document: {
       sentBy: 'taxyaper',
     },
+    messages: [],
+    section: 'docket',
+    sentBy: 'docketclerk',
+    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'taxpayer',
+        };
+      },
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'taxpayer',
-          role: 'petitioner',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
@@ -42,16 +42,16 @@ describe('getWorkItemsBySection', () => {
 
   it('returns an empty array if no work items are returned', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'docketclerk',
+          userId: 'docketclerk',
+        };
+      },
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'docketclerk',
-          role: 'docketclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     const result = await getWorkItemsBySection({
       applicationContext,
@@ -61,20 +61,20 @@ describe('getWorkItemsBySection', () => {
 
   it('validates and returns the work items', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'docketclerk',
+          userId: 'docketclerk',
+        };
+      },
       getPersistenceGateway: () => ({
         getWorkItemsBySection: async () => [mockWorkItem],
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'docketclerk',
-          role: 'docketclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     const result = await getWorkItemsBySection({
-      userId: 'docketclerk',
       applicationContext,
+      userId: 'docketclerk',
     });
     expect(result).toMatchObject([mockWorkItem]);
   });

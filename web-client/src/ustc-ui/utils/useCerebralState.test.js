@@ -1,7 +1,7 @@
 import {
-  useCerebralStateFactory,
   decorateWithPostCallback,
   decorateWithPreemptiveCallback,
+  useCerebralStateFactory,
 } from './useCerebralState';
 
 describe('decorateWithPostCallback', () => {

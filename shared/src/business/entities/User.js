@@ -8,10 +8,10 @@ const joi = require('joi-browser');
 joiValidationDecorator(
   User,
   joi.object().keys({
-    userId: joi.string().required(),
-    token: joi.string().optional(),
-    name: joi.string().optional(),
     email: joi.string().optional(),
+    name: joi.string().optional(),
+    token: joi.string().optional(),
+    userId: joi.string().required(),
   }),
 );
 /**

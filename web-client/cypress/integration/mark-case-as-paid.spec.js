@@ -1,7 +1,7 @@
 xdescribe('Mark a Case as Paid', function() {
   describe('Docketclerk logs', () => {
     before(() => {
-      cy.login('docketclerk', '/case-detail/102-18');
+      cy.login('docketclerk', '/case-detail/102-19');
     });
 
     it('click on the case info tab', () => {
