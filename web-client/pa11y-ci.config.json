@@ -331,8 +331,8 @@
         "wait for #tab-work-queue to be visible",
         "click element #tab-work-queue",
         "wait for #section-work-queue to be visible",
-        "wait for #label-d017a142-85de-4ede-bd10-a9094ddc391a to be visible",
-        "click element #label-d017a142-85de-4ede-bd10-a9094ddc391a",
+        "wait for #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2 to be visible",
+        "click element #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
         "wait for td.action-bar to be visible"
       ]
     },
@@ -340,13 +340,13 @@
     "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     {
       "notes": "checks a11y of forward form",
-      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dd219579-9f1a-49e3-a092-f79164631ae8&info=forwarding-form",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7&info=forwarding-form",
       "actions": [
         "wait for #tab-pending-messages to be visible",
         "click element #tab-pending-messages",
-        "wait for .send-to[data-workitemid='d017a142-85de-4ede-bd10-a9094ddc391a'] to be visible",
-        "click element .send-to[data-workitemid='d017a142-85de-4ede-bd10-a9094ddc391a']",
-        "wait for form.forward-form[data-workitemid='d017a142-85de-4ede-bd10-a9094ddc391a'] to be visible"
+        "wait for .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
+        "click element .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2']",
+        "wait for form.forward-form[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible"
       ]
     },
 
