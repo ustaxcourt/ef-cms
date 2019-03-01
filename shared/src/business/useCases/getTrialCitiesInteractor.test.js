@@ -35,24 +35,4 @@ describe('Get trial cities', () => {
 
     expect(error).toBeUndefined();
   });
-
-  it('throws a UnauthorizedError if user is unauthorized', async () => {
-    const applicationContext = {
-      getCurrentUser: () => {
-        return { userId: 'notauser' };
-      },
-    };
-
-    let error;
-    try {
-      await getTrialCities({
-        procedureType: 'Small',
-        applicationContext: applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
-  });
 });
