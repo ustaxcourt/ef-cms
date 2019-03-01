@@ -54,8 +54,11 @@ describe('forEach', () => {
 });
 
 describe('getDefaultAttribute', () => {
-  it('should map items and exclude null', () => {
+  it('should find first attribute and return', () => {
     const children = [
+      <div key="what" kid="someIds">
+        sds
+      </div>,
       <div key="what" id="someId">
         sds
       </div>,
