@@ -38,9 +38,9 @@ exports.filePetition = async ({
   }
 
   await applicationContext.getUseCases().createCase({
-    petitionFileId,
-    ownershipDisclosureFileId,
-    petitionMetadata,
     applicationContext,
+    ownershipDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
   });
 };

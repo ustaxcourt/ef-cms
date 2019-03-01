@@ -33,11 +33,11 @@ exports.fileRespondentDocument = async ({
     });
 
   await applicationContext.getUseCases().createDocument({
-    document: {
-      documentType,
-      documentId,
-    },
-    caseId: caseToUpdate.caseId,
     applicationContext,
+    caseId: caseToUpdate.caseId,
+    document: {
+      documentId,
+      documentType,
+    },
   });
 };

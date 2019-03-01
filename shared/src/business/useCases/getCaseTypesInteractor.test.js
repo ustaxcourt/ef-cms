@@ -7,8 +7,8 @@ describe('Get case types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          userId: 'taxpayer',
           role: 'petitioner',
+          userId: 'taxpayer',
         };
       },
     };

@@ -3,38 +3,38 @@ const { omit } = require('lodash');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 const MOCK_CASE = {
-  userId: 'userId',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  docketNumber: '56789-18',
-  hasIrsNotice: false,
-  status: 'New',
-  partyType: 'Petitioner',
   caseType: 'Other',
-  procedureType: 'Regular',
-  filingType: 'Myself',
   createdAt: new Date().toISOString(),
-  preferredTrialCity: 'Washington, D.C.',
-  petitioners: [{ name: 'Test Taxpayer' }],
+  docketNumber: '56789-18',
   documents: [
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer',
       role: 'petitioner',
+      userId: 'taxpayer',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer',
       role: 'petitioner',
+      userId: 'taxpayer',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      userId: 'taxpayer',
       role: 'petitioner',
+      userId: 'taxpayer',
     },
   ],
+  filingType: 'Myself',
+  hasIrsNotice: false,
+  partyType: 'Petitioner',
+  petitioners: [{ name: 'Test Taxpayer' }],
+  preferredTrialCity: 'Washington, D.C.',
+  procedureType: 'Regular',
+  status: 'New',
+  userId: 'userId',
 };
 
 describe('updateCase', () => {
@@ -42,26 +42,26 @@ describe('updateCase', () => {
 
   it('should throw an error if the persistence layer returns an invalid case', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateCase({
+        applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         petitioners: [{ name: 'Test Taxpayer' }],
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -74,26 +74,26 @@ describe('updateCase', () => {
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateCase({
+        applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'documents'),
         petitioners: [{ name: 'Test Taxpayer' }],
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -108,26 +108,26 @@ describe('updateCase', () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let updatedCase;
 
     updatedCase = await updateCase({
+      applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       petitioners: [{ name: 'Test Taxpayer' }],
-      applicationContext,
     });
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
@@ -145,25 +145,25 @@ describe('updateCase', () => {
     });
 
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
 
     const updatedCase = await updateCase({
+      applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
       petitioners: [{ name: 'Test Taxpayer' }],
-      applicationContext,
     });
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
@@ -173,25 +173,25 @@ describe('updateCase', () => {
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
     applicationContext = {
-      getPersistenceGateway: () => {
-        return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
-        };
-      },
+      environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
           userId: 'nope',
         };
       },
-      environment: { stage: 'local' },
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
     };
     let error;
     try {
       await updateCase({
+        applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
         petitioners: [{ name: 'Test Taxpayer' }],
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -202,25 +202,25 @@ describe('updateCase', () => {
 
   it('should throw an error if the user is unauthorized to update a case part deux', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'nope',
+          userId: 'nope',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           saveCase: () => Promise.resolve(MOCK_CASE),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'nope',
-          role: 'nope',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateCase({
+        applicationContext,
         caseId: '123',
         caseToUpdate: MOCK_CASE,
-        applicationContext,
       });
     } catch (err) {
       error = err;

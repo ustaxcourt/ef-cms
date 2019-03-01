@@ -47,8 +47,8 @@ exports.updateWorkItem = async ({
   const afterUpdate = await applicationContext
     .getPersistenceGateway()
     .saveWorkItem({
-      workItemToSave: updatedWorkItem,
       applicationContext,
+      workItemToSave: updatedWorkItem,
     });
 
   return new WorkItem(afterUpdate).validate().toRawObject();

@@ -7,18 +7,18 @@ describe('Send petition to IRS', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
       getPersistenceGateway: () => {
         return {
           getCasesByUser: () => Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesByUser({
-        userId: 'petitionsclerk',
         applicationContext,
+        userId: 'petitionsclerk',
       });
     } catch (err) {
       error = err;

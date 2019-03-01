@@ -22,25 +22,25 @@ exports.saveVersionedCase = async ({
   // update the current history
   await client.put({
     applicationContext,
-    TableName: TABLE,
     Item: {
       pk: caseToSave.caseId,
       sk: '0',
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
+    TableName: TABLE,
   });
 
   // add a history entry
   return await client.put({
     applicationContext,
-    TableName: TABLE,
     Item: {
       pk: caseToSave.caseId,
       sk: `${nextVersionToSave}`,
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
+    TableName: TABLE,
   });
 };
 /**
@@ -53,26 +53,26 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
   const currentCaseState = await client.get({
     applicationContext,
-    TableName: TABLE,
     Key: {
       pk: caseToSave.caseId,
       sk: '0',
     },
+    TableName: TABLE,
   });
 
   if (!currentCaseState) {
     await createMappingRecord({
+      applicationContext,
       pkId: caseToSave.userId,
       skId: caseToSave.caseId,
       type: 'case',
-      applicationContext,
     });
 
     await createMappingRecord({
+      applicationContext,
       pkId: caseToSave.docketNumber,
       skId: caseToSave.caseId,
       type: 'case',
-      applicationContext,
     });
   }
 
@@ -101,28 +101,28 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     if (currentStatus) {
       await client.delete({
         applicationContext,
-        tableName: TABLE,
         key: {
           pk: `${currentStatus}|case-status`,
           sk: caseToSave.caseId,
         },
+        tableName: TABLE,
       });
     }
 
     await client.put({
       applicationContext,
-      TableName: TABLE,
       Item: {
         pk: `${caseToSave.status}|case-status`,
         sk: caseToSave.caseId,
       },
+      TableName: TABLE,
     });
   }
 
   const results = await exports.saveVersionedCase({
+    applicationContext,
     caseToSave,
     existingVersion: (currentCaseState || {}).currentVersion,
-    applicationContext,
   });
 
   return stripWorkItems(

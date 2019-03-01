@@ -18,7 +18,7 @@ exports.createUser = async ({ user, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
   return await applicationContext.getPersistenceGateway().createUser({
-    user,
     applicationContext,
+    user,
   });
 };

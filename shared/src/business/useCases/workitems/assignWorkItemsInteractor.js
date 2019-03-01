@@ -26,8 +26,8 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
       return applicationContext
         .getPersistenceGateway()
         .getWorkItemById({
-          workItemId: workItem.workItemId,
           applicationContext,
+          workItemId: workItem.workItemId,
         })
         .then(fullWorkItem =>
           new WorkItem(fullWorkItem)
@@ -38,15 +38,15 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
             })
             .addMessage(
               new Message({
+                createdAt: new Date().toISOString(),
                 message: `A ${
                   fullWorkItem.document.documentType
                 } filed by ${capitalize(
                   fullWorkItem.document.filedBy,
                 )} is ready for review.`,
                 sentBy: user.name,
-                userId: user.userId,
                 sentTo: workItem.assigneeName,
-                createdAt: new Date().toISOString(),
+                userId: user.userId,
               }),
             ),
         );
@@ -56,8 +56,8 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
   await Promise.all(
     workItemEntities.map(workItemEntity => {
       return applicationContext.getPersistenceGateway().saveWorkItem({
-        workItemToSave: workItemEntity.validate().toRawObject(),
         applicationContext,
+        workItemToSave: workItemEntity.validate().toRawObject(),
       });
     }),
   );
