@@ -14,8 +14,6 @@ import { setInternalUsersAction } from '../actions/setInternalUsersAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
-import { getTrialCitiesAction } from '../actions/getTrialCitiesAction';
-import { setTrialCitiesAction } from '../actions/setTrialCitiesAction';
 
 export const gotoDocumentDetailSequence = [
   setCurrentPageAction('Loading'),
@@ -34,7 +32,5 @@ export const gotoDocumentDetailSequence = [
   setProcedureTypesAction,
   getCaseTypesAction,
   setCaseTypesAction,
-  getTrialCitiesAction,
-  setTrialCitiesAction,
   setCurrentPageAction('DocumentDetail'),
 ];

@@ -17,7 +17,7 @@ export const StartCase = connect(
     form: state.form,
     constants: state.constants,
     showModal: state.showModal,
-    getTrialCities: sequences.getTrialCitiesSequence,
+    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
@@ -38,7 +38,7 @@ export const StartCase = connect(
     form,
     constants,
     showModal,
-    getTrialCities,
+    clearPreferredTrialCitySequence,
     startACaseToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
@@ -695,9 +695,11 @@ export const StartCase = connect(
             <ProcedureType
               value={form.procedureType}
               onChange={e => {
-                getTrialCities({
-                  value: e.currentTarget.value,
+                updateFormValueSequence({
+                  key: 'procedureType',
+                  value: e.target.value,
                 });
+                clearPreferredTrialCitySequence();
                 validateStartCaseSequence();
               }}
               legend="Select Case Procedure"

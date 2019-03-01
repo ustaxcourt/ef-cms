@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { state, props } from 'cerebral';
 import React from 'react';
 
 export const TrialCity = connect(

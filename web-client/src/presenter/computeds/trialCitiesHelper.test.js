@@ -7,16 +7,21 @@ describe('trialCitiesHelper', () => {
   it('returns trialCitiesByState which is an object of state => city pairs', async () => {
     const result = await runCompute(trialCitiesHelper, {
       state: {
-        trialCities: [
-          {
-            state: 'Tennessee',
-            city: 'Chattanooga',
+        constants: {
+          TRIAL_CITIES: {
+            SMALL: [
+              {
+                state: 'Tennessee',
+                city: 'Chattanooga',
+              },
+            ],
           },
-        ],
+        },
         getTrialCityName,
       },
     });
-    expect(result).toMatchObject({
+    const trailCitiesByState = result('Small');
+    expect(trailCitiesByState).toMatchObject({
       trialCitiesByState: { Tennessee: ['Chattanooga, Tennessee'] },
     });
   });
