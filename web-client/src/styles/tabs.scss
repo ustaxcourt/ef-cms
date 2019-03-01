@@ -97,6 +97,7 @@ nav.horizontal-tabs,
           cursor: pointer;
 
           &:hover {
+            background-color: transparent;
             color: $color-primary-darkest;
           }
         }
@@ -112,7 +113,7 @@ nav.horizontal-tabs,
   }
 
   &.classic-horizontal {
-    nav {
+    > nav {
       ul {
         li {
           button {
@@ -143,7 +144,7 @@ nav.horizontal-tabs,
 
   &.container-tabs {
     border: 1px solid $color-gray-lighter;
-    nav {
+    > nav {
       background-color: $color-gray-lightest;
 
       ul {

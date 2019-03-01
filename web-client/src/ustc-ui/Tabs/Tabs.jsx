@@ -49,6 +49,7 @@ export function TabsComponent({
       <li className={liClass}>
         <button
           role="tab"
+          type="button"
           className="tab-link"
           id={id}
           aria-controls={tabContentId}
