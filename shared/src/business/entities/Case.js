@@ -21,7 +21,6 @@ const statusMap = {
   recalled: 'Recalled',
 };
 
-const { REGULAR_TRIAL_CITIES, SMALL_TRIAL_CITIES } = require('./TrialCities');
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 const CASE_TYPES = [
