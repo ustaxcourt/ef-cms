@@ -5,9 +5,9 @@ const sinon = require('sinon');
 describe('getWorkItemById', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
-      workItemId: 'abc',
       pk: 'abc',
       sk: 'abc',
+      workItemId: 'abc',
     });
   });
 

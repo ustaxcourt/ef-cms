@@ -7,19 +7,19 @@ describe('Get cases for respondent', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'respondent',
+          userId: 'respondent',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesForRespondent: () =>
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'respondent',
-          role: 'respondent',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {

@@ -6,10 +6,10 @@ const {
 } = require('ef-cms-shared/src/errors/errors');
 
 const headers = {
-  'Content-Type': 'application/json',
-  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
-  'Pragma': 'no-cache',
   'Access-Control-Allow-Origin': '*',
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+  'Content-Type': 'application/json',
+  'Pragma': 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
 
@@ -56,10 +56,10 @@ exports.redirect = async (event, fun, statusCode = 302) => {
   try {
     const { url } = await fun();
     return {
-      statusCode,
       headers: {
         Location: url,
       },
+      statusCode,
     };
   } catch (err) {
     return exports.sendError(err);
@@ -74,9 +74,9 @@ exports.redirect = async (event, fun, statusCode = 302) => {
  */
 exports.sendError = err => {
   return {
-    statusCode: err.statusCode || '400',
     body: JSON.stringify(err.message),
     headers,
+    statusCode: err.statusCode || '400',
   };
 };
 
@@ -89,9 +89,9 @@ exports.sendError = err => {
  */
 exports.sendOk = (response, statusCode = '200') => {
   return {
-    statusCode,
     body: JSON.stringify(response),
     headers,
+    statusCode,
   };
 };
 

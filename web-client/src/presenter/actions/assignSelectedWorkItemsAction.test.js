@@ -13,27 +13,27 @@ presenter.providers.applicationContext = {
 describe('setPathAction', async () => {
   it('updates only the section queue items to have the new assignee informaion', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
+      modules: {
+        presenter,
+      },
       state: {
+        assigneeId: 'docketclerk',
+        assigneeName: 'Docket Clerk',
         selectedWorkItems: [
           {
             workItemId: 'q',
           },
         ],
-        workQueue: [
-          {
-            workItemId: 'q',
-            assigneeId: 'docketclerk1',
-            assigneeName: 'Docket Clerk 1',
-          },
-        ],
-        assigneeId: 'docketclerk',
-        assigneeName: 'Docket Clerk',
         user: {
           token: 'docketclerk',
         },
-      },
-      modules: {
-        presenter,
+        workQueue: [
+          {
+            assigneeId: 'docketclerk1',
+            assigneeName: 'Docket Clerk 1',
+            workItemId: 'q',
+          },
+        ],
       },
     });
     expect(result.state.workQueue).toEqual([

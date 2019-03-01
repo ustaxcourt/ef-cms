@@ -52,8 +52,8 @@ export const completeWorkItemAction = async ({
 
   await applicationContext.getUseCases().updateWorkItem({
     applicationContext,
-    workItemToUpdate,
-    workItemId: props.workItemId,
     userId: applicationContext.getCurrentUser().userId,
+    workItemId: props.workItemId,
+    workItemToUpdate,
   });
 };

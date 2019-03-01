@@ -25,8 +25,8 @@ exports.getSentWorkItemsForSection = async ({
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getSentWorkItemsForSection({
-      section,
       applicationContext,
+      section,
     });
 
   return workItems;

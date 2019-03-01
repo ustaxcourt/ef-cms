@@ -12,12 +12,12 @@ export const submitCaseDetailEditSaveSequence = [
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
   {
+    error: [setValidationAlertErrorsAction],
     success: [
       updateCaseAction,
       setCaseAction,
       setFormSaveSuccessAction,
       expireFormSaveSuccessAction,
     ],
-    error: [setValidationAlertErrorsAction],
   },
 ];

@@ -18,9 +18,9 @@ describe('updateCaseValueByIndexSequence', async () => {
       ],
     });
     await test.runSequence('updateCaseValueByIndexSequence', {
+      index: 0,
       key: 'yearAmounts',
       subKey: 'year',
-      index: 0,
       value: '1999',
     });
     expect(test.getState('caseDetail')).toEqual({

@@ -13,9 +13,9 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
+        form: {},
         getTrialCityName,
         petition: {},
-        form: {},
       },
     });
     expect(result.showPetitionFileValid).toBeFalsy();
@@ -28,11 +28,11 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
+        form: {},
         getTrialCityName,
         petition: {
           petitionFile: true,
         },
-        form: {},
       },
     });
     expect(result.showPetitionFileValid).toBeTruthy();
@@ -45,13 +45,13 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
+        form: {
+          filingType: 'A business',
+          partyType: true,
+        },
         getTrialCityName,
         petition: {
           petitionFile: true,
-        },
-        form: {
-          partyType: true,
-          filingType: 'A business',
         },
       },
     });
@@ -65,13 +65,13 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
+        form: {
+          filingType: 'not A business',
+          partyType: true,
+        },
         getTrialCityName,
         petition: {
           petitionFile: true,
-        },
-        form: {
-          partyType: true,
-          filingType: 'not A business',
         },
       },
     });
@@ -85,10 +85,10 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
-        getTrialCityName,
         form: {
           hasIrsNotice: true,
         },
+        getTrialCityName,
       },
     });
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
@@ -102,10 +102,10 @@ describe('start a case computed', () => {
           PARTY_TYPES,
           TRIAL_CITIES,
         },
-        getTrialCityName,
         form: {
           hasIrsNotice: false,
         },
+        getTrialCityName,
       },
     });
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();

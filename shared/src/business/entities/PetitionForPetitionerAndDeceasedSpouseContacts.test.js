@@ -5,14 +5,14 @@ describe('Petition', () => {
     it('should not validate without contacts', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        petitionFile: {},
-        signature: true,
         partyType: 'Petitioner & Deceased Spouse',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -20,33 +20,33 @@ describe('Petition', () => {
     it('can validate primary contact name', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
-        filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
-        petitionFile: {},
-        signature: true,
-        partyType: 'Petitioner & Deceased Spouse',
         contactPrimary: {
-          countryType: 'domestic',
-          name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
-          state: 'AK',
-          postalCode: '05198',
           country: 'USA',
-          phone: '1234567890',
+          countryType: 'domestic',
           email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
         },
         contactSecondary: {
-          countryType: 'domestic',
-          name: 'Betty Crocker',
           address1: '1599 Pennsylvania Ave',
           city: 'Walla Walla',
-          state: 'WA',
+          countryType: 'domestic',
+          name: 'Betty Crocker',
           postalCode: '78774',
+          state: 'WA',
         },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13',
+        partyType: 'Petitioner & Deceased Spouse',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

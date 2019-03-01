@@ -52,51 +52,51 @@ const FORMATTED_WORK_ITEM = {
   section: 'docket',
   selected: false,
   sentBy: 'respondent',
-  workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
   showComplete: true,
   showSendTo: true,
+  workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
 };
 describe('formatted work queue computed', () => {
   const workItem = {
-    createdAt: '2018-12-27T18:05:54.166Z',
+    assigneeId: null,
     assigneeName: null,
-    caseStatus: 'General',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    caseStatus: 'General',
+    createdAt: '2018-12-27T18:05:54.166Z',
+    docketNumber: '101-18',
     document: {
-      documentType: 'Answer',
       createdAt: '2018-12-27T18:05:54.164Z',
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      documentType: 'Answer',
     },
     messages: [
       {
         createdAt: '2018-12-27T18:05:54.164Z',
-        messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
         message: 'a Answer filed by respondent is ready for review',
-        userId: 'respondent',
+        messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
         sentBy: 'Test Respondent',
+        userId: 'respondent',
       },
       {
         createdAt: '2018-12-27T18:05:54.164Z',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
         message: 'a message',
-        userId: 'docketclerk',
+        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
         sentBy: 'Test Docketclerk',
+        userId: 'docketclerk',
       },
     ],
     section: 'docket',
-    workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
-    assigneeId: null,
-    docketNumber: '101-18',
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
+    workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
   };
 
   let result;
   beforeEach(() => {
     result = runCompute(formattedWorkQueue, {
       state: {
-        workQueue: [workItem],
         selectedWorkItems: [],
+        workQueue: [workItem],
       },
     });
   });
@@ -122,8 +122,8 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        workQueue: [workItem],
         selectedWorkItems: [],
+        workQueue: [workItem],
       },
     });
     expect(result2[0].showSendTo).toBeFalsy();
@@ -133,8 +133,8 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        workQueue: [workItem],
         selectedWorkItems: [],
+        workQueue: [workItem],
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeFalsy();
@@ -145,8 +145,8 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = 'Batched for IRS';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        workQueue: [workItem],
         selectedWorkItems: [],
+        workQueue: [workItem],
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
@@ -158,8 +158,8 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = 'Recalled';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        workQueue: [workItem],
         selectedWorkItems: [],
+        workQueue: [workItem],
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
