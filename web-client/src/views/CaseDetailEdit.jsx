@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
 
-import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
-import { IRSNotice } from './CaseDetailEdit/IRSNotice';
+import { CaseDetailEditPartyInformation } from './CaseDetailEdit/CaseDetailEditPartyInformation';
 import { CaseInfo } from './CaseDetailEdit/CaseInfo';
+import { IRSNotice } from './CaseDetailEdit/IRSNotice';
+import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 
 export const CaseDetailEdit = connect(
   {
@@ -39,6 +40,8 @@ export const CaseDetailEdit = connect(
         {showModal === 'UpdateCaseCancelModalDialog' && (
           <UpdateCaseCancelModalDialog />
         )}
+
+        <CaseDetailEditPartyInformation />
 
         <div className="blue-container">
           <IRSNotice />

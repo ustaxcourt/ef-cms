@@ -4,15 +4,15 @@ import React from 'react';
 
 export const Country = connect(
   {
-    form: state.form,
+    data: state[props.bind],
     constants: state.constants,
     type: props.type,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    updateFormValueSequence: sequences[props.onChange],
+    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
   ({
-    form,
+    data,
     constants,
     type,
     updateFormValueSequence,
@@ -43,7 +43,7 @@ export const Country = connect(
             }
             id={`${type}.countryType`}
             name={`${type}.countryType`}
-            value={form[type].countryType}
+            value={data[type].countryType}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -65,7 +65,7 @@ export const Country = connect(
             </div>
           )}
         </div>
-        {form[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
+        {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
               'usa-form-group ' +
@@ -82,7 +82,7 @@ export const Country = connect(
               type="text"
               name={`${type}.country`}
               autoCapitalize="none"
-              value={form[type].country || ''}
+              value={data[type].country || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
