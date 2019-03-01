@@ -17,7 +17,7 @@ describe('Get cases for respondent', () => {
       getPersistenceGateway: () => {
         return {
           getCasesForRespondent: () =>
-            Promise.resolve([omit(MOCK_CASE, 'documents')]),
+            Promise.resolve([omit(MOCK_CASE, 'docketNumber')]),
         };
       },
     };
@@ -30,7 +30,7 @@ describe('Get cases for respondent', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 });

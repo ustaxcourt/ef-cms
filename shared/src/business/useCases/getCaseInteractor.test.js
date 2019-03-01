@@ -164,52 +164,11 @@ describe('Get case', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () =>
-            Promise.resolve({
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              caseType: 'Other',
-              createdAt: new Date().toISOString(),
-              docketNumber: '00101-00',
-              hasIrsNotice: false,
-              partyType: 'Petitioner',
-              petitioners: [{ name: 'Test Taxpayer' }],
-              preferredTrialCity: 'Washington, D.C.',
-              procedureType: 'Regular',
-            }),
-        };
-      },
-    };
-    let error;
-    try {
-      await getCase({
-        applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
-    );
-  });
-
-  it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'intakeclerk',
-          userId: 'intakeclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
           getCaseByDocketNumber: () =>
             Promise.resolve({
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseType: 'Other',
               createdAt: new Date().toISOString(),
-              docketNumber: '00101-00',
               hasIrsNotice: false,
               partyType: 'Petitioner',
               petitioners: [{ name: 'Test Taxpayer' }],
@@ -229,7 +188,7 @@ describe('Get case', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 });
