@@ -6,7 +6,7 @@ import { TabsComponent, Tab } from './Tabs';
 describe('TabsComponent', () => {
   it('should show the default item', () => {
     const testRenderer = TestRenderer.create(
-      <TabsComponent defaultActiveTab="my">
+      <TabsComponent defaultActiveTab="my" className="yeah">
         <Tab tabName="my" title="My Queue" id="tab-my-queue">
           <div id="tab-individual-panel">Indy</div>
         </Tab>
