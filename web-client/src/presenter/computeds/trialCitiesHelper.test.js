@@ -11,8 +11,8 @@ describe('trialCitiesHelper', () => {
           TRIAL_CITIES: {
             SMALL: [
               {
-                state: 'Tennessee',
                 city: 'Chattanooga',
+                state: 'Tennessee',
               },
             ],
           },

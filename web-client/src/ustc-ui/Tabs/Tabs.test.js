@@ -1,7 +1,7 @@
 import React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
 
-import { TabsComponent, Tab } from './Tabs';
+import { Tab, TabsComponent } from './Tabs';
 
 describe('TabsComponent', () => {
   it('should show the default item', () => {

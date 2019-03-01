@@ -8,7 +8,7 @@ export const autoSaveCaseSequence = [
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
   {
-    success: [updateCaseAction],
     error: [],
+    success: [updateCaseAction],
   },
 ];

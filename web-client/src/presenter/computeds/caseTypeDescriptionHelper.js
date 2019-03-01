@@ -66,8 +66,8 @@ export const caseTypeDescriptionHelper = get => {
       }
       if (caseDescription !== '') {
         caseTypesWithDescriptions.push({
-          type: caseType,
           description: caseDescription,
+          type: caseType,
         });
       }
     });
@@ -108,8 +108,8 @@ export const caseTypeDescriptionHelper = get => {
       }
       if (caseDescription !== '') {
         caseTypesWithDescriptions.push({
-          type: caseType,
           description: caseDescription,
+          type: caseType,
         });
       }
     });

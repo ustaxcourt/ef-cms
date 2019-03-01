@@ -15,14 +15,14 @@ export const recallPetitionFromIRSHoldingQueueAction = async ({
   props,
 }) => {
   await applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
-    caseId: get(state.caseDetail).caseId,
     applicationContext,
+    caseId: get(state.caseDetail).caseId,
   });
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {
-      title: 'The petition is now recalled.',
       message: 'It will need to be re-served to the IRS.',
+      title: 'The petition is now recalled.',
     },
   };
 };
