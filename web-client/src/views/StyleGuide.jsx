@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
+import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
+
 export const StyleGuide = () => (
   <React.Fragment>
     <section className="usa-section usa-grid">
@@ -111,21 +113,42 @@ export const StyleGuide = () => (
     <section className="usa-section usa-grid">
       <h1>Tabs</h1>
       <hr />
+
+      <h2>Base Tabs</h2>
+
+      <Tabs>
+        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <p>My Queue Content</p>
+        </Tab>
+        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <p>Section Queue Content</p>
+        </Tab>
+      </Tabs>
+
       <h2>Primary Tabs</h2>
-      <div className="horizontal-tabs subsection">
-        <ul role="tablist">
-          <li className="active">
-            <button role="tab" className="tab-link" aria-selected={true}>
-              My Queue
-            </button>
-          </li>
-          <li>
-            <button role="tab" className="tab-link" aria-selected={false}>
-              Section Queue
-            </button>
-          </li>
-        </ul>
-      </div>
+
+      <Tabs className="horizontal-tabs">
+        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <p>My Queue Content</p>
+        </Tab>
+        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <p>Section Queue Content</p>
+        </Tab>
+      </Tabs>
+
+      <h2>Container Tabs</h2>
+
+      <Tabs className="container-tabs">
+        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <div>
+            <h3>My Queue Content</h3>
+          </div>
+        </Tab>
+        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <p>Section Queue Content</p>
+        </Tab>
+      </Tabs>
+
       <h2>Secondary Tabs</h2>
       <div className="work-queue-tab-container">
         <h3 className="work-queue-tab">Inbox</h3>

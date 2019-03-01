@@ -17,6 +17,7 @@ export function TabsComponent({
   onSelect,
   children,
   defaultActiveTab,
+  className,
 }) {
   let activeKey, setTab;
 
@@ -31,6 +32,8 @@ export function TabsComponent({
   }
 
   setTab = decorateWithPostCallback(setTab, onSelect);
+
+  const tabsClass = classNames('ustc-ui-tabs', className || '');
 
   function renderTab(child) {
     const { title, tabName, id } = child.props;
@@ -65,7 +68,7 @@ export function TabsComponent({
 
     if (isActiveTab) {
       return (
-        <div role="tabpanel" id={tabContentId}>
+        <div className="tabcontent" role="tabpanel" id={tabContentId}>
           {children}
         </div>
       );
@@ -75,17 +78,18 @@ export function TabsComponent({
   }
 
   return (
-    <>
-      <nav className="horizontal-tabs subsection">
+    <div className={tabsClass}>
+      <nav>
         <ul role="tablist">{map(children, renderTab)}</ul>
       </nav>
 
       {map(children, renderTabContent)}
-    </>
+    </div>
   );
 }
 
 TabsComponent.propTypes = {
+  className: PropTypes.string,
   bind: PropTypes.string,
   value: PropTypes.any,
   simpleSetter: PropTypes.func,
