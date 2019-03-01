@@ -13,27 +13,27 @@ exports.getSortRecordsViaMapping = async ({
 
   const mapping = await client.query({
     applicationContext,
-    TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `${key}|${type}`,
       ':afterDate': afterDate,
+      ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+    TableName: TABLE,
   });
 
   const ids = mapping.map(metadata => metadata[foreignKey]);
 
   const results = await client.batchGet({
     applicationContext,
-    tableName: TABLE,
     keys: ids.map(id => ({
       pk: id,
       sk: isVersioned ? '0' : id,
     })),
+    tableName: TABLE,
   });
 
   return stripInternalKeys(results);

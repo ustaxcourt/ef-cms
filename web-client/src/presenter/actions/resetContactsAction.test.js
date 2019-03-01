@@ -2,8 +2,8 @@ import { runAction } from 'cerebral/test';
 
 import { resetContactsAction } from './resetContactsAction';
 import {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 describe('resetContactsAction', async () => {
@@ -11,21 +11,21 @@ describe('resetContactsAction', async () => {
     const { state } = await runAction(resetContactsAction, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
           contactPrimary: {
-            name: 'Bob',
             address1: '123 Abc Ln',
-            countryType: 'domestic',
             city: 'Bobville',
+            countryType: 'domestic',
+            email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
             state: 'AL',
             zip: '12345',
-            phone: '1234567890',
-            email: 'test@example.com',
           },
+          partyType: PARTY_TYPES.petitioner,
         },
         constants: {
-          PARTY_TYPES,
           COUNTRY_TYPES,
+          PARTY_TYPES,
         },
       },
     });
@@ -42,21 +42,21 @@ describe('resetContactsAction', async () => {
     const { state } = await runAction(resetContactsAction, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
           contactPrimary: {
-            name: 'Bob',
             address1: '123 Abc Ln',
-            countryType: 'international',
-            country: 'Germany',
             city: 'Bobville',
-            zip: '12345',
-            phone: '1234567890',
+            country: 'Germany',
+            countryType: 'international',
             email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
+            zip: '12345',
           },
+          partyType: PARTY_TYPES.petitioner,
         },
         constants: {
-          PARTY_TYPES,
           COUNTRY_TYPES,
+          PARTY_TYPES,
         },
       },
     });
@@ -73,29 +73,29 @@ describe('resetContactsAction', async () => {
     const { state } = await runAction(resetContactsAction, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitionerSpouse,
           contactPrimary: {
-            name: 'Bob',
             address1: '123 Abc Ln',
-            countryType: 'domestic',
             city: 'Bobville',
+            countryType: 'domestic',
+            email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
             state: 'AL',
             zip: '12345',
-            phone: '1234567890',
-            email: 'test@example.com',
           },
           contactSecondary: {
-            name: 'Bob',
             address1: '123 Abc Ln',
-            countryType: 'domestic',
             city: 'Bobville',
+            countryType: 'domestic',
+            name: 'Bob',
             state: 'AL',
             zip: '12345',
           },
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
         constants: {
-          PARTY_TYPES,
           COUNTRY_TYPES,
+          PARTY_TYPES,
         },
       },
     });

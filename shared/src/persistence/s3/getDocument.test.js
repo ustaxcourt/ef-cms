@@ -5,6 +5,12 @@ describe('getDocument', () => {
     const BLOB_DATA = 'abc';
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
+      getCurrentUser: () => {
+        return { role: 'petitioner', userId: 'taxpayer' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
       getHttpClient: () => {
         const fun = () => ({
           data: BLOB_DATA,
@@ -17,12 +23,6 @@ describe('getDocument', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => BLOB_DATA,
       }),
-      getCurrentUser: () => {
-        return { userId: 'taxpayer', role: 'petitioner' };
-      },
-      getCurrentUserToken: () => {
-        return '';
-      },
     };
     const result = await getDocument({
       applicationContext,

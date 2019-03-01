@@ -10,17 +10,17 @@ export default get => {
   ].includes(currentPage);
 
   return {
-    showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
-    showRecallButton: caseDetail.status === 'Batched for IRS',
-    showDocumentStatus: !caseDetail.irsSendDate,
+    showActionRequired: !caseDetail.payGovId,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
+    showDocumentStatus: !caseDetail.irsSendDate,
     showFileDocumentButton: ['CaseDetailRespondent'].includes(currentPage),
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
-    showActionRequired: !caseDetail.payGovId,
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
+    showRecallButton: caseDetail.status === 'Batched for IRS',
+    showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
   };
 };

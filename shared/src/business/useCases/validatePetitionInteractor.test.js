@@ -6,12 +6,12 @@ const moment = require('moment');
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validatePetition({
-      petition: {},
       applicationContext: {
         getEntityConstructors: () => ({
           Petition,
         }),
       },
+      petition: {},
     });
 
     expect(errors).toEqual({
@@ -25,14 +25,14 @@ describe('validatePetition', () => {
 
   it('returns the expected errors object when caseType is defined', () => {
     const errors = validatePetition({
-      petition: {
-        caseType: 'defined',
-        hasIrsNotice: true,
-      },
       applicationContext: {
         getEntityConstructors: () => ({
           Petition,
         }),
+      },
+      petition: {
+        caseType: 'defined',
+        hasIrsNotice: true,
       },
     });
     expect(errors).toEqual({
@@ -47,21 +47,21 @@ describe('validatePetition', () => {
 
   it('returns the expected errors object', () => {
     const errors = validatePetition({
-      petition: {
-        hasIrsNotice: true,
-        caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
-        partyType: 'defined',
-        petitionFile: new File([], 'test.png'),
-        preferredTrialCity: 'defined',
-        irsNoticeDate: new Date().toISOString(),
-        signature: true,
-      },
       applicationContext: {
         getEntityConstructors: () => ({
           Petition,
         }),
+      },
+      petition: {
+        caseType: 'defined',
+        filingType: 'defined',
+        hasIrsNotice: true,
+        irsNoticeDate: new Date().toISOString(),
+        partyType: 'defined',
+        petitionFile: new File([], 'test.png'),
+        preferredTrialCity: 'defined',
+        procedureType: 'defined',
+        signature: true,
       },
     });
     expect(errors).toEqual(null);
@@ -71,21 +71,21 @@ describe('validatePetition', () => {
     const futureDate = moment().add(1, 'days');
 
     const errors = validatePetition({
-      petition: {
-        hasIrsNotice: true,
-        caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
-        partyType: 'defined',
-        petitionFile: new File([], 'test.png'),
-        preferredTrialCity: 'defined',
-        irsNoticeDate: futureDate.toDate().toISOString(),
-        signature: true,
-      },
       applicationContext: {
         getEntityConstructors: () => ({
           Petition,
         }),
+      },
+      petition: {
+        caseType: 'defined',
+        filingType: 'defined',
+        hasIrsNotice: true,
+        irsNoticeDate: futureDate.toDate().toISOString(),
+        partyType: 'defined',
+        petitionFile: new File([], 'test.png'),
+        preferredTrialCity: 'defined',
+        procedureType: 'defined',
+        signature: true,
       },
     });
 

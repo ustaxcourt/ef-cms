@@ -10,9 +10,9 @@ export const chooseWorkQueueSequence = [
   clearWorkQueueAction,
   chooseWorkQueueAction,
   {
-    sectioninbox: [getWorkItemsForSectionAction, setWorkItemsAction],
-    sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
     myinbox: [getWorkItemsByUserAction, setWorkItemsAction],
     myoutbox: [getSentWorkItemsForUserAction, setWorkItemsAction],
+    sectioninbox: [getWorkItemsForSectionAction, setWorkItemsAction],
+    sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
   },
 ];

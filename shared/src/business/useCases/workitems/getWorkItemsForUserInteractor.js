@@ -21,8 +21,8 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
   let workItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsForUser({
-      userId: user.userId,
       applicationContext,
+      userId: user.userId,
     });
 
   if (!workItems) {

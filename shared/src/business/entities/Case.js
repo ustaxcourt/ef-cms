@@ -15,8 +15,8 @@ const uuidVersions = {
 };
 
 const statusMap = {
-  general: 'General',
   batchedForIRS: 'Batched for IRS',
+  general: 'General',
   new: 'New',
   recalled: 'Recalled',
 };
@@ -98,10 +98,6 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .optional(),
-    userId: joi
-      .string()
-      // .uuid(uuidVersions)
-      .optional(),
     caseType: joi.string().required(),
     createdAt: joi
       .date()
@@ -116,51 +112,55 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     docketRecord: joi.array().optional(),
-    respondent: joi
-      .object()
-      .allow(null)
-      .optional(),
+    documents: joi
+      .array()
+      .min(1)
+      .required(),
+    filingType: joi.string().required(),
+    hasIrsNotice: joi.boolean().required(),
+    hasVerifiedIrsNotice: joi
+      .boolean()
+      .optional()
+      .allow(null),
     irsNoticeDate: joi
       .date()
       .iso()
       .max('now')
       .when('hasVerifiedIrsNotice', {
         is: true,
-        then: joi.required(),
         otherwise: joi.optional().allow(null),
+        then: joi.required(),
       }),
     irsSendDate: joi
       .date()
       .iso()
       .optional(),
     partyType: joi.string().required(),
-    payGovId: joi
-      .string()
-      .allow(null)
-      .optional(),
     payGovDate: joi
       .date()
       .iso()
       .max('now')
       .allow(null)
       .optional(),
-    hasIrsNotice: joi.boolean().required(),
-    hasVerifiedIrsNotice: joi
-      .boolean()
-      .optional()
-      .allow(null),
+    payGovId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    preferredTrialCity: joi.string().required(),
+    procedureType: joi.string().required(),
+    respondent: joi
+      .object()
+      .allow(null)
+      .optional(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
       .optional(),
-    documents: joi
-      .array()
-      .min(1)
-      .required(),
+    userId: joi
+      .string()
+      // .uuid(uuidVersions)
+      .optional(),
     workItems: joi.array().optional(),
-    preferredTrialCity: joi.string().required(),
-    procedureType: joi.string().required(),
-    filingType: joi.string().required(),
     yearAmounts: joi
       .array()
       .unique((a, b) => a.year === b.year)
@@ -177,10 +177,11 @@ joiValidationDecorator(
     );
   },
   {
+    caseType: 'Case Type is required.',
     docketNumber: 'Docket number is required.',
     documents: 'At least one valid document is required.',
+    filingType: 'Filing Type is required.',
     hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-    caseType: 'Case Type is required.',
     irsNoticeDate: [
       {
         contains: 'must be less than or equal to',
@@ -189,18 +190,7 @@ joiValidationDecorator(
       },
       'Please enter a valid IRS notice date.',
     ],
-    procedureType: 'Procedure Type is required.',
-    filingType: 'Filing Type is required.',
     partyType: 'Party Type is required.',
-    preferredTrialCity: 'Preferred Trial City is required.',
-    yearAmounts: [
-      {
-        contains: 'contains a duplicate',
-        message: 'Duplicate years are not allowed',
-      },
-      'A valid year and amount are required.',
-    ],
-    payGovId: 'Fee Payment Id must be in a valid format',
     payGovDate: [
       {
         contains: 'must be less than or equal to',
@@ -208,6 +198,16 @@ joiValidationDecorator(
           'The Fee Payment date is in the future. Please enter a valid date.',
       },
       'Please enter a valid Fee Payment date.',
+    ],
+    payGovId: 'Fee Payment Id must be in a valid format',
+    preferredTrialCity: 'Preferred Trial City is required.',
+    procedureType: 'Procedure Type is required.',
+    yearAmounts: [
+      {
+        contains: 'contains a duplicate',
+        message: 'Duplicate years are not allowed',
+      },
+      'A valid year and amount are required.',
     ],
   },
 );
@@ -337,9 +337,9 @@ Case.prototype.addDocument = function(document) {
 
   this.addDocketRecord(
     new DocketRecord({
-      filingDate: document.createdAt,
-      filedBy: document.filedBy,
       description: document.documentType,
+      filedBy: document.filedBy,
+      filingDate: document.createdAt,
       status: document.status,
     }),
   );
@@ -397,8 +397,8 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   if (payGovDate) {
     this.addDocketRecord(
       new DocketRecord({
-        filingDate: payGovDate,
         description: 'Filing fee paid',
+        filingDate: payGovDate,
       }),
     );
   }
@@ -460,11 +460,11 @@ Case.stripLeadingZeros = docketNumber => {
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string, answer: string, stipulatedDecision: string}}
  */
 Case.documentTypes = {
-  petitionFile: 'Petition',
+  answer: 'Answer',
   // statementOfTaxpayerIdentificationNumber:
   //   'Statement of Taxpayer Identification Number',
   ownershipDisclosure: 'Ownership Disclosure Statement',
-  answer: 'Answer',
+  petitionFile: 'Petition',
   stipulatedDecision: 'Stipulated Decision',
 };
 

@@ -284,4 +284,61 @@ describe('case detail edit computed', () => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeTruthy();
   });
+
+  it('sets showOwnershipDisclosureStatement true, sets document id if partyType is corporation', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          partyType: PARTY_TYPES.corporation,
+          documents: [
+            {
+              documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+              documentType: 'Ownership Disclosure Statement',
+            },
+          ],
+        },
+        constants: {
+          PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showOwnershipDisclosureStatement).toBeTruthy();
+    expect(result.ownershipDisclosureStatementDocumentId).toEqual(
+      '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+    );
+  });
+
+  it('sets showOwnershipDisclosureStatement false if partyType is corporation but there is no document for ODS', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          partyType: PARTY_TYPES.corporation,
+          documents: [
+            {
+              documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        constants: {
+          PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+  });
+
+  it('sets showOwnershipDisclosureStatement false if partyType is petitioner', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          partyType: PARTY_TYPES.petitioner,
+        },
+        constants: {
+          PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+  });
 });

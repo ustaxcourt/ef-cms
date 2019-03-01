@@ -14,28 +14,28 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 
 const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   const workItemEntity = new WorkItem({
-    sentBy: user.userId,
+    assigneeId: null,
+    assigneeName: null,
     caseId: caseToAdd.caseId,
+    caseStatus: caseToAdd.status,
+    docketNumber: caseToAdd.docketNumber,
+    docketNumberSuffix: caseToAdd.docketNumberSuffix,
     document: {
       ...documentEntity.toRawObject(),
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-    caseStatus: caseToAdd.status,
-    assigneeId: null,
-    docketNumber: caseToAdd.docketNumber,
-    docketNumberSuffix: caseToAdd.docketNumberSuffix,
     section: PETITIONS_SECTION,
-    assigneeName: null,
+    sentBy: user.userId,
   });
 
   workItemEntity.addMessage(
     new Message({
+      createdAt: new Date().toISOString(),
       message: `A ${documentEntity.documentType} filed by ${capitalize(
         user.role,
       )} is ready for review.`,
       sentBy: user.name,
-      createdAt: new Date().toISOString(),
     }),
   );
 
@@ -85,18 +85,18 @@ exports.createCase = async ({
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
-      filingDate: caseToAdd.createdAt,
       description: `Request for Place of Trial at ${
         caseToAdd.preferredTrialCity
       }`,
+      filingDate: caseToAdd.createdAt,
     }),
   );
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
-    userId: user.userId,
     filedBy: user.name,
+    userId: user.userId,
   });
   addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
 
@@ -104,15 +104,15 @@ exports.createCase = async ({
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
-      userId: user.userId,
       filedBy: user.name,
+      userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: caseToAdd.validate().toRawObject(),
     applicationContext,
+    caseToSave: caseToAdd.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();
