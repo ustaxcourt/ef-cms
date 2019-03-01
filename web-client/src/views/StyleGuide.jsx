@@ -136,6 +136,15 @@ export const StyleGuide = () => (
         </Tab>
       </Tabs>
 
+      <Tabs className="classic-horizontal">
+        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <p>My Queue Content</p>
+        </Tab>
+        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <p>Section Queue Content</p>
+        </Tab>
+      </Tabs>
+
       <h2>Container Tabs</h2>
 
       <Tabs className="container-tabs">
@@ -146,6 +155,16 @@ export const StyleGuide = () => (
         </Tab>
         <Tab tabName="section" title="Section Queue" id="tab-work-queue">
           <p>Section Queue Content</p>
+          <div className="blue-container">
+            <p>
+              To file a case on behalf of another taxpayer, you must be
+              authorized to litigate in this Court as provided by the Tax Court
+              Rules of Practice and Procedure (Rule 60). Enrolled agents,
+              certified public accountants, and powers of attorney who are not
+              admitted to practice before the Court are not eligible to
+              represent taxpayers.
+            </p>
+          </div>
         </Tab>
       </Tabs>
 
