@@ -11,6 +11,12 @@ export const formatDocument = document => {
   return result;
 };
 
+export const formatDocketRecord = docketRecord => {
+  const result = _.cloneDeep(docketRecord);
+  result.createdAtFormatted = moment(result.filingDate).format('L');
+  return result;
+};
+
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
   const yearAmountError = (caseDetailErrors.yearAmounts || []).find(error => {
     return error.index === idx;
@@ -79,6 +85,8 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   const result = _.cloneDeep(caseDetail);
 
   if (result.documents) result.documents = result.documents.map(formatDocument);
+  if (result.docketRecord)
+    result.docketRecord = result.docketRecord.map(formatDocketRecord);
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
       result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
