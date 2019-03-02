@@ -19,28 +19,28 @@ const applicationContext = {
 describe('awsDynamoPersistence', function() {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
+        caseId: '123',
         pk: '123',
         sk: '123',
-        caseId: '123',
         status: 'New',
       },
     ]);
@@ -71,9 +71,9 @@ describe('awsDynamoPersistence', function() {
       const isVersioned = undefined;
       await getRecordViaMapping({
         applicationContext,
+        isVersioned,
         key,
         type,
-        isVersioned,
       });
 
       expect(client.get.getCall(0).args[0].Key.sk).not.to.equal('0');

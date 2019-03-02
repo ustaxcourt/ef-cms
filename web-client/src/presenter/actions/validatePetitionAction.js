@@ -21,18 +21,18 @@ export const validatePetitionAction = ({ applicationContext, path, get }) => {
   );
 
   const errors = applicationContext.getUseCases().validatePetition({
-    petition: { ...petition, ...form },
     applicationContext,
+    petition: { ...petition, ...form },
   });
 
   if (!errors) {
     return path.success();
   } else {
     return path.error({
-      errors,
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errors,
     });
   }
 };

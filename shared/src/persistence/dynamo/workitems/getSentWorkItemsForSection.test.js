@@ -7,16 +7,16 @@ describe('getSentWorkItemsForSection', () => {
   beforeEach(() => {
     sinon.stub(client, 'query').resolves([
       {
-        workItemId: 'abc',
         pk: 'abc',
         sk: 'abc',
+        workItemId: 'abc',
       },
     ]);
     sinon.stub(client, 'batchGet').resolves([
       {
-        workItemId: 'abc',
         pk: 'abc',
         sk: 'abc',
+        workItemId: 'abc',
       },
     ]);
     sinon
@@ -41,6 +41,7 @@ describe('getSentWorkItemsForSection', () => {
       section: 'petitions',
     });
     expect(client.query.getCall(0).args[0]).toEqual({
+      applicationContext: { environment: { stage: 'dev' } },
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
@@ -48,7 +49,6 @@ describe('getSentWorkItemsForSection', () => {
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
       TableName: 'efcms-dev',
-      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });

@@ -20,17 +20,17 @@ export const fileRespondentDocumentAction = async ({
 
   await applicationContext.getUseCases().fileRespondentDocument({
     applicationContext,
-    document: get(state.document.file),
     caseToUpdate,
+    document: get(state.document.file),
     documentType,
     userId: user.token,
   });
 
   return {
-    docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
-      title: `Your ${documentType} was uploaded successfully.`,
       message: 'Your document has been filed.',
+      title: `Your ${documentType} was uploaded successfully.`,
     },
+    docketNumber: caseToUpdate.docketNumber,
   };
 };

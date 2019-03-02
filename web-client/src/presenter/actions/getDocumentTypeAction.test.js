@@ -15,13 +15,13 @@ describe('getDocumentType', async () => {
 
   it('should invoke the error function when no document types returned', async () => {
     await runAction(getDocumentTypeAction, {
+      modules: {
+        presenter,
+      },
       state: {
         document: {
           documentType: 'other',
         },
-      },
-      modules: {
-        presenter,
       },
     });
     expect(spy.called).toEqual(true);

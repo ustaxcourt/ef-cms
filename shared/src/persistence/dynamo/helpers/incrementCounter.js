@@ -15,18 +15,18 @@ exports.incrementCounter = ({ applicationContext }) => {
 
   return client.updateConsistent({
     applicationContext,
-    TableName: TABLE,
-    Key: {
-      pk: `docketNumberCounter-${year}`,
-      sk: `docketNumberCounter-${year}`,
-    },
-    UpdateExpression: 'ADD #a :x',
     ExpressionAttributeNames: {
       '#a': 'id',
     },
     ExpressionAttributeValues: {
       ':x': 1,
     },
+    Key: {
+      pk: `docketNumberCounter-${year}`,
+      sk: `docketNumberCounter-${year}`,
+    },
     ReturnValues: 'UPDATED_NEW',
+    TableName: TABLE,
+    UpdateExpression: 'ADD #a :x',
   });
 };

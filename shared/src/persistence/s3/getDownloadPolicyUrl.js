@@ -10,8 +10,8 @@ exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
       'getObject',
       {
         Bucket: applicationContext.getDocumentsBucketName(),
-        Key: documentId,
         Expires: 120,
+        Key: documentId,
       },
       (err, data) => {
         if (err) {

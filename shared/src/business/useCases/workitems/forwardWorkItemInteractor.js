@@ -36,8 +36,8 @@ exports.forwardWorkItem = async ({
   const workItemToForward = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
-      workItemId: workItemId,
       applicationContext,
+      workItemId: workItemId,
     })
     .then(fullWorkItem =>
       new WorkItem(fullWorkItem)
@@ -48,17 +48,17 @@ exports.forwardWorkItem = async ({
         })
         .addMessage(
           new Message({
+            createdAt: new Date().toISOString(),
             message,
             sentBy: user.name,
-            userId: user.userId,
             sentTo: userToForwardTo.name,
-            createdAt: new Date().toISOString(),
+            userId: user.userId,
           }),
         ),
     );
 
   return applicationContext.getPersistenceGateway().saveWorkItem({
-    workItemToSave: workItemToForward.validate().toRawObject(),
     applicationContext,
+    workItemToSave: workItemToForward.validate().toRawObject(),
   });
 };

@@ -15,11 +15,11 @@ const joi = require('joi-browser');
 function Petition(rawPetition) {
   Object.assign(this, rawPetition);
   const contacts = instantiateContacts({
-    partyType: this.partyType,
     contactInfo: {
       primary: this.contactPrimary,
       secondary: this.contactSecondary,
     },
+    partyType: this.partyType,
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
@@ -27,6 +27,7 @@ function Petition(rawPetition) {
 
 Petition.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
+  filingType: 'Filing Type is a required field.',
   hasIrsNotice: 'You must indicate whether you received an IRS notice.',
   irsNoticeDate: [
     {
@@ -35,12 +36,11 @@ Petition.errorToMessageMap = {
     },
     'Notice Date is a required field.',
   ],
+  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
-  procedureType: 'Procedure Type is a required field.',
-  filingType: 'Filing Type is a required field.',
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
+  procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',
 };
 
@@ -53,9 +53,10 @@ joiValidationDecorator(
       .allow(null),
     caseType: joi.when('hasIrsNotice', {
       is: joi.exist(),
-      then: joi.string().required(),
       otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
     }),
+    countryType: joi.string().optional(),
     filingType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
     irsNoticeDate: joi
@@ -64,15 +65,14 @@ joiValidationDecorator(
       .max('now')
       .when('hasIrsNotice', {
         is: true,
-        then: joi.required(),
         otherwise: joi.optional().allow(null),
+        then: joi.required(),
       }),
     ownershipDisclosureFile: joi.object().when('filingType', {
       is: 'A business',
-      then: joi.required(),
       otherwise: joi.optional().allow(null),
-    }),
-    countryType: joi.string().optional(), // TODO: this should probably be required, but set to optional for now
+      then: joi.required(),
+    }), // TODO: this should probably be required, but set to optional for now
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),

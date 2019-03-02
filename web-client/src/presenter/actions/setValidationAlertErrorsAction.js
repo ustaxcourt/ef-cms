@@ -12,7 +12,6 @@ import { flattenDeep } from 'lodash';
  */
 export const setValidationAlertErrorsAction = ({ props, store }) => {
   const alertError = {
-    title: 'Please correct the following errors on the page:',
     messages: flattenDeep(
       Object.keys(props.errors).map(key => {
         const error = props.errors[key];
@@ -34,6 +33,7 @@ export const setValidationAlertErrorsAction = ({ props, store }) => {
         }
       }),
     ),
+    title: 'Please correct the following errors on the page:',
   };
   store.set(state.alertError, alertError);
 };
