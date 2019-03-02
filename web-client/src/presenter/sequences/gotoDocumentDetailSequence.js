@@ -1,3 +1,6 @@
+import { state } from 'cerebral';
+import { set } from 'cerebral/factories';
+
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
@@ -20,6 +23,7 @@ export const gotoDocumentDetailSequence = [
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
+  set(state.documentDetail.tab, 'partyInfo'),
   setDocumentIdAction,
   getCaseAction,
   setCaseAction,

@@ -25,8 +25,8 @@ exports.sendPetitionToIRS = async ({ caseId, applicationContext }) => {
   }
 
   const caseRecord = await applicationContext.getUseCases().getCase({
-    caseId,
     applicationContext,
+    caseId,
   });
 
   const caseEntity = new Case(caseRecord);
@@ -36,8 +36,8 @@ exports.sendPetitionToIRS = async ({ caseId, applicationContext }) => {
   let sendDate;
   try {
     sendDate = await applicationContext.irsGateway.sendToIRS({
-      caseToSend: caseEntity.toRawObject(),
       applicationContext,
+      caseToSend: caseEntity.toRawObject(),
     });
   } catch (error) {
     throw new Error(`error sending ${caseId} to IRS: ${error.message}`);
@@ -48,8 +48,8 @@ exports.sendPetitionToIRS = async ({ caseId, applicationContext }) => {
   caseEntity.markAsSentToIRS(sendDate).validateWithError(invalidEntityError);
 
   await applicationContext.getPersistenceGateway().saveCase({
-    caseToSave: caseEntity.toRawObject(),
     applicationContext,
+    caseToSave: caseEntity.toRawObject(),
   });
 
   return sendDate;

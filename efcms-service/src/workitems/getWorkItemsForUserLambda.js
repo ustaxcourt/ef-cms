@@ -14,7 +14,7 @@ exports.handler = event =>
     const userId = event.pathParameters.userId;
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().getWorkItemsForUser({
-      userId,
       applicationContext,
+      userId,
     });
   });

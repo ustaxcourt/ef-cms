@@ -6,7 +6,6 @@ exports.getUsersInSection = async ({ applicationContext, section }) => {
 
   const users = await client.query({
     applicationContext,
-    TableName: TABLE,
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -14,6 +13,7 @@ exports.getUsersInSection = async ({ applicationContext, section }) => {
       ':pk': `${section}|user`,
     },
     KeyConditionExpression: '#pk = :pk',
+    TableName: TABLE,
   });
 
   return stripInternalKeys(users);

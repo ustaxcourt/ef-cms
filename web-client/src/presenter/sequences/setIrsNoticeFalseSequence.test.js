@@ -11,8 +11,8 @@ test = CerebralTest(presenter);
 describe('setIrsNoticeFalseSequence', async () => {
   it('should clear the irsNoticeDate fields on the form, clear the yearAmounts, and set hasIrsNotice to false on the caseDetail', async () => {
     test.setState('form', {
-      irsMonth: '01',
       irsDay: '10',
+      irsMonth: '01',
       irsYear: '2019',
     });
     test.setState('caseDetail', {
@@ -20,16 +20,16 @@ describe('setIrsNoticeFalseSequence', async () => {
       hasVerifiedIrsNotice: undefined,
       yearAmounts: [
         {
-          year: '2000',
           amount: 100.0,
+          year: '2000',
         },
       ],
     });
 
     await test.runSequence('setIrsNoticeFalseSequence');
     expect(test.getState('form')).toMatchObject({
-      irsMonth: '',
       irsDay: '',
+      irsMonth: '',
       irsYear: '',
     });
     expect(test.getState('caseDetail')).toMatchObject({

@@ -8,10 +8,10 @@ exports.deleteMappingRecord = async ({
 }) => {
   await client.delete({
     applicationContext,
-    tableName: `efcms-${applicationContext.environment.stage}`,
     key: {
       pk: `${pkId}|${type}`,
       sk: skId,
     },
+    tableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

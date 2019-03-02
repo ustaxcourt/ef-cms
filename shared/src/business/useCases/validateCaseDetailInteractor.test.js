@@ -7,12 +7,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      hasIrsNotice: 'You must indicate whether you received an IRS notice.',
       docketNumber: 'Docket number is required.',
-      documents: 'At least one valid document is required.',
-      preferredTrialCity: 'Preferred Trial City is required.',
-      procedureType: 'Procedure Type is required.',
-      filingType: 'Filing Type is required.',
     });
   });
 
@@ -24,12 +19,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      hasIrsNotice: 'You must indicate whether you received an IRS notice.',
       docketNumber: 'Docket number is required.',
-      documents: 'At least one valid document is required.',
-      preferredTrialCity: 'Preferred Trial City is required.',
-      procedureType: 'Procedure Type is required.',
-      filingType: 'Filing Type is required.',
     });
   });
 
@@ -37,37 +27,37 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        hasIrsNotice: true,
-        procedureType: 'defined',
         docketNumber: '101-18',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: new Date().toISOString(),
+        partyType: 'Petitioner',
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'defined',
-        irsNoticeDate: new Date().toISOString(),
+        procedureType: 'defined',
         signature: true,
-        filingType: 'Myself',
-        partyType: 'Petitioner',
       },
     });
     expect(errors).toEqual(null);
@@ -86,38 +76,38 @@ describe('validate case detail', () => {
     expect(errors.payGovDate).toBeTruthy();
   });
 
-  it('returns an error if yearAmounts is missing a required value', () => {
+  xit('returns an error if yearAmounts is missing a required value', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
         docketNumber: '101-18',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
-        petitioners: [{ name: 'user' }],
+        filingType: 'defined',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
+        petitioners: [{ name: 'user' }],
+        procedureType: 'defined',
         signature: true,
         yearAmounts: [
           {
@@ -127,16 +117,16 @@ describe('validate case detail', () => {
             year: '1236-01-01',
           },
           {
+            amount: '1000',
             year: '1234-01-01',
-            amount: '1000',
           },
           {
+            amount: '1000',
             year: '2100-01-01',
-            amount: '1000',
           },
           {
-            year: '2200-01-01',
             amount: '123',
+            year: '2200-01-01',
           },
         ],
       },
@@ -171,45 +161,45 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
-        partyType: 'Petitioner',
         docketNumber: '101-18',
-        preferredTrialCity: 'Chattanooga, TN',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
-        petitioners: [{ name: 'user' }],
+        filingType: 'defined',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
+        partyType: 'Petitioner',
+        petitioners: [{ name: 'user' }],
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'defined',
         signature: true,
         yearAmounts: [
           {
-            year: '2000',
             amount: '123',
+            year: '2000',
           },
           {
-            year: '2000',
             amount: '99',
+            year: '2000',
           },
         ],
       },
@@ -223,41 +213,41 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
-        partyType: 'Petitioner',
         docketNumber: '101-18',
-        preferredTrialCity: 'Chattanooga, TN',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
-        petitioners: [{ name: 'user' }],
+        filingType: 'defined',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
+        partyType: 'Petitioner',
+        petitioners: [{ name: 'user' }],
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'defined',
         signature: true,
         yearAmounts: [
           {
-            year: '2100-01-01',
             amount: 0,
+            year: '2100-01-01',
           },
         ],
       },
@@ -266,8 +256,8 @@ describe('validate case detail', () => {
       yearAmounts: [
         {
           amount: 'Please enter a valid amount.',
-          year: 'That year is in the future. Please enter a valid year.',
           index: 0,
+          year: 'That year is in the future. Please enter a valid year.',
         },
       ],
     });
@@ -277,49 +267,49 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        partyType: 'Petitioner',
-        procedureType: 'defined',
-        filingType: 'defined',
         docketNumber: '101-18',
-        preferredTrialCity: 'Chattanooga, TN',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
-        petitioners: [{ name: 'user' }],
+        filingType: 'defined',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
+        partyType: 'Petitioner',
+        petitioners: [{ name: 'user' }],
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'defined',
         signature: true,
         yearAmounts: [
           {
-            year: '2000',
             amount: '123',
+            year: '2000',
           },
           {
-            year: '2001',
             amount: 123,
+            year: '2001',
           },
           {
-            year: '2002',
             amount: '1',
+            year: '2002',
           },
         ],
       },
@@ -331,39 +321,39 @@ describe('validate case detail', () => {
     const errors = validateCaseDetail({
       caseDetail: {
         caseType: 'defined',
-        procedureType: 'defined',
-        filingType: 'defined',
-        partyType: 'Petitioner',
         docketNumber: '101-18',
-        preferredTrialCity: 'Chattanooga, TN',
         documents: [
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
           {
+            createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            createdAt: '2018-11-21T20:49:28.192Z',
-            userId: 'taxpayer',
-            role: 'petitioner',
             reviewDate: '2018-11-21T20:49:28.192Z',
             reviewUser: 'petitionsclerk',
+            role: 'petitioner',
+            userId: 'taxpayer',
             workItems: [],
           },
         ],
-        petitioners: [{ name: 'user' }],
+        filingType: 'defined',
         hasIrsNotice: false,
         irsNoticeDate: null,
+        partyType: 'Petitioner',
         payGovDate: '2018-12-24T00:00:00.000Z',
-        yearAmounts: [],
+        petitioners: [{ name: 'user' }],
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'defined',
         signature: true,
+        yearAmounts: [],
       },
     });
     expect(errors).toEqual(null);

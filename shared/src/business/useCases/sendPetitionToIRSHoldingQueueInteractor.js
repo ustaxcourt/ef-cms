@@ -30,8 +30,8 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
-      caseId,
       applicationContext,
+      caseId,
     });
 
   if (!caseRecord) {
@@ -56,8 +56,8 @@ exports.sendPetitionToIRSHoldingQueue = async ({
 
     caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
     return await applicationContext.getPersistenceGateway().saveCase({
-      caseToSave: caseEntity.toRawObject(),
       applicationContext,
+      caseToSave: caseEntity.toRawObject(),
     });
   } else {
     throw new NotFoundError(

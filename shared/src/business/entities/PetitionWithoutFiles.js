@@ -20,14 +20,14 @@ joiValidationDecorator(
   PetitionWithoutFiles,
   joi.object().keys({
     caseType: joi.string().required(),
+    filingType: joi.string().required(),
     irsNoticeDate: joi
       .date()
       .max('now')
       .iso()
       .optional(),
-    procedureType: joi.string().required(),
-    filingType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
+    procedureType: joi.string().required(),
   }),
 );
 

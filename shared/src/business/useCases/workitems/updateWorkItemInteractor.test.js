@@ -4,39 +4,39 @@ describe('updateWorkItem', () => {
   let applicationContext;
 
   let mockWorkItem = {
-    createdAt: '',
-    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    messages: [],
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    sentBy: 'docketclerk',
     assigneeId: 'docketclerk',
-    section: 'docket',
+    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    createdAt: '',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
       sentBy: 'taxpayer',
     },
+    messages: [],
+    section: 'docket',
+    sentBy: 'docketclerk',
+    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'taxpayer',
+        };
+      },
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'taxpayer',
-          role: 'petitioner',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateWorkItem({
-        workItemToUpdate: mockWorkItem,
-        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItemToUpdate: mockWorkItem,
       });
     } catch (e) {
       error = e;
@@ -46,23 +46,23 @@ describe('updateWorkItem', () => {
 
   it('throws an error if the workItemToUpdate is null', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'docketclerk',
+          userId: 'docketclerk',
+        };
+      },
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'docketclerk',
-          role: 'docketclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateWorkItem({
-        workItemToUpdate: null,
-        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItemToUpdate: null,
       });
     } catch (e) {
       error = e;
@@ -72,24 +72,24 @@ describe('updateWorkItem', () => {
 
   it('throws an error if the workItemToUpdate.workItemId does not match the workItemId', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'docketclerk',
+          userId: 'docketclerk',
+        };
+      },
       getPersistenceGateway: () => ({
         saveWorkItem: async () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'docketclerk',
-          role: 'docketclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await updateWorkItem({
-        userId: 'docketclerk',
-        workItemToUpdate: mockWorkItem,
-        workItemId: 'x54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        userId: 'docketclerk',
+        workItemId: 'x54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItemToUpdate: mockWorkItem,
       });
     } catch (e) {
       error = e;
@@ -99,29 +99,29 @@ describe('updateWorkItem', () => {
 
   it('successfully returns the new updated work item on valid user and arguments', async () => {
     applicationContext = {
-      getPersistenceGateway: () => ({
-        saveWorkItem: async () => mockWorkItem,
-        getUserById: () => {
-          return {
-            userId: 'docketclerk',
-            role: 'docketclerk',
-            name: 'Test Docketclerk',
-          };
-        },
-      }),
+      environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          userId: 'docketclerk',
           role: 'docketclerk',
+          userId: 'docketclerk',
         };
       },
 
-      environment: { stage: 'local' },
+      getPersistenceGateway: () => ({
+        getUserById: () => {
+          return {
+            name: 'Test Docketclerk',
+            role: 'docketclerk',
+            userId: 'docketclerk',
+          };
+        },
+        saveWorkItem: async () => mockWorkItem,
+      }),
     };
     const result = await updateWorkItem({
-      workItemToUpdate: mockWorkItem,
-      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       applicationContext,
+      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItemToUpdate: mockWorkItem,
     });
     expect(result).toMatchObject({
       assigneeId: 'docketclerk',

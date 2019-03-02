@@ -15,7 +15,7 @@ describe('appendNewYearAmountSequence', async () => {
     });
     await test.runSequence('appendNewYearAmountSequence');
     expect(test.getState('caseDetail')).toEqual({
-      yearAmounts: [{ year: '', amount: '' }],
+      yearAmounts: [{ amount: '', year: '' }],
     });
   });
 });

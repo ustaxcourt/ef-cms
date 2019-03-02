@@ -7,48 +7,48 @@ describe('getCasesByStatus', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesByStatus: () =>
-            Promise.resolve([omit(MOCK_CASE, 'documents')]),
+            Promise.resolve([omit(MOCK_CASE, 'docketNumber')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'petitionsclerk',
-          role: 'petitionsclerk',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await getCasesByStatus({
-        status: 'New',
         applicationContext,
+        status: 'New',
       });
     } catch (err) {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 
   it('throws an error if the user is unauthorized', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          userId: 'nope',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesByStatus: () =>
             Promise.resolve([omit(MOCK_CASE, 'documents')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'nope',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {

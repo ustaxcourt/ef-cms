@@ -20,6 +20,12 @@ export const submitFilePetitionSequence = [
   computeIrsNoticeDateAction,
   validatePetitionAction,
   {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+      unsetFormSubmittingAction,
+    ],
     success: [
       set(state.showValidation, false),
       setFormSubmittingAction,
@@ -28,12 +34,6 @@ export const submitFilePetitionSequence = [
       setAlertSuccessAction,
       unsetFormSubmittingAction,
       navigateToDashboardAction,
-    ],
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
-      unsetFormSubmittingAction,
     ],
   },
 ];

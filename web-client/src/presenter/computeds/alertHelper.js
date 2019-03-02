@@ -5,11 +5,11 @@ export default get => {
   const userIsIdentified = get(state.user) || false;
 
   return {
-    showLogIn: userIsIdentified,
     showErrorAlert:
       !!alertError.title || !!alertError.message || !!alertError.messages,
-    showSingleMessage: !!alertError.message,
+    showLogIn: userIsIdentified,
     showMultipleMessages: !!alertError.messages,
+    showSingleMessage: !!alertError.message,
     showTitleOnly:
       !!alertError.title && !alertError.message && !alertError.messages,
   };
