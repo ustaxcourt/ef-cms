@@ -20,6 +20,22 @@ export const DocketRecord = connect(
     token,
     updateCurrentTabSequence,
   }) => {
+    const documentMap = caseDetail.documents.reduce((acc, document) => {
+      acc[document.documentId] = document;
+      return acc;
+    }, {});
+
+    const docketRecordMap = mapFn => {
+      return caseDetail.docketRecord.map((record, idx) => {
+        let document;
+
+        if (record.documentId) {
+          document = documentMap[record.documentId];
+        }
+        return mapFn(record, document, idx);
+      });
+    };
+
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
@@ -50,15 +66,15 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {caseDetail.documents.map((document, idx) => (
+            {docketRecordMap((record, document, idx) => (
               <tr key={idx}>
                 <td className="responsive-title">
                   <span className="responsive-label">Activity date</span>
-                  {document.createdAtFormatted}
+                  {record.createdAtFormatted}
                 </td>
                 <td>
                   <span className="responsive-label">Title</span>
-                  {helper.showDirectDownloadLink && (
+                  {document && helper.showDirectDownloadLink && (
                     <a
                       href={`${baseUrl}/documents/${
                         document.documentId
@@ -71,7 +87,7 @@ export const DocketRecord = connect(
                       {document.documentType}
                     </a>
                   )}
-                  {helper.showDocumentDetailLink && (
+                  {document && helper.showDocumentDetailLink && (
                     <a
                       href={`/case-detail/${
                         caseDetail.docketNumber
@@ -82,41 +98,24 @@ export const DocketRecord = connect(
                       {document.documentType}
                     </a>
                   )}
+                  {!document && record.description}
                 </td>
                 <td>
                   <span className="responsive-label">Filed by</span>
-                  {document.filedBy}
+                  {record.filedBy}
                 </td>
                 <td>
                   <span className="responsive-label">Status</span>
-                  {document.isStatusServed && (
+                  {document && document.isStatusServed && (
                     <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                   )}
-                  {helper.showDocumentStatus && <span>{document.status}</span>}
+                  {document && helper.showDocumentStatus && (
+                    <span>{document.status}</span>
+                  )}
                 </td>
                 <td />
               </tr>
             ))}
-            {helper.showPaymentRecord && (
-              <tr>
-                <td>{caseDetail.payGovDateFormatted}</td>
-                <td>Filing fee paid</td>
-                <td />
-                <td />
-                <td />
-              </tr>
-            )}
-            {helper.showPreferredTrialCity && (
-              <tr>
-                <td>{caseDetail.createdAtFormatted}</td>
-                <td>
-                  Request for Place of Trial at {caseDetail.preferredTrialCity}
-                </td>
-                <td />
-                <td />
-                <td />
-              </tr>
-            )}
           </tbody>
         </table>
       </React.Fragment>

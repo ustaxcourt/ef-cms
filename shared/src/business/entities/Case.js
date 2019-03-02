@@ -335,6 +335,7 @@ Case.prototype.addDocument = function(document) {
       filingDate: document.createdAt,
       filedBy: document.filedBy,
       description: document.documentType,
+      documentId: document.documentId,
       status: document.status,
     }),
   );

@@ -183,4 +183,26 @@ describe('formatYearAmounts', () => {
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
     expect(result.shouldShowYearAmounts).toBeFalsy();
   });
+
+  it('maps docket record dates', async () => {
+    const caseDetail = {
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+      docketRecord: [
+        {
+          description: 'Petition',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+        },
+      ],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
+  });
 });
