@@ -1,14 +1,14 @@
 import { runCompute } from 'cerebral/test';
 
-import { formattedCaseDetail, formatYearAmounts } from './formattedCaseDetail';
+import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
 
 describe('formattedCaseDetail', () => {
   it('should convert the status to general docket when it is general', async () => {
     const result = await runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
-          status: 'general',
           petitioners: [{ name: 'bob' }],
+          status: 'general',
         },
       },
     });
@@ -21,12 +21,12 @@ describe('formatYearAmounts', () => {
     const caseDetail = {
       yearAmounts: [
         {
-          year: '2000',
           amount: '',
+          year: '2000',
         },
         {
-          year: '',
           amount: '',
+          year: '',
         },
       ],
     };
@@ -53,12 +53,12 @@ describe('formatYearAmounts', () => {
     const caseDetail = {
       yearAmounts: [
         {
-          year: '2000',
           amount: '',
+          year: '2000',
         },
         {
-          year: '5000-12-24T00:00:00.000Z',
           amount: '',
+          year: '5000-12-24T00:00:00.000Z',
         },
       ],
     };
@@ -89,12 +89,12 @@ describe('formatYearAmounts', () => {
     const caseDetail = {
       yearAmounts: [
         {
-          year: '2000',
           amount: '1000',
+          year: '2000',
         },
         {
-          year: '2000-12-24T00:00:00.000Z',
           amount: '1337',
+          year: '2000-12-24T00:00:00.000Z',
         },
       ],
     };
@@ -112,8 +112,8 @@ describe('formatYearAmounts', () => {
       },
       {
         amount: '1337',
-        errorMessage: 'Duplicate years are bad',
         amountFormatted: '1,337',
+        errorMessage: 'Duplicate years are bad',
         formattedYear: '2000',
         showError: true,
         year: '2000',

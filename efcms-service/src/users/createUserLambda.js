@@ -12,7 +12,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().createUser({
-      user: JSON.parse(event.body),
       applicationContext,
+      user: JSON.parse(event.body),
     });
   });

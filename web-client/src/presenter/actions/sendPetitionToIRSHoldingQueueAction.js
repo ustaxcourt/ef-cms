@@ -22,8 +22,8 @@ export const sendPetitionToIRSHoldingQueueAction = async ({
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {
-      title: 'The petition is now batched for IRS service.',
       message: 'It can be recalled before 3 pm.',
+      title: 'The petition is now batched for IRS service.',
     },
   };
 };

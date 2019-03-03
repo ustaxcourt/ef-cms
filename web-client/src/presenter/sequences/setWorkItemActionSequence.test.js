@@ -12,8 +12,8 @@ describe('setWorkItemActionSequence', async () => {
   it('should set the key of the workItemsAction if not already set', async () => {
     test.setState('workItemActions', {});
     await test.runSequence('setWorkItemActionSequence', {
-      workItemId: '123',
       action: 'complete',
+      workItemId: '123',
     });
     expect(test.getState('workItemActions')).toMatchObject({
       '123': 'complete',
@@ -35,8 +35,8 @@ describe('setWorkItemActionSequence', async () => {
       '123': 'complete',
     });
     await test.runSequence('setWorkItemActionSequence', {
-      workItemId: '123',
       action: 'complete',
+      workItemId: '123',
     });
     expect(test.getState('workItemActions')).toMatchObject({});
   });

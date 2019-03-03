@@ -5,12 +5,12 @@ const {
 describe('getSentWorkItemsForSection', () => {
   it('throws an unauthorization error if the user does not have access to the WORKITEMS', async () => {
     const applicationContext = {
-      getCurrentUser: () => ({
-        userId: 'taxpayer',
-        role: 'petitioner',
-        name: 'Tax Payer',
-      }),
       environment: { stage: 'local' },
+      getCurrentUser: () => ({
+        name: 'Tax Payer',
+        role: 'petitioner',
+        userId: 'taxpayer',
+      }),
     };
 
     let error;
@@ -29,10 +29,11 @@ describe('getSentWorkItemsForSection', () => {
 
   it('returns the work items that is returned from the persistence', async () => {
     const applicationContext = {
+      environment: { stage: 'local' },
       getCurrentUser: () => ({
-        userId: 'petitionsclerk',
-        role: 'petitionsclerk',
         name: 'Tax Payer',
+        role: 'petitionsclerk',
+        userId: 'petitionsclerk',
       }),
       getPersistenceGateway: () => ({
         getSentWorkItemsForSection: () => [
@@ -41,7 +42,6 @@ describe('getSentWorkItemsForSection', () => {
           },
         ],
       }),
-      environment: { stage: 'local' },
     };
 
     const results = await getSentWorkItemsForSection({

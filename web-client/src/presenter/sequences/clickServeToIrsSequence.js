@@ -11,7 +11,7 @@ export const clickServeToIrsSequence = [
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
   {
-    success: [set(state.showModal, 'ServeToIrsModalDialog')],
     error: [setValidationAlertErrorsAction],
+    success: [set(state.showModal, 'ServeToIrsModalDialog')],
   },
 ];

@@ -16,7 +16,7 @@ export const setAlertFromExceptionAction = ({ props, store }) => {
     return;
   }
   store.set(state.alertError, {
-    title: props.error.title,
     message: props.error.message,
+    title: props.error.title,
   });
 };

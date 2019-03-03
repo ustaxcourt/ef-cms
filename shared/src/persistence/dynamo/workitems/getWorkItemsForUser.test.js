@@ -6,16 +6,16 @@ describe('getWorkItemsForUser', () => {
   beforeEach(() => {
     sinon.stub(client, 'query').resolves([
       {
-        workItemId: 'abc',
         pk: 'abc',
         sk: 'abc',
+        workItemId: 'abc',
       },
     ]);
     sinon.stub(client, 'batchGet').resolves([
       {
-        workItemId: 'abc',
         pk: 'abc',
         sk: 'abc',
+        workItemId: 'abc',
       },
     ]);
   });

@@ -7,15 +7,15 @@ describe('Petition', () => {
         countryType: 'domestic',
       });
       const petition = new entityConstructor({
-        countryType: 'domestic',
-        name: 'Eric',
         address1: '123 Deming Way',
         city: 'Los Angeles',
-        state: 'TN',
-        postalCode: '90210',
-        phone: '555-555-1212',
         country: 'USA',
+        countryType: 'domestic',
         email: 'taxpayer@example.com',
+        name: 'Eric',
+        phone: '555-555-1212',
+        postalCode: '90210',
+        state: 'TN',
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

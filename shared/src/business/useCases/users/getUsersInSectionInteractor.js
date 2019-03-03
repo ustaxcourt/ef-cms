@@ -16,7 +16,7 @@ exports.getUsersInSection = ({ section, applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
   return applicationContext.getPersistenceGateway().getUsersInSection({
-    section,
     applicationContext,
+    section,
   });
 };

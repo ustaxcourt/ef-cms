@@ -15,10 +15,10 @@ export const ContactPrimary = connect(
     data: state[props.bind],
     constants: state.constants,
     onChange: props.onChange,
-    updateFormValueSequence: sequences[props.onChange],
+    onChangeSequence: sequences[props.onChange],
     validationErrors: state.validationErrors,
     onBlur: props.onBlur,
-    validateStartCaseSequence: sequences[props.onBlur],
+    onBlurSequence: sequences[props.onBlur],
     contactsHelper: state[props.contactsHelper],
   },
   ({
@@ -28,10 +28,10 @@ export const ContactPrimary = connect(
     data,
     constants,
     onChange,
-    updateFormValueSequence,
+    onChangeSequence,
     validationErrors,
     onBlur,
-    validateStartCaseSequence,
+    onBlurSequence,
     contactsHelper,
   }) => {
     return (
@@ -67,13 +67,13 @@ export const ContactPrimary = connect(
               autoCapitalize="none"
               value={data.contactPrimary.name || ''}
               onChange={e => {
-                updateFormValueSequence({
+                onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
               onBlur={() => {
-                validateStartCaseSequence();
+                onBlurSequence();
               }}
             />
             {validationErrors.contactPrimary && (
@@ -95,7 +95,7 @@ export const ContactPrimary = connect(
                 autoCapitalize="none"
                 value={data.contactPrimary.title || ''}
                 onChange={e => {
-                  updateFormValueSequence({
+                  onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -136,13 +136,13 @@ export const ContactPrimary = connect(
                 autoCapitalize="none"
                 value={data.contactPrimary.inCareOf || ''}
                 onChange={e => {
-                  updateFormValueSequence({
+                  onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
                 onBlur={() => {
-                  validateStartCaseSequence();
+                  onBlurSequence();
                 }}
               />
               {validationErrors.contactPrimary && (
@@ -189,13 +189,13 @@ export const ContactPrimary = connect(
               autoCapitalize="none"
               value={data.contactPrimary.phone || ''}
               onChange={e => {
-                updateFormValueSequence({
+                onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
               onBlur={() => {
-                validateStartCaseSequence();
+                onBlurSequence();
               }}
             />
             {validationErrors.contactPrimary && (
