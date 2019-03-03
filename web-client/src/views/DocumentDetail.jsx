@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -211,8 +211,8 @@ class DocumentDetailComponent extends React.Component {
                             }`}
                             onClick={() =>
                               setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
                                 action: 'history',
+                                workItemId: workItem.workItemId,
                               })
                             }
                           >
@@ -238,8 +238,8 @@ class DocumentDetailComponent extends React.Component {
                               }`}
                               onClick={() =>
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: 'complete',
+                                  workItemId: workItem.workItemId,
                                 })
                               }
                             >
@@ -267,8 +267,8 @@ class DocumentDetailComponent extends React.Component {
                               }`}
                               onClick={() =>
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: 'forward',
+                                  workItemId: workItem.workItemId,
                                 })
                               }
                             >
@@ -294,8 +294,8 @@ class DocumentDetailComponent extends React.Component {
                                   workItemId: workItem.workItemId,
                                 });
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: null,
+                                  workItemId: workItem.workItemId,
                                 });
                               }}
                             >

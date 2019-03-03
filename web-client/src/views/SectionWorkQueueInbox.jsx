@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SectionWorkQueueInbox = connect(
@@ -87,8 +87,8 @@ export const SectionWorkQueueInbox = connect(
             key={item.workItemId}
             onClick={() =>
               setFocusedWorkItem({
-                workItemId: item.workItemId,
                 queueType: 'workQueue',
+                workItemId: item.workItemId,
               })
             }
           >

@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
@@ -22,8 +22,8 @@ export const SectionWorkQueue = connect(
             role="tab"
             onClick={() =>
               chooseWorkQueueSequence({
-                queue: 'section',
                 box: 'inbox',
+                queue: 'section',
               })
             }
           >
@@ -37,8 +37,8 @@ export const SectionWorkQueue = connect(
             role="tab"
             onClick={() =>
               chooseWorkQueueSequence({
-                queue: 'section',
                 box: 'outbox',
+                queue: 'section',
               })
             }
           >

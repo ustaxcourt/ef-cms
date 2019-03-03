@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
 

@@ -23,10 +23,11 @@ input[type='file'] {
   height: auto;
 }
 
+input[type='email'],
 input[type='file'],
 input[type='number'],
-input[type='text'],
 input[type='tel'],
+input[type='text'],
 textarea,
 select {
   padding-top: 0;
