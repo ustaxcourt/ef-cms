@@ -26,29 +26,29 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('should return the expected combined caseDetail after run', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: '2009',
-          irsMonth: '01',
-          irsDay: '01',
-          payGovYear: '2009',
-          payGovMonth: '01',
-          payGovDay: '01',
-        },
         caseDetail: {
           yearAmounts: [
             {
-              year: '2009',
               amount: 1,
+              year: '2009',
             },
             {
-              year: '2010',
               amount: '2',
+              year: '2010',
             },
             {
-              year: '2011',
               amount: '110,322.432',
+              year: '2011',
             },
           ],
+        },
+        form: {
+          irsDay: '01',
+          irsMonth: '01',
+          irsYear: '2009',
+          payGovDay: '01',
+          payGovMonth: '01',
+          payGovYear: '2009',
         },
       },
     });
@@ -77,29 +77,29 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('should leave the dates as -1 if they are invalid', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: 'x',
-          irsMonth: '01',
-          irsDay: '01',
-          payGovYear: 'x',
-          payGovMonth: '01',
-          payGovDay: '01',
-        },
         caseDetail: {
           yearAmounts: [
             {
-              year: 'x',
               amount: 1,
+              year: 'x',
             },
             {
-              year: '2010',
               amount: '2',
+              year: '2010',
             },
             {
-              year: '2011',
               amount: '110,322.432',
+              year: '2011',
             },
           ],
+        },
+        form: {
+          irsDay: '01',
+          irsMonth: '01',
+          irsYear: 'x',
+          payGovDay: '01',
+          payGovMonth: '01',
+          payGovYear: 'x',
         },
       },
     });
@@ -128,18 +128,18 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('should not delete the date if year is missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: '',
-          irsMonth: '12',
-          irsDay: '24',
-          payGovYear: '',
-          payGovMonth: '12',
-          payGovDay: '24',
-        },
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
+        },
+        form: {
+          irsDay: '24',
+          irsMonth: '12',
+          irsYear: '',
+          payGovDay: '24',
+          payGovMonth: '12',
+          payGovYear: '',
         },
       },
     });
@@ -155,18 +155,18 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('should not delete the date if year and month are missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: '',
-          irsMonth: '',
-          irsDay: '24',
-          payGovYear: '',
-          payGovMonth: '12',
-          payGovDay: '24',
-        },
         caseDetail: {
           irsNoticeDate: null,
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
+        },
+        form: {
+          irsDay: '24',
+          irsMonth: '',
+          irsYear: '',
+          payGovDay: '24',
+          payGovMonth: '12',
+          payGovYear: '',
         },
       },
     });
@@ -183,18 +183,18 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('clears the irsNoticeDate and payGovDate to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: '',
-          irsMonth: '',
-          irsDay: '',
-          payGovYear: '',
-          payGovMonth: '',
-          payGovDay: '',
-        },
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
+        },
+        form: {
+          irsDay: '',
+          irsMonth: '',
+          irsYear: '',
+          payGovDay: '',
+          payGovMonth: '',
+          payGovYear: '',
         },
       },
     });
@@ -207,18 +207,18 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
   it('delets the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
-        form: {
-          irsYear: 'notayear',
-          irsMonth: '12',
-          irsDay: '12',
-          payGovYear: '',
-          payGovMonth: '',
-          payGovDay: '',
-        },
         caseDetail: {
           // irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
+        },
+        form: {
+          irsDay: '12',
+          irsMonth: '12',
+          irsYear: 'notayear',
+          payGovDay: '',
+          payGovMonth: '',
+          payGovYear: '',
         },
       },
     });

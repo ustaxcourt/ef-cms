@@ -10,11 +10,11 @@ exports.COUNTRY_TYPES = {
 };
 
 const domesticErrorToMessageMap = {
-  countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
-  state: 'State is a required field.',
+  countryType: 'Country Type is a required field.',
+  name: 'Name is a required field.',
+  phone: 'Phone is a required field.',
   postalCode: [
     {
       contains: 'match',
@@ -22,88 +22,88 @@ const domesticErrorToMessageMap = {
     },
     'Zip Code is a required field.',
   ],
-  phone: 'Phone is a required field.',
+  state: 'State is a required field.',
 };
 
 const internationalErrorToMessageMap = {
-  countryType: 'Country Type is a required field.',
-  country: 'Country is a required field.',
-  name: 'Name is a required field.',
   address1: 'Address is a required field.',
   city: 'City is a required field.',
-  state: 'State/Province/Region is a required field.',
-  postalCode: 'Postal Code is a required field.',
+  country: 'Country is a required field.',
+  countryType: 'Country Type is a required field.',
+  name: 'Name is a required field.',
   phone: 'Phone is a required field.',
+  postalCode: 'Postal Code is a required field.',
+  state: 'State/Province/Region is a required field.',
 };
 
 const domesticValidationObject = {
+  address1: joi.string().required(),
+  address2: joi.string().optional(),
+  address3: joi.string().optional(),
+  city: joi.string().required(),
   countryType: joi
     .string()
     .valid(exports.COUNTRY_TYPES.DOMESTIC)
     .required(),
   name: joi.string().required(),
-  address1: joi.string().required(),
-  address2: joi.string().optional(),
-  address3: joi.string().optional(),
-  city: joi.string().required(),
-  state: joi.string().required(),
+  phone: joi.string().required(),
   postalCode: joi
     .string()
     .regex(/^\d{5}(-\d{4})?$/)
     .required(),
-  phone: joi.string().required(),
+  state: joi.string().required(),
 };
 
 const internationalValidationObject = {
-  countryType: joi
-    .string()
-    .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
-    .required(),
-  country: joi.string().required(),
-  name: joi.string().required(),
   address1: joi.string().required(),
   address2: joi.string().optional(),
   address3: joi.string().optional(),
   city: joi.string().required(),
-  state: joi.string().optional(),
-  postalCode: joi.string().required(),
+  country: joi.string().required(),
+  countryType: joi
+    .string()
+    .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
+    .required(),
+  name: joi.string().required(),
   phone: joi.string().required(),
+  postalCode: joi.string().required(),
+  state: joi.string().optional(),
 };
 
 exports.PARTY_TYPES = {
-  petitioner: 'Petitioner',
-  transferee: 'Transferee',
-  donor: 'Donor',
-  petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
-  survivingSpouse: 'Surviving Spouse',
-  petitionerSpouse: 'Petitioner & Spouse',
+  conservator: 'Conservator',
   corporation: 'Corporation',
+  custodian: 'Custodian',
+  donor: 'Donor',
+  estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
   estateWithoutExecutor:
     'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
-  partnershipOtherThanTaxMatters:
-    'Partnership (as a partner other than tax matters partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
-  nextFriendForMinor:
-    'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+  guardian: 'Guardian',
   nextFriendForIncompetentPerson:
     'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
-  estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+  nextFriendForMinor:
+    'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
   partnership: 'Partnership (BBA Regime)',
+  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
+  partnershipBBA:
+    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipOtherThanTaxMatters:
+    'Partnership (as a partner other than tax matters partner)',
+  petitioner: 'Petitioner',
+  petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
+  petitionerSpouse: 'Petitioner & Spouse',
+  survivingSpouse: 'Surviving Spouse',
+  transferee: 'Transferee',
   trust: 'Trust',
-  conservator: 'Conservator',
-  guardian: 'Guardian',
-  custodian: 'Custodian',
 };
 
 exports.BUSINESS_TYPES = {
   corporation: exports.PARTY_TYPES.corporation,
   partnershipAsTaxMattersPartner:
     exports.PARTY_TYPES.partnershipAsTaxMattersPartner,
+  partnershipBBA: exports.PARTY_TYPES.partnershipBBA,
   partnershipOtherThanTaxMatters:
     exports.PARTY_TYPES.partnershipOtherThanTaxMatters,
-  partnershipBBA: exports.PARTY_TYPES.partnershipBBA,
 };
 
 exports.ESTATE_TYPES = {
@@ -113,12 +113,12 @@ exports.ESTATE_TYPES = {
 };
 
 exports.OTHER_TYPES = {
-  nextFriendForMinor: exports.PARTY_TYPES.nextFriendForMinor,
+  conservator: exports.PARTY_TYPES.conservator,
+  custodian: exports.PARTY_TYPES.custodian,
+  guardian: exports.PARTY_TYPES.guardian,
   nextFriendForIncompetentPerson:
     exports.PARTY_TYPES.nextFriendForIncompetentPerson,
-  conservator: exports.PARTY_TYPES.conservator,
-  guardian: exports.PARTY_TYPES.guardian,
-  custodian: exports.PARTY_TYPES.custodian,
+  nextFriendForMinor: exports.PARTY_TYPES.nextFriendForMinor,
 };
 
 /**
@@ -280,14 +280,14 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
  */
 exports.instantiateContacts = ({ partyType, contactInfo }) => {
   const primaryConstructor = getContactConstructor({
-    partyType,
-    countryType: (contactInfo.primary || {}).countryType,
     contactType: 'primary',
+    countryType: (contactInfo.primary || {}).countryType,
+    partyType,
   });
   const secondaryConstructor = getContactConstructor({
-    partyType,
-    countryType: (contactInfo.secondary || {}).countryType,
     contactType: 'secondary',
+    countryType: (contactInfo.secondary || {}).countryType,
+    partyType,
   });
   return {
     primary: primaryConstructor

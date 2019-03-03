@@ -12,7 +12,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
-      caseId: event.pathParameters.caseId,
       applicationContext,
+      caseId: event.pathParameters.caseId,
     });
   });

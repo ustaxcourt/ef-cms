@@ -25,11 +25,11 @@ export const forwardWorkItemAction = async ({
   const updatedWorkItem = await applicationContext
     .getUseCases()
     .forwardWorkItem({
-      userId,
-      message: form.forwardMessage,
-      workItemId: workItemId,
-      assigneeId: form.forwardRecipientId,
       applicationContext,
+      assigneeId: form.forwardRecipientId,
+      message: form.forwardMessage,
+      userId,
+      workItemId: workItemId,
     });
 
   // update the local state to have the updated work item returned from the backend
@@ -44,8 +44,8 @@ export const forwardWorkItemAction = async ({
 
   return {
     alertSuccess: {
-      title: 'Message sent',
       message: 'Your message has been sent.',
+      title: 'Message sent',
     },
   };
 };

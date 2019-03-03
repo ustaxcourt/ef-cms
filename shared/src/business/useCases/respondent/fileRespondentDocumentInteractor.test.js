@@ -6,9 +6,8 @@ describe('fileRespondentDocument', () => {
   let applicationContext;
 
   let caseRecord = {
-    userId: 'taxpayer',
-    role: 'petitioner',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    createdAt: '',
     docketNumber: '45678-18',
     documents: [
       {
@@ -27,33 +26,34 @@ describe('fileRespondentDocument', () => {
         userId: 'respondent',
       },
     ],
-    createdAt: '',
+    role: 'petitioner',
+    userId: 'taxpayer',
   };
 
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'taxpayer',
+        };
+      },
       getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
         saveCase: async () => null,
+        uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
         createDocument: () => null,
       }),
-      getCurrentUser: () => {
-        return {
-          userId: 'taxpayer',
-          role: 'petitioner',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
       await fileRespondentDocument({
+        applicationContext,
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',
-        applicationContext,
       });
     } catch (e) {
       error = e;
@@ -65,26 +65,26 @@ describe('fileRespondentDocument', () => {
     let error;
     try {
       applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            role: 'respondent',
+            userId: 'respondent',
+          };
+        },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
           saveCase: async () => null,
+          uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
           createDocument: () => null,
         }),
-        getCurrentUser: () => {
-          return {
-            userId: 'respondent',
-            role: 'respondent',
-          };
-        },
-        environment: { stage: 'local' },
       };
       await fileRespondentDocument({
+        applicationContext,
         caseToUpdate: {},
         document: {},
         documentType: 'Answer',
-        applicationContext,
       });
     } catch (err) {
       error = err;

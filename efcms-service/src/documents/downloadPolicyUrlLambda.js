@@ -12,7 +12,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      documentId: event.pathParameters.documentId,
       applicationContext,
+      documentId: event.pathParameters.documentId,
     });
   });

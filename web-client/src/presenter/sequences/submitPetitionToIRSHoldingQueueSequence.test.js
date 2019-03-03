@@ -5,8 +5,8 @@ import presenter from '..';
 let test;
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    sendPetitionToIRSHoldingQueue: async () => null,
     getCase: async () => {},
+    sendPetitionToIRSHoldingQueue: async () => null,
   }),
 };
 

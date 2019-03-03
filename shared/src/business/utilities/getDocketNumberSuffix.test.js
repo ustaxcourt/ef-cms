@@ -3,8 +3,8 @@ const { getDocketNumberSuffix } = require('./getDocketNumberSuffix');
 describe('getDocketNumberSuffix', () => {
   it('returns W for Whistleblower caseType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Whistleblower',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -13,8 +13,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns P for Passport caseType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Passport',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -23,8 +23,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns X for "Exempt Organization" caseType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Exempt Organization',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -33,8 +33,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns R for "Retirement Plan" caseType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Retirement Plan',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -43,8 +43,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns SL for "Lien/Levy" caseType and "small" for procedureType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'CDP (Lien/Levy)',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -53,8 +53,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns L for "Lien/Levy" caseType and "regular" for procedureType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'CDP (Lien/Levy)',
+      docketNumber: '101-18',
       procedureType: 'regular',
     });
 
@@ -63,8 +63,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns S for all others with "small" for procedureType', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Something New',
+      docketNumber: '101-18',
       procedureType: 'small',
     });
 
@@ -73,8 +73,8 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns null for other instance', () => {
     const suffix = getDocketNumberSuffix({
-      docketNumber: '101-18',
       caseType: 'Something New',
+      docketNumber: '101-18',
       procedureType: 'regular',
     });
 

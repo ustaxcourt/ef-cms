@@ -7,10 +7,10 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.conservator },
         constants: {
           PARTY_TYPES,
         },
+        form: { partyType: PARTY_TYPES.conservator },
       },
     });
     expect(result).toMatchObject({
@@ -19,10 +19,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Conservator',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Taxpayer You Are Filing For',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -30,17 +30,17 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Corporation', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.corporation },
         constants: {
           PARTY_TYPES,
         },
+        form: { partyType: PARTY_TYPES.corporation },
       },
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayInCareOf: true,
         header: 'Tell Us About the Corporation You Are Filing For',
         nameLabel: 'Business Name',
-        displayInCareOf: true,
       },
     });
   });
@@ -48,10 +48,10 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Custodian', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.custodian },
         constants: {
           PARTY_TYPES,
         },
+        form: { partyType: PARTY_TYPES.custodian },
       },
     });
     expect(result).toMatchObject({
@@ -60,10 +60,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Custodian',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Taxpayer You Are Filing For',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -71,10 +71,10 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Donor', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: { partyType: PARTY_TYPES.donor },
         constants: {
           PARTY_TYPES,
         },
+        form: { partyType: PARTY_TYPES.donor },
       },
     });
     expect(result).toMatchObject({
@@ -88,20 +88,20 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc.', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.estate,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayTitle: true,
         header:
           'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
         nameLabel: 'Name of Executor/Personal Representative, etc.',
-        displayTitle: true,
       },
       contactSecondary: {
         header: 'Tell Us About the Estate You Are Filing For',
@@ -113,19 +113,19 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc.', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.estateWithoutExecutor,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayInCareOf: true,
         header: 'Tell Us About the Estate You Are Filing For',
         nameLabel: 'Name of Decedent',
-        displayInCareOf: true,
       },
     });
   });
@@ -133,11 +133,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Guardian', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.guardian,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -147,10 +147,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Guardian',
       },
       contactSecondary: {
-        header: 'Tell Us About the Taxpayer You Are Filing For',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Taxpayer You Are Filing For',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -158,11 +158,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
       },
     });
@@ -173,11 +173,11 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
+        displayInCareOf: true,
+        displayPhone: true,
         header:
           'Tell Us About the Legally Incompetent Person You Are Filing For',
         nameLabel: 'Name of Legally Incompetent Person',
-        displayInCareOf: true,
-        displayPhone: true,
       },
     });
   });
@@ -185,11 +185,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.nextFriendForMinor,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -199,10 +199,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header: 'Tell Us About the Minor You Are Filing For',
-        nameLabel: 'Name of Minor',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Minor You Are Filing For',
+        nameLabel: 'Name of Minor',
       },
     });
   });
@@ -210,11 +210,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.partnershipBBA,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -224,10 +224,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Partnership Representative',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Partnership You Are Filing For',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -235,11 +235,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -250,10 +250,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Partnership You Are Filing For',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -261,11 +261,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as the tax matters partner)', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -275,10 +275,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Tax Matters Partner',
       },
       contactSecondary: {
-        header: 'Tell Us About the Partnership You Are Filing For',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Partnership You Are Filing For',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -286,11 +286,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.petitioner,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -305,24 +305,24 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Spouse', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.petitionerSpouse,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayPhone: true,
         header: 'Tell Us About Yourself',
         nameLabel: 'Name',
-        displayPhone: true,
       },
       contactSecondary: {
+        displayPhone: true,
         header: 'Tell Us About Your Spouse',
         nameLabel: "Spouse's Name",
-        displayPhone: true,
       },
     });
   });
@@ -330,11 +330,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Deceased Spouse', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -353,11 +353,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Surviving Spouse', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.survivingSpouse,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -376,11 +376,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Transferee', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.transferee,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -395,11 +395,11 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Trust', async () => {
     const result = await runCompute(contactsHelper, {
       state: {
-        form: {
-          partyType: PARTY_TYPES.trust,
-        },
         constants: {
           PARTY_TYPES,
+        },
+        form: {
+          partyType: PARTY_TYPES.trust,
         },
       },
     });
@@ -409,10 +409,10 @@ describe('contactsHelper', () => {
         nameLabel: 'Name of Trustee',
       },
       contactSecondary: {
-        header: 'Tell Us About the Trust You Are Filing For',
-        nameLabel: 'Name of Trust',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Tell Us About the Trust You Are Filing For',
+        nameLabel: 'Name of Trust',
       },
     });
   });

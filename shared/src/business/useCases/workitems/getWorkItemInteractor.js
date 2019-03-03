@@ -17,8 +17,8 @@ exports.getWorkItem = async ({ workItemId, applicationContext }) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
-      workItemId,
       applicationContext,
+      workItemId,
     });
 
   if (!workItem) {

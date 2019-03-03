@@ -7,8 +7,8 @@
 export const getWorkItemsByUserAction = async ({ applicationContext }) => {
   const useCases = applicationContext.getUseCases();
   const workItems = await useCases.getWorkItemsForUser({
-    userId: applicationContext.getCurrentUser().userId,
     applicationContext,
+    userId: applicationContext.getCurrentUser().userId,
   });
 
   return { workItems };

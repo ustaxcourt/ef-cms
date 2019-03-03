@@ -15,32 +15,32 @@ presenter.providers.applicationContext = {
 describe('updateCaseAction', async () => {
   it('should filter the year amounts that do not have values', async () => {
     await runAction(updateCaseAction, {
-      state: {
-        caseDetail: {
-          yearAmounts: [
-            {
-              year: '',
-              amount: '',
-            },
-            {
-              year: '2001',
-              amount: '',
-            },
-            {
-              year: '',
-              amount: '1000',
-            },
-            {
-              year: '2002',
-              amount: '1000',
-            },
-          ],
-        },
-      },
       modules: {
         presenter,
       },
       props: {},
+      state: {
+        caseDetail: {
+          yearAmounts: [
+            {
+              amount: '',
+              year: '',
+            },
+            {
+              amount: '',
+              year: '2001',
+            },
+            {
+              amount: '1000',
+              year: '',
+            },
+            {
+              amount: '1000',
+              year: '2002',
+            },
+          ],
+        },
+      },
     });
     expect(updateCaseStub.getCall(0).args[0].caseToUpdate).toMatchObject({
       yearAmounts: [

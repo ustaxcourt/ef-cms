@@ -7,19 +7,19 @@ describe('Get cases for respondent', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'respondent',
+          userId: 'respondent',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           getCasesForRespondent: () =>
-            Promise.resolve([omit(MOCK_CASE, 'documents')]),
+            Promise.resolve([omit(MOCK_CASE, 'docketNumber')]),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'respondent',
-          role: 'respondent',
-        };
-      },
-      environment: { stage: 'local' },
     };
     let error;
     try {
@@ -30,7 +30,7 @@ describe('Get cases for respondent', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 });

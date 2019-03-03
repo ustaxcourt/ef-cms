@@ -555,6 +555,7 @@ export const StartCase = connect(
                   <CaseTypeSelect
                     caseTypes={caseTypeDescriptionHelper.caseTypes}
                     validation="validateStartCaseSequence"
+                    allowDefaultOption={true}
                     onChange="updateFormValueSequence"
                     legend="Type of Notice / Case"
                   />
@@ -661,6 +662,7 @@ export const StartCase = connect(
                   caseTypes={caseTypeDescriptionHelper.caseTypes}
                   validation="validateStartCaseSequence"
                   onChange="updateFormValueSequence"
+                  allowDefaultOption={true}
                   legend="Which topic most closely matches your complaint with the
                 IRS?"
                 />
