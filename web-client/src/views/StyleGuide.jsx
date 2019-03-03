@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 
 export const StyleGuide = () => (
   <React.Fragment>

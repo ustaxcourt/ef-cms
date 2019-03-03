@@ -86,7 +86,7 @@ export class ModalDialog extends React.Component {
 }
 
 ModalDialog.propTypes = {
-  modal: PropTypes.object,
   cancelSequence: PropTypes.func,
   confirmSequence: PropTypes.func,
+  modal: PropTypes.object,
 };

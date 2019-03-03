@@ -54,14 +54,14 @@ class ErrorNotificationComponent extends React.Component {
 }
 
 ErrorNotificationComponent.propTypes = {
-  alertHelper: PropTypes.object,
   alertError: PropTypes.object,
+  alertHelper: PropTypes.object,
 };
 
 export const ErrorNotification = connect(
   {
-    alertHelper: state.alertHelper,
     alertError: state.alertError,
+    alertHelper: state.alertHelper,
   },
   ErrorNotificationComponent,
 );

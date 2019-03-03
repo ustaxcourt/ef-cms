@@ -28,12 +28,6 @@ export const Typography = () => (
         is a text link on a light background.
       </p>
       <p>
-        <a className="usa-color-text-visited" href="#b" name="b">
-          This
-        </a>{' '}
-        is a visited link.
-      </p>
-      <p>
         This is a link that goes to an{' '}
         <a
           className="usa-external_link"
@@ -43,14 +37,6 @@ export const Typography = () => (
         </a>
         .
       </p>
-      <div className="usa-background-dark" style={{ padding: '1em' }}>
-        <p>
-          <a href="#c" name="c">
-            This
-          </a>{' '}
-          is a text link on a dark background.
-        </p>
-      </div>
     </div>
     <div className="usa-section usa-grid">
       <div className="usa-width-one-third">

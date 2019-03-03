@@ -13,26 +13,26 @@ import { TrialCity } from './StartCase/TrialCity';
 
 export const StartCase = connect(
   {
+    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
+    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
+    constants: state.constants,
     filingTypes: state.filingTypes,
     form: state.form,
-    constants: state.constants,
     showModal: state.showModal,
-    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
-    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateHasIrsNoticeFormValueSequence:
+      sequences.updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
-    updateHasIrsNoticeFormValueSequence:
-      sequences.updateHasIrsNoticeFormValueSequence,
-    trialCitiesHelper: state.trialCitiesHelper,
-    validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     filingTypes,
