@@ -569,4 +569,80 @@ describe('Case entity', () => {
       expect(filingTypes[0]).toEqual('Myself');
     });
   });
+
+  describe('docket record suffix changes', () => {
+    it('should save initial docket record suffix', () => {
+      const caseToVerify = new Case({});
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
+    });
+
+    it('should not add a docket record item when the suffix updates from the initial suffix when the case is new', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        initialDocketNumberSuffix: 'W',
+        status: 'New',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add a docket record item when the suffix is updating and is different from the initial suffix and the case is not new', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        docketNumberSuffix: 'P',
+        initialDocketNumberSuffix: 'W',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord[0].description).toEqual(
+        "Docket Number is amended from 'BobW' to 'Bob'",
+      );
+    });
+
+    it('should add a docket record item when the suffix is different from the initial suffix and the case is changing from new', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        initialDocketNumberSuffix: 'W',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord[0].description).toEqual(
+        "Docket Number is amended from 'BobW' to 'Bob'",
+      );
+    });
+
+    it('should remove a docket record entry when the suffix updates back to the initial suffix', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        docketRecord: [
+          {
+            description: 'Petition',
+          },
+          {
+            description: "Docket Number is amended from 'Bob' to 'BobW'",
+          },
+        ],
+        initialDocketNumberSuffix: '_',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not update a docket record entry when the suffix was changed earlier', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        docketRecord: [
+          {
+            description: "Docket Number is amended from 'BobW' to 'Bob'",
+          },
+          {
+            description: 'Petition',
+          },
+        ],
+        initialDocketNumberSuffix: 'W',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(2);
+      expect(caseToVerify.docketRecord[0].description).toEqual(
+        "Docket Number is amended from 'BobW' to 'Bob'",
+      );
+    });
+  });
 });
