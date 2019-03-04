@@ -91,6 +91,11 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
+  // cannot store empty strings in persistence
+  if (caseDetail.preferredTrialCity === '') {
+    delete caseDetail.preferredTrialCity;
+  }
+
   caseDetail.yearAmounts = caseDetail.yearAmounts
     .map(yearAmount => ({
       amount: !yearAmount.amount
