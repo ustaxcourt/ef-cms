@@ -4,8 +4,8 @@ import presenter from '..';
 import sinon from 'sinon';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
 import {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 const updateCaseStub = sinon.stub().returns({});
@@ -17,17 +17,17 @@ presenter.providers.applicationContext = {
 };
 
 const getFixtures = (props, state = {}) => ({
-  state: {
-    ...state,
-    constants: {
-      PARTY_TYPES,
-      COUNTRY_TYPES,
-    },
-  },
   modules: {
     presenter,
   },
   props,
+  state: {
+    ...state,
+    constants: {
+      COUNTRY_TYPES,
+      PARTY_TYPES,
+    },
+  },
 });
 
 describe('updatePartyTypeAction', async () => {
@@ -143,16 +143,16 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
-            filingType: 'Not A business',
             businessType: 'some value',
+            filingType: 'Not A business',
           },
           petition: {
             ownershipDisclosureFile: 'a file',
-          },
-          constants: {
-            PARTY_TYPES: [],
-            COUNTRY_TYPES,
           },
         },
       ),
@@ -170,16 +170,16 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
-            filingType: 'A business',
             businessType: 'some value',
+            filingType: 'A business',
           },
           petition: {
             ownershipDisclosureFile: 'a file',
-          },
-          constants: {
-            PARTY_TYPES: [],
-            COUNTRY_TYPES,
           },
         },
       ),
@@ -197,13 +197,13 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
             contactPrimary: 'some value',
             contactSecondary: 'some other value',
-          },
-          constants: {
-            PARTY_TYPES: [],
-            COUNTRY_TYPES,
           },
         },
       ),

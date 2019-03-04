@@ -28,7 +28,6 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
-        <h3>Case Information</h3>
         <ProcedureType
           value={caseDetail.procedureType}
           onChange={e => {

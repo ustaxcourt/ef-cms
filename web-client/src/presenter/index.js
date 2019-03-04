@@ -74,6 +74,15 @@ import state from './state';
  * Main Cerebral module
  */
 export default {
+  catch: [
+    // ORDER MATTERS! Based on inheritance, the first match will be used
+    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [NotFoundError, notFoundErrorSequence], //404
+    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
+  ],
   providers: {},
   sequences: {
     appendNewYearAmountSequence,
@@ -138,13 +147,4 @@ export default {
     viewDocumentSequence,
   },
   state,
-  catch: [
-    // ORDER MATTERS! Based on inheritance, the first match will be used
-    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
-    [NotFoundError, notFoundErrorSequence], //404
-    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    [ActionError, setCurrentPageErrorSequence], // generic error handler
-  ],
 };

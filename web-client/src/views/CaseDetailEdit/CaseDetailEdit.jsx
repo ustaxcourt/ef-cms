@@ -42,21 +42,22 @@ export const CaseDetailEdit = connect(
           <UpdateCaseCancelModalDialog />
         )}
 
-        <Tabs className="container-tabs">
+        <Tabs
+          className="container-tabs"
+          id="case-detail-tabs"
+          bind="documentDetail.tab"
+        >
           <Tab tabName="partyInfo" title="Parties" id="tab-parties">
-            <div className="blue-container">
-              <PartyInformation />
-            </div>
+            <h3>Party Information</h3>
+            <PartyInformation />
           </Tab>
           <Tab tabName="caseInfo" title="Case Info" id="tab-case-info">
-            <div className="blue-container">
-              <CaseInfo />
-            </div>
+            <h3>Case Information</h3>
+            <CaseInfo />
           </Tab>
           <Tab tabName="irsNotice" title="IRS Notice" id="tab-irs-notice">
-            <div className="blue-container">
-              <IRSNotice />
-            </div>
+            <h3>IRS Notice Information</h3>
+            <IRSNotice />
           </Tab>
         </Tabs>
 

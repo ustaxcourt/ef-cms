@@ -6,6 +6,7 @@ import { Contacts } from '../StartCase/Contacts';
 
 export const PartyInformation = connect(
   {
+    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     caseDetailEditHelper: state.caseDetailEditHelper,
@@ -15,6 +16,7 @@ export const PartyInformation = connect(
       sequences.submitCaseDetailEditSaveSequence,
   },
   ({
+    autoSaveCaseSequence,
     caseDetail,
     updateCasePartyTypeSequence,
     caseDetailEditHelper,
@@ -36,6 +38,7 @@ export const PartyInformation = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
+              autoSaveCaseSequence();
             }}
           >
             {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
@@ -88,7 +91,7 @@ export const PartyInformation = connect(
           bind="caseDetail"
           emailBind="caseDetail.contactPrimary"
           onChange="updateCaseValueSequence"
-          onBlur="validateStartCaseSequence"
+          onBlur="autoSaveCaseSequence"
           contactsHelper="caseDetailEditContactsHelper"
           showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
           showSecondaryContact={caseDetailEditHelper.showSecondaryContact}

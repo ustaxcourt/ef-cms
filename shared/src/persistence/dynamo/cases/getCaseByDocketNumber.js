@@ -16,9 +16,9 @@ exports.getCaseByDocketNumber = async ({
 }) => {
   const aCase = await getRecordViaMapping({
     applicationContext,
+    isVersioned: true,
     key: docketNumber,
     type: 'case',
-    isVersioned: true,
   });
 
   return stripWorkItems(

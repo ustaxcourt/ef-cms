@@ -3,41 +3,41 @@ const _ = require('lodash');
 const User = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
-  createdAt: '2018-12-27T18:06:02.971Z',
+  assigneeId: null,
   assigneeName: 'bob',
-  caseStatus: 'General',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+  caseStatus: 'General',
+  createdAt: '2018-12-27T18:06:02.971Z',
+  docketNumber: '101-18',
+  docketNumberSuffix: 'S',
   document: {
-    documentType: 'Stipulated Decision',
     createdAt: '2018-12-27T18:06:02.968Z',
     documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+    documentType: 'Stipulated Decision',
   },
   messages: [
     {
       createdAt: '2018-12-27T18:06:02.968Z',
-      messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
       message: 'a Stipulated Decision filed by respondent is ready for review',
-      userId: 'respondent',
+      messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
       sentBy: 'Test Respondent',
       sentTo: null,
+      userId: 'respondent',
     },
   ],
   section: 'docket',
-  workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
-  assigneeId: null,
-  docketNumber: '101-18',
-  docketNumberSuffix: 'S',
   sentBy: 'respondent',
   updatedAt: '2018-12-27T18:06:02.968Z',
+  workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
 };
 
 describe('assignWorkItems', () => {
   it('unauthorized user tries to assign a work item', async () => {
     const applicationContext = {
+      environment: { stage: 'local' },
       getCurrentUser: () => ({
         userId: 'baduser',
       }),
-      environment: { stage: 'local' },
     };
     let error;
     try {
@@ -52,10 +52,7 @@ describe('assignWorkItems', () => {
 
   it('fail on validation if the work items provided are invalid', async () => {
     const applicationContext = {
-      user: {
-        name: 'bob',
-        role: 'petitionsclerk',
-      },
+      environment: { stage: 'local' },
       getPersistenceGateway: () => {
         return {
           getWorkItemById: async () => _.omit(MOCK_WORK_ITEM, 'caseId'),
@@ -64,14 +61,17 @@ describe('assignWorkItems', () => {
           }),
         };
       },
-      environment: { stage: 'local' },
+      user: {
+        name: 'bob',
+        role: 'petitionsclerk',
+      },
     };
     let error;
     try {
       await assignWorkItems({
+        applicationContext,
         userId: 'docketclerk',
         workItems: [{}],
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -81,11 +81,12 @@ describe('assignWorkItems', () => {
 
   it('be successful when all validation passed', async () => {
     const applicationContext = {
+      environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          userId: 'docketclerk1',
-          role: 'docketclerk',
           name: 'Test Docketclerk',
+          role: 'docketclerk',
+          userId: 'docketclerk1',
         });
       },
       getPersistenceGateway: () => {
@@ -96,12 +97,11 @@ describe('assignWorkItems', () => {
           }),
         };
       },
-      environment: { stage: 'local' },
     };
     await assignWorkItems({
+      applicationContext,
       userId: 'docketclerk',
       workItems: [MOCK_WORK_ITEM],
-      applicationContext,
     });
   });
 });

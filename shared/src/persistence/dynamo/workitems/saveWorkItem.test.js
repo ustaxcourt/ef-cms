@@ -5,8 +5,8 @@ const sinon = require('sinon');
 describe('saveWorkItem', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
-      caseId: '123',
       assigneeId: 'bob',
+      caseId: '123',
       documents: [
         {
           documentId: 'abc',
@@ -21,9 +21,9 @@ describe('saveWorkItem', () => {
     sinon.stub(client, 'delete').resolves({});
     sinon.stub(client, 'put').resolves([
       {
-        workItemId: 'abc',
         pk: 'abc',
         sk: 'abc',
+        workItemId: 'abc',
       },
     ]);
   });
@@ -43,11 +43,11 @@ describe('saveWorkItem', () => {
       isAuthorizedForWorkItems: () => true,
     };
     const result = await saveWorkItem({
-      workItemToSave: {
-        workItemId: '123',
-        assigneeId: 'bob',
-      },
       applicationContext,
+      workItemToSave: {
+        assigneeId: 'bob',
+        workItemId: '123',
+      },
     });
     expect(result).toEqual([{ workItemId: 'abc' }]);
   });

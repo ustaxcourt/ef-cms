@@ -119,7 +119,11 @@ label.validated::after {
 }
 
 .document-detail-one-third {
+  overflow: scroll;
+  max-height: 890px;
+
   .phone-input {
+    margin-bottom: 25px;
     clear: both;
   }
   .email-input {

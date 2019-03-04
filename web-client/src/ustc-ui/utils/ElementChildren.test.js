@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { map, forEach, getDefaultAttribute } from './ElementChildren';
+import { forEach, getDefaultAttribute, map } from './ElementChildren';
 
 describe('map', () => {
   it('should map items and skip non elements', () => {

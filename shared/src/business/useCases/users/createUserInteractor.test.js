@@ -4,58 +4,58 @@ const { UnauthorizedError } = require('ef-cms-shared/src/errors/errors');
 describe('create user', () => {
   it('creates the user', async () => {
     const mockUser = {
-      userId: 'petitionsclerk1@example.com',
-      role: 'petitions',
       name: 'Test PetitionsClerk',
+      role: 'petitions',
+      userId: 'petitionsclerk1@example.com',
     };
     const applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'admin',
+          userId: 'admin',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           createUser: () => Promise.resolve(mockUser),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'admin',
-          role: 'admin',
-        };
-      },
-      environment: { stage: 'local' },
     };
     const userToCreate = { userId: 'petitionsclerk1@example.com' };
     const user = await createUser({
-      userToCreate,
       applicationContext,
+      userToCreate,
     });
     expect(user).not.toBeUndefined();
   });
 
   it('throws unauthorized for any user without an "admin" role', async () => {
     const mockUser = {
-      userId: 'petitioner1@example.com',
-      role: 'petitioner',
       name: 'Test Petitioner',
+      role: 'petitioner',
+      userId: 'petitioner1@example.com',
     };
     const applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'admin',
+        };
+      },
       getPersistenceGateway: () => {
         return {
           createUser: () => Promise.resolve(mockUser),
         };
       },
-      getCurrentUser: () => {
-        return {
-          userId: 'admin',
-          role: 'petitioner',
-        };
-      },
-      environment: { stage: 'local' },
     };
     const userToCreate = { userId: 'petitioner1@example.com' };
     let error;
     try {
       await createUser({
-        userToCreate,
         applicationContext,
+        userToCreate,
       });
     } catch (err) {
       error = err;

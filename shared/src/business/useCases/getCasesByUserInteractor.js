@@ -10,8 +10,8 @@ exports.getCasesByUser = async ({ userId, applicationContext }) => {
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesByUser({
-      userId,
       applicationContext,
+      userId,
     });
 
   return Case.validateRawCollection(cases);

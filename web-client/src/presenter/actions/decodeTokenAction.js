@@ -5,7 +5,7 @@ export const decodeTokenAction = ({ props }) => {
   decoded.userId = decoded.email;
   decoded.role = decoded['custom:role'];
   return {
-    user: decoded,
     token: props.token,
+    user: decoded,
   };
 };

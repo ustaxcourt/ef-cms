@@ -1,841 +1,1148 @@
 [
   {
-    "pk": "docket|user",
-    "sk": "docketclerk",
-    "password": "Testing1234$",
-    "role": "docketclerk",
-    "name": "Test Docketclerk",
-    "userId": "docketclerk",
-    "section": "docket",
-    "email": "docketclerk"
-  },
-  {
-    "pk": "docket|user",
-    "sk": "docketclerk1",
-    "password": "Testing1234$",
-    "role": "docketclerk",
-    "name": "Test Docketclerk1",
-    "userId": "docketclerk1",
-    "section": "docket",
-    "email": "docketclerk1"
-  },
-  {
-    "pk": "petitions|user",
-    "sk": "petitionsclerk",
-    "password": "Testing1234$",
-    "role": "petitionsclerk",
-    "name": "Test petitionsclerk",
-    "userId": "petitionsclerk",
-    "section": "petitions",
-    "email": "petitionsclerk"
-  },
-  {
-    "pk": "petitions|user",
-    "sk": "petitionsclerk1",
-    "password": "Testing1234$",
-    "role": "petitionsclerk",
-    "name": "Test Petitionsclerk1",
-    "userId": "petitionsclerk1",
-    "section": "petitions",
-    "email": "petitionsclerk1"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "101-18|case"
-  },
-  {
-    "createdAt": "2018-12-27T18:22:57.418Z",
-    "preferredTrialCity": "Hartford, CT",
-    "documents": [
-      {
-        "createdAt": "2018-12-27T18:22:57.418Z",
-        "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd",
-        "documentType": "Petition",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [
-          {
-            "createdAt": "2018-12-27T18:22:57.418Z",
-            "assigneeName": "IRSBatchSystem",
-            "caseStatus": "Batched for IRS",
-            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-            "document": {
-              "documentType": "Petition",
-              "createdAt": "2018-12-27T18:22:57.418Z",
-              "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
-            },
-            "messages": [
-              {
-                "createdAt": "2018-12-27T18:22:57.418Z",
-                "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
-                "message": "Petition ready for review",
-                "userId": "taxpayer",
-                "sentBy": "Petitioner"
-              }
-            ],
-            "section": "petitions",
-            "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-            "assigneeId": null,
-            "docketNumber": "102-18",
-            "docketNumberSuffix": "SL",
-            "sentBy": "petitioner",
-            "updatedAt": "2018-12-27T18:06:02.968Z",
-            "isInitializeCase": true
-          }
-        ]
-      }
-    ],
-    "caseId": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "sk": "0",
-    "hasIrsNotice": false,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "pk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "contactPrimary": {
-      "countryType": "domestic",
-      "postalCode": "37208",
-      "role": "taxpayer",
-      "city": "Orlando",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
-    },
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "userId": "taxpayer",
-    "docketNumber": "102-18",
-    "docketNumberSuffix": "SL",
     "procedureType": "Small",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
-    "caseType": "CDP (Lien/Levy)",
-    "status": "New"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "b6238482-5f0e-48a8-bb8e-da2957074a08|case"
-  },
-  {
-    "caseStatus": "General",
-    "preferredTrialCity": "Hartford, CT",
-    "document": {
-      "documentType": "Stipulated Decision",
-      "createdAt": "2018-12-27T18:06:02.968Z",
-      "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08"
-    },
-    "section": "docket",
-    "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-    "assigneeId": null,
-    "sentBy": "respondent",
-    "createdAt": "2018-12-27T18:06:02.971Z",
-    "assigneeName": null,
-    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-    "messages": [
-      {
-        "createdAt": "2018-12-27T18:06:02.968Z",
-        "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
-        "message": "a Stipulated Decision filed by respondent is ready for review",
-        "userId": "respondent",
-        "sentBy": "Test Respondent"
-      }
-    ],
-    "pk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-    "docketNumber": "101-18",
-    "docketNumberSuffix": "W",
-    "updatedAt": "2018-12-27T18:06:02.968Z"
-  },
-  {
-    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "pk": "taxpayer|case"
-  },
-  {
-    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "pk": "taxpayer|case"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "taxpayer|case"
-  },
-  {
-    "documents": [
-      {
-        "createdAt": "2018-12-27T17:26:36.948Z",
-        "documentType": "Petition",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": [],
-        "documentId": "36bf0a37-6d75-4ea5-85ee-eea07bf9ed99",
-        "userId": "taxpayer",
-        "status": "Served"
-      },
-      {
-        "createdAt": "2018-12-27T18:05:54.166Z",
-        "documentType": "Answer",
-        "filedBy": "Test Respondent",
-        "workItems": [
-          {
-            "createdAt": "2018-12-27T18:05:54.166Z",
-            "assigneeName": "Test Docketclerk",
-            "caseStatus": "General",
-            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-            "document": {
-              "documentType": "Answer",
-              "createdAt": "2018-12-27T18:05:54.164Z",
-              "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
-            },
-            "messages": [
-              {
-                "createdAt": "2018-12-27T18:05:54.164Z",
-                "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
-                "message": "a Answer filed by respondent is ready for review",
-                "userId": "respondent",
-                "sentBy": "Test Respondent"
-              }
-            ],
-            "section": "docket",
-            "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
-            "assigneeId": "docketclerk",
-            "docketNumber": "101-18",
-            "docketNumberSuffix": "W",
-            "sentBy": "respondent",
-            "updatedAt": "2018-12-27T18:05:54.164Z"
-          }
-        ],
-        "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-        "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd",
-        "userId": "respondent"
-      },
-      {
-        "createdAt": "2018-12-27T18:06:02.971Z",
-        "preferredTrialCity": "Hartford, CT",
-        "documentType": "Stipulated Decision",
-        "filedBy": "Test Respondent",
-        "workItems": [
-          {
-            "createdAt": "2018-12-27T18:06:02.971Z",
-            "assigneeName": null,
-            "caseStatus": "General",
-            "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-            "document": {
-              "documentType": "Stipulated Decision",
-              "createdAt": "2018-12-27T18:06:02.968Z",
-              "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08"
-            },
-            "messages": [
-              {
-                "createdAt": "2018-12-27T18:06:02.968Z",
-                "messageId": "343f5b21-a3a9-4657-8e2b-df782f920e45",
-                "message": "a Stipulated Decision filed by respondent is ready for review",
-                "userId": "respondent",
-                "sentBy": "Test Respondent"
-              }
-            ],
-            "section": "docket",
-            "workItemId": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-            "assigneeId": null,
-            "docketNumber": "101-18",
-            "docketNumberSuffix": "W",
-            "sentBy": "respondent",
-            "updatedAt": "2018-12-27T18:06:02.968Z"
-          }
-        ],
-        "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-        "documentId": "b6238482-5f0e-48a8-bb8e-da2957074a08",
-        "userId": "respondent"
-      }
-    ],
-    "hasIrsNotice": false,
-    "hasVerifiedIrsNotice": null,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "respondent": {
-      "postalCode": "37208",
-      "role": "respondent",
-      "city": "Orlando",
-      "userId": "respondent",
-      "respondentId": "respondent",
-      "token": "respondent",
-      "barNumber": "12345",
-      "phone": "111-111-1111",
-      "name": "Test Respondent",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "email": "testrespondent@example.com"
-    },
-    "userId": "taxpayer",
-    "irsSendDate": "2018-12-27T17:27:11.113Z",
-    "createdAt": "2018-12-27T17:26:36.948Z",
-    "payGovId": "1234",
-    "procedureType": "Small",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
-    "preferredTrialCity": "Hartford, CT",
-    "caseType": "Whistleblower",
-    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "0",
-    "pk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "contactPrimary": {
-      "countryType": "domestic",
-      "postalCode": "37208",
-      "role": "taxpayer",
-      "city": "Orlando",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
-    },
-    "docketNumber": "101-18",
-    "docketNumberSuffix": "W",
-    "status": "General"
-  },
-  {
-    "caseStatus": "New",
-    "preferredTrialCity": "Hartford, CT",
-    "document": {
-      "documentType": "Petition",
-      "createdAt": "2018-12-27T18:05:54.164Z",
-      "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
-    },
-    "section": "docket",
-    "workItemId": "9f60fe99-37dc-435c-9bdf-24be67769344",
-    "assigneeId": "docketclerk",
-    "sentBy": "respondent",
-    "createdAt": "2018-12-27T18:05:54.166Z",
-    "assigneeName": "Test Docketclerk",
-    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
-    "messages": [
-      {
-        "createdAt": "2018-12-27T18:05:54.164Z",
-        "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
-        "message": "a Petition filed by taxpayer is ready for review",
-        "userId": "taxpayer",
-        "sentBy": "Test Taxpayer"
-      }
-    ],
-    "pk": "9f60fe99-37dc-435c-9bdf-24be67769344",
-    "docketNumber": "102-18",
-    "docketNumberSuffix": "SL",
-    "updatedAt": "2018-12-27T18:05:54.164Z"
-  },
-  {
-    "caseStatus": "General",
-    "document": {
-      "documentType": "Answer",
-      "createdAt": "2018-12-27T18:05:54.164Z",
-      "documentId": "8eef49b4-9d40-4773-84ab-49e1e59e49cd"
-    },
-    "section": "docket",
-    "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344",
-    "assigneeId": "docketclerk",
-    "sentBy": "respondent",
-    "createdAt": "2018-12-27T18:05:54.166Z",
-    "assigneeName": "Test Docketclerk",
-    "caseId": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
-    "messages": [
-      {
-        "createdAt": "2018-12-27T18:05:54.164Z",
-        "messageId": "09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1",
-        "message": "a Answer filed by respondent is ready for review",
-        "userId": "respondent",
-        "sentBy": "Test Respondent"
-      }
-    ],
-    "pk": "af60fe99-37dc-435c-9bdf-24be67769344",
-    "docketNumber": "101-18",
-    "docketNumberSuffix": "W",
-    "updatedAt": "2018-12-27T18:05:54.164Z"
-  },
-  {
-    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
-    "pk": "docketclerk|workItem"
-  },
-  {
-    "pk": "docket|sentWorkItem",
-    "sk": "2019-01-30T00:00:00Z",
-    "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344"
-  },
-  {
-    "pk": "docketclerk|sentWorkItem",
-    "sk": "2019-01-30T00:00:00Z",
-    "workItemId": "af60fe99-37dc-435c-9bdf-24be67769344"
-  },
-  {
-    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "pk": "103-18|case"
-  },
-  {
-    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "pk": "New|case-status"
-  },
-  {
-    "sk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "pk": "New|case-status"
-  },
-  {
-    "sk": "25f19235-40fa-4450-82c7-1edb7bf4ce03",
-    "pk": "102-18|case"
-  },
-  {
-    "createdAt": "2018-12-27T18:23:07.975Z",
-    "preferredTrialCity": "Hartford, CT",
-    "documents": [
-      {
-        "createdAt": "2018-12-27T18:23:07.975Z",
-        "documentId": "c36354f7-696e-4e61-b8cb-177cec967d2d",
-        "documentType": "Petition",
-        "userId": "taxpayer",
-        "filedBy": "Petitioner Test Taxpayer",
-        "workItems": []
-      }
-    ],
-    "procedureType": "Regular",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
-    "caseType": "Declaratory Judgment (Exempt Organization)",
-    "caseId": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "sk": "0",
-    "hasIrsNotice": false,
-    "hasVerifiedIrsNotice": null,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "pk": "dabe8f23-c143-4b16-b6a6-dc0b83821deb",
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "contactPrimary": {
-      "countryType": "international",
-      "country": "England",
-      "postalCode": "123FunnyCode",
-      "role": "taxpayer",
-      "city": "London",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Fish and Chips St.",
-      "address2": "Mushy Peas",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
-    },
-    "userId": "taxpayer",
-    "docketNumber": "103-18",
-    "docketNumberSuffix": "X",
-    "status": "New"
-  },
-  {
-    "sk": "docketNumberCounter",
-    "id": 4,
-    "pk": "docketNumberCounter"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "General|case-status"
-  },
-  {
-    "sk": "78de1ba3-add3-4329-8372-ce37bda6bc93",
-    "pk": "docket|workItem"
-  },
-  {
-    "sk": "af60fe99-37dc-435c-9bdf-24be67769344",
-    "pk": "docket|workItem"
-  },
-  {
-    "sk": "9f60fe99-37dc-435c-9bdf-24be67769344",
-    "pk": "petitions|workItem"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "respondent|activeCase"
-  },
-  {
-    "sk": "e631d81f-a579-4de5-b8a8-b3f10ef619fd",
-    "pk": "8eef49b4-9d40-4773-84ab-49e1e59e49cd|case"
-  },
-  {
-    "sk": "2019-01-06T22:59:16.055Z",
-    "pk": "petitions|sentWorkItem",
-    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904"
-  },
-  {
-    "docketNumberSuffix": "S",
-    "caseStatus": "Batched for IRS",
-    "document": {
-      "createdAt": "2019-01-06T22:49:42.980Z",
-      "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
-      "documentType": "Petition",
-      "userId": "taxpayer",
-      "filedBy": "Petitioner",
-      "workItems": []
-    },
-    "section": "irsBatchSection",
-    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "isInitializeCase": true,
-    "assigneeId": "irsBatchSystem",
-    "sentBy": "taxpayer",
-    "createdAt": "2019-01-06T22:49:42.981Z",
-    "assigneeName": "IRS Holding Queue",
-    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "messages": [
-      {
-        "createdAt": "2019-01-06T22:49:42.981Z",
-        "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
-        "message": "A Petition filed by Petitioner is ready for review.",
-        "sentBy": "Test Taxpayer"
-      },
-      {
-        "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
-        "createdAt": "2019-01-06T22:59:16.055Z",
-        "sentTo": "IRS Holding Queue",
-        "message": "Petition batched for IRS",
-        "userId": "petitionsclerk",
-        "sentBy": "petitionsclerk"
-      }
-    ],
-    "pk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "docketNumber": "104-18",
-    "updatedAt": "2019-01-06T22:49:42.981Z"
-  },
-  {
-    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "taxpayer|case"
-  },
-  {
-    "sk": "2019-01-06T22:59:16.055Z",
-    "pk": "petitionsclerk|sentWorkItem",
-    "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904"
-  },
-  {
-    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "Batched for IRS|case-status"
-  },
-  {
-    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "aadca074-542e-496a-8322-8cb1c175a63c|case"
-  },
-  {
-    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "pk": "irsBatchSystem|workItem"
-  },
-  {
-    "sk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "pk": "104-18|case"
-  },
-  {
-    "sk": "2b985402-00ec-41d8-a88e-51e4b164e904",
-    "pk": "irsBatchSection|workItem"
-  },
-  {
-    "procedureType": "Small",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
-    "docketNumberSuffix": "S",
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "documents": [
-      {
-        "createdAt": "2019-01-06T22:49:42.980Z",
-        "documentType": "Petition",
-        "filedBy": "Petitioner",
-        "workItems": [
-          {
-            "docketNumberSuffix": "S",
-            "caseStatus": "Batched for IRS",
-            "document": {
-              "createdAt": "2019-01-06T22:49:42.980Z",
-              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
-              "documentType": "Petition",
-              "userId": "taxpayer",
-              "filedBy": "Petitioner",
-              "workItems": []
-            },
-            "section": "irsBatchSection",
-            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
-            "isInitializeCase": true,
-            "assigneeId": "irsBatchSystem",
-            "sentBy": "taxpayer",
-            "createdAt": "2019-01-06T22:49:42.981Z",
-            "assigneeName": "IRS Holding Queue",
-            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-            "messages": [
-              {
-                "createdAt": "2019-01-06T22:49:42.981Z",
-                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
-                "message": "A Petition filed by Petitioner is ready for review.",
-                "sentBy": "Test Taxpayer"
-              },
-              {
-                "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
-                "createdAt": "2019-01-06T22:59:16.055Z",
-                "sentTo": "IRS Holding Queue",
-                "message": "Petition batched for IRS",
-                "userId": "petitionsclerk",
-                "sentBy": "petitionsclerk"
-              }
-            ],
-            "docketNumber": "104-18",
-            "updatedAt": "2019-01-06T22:49:42.981Z"
-          }
-        ],
-        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
-        "userId": "taxpayer"
-      }
-    ],
-    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
-    "hasIrsNotice": true,
-    "hasVerifiedIrsNotice": null,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "userId": "taxpayer",
-    "currentVersion": "2",
-    "caseType": "Deficiency",
-    "yearAmounts": [],
-    "preferredTrialCity": "Washington, District of Columbia",
-    "createdAt": "2019-01-06T22:49:42.980Z",
-    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "docketRecord": [
-      {
-        "filingDate": "2019-01-06T22:49:42.980Z",
-        "description": "Request for Place of Trial at Washington, District of Columbia"
-      },
-      {
-        "filingDate": "2019-01-06T22:49:42.980Z",
-        "description": "Petition",
-        "filedBy": "Petitioner"
-      }
-    ],
-    "sk": "0",
-    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "contactPrimary": {
-      "countryType": "domestic",
-      "postalCode": "37208",
-      "role": "petitioner",
-      "city": "Orlando",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
-    },
-    "docketNumber": "104-18",
-    "status": "Batched for IRS"
-  },
-  {
-    "procedureType": "Small",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
+    "contactSecondary": {},
     "docketNumberSuffix": "S",
     "documents": [
       {
-        "createdAt": "2019-01-06T22:49:42.980Z",
+        "createdAt": "2019-03-01T22:53:50.098Z",
         "documentType": "Petition",
-        "filedBy": "Petitioner",
+        "filedBy": "Test Petitioner",
         "workItems": [
           {
             "docketNumberSuffix": "S",
             "caseStatus": "New",
             "document": {
-              "createdAt": "2019-01-06T22:49:42.980Z",
-              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+              "createdAt": "2019-03-01T22:53:50.098Z",
+              "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
               "documentType": "Petition",
               "userId": "taxpayer",
-              "filedBy": "Petitioner",
+              "filedBy": "Test Petitioner",
               "workItems": []
             },
             "section": "petitions",
-            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
+            "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
             "isInitializeCase": true,
             "assigneeId": null,
             "sentBy": "taxpayer",
-            "createdAt": "2019-01-06T22:49:42.981Z",
+            "createdAt": "2019-03-01T22:53:50.098Z",
             "assigneeName": null,
-            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+            "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
             "messages": [
               {
-                "createdAt": "2019-01-06T22:49:42.981Z",
-                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
+                "createdAt": "2019-03-01T22:53:50.098Z",
+                "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
                 "message": "A Petition filed by Petitioner is ready for review.",
-                "sentBy": "Test Taxpayer"
+                "sentBy": "Test Petitioner"
               }
             ],
-            "docketNumber": "104-18",
-            "updatedAt": "2019-01-06T22:49:42.981Z"
+            "docketNumber": "103-19",
+            "updatedAt": "2019-03-01T22:53:50.098Z"
           }
         ],
-        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
         "userId": "taxpayer"
-      }
-    ],
-    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
-    "hasIrsNotice": true,
-    "hasVerifiedIrsNotice": null,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "userId": "taxpayer",
-    "currentVersion": "1",
-    "caseType": "Deficiency",
-    "yearAmounts": [],
-    "preferredTrialCity": "Washington, District of Columbia",
-    "createdAt": "2019-01-06T22:49:42.980Z",
-    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "docketRecord": [
-      {
-        "filingDate": "2019-01-06T22:49:42.980Z",
-        "description": "Request for Place of Trial at Washington, District of Columbia"
       },
       {
-        "filingDate": "2019-01-06T22:49:42.980Z",
-        "description": "Petition",
-        "filedBy": "Petitioner"
-      }
-    ],
-
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "sk": "1",
-    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "contactPrimary": {
-      "countryType": "domestic",
-      "postalCode": "37208",
-      "role": "petitioner",
-      "city": "Orlando",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
-    },
-    "docketNumber": "104-18",
-    "status": "New"
-  },
-  {
-    "procedureType": "Small",
-    "filingType": "Myself",
-    "partyType": "Petitioner",
-    "docketNumberSuffix": "S",
-    "petitioners": [
-      {
-        "name": "Test Petitioner"
-      }
-    ],
-    "documents": [
-      {
-        "createdAt": "2019-01-06T22:49:42.980Z",
-        "documentType": "Petition",
-        "filedBy": "Petitioner",
+        "createdAt": "2019-03-01T22:54:05.993Z",
+        "documentType": "Answer",
+        "filedBy": "Test Respondent",
         "workItems": [
           {
             "docketNumberSuffix": "S",
-            "caseStatus": "Batched for IRS",
+            "caseStatus": "New",
             "document": {
-              "createdAt": "2019-01-06T22:49:42.980Z",
-              "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
-              "documentType": "Petition",
-              "userId": "taxpayer",
-              "filedBy": "Petitioner",
+              "createdAt": "2019-03-01T22:54:05.993Z",
+              "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+              "userId": "respondent",
+              "documentType": "Answer",
+              "filedBy": "Test Respondent",
               "workItems": []
             },
-            "section": "irsBatchSection",
-            "workItemId": "2b985402-00ec-41d8-a88e-51e4b164e904",
-            "isInitializeCase": true,
-            "assigneeId": "irsBatchSystem",
-            "sentBy": "taxpayer",
-            "createdAt": "2019-01-06T22:49:42.981Z",
-            "assigneeName": "IRS Holding Queue",
-            "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+            "section": "docket",
+            "workItemId": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+            "assigneeId": null,
+            "sentBy": "respondent",
+            "createdAt": "2019-03-01T22:54:06.000Z",
+            "assigneeName": null,
+            "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
             "messages": [
               {
-                "createdAt": "2019-01-06T22:49:42.981Z",
-                "messageId": "ef258e37-3453-417d-a0ee-7f28dc525a2b",
-                "message": "A Petition filed by Petitioner is ready for review.",
-                "sentBy": "Test Taxpayer"
-              },
-              {
-                "messageId": "aecb721a-031e-4f59-b2e9-33f19292baf0",
-                "createdAt": "2019-01-06T22:59:16.055Z",
-                "sentTo": "IRS Holding Queue",
-                "message": "Petition batched for IRS",
-                "userId": "petitionsclerk",
-                "sentBy": "petitionsclerk"
+                "createdAt": "2019-03-01T22:54:06.000Z",
+                "messageId": "08e1cbed-d215-42d2-9216-25c9788dcf5b",
+                "message": "A Answer filed by Respondent is ready for review.",
+                "userId": "respondent",
+                "sentBy": "Test Respondent"
               }
             ],
-            "docketNumber": "104-18",
-            "updatedAt": "2019-01-06T22:49:42.981Z"
+            "docketNumber": "103-19",
+            "updatedAt": "2019-03-01T22:54:06.000Z"
           }
         ],
-        "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-        "documentId": "aadca074-542e-496a-8322-8cb1c175a63c",
-        "userId": "taxpayer"
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+        "userId": "respondent"
       }
     ],
-    "irsNoticeDate": "2019-02-04T06:00:00.000Z",
-    "hasIrsNotice": true,
-    "caseTitle": "Test Taxpayer, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "respondent": {
+      "role": "respondent",
+      "name": "Test Respondent",
+      "custom:role": "respondent",
+      "userId": "respondent",
+      "iat": 1551480838,
+      "respondentId": "respondent",
+      "email": "respondent",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
+    },
+    "partyType": "Petitioner",
     "userId": "taxpayer",
     "currentVersion": "2",
     "caseType": "Deficiency",
     "yearAmounts": [],
-    "preferredTrialCity": "Washington, District of Columbia",
-    "createdAt": "2019-01-06T22:49:42.980Z",
-    "caseId": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
+    "contactPrimary": {
+      "address3": "Officiis sit consect",
+      "address2": "Eiusmod officiis dol",
+      "city": "Laborum Expedita qu",
+      "phone": "+1 (523) 202-1718",
+      "address1": "40 East Cowley Boulevard",
+      "postalCode": "18152",
+      "name": "Samson Workman",
+      "state": "MA",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Mobile, Alabama",
+    "createdAt": "2019-03-01T22:53:50.097Z",
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "docketRecord": [
       {
-        "filingDate": "2019-01-06T22:49:42.980Z",
-        "description": "Request for Place of Trial at Washington, District of Columbia"
+        "description": "Request for Place of Trial at Mobile, Alabama",
+        "filingDate": "2019-03-01T22:53:50.097Z"
       },
       {
-        "filingDate": "2019-01-06T22:49:42.980Z",
         "description": "Petition",
-        "filedBy": "Petitioner"
+        "filingDate": "2019-03-01T22:53:50.098Z",
+        "filedBy": "Test Petitioner"
+      },
+      {
+        "description": "Answer",
+        "filingDate": "2019-03-01T22:54:05.993Z",
+        "filedBy": "Test Respondent"
+      }
+    ],
+    "sk": "0",
+    "filingType": "Myself",
+    "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "custom:role": "petitioner",
+        "userId": "taxpayer",
+        "iat": 1551480807,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ4MDgwN30.sV0OKvwCmL1YUSmvC3-rCviw6iyIj4491Gr-GipsC60"
+      }
+    ],
+    "docketNumber": "103-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {},
+    "docketNumberSuffix": "S",
+    "documents": [
+      {
+        "createdAt": "2019-03-01T22:53:50.098Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T22:53:50.098Z",
+              "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T22:53:50.098Z",
+            "assigneeName": null,
+            "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T22:53:50.098Z",
+                "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "103-19",
+            "updatedAt": "2019-03-01T22:53:50.098Z"
+          }
+        ],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
+        "userId": "taxpayer"
+      }
+    ],
+    "partyType": "Petitioner",
+    "userId": "taxpayer",
+    "currentVersion": "1",
+    "caseType": "Deficiency",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Officiis sit consect",
+      "address2": "Eiusmod officiis dol",
+      "city": "Laborum Expedita qu",
+      "phone": "+1 (523) 202-1718",
+      "address1": "40 East Cowley Boulevard",
+      "postalCode": "18152",
+      "name": "Samson Workman",
+      "state": "MA",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Mobile, Alabama",
+    "createdAt": "2019-03-01T22:53:50.097Z",
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "docketRecord": [
+      {
+        "description": "Request for Place of Trial at Mobile, Alabama",
+        "filingDate": "2019-03-01T22:53:50.097Z"
+      },
+      {
+        "description": "Petition",
+        "filingDate": "2019-03-01T22:53:50.098Z",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "sk": "1",
+    "filingType": "Myself",
+    "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "custom:role": "petitioner",
+        "userId": "taxpayer",
+        "iat": 1551480807,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ4MDgwN30.sV0OKvwCmL1YUSmvC3-rCviw6iyIj4491Gr-GipsC60"
+      }
+    ],
+    "docketNumber": "103-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {},
+    "docketNumberSuffix": "S",
+    "documents": [
+      {
+        "createdAt": "2019-03-01T22:53:50.098Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T22:53:50.098Z",
+              "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T22:53:50.098Z",
+            "assigneeName": null,
+            "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T22:53:50.098Z",
+                "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "103-19",
+            "updatedAt": "2019-03-01T22:53:50.098Z"
+          }
+        ],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
+        "userId": "taxpayer"
+      },
+      {
+        "createdAt": "2019-03-01T22:54:05.993Z",
+        "documentType": "Answer",
+        "filedBy": "Test Respondent",
+        "workItems": [
+          {
+            "docketNumberSuffix": "S",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T22:54:05.993Z",
+              "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+              "userId": "respondent",
+              "documentType": "Answer",
+              "filedBy": "Test Respondent",
+              "workItems": []
+            },
+            "section": "docket",
+            "workItemId": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+            "assigneeId": null,
+            "sentBy": "respondent",
+            "createdAt": "2019-03-01T22:54:06.000Z",
+            "assigneeName": null,
+            "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T22:54:06.000Z",
+                "messageId": "08e1cbed-d215-42d2-9216-25c9788dcf5b",
+                "message": "A Answer filed by Respondent is ready for review.",
+                "userId": "respondent",
+                "sentBy": "Test Respondent"
+              }
+            ],
+            "docketNumber": "103-19",
+            "updatedAt": "2019-03-01T22:54:06.000Z"
+          }
+        ],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+        "userId": "respondent"
+      }
+    ],
+    "respondent": {
+      "role": "respondent",
+      "name": "Test Respondent",
+      "custom:role": "respondent",
+      "userId": "respondent",
+      "iat": 1551480838,
+      "respondentId": "respondent",
+      "email": "respondent",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
+    },
+    "partyType": "Petitioner",
+    "userId": "taxpayer",
+    "currentVersion": "2",
+    "caseType": "Deficiency",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Officiis sit consect",
+      "address2": "Eiusmod officiis dol",
+      "city": "Laborum Expedita qu",
+      "phone": "+1 (523) 202-1718",
+      "address1": "40 East Cowley Boulevard",
+      "postalCode": "18152",
+      "name": "Samson Workman",
+      "state": "MA",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Mobile, Alabama",
+    "createdAt": "2019-03-01T22:53:50.097Z",
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "docketRecord": [
+      {
+        "description": "Request for Place of Trial at Mobile, Alabama",
+        "filingDate": "2019-03-01T22:53:50.097Z"
+      },
+      {
+        "description": "Petition",
+        "filingDate": "2019-03-01T22:53:50.098Z",
+        "filedBy": "Test Petitioner"
+      },
+      {
+        "description": "Answer",
+        "filingDate": "2019-03-01T22:54:05.993Z",
+        "filedBy": "Test Respondent"
       }
     ],
     "sk": "2",
-    "pk": "e6147e39-750c-4bc1-8c47-cad0bf66a091",
-    "contactPrimary": {
-      "countryType": "domestic",
-      "postalCode": "37208",
-      "role": "petitioner",
-      "city": "Orlando",
-      "phone": "111-111-1111",
-      "name": "Test Taxpayer",
-      "address1": "111 Orange St.",
-      "address2": "Building 2",
-      "state": "FL",
-      "userId": "taxpayer",
-      "email": "testtaxpayer@example.com",
-      "token": "taxpayer"
+    "filingType": "Myself",
+    "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "custom:role": "petitioner",
+        "userId": "taxpayer",
+        "iat": 1551480807,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ4MDgwN30.sV0OKvwCmL1YUSmvC3-rCviw6iyIj4491Gr-GipsC60"
+      }
+    ],
+    "docketNumber": "103-19",
+    "status": "New"
+  },
+  {
+    "sk": "docketNumberCounter-2019",
+    "id": 3,
+    "pk": "docketNumberCounter-2019"
+  },
+  {
+    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "taxpayer|case"
+  },
+  {
+    "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "taxpayer|case"
+  },
+  {
+    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "taxpayer|case"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "country": "Cruz Barnes",
+      "address3": "Illum ut architecto",
+      "address2": "Laboris voluptate mi",
+      "city": "Velit minima do quia",
+      "phone": "+1 (352) 612-3284",
+      "address1": "49 First Drive",
+      "postalCode": "64929",
+      "name": "Cairo Harris",
+      "state": "CO",
+      "countryType": "international"
     },
-    "docketNumber": "104-18",
-    "status": "Batched for IRS"
+    "documents": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "P",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T21:42:29.073Z",
+              "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T21:42:29.073Z",
+            "assigneeName": null,
+            "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T21:42:29.073Z",
+                "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "102-19",
+            "updatedAt": "2019-03-01T21:42:29.073Z"
+          }
+        ],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "1983-03-02T00:00:00.000Z",
+    "partyType": "Petitioner & Spouse",
+    "isSpouseDeceased": "No",
+    "caseType": "Passport",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Dolor ea elit dolor",
+      "address2": "Duis molestias ullam",
+      "city": "Voluptatum facere qu",
+      "phone": "+1 (877) 656-9901",
+      "address1": "98 Cowley Avenue",
+      "postalCode": "98237",
+      "name": "Selma Horn",
+      "state": "DE",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "0",
+    "filingType": "Myself and my spouse",
+    "hasIrsNotice": true,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "taxpayer",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
+    "showSaveSuccess": false,
+    "docketNumberSuffix": "P",
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "taxpayer",
+    "currentVersion": "2",
+    "preferredTrialCity": "Boise, Idaho",
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Request for Place of Trial at Boise, Idaho"
+      },
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Petition",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "docketNumber": "102-19",
+    "status": "New",
+    "hasVerifiedIrsNotice": true
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "country": "Cruz Barnes",
+      "address3": "Illum ut architecto",
+      "address2": "Laboris voluptate mi",
+      "city": "Velit minima do quia",
+      "phone": "+1 (352) 612-3284",
+      "address1": "49 First Drive",
+      "postalCode": "64929",
+      "name": "Cairo Harris",
+      "state": "CO",
+      "countryType": "international"
+    },
+    "docketNumberSuffix": "P",
+    "documents": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "P",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T21:42:29.073Z",
+              "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T21:42:29.073Z",
+            "assigneeName": null,
+            "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T21:42:29.073Z",
+                "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "102-19",
+            "updatedAt": "2019-03-01T21:42:29.073Z"
+          }
+        ],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "1983-03-02T00:00:00.000Z",
+    "partyType": "Petitioner & Spouse",
+    "userId": "taxpayer",
+    "currentVersion": "1",
+    "isSpouseDeceased": "No",
+    "caseType": "Passport",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Dolor ea elit dolor",
+      "address2": "Duis molestias ullam",
+      "city": "Voluptatum facere qu",
+      "phone": "+1 (877) 656-9901",
+      "address1": "98 Cowley Avenue",
+      "postalCode": "98237",
+      "name": "Selma Horn",
+      "state": "DE",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Boise, Idaho",
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "docketRecord": [
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Request for Place of Trial at Boise, Idaho"
+      },
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Petition",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "sk": "1",
+    "filingType": "Myself and my spouse",
+    "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "hasIrsNotice": true,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "taxpayer",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
+    "docketNumber": "102-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Small",
+    "contactSecondary": {
+      "country": "Cruz Barnes",
+      "address3": "Illum ut architecto",
+      "address2": "Laboris voluptate mi",
+      "city": "Velit minima do quia",
+      "phone": "+1 (352) 612-3284",
+      "address1": "49 First Drive",
+      "postalCode": "64929",
+      "name": "Cairo Harris",
+      "state": "CO",
+      "countryType": "international"
+    },
+    "documents": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "P",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T21:42:29.073Z",
+              "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T21:42:29.073Z",
+            "assigneeName": null,
+            "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T21:42:29.073Z",
+                "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "102-19",
+            "updatedAt": "2019-03-01T21:42:29.073Z"
+          }
+        ],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+        "userId": "taxpayer"
+      }
+    ],
+    "irsNoticeDate": "1983-03-02T00:00:00.000Z",
+    "partyType": "Petitioner & Spouse",
+    "isSpouseDeceased": "No",
+    "caseType": "Passport",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Dolor ea elit dolor",
+      "address2": "Duis molestias ullam",
+      "city": "Voluptatum facere qu",
+      "phone": "+1 (877) 656-9901",
+      "address1": "98 Cowley Avenue",
+      "postalCode": "98237",
+      "name": "Selma Horn",
+      "state": "DE",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "2",
+    "filingType": "Myself and my spouse",
+    "hasIrsNotice": true,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "taxpayer",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
+    "showSaveSuccess": false,
+    "docketNumberSuffix": "P",
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "userId": "taxpayer",
+    "currentVersion": "2",
+    "preferredTrialCity": "Boise, Idaho",
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Request for Place of Trial at Boise, Idaho"
+      },
+      {
+        "filingDate": "2019-03-01T21:42:29.073Z",
+        "description": "Petition",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "docketNumber": "102-19",
+    "status": "New",
+    "hasVerifiedIrsNotice": true
+  },
+  {
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "sk": "docketclerk",
+    "name": "Test Docketclerk",
+    "section": "docket",
+    "pk": "docket|user",
+    "userId": "docketclerk",
+    "email": "docketclerk"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "sk": "docketclerk1",
+    "name": "Test Docketclerk1",
+    "section": "docket",
+    "pk": "docket|user",
+    "userId": "docketclerk1",
+    "email": "docketclerk1"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T22:53:50.098Z",
+      "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
+      "documentType": "Petition",
+      "userId": "taxpayer",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T22:53:50.098Z",
+    "assigneeName": null,
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "9055257a-0a95-4b80-a728-5bb754c60e59",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T22:53:50.098Z",
+        "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
+        "message": "A Petition filed by Petitioner is ready for review.",
+        "sentBy": "Test Petitioner"
+      }
+    ],
+    "pk": "9055257a-0a95-4b80-a728-5bb754c60e59",
+    "docketNumber": "103-19",
+    "updatedAt": "2019-03-01T22:53:50.098Z"
+  },
+  {
+    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "102-19|case"
+  },
+  {
+    "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "103-19|case"
+  },
+  {
+    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "New|case-status"
+  },
+  {
+    "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "New|case-status"
+  },
+  {
+    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "New|case-status"
+  },
+  {
+    "docketNumberSuffix": "P",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T21:42:29.073Z",
+      "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "documentType": "Petition",
+      "userId": "taxpayer",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "assigneeName": null,
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+        "message": "A Petition filed by Petitioner is ready for review.",
+        "sentBy": "Test Petitioner"
+      }
+    ],
+    "pk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "docketNumber": "102-19",
+    "updatedAt": "2019-03-01T21:42:29.073Z"
+  },
+  {
+    "docketNumberSuffix": "W",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T21:40:46.415Z",
+      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+      "documentType": "Petition",
+      "userId": "taxpayer",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "assigneeName": null,
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "sk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+        "message": "A Petition filed by Petitioner is ready for review.",
+        "sentBy": "Test Petitioner"
+      }
+    ],
+    "pk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "docketNumber": "101-19",
+    "updatedAt": "2019-03-01T21:40:46.415Z"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "docketNumberSuffix": "W",
+    "documents": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "W",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T21:40:46.415Z",
+              "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T21:40:46.415Z",
+            "assigneeName": null,
+            "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T21:40:46.415Z",
+                "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "101-19",
+            "updatedAt": "2019-03-01T21:40:46.415Z"
+          }
+        ],
+        "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+        "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+        "userId": "taxpayer"
+      }
+    ],
+    "partyType": "Petitioner",
+    "userId": "taxpayer",
+    "currentVersion": "1",
+    "caseType": "Whistleblower",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Architecto assumenda",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "phone": "+1 (537) 235-6147",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "name": "Brett Osborne",
+      "state": "AS",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Birmingham, Alabama",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "docketRecord": [
+      {
+        "filingDate": "2019-03-01T21:40:46.415Z",
+        "description": "Request for Place of Trial at Birmingham, Alabama"
+      },
+      {
+        "filingDate": "2019-03-01T21:40:46.415Z",
+        "description": "Petition",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "sk": "0",
+    "filingType": "Myself",
+    "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "taxpayer",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
+    "docketNumber": "101-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "docketNumberSuffix": "W",
+    "documents": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "documentType": "Petition",
+        "filedBy": "Test Petitioner",
+        "workItems": [
+          {
+            "docketNumberSuffix": "W",
+            "caseStatus": "New",
+            "document": {
+              "createdAt": "2019-03-01T21:40:46.415Z",
+              "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+              "documentType": "Petition",
+              "userId": "taxpayer",
+              "filedBy": "Test Petitioner",
+              "workItems": []
+            },
+            "section": "petitions",
+            "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "taxpayer",
+            "createdAt": "2019-03-01T21:40:46.415Z",
+            "assigneeName": null,
+            "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+            "messages": [
+              {
+                "createdAt": "2019-03-01T21:40:46.415Z",
+                "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+                "message": "A Petition filed by Petitioner is ready for review.",
+                "sentBy": "Test Petitioner"
+              }
+            ],
+            "docketNumber": "101-19",
+            "updatedAt": "2019-03-01T21:40:46.415Z"
+          }
+        ],
+        "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+        "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+        "userId": "taxpayer"
+      }
+    ],
+    "partyType": "Petitioner",
+    "userId": "taxpayer",
+    "currentVersion": "1",
+    "caseType": "Whistleblower",
+    "yearAmounts": [],
+    "contactPrimary": {
+      "address3": "Architecto assumenda",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "phone": "+1 (537) 235-6147",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "name": "Brett Osborne",
+      "state": "AS",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "preferredTrialCity": "Birmingham, Alabama",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "docketRecord": [
+      {
+        "filingDate": "2019-03-01T21:40:46.415Z",
+        "description": "Request for Place of Trial at Birmingham, Alabama"
+      },
+      {
+        "filingDate": "2019-03-01T21:40:46.415Z",
+        "description": "Petition",
+        "filedBy": "Test Petitioner"
+      }
+    ],
+    "sk": "1",
+    "filingType": "Myself",
+    "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "taxpayer",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
+    "docketNumber": "101-19",
+    "status": "New"
+  },
+  {
+    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "101-19|case"
+  },
+  {
+    "sk": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+    "pk": "docket|workItem"
+  },
+  {
+    "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "respondent|activeCase"
+  },
+  {
+    "docketNumberSuffix": "S",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T22:54:05.993Z",
+      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "userId": "respondent",
+      "documentType": "Answer",
+      "filedBy": "Test Respondent",
+      "workItems": []
+    },
+    "section": "docket",
+    "workItemId": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+    "assigneeId": null,
+    "sentBy": "respondent",
+    "createdAt": "2019-03-01T22:54:06.000Z",
+    "assigneeName": null,
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T22:54:06.000Z",
+        "messageId": "08e1cbed-d215-42d2-9216-25c9788dcf5b",
+        "message": "A Answer filed by Respondent is ready for review.",
+        "userId": "respondent",
+        "sentBy": "Test Respondent"
+      }
+    ],
+    "pk": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+    "docketNumber": "103-19",
+    "updatedAt": "2019-03-01T22:54:06.000Z"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "sk": "petitionsclerk",
+    "name": "Test petitionsclerk",
+    "section": "petitions",
+    "pk": "petitions|user",
+    "userId": "petitionsclerk",
+    "email": "petitionsclerk"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "sk": "petitionsclerk1",
+    "name": "Test Petitionsclerk1",
+    "section": "petitions",
+    "pk": "petitions|user",
+    "userId": "petitionsclerk1",
+    "email": "petitionsclerk1"
+  },
+  {
+    "sk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "petitions|workItem"
+  },
+  {
+    "sk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "petitions|workItem"
+  },
+  {
+    "sk": "9055257a-0a95-4b80-a728-5bb754c60e59",
+    "pk": "petitions|workItem"
   }
 ]

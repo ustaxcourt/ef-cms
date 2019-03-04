@@ -12,8 +12,8 @@ import _ from 'lodash';
 export const getCasesNewAction = async ({ applicationContext, get }) => {
   let caseList = await applicationContext.getUseCases().getCasesByStatus({
     applicationContext,
-    userId: get(state.user.token),
     status: 'new',
+    userId: get(state.user.token),
   });
   caseList = _.orderBy(caseList, 'createdAt', 'asc');
   return { caseList };

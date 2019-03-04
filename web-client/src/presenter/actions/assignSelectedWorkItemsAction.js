@@ -23,9 +23,9 @@ export const assignSelectedWorkItemsAction = async ({
   await applicationContext.getUseCases().assignWorkItems({
     applicationContext,
     workItems: selectedWorkItems.map(workItem => ({
-      workItemId: workItem.workItemId,
       assigneeId,
       assigneeName,
+      workItemId: workItem.workItemId,
     })),
   });
 

@@ -10,26 +10,26 @@ export default get => {
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
   return {
-    showPetitionFileValid: petition && petition.petitionFile,
-    showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
-    showOwnershipDisclosureValid: petition && petition.ownershipDisclosureFile,
-    showRegularTrialCitiesHint: form.procedureType === 'Regular',
-    showSelectTrial: !!form.procedureType,
-    showSmallTrialCitiesHint: form.procedureType === 'Small',
-
+    showBusinessFilingTypeOptions: form.filingType === 'A business',
     showEstateFilingOptions: form.otherType === 'An estate or trust',
+    showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showMinorIncompetentFilingOptions:
       form.otherType === 'A minor or legally incompetent person',
-
+    showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
     showOtherFilingTypeOptions: form.filingType === 'Other',
-    showBusinessFilingTypeOptions: form.filingType === 'A business',
+
+    showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
+    showOwnershipDisclosureValid: petition && petition.ownershipDisclosureFile,
+
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse',
-
+    showPetitionFileValid: petition && petition.petitionFile,
     showPrimaryContact: showContacts.contactPrimary,
+
+    showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSecondaryContact: showContacts.contactSecondary,
 
-    showHasIrsNoticeOptions: form.hasIrsNotice === true,
-    showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
+    showSelectTrial: !!form.procedureType,
+    showSmallTrialCitiesHint: form.procedureType === 'Small',
   };
 };
