@@ -1,9 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * updates the partyType, filingType, otherType, businessType,
- * contactPrimary, and/or contactSecondary depending on the
- * key/value pair passed in via props
+ * gets the contact view options based on partyType
  *
  * @param {Function} get the cerebral get function used
  * for getting state.caseDetail.partyType and state.constants
