@@ -123,11 +123,8 @@ joiValidationDecorator(
       .date()
       .iso()
       .max('now')
-      .when('hasVerifiedIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.optional(),
-      }),
+      .optional()
+      .allow(null),
     irsSendDate: joi
       .date()
       .iso()
@@ -143,7 +140,10 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    preferredTrialCity: joi.string().optional(),
+    preferredTrialCity: joi
+      .string()
+      .optional()
+      .allow(null),
     procedureType: joi.string().optional(),
     respondent: joi
       .object()
