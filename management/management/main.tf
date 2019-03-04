@@ -15,4 +15,5 @@ module "management" {
   ssh_cidrs = "${var.ssh_cidrs}"
   environment = "${var.environment}"
   deployment = "${var.deployment}"
+  jenkins_instance_type = "${var.jenkins_instance_type}"
 }
