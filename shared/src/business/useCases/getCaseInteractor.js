@@ -47,6 +47,5 @@ exports.getCase = async ({ caseId, applicationContext }) => {
   }
 
   const caseDetail = new Case(caseRecord).validate();
-  caseDetail.caseTitle = Case.getCaseTitle(caseDetail);
   return caseDetail.toRawObject();
 };
