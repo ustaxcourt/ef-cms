@@ -585,19 +585,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add a docket record item when the suffix is updating and is different from the initial suffix and the case is not new', () => {
-      const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        docketNumberSuffix: 'P',
-        initialDocketNumberSuffix: 'W',
-        status: 'Recalled',
-      });
-      expect(caseToVerify.docketRecord[0].description).toEqual(
-        "Docket Number is amended from 'BobW' to 'Bob'",
-      );
-    });
-
-    it('should add a docket record item when the suffix is different from the initial suffix and the case is changing from new', () => {
+    it('should add a docket record item when the suffix is different from the initial suffix and the case is not new', () => {
       const caseToVerify = new Case({
         docketNumber: 'Bob',
         initialDocketNumberSuffix: 'W',
