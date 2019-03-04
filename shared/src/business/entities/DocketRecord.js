@@ -32,6 +32,10 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
   }),
   () => true,
   {},
