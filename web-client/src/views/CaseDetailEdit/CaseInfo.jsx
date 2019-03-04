@@ -10,21 +10,18 @@ export const CaseInfo = connect(
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    trialCitiesHelper: state.trialCitiesHelper,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
   },
   ({
     autoSaveCaseSequence,
     caseDetail,
-    trialCitiesHelper,
     caseDetailErrors,
     form,
+    trialCitiesHelper,
     updateCaseValueSequence,
     updateFormValueSequence,
-    submitCaseDetailEditSaveSequence,
   }) => {
     return (
       <div className="blue-container">
