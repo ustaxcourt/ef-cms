@@ -44,16 +44,18 @@ export const CaseInfo = connect(
           legend="Case Procedure"
         />
 
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="order-to-show-cause"
             type="checkbox"
             name="orderToShowCause"
+            checked={caseDetail.orderToShowCause}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="order-to-show-cause">Order to Show Cause</label>
@@ -194,80 +196,90 @@ export const CaseInfo = connect(
           />
         </div>
 
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="order-for-filing-fee"
             type="checkbox"
             name="orderForFilingFee"
+            checked={caseDetail.orderForFilingFee}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
         </div>
 
         <h3>Orders Needed</h3>
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="order-for-ratification"
             type="checkbox"
             name="orderForRatification"
+            checked={caseDetail.orderForRatification}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="order-for-ratification">
             Order for Ratification of Petition
           </label>
         </div>
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="notice-of-attachments"
             type="checkbox"
             name="noticeOfAttachments"
+            checked={caseDetail.noticeOfAttachments}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="notice-of-attachments">
             Notice of Attachments in the Nature of Evidence
           </label>
         </div>
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="order-for-amended-petition"
             type="checkbox"
             name="orderForAmendedPetition"
+            checked={caseDetail.orderForAmendedPetition}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="order-for-amended-petition">
             Order for Amended Petition
           </label>
         </div>
-        <div className="order-checkbox">
+        <div className="usa-form-group">
           <input
             id="order-for-amended-petition-and-filing-fee"
             type="checkbox"
             name="orderForAmendedPetitionAndFilingFee"
+            checked={caseDetail.orderForAmendedPetitionAndFilingFee}
             onChange={e => {
-              submitCaseDetailEditSaveSequence({
+              updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : undefined,
+                value: e.target.checked ? true : false,
               });
+              autoSaveCaseSequence();
             }}
           />
           <label htmlFor="order-for-amended-petition-and-filing-fee">

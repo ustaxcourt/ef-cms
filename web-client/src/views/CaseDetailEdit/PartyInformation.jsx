@@ -7,22 +7,21 @@ import { Contacts } from '../StartCase/Contacts';
 export const PartyInformation = connect(
   {
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
-    caseDetail: state.caseDetail,
-    updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
-    caseDetailEditHelper: state.caseDetailEditHelper,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
+    caseDetailEditHelper: state.caseDetailEditHelper,
     token: state.token,
-    submitCaseDetailEditSaveSequence:
-      sequences.submitCaseDetailEditSaveSequence,
+    updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
+    updateCaseValueSequence: sequences.updateCaseValueSequence,
   },
   ({
     autoSaveCaseSequence,
-    caseDetail,
-    updateCasePartyTypeSequence,
-    caseDetailEditHelper,
     baseUrl,
+    caseDetail,
+    caseDetailEditHelper,
     token,
-    submitCaseDetailEditSaveSequence,
+    updateCasePartyTypeSequence,
+    updateCaseValueSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
@@ -67,16 +66,18 @@ export const PartyInformation = connect(
                   Ownership Disclosure Statement
                 </a>
               </div>
-              <div className="order-checkbox">
+              <div className="usa-form-group">
                 <input
                   id="order-for-ods"
                   type="checkbox"
                   name="orderForOds"
+                  checked={caseDetail.orderForOds}
                   onChange={e => {
-                    submitCaseDetailEditSaveSequence({
+                    updateCaseValueSequence({
                       key: e.target.name,
-                      value: e.target.checked ? true : undefined,
+                      value: e.target.checked ? true : false,
                     });
+                    autoSaveCaseSequence();
                   }}
                 />
                 <label htmlFor="order-for-ods">
