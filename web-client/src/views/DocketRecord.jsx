@@ -20,22 +20,6 @@ export const DocketRecord = connect(
     token,
     updateCurrentTabSequence,
   }) => {
-    const documentMap = caseDetail.documents.reduce((acc, document) => {
-      acc[document.documentId] = document;
-      return acc;
-    }, {});
-
-    const docketRecordMap = mapFn => {
-      return caseDetail.docketRecord.map((record, idx) => {
-        let document;
-
-        if (record.documentId) {
-          document = documentMap[record.documentId];
-        }
-        return mapFn(record, document, idx);
-      });
-    };
-
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
@@ -66,56 +50,58 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {docketRecordMap((record, document, idx) => (
-              <tr key={idx}>
-                <td className="responsive-title">
-                  <span className="responsive-label">Activity date</span>
-                  {record.createdAtFormatted}
-                </td>
-                <td>
-                  <span className="responsive-label">Title</span>
-                  {document && helper.showDirectDownloadLink && (
-                    <a
-                      href={`${baseUrl}/documents/${
-                        document.documentId
-                      }/documentDownloadUrl?token=${token}`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      aria-label={`View PDF: ${document.documentType}`}
-                    >
-                      <FontAwesomeIcon icon="file-pdf" />
-                      {document.documentType}
-                    </a>
-                  )}
-                  {document && helper.showDocumentDetailLink && (
-                    <a
-                      href={`/case-detail/${
-                        caseDetail.docketNumber
-                      }/documents/${document.documentId}`}
-                      aria-label="View PDF"
-                    >
-                      <FontAwesomeIcon icon="file-pdf" />
-                      {document.documentType}
-                    </a>
-                  )}
-                  {!document && record.description}
-                </td>
-                <td>
-                  <span className="responsive-label">Filed by</span>
-                  {record.filedBy}
-                </td>
-                <td>
-                  <span className="responsive-label">Status</span>
-                  {document && document.isStatusServed && (
-                    <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                  )}
-                  {document && helper.showDocumentStatus && (
-                    <span>{document.status}</span>
-                  )}
-                </td>
-                <td />
-              </tr>
-            ))}
+            {caseDetail.docketRecordWithDocument.map(
+              ({ record, document, index }) => (
+                <tr key={index}>
+                  <td className="responsive-title">
+                    <span className="responsive-label">Activity date</span>
+                    {record.createdAtFormatted}
+                  </td>
+                  <td>
+                    <span className="responsive-label">Title</span>
+                    {document && helper.showDirectDownloadLink && (
+                      <a
+                        href={`${baseUrl}/documents/${
+                          document.documentId
+                        }/documentDownloadUrl?token=${token}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        aria-label={`View PDF: ${document.documentType}`}
+                      >
+                        <FontAwesomeIcon icon="file-pdf" />
+                        {document.documentType}
+                      </a>
+                    )}
+                    {document && helper.showDocumentDetailLink && (
+                      <a
+                        href={`/case-detail/${
+                          caseDetail.docketNumber
+                        }/documents/${document.documentId}`}
+                        aria-label="View PDF"
+                      >
+                        <FontAwesomeIcon icon="file-pdf" />
+                        {document.documentType}
+                      </a>
+                    )}
+                    {!document && record.description}
+                  </td>
+                  <td>
+                    <span className="responsive-label">Filed by</span>
+                    {record.filedBy}
+                  </td>
+                  <td>
+                    <span className="responsive-label">Status</span>
+                    {document && document.isStatusServed && (
+                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
+                    )}
+                    {document && helper.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
+                  </td>
+                  <td />
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </React.Fragment>
