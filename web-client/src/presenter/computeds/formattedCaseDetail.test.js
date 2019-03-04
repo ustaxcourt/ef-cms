@@ -186,9 +186,6 @@ describe('formatYearAmounts', () => {
 
   it('maps docket record dates', async () => {
     const caseDetail = {
-      hasIrsNotice: false,
-      hasVerifiedIrsNotice: false,
-      petitioners: [{ name: 'bob' }],
       docketRecord: [
         {
           description: 'Petition',
@@ -196,6 +193,9 @@ describe('formatYearAmounts', () => {
           filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
     };
     const result = await runCompute(formattedCaseDetail, {
       state: {
@@ -204,5 +204,39 @@ describe('formatYearAmounts', () => {
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
+  });
+
+  it('maps docket record documents', async () => {
+    const caseDetail = {
+      docketRecord: [
+        {
+          description: 'Petition',
+          documentId: 'Petition',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+        },
+      ],
+      documents: [
+        {
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'Petition',
+          documentType: 'Petition',
+          showValidationInput: '2019-02-28T21:14:39.488Z',
+          status: 'served',
+        },
+      ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
+      'Petition',
+    );
   });
 });
