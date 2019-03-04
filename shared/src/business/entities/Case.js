@@ -51,18 +51,22 @@ const FILING_TYPES = ['Myself', 'Myself and my spouse', 'A business', 'Other'];
  */
 function Case(rawCase) {
   const Document = require('./Document');
+
   Object.assign(
     this,
     rawCase,
     {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || 'New',
+      status: rawCase.status || statusMap.new,
     },
     {
       docketNumberSuffix: getDocketNumberSuffix(rawCase),
     },
   );
+
+  this.initialDocketNumberSuffix =
+    this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
@@ -86,6 +90,12 @@ function Case(rawCase) {
     );
   } else {
     this.docketRecord = [];
+  }
+
+  const isNewCase = this.status === statusMap.new;
+
+  if (!isNewCase) {
+    this.updateDocketNumberRecord();
   }
 }
 
@@ -119,6 +129,10 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
+    initialDocketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
     irsNoticeDate: joi
       .date()
       .iso()
@@ -366,6 +380,50 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       docketRecord.status = status;
     }
   });
+
+  return this;
+};
+
+/**
+ *
+ * @param updateDocketNumberRecord
+ * @returns {Case}
+ */
+Case.prototype.updateDocketNumberRecord = function() {
+  const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
+
+  const oldDocketNumber =
+    this.docketNumber +
+    (this.initialDocketNumberSuffix !== '_'
+      ? this.initialDocketNumberSuffix
+      : '');
+  const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+
+  let found;
+
+  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+    const result = docketNumberRegex.exec(docketRecord.description);
+    if (result) {
+      const [, , pastChangedDocketNumber] = result;
+
+      if (pastChangedDocketNumber === newDocketNumber) {
+        found = true;
+        acc.push(docketRecord);
+      }
+    } else {
+      acc.push(docketRecord);
+    }
+    return acc;
+  }, []);
+
+  if (!found && oldDocketNumber != newDocketNumber) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        filingDate: new Date().toISOString(),
+      }),
+    );
+  }
 
   return this;
 };
