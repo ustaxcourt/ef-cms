@@ -19,10 +19,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Conservator',
       },
       contactSecondary: {
-        header: 'Taxpayer Information',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Taxpayer Information',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -38,9 +38,9 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayInCareOf: true,
         header: 'Corporation Information',
         nameLabel: 'Business Name',
-        displayInCareOf: true,
       },
     });
   });
@@ -60,10 +60,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Custodian',
       },
       contactSecondary: {
-        header: 'Taxpayer Information',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Taxpayer Information',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -98,9 +98,9 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
         nameLabel: 'Name of Executor/Personal Representative, etc.',
-        displayTitle: true,
       },
       contactSecondary: {
         header: 'Estate Information',
@@ -122,9 +122,9 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayInCareOf: true,
         header: 'Estate Information',
         nameLabel: 'Name of Decedent',
-        displayInCareOf: true,
       },
     });
   });
@@ -146,10 +146,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Guardian',
       },
       contactSecondary: {
-        header: 'Taxpayer Information',
-        nameLabel: 'Name of Taxpayer',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Taxpayer Information',
+        nameLabel: 'Name of Taxpayer',
       },
     });
   });
@@ -171,10 +171,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header: 'Legally Incompetent Person Information',
-        nameLabel: 'Name of Legally Incompetent Person',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Legally Incompetent Person Information',
+        nameLabel: 'Name of Legally Incompetent Person',
       },
     });
   });
@@ -196,10 +196,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Next Friend',
       },
       contactSecondary: {
-        header: 'Minor Information',
-        nameLabel: 'Name of Minor',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Minor Information',
+        nameLabel: 'Name of Minor',
       },
     });
   });
@@ -221,10 +221,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Partnership Representative',
       },
       contactSecondary: {
-        header: 'Partnership Information',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Partnership Information',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -246,10 +246,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
       },
       contactSecondary: {
-        header: 'Partnership Information',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Partnership Information',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -271,10 +271,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Tax Matters Partner',
       },
       contactSecondary: {
-        header: 'Partnership Information',
-        nameLabel: 'Business Name',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Partnership Information',
+        nameLabel: 'Business Name',
       },
     });
   });
@@ -311,14 +311,14 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displayPhone: true,
         header: 'Petitioner Information',
         nameLabel: 'Name',
-        displayPhone: true,
       },
       contactSecondary: {
+        displayPhone: true,
         header: 'Spouse Information',
         nameLabel: "Spouse's Name",
-        displayPhone: true,
       },
     });
   });
@@ -405,10 +405,10 @@ describe('caseDetailEditContactsHelper', () => {
         nameLabel: 'Name of Trustee',
       },
       contactSecondary: {
-        header: 'Trust Information',
-        nameLabel: 'Name of Trust',
         displayInCareOf: true,
         displayPhone: true,
+        header: 'Trust Information',
+        nameLabel: 'Name of Trust',
       },
     });
   });

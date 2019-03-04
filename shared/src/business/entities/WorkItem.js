@@ -17,9 +17,9 @@ const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
  */
 function WorkItem(rawWorkItem) {
   Object.assign(this, rawWorkItem, {
-    workItemId: rawWorkItem.workItemId || uuid.v4(),
     createdAt: rawWorkItem.createdAt || new Date().toISOString(),
     updatedAt: rawWorkItem.updatedAt || new Date().toISOString(),
+    workItemId: rawWorkItem.workItemId || uuid.v4(),
   });
 
   this.messages = (this.messages || []).map(message => new Message(message));
@@ -30,16 +30,6 @@ WorkItem.name = 'WorkItem';
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
-    workItemId: joi
-      .string()
-      .uuid(uuidVersions)
-      .required(),
-    messages: joi
-      .array()
-      .items(joi.object())
-      .required(), // should be a Message entity at some point
-    sentBy: joi.string().required(),
-    section: joi.string().required(),
     assigneeId: joi
       .string()
       .allow(null)
@@ -47,31 +37,41 @@ joiValidationDecorator(
     assigneeName: joi
       .string()
       .allow(null)
+      .optional(), // should be a Message entity at some point
+    caseId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
+    caseStatus: joi.string().optional(),
+    completedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    createdAt: joi
+      .date()
+      .iso()
       .optional(),
     docketNumber: joi.string().required(),
     docketNumberSuffix: joi
       .string()
       .allow(null)
       .optional(),
-    caseId: joi
-      .string()
-      .uuid(uuidVersions)
-      .required(),
-    caseStatus: joi.string().optional(),
     document: joi.object().required(),
-    createdAt: joi
-      .date()
-      .iso()
-      .optional(),
+    isInitializeCase: joi.boolean().optional(),
+    messages: joi
+      .array()
+      .items(joi.object())
+      .required(),
+    section: joi.string().required(),
+    sentBy: joi.string().required(),
     updatedAt: joi
       .date()
       .iso()
       .required(),
-    completedAt: joi
-      .date()
-      .iso()
-      .optional(),
-    isInitializeCase: joi.boolean().optional(),
+    workItemId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
   }),
   function() {
     return Message.validateCollection(this.messages);
@@ -111,15 +111,15 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
 WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
   this.assignToUser({
     assigneeId: 'irsBatchSystem',
-    role: 'irsBatchSystem',
     assigneeName: 'IRS Holding Queue',
+    role: 'irsBatchSystem',
   });
   this.addMessage(
     new Message({
       message: 'Petition batched for IRS',
       sentBy: userId,
-      userId: userId,
       sentTo: 'IRS Holding Queue',
+      userId: userId,
     }),
   );
 };
@@ -131,16 +131,16 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.assignToUser({
     assigneeId: user.userId,
-    role: user.role,
     assigneeName: user.name,
+    role: user.role,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(
     new Message({
       message: 'Petition recalled from IRS Holding Queue',
       sentBy: 'IRS Holding Queue',
-      userId: 'irsBatchSystem',
       sentTo: user.name,
+      userId: 'irsBatchSystem',
     }),
   );
 };

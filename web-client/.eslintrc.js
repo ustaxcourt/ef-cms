@@ -6,7 +6,15 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
   ],
-  plugins: ['prettier', 'react', 'jsx-a11y', 'cypress', 'jest', 'jsdoc'],
+  plugins: [
+    'prettier',
+    'react',
+    'jsx-a11y',
+    'cypress',
+    'jest',
+    'jsdoc',
+    'sort-keys-fix',
+  ],
   rules: {
     quotes: ['error', 'single', { avoidEscape: true }],
     'jsdoc/require-param': 1,
@@ -40,6 +48,20 @@ module.exports = {
         },
         allowChildren: false,
       },
+    ],
+    'sort-imports': [
+      'warn',
+      {
+        ignoreCase: false,
+        ignoreDeclarationSort: true,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+      },
+    ],
+    'sort-keys-fix/sort-keys-fix': [
+      'warn',
+      'asc',
+      { caseSensitive: false, natural: true },
     ],
   },
   settings: {

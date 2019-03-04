@@ -104,6 +104,7 @@
     "webdriver-manager": "^12.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4"
+    "@babel/core": "^7.3.4",
+    "eslint-plugin-sort-keys-fix": "^1.0.1"
   }
 }

@@ -150,7 +150,7 @@ export default test => {
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2001-01-01T00:00:00.000Z',
+      '2018-12-24T00:00:00.000Z',
     );
 
     // irsNoticeDate - valid

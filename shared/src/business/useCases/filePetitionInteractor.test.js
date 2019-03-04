@@ -28,10 +28,10 @@ describe('filePetition', () => {
     let error;
     try {
       await filePetition({
-        petitionMetadata: null,
-        petitionFile: null,
-        fileHasUploaded: fileHasUploadedStub,
         applicationContext: createApplicationContext(),
+        fileHasUploaded: fileHasUploadedStub,
+        petitionFile: null,
+        petitionMetadata: null,
       });
     } catch (err) {
       error = err;
@@ -41,15 +41,15 @@ describe('filePetition', () => {
 
   it('throws an error when an unauthorized user tries to access the case', async () => {
     await filePetition({
-      petitionMetadata: null,
-      petitionFile: null,
-      fileHasUploaded: fileHasUploadedStub,
       applicationContext: createApplicationContext({
         getCurrentUser: () => ({
-          userId: 'taxpayer',
           role: 'petitioner',
+          userId: 'taxpayer',
         }),
       }),
+      fileHasUploaded: fileHasUploadedStub,
+      petitionFile: null,
+      petitionMetadata: null,
     });
     expect(fileHasUploadedStub.called).toBeTruthy();
   });

@@ -10,34 +10,34 @@ const Case = require('../entities/Case');
 
 const MOCK_WORK_ITEMS = [
   {
-    createdAt: '2018-12-27T18:06:02.971Z',
+    assigneeId: null,
     assigneeName: 'IRSBatchSystem',
-    caseStatus: 'Batched for IRS',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    caseStatus: 'Batched for IRS',
+    createdAt: '2018-12-27T18:06:02.971Z',
+    docketNumber: '101-18',
+    docketNumberSuffix: 'S',
     document: {
-      documentType: Case.documentTypes.petitionFile,
       createdAt: '2018-12-27T18:06:02.968Z',
       documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+      documentType: Case.documentTypes.petitionFile,
     },
+    isInitializeCase: true,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
-        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         message: 'Petition ready for review',
-        userId: 'taxpayer',
+        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         role: 'petitioner',
         sentBy: 'Petitioner',
         sentTo: null,
+        userId: 'taxpayer',
       },
     ],
     section: 'petitions',
-    workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
-    assigneeId: null,
-    docketNumber: '101-18',
-    docketNumberSuffix: 'S',
     sentBy: 'petitioner',
     updatedAt: '2018-12-27T18:06:02.968Z',
-    isInitializeCase: true,
+    workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   },
 ];
 describe('Send petition to IRS Holding Queue', () => {
@@ -48,25 +48,25 @@ describe('Send petition to IRS Holding Queue', () => {
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+      },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           saveCase: ({ caseToSave }) => Promise.resolve(new Case(caseToSave)),
         };
       },
-      environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
-      },
     };
   });
 
   it('sets the case status to Batched for IRS', async () => {
     const result = await sendPetitionToIRSHoldingQueue({
+      applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       userId: 'petitionsclerk',
-      applicationContext,
     });
 
     expect(result.status).toEqual('Batched for IRS');
@@ -79,8 +79,8 @@ describe('Send petition to IRS Holding Queue', () => {
     let error;
     try {
       await sendPetitionToIRSHoldingQueue({
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -92,24 +92,24 @@ describe('Send petition to IRS Holding Queue', () => {
 
   it('case not found if caseId does not exist', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+      },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => null,
           getCaseByCaseId: () => null,
+          saveCase: () => null,
         };
       },
-      environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
-      },
     };
     let error;
     try {
       await sendPetitionToIRSHoldingQueue({
+        applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         userId: 'petitionsclerk',
-        applicationContext,
       });
     } catch (err) {
       error = err;
@@ -122,29 +122,30 @@ describe('Send petition to IRS Holding Queue', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+      },
       getPersistenceGateway: () => {
         return {
-          getCaseByCaseId: () => Promise.resolve(omit(MOCK_CASE, 'documents')),
+          getCaseByCaseId: () =>
+            Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
         };
       },
-      environment: { stage: 'local' },
       getUseCases: () => ({ getCase }),
-      getCurrentUser: () => {
-        return new User({ userId: 'petitionsclerk', role: 'petitionsclerk' });
-      },
     };
     let error;
     try {
       await sendPetitionToIRSHoldingQueue({
+        applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',
-        applicationContext,
       });
     } catch (err) {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "documents" fails because ["documents" must contain at least 1 items]',
+      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
   });
 });

@@ -17,9 +17,9 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
 exports.getDocument = async ({ applicationContext, documentId }) => {
   const url = await getDownloadPolicy({ applicationContext, documentId });
   const { data: fileBlob } = await applicationContext.getHttpClient()({
-    url,
     method: 'GET',
     responseType: 'blob',
+    url,
   });
   return new Blob([fileBlob], { type: 'application/pdf' });
 };

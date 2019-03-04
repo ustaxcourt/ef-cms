@@ -33,19 +33,19 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   );
 
   await saveVersionedCase({
-    existingVersion: (caseToUpdate || {}).currentVersion,
-    caseToSave: caseToUpdate,
     applicationContext,
+    caseToSave: caseToUpdate,
+    existingVersion: (caseToUpdate || {}).currentVersion,
   });
 
   const workItem = await client.put({
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 
   return stripInternalKeys(workItem);

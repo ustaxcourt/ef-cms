@@ -17,8 +17,8 @@ export const appendNewYearAmountAction = async ({ store, get }) => {
     store.set(state.caseDetail.yearAmounts, [
       ...caseDetail.yearAmounts,
       {
-        year: '',
         amount: '',
+        year: '',
       },
     ]);
   }

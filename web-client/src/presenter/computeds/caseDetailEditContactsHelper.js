@@ -1,9 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * updates the partyType, filingType, otherType, businessType,
- * contactPrimary, and/or contactSecondary depending on the
- * key/value pair passed in via props
+ * gets the contact view options based on partyType
  *
  * @param {Function} get the cerebral get function used
  * for getting state.caseDetail.partyType and state.constants
@@ -23,21 +21,21 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Conservator',
         },
         contactSecondary: {
-          header: 'Taxpayer Information',
-          nameLabel: 'Name of Taxpayer',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Taxpayer Information',
+          nameLabel: 'Name of Taxpayer',
         },
       };
       break;
     case PARTY_TYPES.corporation:
       contacts = {
         contactPrimary: {
+          displayInCareOf: true,
           header: 'Corporation Information',
-          nameLabel: 'Business Name',
           inCareOfLabel: 'In Care Of',
           inCareOfLabelHint: 'Your Name',
-          displayInCareOf: true,
+          nameLabel: 'Business Name',
         },
       };
       break;
@@ -48,10 +46,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Custodian',
         },
         contactSecondary: {
-          header: 'Taxpayer Information',
-          nameLabel: 'Name of Taxpayer',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Taxpayer Information',
+          nameLabel: 'Name of Taxpayer',
         },
       };
       break;
@@ -66,9 +64,9 @@ export const caseDetailEditContactsHelper = get => {
     case PARTY_TYPES.estate:
       contacts = {
         contactPrimary: {
+          displayTitle: true,
           header: 'Executor/Personal Representative/Etc.',
           nameLabel: 'Name of Executor/Personal Representative, etc.',
-          displayTitle: true,
         },
         contactSecondary: {
           header: 'Estate Information',
@@ -79,11 +77,11 @@ export const caseDetailEditContactsHelper = get => {
     case PARTY_TYPES.estateWithoutExecutor:
       contacts = {
         contactPrimary: {
+          displayInCareOf: true,
           header: 'Estate Information',
-          nameLabel: 'Name of Decedent',
           inCareOfLabel: 'In Care Of',
           inCareOfLabelHint: 'Your Name',
-          displayInCareOf: true,
+          nameLabel: 'Name of Decedent',
         },
       };
       break;
@@ -94,10 +92,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Guardian',
         },
         contactSecondary: {
-          header: 'Taxpayer Information',
-          nameLabel: 'Name of Taxpayer',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Taxpayer Information',
+          nameLabel: 'Name of Taxpayer',
         },
       };
       break;
@@ -108,10 +106,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Next Friend',
         },
         contactSecondary: {
-          header: 'Legally Incompetent Person Information',
-          nameLabel: 'Name of Legally Incompetent Person',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Legally Incompetent Person Information',
+          nameLabel: 'Name of Legally Incompetent Person',
         },
       };
       break;
@@ -122,10 +120,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Next Friend',
         },
         contactSecondary: {
-          header: 'Minor Information',
-          nameLabel: 'Name of Minor',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Minor Information',
+          nameLabel: 'Name of Minor',
         },
       };
       break;
@@ -136,10 +134,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Partnership Representative',
         },
         contactSecondary: {
-          header: 'Partnership Information',
-          nameLabel: 'Business Name',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Partnership Information',
+          nameLabel: 'Business Name',
         },
       };
       break;
@@ -150,10 +148,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
         },
         contactSecondary: {
-          header: 'Partnership Information',
-          nameLabel: 'Business Name',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Partnership Information',
+          nameLabel: 'Business Name',
         },
       };
       break;
@@ -164,10 +162,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Tax Matters Partner',
         },
         contactSecondary: {
-          header: 'Partnership Information',
-          nameLabel: 'Business Name',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Partnership Information',
+          nameLabel: 'Business Name',
         },
       };
       break;
@@ -182,14 +180,14 @@ export const caseDetailEditContactsHelper = get => {
     case PARTY_TYPES.petitionerSpouse:
       contacts = {
         contactPrimary: {
+          displayPhone: true,
           header: 'Petitioner Information',
           nameLabel: 'Name',
-          displayPhone: true,
         },
         contactSecondary: {
+          displayPhone: true,
           header: 'Spouse Information',
           nameLabel: "Spouse's Name",
-          displayPhone: true,
         },
       };
       break;
@@ -232,10 +230,10 @@ export const caseDetailEditContactsHelper = get => {
           nameLabel: 'Name of Trustee',
         },
         contactSecondary: {
-          header: 'Trust Information',
-          nameLabel: 'Name of Trust',
           displayInCareOf: true,
           displayPhone: true,
+          header: 'Trust Information',
+          nameLabel: 'Name of Trust',
         },
       };
       break;
