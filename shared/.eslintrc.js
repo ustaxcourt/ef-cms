@@ -15,7 +15,7 @@ module.exports = {
     'sort-keys-fix',
   ],
   rules: {
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single', { avoidEscape: true }],
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'error',
     'arrow-parens': ['error', 'as-needed'],
