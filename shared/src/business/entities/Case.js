@@ -335,6 +335,7 @@ Case.prototype.addDocument = function(document) {
   this.addDocketRecord(
     new DocketRecord({
       description: document.documentType,
+      documentId: document.documentId,
       filedBy: document.filedBy,
       filingDate: document.createdAt,
       status: document.status,

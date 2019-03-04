@@ -28,6 +28,6 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
       message: `Case ${caseDetail.docketNumber} has been updated.`,
       title: 'Success',
     },
-    caseDetail: caseToUpdate,
+    caseDetail,
   };
 };
