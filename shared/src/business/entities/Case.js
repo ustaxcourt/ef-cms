@@ -51,18 +51,22 @@ const FILING_TYPES = ['Myself', 'Myself and my spouse', 'A business', 'Other'];
  */
 function Case(rawCase) {
   const Document = require('./Document');
+
   Object.assign(
     this,
     rawCase,
     {
       caseId: rawCase.caseId || uuid.v4(),
       createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || 'New',
+      status: rawCase.status || statusMap.new,
     },
     {
       docketNumberSuffix: getDocketNumberSuffix(rawCase),
     },
   );
+
+  this.initialDocketNumberSuffix =
+    this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
@@ -87,6 +91,21 @@ function Case(rawCase) {
   } else {
     this.docketRecord = [];
   }
+
+  const isNewCase = this.status === statusMap.new;
+
+  if (!isNewCase) {
+    this.updateDocketNumberRecord();
+  }
+
+  this.noticeOfAttachments = this.noticeOfAttachments || false;
+  this.orderForAmendedPetition = this.orderForAmendedPetition || false;
+  this.orderForAmendedPetitionAndFilingFee =
+    this.orderForAmendedPetitionAndFilingFee || false;
+  this.orderForFilingFee = this.orderForFilingFee || false;
+  this.orderForOds = this.orderForOds || false;
+  this.orderForRatification = this.orderForRatification || false;
+  this.orderToShowCause = this.orderToShowCause || false;
 }
 
 Case.name = 'Case';
@@ -119,19 +138,27 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
+    initialDocketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
     irsNoticeDate: joi
       .date()
       .iso()
       .max('now')
-      .when('hasVerifiedIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.optional(),
-      }),
+      .optional()
+      .allow(null),
     irsSendDate: joi
       .date()
       .iso()
       .optional(),
+    noticeOfAttachments: joi.boolean().optional(),
+    orderForAmendedPetition: joi.boolean().optional(),
+    orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
+    orderForFilingFee: joi.boolean().optional(),
+    orderForOds: joi.boolean().optional(),
+    orderForRatification: joi.boolean().optional(),
+    orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
     payGovDate: joi
       .date()
@@ -143,7 +170,10 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    preferredTrialCity: joi.string().optional(),
+    preferredTrialCity: joi
+      .string()
+      .optional()
+      .allow(null),
     procedureType: joi.string().optional(),
     respondent: joi
       .object()
@@ -218,6 +248,7 @@ joiValidationDecorator(
 Case.getCaseTitle = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
+    case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
       caseCaption = `${
         rawCase.contactPrimary.name
@@ -251,11 +282,6 @@ Case.getCaseTitle = function(rawCase) {
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
-      break;
-    case PARTY_TYPES.corporation:
-      caseCaption = `${
-        rawCase.contactPrimary.name
-      }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${
@@ -366,6 +392,50 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       docketRecord.status = status;
     }
   });
+
+  return this;
+};
+
+/**
+ *
+ * @param updateDocketNumberRecord
+ * @returns {Case}
+ */
+Case.prototype.updateDocketNumberRecord = function() {
+  const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
+
+  const oldDocketNumber =
+    this.docketNumber +
+    (this.initialDocketNumberSuffix !== '_'
+      ? this.initialDocketNumberSuffix
+      : '');
+  const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+
+  let found;
+
+  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+    const result = docketNumberRegex.exec(docketRecord.description);
+    if (result) {
+      const [, , pastChangedDocketNumber] = result;
+
+      if (pastChangedDocketNumber === newDocketNumber) {
+        found = true;
+        acc.push(docketRecord);
+      }
+    } else {
+      acc.push(docketRecord);
+    }
+    return acc;
+  }, []);
+
+  if (!found && oldDocketNumber != newDocketNumber) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        filingDate: new Date().toISOString(),
+      }),
+    );
+  }
 
   return this;
 };

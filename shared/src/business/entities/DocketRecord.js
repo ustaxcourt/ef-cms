@@ -19,6 +19,10 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
+    documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
     filedBy: joi
       .string()
       .optional()
@@ -29,10 +33,6 @@ joiValidationDecorator(
       .iso()
       .required(),
     status: joi
-      .string()
-      .allow(null)
-      .optional(),
-    documentId: joi
       .string()
       .allow(null)
       .optional(),

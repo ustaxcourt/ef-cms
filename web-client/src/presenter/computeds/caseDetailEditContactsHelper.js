@@ -1,9 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * updates the partyType, filingType, otherType, businessType,
- * contactPrimary, and/or contactSecondary depending on the
- * key/value pair passed in via props
+ * gets the contact view options based on partyType
  *
  * @param {Function} get the cerebral get function used
  * for getting state.caseDetail.partyType and state.constants
@@ -194,17 +192,6 @@ export const caseDetailEditContactsHelper = get => {
       };
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      contacts = {
-        contactPrimary: {
-          header: 'Petitioner Information',
-          nameLabel: 'Name',
-        },
-        contactSecondary: {
-          header: 'Spouse Information',
-          nameLabel: "Spouse's Name",
-        },
-      };
-      break;
     case PARTY_TYPES.survivingSpouse:
       contacts = {
         contactPrimary: {

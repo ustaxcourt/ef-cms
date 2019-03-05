@@ -59,6 +59,9 @@ describe('createCase', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: 'other',
+        contactPrimary: {
+          name: 'Diana Prince',
+        },
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: DATE,
@@ -71,19 +74,22 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       caseType: 'other',
+      contactPrimary: {
+        name: 'Diana Prince',
+      },
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
       docketRecord: [
         {
-          description: 'Request for Place of Trial at Chattanooga, TN',
-          filingDate: '2018-11-21T20:49:28.192Z',
-        },
-        {
           description: 'Petition',
           filedBy: 'Test Taxpayer',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
+        },
+        {
+          description: 'Request for Place of Trial at Chattanooga, TN',
+          filingDate: '2018-11-21T20:49:28.192Z',
         },
         {
           description: 'Ownership Disclosure Statement',
@@ -202,8 +208,12 @@ describe('createCase', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: 'other',
+        contactPrimary: {
+          name: 'Diana Prince',
+        },
         filingType: 'Myself',
         hasIrsNotice: true,
+
         irsNoticeDate: DATE,
         partyType: 'Petitioner',
         preferredTrialCity: 'Chattanooga, TN',
@@ -214,6 +224,9 @@ describe('createCase', () => {
     const expectedCaseRecordToPersist = {
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       caseType: 'other',
+      contactPrimary: {
+        name: 'Diana Prince',
+      },
       createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
@@ -263,6 +276,7 @@ describe('createCase', () => {
       hasIrsNotice: true,
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
+
       petitioners: [
         {
           name: 'Test Taxpayer',
@@ -315,6 +329,9 @@ describe('createCase', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseType: 'other',
+          contactPrimary: {
+            name: 'Diana Prince',
+          },
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
@@ -362,7 +379,11 @@ describe('createCase', () => {
         petitionFileId: null,
         petitionMetadata: {
           caseType: 'other',
+          contactPrimary: {
+            name: 'Diana Prince',
+          },
           filingType: 'Myself',
+
           hasIrsNotice: true,
           irsNoticeDate: DATE,
           partyType: 'Petitioner',

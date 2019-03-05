@@ -83,7 +83,6 @@ exports.PARTY_TYPES = {
     'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
   nextFriendForMinor:
     'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-  partnership: 'Partnership (BBA Regime)',
   partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
   partnershipBBA:
     'Partnership (as a partnership representative under the BBA regime)',
@@ -247,7 +246,7 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
       primary: getPetitionerEstateWithExecutorPrimaryContact({ countryType }),
       secondary: getPetitionerEstateExecutorContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.partnership]: {
+    [exports.PARTY_TYPES.partnershipBBA]: {
       primary: getPetitionerIntermediaryContact({ countryType }),
       secondary: getPetitionerPartnershipRepContact({ countryType }),
     }[contactType],

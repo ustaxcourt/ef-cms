@@ -1,6 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-import { get, sequences, state } from 'cerebral';
-
 export const useCerebralStateFactory = (simpleSetter, value) => (
   bind,
   defaultValue,
@@ -14,7 +11,6 @@ export const useCerebralStateFactory = (simpleSetter, value) => (
     });
   };
 
-  // default value
   if (!getter && defaultValue) {
     setter((getter = defaultValue));
   }
