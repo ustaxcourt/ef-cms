@@ -239,6 +239,7 @@ joiValidationDecorator(
 Case.getCaseTitle = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
+    case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
       caseCaption = `${
         rawCase.contactPrimary.name
@@ -272,11 +273,6 @@ Case.getCaseTitle = function(rawCase) {
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
       }, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
-      break;
-    case PARTY_TYPES.corporation:
-      caseCaption = `${
-        rawCase.contactPrimary.name
-      }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${
