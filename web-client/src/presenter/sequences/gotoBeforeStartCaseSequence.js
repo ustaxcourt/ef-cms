@@ -1,3 +1,5 @@
-import setCurrentPage from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export default [setCurrentPage('BeforeStartingCase')];
+export const gotoBeforeStartCaseSequence = [
+  setCurrentPageAction('BeforeStartingCase'),
+];

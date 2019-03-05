@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.router the riot.router object that is used for getting the current route
  * @returns {Object} the list of section work items
  */
-export default ({ get, path, router }) => {
+export const isLoggedInAction = ({ get, path, router }) => {
   const user = get(state.user);
   if (!user) {
     return path['unauthorized']({ path: router.route() });

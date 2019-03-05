@@ -5,11 +5,11 @@ exports.getWorkItemById = async ({ workItemId, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
   const workItem = await client.get({
     applicationContext,
-    TableName: TABLE,
     Key: {
       pk: workItemId,
       sk: workItemId,
     },
+    TableName: TABLE,
   });
   return stripInternalKeys(workItem);
 };

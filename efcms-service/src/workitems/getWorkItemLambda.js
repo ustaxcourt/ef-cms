@@ -8,12 +8,12 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.get = event =>
-  handle(() => {
+exports.handler = event =>
+  handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().getWorkItem({
-      workItemId: event.pathParameters.workItemId,
       applicationContext,
+      workItemId: event.pathParameters.workItemId,
     });
   });

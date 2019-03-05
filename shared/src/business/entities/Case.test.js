@@ -2,8 +2,8 @@ const assert = require('assert');
 
 const Case = require('./Case');
 const DocketRecord = require('./DocketRecord');
-const { REGULAR_TRIAL_CITIES } = require('./TrialCities');
-const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
+const { PARTY_TYPES } = require('./Contacts/PetitionContact');
 
 describe('Case entity', () => {
   describe('isValid', () => {
@@ -24,13 +24,13 @@ describe('Case entity', () => {
 
     it('Creates an invalid case with a document', () => {
       const myCase = new Case({
-        petitioners: [{ name: 'Test Taxpayer' }],
         documents: [
           {
             documentId: '123',
             documentType: 'testing',
           },
         ],
+        petitioners: [{ name: 'Test Taxpayer' }],
       });
       assert.ok(!myCase.isValid());
     });
@@ -58,8 +58,8 @@ describe('Case entity', () => {
       const myCase = new Case({
         petitioners: [],
         yearAmounts: [
-          { year: '2000', amount: '34.50' },
-          { year: '2001', amount: '34.50' },
+          { amount: '34.50', year: '2000' },
+          { amount: '34.50', year: '2001' },
         ],
       });
       assert.ok(!myCase.isValid());
@@ -70,12 +70,12 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         yearAmounts: [
           {
-            year: '2000',
             amount: '34.50',
+            year: '2000',
           },
           {
-            year: '2000',
             amount: '100.50',
+            year: '2000',
           },
         ],
       }).isValid();
@@ -87,12 +87,12 @@ describe('Case entity', () => {
     it('will fail validation when having two year amounts with the same year', () => {
       const isValid = Case.areYearsUnique([
         {
-          year: '2000',
           amount: '34.50',
+          year: '2000',
         },
         {
-          year: '2000',
           amount: '34.50',
+          year: '2000',
         },
       ]);
       expect(isValid).toBeFalsy();
@@ -100,6 +100,72 @@ describe('Case entity', () => {
   });
 
   describe('validate', () => {
+    it('should do nothing if valid', () => {
+      let error = null;
+      try {
+        new Case(MOCK_CASE).validate();
+      } catch (err) {
+        error = err;
+      }
+      assert.ok(error === null);
+    });
+
+    describe('should pass when hasIrsNotice is provided', () => {
+      it('and hasIrsNotice is true and all required fields are provided', () => {
+        let error = null;
+        try {
+          new Case(MOCK_CASE).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
+
+      it('and hasIrsNotice is false and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { caseType: 'Other', hasIrsNotice: false },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        assert.ok(error === null);
+      });
+    });
+
+    describe('should fail when hasIRSnotice is true', () => {
+      it('and is missing irsNoticeDate', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { caseType: 'Other', hasIrsNotice: true },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+
+      it('and is missing hasIrsNotice', () => {
+        let error = null;
+        let rawCase = Object.assign(
+          { caseType: 'Other', irsNoticeDate: '2018-03-01T00:00:00.000Z' },
+          MOCK_CASE_WITHOUT_NOTICE,
+        );
+        try {
+          new Case(rawCase).validate();
+        } catch (err) {
+          error = err;
+        }
+        expect(error).toBeDefined();
+      });
+    });
+
     it('should do nothing if valid', () => {
       let error = null;
       try {
@@ -163,7 +229,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Petitioner & Spouse',
+        partyType: PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -176,7 +242,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Deceased Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Petitioner & Deceased Spouse',
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -189,8 +255,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+        partyType: PARTY_TYPES.estate,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -203,8 +268,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseTitle).toEqual(
         'Estate of Test Taxpayer, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent',
@@ -214,7 +278,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Trust',
+        partyType: PARTY_TYPES.trust,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -227,7 +291,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Corporation',
+        partyType: PARTY_TYPES.corporation,
       });
       expect(caseTitle).toEqual(
         'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
@@ -237,7 +301,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -250,7 +314,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Partnership (as a partner other than tax matters partner)',
+        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -263,8 +327,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Partnership (as a partnership representative under the BBA regime)',
+        partyType: PARTY_TYPES.partnershipBBA,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -277,7 +340,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Conservator',
+        partyType: PARTY_TYPES.conservator,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -290,7 +353,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Guardian',
+        partyType: PARTY_TYPES.guardian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -303,7 +366,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Custodian',
+        partyType: PARTY_TYPES.custodian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -316,8 +379,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: PARTY_TYPES.nextFriendForMinor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -327,11 +389,10 @@ describe('Case entity', () => {
       );
     });
 
-    it('party type Incompetent Person', () => {
+    it('party type Legally Incompetent Person', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType:
-          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -344,7 +405,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Donor',
+        partyType: PARTY_TYPES.donor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -357,7 +418,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Transferee',
+        partyType: PARTY_TYPES.transferee,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -370,7 +431,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const caseTitle = Case.getCaseTitle({
         ...MOCK_CASE,
-        partyType: 'Surviving Spouse',
+        partyType: PARTY_TYPES.survivingSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -402,8 +463,8 @@ describe('Case entity', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.addDocketRecord(
         new DocketRecord({
-          filingDate: new Date().toISOString(),
           description: 'test',
+          filingDate: new Date().toISOString(),
         }),
       );
       expect(caseRecord.docketRecord).toHaveLength(1);
@@ -448,8 +509,13 @@ describe('Case entity', () => {
   });
 
   describe('getCaseTypes', () => {
-    it('returns the case types', () => {
-      const caseTypes = Case.getCaseTypes();
+    it('returns the case types for hasIrsNotice true', () => {
+      const caseTypes = Case.getCaseTypes(true);
+      expect(caseTypes).not.toBeNull();
+      expect(caseTypes.length).toBeGreaterThan(1);
+    });
+    it('returns the case types for hasIrsNotice false', () => {
+      const caseTypes = Case.getCaseTypes(false);
       expect(caseTypes).not.toBeNull();
       expect(caseTypes.length).toBeGreaterThan(1);
     });
@@ -472,14 +538,14 @@ describe('Case entity', () => {
     it('attaches the document to the case', () => {
       const caseToVerify = new Case({});
       caseToVerify.addDocument({
-        documentType: 'Answer',
         documentId: '123',
+        documentType: 'Answer',
         userId: 'respondent',
       });
       expect(caseToVerify.documents.length).toEqual(1);
       expect(caseToVerify.documents[0]).toMatchObject({
-        documentType: 'Answer',
         documentId: '123',
+        documentType: 'Answer',
         userId: 'respondent',
       });
     });
@@ -504,19 +570,67 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getTrialCities', () => {
-    it('returns the trial cities by procedure type', () => {
-      const procedureTypes = Case.getProcedureTypes();
-      procedureTypes.forEach(procedureType => {
-        const trialCities = Case.getTrialCities(procedureType);
-        expect(trialCities).not.toBeNull();
-        expect(trialCities.length).toBeGreaterThan(1);
-      });
+  describe('docket record suffix changes', () => {
+    it('should save initial docket record suffix', () => {
+      const caseToVerify = new Case({});
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
     });
-    it('returns the regular trial cities for unidentified procedure type', () => {
-      const procedureType = 'unknown';
-      const trialCities = Case.getTrialCities(procedureType);
-      expect(trialCities).toEqual(REGULAR_TRIAL_CITIES);
+
+    it('should not add a docket record item when the suffix updates from the initial suffix when the case is new', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        initialDocketNumberSuffix: 'W',
+        status: 'New',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add a docket record item when the suffix is different from the initial suffix and the case is not new', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        initialDocketNumberSuffix: 'W',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord[0].description).toEqual(
+        "Docket Number is amended from 'BobW' to 'Bob'",
+      );
+    });
+
+    it('should remove a docket record entry when the suffix updates back to the initial suffix', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        docketRecord: [
+          {
+            description: 'Petition',
+          },
+          {
+            description: "Docket Number is amended from 'Bob' to 'BobW'",
+          },
+        ],
+        initialDocketNumberSuffix: '_',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not update a docket record entry when the suffix was changed earlier', () => {
+      const caseToVerify = new Case({
+        docketNumber: 'Bob',
+        docketRecord: [
+          {
+            description: "Docket Number is amended from 'BobW' to 'Bob'",
+          },
+          {
+            description: 'Petition',
+          },
+        ],
+        initialDocketNumberSuffix: 'W',
+        status: 'Recalled',
+      });
+      expect(caseToVerify.docketRecord.length).toEqual(2);
+      expect(caseToVerify.docketRecord[0].description).toEqual(
+        "Docket Number is amended from 'BobW' to 'Bob'",
+      );
     });
   });
 });

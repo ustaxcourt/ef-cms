@@ -2,7 +2,11 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import updatePartyTypeAction from './updatePartyTypeAction';
+import { updatePartyTypeAction } from './updatePartyTypeAction';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/Contacts/PetitionContact';
 
 const updateCaseStub = sinon.stub().returns({});
 
@@ -13,11 +17,17 @@ presenter.providers.applicationContext = {
 };
 
 const getFixtures = (props, state = {}) => ({
-  state,
   modules: {
     presenter,
   },
   props,
+  state: {
+    ...state,
+    constants: {
+      COUNTRY_TYPES,
+      PARTY_TYPES,
+    },
+  },
 });
 
 describe('updatePartyTypeAction', async () => {
@@ -119,7 +129,9 @@ describe('updatePartyTypeAction', async () => {
       }),
     );
     expect(state.form.partyType).toEqual('Any Value');
-    expect(state.form.otherType).toEqual('A minor or incompetent person');
+    expect(state.form.otherType).toEqual(
+      'A minor or legally incompetent person',
+    );
   });
 
   it('resets the state.petition.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
@@ -131,9 +143,13 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
-            filingType: 'Not A business',
             businessType: 'some value',
+            filingType: 'Not A business',
           },
           petition: {
             ownershipDisclosureFile: 'a file',
@@ -154,9 +170,13 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
-            filingType: 'A business',
             businessType: 'some value',
+            filingType: 'A business',
           },
           petition: {
             ownershipDisclosureFile: 'a file',
@@ -177,6 +197,10 @@ describe('updatePartyTypeAction', async () => {
           value: 'Any Value',
         },
         {
+          constants: {
+            COUNTRY_TYPES,
+            PARTY_TYPES: [],
+          },
           form: {
             contactPrimary: 'some value',
             contactSecondary: 'some other value',

@@ -45,16 +45,15 @@ pipeline {
         }
       }
     }
-    // TODO: temp remove until dynamodb-local can be replaced
-    //stage('Audit') {
-    //  steps {
-    //    script {
-    //      dir('efcms-service') {
-    //        sh "./docker-audit.sh"
-    //      }
-    //    }
-    //  }
-    //}
+    stage('Audit') {
+     steps {
+       script {
+         dir('efcms-service') {
+           sh "./docker-audit.sh"
+         }
+       }
+     }
+    }
     stage('Lint') {
       steps {
         script {

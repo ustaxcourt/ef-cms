@@ -7,16 +7,16 @@ describe('formatted case details computed', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
-          petitioners: [{ name: 'bob' }],
-          irsDate: '2018-11-21T20:49:28.192Z',
           documents: [
             {
-              documentType: 'Petition',
               createdAt: '2018-11-21T20:49:28.192Z',
+              documentType: 'Petition',
               reviewDate: '2018-11-22T20:49:28.192Z',
               status: 'served',
             },
           ],
+          irsDate: '2018-11-21T20:49:28.192Z',
+          petitioners: [{ name: 'bob' }],
         },
         form: {},
       },
@@ -30,16 +30,16 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
-            petitioners: [{ name: 'bob' }],
-            irsDate: '2018-11-21T20:49:28.192Z',
             documents: [
               {
-                documentType: 'fakeType',
                 createdAt: '2018-11-21T20:49:28.192Z',
+                documentType: 'fakeType',
                 reviewDate: '2018-11-22T20:49:28.192Z',
                 status: 'served',
               },
             ],
+            irsDate: '2018-11-21T20:49:28.192Z',
+            petitioners: [{ name: 'bob' }],
           },
         ],
       },
@@ -53,7 +53,7 @@ describe('formatted case details computed', () => {
         cases: [
           {
             petitioners: [{ name: 'bob' }],
-            respondent: { name: 'test', barNumber: '123' },
+            respondent: { barNumber: '123', name: 'test' },
           },
         ],
       },

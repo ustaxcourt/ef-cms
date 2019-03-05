@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object used for setting workItemActions
  */
-export default ({ store }) => {
+export const clearWorkItemActionMapAction = ({ store }) => {
   store.set(state.workItemActions, {});
 };

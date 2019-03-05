@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object used for setting petition
  */
-export default ({ store }) => {
+export const clearPetitionAction = ({ store }) => {
   store.set(state.petition, {
     petitionFile: null,
     uploadsFinished: 0,

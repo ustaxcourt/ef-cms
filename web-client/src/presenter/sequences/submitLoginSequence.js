@@ -1,21 +1,21 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import getUser from '../actions/getUserAction';
-import decodeToken from '../actions/decodeTokenAction';
-import setFormSubmitting from '../actions/setFormSubmittingAction';
-import setUser from '../actions/setUserAction';
-import setToken from '../actions/setTokenAction';
-import createToken from '../actions/createTokenAction';
-import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import navigateToPath from '../actions/navigateToPathAction';
+import { createTokenAction } from '../actions/createTokenAction';
+import { decodeTokenAction } from '../actions/decodeTokenAction';
+import { getUserAction } from '../actions/getUserAction';
+import { navigateToPathAction } from '../actions/navigateToPathAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setTokenAction } from '../actions/setTokenAction';
+import { setUserAction } from '../actions/setUserAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
-export default [
-  setFormSubmitting,
-  createToken,
-  decodeToken,
-  setToken,
-  getUser,
-  setUser,
+export const submitLoginSequence = [
+  setFormSubmittingAction,
+  createTokenAction,
+  decodeTokenAction,
+  setTokenAction,
+  getUserAction,
+  setUserAction,
   clearAlertsAction,
-  navigateToPath,
-  unsetFormSubmitting,
+  navigateToPathAction,
+  unsetFormSubmittingAction,
 ];

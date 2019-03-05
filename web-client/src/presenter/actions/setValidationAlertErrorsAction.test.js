@@ -1,12 +1,10 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
-import setValidationAlertErrors from './setValidationAlertErrorsAction';
+import { runAction } from 'cerebral/test';
+import { setValidationAlertErrorsAction } from './setValidationAlertErrorsAction';
 
 describe('setValidationAlertErrors', async () => {
   it('state.alertError contains 3 errors, one from the irsNoticeDate error, and two from the yearAmounts array', async () => {
-    const { state } = await runAction(setValidationAlertErrors, {
-      state: {},
+    const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
         presenter,
       },
@@ -19,12 +17,13 @@ describe('setValidationAlertErrors', async () => {
               year: 'A year can not be in the future',
             },
             {
-              index: 5,
               amount: 'An amount must exist',
+              index: 5,
             },
           ],
         },
       },
+      state: {},
     });
     expect(state.alertError).toMatchObject({
       messages: [
@@ -36,20 +35,20 @@ describe('setValidationAlertErrors', async () => {
   });
 
   it('creates messages for errors with nested objects', async () => {
-    const { state } = await runAction(setValidationAlertErrors, {
-      state: {},
+    const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
         presenter,
       },
       props: {
         errors: {
-          green: 'green is incorrect',
           blues: { cobalt: 'cobalt is incorrect' },
+          green: 'green is incorrect',
         },
       },
+      state: {},
     });
     expect(state.alertError).toMatchObject({
-      messages: ['green is incorrect', 'cobalt is incorrect'],
+      messages: ['cobalt is incorrect', 'green is incorrect'],
     });
   });
 });

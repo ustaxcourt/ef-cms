@@ -10,12 +10,17 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral store used for getting the props.combinedCaseDetailWithForm
  * @returns {Object} the alertSuccess and the generated docketNumber
  */
-export default ({ store, applicationContext, path, props }) => {
+export const validateCaseDetailAction = ({
+  store,
+  applicationContext,
+  path,
+  props,
+}) => {
   const { combinedCaseDetailWithForm } = props;
 
   const errors = applicationContext.getUseCases().validateCaseDetail({
-    caseDetail: combinedCaseDetailWithForm,
     applicationContext,
+    caseDetail: combinedCaseDetailWithForm,
   });
 
   store.set(state.caseDetailErrors, errors || {});

@@ -9,3 +9,4 @@ web-client/node_modules
 web-client/reports
 web-client/tests_output/
 gen.conf
+aws.json

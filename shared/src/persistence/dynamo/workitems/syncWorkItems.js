@@ -8,135 +8,184 @@ const {
 
 const client = require('../../dynamodbClientService');
 
+const processNewWorkItem = async ({ workItem, applicationContext }) => {
+  if (workItem.assigneeId) {
+    await createMappingRecord({
+      applicationContext,
+      pkId: workItem.assigneeId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    });
+  }
+
+  await createMappingRecord({
+    applicationContext,
+    pkId: workItem.section,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
+
+  await client.put({
+    applicationContext,
+    Item: {
+      pk: workItem.workItemId,
+      sk: workItem.workItemId,
+      ...workItem,
+    },
+    TableName: `efcms-${applicationContext.environment.stage}`,
+  });
+};
+
+const syncChangedCaseStatus = async ({
+  workItem,
+  caseToSave,
+  applicationContext,
+  existing,
+}) => {
+  workItem.caseStatus = caseToSave.status;
+  if (caseToSave.status === 'Batched for IRS' && workItem.isInitializeCase) {
+    // TODO: this seems like business logic, refactor
+    const batchedMessage = workItem.messages.find(
+      message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
+    );
+    const { userId, createdAt } = batchedMessage;
+
+    await createMappingRecord({
+      applicationContext,
+      item: {
+        workItemId: existing.workItemId,
+      },
+      pkId: userId,
+      skId: createdAt,
+      type: 'sentWorkItem',
+    });
+
+    await createMappingRecord({
+      applicationContext,
+      item: {
+        workItemId: existing.workItemId,
+      },
+      pkId: existing.section,
+      skId: createdAt,
+      type: 'sentWorkItem',
+    });
+  } else if (caseToSave.status === 'Recalled') {
+    // TODO: this seems like business logic, refactor
+    const batchedMessage = workItem.messages.find(
+      message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
+    );
+    let userId, createdAt;
+    if (batchedMessage) {
+      userId = batchedMessage.userId;
+      createdAt = batchedMessage.createdAt;
+
+      await deleteMappingRecord({
+        applicationContext,
+        pkId: userId,
+        skId: createdAt,
+        type: 'sentWorkItem',
+      });
+      await deleteMappingRecord({
+        applicationContext,
+        pkId: 'petitions', // TODO: this probably shouldn't be hard coded
+        skId: createdAt,
+        type: 'sentWorkItem',
+      });
+    }
+  }
+  await exports.updateWorkItem({
+    applicationContext,
+    workItemToSave: workItem,
+  });
+};
+
+const handleExistingWorkItem = async ({
+  applicationContext,
+  workItem,
+  existing,
+  caseToSave,
+  currentCaseState,
+}) => {
+  if (workItem.assigneeId !== existing.assigneeId) {
+    await exports.reassignWorkItem({
+      applicationContext,
+      existingWorkItem: existing,
+      workItemToSave: workItem,
+    });
+  }
+
+  if (existing.docketNumberSuffix !== workItem.docketNumberSuffix) {
+    await exports.updateWorkItem({
+      applicationContext,
+      workItemToSave: workItem,
+    });
+  }
+
+  if (!existing.completedAt && workItem.completedAt) {
+    await createMappingRecord({
+      applicationContext,
+      item: {
+        workItemId: existing.workItemId,
+      },
+      pkId: workItem.section,
+      skId: workItem.completedAt,
+      type: 'sentWorkItem',
+    });
+  }
+
+  if (caseToSave.status !== currentCaseState.status) {
+    syncChangedCaseStatus({
+      applicationContext,
+      caseToSave,
+      existing,
+      workItem,
+    });
+  }
+};
+
+const getCurrentWorkItems = ({ currentCaseState }) => {
+  let currentWorkItems = [];
+  ((currentCaseState || {}).documents || []).forEach(
+    document =>
+      (currentWorkItems = [...currentWorkItems, ...(document.workItems || [])]),
+  );
+  return currentWorkItems;
+};
+
+const getNewWorkItems = ({ caseToSave }) => {
+  let newWorkItems = [];
+  (caseToSave.documents || []).forEach(
+    document =>
+      (newWorkItems = [...newWorkItems, ...(document.workItems || [])]),
+  );
+  return newWorkItems;
+};
+
 exports.syncWorkItems = async ({
   applicationContext,
   caseToSave,
   currentCaseState,
 }) => {
-  let currentWorkItems = [];
-  let newWorkItems = [];
-  ((currentCaseState || {}).documents || []).forEach(
-    document =>
-      (currentWorkItems = [...currentWorkItems, ...(document.workItems || [])]),
-  );
-  (caseToSave.documents || []).forEach(
-    document =>
-      (newWorkItems = [...newWorkItems, ...(document.workItems || [])]),
-  );
+  let currentWorkItems = getCurrentWorkItems({ currentCaseState });
+  let newWorkItems = getNewWorkItems({ caseToSave });
 
   for (let workItem of newWorkItems) {
     const existing = currentWorkItems.find(
       item => item.workItemId === workItem.workItemId,
     );
     if (!existing) {
-      if (workItem.assigneeId) {
-        await createMappingRecord({
-          pkId: workItem.assigneeId,
-          skId: workItem.workItemId,
-          type: 'workItem',
-          applicationContext,
-        });
-      }
-
-      await createMappingRecord({
+      await processNewWorkItem({
         applicationContext,
-        pkId: workItem.section,
-        skId: workItem.workItemId,
-        type: 'workItem',
-      });
-
-      await client.put({
-        applicationContext,
-        TableName: `efcms-${applicationContext.environment.stage}`,
-        Item: {
-          pk: workItem.workItemId,
-          sk: workItem.workItemId,
-          ...workItem,
-        },
+        workItem,
       });
     } else {
-      // the workItem exists in the current state, but check if the assigneeId changed
-      if (workItem.assigneeId !== existing.assigneeId) {
-        // the item has changed assignees, delete item
-        await exports.reassignWorkItem({
-          applicationContext,
-          existingWorkItem: existing,
-          workItemToSave: workItem,
-        });
-      }
-
-      if (!existing.completedAt && workItem.completedAt) {
-        await createMappingRecord({
-          applicationContext,
-          pkId: workItem.section,
-          skId: workItem.completedAt,
-          item: {
-            workItemId: existing.workItemId,
-          },
-          type: 'sentWorkItem',
-        });
-      }
-
-      if (caseToSave.status !== currentCaseState.status) {
-        workItem.caseStatus = caseToSave.status;
-        if (
-          caseToSave.status === 'Batched for IRS' &&
-          workItem.isInitializeCase
-        ) {
-          // TODO: this seems like business logic, refactor
-          const batchedMessage = workItem.messages.find(
-            message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
-          );
-          const { userId, createdAt } = batchedMessage;
-
-          await createMappingRecord({
-            applicationContext,
-            pkId: userId,
-            skId: createdAt,
-            item: {
-              workItemId: existing.workItemId,
-            },
-            type: 'sentWorkItem',
-          });
-
-          await createMappingRecord({
-            applicationContext,
-            pkId: existing.section,
-            skId: createdAt,
-            item: {
-              workItemId: existing.workItemId,
-            },
-            type: 'sentWorkItem',
-          });
-        } else if (caseToSave.status === 'Recalled') {
-          // TODO: this seems like business logic, refactor
-          const batchedMessage = workItem.messages.find(
-            message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
-          );
-          let userId, createdAt;
-          if (batchedMessage) {
-            userId = batchedMessage.userId;
-            createdAt = batchedMessage.createdAt;
-
-            await deleteMappingRecord({
-              applicationContext,
-              pkId: userId,
-              skId: createdAt,
-              type: 'sentWorkItem',
-            });
-            await deleteMappingRecord({
-              applicationContext,
-              pkId: 'petitions', // TODO: this probably shouldn't be hard coded
-              skId: createdAt,
-              type: 'sentWorkItem',
-            });
-          }
-        }
-        await exports.updateWorkItem({
-          applicationContext,
-          workItemToSave: workItem,
-        });
-      }
+      await handleExistingWorkItem({
+        applicationContext,
+        caseToSave,
+        currentCaseState,
+        existing,
+        workItem,
+      });
     }
   }
 };
@@ -182,11 +231,11 @@ exports.reassignWorkItem = async ({
 exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
   await client.put({
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };
