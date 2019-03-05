@@ -1,8 +1,9 @@
-import { connect } from '@cerebral/react';
-import { state, sequences } from 'cerebral';
-import React from 'react';
+import { sequences, state } from 'cerebral';
+
 import { ProcedureType } from '../StartCase/ProcedureType';
+import React from 'react';
 import { TrialCity } from '../StartCase/TrialCity';
+import { connect } from '@cerebral/react';
 
 export const CaseInfo = connect(
   {
@@ -210,78 +211,80 @@ export const CaseInfo = connect(
           <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
         </div>
 
-        <h3>Orders Needed</h3>
-        <div className="usa-form-group">
-          <input
-            id="order-for-ratification"
-            type="checkbox"
-            name="orderForRatification"
-            checked={caseDetail.orderForRatification}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label htmlFor="order-for-ratification">
-            Order for Ratification of Petition
-          </label>
-        </div>
-        <div className="usa-form-group">
-          <input
-            id="notice-of-attachments"
-            type="checkbox"
-            name="noticeOfAttachments"
-            checked={caseDetail.noticeOfAttachments}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label htmlFor="notice-of-attachments">
-            Notice of Attachments in the Nature of Evidence
-          </label>
-        </div>
-        <div className="usa-form-group">
-          <input
-            id="order-for-amended-petition"
-            type="checkbox"
-            name="orderForAmendedPetition"
-            checked={caseDetail.orderForAmendedPetition}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label htmlFor="order-for-amended-petition">
-            Order for Amended Petition
-          </label>
-        </div>
-        <div className="usa-form-group">
-          <input
-            id="order-for-amended-petition-and-filing-fee"
-            type="checkbox"
-            name="orderForAmendedPetitionAndFilingFee"
-            checked={caseDetail.orderForAmendedPetitionAndFilingFee}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label htmlFor="order-for-amended-petition-and-filing-fee">
-            Order for Amended Petition and Filing Fee
-          </label>
+        <h3 id="orders-needed">Orders Needed</h3>
+        <div role="list" aria-labelledby="orders-needed">
+          <div className="usa-form-group" role="listitem">
+            <input
+              id="order-for-ratification"
+              type="checkbox"
+              name="orderForRatification"
+              checked={caseDetail.orderForRatification}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="order-for-ratification">
+              Order for Ratification of Petition
+            </label>
+          </div>
+          <div className="usa-form-group" role="listitem">
+            <input
+              id="notice-of-attachments"
+              type="checkbox"
+              name="noticeOfAttachments"
+              checked={caseDetail.noticeOfAttachments}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="notice-of-attachments">
+              Notice of Attachments in the Nature of Evidence
+            </label>
+          </div>
+          <div className="usa-form-group" role="listitem">
+            <input
+              id="order-for-amended-petition"
+              type="checkbox"
+              name="orderForAmendedPetition"
+              checked={caseDetail.orderForAmendedPetition}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="order-for-amended-petition">
+              Order for Amended Petition
+            </label>
+          </div>
+          <div className="usa-form-group" role="listitem">
+            <input
+              id="order-for-amended-petition-and-filing-fee"
+              type="checkbox"
+              name="orderForAmendedPetitionAndFilingFee"
+              checked={caseDetail.orderForAmendedPetitionAndFilingFee}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="order-for-amended-petition-and-filing-fee">
+              Order for Amended Petition and Filing Fee
+            </label>
+          </div>
         </div>
       </div>
     );
