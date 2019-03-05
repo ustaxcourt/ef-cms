@@ -1,14 +1,15 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
+    documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedSectionWorkQueue,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
   },
-  ({ sectionWorkQueue, setFocusedWorkItem }) => {
+  ({ documentHelper, sectionWorkQueue, setFocusedWorkItem }) => {
     return (
       <table
         className="work-queue"
@@ -33,8 +34,8 @@ export const SectionWorkQueueOutbox = connect(
             key={item.workItemId}
             onClick={() =>
               setFocusedWorkItem({
-                workItemId: item.workItemId,
                 queueType: 'workQueue',
+                workItemId: item.workItemId,
               })
             }
           >
@@ -63,9 +64,10 @@ export const SectionWorkQueueOutbox = connect(
                   onClick={e => {
                     e.stopPropagation();
                   }}
-                  href={`/case-detail/${item.docketNumber}/documents/${
-                    item.document.documentId
-                  }`}
+                  href={documentHelper({
+                    docketNumber: item.docketNumber,
+                    documentId: item.document.documentId,
+                  })}
                   className="case-link"
                 >
                   {item.document.documentType}
