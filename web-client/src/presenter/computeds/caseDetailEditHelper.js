@@ -39,12 +39,10 @@ export const caseDetailEditHelper = get => {
   }
 
   return {
+    ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
-
+    showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,
-
-    showOwnershipDisclosureStatement,
-    ownershipDisclosureStatementDocumentId,
   };
 };

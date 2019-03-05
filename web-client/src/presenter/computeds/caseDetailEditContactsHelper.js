@@ -192,17 +192,6 @@ export const caseDetailEditContactsHelper = get => {
       };
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      contacts = {
-        contactPrimary: {
-          header: 'Petitioner Information',
-          nameLabel: 'Name',
-        },
-        contactSecondary: {
-          header: 'Spouse Information',
-          nameLabel: "Spouse's Name",
-        },
-      };
-      break;
     case PARTY_TYPES.survivingSpouse:
       contacts = {
         contactPrimary: {
