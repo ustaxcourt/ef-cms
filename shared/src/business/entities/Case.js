@@ -97,6 +97,15 @@ function Case(rawCase) {
   if (!isNewCase) {
     this.updateDocketNumberRecord();
   }
+
+  this.noticeOfAttachments = this.noticeOfAttachments || false;
+  this.orderForAmendedPetition = this.orderForAmendedPetition || false;
+  this.orderForAmendedPetitionAndFilingFee =
+    this.orderForAmendedPetitionAndFilingFee || false;
+  this.orderForFilingFee = this.orderForFilingFee || false;
+  this.orderForOds = this.orderForOds || false;
+  this.orderForRatification = this.orderForRatification || false;
+  this.orderToShowCause = this.orderToShowCause || false;
 }
 
 Case.name = 'Case';
