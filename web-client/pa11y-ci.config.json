@@ -5,6 +5,18 @@
     "If tests fail due to timeouts, try walking through tests manually.",
     "See info on actions here: https://github.com/pa11y/pa11y#actions"
   ],
+  "EXAMPLE": [
+    "http://example.com/simple-url-with-no-actions-to-set-up",
+    {
+      "notes": "an optional note explaining the intent for this particular url, in which all actions must complete successfully before pa11y tests the page content",
+      "url": "http://example.com/my-url?parameter=value&info=(optional string to distinguish this case from others if it should fail)",
+      "actions": [
+        "wait for #something-in-page to be visible",
+        "click on element #something-in-page",
+        "wait for #something-else to be visible"
+      ]
+    }
+  ],
   "defaults": {
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
@@ -306,6 +318,20 @@
         "click element label#has-irs-verified-notice-yes",
         "wait for #date-of-notice-month to be visible"
       ]
+    },
+    {
+      "notes": "check a11y of content within parties tab of document detail",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=parties-tab",
+      "actions": [
+        "wait for #tab-case-info to be visible",
+        "click element #tab-case-info",
+        "wait for #tabContent-caseInfo to be visible"
+      ]
+    },
+    {
+      "notes": "check a11y of content within parties tab of document detail",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=case-info-tab",
+      "actions": []
     },
 
     "http://localhost:1234/mock-login?token=intakeclerk&path=/",
