@@ -1,3 +1,3 @@
-import appendNewYearAmount from '../actions/appendNewYearAmountAction';
+import { appendNewYearAmountAction } from '../actions/appendNewYearAmountAction';
 
-export default [appendNewYearAmount];
+export const appendNewYearAmountSequence = [appendNewYearAmountAction];

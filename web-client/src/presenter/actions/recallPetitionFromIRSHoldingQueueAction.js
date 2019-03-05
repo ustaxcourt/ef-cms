@@ -9,16 +9,20 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object which is needed for setting the props.docketNumber after recalling a case
  * @returns {Object} the success alert
  */
-export default async ({ applicationContext, get, props }) => {
+export const recallPetitionFromIRSHoldingQueueAction = async ({
+  applicationContext,
+  get,
+  props,
+}) => {
   await applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
-    caseId: get(state.caseDetail).caseId,
     applicationContext,
+    caseId: get(state.caseDetail).caseId,
   });
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {
-      title: 'The petition is now recalled.',
       message: 'It will need to be re-served to the IRS.',
+      title: 'The petition is now recalled.',
     },
   };
 };

@@ -4,7 +4,7 @@
  * @param {string} section the section to fetch users from
  * @returns {Function} a function which should fetch the users in that section
  */
-export default ({ section }) =>
+export const getUsersInSectionAction = ({ section }) =>
   /**
    * get the users in a section
    *
@@ -15,7 +15,7 @@ export default ({ section }) =>
   async ({ applicationContext }) => {
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSection({ section, applicationContext });
+      .getUsersInSection({ applicationContext, section });
     return {
       users,
     };

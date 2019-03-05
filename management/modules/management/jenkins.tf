@@ -16,7 +16,7 @@ resource "aws_instance" "jenkins_web" {
   }
 
   root_block_device {
-    volume_size = 30
+    volume_size = 120
     volume_type = "gp2"
   }
 
@@ -108,6 +108,8 @@ data "aws_ami" "jenkins" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+
+  owners = ["679593333241"]
 }
 
 # Create a new load balancer

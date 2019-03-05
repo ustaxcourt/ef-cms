@@ -11,7 +11,12 @@ import { state } from 'cerebral';
  * @param {Object} providers.props.workItemId the workItemId to set as completed
  * @returns {undefined} doesn't return anything
  */
-export default async ({ get, store, applicationContext, props }) => {
+export const completeWorkItemAction = async ({
+  get,
+  store,
+  applicationContext,
+  props,
+}) => {
   const completeWorkItemDate = new Date().toISOString();
 
   const caseDetail = get(state.caseDetail);
@@ -47,8 +52,8 @@ export default async ({ get, store, applicationContext, props }) => {
 
   await applicationContext.getUseCases().updateWorkItem({
     applicationContext,
-    workItemToUpdate,
-    workItemId: props.workItemId,
     userId: applicationContext.getCurrentUser().userId,
+    workItemId: props.workItemId,
+    workItemToUpdate,
   });
 };

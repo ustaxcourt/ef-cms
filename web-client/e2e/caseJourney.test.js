@@ -1,5 +1,10 @@
 import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
+const {
+  PARTY_TYPES,
+  COUNTRY_TYPES,
+} = require('../../shared/src/business/entities/Contacts/PetitionContact');
+import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 import applicationContext from '../src/applicationContext';
 import presenter from '../src/presenter';
@@ -88,6 +93,12 @@ describe('Case journey', async () => {
         removeItem: () => null,
       },
     };
+
+    test.setState('constants', {
+      PARTY_TYPES,
+      COUNTRY_TYPES,
+      TRIAL_CITIES,
+    });
   });
 
   taxpayerLogin(test);

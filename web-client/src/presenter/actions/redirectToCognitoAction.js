@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default async ({ get }) => {
+export const redirectToCognitoAction = async ({ get }) => {
   const path = get(state.cognitoLoginUrl);
   window.location.replace(path);
 };

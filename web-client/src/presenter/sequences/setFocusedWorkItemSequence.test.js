@@ -12,8 +12,8 @@ describe('setFocusedWorkItemSequence', async () => {
   it('should set the workItem to isFocused true when called', async () => {
     test.setState('workQueue', [
       {
-        workItemId: 'abc',
         isFocused: false,
+        workItemId: 'abc',
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
@@ -30,12 +30,12 @@ describe('setFocusedWorkItemSequence', async () => {
   it('should set the workItems isFocused to false when called if the work item is already focused', async () => {
     test.setState('workQueue', [
       {
-        workItemId: 'abc',
         isFocused: true,
+        workItemId: 'abc',
       },
       {
-        workItemId: 'gg',
         isfocused: false,
+        workItemId: 'gg',
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
@@ -44,12 +44,12 @@ describe('setFocusedWorkItemSequence', async () => {
     });
     expect(test.getState('workQueue')).toMatchObject([
       {
-        workItemId: 'abc',
         isFocused: false,
+        workItemId: 'abc',
       },
       {
-        workItemId: 'gg',
         isfocused: false,
+        workItemId: 'gg',
       },
     ]);
   });

@@ -2,16 +2,17 @@ import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import getFormCombinedWithCaseDetail from '../actions/getFormCombinedWithCaseDetailAction';
-import setValidationAlertErrorsAction from '../actions/setValidationAlertErrorsAction';
-import validateCaseDetail from '../actions/validateCaseDetailAction';
+import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { updateCaseAction } from '../actions/updateCaseAction';
+import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
-export default [
+export const clickServeToIrsSequence = [
   clearAlertsAction,
-  getFormCombinedWithCaseDetail,
-  validateCaseDetail,
+  getFormCombinedWithCaseDetailAction,
+  validateCaseDetailAction,
   {
-    success: [set(state.showModal, 'ServeToIrsModalDialog')],
     error: [setValidationAlertErrorsAction],
+    success: [updateCaseAction, set(state.showModal, 'ServeToIrsModalDialog')],
   },
 ];

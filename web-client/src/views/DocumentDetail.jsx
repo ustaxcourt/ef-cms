@@ -1,17 +1,17 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import ErrorNotification from './ErrorNotification';
-import SuccessNotification from './SuccessNotification';
-import CaseDetailEdit from './CaseDetailEdit';
-import CaseDetailReadOnly from './CaseDetailReadOnly';
-import ServeToIrsModalDialog from './ServeToIrsModalDialog';
-import RecallPetitionModalDialog from './RecallPetitionModalDialog';
+import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
+import { CaseDetailReadOnly } from './CaseDetailReadOnly';
+import { ErrorNotification } from './ErrorNotification';
+import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
+import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
+import { SuccessNotification } from './SuccessNotification';
 
-class DocumentDetail extends React.Component {
+class DocumentDetailComponent extends React.Component {
   render() {
     const {
       baseUrl,
@@ -69,49 +69,47 @@ class DocumentDetail extends React.Component {
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="usa-grid-full subsection">
-            <div className="usa-width-one-half">
-              <nav className="horizontal-tabs horizontal-tabs-header3 ">
-                <ul role="tablist">
-                  {helper.showDocumentInfoTab && (
-                    <li className={helper.showDocumentInfo ? 'active' : ''}>
-                      <button
-                        role="tab"
-                        className="tab-link"
-                        id="tab-document-info"
-                        aria-controls="tab-document-info-panel"
-                        aria-selected={helper.showDocumentInfo}
-                        onClick={() =>
-                          updateCurrentTabSequence({
-                            value: 'Document Info',
-                          })
-                        }
-                      >
-                        Document Info
-                      </button>
-                    </li>
-                  )}
-                  <li className={helper.showPendingMessages ? 'active' : ''}>
+          <div className="tabs-and-buttons-wrapper">
+            <nav className="horizontal-tabs horizontal-tabs-header3 ">
+              <ul role="tablist">
+                {helper.showDocumentInfoTab && (
+                  <li className={helper.showDocumentInfo ? 'active' : ''}>
                     <button
                       role="tab"
                       className="tab-link"
-                      id="tab-pending-messages"
-                      aria-controls="tab-pending-messages-panel"
-                      aria-selected={helper.showPendingMessages}
+                      id="tab-document-info"
+                      aria-controls="tab-document-info-panel"
+                      aria-selected={helper.showDocumentInfo}
                       onClick={() =>
                         updateCurrentTabSequence({
-                          value: 'Pending Messages',
+                          value: 'Document Info',
                         })
                       }
                     >
-                      Pending Messages
+                      Document Info
                     </button>
                   </li>
-                </ul>
-              </nav>
-            </div>
+                )}
+                <li className={helper.showPendingMessages ? 'active' : ''}>
+                  <button
+                    role="tab"
+                    className="tab-link"
+                    id="tab-pending-messages"
+                    aria-controls="tab-pending-messages-panel"
+                    aria-selected={helper.showPendingMessages}
+                    onClick={() =>
+                      updateCurrentTabSequence({
+                        value: 'Pending Messages',
+                      })
+                    }
+                  >
+                    Pending Messages
+                  </button>
+                </li>
+              </ul>
+            </nav>
 
-            <div className="usa-width-one-half">
+            <div className="button-wrapper">
               {caseHelper.showServeToIrsButton &&
                 helper.formattedDocument.isPetition && (
                   <button
@@ -213,8 +211,8 @@ class DocumentDetail extends React.Component {
                             }`}
                             onClick={() =>
                               setWorkItemActionSequence({
-                                workItemId: workItem.workItemId,
                                 action: 'history',
+                                workItemId: workItem.workItemId,
                               })
                             }
                           >
@@ -240,8 +238,8 @@ class DocumentDetail extends React.Component {
                               }`}
                               onClick={() =>
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: 'complete',
+                                  workItemId: workItem.workItemId,
                                 })
                               }
                             >
@@ -269,8 +267,8 @@ class DocumentDetail extends React.Component {
                               }`}
                               onClick={() =>
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: 'forward',
+                                  workItemId: workItem.workItemId,
                                 })
                               }
                             >
@@ -296,8 +294,8 @@ class DocumentDetail extends React.Component {
                                   workItemId: workItem.workItemId,
                                 });
                                 setWorkItemActionSequence({
-                                  workItemId: workItem.workItemId,
                                   action: null,
+                                  workItemId: workItem.workItemId,
                                 });
                               }}
                             >
@@ -454,7 +452,7 @@ class DocumentDetail extends React.Component {
   }
 }
 
-DocumentDetail.propTypes = {
+DocumentDetailComponent.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   caseHelper: PropTypes.object,
@@ -473,7 +471,7 @@ DocumentDetail.propTypes = {
   workItemActions: PropTypes.object,
 };
 
-export default connect(
+export const DocumentDetail = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
@@ -492,5 +490,5 @@ export default connect(
     users: state.internalUsers,
     workItemActions: state.workItemActions,
   },
-  DocumentDetail,
+  DocumentDetailComponent,
 );

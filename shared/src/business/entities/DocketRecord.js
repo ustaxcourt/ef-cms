@@ -15,19 +15,23 @@ function DocketRecord(docketRecord) {
 joiValidationDecorator(
   DocketRecord,
   joi.object().keys({
+    description: joi
+      .string()
+      .optional()
+      .allow(null),
+    documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    filedBy: joi
+      .string()
+      .optional()
+      .allow(null),
     filingDate: joi
       .date()
       .max('now')
       .iso()
       .required(),
-    description: joi
-      .string()
-      .optional()
-      .allow(null),
-    filedBy: joi
-      .string()
-      .optional()
-      .allow(null),
     status: joi
       .string()
       .allow(null)

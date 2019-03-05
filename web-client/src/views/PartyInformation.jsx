@@ -3,11 +3,36 @@ import React from 'react';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
-export default connect(
+export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    constants: state.constants,
   },
-  function PartyInformation({ caseDetail }) {
+  ({ caseDetail, constants }) => {
+    const addressDisplay = contact => {
+      return (
+        <React.Fragment>
+          <p>{contact.name}</p>
+          {contact.title && <p>{contact.title}</p>}
+          <p>
+            <span className="address-line">{contact.address1}</span>
+            <span className="address-line">{contact.address2}</span>
+            {contact.address3 && (
+              <span className="address-line">{contact.address3}</span>
+            )}
+            <span className="address-line">
+              {contact.city}, {contact.state} {contact.postalCode}
+            </span>
+            <span className="address-line">
+              {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&
+                contact.country}
+            </span>
+          </p>
+          {contact.phone && <p>{contact.phone}</p>}
+          {contact.email && <p>{contact.email}</p>}
+        </React.Fragment>
+      );
+    };
     return (
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
@@ -25,25 +50,7 @@ export default connect(
                 </p>
                 <div>
                   <address aria-labelledby="primary-label">
-                    <p>{caseDetail.contactPrimary.name}</p>
-                    <p>{caseDetail.contactPrimary.nameOfDecedent}</p>
-                    <p>
-                      <span className="address-line">
-                        {caseDetail.contactPrimary.address1}
-                      </span>
-                      <span className="address-line">
-                        {caseDetail.contactPrimary.address2}
-                      </span>
-                      <span className="address-line">
-                        {caseDetail.contactPrimary.city},{' '}
-                        {caseDetail.contactPrimary.state}{' '}
-                        {caseDetail.contactPrimary.zip}
-                      </span>
-                    </p>
-                    {caseDetail.contactPrimary.phone && (
-                      <p>{caseDetail.contactPrimary.phone}</p>
-                    )}
-                    <p>{caseDetail.contactPrimary.email}</p>
+                    {addressDisplay(caseDetail.contactPrimary)}
                   </address>
                 </div>
               </React.Fragment>
@@ -57,23 +64,8 @@ export default connect(
               <React.Fragment>
                 <div>
                   <address aria-labelledby="secondary-label">
-                    <p>{caseDetail.contactSecondary.name}</p>
-                    <p>
-                      <span className="address-line">
-                        {caseDetail.contactSecondary.address1}
-                      </span>
-                      <span className="address-line">
-                        {caseDetail.contactSecondary.address2}
-                      </span>
-                      <span className="address-line">
-                        {caseDetail.contactSecondary.city &&
-                          `${caseDetail.contactSecondary.city},`}{' '}
-                        {caseDetail.contactSecondary.state}{' '}
-                        {caseDetail.contactSecondary.zip}
-                      </span>
-                    </p>
-                    <p>{caseDetail.contactSecondary.phone}</p>
-                    <p>{caseDetail.contactSecondary.email}</p>
+                    {caseDetail.contactSecondary.name &&
+                      addressDisplay(caseDetail.contactSecondary)}
                   </address>
                 </div>
               </React.Fragment>
@@ -87,21 +79,13 @@ export default connect(
                   Respondent Information
                 </p>
                 <address aria-labelledby="respondent-label">
-                  <p>{caseDetail.respondent.formattedName}</p>
-                  <p>
-                    <span className="address-line">
-                      {caseDetail.respondent.addressLine1}
-                    </span>
-                    <span className="address-line">
-                      {caseDetail.respondent.addressLine2}
-                    </span>
-                    <span className="address-line">
-                      {caseDetail.respondent.city},{' '}
-                      {caseDetail.respondent.state} {caseDetail.respondent.zip}
-                    </span>
-                  </p>
-                  <p>{caseDetail.respondent.phone}</p>
-                  <p>{caseDetail.respondent.email}</p>
+                  {addressDisplay({
+                    ...caseDetail.respondent,
+                    name: caseDetail.respondent.formattedName,
+                    address1: caseDetail.respondent.addressLine1,
+                    address2: caseDetail.respondent.addressLine2,
+                    address3: caseDetail.respondent.addressLine3,
+                  })}
                 </address>
               </React.Fragment>
             )}

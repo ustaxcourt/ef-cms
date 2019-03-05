@@ -3,30 +3,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import ErrorNotification from './ErrorNotification';
-import FileDocument from './FileDocument';
-import PartyInformation from './PartyInformation';
-import SuccessNotification from './SuccessNotification';
+import { DocketRecord } from './DocketRecord';
+import { ErrorNotification } from './ErrorNotification';
+import { FileDocument } from './FileDocument';
+import { PartyInformation } from './PartyInformation';
+import { SuccessNotification } from './SuccessNotification';
 
-export default connect(
+export const CaseDetailRespondent = connect(
   {
-    baseUrl: state.baseUrl,
-    token: state.token,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    helper: state.caseDetailHelper,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
-    clearDocumentSequence: sequences.clearDocumentSequence,
   },
-  function CaseDetail({
-    baseUrl,
-    token,
-    caseDetail,
-    currentTab,
-    helper,
-    updateCurrentTabSequence,
-    clearDocumentSequence,
-  }) {
+  ({ caseDetail, currentTab, updateCurrentTabSequence }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -83,76 +72,7 @@ export default connect(
           )}
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <button
-                id="button-file-document"
-                className="usa-button"
-                onClick={() => {
-                  clearDocumentSequence();
-                  updateCurrentTabSequence({ value: 'File Document' });
-                }}
-              >
-                <FontAwesomeIcon icon="cloud-upload-alt" />
-                File Document
-              </button>
-              <table
-                className="responsive-table"
-                id="docket-record"
-                aria-describedby="docket-record-tab"
-              >
-                <thead>
-                  <tr>
-                    <th>Date filed</th>
-                    <th>Title</th>
-                    <th>Filed by</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {caseDetail.documents.map((document, idx) => (
-                    <tr key={idx}>
-                      <td className="responsive-title">
-                        <span className="responsive-label">Activity date</span>
-                        {document.createdAtFormatted}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Title</span>
-                        <a
-                          href={`${baseUrl}/documents/${
-                            document.documentId
-                          }/documentDownloadUrl?token=${token}`}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          aria-label={`View PDF: ${document.documentType}`}
-                        >
-                          <FontAwesomeIcon icon="file-pdf" />
-                          {document.documentType}
-                        </a>
-                      </td>
-                      <td>
-                        <span className="responsive-label">Filed by</span>
-                        {document.filedBy}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Status</span>
-                        {document.isStatusServed && (
-                          <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                        )}
-                        {helper.showDocumentStatus && (
-                          <span>{document.status}</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                  {helper.showPaymentRecord && (
-                    <tr>
-                      <td>{caseDetail.payGovDateFormatted}</td>
-                      <td>Filing fee paid</td>
-                      <td />
-                      <td />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+              <DocketRecord />
             </div>
           )}
           {currentTab == 'Case Information' && (

@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting the state.assigneeId and state.assigneeName
  * @param {Object} providers.props the cerebral props object used for passing the props.assigneeId and props.assigneeName
  */
-export default ({ props, store }) => {
+export const setAssigneeIdAction = ({ props, store }) => {
   store.set(state.assigneeId, props.assigneeId);
   store.set(state.assigneeName, props.assigneeName);
 };

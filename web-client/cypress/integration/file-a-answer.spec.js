@@ -4,7 +4,7 @@ describe('Filing an Answer', function() {
 
   describe('File Document Form ', () => {
     before(() => {
-      cy.login('respondent', '/case-detail/102-18');
+      cy.login('respondent', '/case-detail/102-19');
       cy.get(tableSelector)
         .find('tr')
         .then($trs => {
@@ -35,11 +35,11 @@ describe('Filing an Answer', function() {
         .should('contain', 'Answer');
     });
 
-    it('reflects changes to 102-18 by showing it in respondent work queue', () => {
+    it('reflects changes to 102-19 by showing it in respondent work queue', () => {
       cy.get('#queue-nav').click();
       cy.get('table#workQueue')
         .find('a')
-        .should('contain', '102-18');
+        .should('contain', '102-19');
     });
   });
 });

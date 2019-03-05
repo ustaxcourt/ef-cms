@@ -1,26 +1,8 @@
-import { runCompute } from 'cerebral/test';
-
-import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
-
 export default test => {
   it('taxpayer navigates to create case and cancels', async () => {
-    let helper;
-
     await test.runSequence('gotoStartCaseSequence');
-    helper = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(helper.trialCities.length).toBe(0);
     expect(test.getState('showModal')).toBeFalsy();
     expect(test.getState('form')).toEqual({ contactPrimary: {} });
-    await test.runSequence('getTrialCitiesSequence', {
-      value: 'Regular',
-    });
-
-    helper = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(helper.trialCities.length).toBeGreaterThan(0);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',

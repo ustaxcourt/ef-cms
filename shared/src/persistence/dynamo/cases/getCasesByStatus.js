@@ -13,9 +13,9 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 exports.getCasesByStatus = async ({ status, applicationContext }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
+    isVersioned: true,
     key: status,
     type: 'case-status',
-    isVersioned: true,
   });
   return stripWorkItems(
     stripInternalKeys(cases),
