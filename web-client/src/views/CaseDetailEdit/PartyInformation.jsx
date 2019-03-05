@@ -7,19 +7,21 @@ import { Contacts } from '../StartCase/Contacts';
 export const PartyInformation = connect(
   {
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
-    caseDetail: state.caseDetail,
-    updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
-    caseDetailEditHelper: state.caseDetailEditHelper,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
+    caseDetailEditHelper: state.caseDetailEditHelper,
     token: state.token,
+    updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
+    updateCaseValueSequence: sequences.updateCaseValueSequence,
   },
   ({
     autoSaveCaseSequence,
-    caseDetail,
-    updateCasePartyTypeSequence,
-    caseDetailEditHelper,
     baseUrl,
+    caseDetail,
+    caseDetailEditHelper,
     token,
+    updateCasePartyTypeSequence,
+    updateCaseValueSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
@@ -51,18 +53,38 @@ export const PartyInformation = connect(
 
         {caseDetailEditHelper.showOwnershipDisclosureStatement &&
           caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
-            <div className="usa-form-group">
-              <label htmlFor="ods-link">Ownership Disclosure Statement</label>
-              <a
-                href={`${baseUrl}/documents/${
-                  caseDetailEditHelper.ownershipDisclosureStatementDocumentId
-                }/documentDownloadUrl?token=${token}`}
-                aria-label="View PDF"
-              >
-                <FontAwesomeIcon icon="file-pdf" />
-                Ownership Disclosure Statement
-              </a>
-            </div>
+            <React.Fragment>
+              <div className="usa-form-group">
+                <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+                <a
+                  href={`${baseUrl}/documents/${
+                    caseDetailEditHelper.ownershipDisclosureStatementDocumentId
+                  }/documentDownloadUrl?token=${token}`}
+                  aria-label="View PDF"
+                >
+                  <FontAwesomeIcon icon="file-pdf" />
+                  Ownership Disclosure Statement
+                </a>
+              </div>
+              <div className="usa-form-group">
+                <input
+                  id="order-for-ods"
+                  type="checkbox"
+                  name="orderForOds"
+                  checked={caseDetail.orderForOds}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked ? true : false,
+                    });
+                    autoSaveCaseSequence();
+                  }}
+                />
+                <label htmlFor="order-for-ods">
+                  Order for Ownership Disclosure Statement
+                </label>
+              </div>
+            </React.Fragment>
           )}
 
         <Contacts
