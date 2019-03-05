@@ -77,7 +77,7 @@ export const PartyInformation = connect(
                   onChange={e => {
                     updateCaseValueSequence({
                       key: e.target.name,
-                      value: e.target.checked ? true : false,
+                      value: e.target.checked,
                     });
                     autoSaveCaseSequence();
                   }}

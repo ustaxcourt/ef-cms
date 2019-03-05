@@ -50,7 +50,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
@@ -202,7 +202,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
@@ -220,7 +220,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
@@ -238,7 +238,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
@@ -256,7 +256,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
@@ -274,7 +274,7 @@ export const CaseInfo = connect(
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
-                value: e.target.checked ? true : false,
+                value: e.target.checked,
               });
               autoSaveCaseSequence();
             }}
