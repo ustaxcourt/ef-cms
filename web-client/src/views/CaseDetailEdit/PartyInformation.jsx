@@ -1,7 +1,8 @@
 import { connect } from '@cerebral/react';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+
 import { Contacts } from '../StartCase/Contacts';
 
 export const PartyInformation = connect(
@@ -50,7 +51,6 @@ export const PartyInformation = connect(
             ))}
           </select>
         </div>
-
         {caseDetailEditHelper.showOwnershipDisclosureStatement &&
           caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
             <React.Fragment>
@@ -61,6 +61,8 @@ export const PartyInformation = connect(
                     caseDetailEditHelper.ownershipDisclosureStatementDocumentId
                   }/documentDownloadUrl?token=${token}`}
                   aria-label="View PDF"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FontAwesomeIcon icon="file-pdf" />
                   Ownership Disclosure Statement
@@ -86,7 +88,6 @@ export const PartyInformation = connect(
               </div>
             </React.Fragment>
           )}
-
         <Contacts
           parentView="CaseDetail"
           bind="caseDetail"
