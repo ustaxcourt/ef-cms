@@ -6,6 +6,41 @@ const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./Contacts/PetitionContact');
 
 describe('Case entity', () => {
+  it('defaults the orders to false', () => {
+    const myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      noticeOfAttachments: false,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: false,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: false,
+    });
+  });
+
+  it('sets the expected order booleans', () => {
+    const myCase = new Case({
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: true,
+    });
+    expect(myCase).toMatchObject({
+      noticeOfAttachments: true,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: true,
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE);
