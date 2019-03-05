@@ -1,23 +1,23 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
-import React from 'react';
+import { sequences, state } from 'cerebral';
 
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { connect } from '@cerebral/react';
 
 export const IRSNotice = connect(
   {
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
-    caseTypes: state.caseTypes,
     caseDetailErrors: state.caseDetailErrors,
+    caseTypes: state.caseTypes,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     removeYearAmountSequence: sequences.removeYearAmountSequence,
+    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
   },
   ({
     appendNewYearAmountSequence,
