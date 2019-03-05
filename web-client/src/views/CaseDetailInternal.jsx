@@ -13,6 +13,7 @@ export const CaseDetailInternal = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
+    documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     helper: state.caseDetailHelper,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
@@ -23,6 +24,7 @@ export const CaseDetailInternal = connect(
   ({
     caseDetail,
     currentTab,
+    documentHelper,
     extractedPendingMessages,
     helper,
     submitUpdateCaseSequence,
@@ -77,9 +79,10 @@ export const CaseDetailInternal = connect(
                     <td>
                       <p>
                         <a
-                          href={`/case-detail/${
-                            workItem.docketNumber
-                          }/documents/${workItem.document.documentId}`}
+                          href={documentHelper({
+                            docketNumber: workItem.docketNumber,
+                            documentId: workItem.document.documentId,
+                          })}
                           className="case-link"
                         >
                           <FontAwesomeIcon icon="file-pdf" />
