@@ -21,7 +21,7 @@ import { Header } from './Header';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { StartCase } from './StartCase';
-import { StyleGuide } from './StyleGuide';
+import { StyleGuide } from './StyleGuide/StyleGuide';
 import { UsaBanner } from './UsaBanner';
 
 const pages = {
