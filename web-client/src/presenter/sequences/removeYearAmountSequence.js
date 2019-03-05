@@ -1,11 +1,7 @@
-import removeYearAmount from '../actions/removeYearAmountAction';
-import updateCase from '../actions/updateCaseAction';
+import { removeYearAmountAction } from '../actions/removeYearAmountAction';
+import { updateCaseAction } from '../actions/updateCaseAction';
 
-export default [
-  removeYearAmount,
-  updateCase,
-  {
-    error: [],
-    success: [],
-  },
+export const removeYearAmountSequence = [
+  removeYearAmountAction,
+  updateCaseAction,
 ];

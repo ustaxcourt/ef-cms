@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {Object} providers.applicationContext needed for getting the getCasesByUser use case
  * @returns {Object} contains the caseList returned from the getCasesByUser use case
  */
-export default async ({ applicationContext, get }) => {
+export const getCasesByUserAction = async ({ applicationContext, get }) => {
   const userId = get(state.user.userId);
   let caseList = await applicationContext.getUseCases().getCasesByUser({
     applicationContext,

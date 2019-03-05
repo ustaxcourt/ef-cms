@@ -6,15 +6,12 @@ import iconDotGov from '../../node_modules/uswds/dist/img/icon-dot-gov.svg';
 import iconHttps from '../../node_modules/uswds/dist/img/icon-https.svg';
 import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';
 
-/**
- * Official US website banner
- */
-export default connect(
+export const UsaBanner = connect(
   {
     showDetails: state.usaBanner.showDetails,
     toggleUsaBannerDetailsSequence: sequences.toggleUsaBannerDetailsSequence,
   },
-  function UsaBanner({ showDetails, toggleUsaBannerDetailsSequence }) {
+  ({ showDetails, toggleUsaBannerDetailsSequence }) => {
     return (
       <section className="usa-banner">
         <div className="usa-accordion">

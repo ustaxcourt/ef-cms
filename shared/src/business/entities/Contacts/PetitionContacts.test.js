@@ -1,4 +1,5 @@
 const Petition = require('../Petition');
+const { PARTY_TYPES } = require('./PetitionContact');
 
 let petition;
 
@@ -7,13 +8,14 @@ describe('Petition', () => {
     it('should not validate without contact', () => {
       petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
+        partyType: PARTY_TYPES.corporation,
         petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
         signature: true,
-        partyType: 'Corporation',
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -21,414 +23,468 @@ describe('Petition', () => {
     it('can validate primary contact', () => {
       petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
-        filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
-        irsNoticeDate: '2009-10-13',
-        petitionFile: {},
-        signature: true,
-        partyType: 'Corporation',
         contactPrimary: {
-          name: 'Jimmy Dean',
-          inCareOf: 'USTC',
           address1: '876 12th Ave',
           city: 'Nashville',
-          state: 'AK',
-          zip: '05198',
           country: 'USA',
-          phone: '1234567890',
+          countryType: 'domestic',
           email: 'someone@example.com',
+          inCareOf: 'USTC',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
         },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13',
+        partyType: PARTY_TYPES.corporation,
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
   it('can validate Petitioner contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Petitioner',
       contactPrimary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
         address1: '876 12th Ave',
         city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
         country: 'USA',
-        phone: '1234567890',
+        countryType: 'domestic',
         email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
       },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.petitioner,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('can validate Estate without an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns true when contactPrimary is defined and everything else is valid', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType:
-        'Estate without an Executor/Personal Representative/Fiduciary/etc.',
       contactPrimary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
         address1: '876 12th Ave',
         city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
         country: 'USA',
-        phone: '1234567890',
+        countryType: 'domestic',
         email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
       },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.estateWithoutExecutor,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('can validate Estate with an Executor/Personal Representative/Fiduciary/etc. contact', () => {
+  it('returns false for isValid if primary contact is missing', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.estate,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType:
-        'Estate with an Executor/Personal Representative/Fiduciary/etc.',
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType:
-        'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Partnership (BBA Regime) contact', () => {
+  it('a valid petition returns true for isValid', () => {
+    const petition = new Petition({
+      caseType: 'other',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '4444444444',
+        postalCode: '05198',
+        state: 'AK',
+        title: 'Some Title',
+      },
+      contactSecondary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.estate,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Partnership (BBA Regime) contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.partnershipBBA,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Partnership (BBA Regime)',
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Partnership (BBA Regime)',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-        phone: '1234567890',
-        email: 'someone@example.com',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Trust', () => {
+  it('can validate valid Partnership (BBA Regime) contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      contactSecondary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.partnershipBBA,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Trust',
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Trust contact', () => {
+    petition = new Petition({
+      caseType: 'other',
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.trust,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Trust',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-        phone: '1234567890',
-        email: 'someone@example.com',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Conservator contact', () => {
+  it('can validate valid Trust contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      contactSecondary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.trust,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Conservator',
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Conservator contact', () => {
+    petition = new Petition({
+      caseType: 'other',
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.conservator,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
     expect(petition.isValid()).toEqual(false);
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Conservator',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-        phone: '1234567890',
-        email: 'someone@example.com',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Guardian contact', () => {
+  it('can validate valid Conservator contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      contactSecondary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.conservator,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Guardian',
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Guardian contact', () => {
+    petition = new Petition({
+      caseType: 'other',
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.guardian,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
     expect(petition.isValid()).toEqual(false);
-
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Guardian',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        phone: '1234567890',
-      },
-      contactSecondary: {
-        name: 'Jimmy Dean',
-        inCareOf: 'USTC',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-        phone: '1234567890',
-        email: 'someone@example.com',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Custodian contact', () => {
+  it('can validate valid Guardian contact', () => {
+    petition = new Petition({
+      caseType: 'other',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      contactSecondary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.guardian,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Custodian contact', () => {
     let petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.custodian,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Custodian',
     });
     expect(petition.isValid()).toEqual(false);
+  });
 
+  it('can validate valid Custodian contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Custodian',
       contactPrimary: {
-        name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
+        countryType: 'domestic',
+        name: 'Jimmy Dean',
         phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
       },
       contactSecondary: {
-        name: 'Jimmy Dean',
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
         inCareOf: 'USTC',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
+        name: 'Jimmy Dean',
         phone: '1234567890',
-        email: 'someone@example.com',
+        postalCode: '05198',
+        state: 'AK',
       },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.custodian,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('can validate Donor contact', () => {
+  it('can validate invalid Donor contact', () => {
     let petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
       filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
+      hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.donor,
       petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
       signature: true,
-      partyType: 'Donor',
     });
     expect(petition.isValid()).toEqual(false);
-
-    petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Donor',
-      contactPrimary: {
-        name: 'Jimmy Dean',
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
-        country: 'USA',
-        phone: '1234567890',
-        email: 'someone@example.com',
-      },
-    });
-    expect(petition.isValid()).toEqual(true);
   });
 
-  it('can validate Transferee contact', () => {
-    let petition = new Petition({
-      caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Transferee',
-    });
-    expect(petition.isValid()).toEqual(false);
-
+  it('can validate valid Donor contact', () => {
     petition = new Petition({
       caseType: 'other',
-      procedureType: 'Small',
-      filingType: 'Myself',
-      preferredTrialCity: 'Chattanooga, TN',
-      irsNoticeDate: '2009-10-13',
-      petitionFile: {},
-      signature: true,
-      partyType: 'Transferee',
       contactPrimary: {
-        name: 'Jimmy Dean',
         address1: '876 12th Ave',
         city: 'Nashville',
-        state: 'AK',
-        zip: '05198',
         country: 'USA',
-        phone: '1234567890',
+        countryType: 'domestic',
         email: 'someone@example.com',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
       },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.donor,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
     });
-    expect(petition.isValid()).toEqual(true);
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('can validate invalid Transferee contact', () => {
+    let petition = new Petition({
+      caseType: 'other',
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.transferee,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
+    });
+    expect(petition.isValid()).toEqual(false);
+  });
+
+  it('can validate valid Transferee contact', () => {
+    petition = new Petition({
+      caseType: 'other',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: PARTY_TYPES.transferee,
+      petitionFile: {},
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      signature: true,
+    });
+    expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
 });

@@ -16,8 +16,8 @@ exports.uploadDocument = async ({ applicationContext, document }) => {
     .getPersistenceGateway()
     .uploadPdf({
       applicationContext,
-      policy,
       file: document,
+      policy,
     });
 
   return documentId;

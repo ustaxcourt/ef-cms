@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
  * @param {Object} providers.workItemId the cerebral props that contain the workItemId that should be cleared
  */
-export default ({ store, props }) => {
+export const clearCompleteFormAction = ({ store, props }) => {
   store.set(state.completeForm[props.workItemId], {});
 };

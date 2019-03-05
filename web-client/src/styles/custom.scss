@@ -18,14 +18,16 @@ hr {
 
 .label {
   display: block;
-  margin-bottom: 0;
+  margin-bottom: 5px;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 .label-inline {
   display: inline-block;
-  margin: 0 0.8rem 0 0;
+  margin: 0 5px 0 0;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 .forward-form {
@@ -152,7 +154,7 @@ iframe {
 
 .small-case-features {
   h4 {
-    color: $color-cool-blue;
+    color: $color-base;
   }
 
   .warning {
@@ -236,6 +238,7 @@ iframe {
       padding: 20px;
       border: 3px solid $color-primary-alt;
       border-radius: 55px;
+      color: $color-primary-alt;
     }
 
     .svg-wrapper img.svg {
@@ -247,9 +250,8 @@ iframe {
   .before-explanation {
     position: relative;
     top: 0;
-    left: 150px;
     display: inline-block;
-
+    padding-left: 150px;
     .before-label {
       display: block;
       margin-bottom: 14px;
@@ -263,4 +265,41 @@ iframe {
 input.ustc-input-error,
 select.ustc-input-error {
   border: 3px solid $color-red !important;
+}
+
+.tabs-and-buttons-wrapper {
+  position: relative;
+  width: 100%;
+  height: 65px;
+  .horizontal-tabs {
+    position: absolute;
+    bottom: 0;
+  }
+  .button-wrapper {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+#case-detail-tabs {
+  margin-bottom: 20px;
+  > nav {
+    li {
+      width: percentage(1/3);
+      button {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+  }
+  > .tabcontent {
+    > h3 {
+      padding-left: 20px;
+    }
+
+    .blue-container:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

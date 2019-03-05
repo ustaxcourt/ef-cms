@@ -3,7 +3,6 @@ exports.FILE_ANSWER = 'fileAnswer';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
 exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.GET_CASE = 'getCase';
-exports.GET_CASES_BY_DOCUMENT_ID = 'getCasesByDocumentId';
 exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
@@ -12,6 +11,7 @@ exports.CREATE_USER = 'createUser';
 exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 
 const AUTHORIZATION_MAP = {
+  admin: [exports.CREATE_USER],
   docketclerk: [
     exports.CASE_METADATA,
     exports.GET_CASE,
@@ -57,7 +57,6 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
   ],
-  admin: [exports.CREATE_USER],
   taxpayer: [exports.PETITION],
 };
 

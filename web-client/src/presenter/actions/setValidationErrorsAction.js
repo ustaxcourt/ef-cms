@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
-export default ({ props, store }) => {
+export const setValidationErrorsAction = ({ props, store }) => {
   store.set(state.validationErrors, props.errors);
 };

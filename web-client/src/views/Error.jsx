@@ -1,13 +1,12 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-
 import React from 'react';
 
-export default connect(
+export const Error = connect(
   {
     alertHelper: state.alertHelper,
   },
-  function Error({ alertHelper }) {
+  ({ alertHelper }) => {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">We can’t find the page you requested</h1>

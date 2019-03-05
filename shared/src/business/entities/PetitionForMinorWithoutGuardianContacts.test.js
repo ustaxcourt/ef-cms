@@ -5,14 +5,15 @@ describe('Petition', () => {
     it('should not validate without contacts', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        petitionFile: {},
-        signature: true,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -20,37 +21,40 @@ describe('Petition', () => {
     it('can validate contacts', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
-        filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
-        irsNoticeDate: '2009-10-13',
-        petitionFile: {},
-        signature: true,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         contactPrimary: {
-          name: 'Jimmy Dean',
           address1: '876 12th Ave',
           city: 'Nashville',
-          state: 'AK',
-          zip: '05198',
           country: 'USA',
-          phone: '1234567890',
+          countryType: 'domestic',
           email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
         },
         contactSecondary: {
-          name: 'Jimmy Dean',
-          inCareOf: 'USTC',
           address1: '876 12th Ave',
           city: 'Nashville',
-          state: 'AK',
-          zip: '05198',
           country: 'USA',
-          phone: '1234567890',
+          countryType: 'domestic',
           email: 'someone@example.com',
+          inCareOf: 'USTC',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
         },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

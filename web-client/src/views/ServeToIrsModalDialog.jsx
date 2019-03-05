@@ -1,8 +1,9 @@
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
-import ModalDialog from './ModalDialog';
 
-class ServeToIrsModalDialog extends ModalDialog {
+import { ModalDialog } from './ModalDialog';
+
+class ServeToIrsModalDialogComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
@@ -16,10 +17,10 @@ class ServeToIrsModalDialog extends ModalDialog {
   }
 }
 
-export default connect(
+export const ServeToIrsModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitPetitionToIRSHoldingQueueSequence,
   },
-  ServeToIrsModalDialog,
+  ServeToIrsModalDialogComponent,
 );
