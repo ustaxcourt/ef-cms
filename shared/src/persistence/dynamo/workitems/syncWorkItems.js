@@ -11,10 +11,10 @@ const client = require('../../dynamodbClientService');
 const processNewWorkItem = async ({ workItem, applicationContext }) => {
   if (workItem.assigneeId) {
     await createMappingRecord({
+      applicationContext,
       pkId: workItem.assigneeId,
       skId: workItem.workItemId,
       type: 'workItem',
-      applicationContext,
     });
   }
 
@@ -27,12 +27,12 @@ const processNewWorkItem = async ({ workItem, applicationContext }) => {
 
   await client.put({
     applicationContext,
-    TableName: `efcms-${applicationContext.environment.stage}`,
     Item: {
       pk: workItem.workItemId,
       sk: workItem.workItemId,
       ...workItem,
     },
+    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };
 
@@ -135,10 +135,10 @@ const handleExistingWorkItem = async ({
 
   if (caseToSave.status !== currentCaseState.status) {
     syncChangedCaseStatus({
-      workItem,
-      caseToSave,
       applicationContext,
+      caseToSave,
       existing,
+      workItem,
     });
   }
 };
@@ -175,16 +175,16 @@ exports.syncWorkItems = async ({
     );
     if (!existing) {
       await processNewWorkItem({
-        workItem,
         applicationContext,
+        workItem,
       });
     } else {
       await handleExistingWorkItem({
         applicationContext,
-        workItem,
-        existing,
         caseToSave,
         currentCaseState,
+        existing,
+        workItem,
       });
     }
   }

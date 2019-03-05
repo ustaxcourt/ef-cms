@@ -19,6 +19,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import startCaseHelper from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { documentHelper } from './computeds/documentHelper';
 import workQueueHelper from './computeds/workQueueHelper';
 
 export default {
@@ -44,6 +45,7 @@ export default {
     tab: '',
   },
   documentDetailHelper,
+  documentHelper,
   documentId: null,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

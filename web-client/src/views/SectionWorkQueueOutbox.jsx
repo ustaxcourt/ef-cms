@@ -5,10 +5,11 @@ import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
+    documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedSectionWorkQueue,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
   },
-  ({ sectionWorkQueue, setFocusedWorkItem }) => {
+  ({ documentHelper, sectionWorkQueue, setFocusedWorkItem }) => {
     return (
       <table
         className="work-queue"
@@ -63,9 +64,10 @@ export const SectionWorkQueueOutbox = connect(
                   onClick={e => {
                     e.stopPropagation();
                   }}
-                  href={`/case-detail/${item.docketNumber}/documents/${
-                    item.document.documentId
-                  }`}
+                  href={documentHelper({
+                    docketNumber: item.docketNumber,
+                    documentId: item.document.documentId,
+                  })}
                   className="case-link"
                 >
                   {item.document.documentType}

@@ -83,6 +83,14 @@ exports.createCase = async ({
     docketNumber,
   });
 
+  const petitionDocumentEntity = new Document({
+    documentId: petitionFileId,
+    documentType: Case.documentTypes.petitionFile,
+    filedBy: user.name,
+    userId: user.userId,
+  });
+  addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
+
   caseToAdd.addDocketRecord(
     new DocketRecord({
       description: `Request for Place of Trial at ${
@@ -91,14 +99,6 @@ exports.createCase = async ({
       filingDate: caseToAdd.createdAt,
     }),
   );
-
-  const petitionDocumentEntity = new Document({
-    documentId: petitionFileId,
-    documentType: Case.documentTypes.petitionFile,
-    filedBy: user.name,
-    userId: user.userId,
-  });
-  addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
@@ -109,6 +109,7 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
+  caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,
