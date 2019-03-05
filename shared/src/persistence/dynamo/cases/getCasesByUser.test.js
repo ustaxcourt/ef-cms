@@ -15,35 +15,35 @@ const applicationContext = {
 };
 
 const user = {
-  userId: 'taxpayer',
   role: 'petitioner',
+  userId: 'taxpayer',
 };
 
 describe('getCasesByUser', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
+        caseId: '123',
         pk: '123',
         sk: '123',
-        caseId: '123',
         status: 'New',
       },
     ]);
@@ -69,15 +69,15 @@ describe('getCasesByUser', () => {
 
   it('should strip the pk and sk from the results', async () => {
     const result = await getCasesByUser({
-      user,
       applicationContext,
+      user,
     });
     expect(result).to.deep.equal([{ caseId: '123', status: 'New' }]);
   });
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await getCasesByUser({
-      user,
       applicationContext,
+      user,
     });
     expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([
       { pk: '123', sk: '0' },

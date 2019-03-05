@@ -1,61 +1,65 @@
-import appendNewYearAmountSequence from './sequences/appendNewYearAmountSequence';
-import assignSelectedWorkItemsSequence from './sequences/assignSelectedWorkItemsSequence';
-import autoSaveCaseSequence from './sequences/autoSaveCaseSequence';
-import chooseWorkQueueSequence from './sequences/chooseWorkQueueSequence';
-import clearDocumentSequence from './sequences/clearDocumentSequence';
-import clickServeToIrsSequence from './sequences/clickServeToIrsSequence';
-import dismissAlertSequence from './sequences/dismissAlertSequence';
-import dismissModalSequence from './sequences/dismissModalSequence';
-import getTrialCitiesSequence from './sequences/getTrialCitiesSequence';
-import gotoBeforeStartCaseSequence from './sequences/gotoBeforeStartCaseSequence';
-import gotoCaseDetailSequence from './sequences/gotoCaseDetailSequence';
-import gotoDashboardSequence from './sequences/gotoDashboardSequence';
-import gotoDocumentDetailSequence from './sequences/gotoDocumentDetailSequence';
-import gotoLoginSequence from './sequences/gotoLoginSequence';
-import gotoStartCaseSequence from './sequences/gotoStartCaseSequence';
-import gotoStyleGuideSequence from './sequences/gotoStyleGuideSequence';
-import loginWithTokenSequence from './sequences/loginWithTokenSequence';
-import notFoundErrorSequence from './sequences/notFoundErrorSequence';
-import removeYearAmountSequence from './sequences/removeYearAmountSequence';
-import selectAssigneeSequence from './sequences/selectAssigneeSequence';
-import selectWorkItemSequence from './sequences/selectWorkItemSequence';
-import setCurrentPageErrorSequence from './sequences/setCurrentPageErrorSequence';
-import setFocusedWorkItemSequence from './sequences/setFocusedWorkItemSequence';
-import setModalDialogNameSequence from './sequences/setModalDialogNameSequence';
-import setWorkItemActionSequence from './sequences/setWorkItemActionSequence';
-import signOutSequence from './sequences/signOutSequence';
-import startACaseConfirmCancelSequence from './sequences/startACaseConfirmCancelSequence';
-import startACaseToggleCancelSequence from './sequences/startACaseToggleCancelSequence';
-import submitCaseDetailEditSaveSequence from './sequences/submitCaseDetailEditSaveSequence';
-import submitCompleteSequence from './sequences/submitCompleteSequence';
-import submitDocumentSequence from './sequences/submitDocumentSequence';
-import submitFilePetitionSequence from './sequences/submitFilePetitionSequence';
-import submitForwardSequence from './sequences/submitForwardSequence';
-import submitLoginSequence from './sequences/submitLoginSequence';
-import submitPetitionToIRSHoldingQueueSequence from './sequences/submitPetitionToIRSHoldingQueueSequence';
-import submitRecallPetitionFromIRSHoldingQueueSequence from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
-import submitSearchSequence from './sequences/submitSearchSequence';
-import submitUpdateCaseSequence from './sequences/submitUpdateCaseSequence';
-import toggleCaseDifferenceSequence from './sequences/toggleCaseDifferenceSequence';
-import toggleMobileMenuSequence from './sequences/toggleMobileMenuSequence';
-import togglePaymentDetailsSequence from './sequences/togglePaymentDetailsSequence';
-import toggleUsaBannerDetailsSequence from './sequences/toggleUsaBannerDetailsSequence';
-import unauthorizedErrorSequence from './sequences/unauthorizedErrorSequence';
-import unidentifiedUserErrorSequence from './sequences/unidentifiedUserErrorSequence';
-import unsetFormSaveSuccessSequence from './sequences/unsetFormSaveSuccessSequence';
-import updateCaseValueByIndexSequence from './sequences/updateCaseValueByIndexSequence';
-import updateCaseValueSequence from './sequences/updateCaseValueSequence';
-import updateCompleteFormValueSequence from './sequences/updateCompleteFormValueSequence';
-import updateCurrentTabSequence from './sequences/updateCurrentTabSequence';
-import updateDocumentValueSequence from './sequences/updateDocumentValueSequence';
-import updateFormValueSequence from './sequences/updateFormValueSequence';
-import updateForwardFormValueSequence from './sequences/updateForwardFormValueSequence';
-import updatePetitionValueSequence from './sequences/updatePetitionValueSequence';
-import updateSearchTermSequence from './sequences/updateSearchTermSequence';
-import updateStartCaseFormValueSequence from './sequences/updateStartCaseFormValueSequence';
-import validateCaseDetailSequence from './sequences/validateCaseDetailSequence';
-import validateStartCaseSequence from './sequences/validateStartCaseSequence';
-import viewDocumentSequence from './sequences/viewDocumentSequence';
+import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
+import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
+import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
+import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
+import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { dismissAlertSequence } from './sequences/dismissAlertSequence';
+import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
+import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
+import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
+import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoLoginSequence } from './sequences/gotoLoginSequence';
+import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
+import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
+import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
+import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
+import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
+import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
+import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
+import { signOutSequence } from './sequences/signOutSequence';
+import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
+import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
+import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
+import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitDocumentSequence } from './sequences/submitDocumentSequence';
+import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
+import { submitForwardSequence } from './sequences/submitForwardSequence';
+import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetitionToIRSHoldingQueueSequence';
+import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
+import { submitSearchSequence } from './sequences/submitSearchSequence';
+import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
+import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
+import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
+import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
+import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
+import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
+import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
+import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
+import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
+import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
+import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
+import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
+import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
+import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
+import { updateFormValueSequence } from './sequences/updateFormValueSequence';
+import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
+import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
+import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
+import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
+import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
+import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
+import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
@@ -70,17 +74,27 @@ import state from './state';
  * Main Cerebral module
  */
 export default {
+  catch: [
+    // ORDER MATTERS! Based on inheritance, the first match will be used
+    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [NotFoundError, notFoundErrorSequence], //404
+    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
+  ],
   providers: {},
   sequences: {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
+    cerebralBindSimpleSetStateSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
+    clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
     dismissAlertSequence,
     dismissModalSequence,
-    getTrialCitiesSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -93,6 +107,7 @@ export default {
     selectAssigneeSequence,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
+    setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
     signOutSequence,
@@ -115,6 +130,7 @@ export default {
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
+    updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
@@ -122,6 +138,7 @@ export default {
     updateDocumentValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
@@ -130,13 +147,4 @@ export default {
     viewDocumentSequence,
   },
   state,
-  catch: [
-    // ORDER MATTERS! Based on inheritance, the first match will be used
-    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
-    [NotFoundError, notFoundErrorSequence], //404
-    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    [ActionError, setCurrentPageErrorSequence], // generic error handler
-  ],
 };

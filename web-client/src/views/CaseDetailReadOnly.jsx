@@ -2,17 +2,21 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const CaseDetailReadOnly = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  function CaseDetailReadOnly({ caseDetail, formattedCaseDetail }) {
+  ({ caseDetail, formattedCaseDetail }) => {
     return (
       <React.Fragment>
         <div className="blue-container">
-          <h3>IRS Notice(s)</h3>
+          <h3>IRS Notice</h3>
+
+          <span className="label">Notice Attached to Petition</span>
+          <p>{caseDetail.hasIrsNotice ? 'Yes' : 'No'}</p>
+
           <span className="label">Type of Case</span>
           <p>{caseDetail.caseType}</p>
 

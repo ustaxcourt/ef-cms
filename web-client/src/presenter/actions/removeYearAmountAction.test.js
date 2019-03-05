@@ -1,5 +1,5 @@
 import { runAction } from 'cerebral/test';
-import removeYearAmountAction from './removeYearAmountAction';
+import { removeYearAmountAction } from './removeYearAmountAction';
 
 import applicationContext from '../../applicationContext';
 import presenter from '..';
@@ -9,6 +9,9 @@ presenter.providers.applicationContext = applicationContext;
 describe('removeYearAmountAction', async () => {
   it('removes the expected index from the yearAmounts array on caseDetail', async () => {
     const { state } = await runAction(removeYearAmountAction, {
+      props: {
+        index: 1,
+      },
       state: {
         caseDetail: {
           yearAmounts: [
@@ -23,9 +26,6 @@ describe('removeYearAmountAction', async () => {
             },
           ],
         },
-      },
-      props: {
-        index: 1,
       },
     });
 

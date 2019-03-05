@@ -1,10 +1,16 @@
 const { uploadDocument } = require('./uploadDocument');
 
 describe('uploadDocument', () => {
-  it('returns the expected documentId after when the upload was successful', async () => {
+  it('returns the expected documentId after the upload was successful', async () => {
     const DOCUMENT_ID = 'abc';
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
+      getCurrentUser: () => {
+        return { role: 'petitioner', userId: 'taxpayer' };
+      },
+      getCurrentUserToken: () => {
+        return '';
+      },
       getHttpClient: () => ({
         get: () => ({
           data: 'url',
@@ -13,12 +19,6 @@ describe('uploadDocument', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => DOCUMENT_ID,
       }),
-      getCurrentUser: () => {
-        return { userId: 'taxpayer', role: 'petitioner' };
-      },
-      getCurrentUserToken: () => {
-        return '';
-      },
     };
     const documentId = await uploadDocument({
       applicationContext,

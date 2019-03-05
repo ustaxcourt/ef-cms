@@ -3,27 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import ErrorNotification from './ErrorNotification';
-import SuccessNotification from './SuccessNotification';
-import PartyInformation from './PartyInformation';
+import { DocketRecord } from './DocketRecord';
+import { ErrorNotification } from './ErrorNotification';
+import { PartyInformation } from './PartyInformation';
+import { SuccessNotification } from './SuccessNotification';
 
-export default connect(
+export const CaseDetailPetitioner = connect(
   {
-    baseUrl: state.baseUrl,
-    token: state.token,
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
-    helper: state.caseDetailHelper,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
   function CaseDetail({
-    baseUrl,
-    token,
     caseDetail,
     currentTab,
-    helper,
     showDetails,
     togglePaymentDetailsSequence,
     updateCurrentTabSequence,
@@ -165,76 +160,7 @@ export default connect(
           )}
           {currentTab == 'Docket Record' && (
             <div className="tab-content" role="tabpanel">
-              <table className="responsive-table" id="docket-record">
-                <thead>
-                  <tr>
-                    <th>Date filed</th>
-                    <th>Title</th>
-                    <th>Filed by</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {caseDetail.documents.map((document, idx) => (
-                    <tr key={idx}>
-                      <td className="responsive-title">
-                        <span className="responsive-label">Activity date</span>
-                        {document.createdAtFormatted}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Title</span>
-                        <a
-                          href={`${baseUrl}/documents/${
-                            document.documentId
-                          }/documentDownloadUrl?token=${token}`}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          aria-label="View PDF"
-                        >
-                          <FontAwesomeIcon icon="file-pdf" />
-                          {document.documentType}
-                        </a>
-                      </td>
-                      <td>
-                        <span className="responsive-label">Filed by</span>
-                        {document.filedBy}
-                      </td>
-                      <td>
-                        <span className="responsive-label">Status</span>
-                        {document.isStatusServed && (
-                          <span>R served on {caseDetail.irsDateFormatted}</span>
-                        )}
-                        {!caseDetail.irsSendDate && (
-                          <span>{document.status}</span>
-                        )}
-                      </td>
-                      <td />
-                    </tr>
-                  ))}
-                  {caseDetail.payGovId && (
-                    <tr>
-                      <td>{caseDetail.payGovDateFormatted}</td>
-                      <td>Filing fee paid</td>
-                      <td />
-                      <td />
-                      <td />
-                    </tr>
-                  )}
-                  {helper.showPreferredTrialCity && (
-                    <tr>
-                      <td>{caseDetail.createdAtFormatted}</td>
-                      <td>
-                        Request for Place of Trial at{' '}
-                        {caseDetail.preferredTrialCity}
-                      </td>
-                      <td />
-                      <td />
-                      <td />
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+              <DocketRecord />
             </div>
           )}
         </section>

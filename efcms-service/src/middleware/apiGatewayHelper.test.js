@@ -6,53 +6,62 @@ const {
 } = require('ef-cms-shared/src/errors/errors');
 
 const EXPECTED_HEADERS = {
-  'Content-Type': 'application/json',
-  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Access-Control-Allow-Origin': '*',
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+  'Content-Type': 'application/json',
   'Pragma': 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
 
 describe('handle', () => {
-  it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
-    const response = await handle(async () => 'success');
+  it('should return warm up string if warm up source is passed in', async () => {
+    const response = await handle({source: 'serverless-plugin-warmup'}, async () => 'success');
     expect(response).to.deep.equal({
-      statusCode: '200',
+      body: '\"Lambda is warm!\"',
+      headers: EXPECTED_HEADERS,
+      statusCode: '200'
+    });
+  });
+
+  it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
+    const response = await handle({}, async () => 'success');
+    expect(response).to.deep.equal({
       body: JSON.stringify('success'),
       headers: EXPECTED_HEADERS,
+      statusCode: '200',
     });
   });
 
   it('should return an object representing an 404 status if the function returns a NotFoundError', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new NotFoundError('not-found error');
     });
     expect(response).to.deep.equal({
-      statusCode: 404,
       body: JSON.stringify('not-found error'),
       headers: EXPECTED_HEADERS,
+      statusCode: 404,
     });
   });
 
   it('should return an object representing an 403 status if the function returns an UnauthorizedError', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new UnauthorizedError('unauthorized error');
     });
     expect(response).to.deep.equal({
-      statusCode: 403,
       body: JSON.stringify('unauthorized error'),
       headers: EXPECTED_HEADERS,
+      statusCode: 403,
     });
   });
 
   it('should return an object representing an 400 status if the function returns an Error', async () => {
-    const response = await handle(async () => {
+    const response = await handle({}, async () => {
       throw new Error('other error');
     });
     expect(response).to.deep.equal({
-      statusCode: '400',
       body: JSON.stringify('other error'),
       headers: EXPECTED_HEADERS,
+      statusCode: '400',
     });
   });
 });
@@ -136,24 +145,34 @@ describe('getUserFromAuthHeader', () => {
 });
 
 describe('redirect', () => {
-  it('should return a redirect status in the header', async () => {
-    const response = await redirect(async () => ({ url: 'example.com' }));
+  
+  it('should return warm up string if warm up source is passed in', async () => {
+    const response = await redirect({source: 'serverless-plugin-warmup'}, async () => 'success');
     expect(response).to.deep.equal({
-      statusCode: 302,
+      body: '\"Lambda is warm!\"',
+      headers: EXPECTED_HEADERS,
+      statusCode: '200'
+    });
+  });
+
+  it('should return a redirect status in the header', async () => {
+    const response = await redirect({}, async () => ({ url: 'example.com' }));
+    expect(response).to.deep.equal({
       headers: {
         Location: 'example.com',
       },
+      statusCode: 302,
     });
   });
 
   it('should return error object on errors', async () => {
-    const response = await redirect(async () => {
+    const response = await redirect({}, async () => {
       throw new Error('an error');
     });
     expect(response).to.deep.equal({
-      statusCode: '400',
       body: JSON.stringify('an error'),
       headers: EXPECTED_HEADERS,
+      statusCode: '400',
     });
   });
 });

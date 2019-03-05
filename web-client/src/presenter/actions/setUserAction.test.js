@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import setUserAction from './setUserAction';
+import { setUserAction } from './setUserAction';
 
 const setCurrentUserStub = sinon.stub().returns(null);
 
@@ -31,13 +31,13 @@ describe('setUserAction', async () => {
       userId: 'taxpayer',
     };
     await runAction(setUserAction, {
-      state: {},
       modules: {
         presenter,
       },
       props: {
         user,
       },
+      state: {},
     });
     expect(setCurrentUserStub.getCall(0).args[0]).toMatchObject(user);
     expect(setCurrentUserStub.calledOnce).toEqual(true);

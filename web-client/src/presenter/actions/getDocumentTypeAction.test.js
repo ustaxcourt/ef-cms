@@ -1,6 +1,6 @@
 import { runAction } from 'cerebral/test';
 import presenter from '..';
-import getDocumentType from './getDocumentTypeAction';
+import { getDocumentTypeAction } from './getDocumentTypeAction';
 import sinon from 'sinon';
 
 describe('getDocumentType', async () => {
@@ -14,14 +14,14 @@ describe('getDocumentType', async () => {
   });
 
   it('should invoke the error function when no document types returned', async () => {
-    await runAction(getDocumentType, {
+    await runAction(getDocumentTypeAction, {
+      modules: {
+        presenter,
+      },
       state: {
         document: {
           documentType: 'other',
         },
-      },
-      modules: {
-        presenter,
       },
     });
     expect(spy.called).toEqual(true);

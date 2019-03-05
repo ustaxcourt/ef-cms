@@ -10,9 +10,8 @@ import { flattenDeep } from 'lodash';
  * @param {Object} providers.store the cerebral store used for setting state.alertError
  * @returns {undefined} doesn't return anything
  */
-export default ({ props, store }) => {
+export const setValidationAlertErrorsAction = ({ props, store }) => {
   const alertError = {
-    title: 'Please correct the following errors on the page:',
     messages: flattenDeep(
       Object.keys(props.errors).map(key => {
         const error = props.errors[key];
@@ -34,6 +33,7 @@ export default ({ props, store }) => {
         }
       }),
     ),
+    title: 'Please correct the following errors on the page:',
   };
   store.set(state.alertError, alertError);
 };

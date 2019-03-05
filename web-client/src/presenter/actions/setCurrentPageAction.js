@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {string} page the name of the page to set
  */
-export default page =>
+export const setCurrentPageAction = page =>
   /**
    * sets the state.currentPage based on the scoped page
    *

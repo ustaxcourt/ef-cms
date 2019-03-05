@@ -11,3 +11,5 @@ environment = "efcms"
 
 # If you have multiple stacks of infrastructure for the same project, this should change
 deployment = "ops"
+
+jenkins_instance_type = "c5.2xlarge"

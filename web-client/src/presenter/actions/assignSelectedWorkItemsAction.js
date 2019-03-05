@@ -10,7 +10,11 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get helper function
  * @returns {undefined} currently doesn't return anything
  */
-export default async ({ applicationContext, get, store }) => {
+export const assignSelectedWorkItemsAction = async ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const sectionWorkQueue = get(state.workQueue);
   const assigneeId = get(state.assigneeId);
@@ -19,9 +23,9 @@ export default async ({ applicationContext, get, store }) => {
   await applicationContext.getUseCases().assignWorkItems({
     applicationContext,
     workItems: selectedWorkItems.map(workItem => ({
-      workItemId: workItem.workItemId,
       assigneeId,
       assigneeName,
+      workItemId: workItem.workItemId,
     })),
   });
 

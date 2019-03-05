@@ -9,7 +9,7 @@
 exports.getCasesByStatus = async ({ applicationContext, status }) => {
   return await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/cases`, {
+    .get(`${applicationContext.getBaseUrl()}/statuses/${status}/cases`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },

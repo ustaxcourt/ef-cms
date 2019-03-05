@@ -1,4 +1,4 @@
-export default async ({ applicationContext }) => {
+export const getFilingTypesAction = async ({ applicationContext }) => {
   const filingTypes = await applicationContext.getUseCases().getFilingTypes({
     applicationContext,
   });

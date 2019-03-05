@@ -17,28 +17,28 @@ const applicationContext = {
 describe('getCaseByDocketNumber', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
+        caseId: '123',
         pk: '123',
         sk: '123',
-        caseId: '123',
         status: 'New',
       },
     ]);
@@ -64,10 +64,10 @@ describe('getCaseByDocketNumber', () => {
 
   it('should strip the pk and sk from the case', async () => {
     const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '101-18',
       pk: '123',
       sk: '123',
-      docketNumber: '101-18',
-      applicationContext,
     });
     expect(result).to.deep.equal({ caseId: '123', status: 'New' });
   });
@@ -75,10 +75,10 @@ describe('getCaseByDocketNumber', () => {
   it('should return null if no mapping records are returned from the query', async () => {
     client.query.resolves([]);
     const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '101-18',
       pk: '123',
       sk: '123',
-      docketNumber: '101-18',
-      applicationContext,
     });
     expect(result).to.be.null;
   });

@@ -1,20 +1,35 @@
 import { state } from 'cerebral';
 
-export default async ({ store, props, get }) => {
+import { showContactsHelper } from '../computeds/showContactsHelper';
+
+/**
+ * updates the partyType, filingType, otherType, businessType,
+ * contactPrimary, and/or contactSecondary depending on the
+ * key/value pair passed in via props
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store
+ * @param {Object} providers.props the cerebral store used for
+ * getting props.key and props.value
+ * @param {Object} providers.get the cerebral get function used
+ * for getting state.form.filingType
+ */
+export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
+  const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
   if (props.key === 'filingType') {
     switch (props.value) {
       case 'Myself':
-        partyType = 'Petitioner';
+        partyType = PARTY_TYPES.petitioner;
         break;
     }
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
       case 'Yes':
-        partyType = 'Petitioner & Deceased Spouse';
+        partyType = PARTY_TYPES.petitionerDeceasedSpouse;
         break;
       case 'No':
-        partyType = 'Petitioner & Spouse';
+        partyType = PARTY_TYPES.petitionerSpouse;
         break;
     }
   } else if (props.key === 'otherType') {
@@ -22,77 +37,45 @@ export default async ({ store, props, get }) => {
 
     switch (props.value) {
       case 'Donor':
-        partyType = 'Donor';
+        partyType = PARTY_TYPES.donor;
         break;
       case 'Transferee':
-        partyType = 'Transferee';
+        partyType = PARTY_TYPES.transferee;
         break;
       case 'Deceased Spouse':
-        partyType = 'Surviving Spouse';
+        partyType = PARTY_TYPES.survivingSpouse;
         break;
     }
   } else if (props.key === 'businessType') {
-    switch (props.value) {
-      case 'Corporation':
-        partyType = 'Corporation';
-        break;
-      case 'Partnership (as the tax matters partner)':
-        partyType = 'Partnership (as the tax matters partner)';
-        break;
-      case 'Partnership (as a partner other than tax matters partner)':
-        partyType = 'Partnership (as a partner other than tax matters partner)';
-        break;
-      case 'Partnership (as a partnership representative under the BBA regime)':
-        partyType =
-          'Partnership (as a partnership representative under the BBA regime)';
-        break;
-    }
+    partyType = props.value;
   } else if (props.key === 'estateType') {
     store.set(state.form.otherType, 'An estate or trust');
-
-    switch (props.value) {
-      case 'Estate with an Executor/Personal Representative/Fiduciary/etc.':
-        partyType =
-          'Estate with an Executor/Personal Representative/Fiduciary/etc.';
-        break;
-      case 'Estate without an Executor/Personal Representative/Fiduciary/etc.':
-        partyType =
-          'Estate without an Executor/Personal Representative/Fiduciary/etc.';
-        break;
-      case 'Trust':
-        partyType = 'Trust';
-        break;
-    }
+    partyType = props.value;
   } else if (props.key === 'minorIncompetentType') {
-    store.set(state.form.otherType, 'A minor or incompetent person');
-
-    switch (props.value) {
-      case 'Conservator':
-        partyType = 'Conservator';
-        break;
-      case 'Guardian':
-        partyType = 'Guardian';
-        break;
-      case 'Custodian':
-        partyType = 'Custodian';
-        break;
-      case 'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)':
-        partyType =
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)';
-        break;
-      case 'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)':
-        partyType =
-          'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)';
-        break;
-    }
+    store.set(state.form.otherType, 'A minor or legally incompetent person');
+    partyType = props.value;
   }
   store.set(state.form.partyType, partyType);
   if (get(state.form.filingType) !== 'A business') {
-    //clear the ownership disclosure file and business type
+    // clear the ownership disclosure file and business type
     store.set(state.petition.ownershipDisclosureFile, undefined);
     store.set(state.form.businessType, undefined);
   }
-  // ask UI
-  store.set(state.form.contactPrimary, {});
-  store.set(state.form.contactSecondary, {});
+
+  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+
+  store.set(
+    state.form.contactPrimary,
+    (showContacts.contactPrimary && {
+      countryType: COUNTRY_TYPES.DOMESTIC,
+    }) ||
+      {},
+  );
+  store.set(
+    state.form.contactSecondary,
+    (showContacts.contactSecondary && {
+      countryType: COUNTRY_TYPES.DOMESTIC,
+    }) ||
+      {},
+  );
 };
