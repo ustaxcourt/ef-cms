@@ -8,6 +8,7 @@ export const DocketRecord = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
+    documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     token: state.token,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
@@ -16,6 +17,7 @@ export const DocketRecord = connect(
     baseUrl,
     caseDetail,
     clearDocumentSequence,
+    documentHelper,
     helper,
     token,
     updateCurrentTabSequence,
@@ -74,9 +76,10 @@ export const DocketRecord = connect(
                     )}
                     {document && helper.showDocumentDetailLink && (
                       <a
-                        href={`/case-detail/${
-                          caseDetail.docketNumber
-                        }/documents/${document.documentId}`}
+                        href={documentHelper({
+                          docketNumber: caseDetail.docketNumber,
+                          documentId: document.documentId,
+                        })}
                         aria-label="View PDF"
                       >
                         <FontAwesomeIcon icon="file-pdf" />
