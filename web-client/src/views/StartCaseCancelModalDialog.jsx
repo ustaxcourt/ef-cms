@@ -7,11 +7,11 @@ class StartCaseCancelModalDialogComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
-      title: 'Are you sure you want to cancel?',
-      message: 'If you cancel, your form selections will be lost.',
-      confirmLabel: 'Yes, cancel',
       cancelLabel: 'No, continue',
       classNames: '',
+      confirmLabel: 'Yes, cancel',
+      message: 'If you cancel, your form selections will be lost.',
+      title: 'Are you sure you want to cancel?',
     };
   }
 }

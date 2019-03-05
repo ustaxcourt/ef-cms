@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 

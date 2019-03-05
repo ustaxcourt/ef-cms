@@ -11,7 +11,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { SuccessNotification } from './SuccessNotification';
 
 export const DashboardPetitioner = connect(
-  { user: state.user, helper: state.dashboardPetitionerHelper },
+  { helper: state.dashboardPetitionerHelper, user: state.user },
   ({ user, helper }) => {
     return (
       <section className="usa-section usa-grid">
