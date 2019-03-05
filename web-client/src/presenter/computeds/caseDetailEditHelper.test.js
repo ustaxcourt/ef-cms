@@ -289,13 +289,13 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.corporation,
           documents: [
             {
               documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
               documentType: 'Ownership Disclosure Statement',
             },
           ],
+          partyType: PARTY_TYPES.corporation,
         },
         constants: {
           PARTY_TYPES,
@@ -312,13 +312,13 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.corporation,
           documents: [
             {
               documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
               documentType: 'Petition',
             },
           ],
+          partyType: PARTY_TYPES.corporation,
         },
         constants: {
           PARTY_TYPES,
