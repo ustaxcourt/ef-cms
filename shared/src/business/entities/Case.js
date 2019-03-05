@@ -143,6 +143,13 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    noticeOfAttachments: joi.boolean().optional(),
+    orderForAmendedPetition: joi.boolean().optional(),
+    orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
+    orderForFilingFee: joi.boolean().optional(),
+    orderForOds: joi.boolean().optional(),
+    orderForRatification: joi.boolean().optional(),
+    orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
     payGovDate: joi
       .date()
