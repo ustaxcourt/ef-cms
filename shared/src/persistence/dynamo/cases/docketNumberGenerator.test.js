@@ -1,7 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
-
 const { createDocketNumber } = require('./docketNumberGenerator');
 
 describe('Create docket number', function() {
@@ -22,6 +18,6 @@ describe('Create docket number', function() {
       .getFullYear()
       .toString()
       .substr(-2);
-    expect(result).to.equal(`223-${last2YearDigits}`);
+    expect(result).toEqual(`223-${last2YearDigits}`);
   });
 });
