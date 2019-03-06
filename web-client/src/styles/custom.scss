@@ -82,13 +82,28 @@ iframe {
   margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
 
-  *:last-child {
-    margin-bottom: 0;
-  }
-
   .push-right {
     margin-right: 0;
     float: right;
+  }
+
+  &.read-only-party-information {
+    *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  div.read-only-contact-information {
+    margin-bottom: 20px;
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
   }
 }
 
