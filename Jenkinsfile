@@ -70,7 +70,7 @@ pipeline {
         }
       }
     }
-    stage('Tests Pa11y and Cerebral') {
+    stage('Testing') {
       parallel {
         stage('Pa11y') {
           agent any
@@ -98,6 +98,38 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+      parallel {
+        stage('efcms-service') {
+          when {
+            expression {
+              shouldDeploy(env.BRANCH_NAME)
+            }
+          }
+          steps {
+            build job: 'ef-cms-api-deploy', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+        stage('web-client') {
+          when {
+            expression {
+              shouldDeploy(env.BRANCH_NAME)
+            }
+          }
+          steps {
+            build job: 'ef-cms-ui-deploy', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+      }
+    }
   }
   post {
     always {
@@ -105,6 +137,11 @@ pipeline {
     }
   }
 }
+
+def shouldDeploy(branchName) {
+  ['develop', 'staging', 'master'].contains(branchName) == true
+}
+
 
 def checkCommit(folder) {
   if (env.CHANGE_TARGET) {
