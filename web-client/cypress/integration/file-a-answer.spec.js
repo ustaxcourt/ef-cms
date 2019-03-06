@@ -23,6 +23,7 @@ describe('Filing an Answer', function() {
 
     it('can upload the answer with indication of success', () => {
       cy.get('#file-a-document button[type="submit"]').click();
+      cy.url().should('include', 'case-detail');
       cy.showsSuccessMessage(true);
     });
 
