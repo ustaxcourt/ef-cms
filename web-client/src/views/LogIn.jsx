@@ -18,7 +18,8 @@ export const LogIn = connect(
         <form
           id="log-in"
           noValidate
-          onSubmit={() => {
+          onSubmit={event => {
+            event.preventDefault();
             submitLoginSequence();
           }}
         >
