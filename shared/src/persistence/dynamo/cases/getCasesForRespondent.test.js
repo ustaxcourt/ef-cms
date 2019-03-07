@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
@@ -67,14 +64,14 @@ describe('getCasesForRespondent', () => {
       applicationContext,
       respondentId: 'taxpayer',
     });
-    expect(result).to.deep.equal([{ caseId: '123', status: 'New' }]);
+    expect(result).toEqual([{ caseId: '123', status: 'New' }]);
   });
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await getCasesForRespondent({
       applicationContext,
       respondentId: 'taxpayer',
     });
-    expect(client.batchGet.getCall(0).args[0].keys).to.deep.equal([
+    expect(client.batchGet.getCall(0).args[0].keys).toEqual([
       { pk: '123', sk: '0' },
     ]);
   });

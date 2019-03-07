@@ -64,7 +64,6 @@ module.exports = {
     'cypress/globals': true,
     browser: true,
     es6: true,
-    mocha: true,
     node: true,
   },
   parserOptions: {
