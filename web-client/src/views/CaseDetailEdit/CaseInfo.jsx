@@ -26,37 +26,39 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
-        <ProcedureType
-          value={caseDetail.procedureType}
-          onChange={e => {
-            updateCaseValueSequence({
-              key: 'procedureType',
-              value: e.target.value,
-            });
-            updateCaseValueSequence({
-              key: 'preferredTrialCity',
-              value: '',
-            });
-            autoSaveCaseSequence();
-          }}
-          legend="Case Procedure"
-        />
-
         <div className="usa-form-group">
-          <input
-            id="order-to-show-cause"
-            type="checkbox"
-            name="orderToShowCause"
-            checked={caseDetail.orderToShowCause}
+          <ProcedureType
+            value={caseDetail.procedureType}
             onChange={e => {
               updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
+                key: 'procedureType',
+                value: e.target.value,
+              });
+              updateCaseValueSequence({
+                key: 'preferredTrialCity',
+                value: '',
               });
               autoSaveCaseSequence();
             }}
+            legend="Case Procedure"
           />
-          <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+
+          <div className="order-checkbox">
+            <input
+              id="order-to-show-cause"
+              type="checkbox"
+              name="orderToShowCause"
+              checked={caseDetail.orderToShowCause}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+          </div>
         </div>
 
         <TrialCity
@@ -192,27 +194,31 @@ export const CaseInfo = connect(
               });
             }}
           />
-        </div>
 
-        <div className="usa-form-group">
-          <input
-            id="order-for-filing-fee"
-            type="checkbox"
-            name="orderForFilingFee"
-            checked={caseDetail.orderForFilingFee}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-              autoSaveCaseSequence();
-            }}
-          />
-          <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+          <div className="order-checkbox">
+            <input
+              id="order-for-filing-fee"
+              type="checkbox"
+              name="orderForFilingFee"
+              checked={caseDetail.orderForFilingFee}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+          </div>
         </div>
 
         <h3 id="orders-needed">Orders Needed</h3>
-        <div role="list" aria-labelledby="orders-needed">
+        <div
+          className="orders-needed"
+          role="list"
+          aria-labelledby="orders-needed"
+        >
           <div className="usa-form-group" role="listitem">
             <input
               id="order-for-ratification"

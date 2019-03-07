@@ -131,7 +131,32 @@ label.validated::after {
     margin-bottom: 25px;
   }
   .contact-group {
-    margin-top: 45px;
+    margin-top: 40px;
+  }
+  .usa-form-hint {
+    margin-bottom: 0;
+  }
+  .ustc-form-group-city input,
+  .ustc-form-group-state select {
+    margin-bottom: 0;
+  }
+}
+
+.order-checkbox {
+  margin-top: 15px;
+}
+
+.usa-date-of-birth .usa-form-group {
+  margin-bottom: 0;
+}
+
+#orders-needed {
+  margin-top: 50px;
+}
+
+.orders-needed {
+  .usa-form-group {
+    margin-bottom: 20px;
   }
 }
 
