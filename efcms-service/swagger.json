@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2019-02-27T17:02:41Z",
+    "version" : "2019-03-06T15:30:48Z",
     "title" : "dev-ef-cms",
     "contact" : {
       "url" : "https://www.ustaxcourt.gov",
@@ -500,6 +500,9 @@
     },
     "/v1/sections/{section}/users" : {
       "get" : {
+        "tags" : [ "workitems" ],
+        "summary" : "get all users in a section",
+        "description" : "get all users in a section\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
@@ -685,6 +688,9 @@
     },
     "/v1/users/internal" : {
       "get" : {
+        "tags" : [ "workitems" ],
+        "summary" : "get all internal users",
+        "description" : "get all internal users\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
