@@ -67,24 +67,24 @@ export const PartyInformation = connect(
                   <FontAwesomeIcon icon="file-pdf" />
                   Ownership Disclosure Statement
                 </a>
-              </div>
-              <div className="usa-form-group">
-                <input
-                  id="order-for-ods"
-                  type="checkbox"
-                  name="orderForOds"
-                  checked={caseDetail.orderForOds}
-                  onChange={e => {
-                    updateCaseValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    autoSaveCaseSequence();
-                  }}
-                />
-                <label htmlFor="order-for-ods">
-                  Order for Ownership Disclosure Statement
-                </label>
+                <div className="order-checkbox">
+                  <input
+                    id="order-for-ods"
+                    type="checkbox"
+                    name="orderForOds"
+                    checked={caseDetail.orderForOds}
+                    onChange={e => {
+                      updateCaseValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      autoSaveCaseSequence();
+                    }}
+                  />
+                  <label htmlFor="order-for-ods">
+                    Order for Ownership Disclosure Statement
+                  </label>
+                </div>
               </div>
             </React.Fragment>
           )}
