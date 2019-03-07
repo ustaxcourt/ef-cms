@@ -2,7 +2,6 @@
 ENV=$1
 
 REGION="us-east-1"
-restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms'].id" --output text)
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -22,4 +21,4 @@ response=$(aws cognito-idp admin-initiate-auth \
 
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-echo $adminToken
+echo "${adminToken}"
