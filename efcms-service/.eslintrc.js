@@ -1,6 +1,6 @@
 module.exports = {
   extends: ['prettier', 'eslint:recommended', 'plugin:security/recommended'],
-  plugins: ['prettier', 'security', 'jsdoc', 'sort-keys-fix'],
+  plugins: ['prettier', 'security', 'jsdoc', 'sort-keys-fix', 'jest'],
   rules: {
     quotes: ['error', 'single'],
     'arrow-parens': ['error', 'as-needed'],
@@ -38,7 +38,7 @@ module.exports = {
   },
   env: {
     es6: true,
-    mocha: true,
+    'jest/globals': true,
     node: true,
   },
   parserOptions: {

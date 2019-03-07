@@ -13,12 +13,11 @@
     "artillery-plugin-fuzzer": "^1.0.1",
     "aws-sdk": "^2.414.0",
     "aws-sdk-mock": "^4.3.1",
-    "chai": "^4.2.0",
-    "chai-string": "^1.5.0",
     "dynamodb-admin": "^3.1.2",
     "eslint": "^5.15.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-cypress": "^2.2.1",
+    "eslint-plugin-jest": "^22.3.0",
     "eslint-plugin-jsdoc": "^4.1.1",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
@@ -26,9 +25,8 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sort-keys-fix": "^1.0.1",
     "husky": "^1.3.1",
+    "jest": "^24.1.0",
     "lambda-tester": "^3.5.0",
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0",
     "prettier": "^1.16.4",
     "proxyquire": "^2.1.0",
     "serverless": "^1.38.0",
@@ -59,9 +57,7 @@
     "watch": "nodemon -e yml --exec sls offline start",
     "lint": "eslint ./src/**/*.js",
     "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
-    "test": "nyc -a mocha --exit './src/**/*.test.js'",
-    "test:watch": "nyc -a mocha --watch './src/**/*.test.js'",
-    "test:ci": "nyc --all --reporter=cobertura --reporter=html mocha --exit ./src/**/*.test.js && npm run test:coverage",
+    "test": "jest .*test\\.js$",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "create-tables": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop node create-dynamo-tables.js",
     "docker:shellcheck": "./docker-shellcheck.sh",
@@ -76,37 +72,16 @@
     "docker:route53": "./docker-route53.sh",
     "docker:globaltables": "./docker-globaltables.sh"
   },
-  "nyc": {
-    "check-coverage": true,
-    "per-file": true,
-    "extension": [
-      "*.js"
-    ],
-    "exclude": [
-      "**/*[tT]est.js",
-      "./**/node_modules",
-      "**/coverage",
-      "setup-global-tables.js",
-      "create-dynamo-tables.js",
-      "src/cases",
-      "src/users",
-      "src/documents",
-      "src/swagger",
-      "src/workitems",
-      "src/applicationContext.js",
-      "dynamo-export.js"
-    ],
-    "reporter": [
-      "text",
-      "text-summary",
-      "cobertura",
-      "lcov",
-      "html"
-    ],
-    "lines": 95,
-    "statements": 95,
-    "functions": 95,
-    "branches": 90,
-    "cache": true
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage",
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
   }
 }
