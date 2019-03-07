@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
@@ -67,7 +64,7 @@ describe('getCaseByCaseId', async () => {
       applicationContext,
       caseId: '123',
     });
-    expect(result).to.deep.equal({
+    expect(result).toEqual({
       caseId: '123',
       status: 'New',
     });
@@ -79,6 +76,6 @@ describe('getCaseByCaseId', async () => {
       applicationContext,
       caseId: '123',
     });
-    expect(result).to.be.null;
+    expect(result).toBeNull();
   });
 });
