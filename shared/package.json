@@ -48,8 +48,6 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-string": "^1.5.0",
     "eslint": "^5.15.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-cypress": "^2.2.1",

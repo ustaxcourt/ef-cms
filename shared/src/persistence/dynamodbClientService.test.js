@@ -1,9 +1,5 @@
 const AWS = require('aws-sdk');
-const chai = require('chai');
-const expect = require('chai').expect;
 const sinon = require('sinon');
-
-chai.use(require('chai-string'));
 
 const {
   batchGet,
@@ -96,38 +92,38 @@ describe('dynamodbClientService', function() {
         applicationContext,
         Item: MOCK_ITEM,
       });
-      expect(result).to.deep.equal(MOCK_ITEM);
+      expect(result).toEqual(MOCK_ITEM);
     });
   });
 
   describe('updateConsistent', async () => {
     it('should return the  same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
-      expect(result).to.deep.equal('123');
+      expect(result).toEqual('123');
     });
   });
 
   describe('get', async () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await get({ applicationContext });
-      expect(result).to.deep.equal(MOCK_ITEM);
+      expect(result).toEqual(MOCK_ITEM);
     });
     it('should throw an error if the item is not returned', async () => {
       documentClientStub.get.returns({ promise: () => Promise.resolve({}) });
       const result = await get({ applicationContext });
-      expect(result).to.be.undefined;
+      expect(result).toBeUndefined();
     });
     it('should return nothing if the promise is rejected', async () => {
       documentClientStub.get.returns({ promise: () => Promise.reject({}) });
       const result = await get({ applicationContext });
-      expect(result).to.be.undefined;
+      expect(result).toBeUndefined();
     });
   });
 
   describe('query', async () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
-      expect(result).to.deep.equal([MOCK_ITEM]);
+      expect(result).toEqual([MOCK_ITEM]);
     });
   });
 
@@ -142,7 +138,7 @@ describe('dynamodbClientService', function() {
         ],
         tableName: 'a',
       });
-      expect(result).to.deep.equal([MOCK_ITEM]);
+      expect(result).toEqual([MOCK_ITEM]);
     });
     it('should return empty array if no keys', async () => {
       const result = await batchGet({
@@ -150,7 +146,7 @@ describe('dynamodbClientService', function() {
         keys: [],
         tableName: 'a',
       });
-      expect(result).to.deep.equal([]);
+      expect(result).toEqual([]);
     });
   });
 
@@ -166,7 +162,7 @@ describe('dynamodbClientService', function() {
         items: [item],
         tableName: 'a',
       });
-      expect(documentClientStub.batchWrite.getCall(0).args[0]).to.deep.equal({
+      expect(documentClientStub.batchWrite.getCall(0).args[0]).toEqual({
         RequestItems: {
           a: [
             {
@@ -195,7 +191,7 @@ describe('dynamodbClientService', function() {
         },
         tableName: 'a',
       });
-      expect(documentClientStub.delete.getCall(0).args[0]).to.deep.equal({
+      expect(documentClientStub.delete.getCall(0).args[0]).toEqual({
         Key: { pk: '123' },
         TableName: 'a',
       });

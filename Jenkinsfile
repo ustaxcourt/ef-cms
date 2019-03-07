@@ -70,7 +70,7 @@ pipeline {
         }
       }
     }
-    stage('Tests') {
+    stage('Tests Pa11y and Cerebral') {
       parallel {
         stage('Pa11y') {
           agent any
@@ -87,7 +87,7 @@ pipeline {
         stage('Cypress') {
           agent any
           steps {
-            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
+            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER}-${GIT_COMMIT} ./docker-cypress.sh"
           }
           post {
             always {
