@@ -133,6 +133,13 @@ label.validated::after {
   .contact-group {
     margin-top: 40px;
   }
+  .usa-form-hint {
+    margin-bottom: 0;
+  }
+  .ustc-form-group-city input,
+  .ustc-form-group-state select {
+    margin-bottom: 0;
+  }
 }
 
 .order-checkbox {
