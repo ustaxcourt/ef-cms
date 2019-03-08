@@ -92,9 +92,23 @@ describe('TabsComponent', () => {
     expect(testInstance.findByProps({ id: 'non-tab' }).children[0]).toEqual(
       'Non Tab',
     );
+  });
 
-    expect(() =>
-      testInstance.findByProps({ id: 'tab-section-panel' }),
-    ).toThrow();
+  it('should not show tab for items without title (for tabless tabs)', () => {
+    const testRenderer = TestRenderer.create(
+      <TabsComponent defaultActiveTab="my">
+        <Tab tabName="my" id="tab-my-queue">
+          <div id="tab-individual-panel">Indy</div>
+        </Tab>
+        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <div id="tab-section-panel">Section</div>
+        </Tab>
+        <div id="non-tab">Non Tab</div>
+      </TabsComponent>,
+    );
+
+    const testInstance = testRenderer.root;
+
+    expect(() => testInstance.findByProps({ id: 'tab-my-queue' })).toThrow();
   });
 });
