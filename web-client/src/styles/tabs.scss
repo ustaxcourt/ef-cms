@@ -193,15 +193,4 @@ nav.horizontal-tabs,
       }
     }
   }
-
-  > .non-tab {
-    .fix-top-right {
-      @media only screen and (min-width: $small-screen) {
-        position: absolute;
-        top: 4px;
-        right: 0px;
-        margin: 0px;
-      }
-    }
-  }
 }
