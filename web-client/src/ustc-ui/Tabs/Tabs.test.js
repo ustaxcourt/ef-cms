@@ -79,4 +79,22 @@ describe('TabsComponent', () => {
       testInstance.findByProps({ id: 'tab-individual-panel' }),
     ).toThrow();
   });
+
+  it('should show non tab content', () => {
+    const testRenderer = TestRenderer.create(
+      <TabsComponent>
+        <div id="non-tab">Non Tab</div>
+      </TabsComponent>,
+    );
+
+    const testInstance = testRenderer.root;
+
+    expect(testInstance.findByProps({ id: 'non-tab' }).children[0]).toEqual(
+      'Non Tab',
+    );
+
+    expect(() =>
+      testInstance.findByProps({ id: 'tab-section-panel' }),
+    ).toThrow();
+  });
 });
