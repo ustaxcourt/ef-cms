@@ -46,7 +46,7 @@ export function TabsComponent({
       active: isActiveTab,
     });
 
-    if (!tabName) {
+    if (!title) {
       return null;
     }
 
@@ -97,11 +97,16 @@ export function TabsComponent({
     return null;
   }
 
+  const navItems = map(children, child => child.props.title && child);
+  const hasNav = !!(navItems && navItems.length);
+
   return (
     <div id={id} className={tabsClass}>
-      <nav>
-        <ul role="tablist">{map(children, renderTab)}</ul>
-      </nav>
+      {hasNav && (
+        <nav>
+          <ul role="tablist">{map(children, renderTab)}</ul>
+        </nav>
+      )}
       {map(children, renderNonTab)}
       {map(children, renderTabContent)}
     </div>
