@@ -15,7 +15,7 @@ export const WorkQueue = connect(
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
         <Tabs
-          className="horizontal-tabs"
+          className="classic-horizontal"
           defaultActiveTab="my"
           bind="workQueueToDisplay.queue"
           onSelect={() =>

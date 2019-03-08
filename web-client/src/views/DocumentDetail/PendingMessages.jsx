@@ -16,12 +16,7 @@ class PendingMessagesComponent extends React.Component {
       users,
     } = this.props;
     return (
-      <div
-        role="tabpanel"
-        id="tab-pending-messages-panel"
-        aria-labelledby="tab-pending-messages"
-        tabIndex="0"
-      >
+      <div>
         {(!helper.formattedDocument ||
           !helper.formattedDocument.workItems ||
           !helper.formattedDocument.workItems.length) && (

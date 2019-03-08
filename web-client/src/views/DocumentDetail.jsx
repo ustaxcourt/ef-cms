@@ -11,6 +11,9 @@ import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
+import { CompletedMessages } from './DocumentDetail/CompletedMessages';
+
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 
 class DocumentDetailComponent extends React.Component {
   render() {
@@ -64,47 +67,19 @@ class DocumentDetailComponent extends React.Component {
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="tabs-and-buttons-wrapper">
-            <nav className="horizontal-tabs horizontal-tabs-header3 ">
-              <ul role="tablist">
-                {helper.showDocumentInfoTab && (
-                  <li className={helper.showDocumentInfo ? 'active' : ''}>
-                    <button
-                      role="tab"
-                      className="tab-link"
-                      id="tab-document-info"
-                      aria-controls="tab-document-info-panel"
-                      aria-selected={helper.showDocumentInfo}
-                      onClick={() =>
-                        updateCurrentTabSequence({
-                          value: 'Document Info',
-                        })
-                      }
-                    >
-                      Document Info
-                    </button>
-                  </li>
-                )}
-                <li className={helper.showPendingMessages ? 'active' : ''}>
-                  <button
-                    role="tab"
-                    className="tab-link"
-                    id="tab-pending-messages"
-                    aria-controls="tab-pending-messages-panel"
-                    aria-selected={helper.showPendingMessages}
-                    onClick={() =>
-                      updateCurrentTabSequence({
-                        value: 'Pending Messages',
-                      })
-                    }
-                  >
-                    Pending Messages
-                  </button>
-                </li>
-              </ul>
-            </nav>
+          <Tabs className="classic-horizontal-header3" bind="currentTab">
+            <Tab
+              tabName="Document Info"
+              title="Document Info"
+              id="tab-document-info"
+            />
+            <Tab
+              tabName="Pending Messages"
+              title="Pending Messages"
+              id="tab-pending-messages"
+            />
 
-            <div className="button-wrapper">
+            <div className="fix-top-right">
               {caseHelper.showServeToIrsButton &&
                 helper.formattedDocument.isPetition && (
                   <button
@@ -133,23 +108,50 @@ class DocumentDetailComponent extends React.Component {
                   </div>
                 )}
             </div>
-          </div>
+          </Tabs>
 
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
-              {helper.showDocumentInfo && (
-                <div
-                  role="tabpanel"
-                  id="tab-document-info-panel"
-                  aria-labelledby="tab-document-info"
-                  tabIndex="0"
-                >
-                  {helper.showCaseDetailsEdit && <CaseDetailEdit />}
-                  {helper.showCaseDetailsView && <CaseDetailReadOnly />}
-                </div>
-              )}
-              {/*workitem tab start*/}
-              {helper.showPendingMessages && <PendingMessages />}
+              <Tabs bind="currentTab">
+                <Tab tabName="Document Info">
+                  <div
+                    id="tab-document-info-panel"
+                    aria-labelledby="tab-document-info"
+                    tabIndex="0"
+                  >
+                    {helper.showCaseDetailsEdit && <CaseDetailEdit />}
+                    {helper.showCaseDetailsView && <CaseDetailReadOnly />}
+                  </div>
+                </Tab>
+                <Tab tabName="Pending Messages">
+                  <div
+                    id="tab-pending-messages-panel"
+                    aria-labelledby="tab-pending-messages"
+                    tabIndex="0"
+                  >
+                    <Tabs
+                      className="container-tabs"
+                      id="case-detail-messages-tabs"
+                      bind="documentDetail.messagesTab"
+                    >
+                      <Tab
+                        tabName="inProgress"
+                        title="In Progress"
+                        id="tab-messages-in-progress"
+                      >
+                        <PendingMessages />
+                      </Tab>
+                      <Tab
+                        tabName="completed"
+                        title="Complete"
+                        id="tab-messages-completed"
+                      >
+                        <CompletedMessages />
+                      </Tab>
+                    </Tabs>
+                  </div>
+                </Tab>
+              </Tabs>
             </div>
 
             <div className="usa-width-two-thirds">
