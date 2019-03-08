@@ -6,8 +6,8 @@ export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -22,9 +22,9 @@ export default test => {
     test.workItemId = workItem.workItemId;
 
     expect(workItem.messages[0]).toMatchObject({
+      from: 'Test Respondent',
+      fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'A Stipulated Decision filed by Respondent is ready for review.',
-      sentBy: 'Test Respondent',
-      userId: 'respondent',
     });
 
     const formatted = runCompute(formattedSectionWorkQueue, {

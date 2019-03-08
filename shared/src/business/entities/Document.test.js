@@ -45,10 +45,10 @@ describe('Document entity', () => {
         sentBy: 'bob',
       });
       const message = new Message({
+        from: 'Test User',
+        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'hello world',
         messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        sentBy: 'gg',
-        userId: '123',
       });
       workItem.addMessage(message);
       myDoc.addWorkItem(new WorkItem({}));

@@ -7,8 +7,12 @@ export default test => {
       value: 'taxpayer',
     });
     await test.runSequence('submitLoginSequence');
-    expect(test.getState('user.userId')).toEqual('taxpayer');
+    expect(test.getState('user.userId')).toEqual(
+      '7805d1ab-18d0-43ec-bafb-654e83405416',
+    );
     expect(applicationContext.getCurrentUser()).toBeDefined();
-    expect(applicationContext.getCurrentUser().userId).toEqual('taxpayer');
+    expect(applicationContext.getCurrentUser().userId).toEqual(
+      '7805d1ab-18d0-43ec-bafb-654e83405416',
+    );
   });
 };
