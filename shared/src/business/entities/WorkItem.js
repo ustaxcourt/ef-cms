@@ -49,6 +49,19 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    completedBy: joi
+      .string()
+      .optional()
+      .allow(null),
+    completedByUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional()
+      .allow(null),
+    completedMessage: joi
+      .string()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
