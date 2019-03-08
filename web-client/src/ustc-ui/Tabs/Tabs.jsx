@@ -4,7 +4,7 @@ import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import classNames from 'classnames';
 import { camelCase } from 'lodash';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import { useCerebralStateFactory } from '../utils/useCerebralState';
 
@@ -46,6 +46,10 @@ export function TabsComponent({
       active: isActiveTab,
     });
 
+    if (!tabName) {
+      return null;
+    }
+
     return (
       <li className={liClass}>
         <button
@@ -68,6 +72,10 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
+    if (!tabName) {
+      return null;
+    }
+
     if (isActiveTab) {
       return (
         <div className="tabcontent" role="tabpanel" id={tabContentId}>
@@ -79,11 +87,22 @@ export function TabsComponent({
     }
   }
 
+  function renderNonTab(child) {
+    const { tabName } = child.props;
+
+    if (!tabName) {
+      return child;
+    }
+
+    return null;
+  }
+
   return (
     <div id={id} className={tabsClass}>
       <nav>
         <ul role="tablist">{map(children, renderTab)}</ul>
       </nav>
+      <div className="non-tab">{map(children, renderNonTab)}</div>
 
       {map(children, renderTabContent)}
     </div>
@@ -91,21 +110,21 @@ export function TabsComponent({
 }
 
 TabsComponent.propTypes = {
-  id: PropTypes.string,
-  className: PropTypes.string,
   bind: PropTypes.string,
-  value: PropTypes.any,
-  simpleSetter: PropTypes.func,
-  onSelect: PropTypes.func,
   children: PropTypes.node,
+  className: PropTypes.string,
   defaultActiveTab: PropTypes.string,
+  id: PropTypes.string,
+  onSelect: PropTypes.func,
+  simpleSetter: PropTypes.func,
+  value: PropTypes.any,
 };
 
 export const Tabs = connect(
   {
     bind: props.bind,
-    value: state[props.bind],
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
+    value: state[props.bind],
   },
   TabsComponent,
 );
