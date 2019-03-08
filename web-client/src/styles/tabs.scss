@@ -79,6 +79,8 @@ nav.horizontal-tabs,
 }
 
 .ustc-ui-tabs {
+  position: relative;
+
   > nav {
     margin-bottom: 20px;
 
@@ -112,10 +114,17 @@ nav.horizontal-tabs,
     }
   }
 
-  &.classic-horizontal {
+  &.classic-horizontal,
+  &.classic-horizontal-header3 {
     > nav {
       ul {
         li {
+          &.active {
+            button {
+              border-bottom: 3px $color-blue solid;
+            }
+          }
+
           button {
             padding-bottom: 10px;
             margin: 0 45px 0 0;
@@ -131,10 +140,18 @@ nav.horizontal-tabs,
               color: $color-primary-darkest;
             }
           }
+        }
+      }
+    }
+  }
 
+  &.classic-horizontal-header3 {
+    > nav {
+      ul {
+        li {
           &.active {
             button {
-              border-bottom: 3px $color-blue solid;
+              font-weight: $font-bold;
             }
           }
         }
@@ -174,6 +191,15 @@ nav.horizontal-tabs,
           }
         }
       }
+    }
+  }
+
+  > .fix-top-right {
+    @media only screen and (min-width: $small-screen) {
+      position: absolute;
+      top: 4px;
+      right: 0px;
+      margin: 0px;
     }
   }
 }

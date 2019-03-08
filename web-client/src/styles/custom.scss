@@ -319,6 +319,12 @@ select.ustc-input-error {
   }
 }
 
+#case-detail-messages-tabs {
+  > .tabcontent {
+    padding: 20px;
+  }
+}
+
 .ustc-horizontal-list * {
   display: inline-block;
 }
