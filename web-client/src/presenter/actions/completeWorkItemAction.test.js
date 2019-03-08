@@ -25,7 +25,7 @@ presenter.providers.path = {
 
 describe('completeWorkItem', async () => {
   it('should attach an assignee id if one does not already exist', async () => {
-    const result = await runAction(completeWorkItemAction, {
+    await runAction(completeWorkItemAction, {
       modules: {
         presenter,
       },
