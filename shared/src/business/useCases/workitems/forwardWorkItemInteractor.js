@@ -49,10 +49,11 @@ exports.forwardWorkItem = async ({
         .addMessage(
           new Message({
             createdAt: new Date().toISOString(),
+            from: user.name,
+            fromUserId: user.userId,
             message,
-            sentBy: user.name,
-            sentTo: userToForwardTo.name,
-            userId: user.userId,
+            to: userToForwardTo.name,
+            toUserId: userToForwardTo.userId,
           }),
         ),
     );

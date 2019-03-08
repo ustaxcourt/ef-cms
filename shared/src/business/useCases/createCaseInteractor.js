@@ -31,11 +31,11 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   workItemEntity.addMessage(
     new Message({
-      createdAt: new Date().toISOString(),
+      from: user.name,
+      fromUserId: user.userId,
       message: `A ${documentEntity.documentType} filed by ${capitalize(
         user.role,
       )} is ready for review.`,
-      sentBy: user.name,
     }),
   );
 

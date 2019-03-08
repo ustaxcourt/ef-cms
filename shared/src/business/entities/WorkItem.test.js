@@ -68,9 +68,9 @@ describe('WorkItem', () => {
         document: {},
         messages: [
           {
+            from: 'abc',
+            fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'abc',
-            sentBy: 'abc',
-            userId: 'abc',
           },
         ],
         section: 'docket',
@@ -96,9 +96,9 @@ describe('WorkItem', () => {
       });
       workItem.addMessage(
         new Message({
+          from: 'abc',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'abc',
-          sentBy: 'abc',
-          userId: 'abc',
         }),
       );
       assert.ok(workItem.messages.length === 1);

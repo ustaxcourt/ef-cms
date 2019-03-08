@@ -39,14 +39,15 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
             .addMessage(
               new Message({
                 createdAt: new Date().toISOString(),
+                from: user.name,
+                fromUserId: user.userId,
                 message: `A ${
                   fullWorkItem.document.documentType
                 } filed by ${capitalize(
                   fullWorkItem.document.filedBy,
                 )} is ready for review.`,
-                sentBy: user.name,
-                sentTo: workItem.assigneeName,
-                userId: user.userId,
+                to: workItem.assigneeName,
+                toUserId: workItem.assigneeId,
               }),
             ),
         );

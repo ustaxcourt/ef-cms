@@ -25,6 +25,8 @@ function WorkItem(rawWorkItem) {
   this.messages = (this.messages || []).map(message => new Message(message));
 }
 
+const IRS_BATCH_SYSTEM_USER_ID = '63784910-c1af-4476-8988-a02f92da8e09';
+
 WorkItem.name = 'WorkItem';
 
 joiValidationDecorator(
@@ -47,6 +49,19 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    completedBy: joi
+      .string()
+      .optional()
+      .allow(null),
+    completedByUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional()
+      .allow(null),
+    completedMessage: joi
+      .string()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -108,18 +123,19 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
  *
  * @param userId
  */
-WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
+WorkItem.prototype.assignToIRSBatchSystem = function({ userId, name }) {
   this.assignToUser({
-    assigneeId: 'irsBatchSystem',
+    assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
     role: 'irsBatchSystem',
   });
   this.addMessage(
     new Message({
+      from: name,
+      fromUserId: userId,
       message: 'Petition batched for IRS',
-      sentBy: userId,
-      sentTo: 'IRS Holding Queue',
-      userId: userId,
+      to: 'IRS Holding Queue',
+      toUserId: IRS_BATCH_SYSTEM_USER_ID,
     }),
   );
 };
@@ -137,10 +153,11 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.section = PETITIONS_SECTION;
   this.addMessage(
     new Message({
+      from: 'IRS Holding Queue',
+      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
       message: 'Petition recalled from IRS Holding Queue',
-      sentBy: 'IRS Holding Queue',
-      sentTo: user.name,
-      userId: 'irsBatchSystem',
+      to: user.name,
+      toUserId: user.userId,
     }),
   );
 };
@@ -149,14 +166,16 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
  *
  * @param userId
  */
-WorkItem.prototype.setAsCompleted = function(userId) {
+WorkItem.prototype.setAsCompleted = function({ message, userId, name }) {
   this.completedAt = new Date().toISOString();
 
   this.addMessage(
     new Message({
-      message: 'work item completed',
-      sentBy: userId,
-      userId: userId,
+      from: name,
+      fromUserId: userId,
+      message: message || 'work item completed',
+      to: null,
+      toUserId: null,
     }),
   );
 };

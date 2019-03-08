@@ -52,14 +52,14 @@ describe('forwardWorkItem', () => {
       getCurrentUser: () => ({
         name: 'Docket Clerk',
         role: 'docketclerk',
-        userId: 'docketclerk',
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
       getPersistenceGateway: () => ({
         getUserById: () => {
           return {
             name: 'Test Docketclerk',
             role: 'docketclerk',
-            userId: 'docketclerk',
+            userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           };
         },
         getWorkItemById: async () => mockWorkItem,
@@ -68,12 +68,12 @@ describe('forwardWorkItem', () => {
     };
     const result = await forwardWorkItem({
       applicationContext,
-      assigneeId: 'docketclerk',
+      assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'success',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     expect(result).toMatchObject({
-      assigneeId: 'docketclerk',
+      assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Docketclerk',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
@@ -81,10 +81,10 @@ describe('forwardWorkItem', () => {
       document: { sentBy: 'taxyaper' },
       messages: [
         {
+          from: 'Docket Clerk',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'success',
-          sentBy: 'Docket Clerk',
-          sentTo: 'Test Docketclerk',
-          userId: 'docketclerk',
+          to: 'Test Docketclerk',
         },
       ],
       section: 'docket',

@@ -35,11 +35,11 @@ class PendingMessagesComponent extends React.Component {
               <div className="content-wrapper">
                 <p>
                   <span className="label-inline">To</span>
-                  {workItem.currentMessage.sentTo}
+                  {workItem.currentMessage.to}
                 </p>
                 <p>
                   <span className="label-inline">From</span>
-                  {workItem.currentMessage.sentBy}
+                  {workItem.currentMessage.from}
                 </p>
                 <p>
                   <span className="label-inline">Received</span>
@@ -190,11 +190,11 @@ class PendingMessagesComponent extends React.Component {
                       <div key={mIdx}>
                         <p>
                           <span className="label-inline">To</span>
-                          {message.sentTo}
+                          {message.to}
                         </p>
                         <p>
                           <span className="label-inline">From</span>
-                          {message.sentBy}
+                          {message.from}
                         </p>
                         <p>
                           <span className="label-inline">Received</span>

@@ -24,7 +24,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(message.createdAt);
-    message.sentTo = message.sentTo || 'Unassigned';
+    message.to = message.to || 'Unassigned';
     message.createdAtTimeFormatted = moment(message.createdAt).format(
       DATE_FORMAT_LONG,
     );
