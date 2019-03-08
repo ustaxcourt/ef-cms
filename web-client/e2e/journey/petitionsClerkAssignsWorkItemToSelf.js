@@ -38,7 +38,7 @@ export default test => {
     // select an assignee
     expect(test.getState('assigneeId')).toBeNull();
     await test.runSequence('selectAssigneeSequence', {
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk',
     });
     expect(test.getState('assigneeId')).toBeDefined();
@@ -55,7 +55,7 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(assignedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
 
@@ -65,7 +65,7 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(movedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
     const formattedWorkItem = runCompute(formattedWorkQueue, {

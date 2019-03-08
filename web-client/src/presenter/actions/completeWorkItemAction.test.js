@@ -4,15 +4,17 @@ import presenter from '..';
 
 import { completeWorkItemAction } from './completeWorkItemAction';
 
+import sinon from 'sinon';
+
+const updateWorkItemStub = sinon.stub().resolves(null);
+
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
     name: 'Docket Clerk',
     userId: 'docketclerk',
   }),
   getUseCases: () => ({
-    updateWorkItem: async () => {
-      return null;
-    },
+    updateWorkItem: updateWorkItemStub,
   }),
 };
 
@@ -23,7 +25,7 @@ presenter.providers.path = {
 
 describe('completeWorkItem', async () => {
   it('should attach an assignee id if one does not already exist', async () => {
-    const result = await runAction(completeWorkItemAction, {
+    await runAction(completeWorkItemAction, {
       modules: {
         presenter,
       },
@@ -51,11 +53,16 @@ describe('completeWorkItem', async () => {
         },
       },
     });
-    expect(result.state.caseDetail.documents[0].workItems).toMatchObject([
-      {
-        assigneeId: 'docketclerk',
-        assigneeName: 'Docket Clerk',
-      },
-    ]);
+    expect(
+      updateWorkItemStub.getCall(0).args[0].workItemToUpdate,
+    ).toMatchObject({
+      assigneeId: 'docketclerk',
+      assigneeName: 'Docket Clerk',
+      completedBy: 'Docket Clerk',
+      completedByUserId: 'docketclerk',
+      completedMessage: 'work item completed',
+      messages: [],
+      workItemId: 'abc',
+    });
   });
 });

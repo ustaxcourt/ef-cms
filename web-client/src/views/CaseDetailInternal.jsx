@@ -73,7 +73,7 @@ export const CaseDetailInternal = connect(
                       </p>
                       <p>
                         <span className="label-inline">From</span>
-                        {workItem.messages[0].sentBy}
+                        {workItem.messages[0].from}
                       </p>
                     </td>
                     <td>

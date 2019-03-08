@@ -1,60 +1,70 @@
 exports.userMap = {
   docketclerk: {
     'custom:role': 'docketclerk',
-    email: 'docketclerk',
+    email: 'docketclerk@example.com',
     name: 'Test Docketclerk',
     role: 'docketclerk',
     section: 'petitions',
-    userId: 'docketclerk',
+    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
   },
   docketclerk1: {
     'custom:role': 'docketclerk',
-    email: 'docketclerk1',
+    email: 'docketclerk1@example.com',
     name: 'Test Docketclerk1',
     role: 'docketclerk',
     section: 'petitions',
-    userId: 'docketclerk1',
+    userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
   },
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
-    email: 'petitionsclerk',
+    email: 'petitionsclerk@example.com',
     name: 'Test Petitionsclerk',
     role: 'petitionsclerk',
     section: 'petitions',
-    userId: 'petitionsclerk',
+    userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
   },
   petitionsclerk1: {
     'custom:role': 'petitionsclerk',
-    email: 'petitionsclerk1',
+    email: 'petitionsclerk1@example.com',
     name: 'Test Petitionsclerk1',
     role: 'petitionsclerk',
     section: 'petitions',
-    userId: 'petitionsclerk1',
+    userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
   },
   respondent: {
     'custom:role': 'respondent',
-    email: 'respondent',
+    email: 'respondent@example.com',
     name: 'Test Respondent',
     role: 'respondent',
     section: 'petitions',
-    userId: 'respondent',
+    userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
   },
   seniorattorney: {
     'custom:role': 'seniorattorney',
-    email: 'seniorattorney',
+    email: 'seniorattorney@example.com',
     name: 'Test Seniorattorney',
     role: 'seniorattorney',
     section: 'petitions',
-    userId: 'seniorattorney',
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   },
   taxpayer: {
     'custom:role': 'petitioner',
-    email: 'taxpayer',
+    email: 'taxpayer@example.com',
     name: 'Test Petitioner',
     role: 'petitioner',
     section: 'petitioner',
-    userId: 'taxpayer',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
+};
+
+const userByIDMap = {
+  '1805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.docketclerk,
+  '2805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.docketclerk1,
+  '3805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.petitionsclerk,
+  '4805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.petitionsclerk1,
+  '5805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.respondent,
+  '6805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.seniorattorney,
+  '7805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.taxpayer,
 };
 
 /**
@@ -64,5 +74,5 @@ exports.userMap = {
  */
 exports.getUserById = async ({ userId }) => {
   // TODO: should hit cognito to fetch the user data
-  return exports.userMap[userId];
+  return userByIDMap[userId] || exports.userMap[userId];
 };
