@@ -72,19 +72,15 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
-    if (!tabName) {
-      return null;
-    }
-
-    if (isActiveTab) {
+    if (tabName && isActiveTab && children) {
       return (
         <div className="tabcontent" role="tabpanel" id={tabContentId}>
           {children}
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 
   function renderNonTab(child) {
