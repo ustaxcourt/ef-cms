@@ -22,7 +22,9 @@ export const CaseDetailReadOnly = connect(
           <p>{caseDetail.caseType}</p>
 
           <div className="label">Notice Date</div>
-          <p>{caseDetail.formattedIrsNoticeDate || 'No notice provided'}</p>
+          <p>
+            {formattedCaseDetail.irsNoticeDateFormatted || 'No notice provided'}
+          </p>
           <div>
             {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
               <div key={idx}>

@@ -127,7 +127,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? moment.utc(result.irsNoticeDate).format('L')
-    : 'No notice';
+    : 'No notice provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
