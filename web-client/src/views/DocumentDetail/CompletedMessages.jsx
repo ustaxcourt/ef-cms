@@ -22,7 +22,7 @@ class CompletedMessagesComponent extends React.Component {
           documentDetailHelper.formattedDocument.completedWorkItems.map(
             (workItem, idx) => (
               <div
-                className="card gray"
+                className="card completed-card"
                 aria-labelledby="tab-pending-messages"
                 key={idx}
               >
