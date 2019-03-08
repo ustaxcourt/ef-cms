@@ -11,6 +11,9 @@ import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
+import { CompletedMessages } from './DocumentDetail/CompletedMessages';
+
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 
 class DocumentDetailComponent extends React.Component {
   render() {
@@ -148,8 +151,35 @@ class DocumentDetailComponent extends React.Component {
                   {helper.showCaseDetailsView && <CaseDetailReadOnly />}
                 </div>
               )}
-              {/*workitem tab start*/}
-              {helper.showPendingMessages && <PendingMessages />}
+              {helper.showPendingMessages && (
+                <div
+                  role="tabpanel"
+                  id="tab-pending-messages-panel"
+                  aria-labelledby="tab-pending-messages"
+                  tabIndex="0"
+                >
+                  <Tabs
+                    className="container-tabs"
+                    id="case-detail-messages-tabs"
+                    bind="documentDetail.messagesTab"
+                  >
+                    <Tab
+                      tabName="inProgress"
+                      title="In Progress"
+                      id="tab-messages-in-progress"
+                    >
+                      <PendingMessages />
+                    </Tab>
+                    <Tab
+                      tabName="completed"
+                      title="Complete"
+                      id="tab-messages-completed"
+                    >
+                      <CompletedMessages />
+                    </Tab>
+                  </Tabs>
+                </div>
+              )}
             </div>
 
             <div className="usa-width-two-thirds">

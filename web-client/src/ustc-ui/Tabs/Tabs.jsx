@@ -102,8 +102,7 @@ export function TabsComponent({
       <nav>
         <ul role="tablist">{map(children, renderTab)}</ul>
       </nav>
-      <div className="non-tab">{map(children, renderNonTab)}</div>
-
+      {map(children, renderNonTab)}
       {map(children, renderTabContent)}
     </div>
   );
