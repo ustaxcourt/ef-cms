@@ -39,12 +39,11 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   });
 
   const message = new Message({
-    createdAt: new Date().toISOString(),
+    from: user.name,
+    fromUserId: user.userId,
     message: `A ${document.documentType} filed by ${capitalize(
       user.role,
     )} is ready for review.`,
-    sentBy: user.name,
-    userId: user.userId,
   });
 
   workItem.addMessage(message);

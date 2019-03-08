@@ -33,13 +33,17 @@ export const completeWorkItemAction = async ({
     (completeForm[props.workItemId] || {}).completeMessage ||
     'work item completed';
 
+  // TODO: All this logic should probably be refactored in put into the interactor.... the action shouldn't have to know the internals of the
+  // work item entity just to be able to set it as completed...
   workItemToUpdate.completedAt = completeWorkItemDate;
   workItemToUpdate.messages = [
     ...workItemToUpdate.messages,
     {
+      from: applicationContext.getCurrentUser().name,
+      fromUserId: applicationContext.getCurrentUser().userId,
       message,
-      sentBy: applicationContext.getCurrentUser().userId,
-      userId: applicationContext.getCurrentUser().userId,
+      to: null,
+      toUserId: null,
     },
   ];
 
