@@ -40,9 +40,11 @@ class CompletedMessagesComponent extends React.Component {
                       </span>
                     </p>
 
-                    <p>
-                      <span>{workItem.completedMessage}</span>
-                    </p>
+                    {workItem.completedMessage && (
+                      <p>
+                        <span>{workItem.completedMessage}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="content-wrapper">

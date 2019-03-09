@@ -60,7 +60,7 @@ describe('completeWorkItem', async () => {
       assigneeName: 'Docket Clerk',
       completedBy: 'Docket Clerk',
       completedByUserId: 'docketclerk',
-      completedMessage: 'work item completed',
+      completedMessage: undefined,
       messages: [],
       workItemId: 'abc',
     });

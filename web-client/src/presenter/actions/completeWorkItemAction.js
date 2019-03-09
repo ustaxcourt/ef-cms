@@ -29,9 +29,7 @@ export const completeWorkItemAction = async ({
     workItem => workItem.workItemId === props.workItemId,
   );
   const completeForm = get(state.completeForm);
-  const message =
-    (completeForm[props.workItemId] || {}).completeMessage ||
-    'work item completed';
+  const message = (completeForm[props.workItemId] || {}).completeMessage;
 
   // TODO: All this logic should probably be refactored in put into the interactor.... the action shouldn't have to know the internals of the
   // work item entity just to be able to set it as completed...
