@@ -12,8 +12,12 @@ export default get => {
   let formattedDocument = {};
   if (selectedDocument) {
     formattedDocument = formatDocument(selectedDocument);
-    formattedDocument.workItems = (formattedDocument.workItems || [])
+    const allWorkItems = formattedDocument.workItems;
+    formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
+      .map(items => formatWorkItem(items));
+    formattedDocument.completedWorkItems = (allWorkItems || [])
+      .filter(items => items.completedAt)
       .map(items => formatWorkItem(items));
   }
 

@@ -77,6 +77,15 @@ iframe {
   }
 }
 
+.gray-header {
+  background-color: $color-gray-lightest;
+}
+
+.completed-card {
+  margin-bottom: 20px;
+  color: $color-gray;
+}
+
 .blue-container {
   padding: 20px;
   margin-bottom: 20px;
