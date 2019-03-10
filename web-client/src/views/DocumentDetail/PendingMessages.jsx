@@ -7,7 +7,7 @@ import React from 'react';
 class PendingMessagesComponent extends React.Component {
   render() {
     const {
-      helper,
+      documentDetailHelper,
       setWorkItemActionSequence,
       submitCompleteSequence,
       submitForwardSequence,
@@ -17,264 +17,287 @@ class PendingMessagesComponent extends React.Component {
     } = this.props;
     return (
       <div>
-        {(!helper.formattedDocument ||
-          !helper.formattedDocument.workItems ||
-          !helper.formattedDocument.workItems.length) && (
+        {(!documentDetailHelper.formattedDocument ||
+          !documentDetailHelper.formattedDocument.workItems ||
+          !documentDetailHelper.formattedDocument.workItems.length) && (
           <div>
             There are no pending messages associated with this document.
           </div>
         )}
-        {helper.formattedDocument &&
-          helper.formattedDocument.workItems &&
-          helper.formattedDocument.workItems.map((workItem, idx) => (
-            <div
-              className="card"
-              aria-labelledby="tab-pending-messages"
-              key={idx}
-            >
-              <div className="content-wrapper">
-                <p>
-                  <span className="label-inline">To</span>
-                  {workItem.currentMessage.to}
-                </p>
-                <p>
-                  <span className="label-inline">From</span>
-                  {workItem.currentMessage.from}
-                </p>
-                <p>
-                  <span className="label-inline">Received</span>
-                  {workItem.currentMessage.createdAtTimeFormatted}
-                </p>
-                <p>{workItem.currentMessage.message}</p>
-              </div>
+        {documentDetailHelper.formattedDocument &&
+          documentDetailHelper.formattedDocument.workItems &&
+          documentDetailHelper.formattedDocument.workItems.map(
+            (workItem, idx) => (
               <div
-                className="content-wrapper toggle-button-wrapper actions-wrapper"
-                role="tablist"
+                className="card"
+                aria-labelledby="tab-pending-messages"
+                key={idx}
               >
-                <button
-                  role="tab"
-                  id="history-tab"
-                  aria-selected={helper.showAction(
-                    'history',
-                    workItem.workItemId,
-                  )}
-                  aria-controls="history-card"
-                  className={`${
-                    helper.showAction('history', workItem.workItemId)
-                      ? 'selected'
-                      : 'unselected'
-                  }`}
-                  onClick={() =>
-                    setWorkItemActionSequence({
-                      action: 'history',
-                      workItemId: workItem.workItemId,
-                    })
-                  }
+                <div className="content-wrapper">
+                  <p>
+                    <span className="label-inline">To</span>
+                    {workItem.currentMessage.to}
+                  </p>
+                  <p>
+                    <span className="label-inline">From</span>
+                    {workItem.currentMessage.from}
+                  </p>
+                  <p>
+                    <span className="label-inline">Received</span>
+                    {workItem.currentMessage.createdAtTimeFormatted}
+                  </p>
+                  <p>{workItem.currentMessage.message}</p>
+                </div>
+                <div
+                  className="content-wrapper toggle-button-wrapper actions-wrapper"
+                  role="tablist"
                 >
-                  <FontAwesomeIcon icon="list-ul" size="sm" />
-                  View History
-                </button>
-                {workItem.showComplete && (
                   <button
                     role="tab"
-                    id="complete-tab"
-                    aria-selected={helper.showAction(
-                      'complete',
+                    id="history-tab"
+                    aria-selected={documentDetailHelper.showAction(
+                      'history',
                       workItem.workItemId,
                     )}
                     aria-controls="history-card"
                     className={`${
-                      helper.showAction('complete', workItem.workItemId)
+                      documentDetailHelper.showAction(
+                        'history',
+                        workItem.workItemId,
+                      )
                         ? 'selected'
                         : 'unselected'
                     }`}
                     onClick={() =>
                       setWorkItemActionSequence({
-                        action: 'complete',
+                        action: 'history',
                         workItemId: workItem.workItemId,
                       })
                     }
                   >
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
-                    Complete
+                    <FontAwesomeIcon icon="list-ul" size="sm" />
+                    View History
                   </button>
-                )}
-                {workItem.showSendTo && (
-                  <button
-                    role="tab"
-                    id="forward-tab"
-                    aria-selected={helper.showAction(
-                      'forward',
-                      workItem.workItemId,
-                    )}
-                    aria-controls="forward-card"
-                    data-workitemid={workItem.workItemId}
-                    className={`send-to ${
-                      helper.showAction('forward', workItem.workItemId)
-                        ? 'selected'
-                        : 'unselected'
-                    }`}
-                    onClick={() =>
-                      setWorkItemActionSequence({
-                        action: 'forward',
-                        workItemId: workItem.workItemId,
-                      })
-                    }
+                  {workItem.showComplete && (
+                    <button
+                      role="tab"
+                      id="complete-tab"
+                      aria-selected={documentDetailHelper.showAction(
+                        'complete',
+                        workItem.workItemId,
+                      )}
+                      aria-controls="history-card"
+                      className={`${
+                        documentDetailHelper.showAction(
+                          'complete',
+                          workItem.workItemId,
+                        )
+                          ? 'selected'
+                          : 'unselected'
+                      }`}
+                      onClick={() =>
+                        setWorkItemActionSequence({
+                          action: 'complete',
+                          workItemId: workItem.workItemId,
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      Complete
+                    </button>
+                  )}
+                  {workItem.showSendTo && (
+                    <button
+                      role="tab"
+                      id="forward-tab"
+                      aria-selected={documentDetailHelper.showAction(
+                        'forward',
+                        workItem.workItemId,
+                      )}
+                      aria-controls="forward-card"
+                      data-workitemid={workItem.workItemId}
+                      className={`send-to ${
+                        documentDetailHelper.showAction(
+                          'forward',
+                          workItem.workItemId,
+                        )
+                          ? 'selected'
+                          : 'unselected'
+                      }`}
+                      onClick={() =>
+                        setWorkItemActionSequence({
+                          action: 'forward',
+                          workItemId: workItem.workItemId,
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon="share-square" size="sm" /> Send To
+                    </button>
+                  )}
+                </div>
+                {documentDetailHelper.showAction(
+                  'complete',
+                  workItem.workItemId,
+                ) && (
+                  <div
+                    id="complete-card"
+                    role="tabpanel"
+                    aria-labelledby="complete-tab"
+                    className="content-wrapper actions-wrapper"
                   >
-                    <FontAwesomeIcon icon="share-square" size="sm" /> Send To
-                  </button>
-                )}
-              </div>
-              {helper.showAction('complete', workItem.workItemId) && (
-                <div
-                  id="complete-card"
-                  role="tabpanel"
-                  aria-labelledby="complete-tab"
-                  className="content-wrapper actions-wrapper"
-                >
-                  <form
-                    id="complete-form"
-                    role="form"
-                    noValidate
-                    onSubmit={e => {
-                      e.preventDefault();
-                      submitCompleteSequence({
-                        workItemId: workItem.workItemId,
-                      });
-                      setWorkItemActionSequence({
-                        action: null,
-                        workItemId: workItem.workItemId,
-                      });
-                    }}
-                  >
-                    <label htmlFor="complete-message">
-                      Add Message (optional)
-                    </label>
-                    <textarea
-                      name="completeMessage"
-                      id="complete-message"
-                      onChange={e => {
-                        updateCompleteFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
+                    <form
+                      id="complete-form"
+                      role="form"
+                      noValidate
+                      onSubmit={e => {
+                        e.preventDefault();
+                        submitCompleteSequence({
                           workItemId: workItem.workItemId,
                         });
-                      }}
-                    />
-                    <button type="submit" className="usa-button">
-                      <span>Complete</span>
-                    </button>
-                  </form>
-                </div>
-              )}
-              {helper.showAction('history', workItem.workItemId) &&
-                !workItem.historyMessages.length && (
-                  <div
-                    id="history-card"
-                    className="content-wrapper"
-                    role="tabpanel"
-                    aria-labelledby="history-tab"
-                  >
-                    No additional messages are available.
-                  </div>
-                )}
-              {helper.showAction('history', workItem.workItemId) &&
-                workItem.historyMessages.length > 0 && (
-                  <div
-                    className="content-wrapper actions-wrapper"
-                    id="history-card"
-                    role="tabpanel"
-                    aria-labelledby="history-tab"
-                  >
-                    {workItem.historyMessages.map((message, mIdx) => (
-                      <div key={mIdx}>
-                        <p>
-                          <span className="label-inline">To</span>
-                          {message.to}
-                        </p>
-                        <p>
-                          <span className="label-inline">From</span>
-                          {message.from}
-                        </p>
-                        <p>
-                          <span className="label-inline">Received</span>
-                          {message.createdAtTimeFormatted}
-                        </p>
-                        <p>{message.message}</p>
-                        {workItem.historyMessages.length - 1 !== mIdx && (
-                          <hr aria-hidden="true" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              {helper.showAction('forward', workItem.workItemId) && (
-                <div
-                  id="forward-card"
-                  role="tabpanel"
-                  className="content-wrapper actions-wrapper"
-                >
-                  <form
-                    aria-labelledby="forward-tab"
-                    data-workitemid={workItem.workItemId}
-                    className="forward-form"
-                    role="form"
-                    noValidate
-                    onSubmit={e => {
-                      e.preventDefault();
-                      submitForwardSequence({
-                        workItemId: workItem.workItemId,
-                      });
-                    }}
-                  >
-                    <label htmlFor="forward-recipient-id">Send To</label>
-                    <select
-                      name="forwardRecipientId"
-                      id="forward-recipient-id"
-                      aria-labelledby="recipient-label"
-                      onChange={e => {
-                        updateForwardFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
+                        setWorkItemActionSequence({
+                          action: null,
                           workItemId: workItem.workItemId,
                         });
                       }}
                     >
-                      <option value="">-- Select --</option>
-                      {users.map(user => (
-                        <option key={user.userId} value={user.userId}>
-                          {user.name}
-                        </option>
+                      <label htmlFor="complete-message">
+                        Add Message (optional)
+                      </label>
+                      <textarea
+                        name="completeMessage"
+                        id="complete-message"
+                        onChange={e => {
+                          updateCompleteFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      />
+                      <button type="submit" className="usa-button">
+                        <span>Complete</span>
+                      </button>
+                    </form>
+                  </div>
+                )}
+                {documentDetailHelper.showAction(
+                  'history',
+                  workItem.workItemId,
+                ) &&
+                  !workItem.historyMessages.length && (
+                    <div
+                      id="history-card"
+                      className="content-wrapper"
+                      role="tabpanel"
+                      aria-labelledby="history-tab"
+                    >
+                      No additional messages are available.
+                    </div>
+                  )}
+                {documentDetailHelper.showAction(
+                  'history',
+                  workItem.workItemId,
+                ) &&
+                  workItem.historyMessages.length > 0 && (
+                    <div
+                      className="content-wrapper actions-wrapper"
+                      id="history-card"
+                      role="tabpanel"
+                      aria-labelledby="history-tab"
+                    >
+                      {workItem.historyMessages.map((message, mIdx) => (
+                        <div key={mIdx}>
+                          <p>
+                            <span className="label-inline">To</span>
+                            {message.to}
+                          </p>
+                          <p>
+                            <span className="label-inline">From</span>
+                            {message.from}
+                          </p>
+                          <p>
+                            <span className="label-inline">Received</span>
+                            {message.createdAtTimeFormatted}
+                          </p>
+                          <p>{message.message}</p>
+                          {workItem.historyMessages.length - 1 !== mIdx && (
+                            <hr aria-hidden="true" />
+                          )}
+                        </div>
                       ))}
-                    </select>
-                    <label htmlFor="forward-message">Add Message</label>
-                    <textarea
-                      aria-labelledby="message-label"
-                      name="forwardMessage"
-                      id="forward-message"
-                      onChange={e => {
-                        updateForwardFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
+                    </div>
+                  )}
+                {documentDetailHelper.showAction(
+                  'forward',
+                  workItem.workItemId,
+                ) && (
+                  <div
+                    id="forward-card"
+                    role="tabpanel"
+                    className="content-wrapper actions-wrapper"
+                  >
+                    <form
+                      aria-labelledby="forward-tab"
+                      data-workitemid={workItem.workItemId}
+                      className="forward-form"
+                      role="form"
+                      noValidate
+                      onSubmit={e => {
+                        e.preventDefault();
+                        submitForwardSequence({
                           workItemId: workItem.workItemId,
                         });
                       }}
-                    />
-                    <button type="submit" className="usa-button">
-                      Send
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
-          ))}
+                    >
+                      <label htmlFor="forward-recipient-id">Send To</label>
+                      <select
+                        name="forwardRecipientId"
+                        id="forward-recipient-id"
+                        aria-labelledby="recipient-label"
+                        onChange={e => {
+                          updateForwardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      >
+                        <option value="">-- Select --</option>
+                        {users.map(user => (
+                          <option key={user.userId} value={user.userId}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </select>
+                      <label htmlFor="forward-message">Add Message</label>
+                      <textarea
+                        aria-labelledby="message-label"
+                        name="forwardMessage"
+                        id="forward-message"
+                        onChange={e => {
+                          updateForwardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      />
+                      <button type="submit" className="usa-button">
+                        Send
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            ),
+          )}
       </div>
     );
   }
 }
 
 PendingMessagesComponent.propTypes = {
-  helper: PropTypes.object,
+  documentDetailHelper: PropTypes.object,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
@@ -286,7 +309,7 @@ PendingMessagesComponent.propTypes = {
 
 export const PendingMessages = connect(
   {
-    helper: state.documentDetailHelper,
+    documentDetailHelper: state.documentDetailHelper,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,

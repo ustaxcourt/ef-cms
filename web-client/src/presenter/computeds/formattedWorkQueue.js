@@ -29,6 +29,9 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       DATE_FORMAT_LONG,
     );
   });
+  result.completedAtFormatted = moment(result.completedAt).format(
+    DATE_FORMAT_LONG,
+  );
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showComplete = !result.isInitializeCase;
