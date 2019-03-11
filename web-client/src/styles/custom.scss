@@ -252,16 +252,17 @@ iframe {
     position: absolute;
     top: 0;
     display: inline-block;
-    width: 150px;
+    width: 100px;
+    height: 100px;
+    padding: 20px;
+    border: 3px solid $color-primary-alt;
+    border-radius: 55px;
     color: $color-primary-alt;
 
     svg,
     .svg-wrapper {
-      width: 100px;
-      height: 100px;
-      padding: 20px;
-      border: 3px solid $color-primary-alt;
-      border-radius: 55px;
+      width: 100%;
+      height: 100%;
       color: $color-primary-alt;
     }
 
