@@ -68,8 +68,6 @@ function Case(rawCase) {
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
-  this.initialCaption = this.initialCaption || this.caseTitle;
-
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
   );

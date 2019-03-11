@@ -668,4 +668,57 @@ describe('Case entity', () => {
       );
     });
   });
+
+  describe('updateCaptionDocketRecord', () => {
+    it('should not add record when caption is initially being set', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should not add docket record when caption is the initial caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'Caption',
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add docket record when caption changes from initial caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A New Caption',
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not add docket record when caption is not changing from the last updated caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption' to 'A New Caption'",
+          },
+        ],
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should add docket record when caption changes from the last updated caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A Very Berry New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption' to 'A New Caption'",
+          },
+        ],
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(2);
+    });
+  });
 });
