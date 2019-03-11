@@ -67,6 +67,7 @@ const checkDate = (updatedDateString, originalDate) => {
  */
 export const getFormCombinedWithCaseDetailAction = ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
+  let caseCaption = get(state.caseCaption);
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),
   };
@@ -104,6 +105,10 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
       year: castToISO(yearAmount.year),
     }))
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
+
+  if (caseCaption && (caseCaption = caseCaption.trim())) {
+    caseDetail.caseTitle = `${caseCaption} v. Commissioner of Internal Revenue, Respondent`;
+  }
 
   return {
     combinedCaseDetailWithForm: {
