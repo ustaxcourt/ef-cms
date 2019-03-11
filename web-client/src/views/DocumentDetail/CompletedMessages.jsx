@@ -2,6 +2,7 @@ import { connect } from '@cerebral/react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { state } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class CompletedMessagesComponent extends React.Component {
   render() {
@@ -28,23 +29,28 @@ class CompletedMessagesComponent extends React.Component {
               >
                 <div className="gray-header">
                   <div className="content-wrapper">
-                    <p>
-                      <span className="label-inline">
-                        Closed by {workItem.completedBy}
-                      </span>
-                    </p>
-
-                    <p>
-                      <span className="label-inline">
-                        {workItem.completedAtFormatted}
-                      </span>
-                    </p>
-
-                    {workItem.completedMessage && (
+                    <div className="completed-icon">
+                      <FontAwesomeIcon icon={['far', 'check-circle']} />
+                    </div>
+                    <div className="completed-content">
                       <p>
-                        <span>{workItem.completedMessage}</span>
+                        <span className="label-inline">
+                          Closed by {workItem.completedBy}
+                        </span>
                       </p>
-                    )}
+
+                      <p>
+                        <span className="label-inline">
+                          {workItem.completedAtFormatted}
+                        </span>
+                      </p>
+
+                      {workItem.completedMessage && (
+                        <p className="completed-message">
+                          <span>{workItem.completedMessage}</span>
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="content-wrapper">
@@ -63,7 +69,7 @@ class CompletedMessagesComponent extends React.Component {
                           <span className="label-inline">Received</span>
                           {message.createdAtTimeFormatted}
                         </p>
-                        <p>{message.message}</p>
+                        <p className="completed-message">{message.message}</p>
                       </div>
                       {messageIdx < workItem.messages.length - 1 && <hr />}
                     </React.Fragment>
