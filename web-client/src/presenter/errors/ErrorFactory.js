@@ -18,7 +18,7 @@ export default {
       return new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {
       return new ServerInvalidResponseError(e);
-    } else if (!responseCode) {
+    } else if (!e.response) {
       // this should only happen if cognito throws a cors exception due to expired tokens or invalid tokens
       return new UnidentifiedUserError(e);
     } else {
