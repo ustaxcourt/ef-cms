@@ -1,3 +1,5 @@
+const { put } = require('../requests');
+
 /**
  * forwardWorkItem
  *
@@ -6,23 +8,18 @@
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.forwardWorkItem = async ({
+exports.forwardWorkItem = ({
   workItemId,
   assigneeId,
   message,
   applicationContext,
 }) => {
-  const response = await applicationContext.getHttpClient().put(
-    `${applicationContext.getBaseUrl()}/workitems/${workItemId}/assignee`,
-    {
+  return put({
+    applicationContext,
+    body: {
       assigneeId,
       message,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    },
-  );
-  return response.data;
+    endpoint: `/workitems/${workItemId}/assignee`,
+  });
 };
