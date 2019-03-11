@@ -9,7 +9,7 @@ import { dismissCaseCaptionModalSequence } from './dismissCaseCaptionModalSequen
 
 export const updateCaseDetailSequence = [
   getFormCombinedWithCaseDetailAction,
-  validateCaseDetailAction, // should it be validating on caption update???
+  validateCaseDetailAction,
   {
     error: [setValidationAlertErrorsAction],
     success: [
