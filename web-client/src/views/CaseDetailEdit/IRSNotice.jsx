@@ -1,9 +1,9 @@
+import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
+import React from 'react';
 
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { connect } from '@cerebral/react';
 
 export const IRSNotice = connect(
   {
