@@ -337,3 +337,9 @@ select.ustc-input-error {
 .ustc-horizontal-list * {
   display: inline-block;
 }
+
+#tabContent-completed,
+#tabContent-inProgress {
+  overflow: scroll;
+  max-height: 931px;
+}
