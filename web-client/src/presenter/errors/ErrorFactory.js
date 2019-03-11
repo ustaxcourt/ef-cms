@@ -8,11 +8,11 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 export default {
   getError: e => {
     let responseCode = (e.response && e.response.status) || e.statusCode;
-    if (403 === responseCode) {
+    if (403 == responseCode) {
       return new UnauthorizedRequestError(e);
-    } else if (404 === responseCode) {
+    } else if (404 == responseCode) {
       return new NotFoundError(e);
-    } else if (401 === responseCode) {
+    } else if (401 == responseCode) {
       return new UnidentifiedUserError();
     } else if (/^4/.test(responseCode)) {
       return new InvalidRequestError(e);
