@@ -68,6 +68,8 @@ function Case(rawCase) {
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
+  this.initialCaption = this.initialCaption || this.caseTitle;
+
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
   );
@@ -138,6 +140,10 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
+    initialCaption: joi
+      .string()
+      .allow(null)
+      .optional(),
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
@@ -392,6 +398,40 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       docketRecord.status = status;
     }
   });
+
+  return this;
+};
+
+/**
+ *
+ * @param updateCaptionDocketRecord
+ * @returns {Case}
+ */
+Case.prototype.updateCaptionDocketRecord = function() {
+  const captionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+  let lastCaption = this.initialCaption;
+
+  this.docketRecord.forEach(docketRecord => {
+    const result = captionRegex.exec(docketRecord.description);
+    if (result) {
+      const [, , changedCaption] = result;
+      lastCaption = changedCaption;
+    }
+  });
+
+  const hasCaptionChanged =
+    this.initialCaption && lastCaption !== this.caseTitle;
+
+  if (hasCaptionChanged) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Caption of case is amended from '${lastCaption}' to '${
+          this.caseTitle
+        }'`,
+        filingDate: new Date().toISOString(),
+      }),
+    );
+  }
 
   return this;
 };
