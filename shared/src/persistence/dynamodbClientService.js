@@ -32,9 +32,10 @@ exports.put = params => {
  * @returns {*}
  */
 exports.updateConsistent = params => {
-  // TODO: refactor: this method is not generic enough; it expects all updates to return back an object with a 'id' property..
   return params.applicationContext
-    .getDocumentClient()
+    .getDocumentClient({
+      region: params.applicationContext.environment.masterRegion,
+    })
     .update(params)
     .promise()
     .then(data => data.Attributes.id);
