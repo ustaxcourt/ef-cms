@@ -39,7 +39,7 @@ export const IRSNotice = connect(
           className="usa-fieldset-inputs usa-sans usa-form-group"
         >
           <legend htmlFor="irs-verified-notice-radios">
-            Notice Attached to Petition
+            Notice Attached to Petition?
           </legend>
           <ul className="usa-unstyled-list">
             <li>
