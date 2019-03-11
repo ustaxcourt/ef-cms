@@ -12,14 +12,15 @@ import {
   faListUl,
   faPaperclip,
   faPlusCircle,
-  faShareSquare,
   faQuestionCircle,
+  faShareSquare,
   faSignOutAlt,
   faSlash,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faArrowAltCircleLeft,
+  faCheckCircle as faCheckCircleRegular,
   faClock,
   faCopy,
   faEdit,
@@ -32,7 +33,7 @@ import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { router, route } from './router';
+import { route, router } from './router';
 import { AppComponent } from './views/AppComponent';
 import presenter from './presenter';
 
@@ -62,6 +63,7 @@ const app = {
       faCaretDown,
       faCaretLeft,
       faCaretUp,
+      faCheckCircleRegular,
       faCheckCircle,
       faClock,
       faCloudUploadAlt,

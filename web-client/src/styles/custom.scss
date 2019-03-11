@@ -84,6 +84,23 @@ iframe {
 .completed-card {
   margin-bottom: 20px;
   color: $color-gray;
+
+  .completed-icon {
+    padding-top: 2px;
+    float: left;
+  }
+
+  .completed-content {
+    padding-left: 22px;
+  }
+
+  p {
+    margin-bottom: 0px;
+  }
+
+  .completed-message {
+    margin-top: 5px;
+  }
 }
 
 .blue-container {
