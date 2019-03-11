@@ -1,7 +1,7 @@
 config:
   target: 'https://{{$processEnvironment.API_TARGET}}.execute-api.{{$processEnvironment.API_REGION}}.amazonaws.com'
   phases:
-    - duration: 10
+    - duration: 1
       arrivalRate: 1
       name: 'load test everything'
 scenarios:
