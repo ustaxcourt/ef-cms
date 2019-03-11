@@ -1,9 +1,9 @@
+import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
+import React from 'react';
 
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { connect } from '@cerebral/react';
 
 export const IRSNotice = connect(
   {
@@ -39,7 +39,7 @@ export const IRSNotice = connect(
           className="usa-fieldset-inputs usa-sans usa-form-group"
         >
           <legend htmlFor="irs-verified-notice-radios">
-            Notice Attached to Petition
+            Notice Attached to Petition?
           </legend>
           <ul className="usa-unstyled-list">
             <li>
