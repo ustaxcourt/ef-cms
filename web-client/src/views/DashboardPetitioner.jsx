@@ -43,7 +43,11 @@ export const DashboardPetitioner = connect(
               >
                 Find a court location
               </a>
-              <FontAwesomeIcon icon="share-square" size="sm" />
+              <FontAwesomeIcon
+                icon="share-square"
+                size="sm"
+                className="fa-icon-blue"
+              />
             </p>
             <p>
               <a
@@ -53,7 +57,11 @@ export const DashboardPetitioner = connect(
               >
                 View forms
               </a>
-              <FontAwesomeIcon icon="share-square" size="sm" />
+              <FontAwesomeIcon
+                icon="share-square"
+                size="sm"
+                className="fa-icon-blue"
+              />
             </p>
           </div>
           <div className="blue-container">
@@ -62,7 +70,11 @@ export const DashboardPetitioner = connect(
               <a href="/" target="_blank" rel="noopener noreferrer">
                 How to file a case by mail or in person
               </a>
-              <FontAwesomeIcon icon="share-square" size="sm" />
+              <FontAwesomeIcon
+                icon="share-square"
+                size="sm"
+                className="fa-icon-blue"
+              />
             </p>
           </div>
         </div>
