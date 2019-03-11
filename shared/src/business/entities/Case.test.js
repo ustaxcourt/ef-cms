@@ -670,6 +670,11 @@ describe('Case entity', () => {
   });
 
   describe('updateCaptionDocketRecord', () => {
+    it('should not add to the docket record when the caption is not set', () => {
+      const caseToVerify = new Case({}).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
     it('should not add to the docket record when the caption is initially being set', () => {
       const caseToVerify = new Case({
         caseTitle: 'Caption',

@@ -6,6 +6,7 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
+import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -15,6 +16,7 @@ import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
+import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
@@ -45,6 +47,7 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
+import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
@@ -94,6 +97,7 @@ export default {
     clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
     dismissAlertSequence,
+    dismissCaseCaptionModalSequence,
     dismissModalSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -103,6 +107,7 @@ export default {
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
+    openCaseCaptionModalSequence,
     removeYearAmountSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
@@ -130,6 +135,7 @@ export default {
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
+    updateCaseDetailSequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
