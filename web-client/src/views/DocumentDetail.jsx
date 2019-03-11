@@ -74,8 +74,8 @@ class DocumentDetailComponent extends React.Component {
               id="tab-document-info"
             />
             <Tab
-              tabName="Pending Messages"
-              title="Pending Messages"
+              tabName="Messages"
+              title="Messages"
               id="tab-pending-messages"
             />
 
@@ -123,7 +123,7 @@ class DocumentDetailComponent extends React.Component {
                     {helper.showCaseDetailsView && <CaseDetailReadOnly />}
                   </div>
                 </Tab>
-                <Tab tabName="Pending Messages">
+                <Tab tabName="Messages">
                   <div
                     id="tab-pending-messages-panel"
                     aria-labelledby="tab-pending-messages"
