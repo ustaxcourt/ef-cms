@@ -141,6 +141,9 @@ package:
 
 resources:
   Resources:
+    #####
+    # This Authorizer is used for validating the JWT token before invoking the lambda
+    #####
     ApiGatewayAuthorizer: 
       Type: AWS::ApiGateway::Authorizer
       Properties: 

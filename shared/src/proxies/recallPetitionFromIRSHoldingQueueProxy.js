@@ -1,22 +1,17 @@
+const { remove } = require('./requests');
+
 /**
  *
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.recallPetitionFromIRSHoldingQueue = async ({
+exports.recallPetitionFromIRSHoldingQueue = ({
   caseId,
   applicationContext,
 }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .delete(
-      `${applicationContext.getBaseUrl()}/cases/${caseId}/irsPetitionPackage`,
-      {
-        headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-      },
-    );
-  return response.data;
+  return remove({
+    applicationContext,
+    endpoint: `/cases/${caseId}/irsPetitionPackage`,
+  });
 };
