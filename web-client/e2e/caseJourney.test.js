@@ -27,6 +27,7 @@ import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssign
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
+import petitionsClerkUpdatesCaseCaption from './journey/petitionsClerkUpdatesCaseCaption';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 
@@ -89,14 +90,14 @@ describe('Case journey', async () => {
     jest.setTimeout(30000);
     global.window = {
       localStorage: {
-        setItem: () => null,
         removeItem: () => null,
+        setItem: () => null,
       },
     };
 
     test.setState('constants', {
-      PARTY_TYPES,
       COUNTRY_TYPES,
+      PARTY_TYPES,
       TRIAL_CITIES,
     });
   });
@@ -120,6 +121,7 @@ describe('Case journey', async () => {
   petitionsClerkViewsDashboardAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
+  petitionsClerkUpdatesCaseCaption(test);
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
 
