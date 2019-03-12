@@ -1,8 +1,7 @@
 import { runAction } from 'cerebral/test';
-
 import { setDefaultDocumentDetailTabAction } from './setDefaultDocumentDetailTabAction';
 
-describe('setDefaultDocumentDetailTab', async () => {
+describe('setDefaultDocumentDetailTab', () => {
   it('returns "Document Info" when showDocumentInfoTab is true', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       state: {

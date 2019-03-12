@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('appendNewYearAmountSequence', async () => {
+describe('appendNewYearAmountSequence', () => {
   it('should append a new yearAmount at the end of the yearAmounts array on the caseDetail', async () => {
     test.setState('caseDetail', {
       yearAmounts: [],

@@ -20,7 +20,7 @@ const MOCK_WORK_ITEM = {
       createdAt: '2018-12-27T18:06:02.968Z',
       from: 'Test Respondent',
       fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      message: 'a Stipulated Decision filed by respondent is ready for review',
+      message: 'Stipulated Decision filed by respondent is ready for review',
       messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
       to: null,
       userId: 'respondent',

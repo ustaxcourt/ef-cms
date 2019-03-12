@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('setWorkItemActionSequence', async () => {
+describe('setWorkItemActionSequence', () => {
   it('should set the key of the workItemsAction if not already set', async () => {
     test.setState('workItemActions', {});
     await test.runSequence('setWorkItemActionSequence', {

@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
@@ -72,7 +71,7 @@ export default test => {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'A Petition filed by Test petitioner is ready for review.',
+      'Petition filed by Test petitioner is ready for review.',
     );
   });
 };
