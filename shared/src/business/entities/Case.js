@@ -614,4 +614,4 @@ Case.getFilingTypes = () => {
   return FILING_TYPES;
 };
 
-module.exports = Case;
+exports.Case = Case;
