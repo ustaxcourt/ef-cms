@@ -5,7 +5,7 @@ export default test => {
     test.setState('form', {
       [test.workItemId]: {
         forwardMessage: 'hello world',
-        forwardRecipientId: 'seniorattorney',
+        forwardRecipientId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
     await test.runSequence('submitForwardSequence', {
