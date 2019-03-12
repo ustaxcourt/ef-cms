@@ -5,6 +5,7 @@ const {
   COUNTRY_TYPES,
 } = require('../../shared/src/business/entities/Contacts/PetitionContact');
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 
 import applicationContext from '../src/applicationContext';
 import presenter from '../src/presenter';
@@ -96,6 +97,7 @@ describe('Case journey', async () => {
     };
 
     test.setState('constants', {
+      CASE_CAPTION_POSTFIX,
       COUNTRY_TYPES,
       PARTY_TYPES,
       TRIAL_CITIES,
