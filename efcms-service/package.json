@@ -57,6 +57,7 @@
     "lint": "eslint ./src/**/*.js",
     "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
     "test": "jest .*test\\.js$",
+    "test:watch": "jest --watch .*test\\.js$",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "create-tables": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop node create-dynamo-tables.js",
     "docker:shellcheck": "./docker-shellcheck.sh",

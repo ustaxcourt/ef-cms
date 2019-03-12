@@ -25,6 +25,7 @@ import workQueueHelper from './computeds/workQueueHelper';
 export default {
   alertHelper,
   assigneeId: null,
+  caseCaption: '',
   caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,

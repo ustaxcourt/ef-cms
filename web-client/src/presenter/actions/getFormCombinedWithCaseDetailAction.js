@@ -66,7 +66,9 @@ const checkDate = (updatedDateString, originalDate) => {
  * @returns {Object} the combinedCaseDetailWithForm
  */
 export const getFormCombinedWithCaseDetailAction = ({ get }) => {
+  const { CASE_CAPTION_POSTFIX } = get(state.constants);
   const caseDetail = { ...get(state.caseDetail) };
+  let caseCaption = get(state.caseCaption);
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),
   };
@@ -104,6 +106,10 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
       year: castToISO(yearAmount.year),
     }))
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
+
+  if (caseCaption && (caseCaption = caseCaption.trim())) {
+    caseDetail.caseTitle = `${caseCaption} ${CASE_CAPTION_POSTFIX}`;
+  }
 
   return {
     combinedCaseDetailWithForm: {
