@@ -19,7 +19,7 @@ import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 
 export const gotoDocumentDetailSequence = [
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,

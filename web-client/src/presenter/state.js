@@ -37,7 +37,7 @@ export default {
   cognitoLoginUrl: null,
   completeForm: {},
   contactsHelper,
-  currentPage: 'Loading',
+  currentPage: 'Interstitial',
   currentTab: '',
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
