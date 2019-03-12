@@ -4,7 +4,7 @@ export const Forms = () => (
   <section className="usa-section usa-grid">
     <h1>Forms</h1>
     <hr />
-    <form className="usa-form">
+    <form>
       <div>
         <label htmlFor="input-text">Text input</label>
         <input id="input-text" type="text" />
@@ -200,84 +200,41 @@ export const Forms = () => (
         </ul>
       </fieldset>
 
-      <fieldset className="usa-fieldset-inputs usa-sans">
-        <legend>Horizontal radio buttons</legend>
-        <ul className="usa-unstyled-list ustc-horizontal-list">
-          <li>
-            <input
-              id="stanton-inline"
-              type="radio"
-              name="historical-figures-2"
-              value="stanton"
-            />
-            <label htmlFor="stanton-inline">Elizabeth Cady Stanton</label>
-          </li>
-          <li>
-            <input
-              id="anthony-inline"
-              type="radio"
-              name="historical-figures-2"
-              value="anthony"
-            />
-            <label htmlFor="anthony-inline">Susan B. Anthony</label>
-          </li>
-        </ul>
-      </fieldset>
-
-      <fieldset className="usa-fieldset-inputs usa-sans">
-        <legend>Horizontal radio buttons</legend>
-        <div className="ustc-horizontal-list">
-          <input
-            id="stanton-inline2"
-            type="radio"
-            name="historical-figures-2"
-            value="stanton"
-          />
-          <label htmlFor="stanton-inline2">Elizabeth Cady Stanton</label>
-
-          <input
-            id="anthony-inline2"
-            type="radio"
-            name="historical-figures-2"
-            value="anthony"
-          />
-          <label htmlFor="anthony-inline2">Susan B. Anthony</label>
-        </div>
-      </fieldset>
-
-      <fieldset className="usa-fieldset-inputs usa-sans usa-input-error">
-        <legend>Radio buttons with error</legend>
-        <ul className="usa-unstyled-list">
-          <li>
-            <input
-              id="stanton-error"
-              type="radio"
-              name="historical-figures-2"
-              value="stanton"
-            />
-            <label htmlFor="stanton-error">Elizabeth Cady Stanton</label>
-          </li>
-          <li>
-            <input
-              id="anthony-error"
-              type="radio"
-              name="historical-figures-2"
-              value="anthony"
-            />
-            <label htmlFor="anthony-error">Susan B. Anthony</label>
-          </li>
-          <li>
-            <input
-              id="tubman-error"
-              type="radio"
-              name="historical-figures-2"
-              value="tubman"
-            />
-            <label htmlFor="tubman-error">Harriet Tubman</label>
-          </li>
-        </ul>
-        <div className="usa-input-error-message beneath">Error message</div>
-      </fieldset>
+      <div className="usa-input-error">
+        <fieldset className="usa-fieldset-inputs usa-sans">
+          <legend>Radio buttons with error</legend>
+          <ul className="usa-unstyled-list">
+            <li>
+              <input
+                id="stanton-error"
+                type="radio"
+                name="historical-figures-2"
+                value="stanton"
+              />
+              <label htmlFor="stanton-error">Elizabeth Cady Stanton</label>
+            </li>
+            <li>
+              <input
+                id="anthony-error"
+                type="radio"
+                name="historical-figures-2"
+                value="anthony"
+              />
+              <label htmlFor="anthony-error">Susan B. Anthony</label>
+            </li>
+            <li>
+              <input
+                id="tubman-error"
+                type="radio"
+                name="historical-figures-2"
+                value="tubman"
+              />
+              <label htmlFor="tubman-error">Harriet Tubman</label>
+            </li>
+          </ul>
+          <div className="usa-input-error-message beneath">Error message</div>
+        </fieldset>
+      </div>
 
       <fieldset>
         <legend>Date</legend>
@@ -315,42 +272,44 @@ export const Forms = () => (
         </div>
       </fieldset>
 
-      <fieldset className="usa-input-error">
-        <legend>Date with error</legend>
-        <div className="usa-date-of-birth">
-          <div className="usa-form-group usa-form-group-month">
-            <label htmlFor="date_of_birth_1-error">MM</label>
-            <input
-              className="usa-input-inline"
-              id="date_of_birth_1-error"
-              type="number"
-              min="1"
-              max="12"
-            />
+      <div className="usa-input-error">
+        <fieldset>
+          <legend>Date with error</legend>
+          <div className="usa-date-of-birth">
+            <div className="usa-form-group usa-form-group-month">
+              <label htmlFor="date_of_birth_1-error">MM</label>
+              <input
+                className="usa-input-inline"
+                id="date_of_birth_1-error"
+                type="number"
+                min="1"
+                max="12"
+              />
+            </div>
+            <div className="usa-form-group usa-form-group-day">
+              <label htmlFor="date_of_birth_2-error">DD</label>
+              <input
+                className="usa-input-inline"
+                id="date_of_birth_2-error"
+                type="number"
+                min="1"
+                max="31"
+              />
+            </div>
+            <div className="usa-form-group usa-form-group-year">
+              <label htmlFor="date_of_birth_3-error">YYYY</label>
+              <input
+                className="usa-input-inline"
+                id="date_of_birth_3-error"
+                type="number"
+                min="1900"
+                max="2000"
+              />
+            </div>
+            <div className="usa-input-error-message beneath">Error message</div>
           </div>
-          <div className="usa-form-group usa-form-group-day">
-            <label htmlFor="date_of_birth_2-error">DD</label>
-            <input
-              className="usa-input-inline"
-              id="date_of_birth_2-error"
-              type="number"
-              min="1"
-              max="31"
-            />
-          </div>
-          <div className="usa-form-group usa-form-group-year">
-            <label htmlFor="date_of_birth_3-error">YYYY</label>
-            <input
-              className="usa-input-inline"
-              id="date_of_birth_3-error"
-              type="number"
-              min="1900"
-              max="2000"
-            />
-          </div>
-          <div className="usa-input-error-message beneath">Error message</div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
     </form>
   </section>
 );
