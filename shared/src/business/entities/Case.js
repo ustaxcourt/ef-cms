@@ -44,6 +44,9 @@ const PROCEDURE_TYPES = ['Regular', 'Small'];
 
 const FILING_TYPES = ['Myself', 'Myself and my spouse', 'A business', 'Other'];
 
+exports.CASE_CAPTION_POSTFIX =
+  'v. Commissioner of Internal Revenue, Respondent';
+
 /**
  * Case
  * @param rawCase
@@ -138,6 +141,10 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
+    initialCaption: joi
+      .string()
+      .allow(null)
+      .optional(),
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
@@ -250,93 +257,97 @@ Case.getCaseTitle = function(rawCase) {
   switch (rawCase.partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
-      caseCaption = `${
-        rawCase.contactPrimary.name
-      }, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      caseCaption = `${rawCase.contactPrimary.name}, Petitioner ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.petitionerSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
-      }, Petitioners v. Commissioner of Internal Revenue, Respondent`;
+      }, Petitioners ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
       }, Deceased, ${
         rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioners v. Commissioner of Internal Revenue, Respondent`;
+      }, Surviving Spouse, Petitioners ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.estate:
       caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
-      }, ${
-        rawCase.contactPrimary.title
-      }, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      }, ${rawCase.contactPrimary.title}, Petitioner(s) ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${
         rawCase.contactPrimary.name
-      }, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Deceased, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.trust:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      }, Trustee, Petitioner(s) ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Tax Matters Partner, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, A Partner Other Than the Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, A Partner Other Than the Tax Matters Partner, Petitioner ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.partnershipBBA:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent`;
+      }, Partnership Representative, Petitioner(s) ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.conservator:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Conservator, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Conservator, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Guardian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Guardian, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.custodian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Custodian, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Custodian, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.nextFriendForMinor:
       caseCaption = `${rawCase.contactSecondary.name}, Minor, ${
         rawCase.contactPrimary.name
-      }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Next Friend, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.nextFriendForIncompetentPerson:
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
         rawCase.contactPrimary.name
-      }, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Next Friend, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
     case PARTY_TYPES.donor:
-      caseCaption = `${
-        rawCase.contactPrimary.name
-      }, Donor, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.transferee:
-      caseCaption = `${
-        rawCase.contactPrimary.name
-      }, Transferee, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner ${
+        exports.CASE_CAPTION_POSTFIX
+      }`;
       break;
     case PARTY_TYPES.survivingSpouse:
       caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent`;
+      }, Surviving Spouse, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
       break;
   }
   return caseCaption;
@@ -392,6 +403,40 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       docketRecord.status = status;
     }
   });
+
+  return this;
+};
+
+/**
+ *
+ * @param updateCaptionDocketRecord
+ * @returns {Case}
+ */
+Case.prototype.updateCaptionDocketRecord = function() {
+  const captionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+  let lastCaption = this.initialCaption;
+
+  this.docketRecord.forEach(docketRecord => {
+    const result = captionRegex.exec(docketRecord.description);
+    if (result) {
+      const [, , changedCaption] = result;
+      lastCaption = changedCaption;
+    }
+  });
+
+  const hasCaptionChanged =
+    this.initialCaption && lastCaption !== this.caseTitle;
+
+  if (hasCaptionChanged) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Caption of case is amended from '${lastCaption}' to '${
+          this.caseTitle
+        }'`,
+        filingDate: new Date().toISOString(),
+      }),
+    );
+  }
 
   return this;
 };
@@ -569,4 +614,4 @@ Case.getFilingTypes = () => {
   return FILING_TYPES;
 };
 
-module.exports = Case;
+exports.Case = Case;
