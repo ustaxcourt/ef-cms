@@ -49,7 +49,9 @@ const {
 const {
   getUsersInSection,
 } = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
-const { getInternalUsers} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
+const {
+  getInternalUsers,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
 const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
@@ -65,7 +67,7 @@ const {
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserUC
+  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
   getCase,
@@ -81,7 +83,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
 const {
   getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor')
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUserInteractor');
@@ -97,6 +99,9 @@ const {
 const {
   getWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
+const {
+  completeWorkItem,
+} = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
@@ -114,20 +119,20 @@ const {
   getUsersInSection: getUsersInSectionUC,
 } = require('ef-cms-shared/src/business/useCases/users/getUsersInSectionInteractor');
 const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionUC
+  getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
 const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
-  recallPetitionFromIRSHoldingQueue
+  recallPetitionFromIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
-  createUser: createUserUC
+  createUser: createUserUC,
 } = require('ef-cms-shared/src/business/useCases/users/createUserInteractor');
 
 const {
-  forwardWorkItem
+  forwardWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 
 const {
@@ -155,7 +160,7 @@ const setCurrentUser = newUser => {
 };
 
 /**
- * 
+ *
  */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -222,6 +227,7 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         assignWorkItems: assignWorkItemsUC,
+        completeWorkItem,
         createCase,
         createDocument,
         createUser: createUserUC,
