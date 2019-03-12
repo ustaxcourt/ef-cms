@@ -1,5 +1,4 @@
 const { completeWorkItem } = require('./completeWorkItemInteractor');
-const { omit } = require('lodash');
 
 describe('completeWorkItem', () => {
   let applicationContext;
@@ -131,6 +130,7 @@ describe('completeWorkItem', () => {
       },
       messages: [
         {
+          createdAt: '2019-03-11T21:56:01.625Z',
           from: 'Test Docketclerk',
           fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'Completed',
