@@ -107,3 +107,9 @@ p.lead {
   font-weight: $font-regular;
   line-height: 1.7em;
 }
+
+p.semi-bold {
+  font-family: $font-regular;
+  font-size: 17px;
+  font-weight: $font-semibold;
+}

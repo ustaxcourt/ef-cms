@@ -1,9 +1,16 @@
+import { ActionError } from './errors/ActionError';
+import { InvalidRequestError } from './errors/InvalidRequestError';
+import { NotFoundError } from './errors/NotFoundError';
+import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
@@ -16,12 +23,12 @@ import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
-import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
-import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
@@ -30,6 +37,7 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { signOutSequence } from './sequences/signOutSequence';
 import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
 import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
+import state from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitDocumentSequence } from './sequences/submitDocumentSequence';
@@ -63,15 +71,6 @@ import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFor
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-
-import { ActionError } from './errors/ActionError';
-import { InvalidRequestError } from './errors/InvalidRequestError';
-import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
-import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
-import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
-import { NotFoundError } from './errors/NotFoundError';
-
-import state from './state';
 
 /**
  * Main Cerebral module
@@ -111,6 +110,7 @@ export default {
     removeYearAmountSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
+    setCaseCaptionSequence,
     setFocusedWorkItemSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,

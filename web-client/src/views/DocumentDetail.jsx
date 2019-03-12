@@ -1,19 +1,19 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
 
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
+import { CompletedMessages } from './DocumentDetail/CompletedMessages';
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PendingMessages } from './DocumentDetail/PendingMessages';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
-import { PendingMessages } from './DocumentDetail/PendingMessages';
-import { CompletedMessages } from './DocumentDetail/CompletedMessages';
-
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { connect } from '@cerebral/react';
 
 class DocumentDetailComponent extends React.Component {
   render() {
@@ -23,9 +23,9 @@ class DocumentDetailComponent extends React.Component {
       caseHelper,
       clickServeToIrsSequence,
       helper,
+      openCaseCaptionModalSequence,
       showModal,
       token,
-      updateCurrentTabSequence,
       setModalDialogNameSequence,
     } = this.props;
     return (
@@ -42,8 +42,24 @@ class DocumentDetailComponent extends React.Component {
               Docket Number: {caseDetail.docketNumberWithSuffix}
             </a>
           </h1>
-          <p>{caseDetail.caseTitle}</p>
-          <p>
+          <p className="float-left">{caseDetail.caseTitle} </p>
+          {helper.showCaptionEditButton && (
+            <p className="float-left">
+              <button
+                className="link"
+                onClick={() => {
+                  openCaseCaptionModalSequence();
+                }}
+              >
+                <FontAwesomeIcon icon="edit" size="sm" /> Edit
+              </button>
+            </p>
+          )}
+          {showModal == 'UpdateCaseCaptionModalDialog' && (
+            <UpdateCaseCaptionModalDialog />
+          )}
+
+          <p className="clear-both">
             <span
               className="usa-label case-status-label"
               aria-label={`status: ${caseDetail.status}`}
@@ -183,10 +199,10 @@ DocumentDetailComponent.propTypes = {
   caseHelper: PropTypes.object,
   clickServeToIrsSequence: PropTypes.func,
   helper: PropTypes.object,
+  openCaseCaptionModalSequence: PropTypes.func,
   setModalDialogNameSequence: PropTypes.func,
   showModal: PropTypes.string,
   token: PropTypes.string,
-  updateCurrentTabSequence: PropTypes.func,
   workItemActions: PropTypes.object,
 };
 
@@ -197,10 +213,10 @@ export const DocumentDetail = connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
+    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     workItemActions: state.workItemActions,
   },
   DocumentDetailComponent,
