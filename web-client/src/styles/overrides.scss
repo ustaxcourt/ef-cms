@@ -64,21 +64,19 @@
 
 .usa-input-error {
   padding-top: unset;
+  padding-bottom: 0;
   margin-top: auto;
+  margin-bottom: 20px;
 }
 
 .usa-input-error-message {
   padding: 0;
   margin: 10px 0 0;
   clear: left;
-  line-height: 1;
+}
 
-  &.beneath {
-    margin: 0 0 10px;
-  }
-  &.padded-left {
-    padding-left: 10px;
-  }
+.usa-fieldset-inputs {
+  margin-bottom: 5px;
 }
 
 .usa-alert-error,
