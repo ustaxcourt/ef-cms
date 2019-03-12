@@ -82,7 +82,7 @@ export const Forms = () => (
 
       <fieldset className="usa-fieldset-inputs usa-sans">
         <legend>Checkboxes</legend>
-        <ul className="usa-unstyled-list">
+        <ul className="ustc-option-list">
           <li>
             <input
               id="truth"
@@ -125,7 +125,7 @@ export const Forms = () => (
       <div className="usa-input-error">
         <fieldset className="usa-fieldset-inputs usa-sans">
           <legend>Checkboxes with error</legend>
-          <ul className="usa-unstyled-list">
+          <ul className="ustc-option-list">
             <li>
               <input
                 id="truth-error"
@@ -169,7 +169,7 @@ export const Forms = () => (
 
       <fieldset className="usa-fieldset-inputs usa-sans">
         <legend>Radio buttons</legend>
-        <ul className="usa-unstyled-list">
+        <ul className="ustc-option-list">
           <li>
             <input
               id="stanton-error"
@@ -203,7 +203,7 @@ export const Forms = () => (
       <div className="usa-input-error">
         <fieldset className="usa-fieldset-inputs usa-sans">
           <legend>Radio buttons with error</legend>
-          <ul className="usa-unstyled-list">
+          <ul className="ustc-option-list">
             <li>
               <input
                 id="stanton-error"
