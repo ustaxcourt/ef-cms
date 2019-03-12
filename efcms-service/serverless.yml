@@ -10,7 +10,6 @@ plugins:
   - serverless-plugin-warmup
   - serverless-prune-plugin
 custom:
-
   prune:
     automatic: true
     number: 3
@@ -25,7 +24,7 @@ custom:
     cors: cors-policy.xml
 
   warmup:
-    enabled: 
+    enabled:
       - dev
       - stg
       - prod
@@ -53,7 +52,7 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
-  
+
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
     basePath: ''
@@ -144,15 +143,15 @@ resources:
     #####
     # This Authorizer is used for validating the JWT token before invoking the lambda
     #####
-    ApiGatewayAuthorizer: 
+    ApiGatewayAuthorizer:
       Type: AWS::ApiGateway::Authorizer
-      Properties: 
+      Properties:
         Name: CognitoUserPool
         Type: COGNITO_USER_POOLS
         IdentitySource: method.request.header.Authorization
-        RestApiId: 
+        RestApiId:
           Ref: ApiGatewayRestApi
-        ProviderARNs: 
+        ProviderARNs:
           - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
 
     #####
@@ -359,6 +358,18 @@ functions:
     events:
       - http:
           path: v1/workitems/{workItemId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  completeWorkItem:
+    handler: src/workitems/completeWorkItemLambda.handler
+    events:
+      - http:
+          path: v1/workitems/{workItemId}/complete
           method: put
           cors: true
           authorizer:
