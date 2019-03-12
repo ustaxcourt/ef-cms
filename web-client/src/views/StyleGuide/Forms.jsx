@@ -5,10 +5,12 @@ export const Forms = () => (
     <h1>Forms</h1>
     <hr />
     <form>
-      <div>
-        <label htmlFor="input-text">Text input</label>
-        <input id="input-text" type="text" />
-      </div>
+      <label htmlFor="input-text">Text input</label>
+      <input id="input-text" type="text" />
+
+      <label htmlFor="input-text-hint">Text input with hint text</label>
+      <span className="usa-form-hint">This is your hint!</span>
+      <input id="input-text-hint" type="text" />
 
       <div className="usa-input-error">
         <label htmlFor="input-text-error">Text input with error</label>
@@ -81,8 +83,8 @@ export const Forms = () => (
       </div>
 
       <fieldset className="usa-fieldset-inputs usa-sans">
-        <legend>Checkboxes</legend>
-        <ul className="ustc-option-list">
+        <legend>Checkboxes vertical</legend>
+        <ul className="ustc-vertical-option-list">
           <li>
             <input
               id="truth"
@@ -122,10 +124,52 @@ export const Forms = () => (
         </ul>
       </fieldset>
 
+      <fieldset className="usa-fieldset-inputs usa-sans">
+        <legend>Checkboxes horizontal</legend>
+        <ul className="usa-unstyled-list">
+          <li>
+            <input
+              id="truth-horizontal"
+              type="checkbox"
+              name="historical-figures-1-horizontal"
+              value="truth"
+            />
+            <label htmlFor="truth-horizontal">Sojourner Truth</label>
+          </li>
+          <li>
+            <input
+              id="douglass-horizontal"
+              type="checkbox"
+              name="historical-figures-1-horizontal"
+              value="douglass"
+            />
+            <label htmlFor="douglass">Frederick Douglass</label>
+          </li>
+          <li>
+            <input
+              id="washington-horizontal"
+              type="checkbox"
+              name="historical-figures-1-horizontal"
+              value="washington"
+            />
+            <label htmlFor="washington-horizontal">Booker T. Washington</label>
+          </li>
+          <li>
+            <input
+              id="carver-horizontal"
+              type="checkbox"
+              name="historical-figures-1-horizontal"
+              disabled
+            />
+            <label htmlFor="carver-horizontal">George Washington Carver</label>
+          </li>
+        </ul>
+      </fieldset>
+
       <div className="usa-input-error">
         <fieldset className="usa-fieldset-inputs usa-sans">
           <legend>Checkboxes with error</legend>
-          <ul className="ustc-option-list">
+          <ul className="ustc-vertical-option-list">
             <li>
               <input
                 id="truth-error"
@@ -168,11 +212,11 @@ export const Forms = () => (
       </div>
 
       <fieldset className="usa-fieldset-inputs usa-sans">
-        <legend>Radio buttons</legend>
-        <ul className="ustc-option-list">
+        <legend>Radio buttons vertical</legend>
+        <ul className="ustc-vertical-option-list">
           <li>
             <input
-              id="stanton-error"
+              id="stanton"
               type="radio"
               name="historical-figures-2"
               value="stanton"
@@ -181,7 +225,7 @@ export const Forms = () => (
           </li>
           <li>
             <input
-              id="anthony-error"
+              id="anthony"
               type="radio"
               name="historical-figures-2"
               value="anthony"
@@ -190,7 +234,7 @@ export const Forms = () => (
           </li>
           <li>
             <input
-              id="tubman-error"
+              id="tubman"
               type="radio"
               name="historical-figures-2"
               value="tubman"
@@ -200,10 +244,43 @@ export const Forms = () => (
         </ul>
       </fieldset>
 
+      <fieldset className="usa-fieldset-inputs usa-sans">
+        <legend>Radio buttons horizontal</legend>
+        <ul className="usa-unstyled-list">
+          <li>
+            <input
+              id="stanton-horizontal"
+              type="radio"
+              name="historical-figures-2-horizontal"
+              value="stanton"
+            />
+            <label htmlFor="stanton-horizontal">Elizabeth Cady Stanton</label>
+          </li>
+          <li>
+            <input
+              id="anthony-horizontal"
+              type="radio"
+              name="historical-figures-2-horizontal"
+              value="anthony"
+            />
+            <label htmlFor="anthony-horizontal">Susan B. Anthony</label>
+          </li>
+          <li>
+            <input
+              id="tubman-horizontal"
+              type="radio"
+              name="historical-figures-2-horizontal"
+              value="tubman"
+            />
+            <label htmlFor="tubman-horizontal">Harriet Tubman</label>
+          </li>
+        </ul>
+      </fieldset>
+
       <div className="usa-input-error">
         <fieldset className="usa-fieldset-inputs usa-sans">
           <legend>Radio buttons with error</legend>
-          <ul className="ustc-option-list">
+          <ul className="ustc-vertical-option-list">
             <li>
               <input
                 id="stanton-error"
