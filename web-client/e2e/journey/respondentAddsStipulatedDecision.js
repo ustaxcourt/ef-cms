@@ -1,4 +1,4 @@
-import Case from '../../..//shared/src/business/entities/Case';
+import { Case } from '../../../shared/src/business/entities/Case';
 
 export default (test, fakeFile) => {
   return it('Respondent adds a stipulated decision', async () => {

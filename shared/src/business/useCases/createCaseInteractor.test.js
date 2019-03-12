@@ -276,6 +276,8 @@ describe('createCase', () => {
       ],
       filingType: 'Myself',
       hasIrsNotice: true,
+      initialCaption:
+        'Diana Prince, Petitioner v. Commissioner of Internal Revenue, Respondent',
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
 
