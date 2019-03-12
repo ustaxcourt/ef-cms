@@ -41,7 +41,7 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const message = new Message({
     from: user.name,
     fromUserId: user.userId,
-    message: `A ${document.documentType} filed by ${capitalize(
+    message: `${document.documentType} filed by ${capitalize(
       user.role,
     )} is ready for review.`,
   });

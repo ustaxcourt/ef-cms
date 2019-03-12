@@ -41,7 +41,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
                 createdAt: new Date().toISOString(),
                 from: user.name,
                 fromUserId: user.userId,
-                message: `A ${
+                message: `${
                   fullWorkItem.document.documentType
                 } filed by ${capitalize(
                   fullWorkItem.document.filedBy,

@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('setIrsNoticeFalseSequence', async () => {
+describe('setIrsNoticeFalseSequence', () => {
   it('should clear the irsNoticeDate fields on the form, clear the yearAmounts, and set hasIrsNotice to false on the caseDetail', async () => {
     test.setState('form', {
       irsDay: '10',

@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { formattedWorkQueue } from './formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,
@@ -12,7 +11,7 @@ const FORMATTED_WORK_ITEM = {
     createdAtFormatted: '12/27/2018',
     from: 'Test Respondent',
     fromUserId: 'respondent',
-    message: 'a Answer filed by respondent is ready for review',
+    message: 'Answer filed by respondent is ready for review',
     messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
     to: 'Unassigned',
   },
@@ -36,7 +35,7 @@ const FORMATTED_WORK_ITEM = {
       createdAtFormatted: '12/27/2018',
       from: 'Test Respondent',
       fromUserId: 'respondent',
-      message: 'a Answer filed by respondent is ready for review',
+      message: 'Answer filed by respondent is ready for review',
       messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
       to: 'Unassigned',
     },
@@ -74,7 +73,7 @@ describe('formatted work queue computed', () => {
         createdAt: '2018-12-27T18:05:54.164Z',
         from: 'Test Respondent',
         fromUserId: 'respondent',
-        message: 'a Answer filed by respondent is ready for review',
+        message: 'Answer filed by respondent is ready for review',
         messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
       },
       {
