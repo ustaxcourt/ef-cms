@@ -1,3 +1,5 @@
+const { put } = require('./requests');
+
 /**
  * updateCase
  *
@@ -6,17 +8,10 @@
  * @param userId
  * @returns {Promise<*>}
  */
-exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .put(
-      `${applicationContext.getBaseUrl()}/cases/${caseToUpdate.caseId}`,
-      caseToUpdate,
-      {
-        headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-      },
-    );
-  return response.data;
+exports.updateCase = ({ applicationContext, caseToUpdate }) => {
+  return put({
+    applicationContext,
+    body: caseToUpdate,
+    endpoint: `/cases/${caseToUpdate.caseId}`,
+  });
 };

@@ -1,3 +1,5 @@
+const { get } = require('../requests');
+
 /**
  * getCaseProxy
  *
@@ -6,13 +8,9 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getInternalUsers = async ({ applicationContext }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/users/internal`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    });
-  return response.data;
+exports.getInternalUsers = ({ applicationContext }) => {
+  return get({
+    applicationContext,
+    endpoint: '/users/internal',
+  });
 };
