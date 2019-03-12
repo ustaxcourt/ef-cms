@@ -36,6 +36,7 @@ import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkI
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import uuidv4 from 'uuid/v4';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
@@ -67,6 +68,7 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   assignWorkItems,
+  completeWorkItem,
   createCase,
   createDocument,
   downloadDocumentFile,
