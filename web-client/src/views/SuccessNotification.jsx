@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 
 class SuccessNotificationComponent extends React.Component {
   componentDidUpdate() {
@@ -20,12 +21,18 @@ class SuccessNotificationComponent extends React.Component {
     const alertSuccess = this.props.alertSuccess;
     const dismissAlert = this.props.dismissAlert;
     this.notificationRef = React.createRef();
+    const isMessageOnly =
+      alertSuccess && alertSuccess.message && !alertSuccess.title;
 
     return (
       <React.Fragment>
         {alertSuccess && (
           <div
-            className="usa-alert usa-alert-success"
+            className={classNames(
+              'usa-alert',
+              'usa-alert-success',
+              isMessageOnly && 'usa-alert-success-message-only',
+            )}
             aria-live="polite"
             role="alert"
             ref={this.notificationRef}
