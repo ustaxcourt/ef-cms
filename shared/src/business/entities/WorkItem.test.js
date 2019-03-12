@@ -117,7 +117,9 @@ describe('WorkItem', () => {
         messages: [],
         sentBy: 'bob',
       });
-      workItem.setAsCompleted('jane');
+      workItem.setAsCompleted({
+        user: { name: 'jane', userId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
+      });
       expect(workItem.messages.length === 1).toBe(true);
       expect(workItem.messages[0].message).toEqual('work item completed');
     });
