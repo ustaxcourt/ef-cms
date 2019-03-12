@@ -1,6 +1,11 @@
+const {
+  CASE_CAPTION_POSTFIX,
+} = require('../../../shared/src/business/entities/Case');
+
 export default test => {
   return it('Petitions clerk updates case caption', async () => {
     test.setState('caseDetail', {});
+    test.setState('constants', { CASE_CAPTION_POSTFIX });
 
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
