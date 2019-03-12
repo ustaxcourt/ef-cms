@@ -9,6 +9,7 @@ import {
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 
 import ErrorFactory from './presenter/errors/ErrorFactory';
+import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
 import Petition from '../../shared/src/business/entities/Petition';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -42,6 +43,7 @@ import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWor
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import uuidv4 from 'uuid/v4';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
@@ -97,6 +99,7 @@ const allUseCases = {
   updateCase,
   updateWorkItem,
   validateCaseDetail,
+  validateForwardMessage,
   validatePetition,
 };
 decorateWithTryCatch(allUseCases);
@@ -127,6 +130,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    ForwardMessage,
     Petition,
   }),
   getError: e => {
