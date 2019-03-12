@@ -1,24 +1,21 @@
+const { put } = require('../requests');
+
 /**
+ * completeWorkItem
  *
- * @param applicationContext
  * @param completedMessage
  * @param workItemId
- * @param userId
+ * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.completeWorkItem = async ({
-  applicationContext,
+exports.completeWorkItem = ({
   completedMessage,
   workItemId,
+  applicationContext,
 }) => {
-  const response = await applicationContext.getHttpClient().put(
-    `${applicationContext.getBaseUrl()}/workitems/${workItemId}/complete`,
-    { completedMessage },
-    {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    },
-  );
-  return response.data;
+  return put({
+    applicationContext,
+    body: { completedMessage },
+    endpoint: `/workitems/${workItemId}/complete`,
+  });
 };
