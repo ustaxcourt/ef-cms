@@ -31,22 +31,18 @@ exports.completeWorkItem = async ({
       workItemId,
     });
 
-  const completedWorkItem = new WorkItem({
-    ...originalWorkItem,
-    completedAt: new Date().toISOString(),
-    completedBy: applicationContext.getCurrentUser().name,
-    completedByUserId: applicationContext.getCurrentUser().userId,
-    completedMessage,
-  })
+  const completedWorkItem = new WorkItem(originalWorkItem)
+    .setAsCompleted({
+      message: completedMessage,
+      user: applicationContext.getCurrentUser(),
+    })
     .validate()
     .toRawObject();
 
-  const afterUpdate = await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItem({
-      applicationContext,
-      workItemToSave: completedWorkItem,
-    });
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItemToSave: completedWorkItem,
+  });
 
-  return new WorkItem(afterUpdate).validate().toRawObject();
+  return completedWorkItem;
 };
