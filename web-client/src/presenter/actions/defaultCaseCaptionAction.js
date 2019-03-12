@@ -8,12 +8,11 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object used for setting showModal
  */
 export const defaultCaseCaptionAction = ({ store, get }) => {
+  const { CASE_CAPTION_POSTFIX } = get(state.constants);
   const caseDetail = { ...get(state.caseDetail) };
   let { caseTitle } = caseDetail;
 
-  caseTitle = caseTitle
-    .replace('v. Commissioner of Internal Revenue, Respondent', '')
-    .trim();
+  caseTitle = caseTitle.replace(CASE_CAPTION_POSTFIX, '').trim();
 
   store.set(state.caseCaption, caseTitle);
 };
