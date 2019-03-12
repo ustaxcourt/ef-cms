@@ -91,6 +91,14 @@
     margin-bottom: 0;
   }
 
+  &.usa-alert-success-message-only {
+    @media only screen and (min-width: $medium-screen) {
+      .usa-grid-full {
+        margin-top: 6px;
+      }
+    }
+  }
+
   button {
     float: right;
 
