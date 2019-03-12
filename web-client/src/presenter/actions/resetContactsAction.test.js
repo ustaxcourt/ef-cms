@@ -38,7 +38,7 @@ describe('resetContactsAction', async () => {
     });
   });
 
-  it('clears the contactPrimary except for countryType and email for an international address', async () => {
+  it('clears the contactPrimary except for countryType (which should be set back to the domestic default) and email for an international address', async () => {
     const { state } = await runAction(resetContactsAction, {
       state: {
         caseDetail: {
