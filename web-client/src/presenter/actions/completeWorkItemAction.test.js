@@ -6,7 +6,7 @@ import { completeWorkItemAction } from './completeWorkItemAction';
 
 import sinon from 'sinon';
 
-const updateWorkItemStub = sinon.stub().resolves(null);
+const completeWorkItemStub = sinon.stub().returns(null);
 
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
@@ -14,7 +14,7 @@ presenter.providers.applicationContext = {
     userId: 'docketclerk',
   }),
   getUseCases: () => ({
-    updateWorkItem: updateWorkItemStub,
+    completeWorkItem: completeWorkItemStub,
   }),
 };
 
@@ -23,8 +23,8 @@ presenter.providers.path = {
   success() {},
 };
 
-describe('completeWorkItem', async () => {
-  it('should attach an assignee id if one does not already exist', async () => {
+describe('completeWorkItem', () => {
+  it('should have undefined completedMessage if completeForm is empty', async () => {
     await runAction(completeWorkItemAction, {
       modules: {
         presenter,
@@ -54,15 +54,41 @@ describe('completeWorkItem', async () => {
       },
     });
     expect(
-      updateWorkItemStub.getCall(0).args[0].workItemToUpdate,
-    ).toMatchObject({
-      assigneeId: 'docketclerk',
-      assigneeName: 'Docket Clerk',
-      completedBy: 'Docket Clerk',
-      completedByUserId: 'docketclerk',
-      completedMessage: undefined,
-      messages: [],
-      workItemId: 'abc',
+      completeWorkItemStub.getCall(0).args[0].completedMessage,
+    ).toBeUndefined();
+  });
+
+  it('should set completedMessage to completeMessage in completeForm', async () => {
+    await runAction(completeWorkItemAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        workItemId: 'abc',
+      },
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              workItems: [
+                {
+                  messages: [],
+                  workItemId: 'abc',
+                },
+              ],
+            },
+          ],
+        },
+        completeForm: { abc: { completeMessage: 'Completed' } },
+        user: {
+          name: 'Docket Clerk',
+          token: 'docketclerk',
+          userId: 'docketclerk',
+        },
+      },
     });
+    expect(completeWorkItemStub.getCall(1).args[0].completedMessage).toEqual(
+      'Completed',
+    );
   });
 });
