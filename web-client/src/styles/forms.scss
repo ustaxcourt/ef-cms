@@ -40,6 +40,21 @@ textarea.caption {
   height: 107px;
 }
 
+input[type='email']:hover,
+input[type='email']:focus,
+input[type='number']:hover,
+input[type='number']:focus,
+input[type='tel']:hover,
+input[type='tel']:focus,
+input[type='text']:hover,
+input[type='text']:focus,
+textarea:hover,
+textarea:focus,
+select:hover,
+select:focus {
+  border: 2px solid $color-primary;
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -52,6 +67,14 @@ input[type='number'] {
 
 input:focus::placeholder {
   color: transparent;
+}
+
+.ustc-option-list {
+  padding: 0;
+  margin-top: 0;
+  li {
+    display: block;
+  }
 }
 
 label.validated::after {
