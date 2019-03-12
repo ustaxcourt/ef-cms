@@ -6,8 +6,6 @@ import {
   PARTY_TYPES,
 } from '../../shared/src/business/entities/Contacts/PetitionContact';
 
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
-
 import ErrorFactory from './presenter/errors/ErrorFactory';
 import Petition from '../../shared/src/business/entities/Petition';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -115,7 +113,6 @@ const applicationContext = {
   },
   getConstants: () => ({
     BUSINESS_TYPES,
-    CASE_CAPTION_POSTFIX,
     COUNTRY_TYPES,
     ESTATE_TYPES,
     OTHER_TYPES,
