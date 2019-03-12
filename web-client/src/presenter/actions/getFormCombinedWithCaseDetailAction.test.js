@@ -1,8 +1,7 @@
-import { runAction } from 'cerebral/test';
-import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
-import { castToISO } from './getFormCombinedWithCaseDetailAction';
-
 import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { castToISO } from './getFormCombinedWithCaseDetailAction';
+import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
+import { runAction } from 'cerebral/test';
 
 describe('castToISO', () => {
   it('returns an iso string when the date string passed in is valid', () => {
@@ -24,7 +23,7 @@ describe('castToISO', () => {
   });
 });
 
-describe('getFormCombinedWithCaseDetailAction', async () => {
+describe('getFormCombinedWithCaseDetailAction', () => {
   it('should return the expected combined caseDetail after run', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {

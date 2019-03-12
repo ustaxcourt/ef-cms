@@ -1,20 +1,20 @@
 import React from 'react';
 import { Container } from '@cerebral/react';
-import App, { Module } from 'cerebral';
+import App from 'cerebral';
 import { cerebralBindSimpleSetStateSequence } from '../../presenter/sequences/cerebralBindSimpleSetStateSequence';
 import TestRenderer, { act } from 'react-test-renderer';
 import { Tab, Tabs } from './Tabs';
 
 describe('TabsComponent', () => {
   it('should show the binded item', () => {
-    const testModule = Module({
+    const testModule = {
       sequences: {
         cerebralBindSimpleSetStateSequence,
       },
       state: {
         tab: 'my',
       },
-    });
+    };
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
@@ -41,14 +41,14 @@ describe('TabsComponent', () => {
   });
 
   it('should be able to click to show an item', () => {
-    const testModule = Module({
+    const testModule = {
       sequences: {
         cerebralBindSimpleSetStateSequence,
       },
       state: {
         tab: 'my',
       },
-    });
+    };
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>

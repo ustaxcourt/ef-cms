@@ -1,13 +1,11 @@
-import { runAction } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
-
+import { runAction } from 'cerebral/test';
 import { setPathAction } from './setPathAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setPathAction', async () => {
+describe('setPathAction', () => {
   it('does not changes the existing path if props.path is not set', async () => {
     const result = await runAction(setPathAction, {
       props: {},
