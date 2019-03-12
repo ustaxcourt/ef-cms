@@ -1,4 +1,4 @@
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const DocketRecord = require('../entities/DocketRecord');
 const Document = require('../entities/Document');
@@ -109,7 +109,7 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
+  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,

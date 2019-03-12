@@ -32,10 +32,6 @@ export class ModalDialog extends React.Component {
     document.removeEventListener('keydown', this.keydownTriggered, false);
   }
 
-  componentDidUpdate() {
-    this.focusModal();
-  }
-
   focusModal() {
     const modalHeader = document.querySelector('.modal-header .title');
     modalHeader.focus();
@@ -64,7 +60,8 @@ export class ModalDialog extends React.Component {
               {modal.title}
             </h3>
           </div>
-          <p>{modal.message}</p>
+          {modal.message && <p>{modal.message}</p>}
+          {this.renderBody && this.renderBody()}
           <button
             type="button"
             onClick={this.runConfirmSequence}

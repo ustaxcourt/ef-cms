@@ -1,4 +1,4 @@
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -51,6 +51,7 @@ exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
 
   const paidCase = new Case(caseToUpdate)
     .markAsPaidByPayGov(caseToUpdate.payGovDate)
+    .updateCaptionDocketRecord()
     .validate()
     .toRawObject();
 
