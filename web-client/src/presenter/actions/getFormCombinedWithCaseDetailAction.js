@@ -66,8 +66,7 @@ const checkDate = (updatedDateString, originalDate) => {
  * @returns {Object} the combinedCaseDetailWithForm
  */
 export const getFormCombinedWithCaseDetailAction = ({ get }) => {
-  const CASE_CAPTION_POSTFIX =
-    'v. Commissioner of Internal Revenue, Respondent';
+  const { CASE_CAPTION_POSTFIX } = get(state.constants);
   const caseDetail = { ...get(state.caseDetail) };
   let caseCaption = get(state.caseCaption);
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {

@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import Case from '../../../../shared/src/business/entities/Case';
+import { Case } from '../../../../shared/src/business/entities/Case';
 
 /**
  * returns the path based on what the documentType is for the selected state.document.documentType.
