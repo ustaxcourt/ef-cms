@@ -147,10 +147,12 @@ const User = require('ef-cms-shared/src/business/entities/User');
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  masterRegion: process.env.MASTER_REGION || 'us-east-1',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
 };
+
 let user;
 const getCurrentUser = () => {
   return user;
@@ -167,17 +169,12 @@ module.exports = (appContextUser = {}) => {
 
   return {
     docketNumberGenerator,
-    environment: {
-      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-      region: process.env.AWS_REGION || 'us-east-1',
-      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-      stage: process.env.STAGE || 'local',
-    },
+    environment,
     getCurrentUser,
-    getDocumentClient: () => {
+    getDocumentClient: ({region} = {}) => {
       return new DynamoDB.DocumentClient({
         endpoint: environment.dynamoDbEndpoint,
-        region: environment.region,
+        region: region || environment.region,
       });
     },
     getDocumentsBucketName: () => {

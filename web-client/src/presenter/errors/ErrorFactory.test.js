@@ -62,6 +62,14 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('ActionError');
     expect(result.title).toEqual('An error occurred');
   });
+
+  it('creates UnidentifiedUserError errors for null responses (when cors error happen in cognito)', () => {
+    const error = new Error();
+    error.response = null;
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('UnidentifiedUserError');
+    expect(result.title).toEqual('You are not logged in');
+  });
   it('creates ActionError errors for unusually constructed Errors', () => {
     const error = new Error('something completely different');
     error.response = {};
