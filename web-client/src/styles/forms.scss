@@ -35,6 +35,11 @@ select {
   margin: 0 0 2rem;
 }
 
+textarea.caption {
+  width: 379px;
+  height: 107px;
+}
+
 input[type='email']:hover,
 input[type='email']:focus,
 input[type='number']:hover,
