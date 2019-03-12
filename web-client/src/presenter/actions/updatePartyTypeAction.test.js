@@ -1,12 +1,12 @@
-import { runAction } from 'cerebral/test';
-
-import presenter from '..';
-import sinon from 'sinon';
-import { updatePartyTypeAction } from './updatePartyTypeAction';
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+
+import presenter from '..';
+import { runAction } from 'cerebral/test';
+import sinon from 'sinon';
+import { updatePartyTypeAction } from './updatePartyTypeAction';
 
 const updateCaseStub = sinon.stub().returns({});
 
@@ -30,7 +30,7 @@ const getFixtures = (props, state = {}) => ({
   },
 });
 
-describe('updatePartyTypeAction', async () => {
+describe('updatePartyTypeAction', () => {
   it('sets the partyType to Petitioner when filingType is updated to Myself', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,

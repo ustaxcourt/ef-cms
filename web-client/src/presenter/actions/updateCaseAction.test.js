@@ -1,6 +1,5 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
+import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 import { updateCaseAction } from './updateCaseAction';
 
@@ -12,7 +11,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('updateCaseAction', async () => {
+describe('updateCaseAction', () => {
   it('should filter the year amounts that do not have values', async () => {
     await runAction(updateCaseAction, {
       modules: {
