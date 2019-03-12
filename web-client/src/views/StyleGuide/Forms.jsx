@@ -8,7 +8,9 @@ export const Forms = () => (
       <label htmlFor="input-text">Text input</label>
       <input id="input-text" type="text" />
 
-      <label htmlFor="input-text-hint">Text input with hint text</label>
+      <label className="with-hint" htmlFor="input-text-hint">
+        Text input with hint text
+      </label>
       <span className="usa-form-hint">This is your hint!</span>
       <input id="input-text-hint" type="text" />
 
