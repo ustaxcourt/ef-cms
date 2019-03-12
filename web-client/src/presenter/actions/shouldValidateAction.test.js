@@ -1,8 +1,7 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
-import sinon from 'sinon';
+import { runAction } from 'cerebral/test';
 import { shouldValidateAction } from './shouldValidateAction';
+import sinon from 'sinon';
 
 const validateSpy = sinon.spy();
 const ignoreSpy = sinon.spy();
@@ -12,7 +11,7 @@ presenter.providers.path = {
   validate: validateSpy,
 };
 
-describe('shouldValidateAction', async () => {
+describe('shouldValidateAction', () => {
   it('calls path.ignore if showValidation is false', async () => {
     await runAction(shouldValidateAction, {
       modules: {

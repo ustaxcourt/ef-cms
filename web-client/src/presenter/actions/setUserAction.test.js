@@ -1,8 +1,7 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
-import sinon from 'sinon';
+import { runAction } from 'cerebral/test';
 import { setUserAction } from './setUserAction';
+import sinon from 'sinon';
 
 const setCurrentUserStub = sinon.stub().returns(null);
 
@@ -10,7 +9,7 @@ presenter.providers.applicationContext = {
   setCurrentUser: setCurrentUserStub,
 };
 
-describe('setUserAction', async () => {
+describe('setUserAction', () => {
   beforeEach(() => {
     process.env.USTC_ENV = 'dev';
     global.window = {

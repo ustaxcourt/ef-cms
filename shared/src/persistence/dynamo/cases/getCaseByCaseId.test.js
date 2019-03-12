@@ -11,7 +11,7 @@ const applicationContext = {
   isAuthorizedForWorkItems: () => true,
 };
 
-describe('getCaseByCaseId', async () => {
+describe('getCaseByCaseId', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       caseId: '123',
