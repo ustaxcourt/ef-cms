@@ -9,7 +9,8 @@ presenter.providers.applicationContext = applicationContext;
 test = CerebralTest(presenter);
 
 describe('setIrsNoticeFalseSequence', async () => {
-  it('should clear the irsNoticeDate fields on the form, clear the yearAmounts, and set hasIrsNotice to false on the caseDetail', async () => {
+  // hasIrsNotice is the original value submitted from the taxpayer, hasVerifiedIrsNotice is a different field used by the petitionsclerk
+  it('when hasVerifiedIrsNotice is not defined, it should set the hasVerifiedIrsNotice to false, clear the form year properties, and clear the yearAmounts on the caseDetail, and not modify the original hasIrsNotice', async () => {
     test.setState('form', {
       irsDay: '10',
       irsMonth: '01',
