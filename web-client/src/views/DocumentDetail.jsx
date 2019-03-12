@@ -23,6 +23,7 @@ class DocumentDetailComponent extends React.Component {
       caseHelper,
       clickServeToIrsSequence,
       helper,
+      openCaseCaptionModalSequence,
       showModal,
       token,
       setModalDialogNameSequence,
@@ -46,11 +47,8 @@ class DocumentDetailComponent extends React.Component {
             <p className="float-left">
               <button
                 className="link"
-                data-foo="bar"
                 onClick={() => {
-                  setModalDialogNameSequence({
-                    showModal: 'UpdateCaseCaptionModalDialog',
-                  });
+                  openCaseCaptionModalSequence();
                 }}
               >
                 <FontAwesomeIcon icon="edit" size="sm" /> Edit
@@ -201,6 +199,7 @@ DocumentDetailComponent.propTypes = {
   caseHelper: PropTypes.object,
   clickServeToIrsSequence: PropTypes.func,
   helper: PropTypes.object,
+  openCaseCaptionModalSequence: PropTypes.func,
   setModalDialogNameSequence: PropTypes.func,
   showModal: PropTypes.string,
   token: PropTypes.string,
@@ -214,6 +213,7 @@ export const DocumentDetail = connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
+    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,

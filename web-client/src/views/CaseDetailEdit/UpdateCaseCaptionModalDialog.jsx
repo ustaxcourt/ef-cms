@@ -18,7 +18,13 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
     return (
       <div>
         <p className="semi-bold">Case Caption</p>
-        <textarea className="caption" value={this.caseCaption} />
+        <textarea
+          className="caption"
+          defaultValue={this.props.caseCaption}
+          onChange={e =>
+            this.props.setCaseCaptionSequence({ caseCaption: e.target.value })
+          }
+        />
       </div>
     );
   }
@@ -26,9 +32,10 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
 
 export const UpdateCaseCaptionModalDialog = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.dismissCaseCaptionModalSequence,
     caseCaption: state.caseCaption,
-    confirmSequence: sequences.startACaseConfirmCancelSequence,
+    confirmSequence: sequences.updateCaseDetailSequence,
+    setCaseCaptionSequence: sequences.setCaseCaptionSequence,
   },
   UpdateCaseCaptionModalDialogComponent,
 );

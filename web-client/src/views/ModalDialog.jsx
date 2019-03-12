@@ -32,10 +32,6 @@ export class ModalDialog extends React.Component {
     document.removeEventListener('keydown', this.keydownTriggered, false);
   }
 
-  componentDidUpdate() {
-    this.focusModal();
-  }
-
   focusModal() {
     const modalHeader = document.querySelector('.modal-header .title');
     modalHeader.focus();
