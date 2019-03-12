@@ -18,11 +18,6 @@ resource "aws_dynamodb_table" "efcms-east" {
     type = "S"
   }
 
-  ttl {
-    attribute_name = "timeToLive"
-    enabled        = false
-  }
-
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
@@ -53,11 +48,6 @@ resource "aws_dynamodb_table" "efcms-west" {
   attribute {
     name = "sk"
     type = "S"
-  }
-
-  ttl {
-    attribute_name = "timeToLive"
-    enabled        = false
   }
 
   stream_enabled   = true
