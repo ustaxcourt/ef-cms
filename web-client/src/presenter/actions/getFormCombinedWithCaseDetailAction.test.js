@@ -2,8 +2,6 @@ import { runAction } from 'cerebral/test';
 import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
 import { castToISO } from './getFormCombinedWithCaseDetailAction';
 
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
-
 describe('castToISO', () => {
   it('returns an iso string when the date string passed in is valid', () => {
     expect(castToISO('2010-10-10')).toEqual('2010-10-10T00:00:00.000Z');
@@ -43,9 +41,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
               year: '2011',
             },
           ],
-        },
-        constants: {
-          CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '01',
@@ -98,9 +93,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
             },
           ],
         },
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '01',
           irsMonth: '01',
@@ -141,9 +133,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
         },
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '24',
           irsMonth: '12',
@@ -170,9 +159,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
           irsNoticeDate: null,
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
-        },
-        constants: {
-          CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '24',
@@ -202,9 +188,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
         },
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '',
           irsMonth: '',
@@ -228,9 +211,6 @@ describe('getFormCombinedWithCaseDetailAction', async () => {
           // irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
-        },
-        constants: {
-          CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '12',
