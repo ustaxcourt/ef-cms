@@ -8,14 +8,28 @@ import { navigateToDashboardAction } from '../actions/navigateToDashboardAction'
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { validateWorkItemAction } from '../actions/validateWorkItemAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 
 export const submitForwardSequence = [
   setFormSubmittingAction,
   clearAlertsAction,
-  forwardWorkItemAction,
-  clearForwardFormAction,
-  set(state.document.showForwardInputs, false),
-  setAlertSuccessAction,
+  validateWorkItemAction,
+  {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+    ],
+    success: [
+      forwardWorkItemAction,
+      clearForwardFormAction,
+      set(state.document.showForwardInputs, false),
+      setAlertSuccessAction,
+      navigateToDashboardAction,
+    ],
+  },
   unsetFormSubmittingAction,
-  navigateToDashboardAction,
 ];
