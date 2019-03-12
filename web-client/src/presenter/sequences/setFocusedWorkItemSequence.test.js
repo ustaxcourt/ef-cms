@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('setFocusedWorkItemSequence', async () => {
+describe('setFocusedWorkItemSequence', () => {
   it('should set the workItem to isFocused true when called', async () => {
     test.setState('workQueue', [
       {

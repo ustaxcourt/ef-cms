@@ -16,12 +16,11 @@ export default test => {
     });
     expect(workItem.messages).toMatchObject([
       {
-        message:
-          'A Stipulated Decision filed by Respondent is ready for review.',
+        message: 'Stipulated Decision filed by Respondent is ready for review.',
       },
       {
         message:
-          'A Stipulated Decision filed by Test respondent is ready for review.',
+          'Stipulated Decision filed by Test respondent is ready for review.',
       },
       {
         message: 'hello world',

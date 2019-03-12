@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('setFocusedWorkItemSequence', async () => {
+describe('setFocusedWorkItemSequence', () => {
   it('should add a work item to the selectedWorkItems state if it does not already exist', async () => {
     test.setState('selectedWorkItems', [
       {
