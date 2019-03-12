@@ -18,6 +18,7 @@ const MOCK_ITEM = {
 let documentClientStub;
 
 const applicationContext = {
+  environment: {},
   getDocumentClient: () => {
     return documentClientStub;
   },

@@ -1,3 +1,5 @@
+const { get } = require('./requests');
+
 /**
  * getCasesByStatus
  *
@@ -6,26 +8,22 @@
  * @param status
  * @returns {Promise<*>}
  */
-exports.getCasesByStatus = async ({ applicationContext, status }) => {
-  return await applicationContext
-    .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/statuses/${status}/cases`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-      params: {
-        status,
-      },
-    })
-    .then(response => {
-      // TODO: this should probably be sorted in a computed
-      if (!(response.data && Array.isArray(response.data))) {
-        return response.data;
-      } else {
-        response.data.sort(function(a, b) {
-          return new Date(a.createdAt) - new Date(b.createdAt);
-        });
-      }
-      return response.data;
-    });
+exports.getCasesByStatus = ({ applicationContext, status }) => {
+  return get({
+    applicationContext,
+    endpoint: `/statuses/${status}/cases`,
+    params: {
+      status,
+    },
+  }).then(data => {
+    // TODO: this should probably be sorted in a computed
+    if (!(data && Array.isArray(data))) {
+      return data;
+    } else {
+      data.sort(function(a, b) {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      });
+    }
+    return data;
+  });
 };
