@@ -2,7 +2,6 @@ const {
   validateForwardMessage,
 } = require('./validateForwardMessageInteractor');
 const ForwardMessage = require('../../entities/ForwardMessage');
-const { omit } = require('lodash');
 
 describe('validateForwardMessage', () => {
   it('returns the expected errors object on an empty message', () => {
