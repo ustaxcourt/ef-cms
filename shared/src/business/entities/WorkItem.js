@@ -172,16 +172,6 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedByUserId = user.userId;
   this.completedMessage = message;
 
-  this.addMessage(
-    new Message({
-      from: this.completedBy,
-      fromUserId: this.completedByUserId,
-      message: message || 'work item completed',
-      to: null,
-      toUserId: null,
-    }),
-  );
-
   return this;
 };
 

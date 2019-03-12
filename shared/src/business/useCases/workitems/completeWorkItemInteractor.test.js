@@ -79,15 +79,7 @@ describe('completeWorkItem', () => {
       document: {
         sentBy: 'taxpayer',
       },
-      messages: [
-        {
-          from: 'Test Docketclerk',
-          fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'work item completed',
-          to: null,
-          toUserId: null,
-        },
-      ],
+      messages: [],
       section: 'docket',
       sentBy: 'docketclerk',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -128,15 +120,7 @@ describe('completeWorkItem', () => {
       document: {
         sentBy: 'taxpayer',
       },
-      messages: [
-        {
-          from: 'Test Docketclerk',
-          fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'Completed',
-          to: null,
-          toUserId: null,
-        },
-      ],
+      messages: [],
       section: 'docket',
       sentBy: 'docketclerk',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

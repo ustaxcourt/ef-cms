@@ -104,7 +104,7 @@ describe('WorkItem', () => {
       assert.ok(workItem.messages.length === 1);
     });
 
-    it('when set as completed', () => {
+    it('no message added when set as completed', () => {
       const workItem = new WorkItem({
         assigneeId: 'bob',
         assigneeName: 'bob',
@@ -120,8 +120,7 @@ describe('WorkItem', () => {
       workItem.setAsCompleted({
         user: { name: 'jane', userId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
       });
-      expect(workItem.messages.length === 1).toBe(true);
-      expect(workItem.messages[0].message).toEqual('work item completed');
+      expect(workItem.messages.length === 0).toBe(true);
     });
   });
 });
