@@ -21,7 +21,8 @@ class SuccessNotificationComponent extends React.Component {
     const alertSuccess = this.props.alertSuccess;
     const dismissAlert = this.props.dismissAlert;
     this.notificationRef = React.createRef();
-    const isMessageOnly = alertSuccess.message && !alertSuccess.title;
+    const isMessageOnly =
+      alertSuccess && alertSuccess.message && !alertSuccess.title;
 
     return (
       <React.Fragment>
