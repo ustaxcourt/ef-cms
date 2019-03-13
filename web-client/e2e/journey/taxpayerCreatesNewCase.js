@@ -12,6 +12,11 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'stinFile',
+      value: fakeFile,
+    });
+
     let result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
