@@ -11,11 +11,7 @@ class ErrorNotificationComponent extends React.Component {
   focusNotification() {
     const notification = this.notificationRef.current;
     if (notification) {
-      window.scrollTo({
-        behavior: 'smooth',
-        left: 0,
-        top: 0,
-      });
+      window.scrollTo(0, 0);
     }
   }
 
