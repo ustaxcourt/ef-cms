@@ -30,7 +30,7 @@ describe('getSentWorkItemsForUser', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('invokes the peristence layer with the proper request object and date filter', async () => {
+  it('invokes the peristence layer with the pk having docketclerk|sentWorkItem and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -48,7 +48,6 @@ describe('getSentWorkItemsForUser', () => {
         ':pk': 'docketclerk|sentWorkItem',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
-      TableName: 'efcms-dev',
     });
   });
 });

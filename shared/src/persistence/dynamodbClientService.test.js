@@ -18,7 +18,7 @@ const MOCK_ITEM = {
 let documentClientStub;
 
 const applicationContext = {
-  environment: {},
+  environment: { stage: 'dev' },
   getDocumentClient: () => {
     return documentClientStub;
   },
@@ -31,7 +31,7 @@ describe('dynamodbClientService', function() {
         promise: () =>
           Promise.resolve({
             Responses: {
-              a: [
+              'efcms-dev': [
                 {
                   'aws:rep:deleting': 'a',
                   'aws:rep:updateregion': 'b',
@@ -165,7 +165,7 @@ describe('dynamodbClientService', function() {
       });
       expect(documentClientStub.batchWrite.getCall(0).args[0]).toEqual({
         RequestItems: {
-          a: [
+          'efcms-dev': [
             {
               PutRequest: {
                 ConditionExpression:
@@ -190,11 +190,10 @@ describe('dynamodbClientService', function() {
         key: {
           pk: '123',
         },
-        tableName: 'a',
       });
       expect(documentClientStub.delete.getCall(0).args[0]).toEqual({
         Key: { pk: '123' },
-        TableName: 'a',
+        TableName: 'efcms-dev',
       });
     });
   });
