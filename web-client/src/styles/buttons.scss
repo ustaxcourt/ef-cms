@@ -18,6 +18,9 @@ button.link {
   font-weight: normal;
   text-align: left;
   text-decoration: underline;
+  svg {
+    margin-right: 0;
+  }
 }
 
 button.pdf-link:hover,

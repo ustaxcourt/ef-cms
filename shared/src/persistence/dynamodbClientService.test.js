@@ -87,7 +87,7 @@ describe('dynamodbClientService', function() {
     AWS.DynamoDB.DocumentClient.restore();
   });
 
-  describe('put', async () => {
+  describe('put', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
         applicationContext,
@@ -97,14 +97,14 @@ describe('dynamodbClientService', function() {
     });
   });
 
-  describe('updateConsistent', async () => {
+  describe('updateConsistent', () => {
     it('should return the  same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
       expect(result).toEqual('123');
     });
   });
 
-  describe('get', async () => {
+  describe('get', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await get({ applicationContext });
       expect(result).toEqual(MOCK_ITEM);
@@ -121,14 +121,14 @@ describe('dynamodbClientService', function() {
     });
   });
 
-  describe('query', async () => {
+  describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
       expect(result).toEqual([MOCK_ITEM]);
     });
   });
 
-  describe('batchGet', async () => {
+  describe('batchGet', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
         applicationContext,
@@ -151,7 +151,7 @@ describe('dynamodbClientService', function() {
     });
   });
 
-  describe('batchWrite', async () => {
+  describe('batchWrite', () => {
     it('should call client.batchWrite with the expected arguments', async () => {
       const item = {
         pk: '123',
@@ -183,7 +183,7 @@ describe('dynamodbClientService', function() {
     });
   });
 
-  describe('delete', async () => {
+  describe('delete', () => {
     it('should try to delete using the key passed in', async () => {
       await deleteObj({
         applicationContext,
