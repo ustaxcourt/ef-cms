@@ -56,6 +56,7 @@ exports.createCase = async ({
   petitionFileId,
   ownershipDisclosureFileId,
   applicationContext,
+  stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, PETITION)) {
@@ -90,6 +91,14 @@ exports.createCase = async ({
     userId: user.userId,
   });
   addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
+
+  const stinDocumentEntity = new Document({
+    documentId: stinFileId,
+    documentType: Case.documentTypes.stin,
+    filedBy: user.name,
+    userId: user.userId,
+  });
+  caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
