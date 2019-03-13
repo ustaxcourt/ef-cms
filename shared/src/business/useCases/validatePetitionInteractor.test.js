@@ -62,6 +62,7 @@ describe('validatePetition', () => {
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
+        stinFile: {},
       },
     });
     expect(errors).toEqual(null);
@@ -86,6 +87,7 @@ describe('validatePetition', () => {
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
+        stinFile: {},
       },
     });
 
