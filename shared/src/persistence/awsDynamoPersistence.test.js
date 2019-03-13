@@ -78,7 +78,10 @@ describe('awsDynamoPersistence', function() {
 
   describe('incrementCounter', () => {
     it('should invoke the correct client updateConsistence method using the correct pk and sk', async () => {
-      await incrementCounter({ applicationContext });
+      await incrementCounter({
+        applicationContext,
+        key: 'docketNumberCounter',
+      });
       const year = new Date().getFullYear().toString();
 
       expect(client.updateConsistent.getCall(0).args[0].Key.pk).toEqual(

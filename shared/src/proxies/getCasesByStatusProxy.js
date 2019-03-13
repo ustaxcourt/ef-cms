@@ -15,15 +15,5 @@ exports.getCasesByStatus = ({ applicationContext, status }) => {
     params: {
       status,
     },
-  }).then(data => {
-    // TODO: this should probably be sorted in a computed
-    if (!(data && Array.isArray(data))) {
-      return data;
-    } else {
-      data.sort(function(a, b) {
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      });
-    }
-    return data;
   });
 };
