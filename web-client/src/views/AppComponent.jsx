@@ -18,6 +18,7 @@ import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { StartCase } from './StartCase';
@@ -38,6 +39,7 @@ const pages = {
   DashboardSeniorAttorney,
   DocumentDetail,
   Error,
+  Interstitial,
   Loading,
   LogIn,
   StartCase,
