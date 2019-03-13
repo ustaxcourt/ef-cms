@@ -25,6 +25,7 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
             this.props.setCaseCaptionSequence({ caseCaption: e.target.value })
           }
         />
+        v. Commissioner of Internal Revenue, Respondent
       </div>
     );
   }
