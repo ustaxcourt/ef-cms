@@ -33,8 +33,6 @@ exports.forwardWorkItem = async ({
       .getUserById({ applicationContext, userId: assigneeId }),
   );
 
-  console.log('userToForwardTo', userToForwardTo);
-
   const workItemToForward = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
