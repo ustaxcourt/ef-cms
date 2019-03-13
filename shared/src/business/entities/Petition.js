@@ -1,9 +1,7 @@
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('./Contacts/PetitionContact');
-
-// TODO: rename the folder Contacts to lower case contacts
+const { instantiateContacts } = require('./contacts/PetitionContact');
 
 const joi = require('joi-browser');
 
