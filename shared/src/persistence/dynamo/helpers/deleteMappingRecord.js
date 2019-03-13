@@ -12,6 +12,5 @@ exports.deleteMappingRecord = async ({
       pk: `${pkId}|${type}`,
       sk: skId,
     },
-    tableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

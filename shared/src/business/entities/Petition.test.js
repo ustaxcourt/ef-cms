@@ -41,6 +41,20 @@ describe('Petition entity', () => {
         petition.getFormattedValidationErrors().ownershipDisclosureFile,
       ).toBeUndefined();
     });
+    it('requires stinFile', () => {
+      const petition = new Petition({
+        businessType: 'Corporation',
+        caseType: 'other',
+        filingType: 'A business',
+        hasIrsNotice: false,
+        irsNoticeDate: null,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+      });
+      expect(petition.getFormattedValidationErrors().stinFile).toEqual(
+        'Statement of Taxpayer Identification Number is required.',
+      );
+    });
   });
 
   describe('irs notice date validation', () => {

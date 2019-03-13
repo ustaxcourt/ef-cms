@@ -16,6 +16,7 @@ describe('Petition', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
+        stinFile: {},
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -43,6 +44,7 @@ describe('Petition', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
+        stinFile: {},
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
@@ -71,6 +73,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -98,6 +101,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -113,6 +117,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -147,6 +152,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -162,6 +168,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -198,6 +205,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -213,6 +221,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -249,6 +258,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -264,6 +274,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -300,6 +311,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -315,6 +327,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -351,6 +364,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -366,6 +380,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -402,6 +417,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -417,6 +433,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -443,6 +460,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -458,6 +476,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -484,6 +503,7 @@ describe('Petition', () => {
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
+      stinFile: {},
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });

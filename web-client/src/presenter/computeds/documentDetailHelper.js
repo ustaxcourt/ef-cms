@@ -27,7 +27,6 @@ export default get => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showCaptionEditButton: caseDetail.status !== 'Batched for IRS',
     showCaseDetailsEdit: ['New', 'Recalled'].includes(caseDetail.status),
     showCaseDetailsView: ['Batched for IRS'].includes(caseDetail.status),
     showDocumentInfo: get(state.currentTab) === 'Document Info',
