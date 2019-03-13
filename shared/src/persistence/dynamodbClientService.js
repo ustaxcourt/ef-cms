@@ -1,3 +1,5 @@
+const { chunk } = require('lodash');
+
 /**
  * PUT for dynamodb aws-sdk client
  * @param item
@@ -100,25 +102,31 @@ exports.query = params => {
  * BATCH GET for aws-sdk dynamodb client
  * @param params
  */
-exports.batchGet = ({ applicationContext, keys }) => {
+exports.batchGet = async ({ applicationContext, keys }) => {
   if (!keys.length) return [];
-  // TODO: BATCH GET CAN ONLY DO 100 AT A TIME
-  return applicationContext
-    .getDocumentClient()
-    .batchGet({
-      RequestItems: {
-        [getTableName({ applicationContext })]: {
-          Keys: keys,
-        },
-      },
-    })
-    .promise()
-    .then(result => {
-      // TODO: REFACTOR THIS
-      const items = result.Responses[getTableName({ applicationContext })];
-      items.forEach(item => removeAWSGlobalFields(item));
-      return items;
-    });
+  const chunks = chunk(keys, 100);
+
+  let results = [];
+  for (let chunkOfKeys of chunks) {
+    results = results.concat(
+      await applicationContext
+        .getDocumentClient()
+        .batchGet({
+          RequestItems: {
+            [getTableName({ applicationContext })]: {
+              Keys: chunkOfKeys,
+            },
+          },
+        })
+        .promise()
+        .then(result => {
+          const items = result.Responses[getTableName({ applicationContext })];
+          items.forEach(item => removeAWSGlobalFields(item));
+          return items;
+        }),
+    );
+  }
+  return results;
 };
 
 /**
