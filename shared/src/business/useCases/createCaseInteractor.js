@@ -33,7 +33,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
     new Message({
       from: user.name,
       fromUserId: user.userId,
-      message: `A ${documentEntity.documentType} filed by ${capitalize(
+      message: `${documentEntity.documentType} filed by ${capitalize(
         user.role,
       )} is ready for review.`,
     }),

@@ -12,7 +12,7 @@ export default test => {
 
     await test.runSequence('openCaseCaptionModalSequence');
 
-    expect(test.getState('showModal')).toEqual('CaseCaptionModal');
+    expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
     expect(test.getState('caseCaption')).toEqual(
       'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
     );
@@ -29,7 +29,7 @@ export default test => {
 
     await test.runSequence('openCaseCaptionModalSequence');
 
-    expect(test.getState('showModal')).toEqual('CaseCaptionModal');
+    expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
     expect(test.getState('caseCaption')).toEqual(
       'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
     );

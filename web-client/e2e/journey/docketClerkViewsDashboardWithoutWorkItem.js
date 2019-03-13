@@ -2,8 +2,8 @@ export default test => {
   return it('Docket clerk views their dashboard and should not expect an individual work queue item, but should expect the docket section item', async () => {
     await test.runSequence('gotoDashboardSequence');
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'my',
       box: 'inbox',
+      queue: 'my',
     });
     const workItem = test
       .getState('workQueue')
@@ -11,8 +11,8 @@ export default test => {
     expect(workItem).toBeUndefined();
 
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
     const sectionWorkItems = test
       .getState('workQueue')

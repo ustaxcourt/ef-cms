@@ -1,13 +1,13 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
-import React from 'react';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { sequences, state } from 'cerebral';
 
-import { Tabs, Tab } from '../../ustc-ui/Tabs/Tabs';
-import { PartyInformation } from './PartyInformation';
 import { CaseInfo } from './CaseInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from './IRSNotice';
+import { PartyInformation } from './PartyInformation';
+import React from 'react';
 import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
+import { connect } from '@cerebral/react';
 
 export const CaseDetailEdit = connect(
   {

@@ -1,10 +1,20 @@
 import {
+  faArrowAltCircleLeft,
+  faCheckCircle as faCheckCircleRegular,
+  faClock,
+  faCopy,
+  faEdit,
+  faEyeSlash,
+  faFilePdf as faFilePdfRegular,
+} from '@fortawesome/free-regular-svg-icons';
+import {
   faCaretDown,
   faCaretLeft,
   faCaretUp,
   faCheckCircle,
   faCloudUploadAlt,
   faDollarSign,
+  faEdit as faEditSolid,
   faExclamationTriangle,
   faFilePdf,
   faFlag,
@@ -19,23 +29,14 @@ import {
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  faArrowAltCircleLeft,
-  faCheckCircle as faCheckCircleRegular,
-  faClock,
-  faCopy,
-  faEdit,
-  faEyeSlash,
-  faFilePdf as faFilePdfRegular,
-} from '@fortawesome/free-regular-svg-icons';
-import { Container } from '@cerebral/react';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { route, router } from './router';
+
 import App from 'cerebral';
+import { AppComponent } from './views/AppComponent';
+import { Container } from '@cerebral/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import { route, router } from './router';
-import { AppComponent } from './views/AppComponent';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import presenter from './presenter';
 
 /**
@@ -71,6 +72,7 @@ const app = {
       faCopy,
       faDollarSign,
       faEdit,
+      faEditSolid,
       faExclamationTriangle,
       faEyeSlash,
       faFilePdf,

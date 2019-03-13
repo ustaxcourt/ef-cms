@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { formattedSectionWorkQueue } from '../../src/presenter/computeds/formattedSectionWorkQueue';
+import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
@@ -24,7 +23,7 @@ export default test => {
     expect(workItem.messages[0]).toMatchObject({
       from: 'Test Respondent',
       fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-      message: 'A Stipulated Decision filed by Respondent is ready for review.',
+      message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
     const formatted = runCompute(formattedSectionWorkQueue, {
