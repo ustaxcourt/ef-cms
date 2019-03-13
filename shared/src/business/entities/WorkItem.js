@@ -166,18 +166,13 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
  *
  * @param userId
  */
-WorkItem.prototype.setAsCompleted = function({ message, userId, name }) {
+WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedAt = new Date().toISOString();
+  this.completedBy = user.name;
+  this.completedByUserId = user.userId;
+  this.completedMessage = message;
 
-  this.addMessage(
-    new Message({
-      from: name,
-      fromUserId: userId,
-      message: message || 'work item completed',
-      to: null,
-      toUserId: null,
-    }),
-  );
+  return this;
 };
 
 module.exports = WorkItem;

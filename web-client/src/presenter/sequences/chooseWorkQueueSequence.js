@@ -4,9 +4,12 @@ import { getSentWorkItemsForSectionAction } from '../actions/getSentWorkItemsFor
 import { getSentWorkItemsForUserAction } from '../actions/getSentWorkItemsForUserAction';
 import { getWorkItemsByUserAction } from '../actions/getWorkItemsByUserAction';
 import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
 export const chooseWorkQueueSequence = [
+  setFormSubmittingAction,
   clearWorkQueueAction,
   chooseWorkQueueAction,
   {
@@ -15,4 +18,5 @@ export const chooseWorkQueueSequence = [
     sectioninbox: [getWorkItemsForSectionAction, setWorkItemsAction],
     sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
   },
+  unsetFormSubmittingAction,
 ];

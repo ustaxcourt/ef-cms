@@ -12,7 +12,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUsersAction } from '../actions/setUsersAction';
 
 const goToDashboard = [
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
   getUserRoleAction,
   {

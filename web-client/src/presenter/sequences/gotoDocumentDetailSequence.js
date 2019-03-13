@@ -18,7 +18,7 @@ import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { state } from 'cerebral';
 
 export const gotoDocumentDetailSequence = [
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
