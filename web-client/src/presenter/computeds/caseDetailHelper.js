@@ -11,6 +11,7 @@ export default get => {
 
   return {
     showActionRequired: !caseDetail.payGovId,
+    showCaptionEditButton: caseDetail.status !== 'Batched for IRS',
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
