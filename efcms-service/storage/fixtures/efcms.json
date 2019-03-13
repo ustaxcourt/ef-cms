@@ -46,6 +46,15 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
         "createdAt": "2019-03-01T22:54:05.993Z",
         "documentType": "Answer",
         "filedBy": "Test Respondent",
@@ -198,6 +207,15 @@
         "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "partyType": "Petitioner",
@@ -294,6 +312,15 @@
         "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-01T22:54:05.993Z",
@@ -476,6 +503,15 @@
         "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
         "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
@@ -594,6 +630,15 @@
         "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
         "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
@@ -702,6 +747,15 @@
         "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
         "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
@@ -805,6 +859,15 @@
         "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
@@ -940,6 +1003,15 @@
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -1053,6 +1125,15 @@
         "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
@@ -1177,6 +1258,15 @@
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -1296,6 +1386,15 @@
         "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
@@ -1422,6 +1521,15 @@
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -1543,6 +1651,15 @@
         "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
@@ -1671,6 +1788,15 @@
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -1794,6 +1920,15 @@
         "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
@@ -1924,6 +2059,15 @@
       },
       {
         "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Ownership Disclosure Statement",
         "filedBy": "Test Petitioner",
         "workItems": [],
@@ -2026,8 +2170,7 @@
     "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "seniorattorney"
   },
-  
-  
+
   {
     "role": "docketclerk",
     "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -2251,6 +2394,15 @@
         "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
         "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "partyType": "Petitioner",
@@ -2349,6 +2501,15 @@
         "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
         "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-03-05T17:34:13.491Z",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Test Petitioner",
+        "workItems": [],
+        "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
     "partyType": "Petitioner",
