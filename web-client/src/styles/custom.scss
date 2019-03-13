@@ -75,6 +75,10 @@ iframe {
   margin-bottom: 30px;
 }
 
+select[disabled] {
+  background-color: $color-gray-lightest;
+}
+
 .grey-container {
   padding: 20px;
   margin-bottom: 20px;
