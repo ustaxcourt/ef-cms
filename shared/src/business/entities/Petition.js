@@ -73,7 +73,7 @@ joiValidationDecorator(
       is: 'A business',
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }), // TODO: this should probably be required, but set to optional for now
+    }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),

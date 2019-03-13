@@ -1,3 +1,8 @@
+const {
+  isAuthorized,
+  PETITION,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/Case');
 
 /**
@@ -10,8 +15,10 @@ exports.getCasesForRespondent = async ({
   respondentId,
   applicationContext,
 }) => {
-  // const user = applicationContext.getCurrentUser();
-  // TODO: Authorization
+  const user = applicationContext.getCurrentUser();
+  if (!isAuthorized(user, PETITION, respondentId)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const cases = await applicationContext
     .getPersistenceGateway()

@@ -1,4 +1,3 @@
-//TODO remove
 const {
   isAuthorized,
   PETITION,
