@@ -9,7 +9,7 @@ exports.filePetition = async ({
   petitionMetadata,
   petitionFile,
   ownershipDisclosureFile,
-  fileHasUploaded,
+  stinFile,
   applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -24,7 +24,6 @@ exports.filePetition = async ({
       applicationContext,
       document: petitionFile,
     });
-  fileHasUploaded();
 
   let ownershipDisclosureFileId;
   if (ownershipDisclosureFile) {
@@ -34,7 +33,16 @@ exports.filePetition = async ({
         applicationContext,
         document: ownershipDisclosureFile,
       });
-    fileHasUploaded();
+  }
+
+  let stinFileId;
+  if (stinFile) {
+    stinFileId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: stinFile,
+      });
   }
 
   await applicationContext.getUseCases().createCase({
@@ -42,5 +50,6 @@ exports.filePetition = async ({
     ownershipDisclosureFileId,
     petitionFileId,
     petitionMetadata,
+    stinFileId,
   });
 };
