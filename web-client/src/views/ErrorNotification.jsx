@@ -1,7 +1,7 @@
-import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 
 class ErrorNotificationComponent extends React.Component {
   componentDidUpdate() {
@@ -11,7 +11,7 @@ class ErrorNotificationComponent extends React.Component {
   focusNotification() {
     const notification = this.notificationRef.current;
     if (notification) {
-      notification.scrollIntoView();
+      window.scrollTo(0, 0);
     }
   }
 
