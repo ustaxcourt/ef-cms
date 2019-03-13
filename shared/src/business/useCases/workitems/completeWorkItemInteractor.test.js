@@ -23,6 +23,7 @@ describe('completeWorkItem', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
+          name: 'Petitioner',
           role: 'petitioner',
           userId: 'taxpayer',
         };
