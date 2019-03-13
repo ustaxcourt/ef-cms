@@ -1,9 +1,9 @@
-import assignSelectedWorkItemsAction from '../actions/assignSelectedWorkItemsAction';
-import getWorkItemsForSection from '../actions/getWorkItemsForSectionAction';
-import setWorkItems from '../actions/setWorkItemsAction';
+import { assignSelectedWorkItemsAction } from '../actions/assignSelectedWorkItemsAction';
+import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionAction';
+import { setWorkItemsAction } from '../actions/setWorkItemsAction';
 
-export default [
+export const assignSelectedWorkItemsSequence = [
   assignSelectedWorkItemsAction,
-  getWorkItemsForSection,
-  setWorkItems,
+  getWorkItemsForSectionAction,
+  setWorkItemsAction,
 ];

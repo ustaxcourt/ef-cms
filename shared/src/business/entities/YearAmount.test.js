@@ -5,8 +5,8 @@ describe('YearAmount', () => {
     it('returns false if a year is in the future', () => {
       expect(
         new YearAmount({
-          year: new Date('9000-01-01').toISOString(),
           amount: 100,
+          year: new Date('9000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -16,8 +16,8 @@ describe('YearAmount', () => {
     it('returns false if a number with a decimal point', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: 100.94,
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -25,8 +25,8 @@ describe('YearAmount', () => {
     it('returns false if the amount has a single decimal', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: '100.94',
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -34,8 +34,8 @@ describe('YearAmount', () => {
     it('returns false if the amount has a two decimals', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: '100.94.32',
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -43,8 +43,8 @@ describe('YearAmount', () => {
     it('returns false if the amount has a character in it', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: '100x94.32',
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -52,8 +52,8 @@ describe('YearAmount', () => {
     it('returns false if the amount has a comma', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: '000,100',
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeFalsy();
     });
@@ -69,8 +69,8 @@ describe('YearAmount', () => {
     it('returns true if the amount is empty', () => {
       expect(
         new YearAmount({
-          year: new Date('2000-01-01').toISOString(),
           amount: null,
+          year: new Date('2000-01-01').toISOString(),
         }).isValid(),
       ).toBeTruthy();
     });

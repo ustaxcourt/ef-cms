@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class ErrorNotification extends React.Component {
+class ErrorNotificationComponent extends React.Component {
   componentDidUpdate() {
     this.focusNotification();
   }
@@ -53,15 +53,15 @@ class ErrorNotification extends React.Component {
   }
 }
 
-ErrorNotification.propTypes = {
+ErrorNotificationComponent.propTypes = {
   alertHelper: PropTypes.object,
   alertError: PropTypes.object,
 };
 
-export default connect(
+export const ErrorNotification = connect(
   {
     alertHelper: state.alertHelper,
     alertError: state.alertError,
   },
-  ErrorNotification,
+  ErrorNotificationComponent,
 );

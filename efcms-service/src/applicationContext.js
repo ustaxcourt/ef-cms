@@ -32,9 +32,6 @@ const {
 
 // cases
 const {
-  getCasesByDocumentId,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByDocumentId');
-const {
   getCasesByStatus,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByStatus');
 const {
@@ -69,77 +66,69 @@ const {
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUser.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
   getCase,
-} = require('ef-cms-shared/src/business/useCases/getCase.interactor');
+} = require('ef-cms-shared/src/business/useCases/getCaseInteractor');
 const {
   getCasesByStatus: getCasesByStatusUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByStatus.interactor');
+} = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
 const {
   createCase,
-} = require('ef-cms-shared/src/business/useCases/createCase.interactor');
+} = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
 const {
   getCasesByUser: getCasesByUserUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByUser.interactor');
+} = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
 const {
   getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor')
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor')
 const {
   getUser,
-} = require('ef-cms-shared/src/business/useCases/getUser.interactor');
+} = require('ef-cms-shared/src/business/useCases/getUserInteractor');
 const {
   sendPetitionToIRSHoldingQueue,
-} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueue.interactor');
+} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   updateCase,
-} = require('ef-cms-shared/src/business/useCases/updateCase.interactor');
+} = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
-} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondent.interactor');
+} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
 const {
   getWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItem.interactor');
-const {
-  getWorkItems,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
   updateWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItem.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
 const {
   createDocument,
-} = require('ef-cms-shared/src/business/useCases/createDocument.interactor');
-const {
-  getInteractorForGettingCases,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGettingCases');
-const {
-  getInteractorForGetUsers,
-} = require('ef-cms-shared/src/business/useCases/utilities/getInteractorForGetUsers');
+} = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
 const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySection.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
+const {
+  getWorkItemsForUser: getWorkItemsForUserUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
+
 const {
   getUsersInSection: getUsersInSectionUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSection.interactor');
-const {
-  getWorkItems: getWorkItemsUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItems.interactor');
+} = require('ef-cms-shared/src/business/useCases/users/getUsersInSectionInteractor');
 const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC
-} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSection.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
 const {
   assignWorkItems: assignWorkItemsUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItems.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
   recallPetitionFromIRSHoldingQueue
-} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueue.interactor');
+} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
   createUser: createUserUC
-} = require('ef-cms-shared/src/business/useCases/users/createUser.interactor');
+} = require('ef-cms-shared/src/business/useCases/users/createUserInteractor');
 
 const {
   forwardWorkItem
-} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItem.interactor');
+} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 
 const {
   isAuthorized,
@@ -172,13 +161,14 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
-    getStorageClient: () => {
-      return new S3({
-        endpoint: environment.s3Endpoint,
-        region: environment.region,
-        s3ForcePathStyle: true,
-      });
+    docketNumberGenerator,
+    environment: {
+      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+      region: process.env.AWS_REGION || 'us-east-1',
+      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
+      stage: process.env.STAGE || 'local',
     },
+    getCurrentUser,
     getDocumentClient: () => {
       return new DynamoDB.DocumentClient({
         endpoint: environment.dynamoDbEndpoint,
@@ -188,110 +178,74 @@ module.exports = (appContextUser = {}) => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
-    getUniqueId: () => {
-      return uuidv4();
-    },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
-        incrementCounter,
-        getUploadPolicy,
-        getDownloadPolicyUrl,
-        getUserById,
         createUser,
-        getUsersInSection,
-        getInternalUsers,
-
-        // work items
-        getWorkItemsBySection,
-        getWorkItemsForUser,
-        getWorkItemById,
-        saveWorkItem,
-        getSentWorkItemsForUser,
-        getSentWorkItemsForSection,
-
-        // cases
-        getCasesByStatus,
-        getCasesByDocumentId,
-        getCasesByUser,
-        getCasesForRespondent,
-        saveCase,
         getCaseByCaseId,
         getCaseByDocketNumber,
+        getCasesByStatus,
+        getCasesByUser,
+        getCasesForRespondent,
+        getDownloadPolicyUrl,
+
+        // work items
+        getInternalUsers,
+        getSentWorkItemsForSection,
+        getSentWorkItemsForUser,
+        getUploadPolicy,
+        getUserById,
+        getUsersInSection,
+
+        // cases
+        getWorkItemById,
+        getWorkItemsBySection,
+        getWorkItemsForUser,
+        incrementCounter,
+        saveCase,
+        saveWorkItem,
       };
     },
-    docketNumberGenerator,
-    irsGateway,
-    // TODO: replace external calls to environment
-    environment: {
-      stage: process.env.STAGE || 'local',
-      region: process.env.AWS_REGION || 'us-east-1',
-      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
+    getStorageClient: () => {
+      return new S3({
+        endpoint: environment.s3Endpoint,
+        region: environment.region,
+        s3ForcePathStyle: true,
+      });
     },
-    getCurrentUser,
-    isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
+    // TODO: replace external calls to environment
+    getUniqueId: () => {
+      return uuidv4();
+    },
     getUseCases: () => {
       return {
+        assignWorkItems: assignWorkItemsUC,
         createCase,
+        createDocument,
         createUser: createUserUC,
+        forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
-        getUsersInSection: getUsersInSectionUC,
-        getInternalUsers: getInternalUsersUC,
-        getUser,
-        forwardWorkItem,
-        sendPetitionToIRSHoldingQueue,
-        updateCase,
         getCasesForRespondent: getCasesForRespondentUC,
-        getWorkItem,
-        getWorkItems,
-        getWorkItemsUC,
-        updateWorkItem,
-        createDocument,
-        getWorkItemsBySection: getWorkItemsBySectionUC,
+        getInternalUsers: getInternalUsersUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
-        assignWorkItems: assignWorkItemsUC,
+        getUser,
+        getUsersInSection: getUsersInSectionUC,
+        getWorkItem,
+        getWorkItemsBySection: getWorkItemsBySectionUC,
+        getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
+        sendPetitionToIRSHoldingQueue,
+        updateCase,
+        updateWorkItem,
       };
     },
-    getUpdateCaseInteractorQueryParam: event => {
-      const interactorName =
-        (event.queryStringParameters || {}).interactorName || 'updateCase';
-      switch (interactorName) {
-      default:
-        return updateCase;
-      }
-    },
-    getUpdateWorkItemInteractor: event => {
-      const interactorName =
-        (event.queryStringParameters || {}).interactorName || 'updateWorkItem';
-      switch (interactorName) {
-      case 'forwardWorkItem':
-        return forwardWorkItem;
-      default:
-        return updateWorkItem;
-      }
-    },
-    getWorkItemsInteractor: event => {
-      const section = (event.queryStringParameters || {}).section;
-      const completed = (event.queryStringParameters || {}).completed;
-      if (section && completed) {
-        return getSentWorkItemsForSectionUC;
-      } else if (section) {
-        return getWorkItemsBySectionUC;
-      } else if (completed) {
-        return getSentWorkItemsForUserUC;
-      } else {
-        return getWorkItemsUC;
-      }
-    },
-    getInteractorForGettingCases,
-    getInteractorForGetUsers,
+    irsGateway,
+    isAuthorized,
+    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
   };
 };

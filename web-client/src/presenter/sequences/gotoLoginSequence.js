@@ -1,5 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearLoginForm from '../actions/clearLoginFormAction';
-import setCurrentPage from '../actions/setCurrentPageAction';
+import { clearLoginFormAction } from '../actions/clearLoginFormAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export default [clearAlertsAction, clearLoginForm, setCurrentPage('LogIn')];
+export const gotoLoginSequence = [
+  clearAlertsAction,
+  clearLoginFormAction,
+  setCurrentPageAction('LogIn'),
+];

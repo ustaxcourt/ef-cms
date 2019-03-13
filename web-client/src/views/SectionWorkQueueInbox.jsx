@@ -1,9 +1,9 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { state, sequences } from 'cerebral';
+import React from 'react';
 
-export default connect(
+export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     sectionWorkQueue: state.formattedSectionWorkQueue,
@@ -14,7 +14,7 @@ export default connect(
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueueInbox({
+  ({
     assignSelectedWorkItemsSequence,
     sectionWorkQueue,
     selectAssigneeSequence,
@@ -23,7 +23,7 @@ export default connect(
     setFocusedWorkItem,
     users,
     workQueueHelper,
-  }) {
+  }) => {
     return (
       <table
         className="work-queue"

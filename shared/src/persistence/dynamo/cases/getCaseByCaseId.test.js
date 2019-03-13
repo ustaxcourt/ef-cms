@@ -17,28 +17,28 @@ const applicationContext = {
 describe('getCaseByCaseId', async () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'put').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'delete').resolves({
+      caseId: '123',
       pk: '123',
       sk: '123',
-      caseId: '123',
       status: 'New',
     });
     sinon.stub(client, 'batchGet').resolves([
       {
+        caseId: '123',
         pk: '123',
         sk: '123',
-        caseId: '123',
         status: 'New',
       },
     ]);
@@ -64,8 +64,8 @@ describe('getCaseByCaseId', async () => {
 
   it('should strip out the internal keys used for persistence before returning', async () => {
     const result = await getCaseByCaseId({
-      caseId: '123',
       applicationContext,
+      caseId: '123',
     });
     expect(result).to.deep.equal({
       caseId: '123',
@@ -76,8 +76,8 @@ describe('getCaseByCaseId', async () => {
   it('should return null if nothing is returned from the client get request', async () => {
     client.get.resolves(null);
     const result = await getCaseByCaseId({
-      caseId: '123',
       applicationContext,
+      caseId: '123',
     });
     expect(result).to.be.null;
   });

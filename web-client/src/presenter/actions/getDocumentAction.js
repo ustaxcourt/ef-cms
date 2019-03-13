@@ -5,12 +5,12 @@
  * @param {Object} providers.applicationContext needed for getting the downloadDocumentFile use case
  * @param {Object} providers.props the cerebral props that contains documentId.
  */
-export default async ({ applicationContext, props }) => {
+export const getDocumentAction = async ({ applicationContext, props }) => {
   const documentBlob = await applicationContext
     .getUseCases()
     .downloadDocumentFile({
-      documentId: props.documentId,
       applicationContext,
+      documentId: props.documentId,
     });
   props.callback(documentBlob);
 };

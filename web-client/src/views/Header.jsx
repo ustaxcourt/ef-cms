@@ -1,25 +1,20 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state, sequences } from 'cerebral';
 import React from 'react';
-import SearchBox from './SearchBox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { SearchBox } from './SearchBox';
 
 import close from '../../node_modules/uswds/dist/img/close.svg';
 
-export default connect(
+export const Header = connect(
   {
     mobileMenu: state.mobileMenu,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     signOutSequence: sequences.signOutSequence,
     user: state.user,
   },
-
-  function Header({
-    user,
-    mobileMenu,
-    toggleMobileMenuSequence,
-    signOutSequence,
-  }) {
+  ({ user, mobileMenu, toggleMobileMenuSequence, signOutSequence }) => {
     return (
       <header className="usa-header usa-header-extended" role="banner">
         <div className="usa-navbar">

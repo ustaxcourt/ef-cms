@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {Object} providers.applicationContext the application context used for getting the fileRespondentDocument use case
  * @param {Function} providers.get the cerebral get function used for getting caseDetail, document, user
  */
-export default async ({ applicationContext, get }) => {
+export const fileRespondentDocumentAction = async ({
+  applicationContext,
+  get,
+}) => {
   const caseToUpdate = get(state.caseDetail);
 
   const documentType = get(state.document.documentType);
@@ -17,17 +20,17 @@ export default async ({ applicationContext, get }) => {
 
   await applicationContext.getUseCases().fileRespondentDocument({
     applicationContext,
-    document: get(state.document.file),
     caseToUpdate,
+    document: get(state.document.file),
     documentType,
     userId: user.token,
   });
 
   return {
-    docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
-      title: `Your ${documentType} was uploaded successfully.`,
       message: 'Your document has been filed.',
+      title: `Your ${documentType} was uploaded successfully.`,
     },
+    docketNumber: caseToUpdate.docketNumber,
   };
 };

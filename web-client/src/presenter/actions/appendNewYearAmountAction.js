@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object
  * @param {Function} providers.get the cerebral get helper function
  */
-export default async ({ store, get }) => {
+export const appendNewYearAmountAction = async ({ store, get }) => {
   const caseDetail = get(state.caseDetail);
   const emptyYearAmounts = (caseDetail.yearAmounts || []).filter(yearAmount => {
     return !yearAmount.year;
@@ -17,8 +17,8 @@ export default async ({ store, get }) => {
     store.set(state.caseDetail.yearAmounts, [
       ...caseDetail.yearAmounts,
       {
-        year: '',
         amount: '',
+        year: '',
       },
     ]);
   }

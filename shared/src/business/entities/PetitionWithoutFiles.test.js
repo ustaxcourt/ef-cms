@@ -5,12 +5,12 @@ describe('PetitionWithoutFiles entity', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
       const petition = new PetitionWithoutFiles({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
         irsNoticeDate: null,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
       });
-      expect(petition.isValid()).toEqual(true);
+      expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

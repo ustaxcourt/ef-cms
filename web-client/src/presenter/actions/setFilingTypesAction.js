@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
-export default ({ store, props }) => {
+export const setFilingTypesAction = ({ store, props }) => {
   store.set(state.filingTypes, props.filingTypes);
 };

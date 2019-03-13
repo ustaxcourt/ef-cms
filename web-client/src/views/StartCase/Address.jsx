@@ -2,38 +2,40 @@ import { connect } from '@cerebral/react';
 import { sequences, state, props } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const Address = connect(
   {
-    form: state.form,
+    data: state[props.bind],
     type: props.type,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    updateFormValueSequence: sequences[props.onChange],
+    validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
-  function Address({
-    form,
+  ({
+    data,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
-  }) {
+  }) => {
     return (
       <React.Fragment>
         <div
           className={
             'usa-form-group ' +
-            (validationErrors[type] && validationErrors[type].address1
+            (validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].address1
               ? 'usa-input-error'
               : '')
           }
         >
-          <label htmlFor={`${type}.address1`}>Street Address</label>
+          <label htmlFor={`${type}.address1`}>Mailing Address</label>
           <input
             id={`${type}.address1`}
             type="text"
             name={`${type}.address1`}
             autoCapitalize="none"
-            value={form[type].address1 || ''}
+            value={data[type].address1 || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -44,7 +46,7 @@ export default connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors[type] && (
+          {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
               {validationErrors[type].address1}
             </div>
@@ -52,14 +54,35 @@ export default connect(
         </div>
         <div className="usa-form-group">
           <label htmlFor={`${type}.address2`}>
-            Suite/Apt # <span className="usa-form-hint">(optional)</span>
+            Address Line 2 <span className="usa-form-hint">(optional)</span>
           </label>
           <input
             id={`${type}.address2`}
             type="text"
             name={`${type}.address2`}
             autoCapitalize="none"
-            value={form[type].address2 || ''}
+            value={data[type].address2 || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+        </div>
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.address3`}>
+            Address Line 3 <span className="usa-form-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.address3`}
+            type="text"
+            name={`${type}.address3`}
+            autoCapitalize="none"
+            value={data[type].address3 || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -73,6 +96,7 @@ export default connect(
         </div>
         <div
           className={
+            validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-input-error'
@@ -87,12 +111,14 @@ export default connect(
               name={`${type}.city`}
               className={
                 'usa-input-inline ' +
-                (validationErrors[type] && validationErrors[type].city
+                (validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].city
                   ? 'ustc-input-error'
                   : '')
               }
               autoCapitalize="none"
-              value={form[type].city || ''}
+              value={data[type].city || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -109,13 +135,15 @@ export default connect(
             <select
               className={
                 'usa-input-inline ' +
-                (validationErrors[type] && validationErrors[type].state
+                (validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].state
                   ? 'ustc-input-error'
                   : '')
               }
               id={`${type}.state`}
               name={`${type}.state`}
-              value={form[type].state || ''}
+              value={data[type].state || ''}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -125,60 +153,76 @@ export default connect(
               }}
             >
               <option value="">- Select -</option>
-              <option value="AL">Alabama</option>
-              <option value="AK">Alaska</option>
-              <option value="AZ">Arizona</option>
-              <option value="AR">Arkansas</option>
-              <option value="CA">California</option>
-              <option value="CO">Colorado</option>
-              <option value="CT">Connecticut</option>
-              <option value="DE">Delaware</option>
-              <option value="DC">District of Columbia</option>
-              <option value="FL">Florida</option>
-              <option value="GA">Georgia</option>
-              <option value="HI">Hawaii</option>
-              <option value="ID">Idaho</option>
-              <option value="IL">Illinois</option>
-              <option value="IN">Indiana</option>
-              <option value="IA">Iowa</option>
-              <option value="KS">Kansas</option>
-              <option value="KY">Kentucky</option>
-              <option value="LA">Louisiana</option>
-              <option value="ME">Maine</option>
-              <option value="MD">Maryland</option>
-              <option value="MA">Massachusetts</option>
-              <option value="MI">Michigan</option>
-              <option value="MN">Minnesota</option>
-              <option value="MS">Mississippi</option>
-              <option value="MO">Missouri</option>
-              <option value="MT">Montana</option>
-              <option value="NE">Nebraska</option>
-              <option value="NV">Nevada</option>
-              <option value="NH">New Hampshire</option>
-              <option value="NJ">New Jersey</option>
-              <option value="NM">New Mexico</option>
-              <option value="NY">New York</option>
-              <option value="NC">North Carolina</option>
-              <option value="ND">North Dakota</option>
-              <option value="OH">Ohio</option>
-              <option value="OK">Oklahoma</option>
-              <option value="OR">Oregon</option>
-              <option value="PA">Pennsylvania</option>
-              <option value="RI">Rhode Island</option>
-              <option value="SC">South Carolina</option>
-              <option value="SD">South Dakota</option>
-              <option value="TN">Tennessee</option>
-              <option value="TX">Texas</option>
-              <option value="UT">Utah</option>
-              <option value="VT">Vermont</option>
-              <option value="VA">Virginia</option>
-              <option value="WA">Washington</option>
-              <option value="WV">West Virginia</option>
-              <option value="WI">Wisconsin</option>
-              <option value="WY">Wyoming</option>
+              <optgroup label="State">
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="DC">District of Columbia</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="AA">AA</option>
+                <option value="AE">AE</option>
+                <option value="AP">AP</option>
+                <option value="AS">AS</option>
+                <option value="FM">FM</option>
+                <option value="GU">GU</option>
+                <option value="MH">MH</option>
+                <option value="MP">MP</option>
+                <option value="PW">PW</option>
+                <option value="PR">PR</option>
+                <option value="VI">VI</option>
+              </optgroup>
             </select>
           </div>
-          {validationErrors[type] &&
+          {validationErrors &&
+            validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state) && (
               <React.Fragment>
                 <div className="usa-input-error-message beneath">
@@ -193,21 +237,23 @@ export default connect(
         <div
           className={
             'usa-form-group clear-both ' +
-            (validationErrors[type] && validationErrors[type].zip
+            (validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].postalCode
               ? 'usa-input-error'
               : '')
           }
         >
-          <label htmlFor={`${type}.zip`} aria-label="zip code">
+          <label htmlFor={`${type}.postalCode`} aria-label="zip code">
             ZIP Code
           </label>
           <input
-            id={`${type}.zip`}
+            id={`${type}.postalCode`}
             type="text"
-            name={`${type}.zip`}
+            name={`${type}.postalCode`}
             className="usa-input-medium"
             autoCapitalize="none"
-            value={form[type].zip || ''}
+            value={data[type].postalCode || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
@@ -218,9 +264,9 @@ export default connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors[type] && validationErrors[type] && (
+          {validationErrors && validationErrors[type] && (
             <div className="usa-input-error-message beneath">
-              {validationErrors.contactPrimary.zip}
+              {validationErrors[type].postalCode}
             </div>
           )}
         </div>

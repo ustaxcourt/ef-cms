@@ -1,4 +1,4 @@
 import { set } from 'cerebral/factories';
-import { state, props } from 'cerebral';
+import { props, state } from 'cerebral';
 
-export default [set(state.currentTab, props.value)];
+export const updateCurrentTabSequence = [set(state.currentTab, props.value)];

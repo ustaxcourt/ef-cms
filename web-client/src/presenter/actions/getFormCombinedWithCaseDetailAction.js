@@ -9,6 +9,9 @@ import moment from 'moment';
  * @returns {string} the ISO string.
  */
 export const castToISO = dateString => {
+  if (dateString === '') {
+    return null;
+  }
   dateString = dateString
     .split('-')
     .map(segment => segment.padStart(2, '0'))
@@ -62,7 +65,7 @@ const checkDate = (updatedDateString, originalDate) => {
  * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
  * @returns {Object} the combinedCaseDetailWithForm
  */
-export default ({ get }) => {
+export const getFormCombinedWithCaseDetailAction = ({ get }) => {
   const caseDetail = { ...get(state.caseDetail) };
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),
@@ -88,12 +91,19 @@ export default ({ get }) => {
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
 
-  caseDetail.yearAmounts = caseDetail.yearAmounts.map(yearAmount => ({
-    amount: !yearAmount.amount
-      ? null
-      : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-    year: castToISO(yearAmount.year),
-  }));
+  // cannot store empty strings in persistence
+  if (caseDetail.preferredTrialCity === '') {
+    delete caseDetail.preferredTrialCity;
+  }
+
+  caseDetail.yearAmounts = caseDetail.yearAmounts
+    .map(yearAmount => ({
+      amount: !yearAmount.amount
+        ? null
+        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
+      year: castToISO(yearAmount.year),
+    }))
+    .filter(yearAmount => yearAmount.year || yearAmount.amount);
 
   return {
     combinedCaseDetailWithForm: {

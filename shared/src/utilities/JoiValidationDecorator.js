@@ -134,8 +134,8 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
     const { error } = joi.validate(this, schema, {
-      allowUnknown: true,
       abortEarly: false,
+      allowUnknown: true,
     });
     if (!error) return null;
     const errors = {};

@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-class ModalDialog extends React.Component {
+export class ModalDialog extends React.Component {
   constructor(props) {
     super(props);
     this.modal = {};
@@ -90,5 +90,3 @@ ModalDialog.propTypes = {
   cancelSequence: PropTypes.func,
   confirmSequence: PropTypes.func,
 };
-
-export default ModalDialog;

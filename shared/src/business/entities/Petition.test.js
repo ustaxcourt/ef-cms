@@ -4,12 +4,13 @@ describe('Petition entity', () => {
   describe('isValid', () => {
     it('requires ownership disclosure if filing type is a business', () => {
       const petition = new Petition({
-        caseType: 'other',
         businessType: 'Corporation',
-        procedureType: 'Small',
+        caseType: 'other',
         filingType: 'A business',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
       });
       expect(
         petition.getFormattedValidationErrors().ownershipDisclosureFile,
@@ -18,9 +19,10 @@ describe('Petition entity', () => {
     it('does not require ownership disclosure if filing type not set', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
       });
       expect(
         petition.getFormattedValidationErrors().ownershipDisclosureFile,
@@ -29,10 +31,11 @@ describe('Petition entity', () => {
     it('does not require ownership disclosure if filing type not a business', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'not a biz',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: false,
         irsNoticeDate: null,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
       });
       expect(
         petition.getFormattedValidationErrors().ownershipDisclosureFile,
@@ -44,30 +47,63 @@ describe('Petition entity', () => {
     it('should require notice date', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
-        petitionFile: {},
-        signature: true,
+        hasIrsNotice: true,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
       expect(petition.getFormattedValidationErrors().irsNoticeDate).toEqual(
         'Notice Date is a required field.',
       );
     });
 
+    it('should not require notice date', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: false,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().irsNoticeDate,
+      ).toBeUndefined();
+    });
+
+    it('should not require case type without indicating they have a notice ', () => {
+      const petition = new Petition({
+        filingType: 'Myself',
+        hasIrsNotice: undefined,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(petition.getFormattedValidationErrors().caseType).toBeUndefined();
+    });
+
     it('should inform you if notice date is in the future', () => {
       const petition = new Petition({
         caseType: 'other',
-        procedureType: 'Small',
         filingType: 'Myself',
-        preferredTrialCity: 'Chattanooga, TN',
+        hasIrsNotice: true,
         irsNoticeDate: '3009-10-13',
-        petitionFile: {},
-        signature: true,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
       });
       expect(petition.getFormattedValidationErrors().irsNoticeDate).toEqual(
         'Notice Date is in the future. Please enter a valid date.',

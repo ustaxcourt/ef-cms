@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2019-02-21T21:30:57Z",
+    "version" : "2019-02-27T17:02:41Z",
     "title" : "dev-ef-cms",
     "contact" : {
       "url" : "https://www.ustaxcourt.gov",
@@ -24,29 +24,6 @@
   "schemes" : [ "https" ],
   "paths" : {
     "/v1/cases" : {
-      "get" : {
-        "tags" : [ "cases" ],
-        "summary" : "get all cases for a user",
-        "description" : "Get all cases for a user.\n",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "caseId",
-          "in" : "path",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
-            }
-          }
-        },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
-      },
       "post" : {
         "tags" : [ "cases" ],
         "summary" : "create a case",
@@ -395,6 +372,213 @@
         }
       }
     },
+    "/v1/respondents/{respondentId}/cases" : {
+      "get" : {
+        "tags" : [ "cases" ],
+        "summary" : "get all cases for a user",
+        "description" : "Get all cases for a user.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sections/{section}/inbox" : {
+      "get" : {
+        "tags" : [ "workitems" ],
+        "summary" : "get all workitems in the sections inbox",
+        "description" : "Get all workitems in the sections inbox.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/workItem"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sections/{section}/outbox" : {
+      "get" : {
+        "tags" : [ "workitems" ],
+        "summary" : "get all workitems in the sections outbox",
+        "description" : "Get all workitems in the sections outbox.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/workItem"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sections/{section}/users" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/user"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/statuses/{status}/cases" : {
+      "get" : {
+        "tags" : [ "cases" ],
+        "summary" : "get all cases by a status",
+        "description" : "get all cases by a status\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/swagger" : {
       "get" : {
         "responses" : { }
@@ -452,12 +636,6 @@
       }
     },
     "/v1/users" : {
-      "get" : {
-        "responses" : { },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
-      },
       "post" : {
         "tags" : [ "user" ],
         "summary" : "creates a user",
@@ -505,11 +683,92 @@
         }
       }
     },
-    "/v1/workitems" : {
+    "/v1/users/internal" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/user"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{userId}/cases" : {
+      "get" : {
+        "tags" : [ "cases" ],
+        "summary" : "get all cases for a user",
+        "description" : "Get all cases for a user.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/case"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{userId}/inbox" : {
       "get" : {
         "tags" : [ "workitems" ],
-        "summary" : "get all workitems for a user",
-        "description" : "Get all workitems for a user.\n",
+        "summary" : "get a users work item inbox",
+        "description" : "get a users work item inbox\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
@@ -523,6 +782,73 @@
           "CognitoUserPool" : [ ]
         } ]
       },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/{userId}/outbox" : {
+      "get" : {
+        "tags" : [ "workitems" ],
+        "summary" : "get a users work item outbox",
+        "description" : "get a users work item outbox\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/workItem"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workitems" : {
       "put" : {
         "tags" : [ "workitems" ],
         "summary" : "assigns an assigneId to a list of work item ids",
@@ -586,6 +912,48 @@
         "tags" : [ "workitems" ],
         "summary" : "update a workitem by workItemId",
         "description" : "Update a workitem.\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/workItem"
+            }
+          }
+        },
+        "security" : [ {
+          "CognitoUserPool" : [ ]
+        } ]
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Credentials" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workitems/{workItemId}/assignee" : {
+      "put" : {
+        "tags" : [ "workitems" ],
+        "summary" : "sets the assigneeId of the workitem to a new user",
+        "description" : "sets the assigneeId of the workitem to a new user.\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {

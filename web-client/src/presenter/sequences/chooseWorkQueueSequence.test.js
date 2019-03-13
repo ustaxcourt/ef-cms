@@ -7,11 +7,11 @@ let test;
 const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
 const getWorkItemsBySectionStub = sinon.stub().returns({});
 presenter.providers.applicationContext = {
-  setCurrentUser: setCurrentUserStub,
   getCurrentUser: setCurrentUserStub,
   getUseCases: () => ({
     getWorkItemsBySection: getWorkItemsBySectionStub,
   }),
+  setCurrentUser: setCurrentUserStub,
 };
 test = CerebralTest(presenter);
 
@@ -19,12 +19,12 @@ describe('chooseWorkQueueSequence', async () => {
   it('should set the workQueueToDisplay to match the props passed in', async () => {
     test.setState('workQueueToDisplay', null);
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
     expect(test.getState('workQueueToDisplay')).toEqual({
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
     expect(getWorkItemsBySectionStub.called).toBeTruthy();
   });

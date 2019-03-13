@@ -6,13 +6,13 @@ exports.createUser = async ({ user, applicationContext }) => {
   const TABLE = `efcms-${applicationContext.environment.stage}`;
   await client.put({
     applicationContext,
-    TableName: TABLE,
     Item: {
       pk: `${getSectionForRole(user.role)}|user`,
       sk: user.email,
       userId: user.email,
       ...user,
     },
+    TableName: TABLE,
   });
 
   const cognito = new AWS.CognitoIdentityServiceProvider({
@@ -20,8 +20,6 @@ exports.createUser = async ({ user, applicationContext }) => {
   });
   await cognito
     .adminCreateUser({
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.email,
       MessageAction: 'SUPPRESS',
       TemporaryPassword: user.password,
       UserAttributes: [
@@ -42,6 +40,8 @@ exports.createUser = async ({ user, applicationContext }) => {
           Value: user.name,
         },
       ],
+      Username: user.email,
+      UserPoolId: process.env.USER_POOL_ID,
     })
     .promise();
 };

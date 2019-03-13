@@ -1,8 +1,8 @@
-import { NotFoundError } from './NotFoundError';
-import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { ActionError } from './ActionError';
 import { InvalidRequestError } from './InvalidRequestError';
+import { NotFoundError } from './NotFoundError';
 import { ServerInvalidResponseError } from './ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export default {

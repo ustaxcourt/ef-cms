@@ -11,7 +11,12 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object containing workItemId
  * @returns {Object} the success alert object used for displayinng a green alert at the top of the page
  */
-export default async ({ get, store, applicationContext, props }) => {
+export const forwardWorkItemAction = async ({
+  get,
+  store,
+  applicationContext,
+  props,
+}) => {
   const { workItemId } = props;
 
   const form = get(state.form)[props.workItemId];
@@ -20,11 +25,11 @@ export default async ({ get, store, applicationContext, props }) => {
   const updatedWorkItem = await applicationContext
     .getUseCases()
     .forwardWorkItem({
-      userId,
-      message: form.forwardMessage,
-      workItemId: workItemId,
-      assigneeId: form.forwardRecipientId,
       applicationContext,
+      assigneeId: form.forwardRecipientId,
+      message: form.forwardMessage,
+      userId,
+      workItemId: workItemId,
     });
 
   // update the local state to have the updated work item returned from the backend
@@ -39,8 +44,8 @@ export default async ({ get, store, applicationContext, props }) => {
 
   return {
     alertSuccess: {
-      title: 'Message sent',
       message: 'Your message has been sent.',
+      title: 'Message sent',
     },
   };
 };
