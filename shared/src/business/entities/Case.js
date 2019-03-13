@@ -8,7 +8,7 @@ const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const YearAmount = require('./YearAmount');
 const DocketRecord = require('./DocketRecord');
-const { PARTY_TYPES } = require('./Contacts/PetitionContact');
+const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
 const uuidVersions = {
   version: ['uuidv4'],

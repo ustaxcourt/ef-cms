@@ -10,7 +10,7 @@ import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
-import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard'; // TODO: this will need to change since uploaded stipulated decisions do NOT create a work item to the docketclerk user any more
+import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
 import docketClerkViewsDashboardAfterForward from './journey/docketClerkViewsDashboardAfterForward';
 import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
 import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
@@ -51,13 +51,7 @@ import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
   PARTY_TYPES,
   COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/Contacts/PetitionContact');
-
-
-
-
-
-
+} = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;
 global.FormData = FormData;
