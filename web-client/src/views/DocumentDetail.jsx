@@ -43,7 +43,7 @@ class DocumentDetailComponent extends React.Component {
             </a>
           </h1>
           <p className="float-left">{caseDetail.caseTitle} </p>
-          {helper.showCaptionEditButton && (
+          {caseHelper.showCaptionEditButton && (
             <p className="float-left">
               <button
                 className="link"

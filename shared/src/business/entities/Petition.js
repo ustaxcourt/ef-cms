@@ -42,6 +42,7 @@ Petition.errorToMessageMap = {
   preferredTrialCity: 'Preferred Trial City is a required field.',
   procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',
+  stinFile: 'Statement of Taxpayer Identification Number is required.',
 };
 
 joiValidationDecorator(
@@ -78,6 +79,7 @@ joiValidationDecorator(
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
     signature: joi.boolean().required(),
+    stinFile: joi.object().required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();

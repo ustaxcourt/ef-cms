@@ -32,7 +32,6 @@ const processNewWorkItem = async ({ workItem, applicationContext }) => {
       sk: workItem.workItemId,
       ...workItem,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };
 
@@ -236,6 +235,5 @@ exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };
