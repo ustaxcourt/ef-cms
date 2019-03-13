@@ -36,7 +36,7 @@ exports.updateWorkItem = async ({
   const otherUser = new User(
     await applicationContext
       .getPersistenceGateway()
-      .getUserById({ userId: workItemToUpdate.assigneeId }),
+      .getUserById({ applicationContext, userId: workItemToUpdate.assigneeId }),
   );
   workItemToUpdate.assigneeName = otherUser.name;
 
