@@ -63,18 +63,17 @@ The end result of this is not a dev, staging, or production website, but is inst
 
 10. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
 
-- `SONAR_ORG` / your sonar organization’s name
-- `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
-- `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
-- `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
-- `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
-- `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
+    - `SONAR_ORG` / your sonar organization’s name
+    - `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
+    - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
+    - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+    - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
+    - `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
 
-11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. (This must be run from within `management/management/`, like such: `../bin/setup-jobs.sh`.) This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
+11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
-
-- Your organization’s name in GitHub, e.g. `examplecourt`.
-- The project repository’s name in GitHub, e.g. `ef-cms`.
+    - Your organization’s name in GitHub, e.g. `examplecourt`.
+    - The project repository’s name in GitHub, e.g. `ef-cms`.
 
 12. Increase the number of Jenkins executors to five. Choose `Jenkins` ⟶ `Build Executor Status` ⟶ `Master` ⟶ `Configure`, and change `# of executors` from `2` to `5`.
 13. Restart Jenkins. This can be done by choosing `Jenkins` (i.e., going to the home page), and appending `safeRestart` to the URL, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/safeRestart`.
