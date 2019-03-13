@@ -382,6 +382,15 @@ Case.prototype.addDocument = function(document) {
 
 /**
  *
+ * @param document
+ */
+Case.prototype.addDocumentWithoutDocketRecord = function(document) {
+  document.caseId = this.caseId;
+  this.documents = [...this.documents, document];
+};
+
+/**
+ *
  * @param sendDate
  * @returns {Case}
  */
