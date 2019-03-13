@@ -51,7 +51,7 @@ import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
   PARTY_TYPES,
   COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/Contacts/PetitionContact');
+} = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 
 
