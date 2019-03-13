@@ -19,8 +19,8 @@ describe('trialCitiesHelper', () => {
         getTrialCityName,
       },
     });
-    const trialCities = result('Small');
-    expect(trialCities).toMatchObject({
+    const trialCitiesResult = result('Small');
+    expect(trialCitiesResult).toMatchObject({
       trialCitiesByState: { Tennessee: ['Chattanooga, Tennessee'] },
     });
   });
@@ -41,9 +41,9 @@ describe('trialCitiesHelper', () => {
         getTrialCityName,
       },
     });
-    const trialCities = result('not small');
-    expect(trialCities).toMatchObject({
-      trialCities: { Illinois: ['Chicago, Illinois'] },
+    const trialCitiesResult = result('not small');
+    expect(trialCitiesResult).toMatchObject({
+      trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
     });
   });
 });
