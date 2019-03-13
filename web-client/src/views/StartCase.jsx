@@ -82,7 +82,7 @@ export const StartCase = connect(
                       className="fa-icon-gold"
                       size="sm"
                     />
-                    This should include your petition form and any IRS notice
+                    This should include your Petition form and any IRS notice
                     <span aria-hidden="true">(s)</span> you received.
                   </span>
                 </div>
@@ -133,6 +133,51 @@ export const StartCase = connect(
               </div>
             </div>
           </div>
+
+          <h2>Upload Your Statement of Taxpayer Identification</h2>
+          <div className="blue-container">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.stinFile ? 'usa-input-error' : '')
+              }
+            >
+              <label
+                htmlFor="stin-file"
+                className={
+                  'ustc-upload-stin with-hint ' +
+                  (startCaseHelper.showStinFileValid ? 'validated' : '')
+                }
+              >
+                Upload Your Statement of Taxpayer Identification{' '}
+                <span className="success-message">
+                  <FontAwesomeIcon icon="check-circle" size="sm" />
+                </span>
+              </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf)
+              </span>
+              <input
+                id="stin-file"
+                type="file"
+                accept=".pdf"
+                name="stinFile"
+                onChange={e => {
+                  updatePetitionValueSequence({
+                    key: e.target.name,
+                    value: e.target.files[0],
+                  });
+                }}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
+              />
+              <div className="usa-input-error-message beneath">
+                {validationErrors.stinFile}
+              </div>
+            </div>
+          </div>
+
           <div className="usa-form-group">
             <h3>Who is Filing This Case?</h3>
             <div className="blue-container">
@@ -764,7 +809,7 @@ export const StartCase = connect(
               </li>
               <li>You have not included any evidence with your Petition.</li>
               <li>
-                Your Petition and any IRS Notices have been saved and uploaded
+                Your Petition and any IRS notices have been saved and uploaded
                 as a single PDF.
               </li>
             </ol>
