@@ -7,8 +7,6 @@ exports.getRecordsViaMapping = async ({
   type,
   isVersioned = false,
 }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-
   const mapping = await client.query({
     applicationContext,
     ExpressionAttributeNames: {
@@ -18,7 +16,6 @@ exports.getRecordsViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk',
-    TableName: TABLE,
   });
 
   const ids = mapping.map(metadata => metadata.sk);
@@ -29,7 +26,6 @@ exports.getRecordsViaMapping = async ({
       pk: id,
       sk: isVersioned ? '0' : id,
     })),
-    tableName: TABLE,
   });
 
   return stripInternalKeys(results);

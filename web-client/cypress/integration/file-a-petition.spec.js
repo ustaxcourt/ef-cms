@@ -47,7 +47,7 @@ describe('File a petition', function() {
     //   cy.contains('button[type="submit"]', 'Submit');
     // });
 
-    it('shows validation checkmark when file is selected', () => {
+    it('shows validation checkmark when petition file is selected', () => {
       cy.get('form')
         .find('label[for="petition-file"]')
         .scrollIntoView()
@@ -58,6 +58,20 @@ describe('File a petition', function() {
 
       cy.get('form')
         .find('label[for="petition-file"]')
+        .should('have.class', 'validated');
+    });
+
+    it('shows validation checkmark when Statement of Taxpayer Identification Number file is selected', () => {
+      cy.get('form')
+        .find('label[for="stin-file"]')
+        .scrollIntoView()
+        .should('not.have.class', 'validated');
+
+      // select first file
+      cy.upload_file('w3-dummy.pdf', 'form #stin-file');
+
+      cy.get('form')
+        .find('label[for="stin-file"]')
         .should('have.class', 'validated');
     });
 

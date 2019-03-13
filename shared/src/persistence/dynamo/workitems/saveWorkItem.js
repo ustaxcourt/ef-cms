@@ -45,7 +45,6 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 
   return stripInternalKeys(workItem);
