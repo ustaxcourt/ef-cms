@@ -133,6 +133,9 @@
       }
     ],
     "sk": "0",
+
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
     "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "hasIrsNotice": false,
@@ -495,6 +498,9 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "0",
+
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself and my spouse",
     "hasIrsNotice": true,
     "petitioners": [
@@ -833,6 +839,9 @@
     "payGovId": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "0",
+
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "filingType": "A business",
     "orderForOds": true,
     "orderForRatification": true,
@@ -2010,6 +2019,40 @@
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "docketclerk"
   },
+
+  {
+    "password": "Testing1234$",
+    "role": "seniorattorney",
+    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Seniorattorney",
+    "section": "seniorattorney",
+    "pk": "seniorattorney|user",
+    "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "seniorattorney"
+  },
+
+  {
+    "password": "Testing1234$",
+    "role": "seniorattorney",
+    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Seniorattorney",
+    "section": "seniorattorney",
+    "pk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "seniorattorney"
+  },
+  
+  
+  {
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Docketclerk",
+    "section": "docket",
+    "pk": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "docketclerk"
+  },
   {
     "password": "Testing1234$",
     "role": "docketclerk",
@@ -2017,6 +2060,16 @@
     "name": "Test Docketclerk1",
     "section": "docket",
     "pk": "docket|user",
+    "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "docketclerk1"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "docketclerk",
+    "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Docketclerk1",
+    "section": "docket",
+    "pk": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "docketclerk1"
   },
@@ -2255,6 +2308,8 @@
       }
     ],
     "sk": "0",
+    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
     "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
@@ -2426,10 +2481,30 @@
   {
     "password": "Testing1234$",
     "role": "petitionsclerk",
+    "sk": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Petitionsclerk",
+    "section": "petitions",
+    "pk": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "petitionsclerk"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
     "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitionsclerk1",
     "section": "petitions",
     "pk": "petitions|user",
+    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "petitionsclerk1"
+  },
+  {
+    "password": "Testing1234$",
+    "role": "petitionsclerk",
+    "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Petitionsclerk1",
+    "section": "petitions",
+    "pk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "petitionsclerk1"
   },
