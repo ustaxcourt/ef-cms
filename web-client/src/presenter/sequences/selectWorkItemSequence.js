@@ -1,3 +1,3 @@
-import selectWorkItem from '../actions/selectWorkItemAction';
+import { selectWorkItemAction } from '../actions/selectWorkItemAction';
 
-export default [selectWorkItem];
+export const selectWorkItemSequence = [selectWorkItemAction];

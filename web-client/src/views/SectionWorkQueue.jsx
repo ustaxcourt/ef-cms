@@ -1,15 +1,16 @@
 import { connect } from '@cerebral/react';
-import React from 'react';
 import { state, sequences } from 'cerebral';
-import SectionWorkQueueOutbox from './SectionWorkQueueOutbox';
-import SectionWorkQueueInbox from './SectionWorkQueueInbox';
+import React from 'react';
 
-export default connect(
+import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
+import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
+
+export const SectionWorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  function SectionWorkQueue({ chooseWorkQueueSequence, workQueueHelper }) {
+  ({ chooseWorkQueueSequence, workQueueHelper }) => {
     return (
       <React.Fragment>
         <div role="tablist" className="queue-tab-container">

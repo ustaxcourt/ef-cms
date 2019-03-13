@@ -1,4 +1,7 @@
 import { runCompute } from 'cerebral/test';
+const {
+  PARTY_TYPES,
+} = require('../../../shared/src/business/entities/Contacts/PetitionContact');
 
 import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
 
@@ -9,25 +12,13 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '00',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2001',
-    });
-
     let result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPetitionerContact).toBeFalsy();
+    expect(result.showPrimaryContact).toBeFalsy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // showPetitionerContact
+    // Petitioner party type primary contact with international address
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Myself',
@@ -36,8 +27,66 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPetitionerContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.countryType',
+      value: 'international',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.country',
+      value: 'Switzerland',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.name',
+      value: 'Test Person',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address1',
+      value: '123 Abc Ln',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.city',
+      value: 'Cityville',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.postalCode',
+      value: '23-skidoo',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.email',
+      value: 'test@example.com',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.phone',
+      value: '1234567890',
+    });
+
+    expect(test.getState('form.contactPrimary')).toEqual({
+      name: 'Test Person',
+      address1: '123 Abc Ln',
+      countryType: 'international',
+      country: 'Switzerland',
+      city: 'Cityville',
+      postalCode: '23-skidoo',
+      email: 'test@example.com',
+      phone: '1234567890',
+    });
+
+    // Petitioner party type primary contact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'Myself',
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPrimaryContact).toBeTruthy();
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.countryType',
+      value: 'domestic',
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Test Person',
@@ -59,7 +108,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.zip',
+      key: 'contactPrimary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -72,17 +121,18 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('form.contactPrimary')).toEqual({
+      countryType: 'domestic',
       name: 'Test Person',
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
     });
 
-    // showPetitionerAndSpouseContact
+    // Petitioner & Spouse party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Myself and my spouse',
@@ -101,9 +151,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPetitionerAndSpouseContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showPetitionerAndDeceasedSpouseContact
+    // Petitioner & Deceased Spouse party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Myself and my spouse',
@@ -122,10 +173,11 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPetitionerAndDeceasedSpouseContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeFalsy();
 
-    // showCorporationContact
+    // Corporation party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -144,10 +196,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showCorporationContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
-    // showPartnershipTaxMattersContact
+    // Partnership tax matters party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -166,7 +218,8 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPartnershipTaxMattersContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
     await test.runSequence('submitFilePetitionSequence');
@@ -185,7 +238,34 @@ export default (test, fakeFile) => {
       'Ownership Disclosure Statement is required.',
     );
 
-    // showPartnershipOtherContact
+    // Partnership other than tax matters party type primary/secondary contact
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'filingType',
+      value: 'A business',
+    });
+
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showBusinessFilingTypeOptions).toBeTruthy();
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'businessType',
+      value: PARTY_TYPES.partnershipOtherThanTaxMatters,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
+
+    // Partnership BBA party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -198,59 +278,16 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: 'Partnership (as a partner other than tax matters partner)',
+      value: PARTY_TYPES.partnershipBBA,
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showPartnershipOtherContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showPartnershipBBAContact
-    await test.runSequence('updateStartCaseFormValueSequence', {
-      key: 'filingType',
-      value: 'A business',
-    });
-
-    result = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(result.showBusinessFilingTypeOptions).toBeTruthy();
-
-    await test.runSequence('updateStartCaseFormValueSequence', {
-      key: 'businessType',
-      value:
-        'Partnership (as a partnership representative under the BBA regime)',
-    });
-
-    result = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(result.showPartnershipBBAContact).toBeTruthy();
-
-    // showPartnershipBBAContact
-    await test.runSequence('updateStartCaseFormValueSequence', {
-      key: 'filingType',
-      value: 'A business',
-    });
-
-    result = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(result.showBusinessFilingTypeOptions).toBeTruthy();
-
-    await test.runSequence('updateStartCaseFormValueSequence', {
-      key: 'businessType',
-      value:
-        'Partnership (as a partnership representative under the BBA regime)',
-    });
-
-    result = runCompute(startCaseHelper, {
-      state: test.getState(),
-    });
-    expect(result.showPartnershipBBAContact).toBeTruthy();
-
-    // showEstateWithExecutorContact
+    // Estate with executor party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -281,9 +318,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showEstateWithExecutorContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showEstateWithoutExecutorContact
+    // Estate without executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -313,9 +351,9 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showEstateWithoutExecutorContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
 
-    // showTrustAndTrusteeContact
+    // trust and trustee party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -344,9 +382,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showTrustAndTrusteeContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showConservatorContact
+    // conservator party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -359,7 +398,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -375,9 +414,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showConservatorContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showGuardianContact
+    // guardian party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -390,7 +430,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -406,9 +446,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showGuardianContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showCustodianContact
+    // custodian party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -421,7 +462,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -437,9 +478,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showCustodianContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showMinorContact
+    // minor party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -452,7 +494,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -469,9 +511,10 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showMinorContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showIncompetentPersonContact
+    // legally incompetent person party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -484,7 +527,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'A minor or incompetent person',
+      value: 'A minor or legally incompetent person',
     });
 
     result = runCompute(startCaseHelper, {
@@ -495,15 +538,16 @@ export default (test, fakeFile) => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
       value:
-        'Next Friend for an Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+        'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showIncompetentPersonContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
-    // showDonorContact
+    // donor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -522,9 +566,9 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showDonorContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
 
-    // showTransfereeContact
+    // transferee party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -543,9 +587,9 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showTransfereeContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
 
-    // showSurvivingSpouseContact
+    // surviving spouse party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -564,7 +608,8 @@ export default (test, fakeFile) => {
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(result.showSurvivingSpouseContact).toBeTruthy();
+    expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
     await test.runSequence('submitFilePetitionSequence');
 
@@ -598,7 +643,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.zip',
+      key: 'contactSecondary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -615,8 +660,9 @@ export default (test, fakeFile) => {
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
+      countryType: 'domestic',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
     });
@@ -642,7 +688,7 @@ export default (test, fakeFile) => {
       value: 'CA',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.zip',
+      key: 'contactPrimary.postalCode',
       value: '12345',
     });
     await test.runSequence('updateFormValueSequence', {
@@ -658,10 +704,51 @@ export default (test, fakeFile) => {
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
+      countryType: 'domestic',
       state: 'CA',
-      zip: '12345',
+      postalCode: '12345',
       email: 'test@example.com',
       phone: '1234567890',
+    });
+
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: false,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showHasIrsNoticeOptions).toBeFalsy();
+    expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
+
+    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+      key: 'hasIrsNotice',
+      value: true,
+    });
+
+    result = runCompute(startCaseHelper, {
+      state: test.getState(),
+    });
+    expect(result.showHasIrsNoticeOptions).toBeTruthy();
+    expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseType',
+      value: 'Whistleblower',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'month',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'day',
+      value: '01',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'year',
+      value: '2001',
     });
 
     // try without checking the signature
@@ -677,6 +764,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('submitFilePetitionSequence');
+
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({

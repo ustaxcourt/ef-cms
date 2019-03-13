@@ -1,11 +1,11 @@
 import { runAction } from 'cerebral/test';
-import setAlertFromExceptionAction from './setAlertFromExceptionAction';
+import { setAlertFromExceptionAction } from './setAlertFromExceptionAction';
 
 describe('setAlertFromExceptionAction', async () => {
   it('sets alertError when valid message provided', async () => {
     const error = {
-      title: 'my title',
       message: 'my message',
+      title: 'my title',
     };
     const { state } = await runAction(setAlertFromExceptionAction, {
       props: { error },

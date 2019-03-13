@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 import sinon from 'sinon';
-import validateCaseDetail from './validateCaseDetailAction';
+import { validateCaseDetailAction } from './validateCaseDetailAction';
 
 const validateCaseDetailStub = sinon.stub().returns(null);
 const successStub = sinon.stub();
@@ -15,14 +15,13 @@ presenter.providers.applicationContext = {
 };
 
 presenter.providers.path = {
-  success: successStub,
   error: errorStub,
+  success: successStub,
 };
 
 describe('validateCaseDetail', async () => {
   it('should call the path success when no errors are found', async () => {
-    await runAction(validateCaseDetail, {
-      state: {},
+    await runAction(validateCaseDetailAction, {
       modules: {
         presenter,
       },
@@ -33,6 +32,7 @@ describe('validateCaseDetail', async () => {
           payGovDate: '2010-01-01',
         },
       },
+      state: {},
     });
     expect(validateCaseDetailStub.getCall(0).args[0].caseDetail).toMatchObject({
       caseId: '123',
@@ -44,22 +44,22 @@ describe('validateCaseDetail', async () => {
 
   it('should call the path error when any errors are found', async () => {
     validateCaseDetailStub.returns('error');
-    await runAction(validateCaseDetail, {
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
       state: {
-        form: {
-          irsYear: '2009',
-          irsMonth: '10',
-          irsDay: '13',
-          payGovYear: '2010',
-          payGovMonth: '01',
-          payGovDay: '01',
-        },
         caseDetail: {
           caseId: '123',
         },
-      },
-      modules: {
-        presenter,
+        form: {
+          irsDay: '13',
+          irsMonth: '10',
+          irsYear: '2009',
+          payGovDay: '01',
+          payGovMonth: '01',
+          payGovYear: '2010',
+        },
       },
     });
     expect(errorStub.calledOnce).toEqual(true);

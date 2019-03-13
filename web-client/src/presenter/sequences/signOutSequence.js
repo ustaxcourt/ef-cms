@@ -1,11 +1,13 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import clearLoginForm from '../actions/clearLoginFormAction';
-import clearUser from '../actions/clearUserAction';
-import navigateToCognito from '../actions/navigateToCognitoAction';
+import { clearLoginFormAction } from '../actions/clearLoginFormAction';
+import { clearUserAction } from '../actions/clearUserAction';
+import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export default [
+export const signOutSequence = [
+  setCurrentPageAction('Loading'),
   clearAlertsAction,
-  clearUser,
-  clearLoginForm,
-  navigateToCognito,
+  clearUserAction,
+  clearLoginFormAction,
+  navigateToCognitoAction,
 ];

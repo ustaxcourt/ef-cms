@@ -2,12 +2,12 @@ import { runAction } from 'cerebral/test';
 
 import presenter from '..';
 
-import completeWorkItem from './completeWorkItemAction';
+import { completeWorkItemAction } from './completeWorkItemAction';
 
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
-    userId: 'docketclerk',
     name: 'Docket Clerk',
+    userId: 'docketclerk',
   }),
   getUseCases: () => ({
     updateWorkItem: async () => {
@@ -17,38 +17,38 @@ presenter.providers.applicationContext = {
 };
 
 presenter.providers.path = {
-  success() {},
   error() {},
+  success() {},
 };
 
 describe('completeWorkItem', async () => {
   it('should attach an assignee id if one does not already exist', async () => {
-    const result = await runAction(completeWorkItem, {
+    const result = await runAction(completeWorkItemAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        workItemId: 'abc',
+      },
       state: {
-        user: {
-          userId: 'docketclerk',
-          token: 'docketclerk',
-          name: 'Docket Clerk',
-        },
-        completeForm: {},
         caseDetail: {
           documents: [
             {
               workItems: [
                 {
-                  workItemId: 'abc',
                   messages: [],
+                  workItemId: 'abc',
                 },
               ],
             },
           ],
         },
-      },
-      props: {
-        workItemId: 'abc',
-      },
-      modules: {
-        presenter,
+        completeForm: {},
+        user: {
+          name: 'Docket Clerk',
+          token: 'docketclerk',
+          userId: 'docketclerk',
+        },
       },
     });
     expect(result.state.caseDetail.documents[0].workItems).toMatchObject([

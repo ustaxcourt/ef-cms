@@ -5,7 +5,7 @@
  * @param {Object} providers.applicationContext the application context used for getting the getInternalUsers use case
  * @returns {Object} the list of procedureTypes
  */
-export default async ({ applicationContext }) => {
+export const getProcedureTypesAction = async ({ applicationContext }) => {
   const procedureTypes = await applicationContext
     .getUseCases()
     .getProcedureTypes({

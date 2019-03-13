@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state } from 'cerebral';
 import React from 'react';
 
-export default connect(
+export const CaseDetailPublic = connect(
   {
     caseDetail: state.formattedCaseDetail,
   },
-  function CaseDetail({ caseDetail }) {
+  ({ caseDetail }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">

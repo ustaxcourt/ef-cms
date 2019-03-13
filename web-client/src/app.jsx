@@ -4,13 +4,16 @@ import {
   faCaretUp,
   faCheckCircle,
   faCloudUploadAlt,
+  faDollarSign,
   faExclamationTriangle,
   faFilePdf,
   faFlag,
+  faLaptop,
   faListUl,
   faPaperclip,
   faPlusCircle,
   faShareSquare,
+  faQuestionCircle,
   faSignOutAlt,
   faSlash,
   faTimesCircle,
@@ -20,8 +23,8 @@ import {
   faClock,
   faCopy,
   faEdit,
-  faFilePdf as faFilePdfRegular,
   faEyeSlash,
+  faFilePdf as faFilePdfRegular,
 } from '@fortawesome/free-regular-svg-icons';
 import { Container } from '@cerebral/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -30,7 +33,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { router, route } from './router';
-import AppComponent from './views/App';
+import { AppComponent } from './views/AppComponent';
 import presenter from './presenter';
 
 /**
@@ -52,6 +55,8 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
+    presenter.state.constants = applicationContext.getConstants();
+
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,
@@ -61,12 +66,14 @@ const app = {
       faClock,
       faCloudUploadAlt,
       faCopy,
+      faDollarSign,
       faEdit,
       faExclamationTriangle,
       faEyeSlash,
       faFilePdf,
       faFilePdfRegular,
       faFlag,
+      faLaptop,
       faListUl,
       faPaperclip,
       faPlusCircle,
@@ -74,6 +81,7 @@ const app = {
       faSignOutAlt,
       faSlash,
       faTimesCircle,
+      faQuestionCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

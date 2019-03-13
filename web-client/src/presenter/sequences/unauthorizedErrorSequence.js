@@ -1,9 +1,9 @@
-import setAlertFromExceptionAction from '../actions/setAlertFromExceptionAction';
-import unsetFormSubmitting from '../actions/unsetFormSubmittingAction';
-import redirectToCognito from '../actions/redirectToCognitoAction';
+import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 
-export default [
-  unsetFormSubmitting,
+export const unauthorizedErrorSequence = [
+  unsetFormSubmittingAction,
   setAlertFromExceptionAction,
-  redirectToCognito,
+  redirectToCognitoAction,
 ];

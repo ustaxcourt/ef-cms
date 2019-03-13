@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.get the cerebral store used for getting state.caseDetail and state.document
  * @returns {Object} the alertSuccess and the generated docketNumber
  */
-export default async ({ applicationContext, get }) => {
+export const uploadDocumentAction = async ({ applicationContext, get }) => {
   const caseToUpdate = get(state.caseDetail);
 
   const documentType = get(state.document.documentType);
@@ -18,17 +18,17 @@ export default async ({ applicationContext, get }) => {
   await applicationContext.getUseCaseForDocumentUpload(documentType, user.role)(
     {
       applicationContext,
-      document: get(state.document.file),
       caseToUpdate,
+      document: get(state.document.file),
       userId: user.token,
     },
   );
 
   return {
-    docketNumber: caseToUpdate.docketNumber,
     alertSuccess: {
-      title: `Your ${documentType} was uploaded successfully.`,
       message: 'Your document has been filed.',
+      title: `Your ${documentType} was uploaded successfully.`,
     },
+    docketNumber: caseToUpdate.docketNumber,
   };
 };

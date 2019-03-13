@@ -9,7 +9,7 @@
 exports.getUsersInSection = async ({ applicationContext, section }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/users?section=${section}`, {
+    .get(`${applicationContext.getBaseUrl()}/sections/${section}/users`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },

@@ -11,6 +11,12 @@ export const formatDocument = document => {
   return result;
 };
 
+export const formatDocketRecord = docketRecord => {
+  const result = _.cloneDeep(docketRecord);
+  result.createdAtFormatted = moment(result.filingDate).format('L');
+  return result;
+};
+
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
   const yearAmountError = (caseDetailErrors.yearAmounts || []).find(error => {
     return error.index === idx;
@@ -67,7 +73,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
     }).length !== 1;
 
   if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
-    caseDetail.yearAmountsFormatted = [{ year: '', amount: '' }];
+    caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
       formatYearAmount(caseDetailErrors, caseDetail),
@@ -75,10 +81,35 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   }
 };
 
+const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
+  const documentMap = documents.reduce((acc, document) => {
+    acc[document.documentId] = document;
+    return acc;
+  }, {});
+
+  return docketRecords.map((record, index) => {
+    let document;
+
+    if (record.documentId) {
+      document = documentMap[record.documentId];
+    }
+    return { document, index, record };
+  });
+};
+
 const formatCase = (caseDetail, caseDetailErrors) => {
   const result = _.cloneDeep(caseDetail);
+  result.docketRecordWithDocument = [];
 
   if (result.documents) result.documents = result.documents.map(formatDocument);
+  if (result.docketRecord) {
+    result.docketRecord = result.docketRecord.map(formatDocketRecord);
+    result.docketRecordWithDocument = formatDocketRecordWithDocument(
+      result.docketRecord,
+      result.documents,
+    );
+  }
+
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
       result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
@@ -96,11 +127,20 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? moment.utc(result.irsNoticeDate).format('L')
-    : 'No Date Provided';
+    : 'No notice';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted
   }`;
+
+  result.shouldShowIrsNoticeDate =
+    result.hasVerifiedIrsNotice ||
+    ((result.hasVerifiedIrsNotice === null ||
+      result.hasVerifiedIrsNotice === undefined) &&
+      result.hasIrsNotice);
+
+  result.shouldShowYearAmounts =
+    result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
   formatYearAmounts(result, caseDetailErrors);
 

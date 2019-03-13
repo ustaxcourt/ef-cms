@@ -30,39 +30,6 @@ const applicationContext = {
 describe('dynamodbClientService', function() {
   beforeEach(() => {
     documentClientStub = {
-      put: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
-      update: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Attributes: {
-              id: '123',
-            },
-          }),
-      }),
-      get: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Item: {
-              'aws:rep:deleting': 'a',
-              'aws:rep:updateregion': 'b',
-              'aws:rep:updatetime': 'c',
-              ...MOCK_ITEM,
-            },
-          }),
-      }),
-      query: sinon.stub().returns({
-        promise: () =>
-          Promise.resolve({
-            Items: [
-              {
-                'aws:rep:deleting': 'a',
-                'aws:rep:updateregion': 'b',
-                'aws:rep:updatetime': 'c',
-                ...MOCK_ITEM,
-              },
-            ],
-          }),
-      }),
       batchGet: sinon.stub().returns({
         promise: () =>
           Promise.resolve({
@@ -78,10 +45,43 @@ describe('dynamodbClientService', function() {
             },
           }),
       }),
-      delete: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
       batchWrite: sinon
         .stub()
         .returns({ promise: () => Promise.resolve(null) }),
+      delete: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
+      get: sinon.stub().returns({
+        promise: () =>
+          Promise.resolve({
+            Item: {
+              'aws:rep:deleting': 'a',
+              'aws:rep:updateregion': 'b',
+              'aws:rep:updatetime': 'c',
+              ...MOCK_ITEM,
+            },
+          }),
+      }),
+      put: sinon.stub().returns({ promise: () => Promise.resolve(null) }),
+      query: sinon.stub().returns({
+        promise: () =>
+          Promise.resolve({
+            Items: [
+              {
+                'aws:rep:deleting': 'a',
+                'aws:rep:updateregion': 'b',
+                'aws:rep:updatetime': 'c',
+                ...MOCK_ITEM,
+              },
+            ],
+          }),
+      }),
+      update: sinon.stub().returns({
+        promise: () =>
+          Promise.resolve({
+            Attributes: {
+              id: '123',
+            },
+          }),
+      }),
     };
     sinon.stub(AWS.DynamoDB, 'DocumentClient').returns(documentClientStub);
   });
@@ -135,20 +135,20 @@ describe('dynamodbClientService', function() {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
         applicationContext,
-        tableName: 'a',
         keys: [
           {
             pk: '123',
           },
         ],
+        tableName: 'a',
       });
       expect(result).to.deep.equal([MOCK_ITEM]);
     });
     it('should return empty array if no keys', async () => {
       const result = await batchGet({
         applicationContext,
-        tableName: 'a',
         keys: [],
+        tableName: 'a',
       });
       expect(result).to.deep.equal([]);
     });
@@ -163,21 +163,21 @@ describe('dynamodbClientService', function() {
       };
       await batchWrite({
         applicationContext,
-        tableName: 'a',
         items: [item],
+        tableName: 'a',
       });
       expect(documentClientStub.batchWrite.getCall(0).args[0]).to.deep.equal({
         RequestItems: {
           a: [
             {
               PutRequest: {
-                Item: item,
                 ConditionExpression:
                   'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
                 ExpressionAttributeNames: {
                   '#pk': item.pk,
                   '#sk': item.sk,
                 },
+                Item: item,
               },
             },
           ],
@@ -190,14 +190,14 @@ describe('dynamodbClientService', function() {
     it('should try to delete using the key passed in', async () => {
       await deleteObj({
         applicationContext,
-        tableName: 'a',
         key: {
           pk: '123',
         },
+        tableName: 'a',
       });
       expect(documentClientStub.delete.getCall(0).args[0]).to.deep.equal({
-        TableName: 'a',
         Key: { pk: '123' },
+        TableName: 'a',
       });
     });
   });
