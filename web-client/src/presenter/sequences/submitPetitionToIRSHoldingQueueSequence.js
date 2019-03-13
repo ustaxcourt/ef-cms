@@ -10,7 +10,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 export const submitPetitionToIRSHoldingQueueSequence = [
   clearAlertsAction,
   clearModalAction,
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   sendPetitionToIRSHoldingQueueAction,
   setAlertSuccessAction,
   getCaseAction,
