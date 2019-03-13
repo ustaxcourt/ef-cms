@@ -57,9 +57,9 @@ export const BeforeStartingCase = () => (
               Tax Court Rules of Practice and Procedure
             </a>
             . <strong>Do not</strong> include personal information (such as
-            Social Security Numbers or Taxpayer Identification Numbers,
-            birthdates, names of minor children, or financial account
-            information) in your Petition.
+            Social Security Numbers, Taxpayer Identification Numbers, or
+            Employer Identification Numbers, birthdates, names of minor
+            children, or financial account information) in your Petition.
           </p>
           <p className="label">Statement of Taxpayer Identification</p>
           <p>
@@ -103,11 +103,11 @@ export const BeforeStartingCase = () => (
           </h3>
           <p>
             If the IRS notice includes personal information (such as Social
-            Security Numbers or Taxpayer Identification Numbers), remove or
-            redact that information before including it with your Petition. You
-            can remove this information by deleting it, marking through it so
-            itʼs illegible, or any other method that will prevent it from being
-            seen.
+            Security Numbers, Taxpayer Identification Numbers, or Employer
+            Identification Numbers), remove or redact that information before
+            including it with your Petition. You can remove this information by
+            deleting it, marking through it so itʼs illegible, or any other
+            method that will prevent it from being seen.
           </p>
         </div>
       </div>
