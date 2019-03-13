@@ -2019,6 +2019,30 @@
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "docketclerk"
   },
+
+  {
+    "password": "Testing1234$",
+    "role": "seniorattorney",
+    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Seniorattorney",
+    "section": "seniorattorney",
+    "pk": "seniorattorney|user",
+    "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "seniorattorney"
+  },
+
+  {
+    "password": "Testing1234$",
+    "role": "seniorattorney",
+    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Seniorattorney",
+    "section": "seniorattorney",
+    "pk": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "seniorattorney"
+  },
+  
+  
   {
     "password": "Testing1234$",
     "role": "docketclerk",
