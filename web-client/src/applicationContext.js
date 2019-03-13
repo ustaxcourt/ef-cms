@@ -7,6 +7,7 @@ import {
 } from '../../shared/src/business/entities/contacts/PetitionContact';
 
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
 
 import ErrorFactory from './presenter/errors/ErrorFactory';
 import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
@@ -125,6 +126,7 @@ const applicationContext = {
     ESTATE_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
+    SECTIONS,
     TRIAL_CITIES,
   }),
   getCurrentUser,
