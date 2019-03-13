@@ -579,12 +579,10 @@ Case.stripLeadingZeros = docketNumber => {
 
 /**
  * documentTypes
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string, answer: string, stipulatedDecision: string}}
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string, answer: string, stipulatedDecision: string}}
  */
 Case.documentTypes = {
   answer: 'Answer',
-  // statementOfTaxpayerIdentificationNumber:
-  //   'Statement of Taxpayer Identification Number',
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
   stin: 'Statement of Taxpayer Identification',
