@@ -578,6 +578,7 @@ Case.documentTypes = {
   //   'Statement of Taxpayer Identification Number',
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
+  stin: 'Statement of Taxpayer Identification',
   stipulatedDecision: 'Stipulated Decision',
 };
 
