@@ -26,6 +26,7 @@ import {
   faShareSquare,
   faSignOutAlt,
   faSlash,
+  faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { route, router } from './router';
@@ -64,8 +65,8 @@ const app = {
       faCaretDown,
       faCaretLeft,
       faCaretUp,
-      faCheckCircleRegular,
       faCheckCircle,
+      faCheckCircleRegular,
       faClock,
       faCloudUploadAlt,
       faCopy,
@@ -81,11 +82,12 @@ const app = {
       faListUl,
       faPaperclip,
       faPlusCircle,
+      faQuestionCircle,
       faShareSquare,
       faSignOutAlt,
       faSlash,
+      faSync,
       faTimesCircle,
-      faQuestionCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
