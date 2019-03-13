@@ -27,6 +27,21 @@ describe('getInternalUsers', () => {
         userId: 'seniorattorney1',
       },
     ]);
+
+    sinon.stub(client, 'batchGet').resolves([
+      {
+        pk: 'petitions|user',
+        userId: 'petitionsclerk1',
+      },
+      {
+        pk: 'docket|user',
+        userId: 'docketclerk1',
+      },
+      {
+        pk: 'seniorattorney|user',
+        userId: 'seniorattorney1',
+      },
+    ]);
   });
 
   afterEach(() => {
