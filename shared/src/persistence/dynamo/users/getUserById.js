@@ -57,22 +57,21 @@ exports.userMap = {
   },
 };
 
-const userByIDMap = {
-  '1805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.docketclerk,
-  '2805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.docketclerk1,
-  '3805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.petitionsclerk,
-  '4805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.petitionsclerk1,
-  '5805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.respondent,
-  '6805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.seniorattorney,
-  '7805d1ab-18d0-43ec-bafb-654e83405416': exports.userMap.taxpayer,
-};
+const client = require('../../dynamodbClientService');
 
 /**
  * getUserById
  * @param userId
  * @returns {*}
  */
-exports.getUserById = async ({ userId }) => {
-  // TODO: should hit cognito to fetch the user data
-  return userByIDMap[userId] || exports.userMap[userId];
+exports.getUserById = async ({ applicationContext, userId }) => {
+  const TABLE = `efcms-${applicationContext.environment.stage}`;
+  return client.get({
+    applicationContext,
+    Key: {
+      pk: userId,
+      sk: userId,
+    },
+    TableName: TABLE,
+  });
 };
