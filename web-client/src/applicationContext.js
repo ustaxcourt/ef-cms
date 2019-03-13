@@ -4,7 +4,7 @@ import {
   ESTATE_TYPES,
   OTHER_TYPES,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/Contacts/PetitionContact';
+} from '../../shared/src/business/entities/contacts/PetitionContact';
 
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 

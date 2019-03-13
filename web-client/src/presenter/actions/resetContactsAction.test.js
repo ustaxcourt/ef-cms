@@ -1,7 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
-} from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+} from '../../../../shared/src/business/entities/contacts/PetitionContact';
 
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';

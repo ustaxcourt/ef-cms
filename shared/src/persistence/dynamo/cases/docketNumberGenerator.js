@@ -6,6 +6,7 @@
 exports.createDocketNumber = async ({ applicationContext }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
+    key: 'docketNumberCounter',
   });
   const plus100 = id + 100;
   const last2YearDigits = new Date()
