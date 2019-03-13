@@ -11,11 +11,16 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+@media only screen and (min-width: $medium-screen) {
+  .modal-dialog {
+    width: 500px;
+  }
+}
+
 .modal-dialog {
   position: relative;
   top: 25%;
   display: block;
-  width: 500px;
   min-height: 145px;
   padding: 13px 30px 10px 20px;
   margin: auto;
@@ -33,6 +38,7 @@
   .modal-close-button {
     margin-right: -10px;
     float: right;
+    text-align: right;
 
     svg {
       margin-right: 0;
