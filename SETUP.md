@@ -46,7 +46,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Note the values of the four `NS` domains. These are what need to be added to the DNS entry for your main domain name.
    - The method of modifying your main domain name’s DNS will vary enormously, so specific guidance is impossible, but you need to create four new `NS` records, one for each of those Route 53 records, with a host name of the subdomain (e.g., `ef-cms`) and a value of the AWS DNS (e.g., `ns-123.awsdns-56.net`). If you are limited in the number of `NS` records that you can create, simply create as many of the four as you can.
 6. If completing the prior step took more than a few minutes, then step 3 failed. That’s OK! Simply re-run `deploy-infrastructure.sh`.
-7. After `deploy-infrastructure.sh` has completed successfully, run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`. This must be run from within `management/management`, like such: `../bin/setup-jenkins.sh`.
+7. After `deploy-infrastructure.sh` has completed successfully, run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`. This must be run from within `management/management/`, like such: `../bin/setup-jenkins.sh`.
 8. Log into Jenkins.
    - Get the Jenkins credentials, using `show-passwords.sh`, found in `management/management/`.
    - Note the Jenkins username and password.
@@ -70,7 +70,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
 - `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
 
-11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
+11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. (This must be run from within `management/management/`, like such: `../bin/setup-jobs.sh`.) This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
 
 - Your organization’s name in GitHub, e.g. `examplecourt`.
