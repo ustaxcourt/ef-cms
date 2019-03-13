@@ -1,9 +1,10 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from '@cerebral/react';
 
 class SuccessNotificationComponent extends React.Component {
   componentDidUpdate() {
@@ -13,7 +14,7 @@ class SuccessNotificationComponent extends React.Component {
   focusNotification() {
     const notification = this.notificationRef.current;
     if (notification) {
-      notification.scrollIntoView();
+      window.scrollTo(0, 0);
     }
   }
 
