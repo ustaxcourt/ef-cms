@@ -1,21 +1,24 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import React from 'react';
 
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { DocketRecord } from './DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './PartyInformation';
+import React from 'react';
 import { SuccessNotification } from './SuccessNotification';
+import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { connect } from '@cerebral/react';
 
 export const CaseDetailInternal = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    caseHelper: state.caseDetailHelper,
     currentTab: state.currentTab,
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
-    helper: state.caseDetailHelper,
+    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
+    showModal: state.showModal,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
@@ -23,10 +26,12 @@ export const CaseDetailInternal = connect(
   },
   ({
     caseDetail,
+    caseHelper,
     currentTab,
     documentHelper,
     extractedPendingMessages,
-    helper,
+    openCaseCaptionModalSequence,
+    showModal,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
@@ -44,8 +49,23 @@ export const CaseDetailInternal = connect(
           <h1 className="captioned" tabIndex="-1">
             Docket Number: {caseDetail.docketNumberWithSuffix}
           </h1>
-          <p>{caseDetail.caseTitle}</p>
-          <p>
+          <p className="float-left">{caseDetail.caseTitle} </p>
+          {caseHelper.showCaptionEditButton && (
+            <p className="float-left">
+              <button
+                className="link"
+                onClick={() => {
+                  openCaseCaptionModalSequence();
+                }}
+              >
+                <FontAwesomeIcon icon="edit" size="sm" /> Edit
+              </button>
+            </p>
+          )}
+          {showModal == 'UpdateCaseCaptionModalDialog' && (
+            <UpdateCaseCaptionModalDialog />
+          )}
+          <p className="clear-both">
             <span
               className="usa-label case-status-label"
               aria-label={'status: ' + caseDetail.status}
@@ -147,13 +167,13 @@ export const CaseDetailInternal = connect(
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>
-                  {helper.showPaymentRecord && (
+                  {caseHelper.showPaymentRecord && (
                     <React.Fragment>
                       <p className="label">Paid by pay.gov</p>
                       <p>{caseDetail.payGovId}</p>
                     </React.Fragment>
                   )}
-                  {helper.showPaymentOptions && (
+                  {caseHelper.showPaymentOptions && (
                     <ul className="usa-unstyled-list">
                       <li>
                         <input
@@ -169,7 +189,7 @@ export const CaseDetailInternal = connect(
                           }}
                         />
                         <label htmlFor="paygov">Paid by pay.gov</label>
-                        {helper.showPayGovIdInput && (
+                        {caseHelper.showPayGovIdInput && (
                           <React.Fragment>
                             <label htmlFor="paygovid">Payment ID</label>
                             <input
