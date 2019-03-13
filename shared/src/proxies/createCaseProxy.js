@@ -12,6 +12,7 @@ exports.createCase = ({
   petitionFileId,
   ownershipDisclosureFileId,
   applicationContext,
+  stinFileId,
 }) => {
   return post({
     applicationContext,
@@ -19,6 +20,7 @@ exports.createCase = ({
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,
+      stinFileId,
     },
     endpoint: '/cases',
   });
