@@ -9,8 +9,6 @@ exports.getSortRecordsViaMapping = async ({
   afterDate,
   isVersioned = false,
 }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-
   const mapping = await client.query({
     applicationContext,
     ExpressionAttributeNames: {
@@ -22,7 +20,6 @@ exports.getSortRecordsViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
-    TableName: TABLE,
   });
 
   const ids = mapping.map(metadata => metadata[foreignKey]);
@@ -33,7 +30,6 @@ exports.getSortRecordsViaMapping = async ({
       pk: id,
       sk: isVersioned ? '0' : id,
     })),
-    tableName: TABLE,
   });
 
   return stripInternalKeys(results);

@@ -1,3 +1,5 @@
+const { chunk } = require('lodash');
+
 /**
  * PUT for dynamodb aws-sdk client
  * @param item
@@ -13,6 +15,8 @@ const removeAWSGlobalFields = item => {
   return item;
 };
 
+const getTableName = ({ applicationContext }) =>
+  `efcms-${applicationContext.environment.stage}`;
 /**
  *
  * @param params
@@ -21,7 +25,12 @@ const removeAWSGlobalFields = item => {
 exports.put = params => {
   return params.applicationContext
     .getDocumentClient()
-    .put(params)
+    .put({
+      TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
     .promise()
     .then(() => params.Item);
 };
@@ -36,7 +45,12 @@ exports.updateConsistent = params => {
     .getDocumentClient({
       region: params.applicationContext.environment.masterRegion,
     })
-    .update(params)
+    .update({
+      TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
     .promise()
     .then(data => data.Attributes.id);
 };
@@ -49,7 +63,12 @@ exports.updateConsistent = params => {
 exports.get = params => {
   return params.applicationContext
     .getDocumentClient()
-    .get(params)
+    .get({
+      TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
     .promise()
     .then(res => {
       return removeAWSGlobalFields(res.Item);
@@ -66,7 +85,12 @@ exports.get = params => {
 exports.query = params => {
   return params.applicationContext
     .getDocumentClient()
-    .query(params)
+    .query({
+      TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
     .promise()
     .then(result => {
       result.Items.forEach(item => removeAWSGlobalFields(item));
@@ -78,25 +102,31 @@ exports.query = params => {
  * BATCH GET for aws-sdk dynamodb client
  * @param params
  */
-exports.batchGet = ({ applicationContext, tableName, keys }) => {
+exports.batchGet = async ({ applicationContext, keys }) => {
   if (!keys.length) return [];
-  // TODO: BATCH GET CAN ONLY DO 25 AT A TIME
-  return applicationContext
-    .getDocumentClient()
-    .batchGet({
-      RequestItems: {
-        [tableName]: {
-          Keys: keys,
-        },
-      },
-    })
-    .promise()
-    .then(result => {
-      // TODO: REFACTOR THIS
-      const items = result.Responses[tableName];
-      items.forEach(item => removeAWSGlobalFields(item));
-      return items;
-    });
+  const chunks = chunk(keys, 100);
+
+  let results = [];
+  for (let chunkOfKeys of chunks) {
+    results = results.concat(
+      await applicationContext
+        .getDocumentClient()
+        .batchGet({
+          RequestItems: {
+            [getTableName({ applicationContext })]: {
+              Keys: chunkOfKeys,
+            },
+          },
+        })
+        .promise()
+        .then(result => {
+          const items = result.Responses[getTableName({ applicationContext })];
+          items.forEach(item => removeAWSGlobalFields(item));
+          return items;
+        }),
+    );
+  }
+  return results;
 };
 
 /**
@@ -106,12 +136,12 @@ exports.batchGet = ({ applicationContext, tableName, keys }) => {
  * @param items
  * @returns {*}
  */
-exports.batchWrite = ({ applicationContext, tableName, items }) => {
+exports.batchWrite = ({ applicationContext, items }) => {
   return applicationContext
     .getDocumentClient()
     .batchWrite({
       RequestItems: {
-        [tableName]: items.map(item => ({
+        [getTableName({ applicationContext })]: items.map(item => ({
           PutRequest: {
             ConditionExpression:
               'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
@@ -127,12 +157,12 @@ exports.batchWrite = ({ applicationContext, tableName, items }) => {
     .promise();
 };
 
-exports.delete = ({ applicationContext, tableName, key }) => {
+exports.delete = ({ applicationContext, key }) => {
   return applicationContext
     .getDocumentClient()
     .delete({
       Key: key,
-      TableName: tableName,
+      TableName: getTableName({ applicationContext }),
     })
     .promise();
 };
