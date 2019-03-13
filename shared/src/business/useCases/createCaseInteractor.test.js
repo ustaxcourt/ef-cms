@@ -69,6 +69,7 @@ describe('createCase', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
     });
 
     const expectedCaseRecordToPersist = {
@@ -138,6 +139,15 @@ describe('createCase', () => {
               workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
             },
           ],
+        },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+          documentType: 'Statement of Taxpayer Identification',
+          filedBy: 'Test Taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
         },
         {
           caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -219,6 +229,7 @@ describe('createCase', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
     });
 
     const expectedCaseRecordToPersist = {
@@ -270,6 +281,15 @@ describe('createCase', () => {
               workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
             },
           ],
+        },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+          documentType: 'Statement of Taxpayer Identification',
+          filedBy: 'Test Taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
         },
       ],
       filingType: 'Myself',
@@ -341,6 +361,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (error) {
       expect(error.message).toEqual('problem');
@@ -395,6 +416,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (err) {
       error = err;
@@ -422,6 +444,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (err) {
       error = err;

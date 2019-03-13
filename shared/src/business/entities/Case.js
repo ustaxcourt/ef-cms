@@ -382,6 +382,15 @@ Case.prototype.addDocument = function(document) {
 
 /**
  *
+ * @param document
+ */
+Case.prototype.addDocumentWithoutDocketRecord = function(document) {
+  document.caseId = this.caseId;
+  this.documents = [...this.documents, document];
+};
+
+/**
+ *
  * @param sendDate
  * @returns {Case}
  */
@@ -578,6 +587,7 @@ Case.documentTypes = {
   //   'Statement of Taxpayer Identification Number',
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
+  stin: 'Statement of Taxpayer Identification',
   stipulatedDecision: 'Stipulated Decision',
 };
 
