@@ -2010,29 +2010,14 @@
     "pk": "104-19|case"
   },
   {
-    "password": "Testing1234$",
-    "role": "docketclerk",
     "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Docketclerk",
-    "section": "docket",
-    "pk": "docket|user",
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "docketclerk"
+    "pk": "docket|user"
   },
-
   {
-    "password": "Testing1234$",
-    "role": "seniorattorney",
-    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Seniorattorney",
-    "section": "seniorattorney",
     "pk": "seniorattorney|user",
-    "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "seniorattorney"
+    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416"
   },
-
   {
-    "password": "Testing1234$",
     "role": "seniorattorney",
     "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Seniorattorney",
@@ -2044,7 +2029,6 @@
   
   
   {
-    "password": "Testing1234$",
     "role": "docketclerk",
     "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Docketclerk",
@@ -2054,17 +2038,10 @@
     "email": "docketclerk"
   },
   {
-    "password": "Testing1234$",
-    "role": "docketclerk",
     "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Docketclerk1",
-    "section": "docket",
-    "pk": "docket|user",
-    "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "docketclerk1"
+    "pk": "docket|user"
   },
   {
-    "password": "Testing1234$",
     "role": "docketclerk",
     "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Docketclerk1",
@@ -2469,17 +2446,10 @@
     "updatedAt": "2019-03-01T22:54:06.000Z"
   },
   {
-    "password": "Testing1234$",
-    "role": "petitionsclerk",
     "sk": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Petitionsclerk",
-    "section": "petitions",
-    "pk": "petitions|user",
-    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "petitionsclerk"
+    "pk": "petitions|user"
   },
   {
-    "password": "Testing1234$",
     "role": "petitionsclerk",
     "sk": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitionsclerk",
@@ -2489,17 +2459,10 @@
     "email": "petitionsclerk"
   },
   {
-    "password": "Testing1234$",
-    "role": "petitionsclerk",
     "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Petitionsclerk1",
-    "section": "petitions",
-    "pk": "petitions|user",
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "petitionsclerk1"
+    "pk": "petitions|user"
   },
   {
-    "password": "Testing1234$",
     "role": "petitionsclerk",
     "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitionsclerk1",
