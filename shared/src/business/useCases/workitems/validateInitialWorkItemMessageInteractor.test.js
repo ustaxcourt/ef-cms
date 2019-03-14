@@ -17,8 +17,8 @@ describe('validateInitialWorkItemMessage', () => {
     });
 
     expect(errors).toEqual({
+      assigneeId: 'Recipient is a required field.',
       message: 'Message is a required field.',
-      recipientId: 'Recipient is a required field.',
       section: 'Section is a required field.',
     });
   });
@@ -31,8 +31,8 @@ describe('validateInitialWorkItemMessage', () => {
         }),
       },
       message: {
+        assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'hello world',
-        recipientId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         section: 'docket',
       },
     });

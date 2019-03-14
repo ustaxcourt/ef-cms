@@ -17,7 +17,12 @@ class CreateMessageModalDialogComponent extends ModalDialog {
   renderBody() {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (this.props.validationErrors.section ? 'usa-input-error' : '')
+          }
+        >
           <label htmlFor="section">Section</label>
 
           <select
@@ -32,6 +37,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               this.props.getUsersInSectionSequence({
                 section: e.target.value,
               });
+              this.props.validateInitialWorkItemMessageSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -41,9 +47,17 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
+          <div className="usa-input-error-message beneath">
+            {this.props.validationErrors.section}
+          </div>
         </div>
 
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (this.props.validationErrors.assigneeId ? 'usa-input-error' : '')
+          }
+        >
           <label htmlFor="assigneeId">Select Recipient</label>
           <select
             className="usa-input-inline"
@@ -56,6 +70,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
+              this.props.validateInitialWorkItemMessageSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -65,9 +80,17 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
+          <div className="usa-input-error-message beneath">
+            {this.props.validationErrors.assigneeId}
+          </div>
         </div>
 
-        <div className="usa-form-group">
+        <div
+          className={
+            'usa-form-group ' +
+            (this.props.validationErrors.message ? 'usa-input-error' : '')
+          }
+        >
           <label htmlFor="message">Add Message</label>
           <textarea
             name="message"
@@ -78,7 +101,13 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 value: e.target.value,
               });
             }}
+            onBlur={e => {
+              this.props.validateInitialWorkItemMessageSequence();
+            }}
           />
+          <div className="usa-input-error-message beneath">
+            {this.props.validationErrors.message}
+          </div>
         </div>
       </React.Fragment>
     );
@@ -87,13 +116,16 @@ class CreateMessageModalDialogComponent extends ModalDialog {
 
 export const CreateMessageModalDialog = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.dismissCreateMessageModalSequence,
     confirmSequence: sequences.createWorkItemSequence,
     constants: state.constants,
     form: state.form,
     getUsersInSectionSequence: sequences.getUsersInSectionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     users: state.users,
+    validateInitialWorkItemMessageSequence:
+      sequences.validateInitialWorkItemMessageSequence,
+    validationErrors: state.validationErrors,
   },
   CreateMessageModalDialogComponent,
 );
