@@ -26,7 +26,20 @@ export default test => {
       message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
-    const answerWorkItem = sectionWorkQueue.find(
+    let sectionOutboxWorkQueue = test.getState('workQueue');
+    let answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
       workItem => workItem.workItemId === test.answerWorkItemId,
     );
     expect(answerWorkItem.messages[0]).toMatchObject({
@@ -41,5 +54,10 @@ export default test => {
       `${test.docketNumber}W`,
     );
     expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
   });
 };

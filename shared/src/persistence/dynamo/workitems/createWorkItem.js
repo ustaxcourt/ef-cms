@@ -45,6 +45,17 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
     type: 'sentWorkItem',
   });
 
+  // section inbox
+  await createMappingRecord({
+    applicationContext,
+    item: {
+      workItemId: workItem.workItemId,
+    },
+    pkId: workItem.section,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
+
   // section sent box
   await createMappingRecord({
     applicationContext,
