@@ -79,5 +79,6 @@ The end result of this is not a dev, staging, or production website, but is inst
 
 12. Increase the number of Jenkins executors to five. Choose `Jenkins` ⟶ `Build Executor Status` ⟶ `Master` ⟶ `Configure`, and change `# of executors` from `2` to `5`.
 13. Restart Jenkins. This can be done by choosing `Jenkins` (i.e., going to the home page), and appending `safeRestart` to the URL, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/safeRestart`.
+14. Set up Jenkins to build pull requests on GitHub. In the GitHub repository housing this project, [create a new webhook](https://github.com/ustaxcourt/ef-cms/settings/hooks). For the `Payload URL`, enter the Jenkins server URL with `/github-webhook/` appended, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/github-webhook/`. Select a `Content type` of `application/x-www-form-urlencoded`, enable SSL verification, and send all events to trigger the webhook.
 
 You are done — the CI/CD pipeline is now ready to operate. To run a build, [see Jenkins documentation](https://jenkins.io/doc/).
