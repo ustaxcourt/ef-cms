@@ -16,7 +16,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
   }
   renderBody() {
     return (
-      <form>
+      <React.Fragment>
         <div className="usa-form-group">
           <label htmlFor="section">Section</label>
 
@@ -44,7 +44,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="recipient">Select Recipient</label>
+          <label htmlFor="assigneeId">Select Recipient</label>
           <select
             className="usa-input-inline"
             id="assigneeId"
@@ -80,7 +80,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             }}
           />
         </div>
-      </form>
+      </React.Fragment>
     );
   }
 }
