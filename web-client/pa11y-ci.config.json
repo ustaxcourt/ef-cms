@@ -337,6 +337,27 @@
         "wait for #tabContent-caseInfo to be visible"
       ]
     },
+    {
+      "notes": "checks a11y of case caption edit dialog",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=case-caption-edit",
+      "actions": [
+        "wait for #caption-edit-button to be visible",
+        "click element #caption-edit-button",
+        "wait for .modal-dialog to be visible"
+      ]
+    },
+    {
+      "notes": "checks a11y of create message dialog",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=create-message-dialog",
+      "actions": [
+        "wait for #tab-pending-messages to be visible",
+        "click element #tab-pending-messages",
+        "wait for #create-message-button to be visible",
+        "click element #create-message-button",
+        "wait for .modal-dialog to be visible"
+      ]
+    },
+
     "http://localhost:1234/mock-login?token=intakeclerk&path=/",
     "http://localhost:1234/mock-login?token=intakeclerk&path=/case-detail/101-19",
 

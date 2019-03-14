@@ -48,6 +48,7 @@ class DocumentDetailComponent extends React.Component {
             <p className="float-left">
               <button
                 className="link"
+                id="caption-edit-button"
                 onClick={() => {
                   openCaseCaptionModalSequence();
                 }}
