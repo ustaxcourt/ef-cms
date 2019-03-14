@@ -18,15 +18,13 @@ class PendingMessagesComponent extends React.Component {
     } = this.props;
     return (
       <div>
-        <div className="button-container">
-          <button
-            type="button"
-            onClick={() => openCreateMessageModalSequence()}
-            className="usa-button-secondary"
-          >
-            Create Message
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => openCreateMessageModalSequence()}
+          className="usa-button-secondary"
+        >
+          Create Message
+        </button>
 
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
