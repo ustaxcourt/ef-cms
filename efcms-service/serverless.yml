@@ -377,6 +377,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  createWorkItem:
+    handler: src/workitems/createWorkItemLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/workitems
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getSentWorkItemsForSection:
     handler: src/workitems/getSentWorkItemsForSectionLambda.handler
     events:

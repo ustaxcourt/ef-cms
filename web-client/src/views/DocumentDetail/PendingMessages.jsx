@@ -13,10 +13,21 @@ class PendingMessagesComponent extends React.Component {
       submitForwardSequence,
       updateCompleteFormValueSequence,
       updateForwardFormValueSequence,
+      openCreateMessageModalSequence,
       users,
     } = this.props;
     return (
       <div>
+        <div className="button-container">
+          <button
+            type="button"
+            onClick={() => openCreateMessageModalSequence()}
+            className="usa-button-secondary"
+          >
+            Create Message
+          </button>
+        </div>
+
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
           !documentDetailHelper.formattedDocument.workItems.length) && (
@@ -298,6 +309,7 @@ class PendingMessagesComponent extends React.Component {
 
 PendingMessagesComponent.propTypes = {
   documentDetailHelper: PropTypes.object,
+  openCreateMessageModalSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
   submitForwardSequence: PropTypes.func,
@@ -310,6 +322,7 @@ PendingMessagesComponent.propTypes = {
 export const PendingMessages = connect(
   {
     documentDetailHelper: state.documentDetailHelper,
+    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,

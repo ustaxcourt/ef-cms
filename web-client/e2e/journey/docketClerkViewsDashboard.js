@@ -10,7 +10,7 @@ export default test => {
     expect(test.getState('users').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
-      .find(workItem => workItem.docketNumber === test.docketNumber);
+      .find(workItem => workItem.workItemId === test.workItemId);
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
