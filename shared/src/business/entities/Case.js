@@ -509,6 +509,10 @@ Case.prototype.recallFromIRSHoldingQueue = function() {
   return this;
 };
 
+Case.prototype.getDocumentById = function({ documentId }) {
+  return this.documents.find(document => document.documentId === documentId);
+};
+
 /**
  *
  * @param {string} payGovDate an ISO formatted datestring
