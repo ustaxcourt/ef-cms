@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "aws-sdk": "^2.419.0",
+    "aws-sdk": "^2.421.0",
     "axios": "^0.18.0",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
@@ -51,7 +51,7 @@
     "eslint": "^5.15.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-cypress": "^2.2.1",
-    "eslint-plugin-jsdoc": "^4.2.0",
+    "eslint-plugin-jsdoc": "^4.4.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
