@@ -14,6 +14,11 @@ export const Forms = () => (
       <span className="usa-form-hint">This is your hint!</span>
       <input id="input-text-hint" type="text" />
 
+      <label htmlFor="input-text-optional">
+        Text input <span className="usa-form-hint">(optional)</span>
+      </label>
+      <input id="input-text-optional" type="text" />
+
       <div className="usa-input-error">
         <label htmlFor="input-text-error">Text input with error</label>
         <input id="input-text-error" type="text" />
