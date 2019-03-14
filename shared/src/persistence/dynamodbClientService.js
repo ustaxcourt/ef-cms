@@ -43,7 +43,7 @@ exports.put = params => {
 exports.updateConsistent = params => {
   return params.applicationContext
     .getDocumentClient({
-      region: params.applicationContext.environment.masterRegion,
+      useMasterRegion: true,
     })
     .update({
       TableName: getTableName({
