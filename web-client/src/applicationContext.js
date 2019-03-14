@@ -34,6 +34,7 @@ import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/g
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
@@ -76,6 +77,7 @@ const allUseCases = {
   completeWorkItem,
   createCase,
   createDocument,
+  createWorkItem,
   downloadDocumentFile,
   filePetition,
   fileRespondentDocument,
