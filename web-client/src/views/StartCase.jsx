@@ -121,8 +121,6 @@ export const StartCase = connect(
                         key: e.target.name,
                         value: e.target.files[0],
                       });
-                    }}
-                    onBlur={() => {
                       validateStartCaseSequence();
                     }}
                   />
@@ -167,8 +165,6 @@ export const StartCase = connect(
                     key: e.target.name,
                     value: e.target.files[0],
                   });
-                }}
-                onBlur={() => {
                   validateStartCaseSequence();
                 }}
               />
