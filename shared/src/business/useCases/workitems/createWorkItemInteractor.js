@@ -59,6 +59,7 @@ exports.createWorkItem = async ({
     docketNumber: theCase.docketNumber,
     docketNumberSuffix: theCase.docketNumberSuffix,
     document: {
+      createdAt: document.createdAt,
       documentId: document.documentId,
       documentType: document.documentType,
     },
