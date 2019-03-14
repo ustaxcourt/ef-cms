@@ -58,7 +58,10 @@ exports.createWorkItem = async ({
     caseStatus: theCase.status,
     docketNumber: theCase.docketNumber,
     docketNumberSuffix: theCase.docketNumberSuffix,
-    document: document.toRawObject(),
+    document: {
+      documentId: document.documentId,
+      documentType: document.documentType,
+    },
     isInitializeCase: false,
     section: userToAssignTo.section,
     sentBy: user.name,
