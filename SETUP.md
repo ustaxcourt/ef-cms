@@ -55,7 +55,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Click the `x` in the top right off the modal that appears.
      - You may be prompted to restart Jenkins, in which case you should do so.
      - After restarting, the modal will pop up again — just click the `x` again.
-9. Create fie global credentials in Jenkins, so that Jenkins has permission to interact with GitHub, SonarCloud, and AWS Cognito using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
+9. Create five global credentials in Jenkins, so that Jenkins has permission to interact with GitHub, SonarCloud, and AWS Cognito using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
    - Create a “username with password” type. Provide an ID of `GITHUB_USER`, and enter the username and password for the GitHub account that you created.
    - Create a “secret text” type. Provide an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
