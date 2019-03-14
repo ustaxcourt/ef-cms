@@ -79,9 +79,9 @@ export const CaseDetailInternal = connect(
           <ErrorNotification />
 
           <div>
-            <h2>Messages in Progress</h2>
+            <h2>Messages In Progress</h2>
             {extractedPendingMessages.length === 0 && (
-              <p>No Pending Messages</p>
+              <p>No Messages In Progress</p>
             )}
             <table className="row-border-only subsection">
               <tbody>
@@ -106,7 +106,7 @@ export const CaseDetailInternal = connect(
                           })}
                           className="case-link"
                         >
-                          <FontAwesomeIcon icon="file-pdf" />
+                          <FontAwesomeIcon icon={['far', 'file-pdf']} />
                           {workItem.document.documentType}
                         </a>
                       </p>
