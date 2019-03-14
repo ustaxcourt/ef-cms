@@ -9,6 +9,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 
 export const createWorkItemSequence = [
   clearAlertsAction,
@@ -22,6 +23,7 @@ export const createWorkItemSequence = [
       {
         success: [stopShowValidationAction, setAlertSuccessAction],
       },
+      clearFormAction,
       clearModalAction,
       refreshCaseAction,
       unsetFormSubmittingAction,

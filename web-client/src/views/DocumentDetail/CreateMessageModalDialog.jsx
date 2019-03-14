@@ -16,7 +16,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
   }
   renderBody() {
     return (
-      <React.Fragment>
+      <div className="ustc-create-message-modal">
         <div
           className={
             'usa-form-group ' +
@@ -109,7 +109,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             {this.props.validationErrors.message}
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
