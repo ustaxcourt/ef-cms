@@ -19,17 +19,17 @@ function InitialWorkItemMessage(rawMessage) {
 joiValidationDecorator(
   InitialWorkItemMessage,
   joi.object().keys({
-    message: joi.string().required(),
-    recipientId: joi
+    assigneeId: joi
       .string()
       .uuid(uuidVersions)
       .required(),
+    message: joi.string().required(),
     section: joi.string().required(),
   }),
   undefined,
   {
+    assigneeId: 'Recipient is a required field.',
     message: 'Message is a required field.',
-    recipientId: 'Recipient is a required field.',
     section: 'Section is a required field.',
   },
 );

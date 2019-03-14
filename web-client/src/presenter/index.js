@@ -15,6 +15,7 @@ import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
+import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
@@ -72,6 +73,7 @@ import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequ
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
@@ -101,6 +103,7 @@ export default {
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
+    dismissCreateMessageModalSequence,
     dismissModalSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
@@ -155,6 +158,7 @@ export default {
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
+    validateInitialWorkItemMessageSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
   },
