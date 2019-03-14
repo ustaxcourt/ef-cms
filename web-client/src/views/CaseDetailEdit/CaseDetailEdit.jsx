@@ -63,9 +63,7 @@ export const CaseDetailEdit = connect(
 
         <button
           aria-disabled={submitting ? 'true' : 'false'}
-          className={
-            submitting ? 'usa-button-active' : 'usa-button usa-button-secondary'
-          }
+          className={submitting ? 'usa-button-active' : 'usa-button-secondary'}
           disabled={submitting}
           type="submit"
         >
