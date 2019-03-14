@@ -19,8 +19,8 @@ export const createWorkItemAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'The message thread was created.',
-      title: 'Your message thread was created successfully.',
+      message: 'You can view it in the Sent tab on your Work Queue.',
+      title: 'Your message was created successfully.',
     },
   });
 };

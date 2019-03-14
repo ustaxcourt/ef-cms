@@ -21,6 +21,7 @@ class PendingMessagesComponent extends React.Component {
         <div className="button-container">
           <button
             type="button"
+            id="create-message-button"
             onClick={() => openCreateMessageModalSequence()}
             className="usa-button-secondary"
           >
@@ -65,12 +66,12 @@ class PendingMessagesComponent extends React.Component {
                 >
                   <button
                     role="tab"
-                    id="history-tab"
+                    id={`history-tab-${idx}`}
                     aria-selected={documentDetailHelper.showAction(
                       'history',
                       workItem.workItemId,
                     )}
-                    aria-controls="history-card"
+                    aria-controls={`history-card-${idx}`}
                     className={`${
                       documentDetailHelper.showAction(
                         'history',
@@ -92,12 +93,12 @@ class PendingMessagesComponent extends React.Component {
                   {workItem.showComplete && (
                     <button
                       role="tab"
-                      id="complete-tab"
+                      id={`complete-tab-${idx}`}
                       aria-selected={documentDetailHelper.showAction(
                         'complete',
                         workItem.workItemId,
                       )}
-                      aria-controls="history-card"
+                      aria-controls={`history-card-${idx}`}
                       className={`${
                         documentDetailHelper.showAction(
                           'complete',
@@ -120,12 +121,12 @@ class PendingMessagesComponent extends React.Component {
                   {workItem.showSendTo && (
                     <button
                       role="tab"
-                      id="forward-tab"
+                      id={`forward-tab-${idx}`}
                       aria-selected={documentDetailHelper.showAction(
                         'forward',
                         workItem.workItemId,
                       )}
-                      aria-controls="forward-card"
+                      aria-controls={`forward-card-${idx}`}
                       data-workitemid={workItem.workItemId}
                       className={`send-to ${
                         documentDetailHelper.showAction(
@@ -151,13 +152,13 @@ class PendingMessagesComponent extends React.Component {
                   workItem.workItemId,
                 ) && (
                   <div
-                    id="complete-card"
+                    id={`complete-card-${idx}`}
                     role="tabpanel"
-                    aria-labelledby="complete-tab"
+                    aria-labelledby={`complete-tab-${idx}`}
                     className="content-wrapper actions-wrapper"
                   >
                     <form
-                      id="complete-form"
+                      id={`complete-form-${idx}`}
                       role="form"
                       noValidate
                       onSubmit={e => {
@@ -171,12 +172,12 @@ class PendingMessagesComponent extends React.Component {
                         });
                       }}
                     >
-                      <label htmlFor="complete-message">
+                      <label htmlFor={`complete-message-${idx}`}>
                         Add Message (optional)
                       </label>
                       <textarea
                         name="completeMessage"
-                        id="complete-message"
+                        id={`complete-message-${idx}`}
                         onChange={e => {
                           updateCompleteFormValueSequence({
                             key: e.target.name,
@@ -197,10 +198,10 @@ class PendingMessagesComponent extends React.Component {
                 ) &&
                   !workItem.historyMessages.length && (
                     <div
-                      id="history-card"
+                      id={`history-card-${idx}`}
                       className="content-wrapper"
                       role="tabpanel"
-                      aria-labelledby="history-tab"
+                      aria-labelledby={`history-tab-${idx}`}
                     >
                       No additional messages are available.
                     </div>
@@ -212,9 +213,9 @@ class PendingMessagesComponent extends React.Component {
                   workItem.historyMessages.length > 0 && (
                     <div
                       className="content-wrapper actions-wrapper"
-                      id="history-card"
+                      id={`history-card-${idx}`}
                       role="tabpanel"
-                      aria-labelledby="history-tab"
+                      aria-labelledby={`history-tab-${idx}`}
                     >
                       {workItem.historyMessages.map((message, mIdx) => (
                         <div key={mIdx}>
@@ -243,12 +244,12 @@ class PendingMessagesComponent extends React.Component {
                   workItem.workItemId,
                 ) && (
                   <div
-                    id="forward-card"
+                    id={`forward-card-${idx}`}
                     role="tabpanel"
                     className="content-wrapper actions-wrapper"
                   >
                     <form
-                      aria-labelledby="forward-tab"
+                      aria-labelledby={`forward-tab-${idx}`}
                       data-workitemid={workItem.workItemId}
                       className="forward-form"
                       role="form"
@@ -260,11 +261,13 @@ class PendingMessagesComponent extends React.Component {
                         });
                       }}
                     >
-                      <label htmlFor="forward-recipient-id">Send To</label>
+                      <label htmlFor={`forward-recipient-id-${idx}`}>
+                        Send To
+                      </label>
                       <select
                         name="forwardRecipientId"
-                        id="forward-recipient-id"
-                        aria-labelledby="recipient-label"
+                        id={`forward-recipient-id-${idx}`}
+                        aria-labelledby={`recipient-label-${idx}`}
                         onChange={e => {
                           updateForwardFormValueSequence({
                             key: e.target.name,
@@ -280,11 +283,13 @@ class PendingMessagesComponent extends React.Component {
                           </option>
                         ))}
                       </select>
-                      <label htmlFor="forward-message">Add Message</label>
+                      <label htmlFor={`forward-message-${idx}`}>
+                        Add Message
+                      </label>
                       <textarea
-                        aria-labelledby="message-label"
+                        aria-labelledby={`message-label-${idx}`}
                         name="forwardMessage"
-                        id="forward-message"
+                        id={`forward-message-${idx}`}
                         onChange={e => {
                           updateForwardFormValueSequence({
                             key: e.target.name,
