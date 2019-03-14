@@ -4,10 +4,13 @@ label {
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1.45em;
+  .usa-form-hint {
+    margin: 0;
+  }
 }
 
 label.with-hint {
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 label p.usa-form-hint {
   display: block;
