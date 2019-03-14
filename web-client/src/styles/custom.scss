@@ -372,3 +372,12 @@ select.ustc-input-error {
   overflow: scroll;
   max-height: 931px;
 }
+
+.ustc-create-message-modal {
+  .usa-input-error input,
+  .usa-input-error textarea,
+  .usa-input-error select {
+    width: calc(100% + 1.9rem);
+    border: 3px solid #cd2026;
+  }
+}

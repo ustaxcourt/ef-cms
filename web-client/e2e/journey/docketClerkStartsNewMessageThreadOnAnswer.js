@@ -5,6 +5,8 @@ export default test => {
       documentId: test.answerDocumentId,
     });
 
+    expect(test.getState('validationErrors')).toEqual({});
+
     await test.runSequence('createWorkItemSequence');
 
     expect(test.getState('validationErrors')).toEqual({
@@ -54,6 +56,8 @@ export default test => {
       section: 'docket',
       sentBy: 'Test Docketclerk',
     });
+
+    expect(test.getState('form')).toEqual({});
 
     await test.runSequence('gotoDashboardSequence');
     await test.runSequence('chooseWorkQueueSequence', {
