@@ -79,7 +79,7 @@ export const CaseDetailInternal = connect(
           <ErrorNotification />
 
           <div>
-            <h2>Pending Messages</h2>
+            <h2>Messages in Progress</h2>
             {extractedPendingMessages.length === 0 && (
               <p>No Pending Messages</p>
             )}
