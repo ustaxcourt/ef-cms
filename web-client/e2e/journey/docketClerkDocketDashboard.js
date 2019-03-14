@@ -3,7 +3,22 @@ import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
+    let sectionOutboxWorkQueue;
+    let answerWorkItem;
     await test.runSequence('gotoDashboardSequence');
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'my',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
@@ -26,8 +41,8 @@ export default test => {
       message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
-    let sectionOutboxWorkQueue = test.getState('workQueue');
-    let answerWorkItem = sectionOutboxWorkQueue.find(
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
       workItem => workItem.workItemId === test.answerWorkItemId,
     );
     expect(answerWorkItem.messages[0]).toMatchObject({

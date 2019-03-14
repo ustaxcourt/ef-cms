@@ -41,5 +41,18 @@ export default test => {
       section: 'docket',
       sentBy: 'Test Docketclerk',
     });
+
+    await test.runSequence('gotoDashboardSequence');
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+    let sectionOutboxWorkQueue = test.getState('workQueue');
+    let answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
   });
 };
