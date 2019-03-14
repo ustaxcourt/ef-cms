@@ -11,6 +11,7 @@ import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
 
 import ErrorFactory from './presenter/errors/ErrorFactory';
 import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
+import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import Petition from '../../shared/src/business/entities/Petition';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -46,6 +47,7 @@ import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkIte
 import uuidv4 from 'uuid/v4';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
+import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
@@ -103,6 +105,7 @@ const allUseCases = {
   updateWorkItem,
   validateCaseDetail,
   validateForwardMessage,
+  validateInitialWorkItemMessage,
   validatePetition,
 };
 decorateWithTryCatch(allUseCases);
@@ -135,6 +138,7 @@ const applicationContext = {
   getCurrentUserToken,
   getEntityConstructors: () => ({
     ForwardMessage,
+    InitialWorkItemMessage,
     Petition,
   }),
   getError: e => {

@@ -17,17 +17,15 @@ class PendingMessagesComponent extends React.Component {
       users,
     } = this.props;
     return (
-      <div>
-        <div className="button-container">
-          <button
-            type="button"
-            id="create-message-button"
-            onClick={() => openCreateMessageModalSequence()}
-            className="usa-button-secondary"
-          >
-            Create Message
-          </button>
-        </div>
+      <>
+        <button
+          type="button"
+          id="create-message-button"
+          onClick={() => openCreateMessageModalSequence()}
+          className="usa-button-secondary"
+        >
+          Create Message
+        </button>
 
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
@@ -307,7 +305,7 @@ class PendingMessagesComponent extends React.Component {
               </div>
             ),
           )}
-      </div>
+      </>
     );
   }
 }
