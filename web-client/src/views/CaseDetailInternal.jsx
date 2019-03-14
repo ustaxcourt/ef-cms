@@ -54,6 +54,7 @@ export const CaseDetailInternal = connect(
             <p className="float-left">
               <button
                 className="link"
+                id="caption-edit-button"
                 onClick={() => {
                   openCaseCaptionModalSequence();
                 }}
