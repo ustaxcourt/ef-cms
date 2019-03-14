@@ -14,6 +14,7 @@ import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
 import { connect } from '@cerebral/react';
+import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
 
 class DocumentDetailComponent extends React.Component {
   render() {
@@ -186,6 +187,9 @@ class DocumentDetailComponent extends React.Component {
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
+        )}
+        {showModal === 'CreateMessageModalDialog' && (
+          <CreateMessageModalDialog />
         )}
         <div tabIndex="0" />
       </React.Fragment>

@@ -75,6 +75,10 @@ const {
 const {
   getCasesByStatus: getCasesByStatusUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
+
+const {
+  createWorkItem
+} = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
@@ -228,6 +232,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createDocument,
         createUser: createUserUC,
+        createWorkItem,
         forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,

@@ -12,9 +12,11 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -25,6 +27,7 @@ import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
+import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
@@ -95,9 +98,11 @@ export default {
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
+    createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissModalSequence,
+    getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -107,6 +112,7 @@ export default {
     gotoStyleGuideSequence,
     loginWithTokenSequence,
     openCaseCaptionModalSequence,
+    openCreateMessageModalSequence,
     removeYearAmountSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
