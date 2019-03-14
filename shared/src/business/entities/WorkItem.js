@@ -79,6 +79,10 @@ joiValidationDecorator(
       .required(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
+    sentByUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
     updatedAt: joi
       .date()
       .iso()

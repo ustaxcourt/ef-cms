@@ -65,7 +65,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   );
 
   result.currentMessage = result.messages[0];
-  result.sentDateFormatted = formatDateIfToday(result.currentMessage);
+  result.sentDateFormatted = formatDateIfToday(result.currentMessage.createdAt);
   result.historyMessages = result.messages.slice(1);
 
   return result;

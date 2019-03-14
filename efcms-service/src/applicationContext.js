@@ -55,7 +55,12 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-
+const {
+  createWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem')
+const {
+  updateCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase')
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 
 const {
@@ -77,7 +82,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
 
 const {
-  createWorkItem
+  createWorkItem: createWorkItemUC
 } = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   createCase,
@@ -95,7 +100,7 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  updateCase,
+  updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
@@ -191,28 +196,26 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         createUser,
+        createWorkItem,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
-
-        // work items
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
-
-        // cases
         getWorkItemById,
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
         saveCase,
         saveWorkItem,
+        updateCase,
       };
     },
     getStorageClient: () => {
@@ -233,7 +236,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createDocument,
         createUser: createUserUC,
-        createWorkItem,
+        createWorkItem: createWorkItemUC,
         forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
@@ -249,7 +252,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         sendPetitionToIRSHoldingQueue,
-        updateCase,
+        updateCase: updateCaseUC,
         updateWorkItem,
       };
     },
