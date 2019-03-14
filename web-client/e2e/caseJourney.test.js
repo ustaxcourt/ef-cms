@@ -8,6 +8,7 @@ import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
+import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
@@ -131,6 +132,7 @@ describe('Case journey', () => {
   docketClerkViewsDashboardWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkViewsDecisionDocument(test);
+  docketClerkStartsNewMessageThreadOnAnswer(test);
 
   docketClerkLogIn(test, 'docketclerk1');
   docketClerkDocketDashboard(test);

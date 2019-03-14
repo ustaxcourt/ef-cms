@@ -26,6 +26,13 @@ export default test => {
       message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
+    const answerWorkItem = sectionWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
     const formatted = runCompute(formattedSectionWorkQueue, {
       state: test.getState(),
     });

@@ -18,6 +18,9 @@ export default test => {
       .getState('workQueue')
       .filter(item => item.docketNumber === test.docketNumber);
     expect(sectionWorkItems.length).toEqual(2);
+    test.answerDocumentId = sectionWorkItems.find(
+      item => item.document.documentType === 'Answer',
+    ).document.documentId;
     test.answerWorkItemId = sectionWorkItems.find(
       item => item.document.documentType === 'Answer',
     ).workItemId;
