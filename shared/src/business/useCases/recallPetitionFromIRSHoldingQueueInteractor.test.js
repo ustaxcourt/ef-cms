@@ -53,6 +53,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
+          name: 'Petitions Clerk',
           role: 'petitionsclerk',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });

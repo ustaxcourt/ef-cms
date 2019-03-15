@@ -1,22 +1,27 @@
 label {
   max-width: 100%;
-  margin: 0 0 8px;
+  margin: 0 0 15px;
   font-size: 17px;
   font-weight: $font-semibold;
-  line-height: 1.45em;
+  line-height: 1;
+  .usa-form-hint {
+    margin: 0;
+  }
 }
 
 label.with-hint {
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
+
 label p.usa-form-hint {
   display: block;
 }
 
 legend {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   font-size: 17px;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 input[type='file'] {
@@ -30,12 +35,13 @@ input[type='tel'],
 input[type='text'],
 textarea,
 select {
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 textarea.caption {
   width: 379px;
   height: 107px;
+  margin-bottom: 2px;
 }
 
 input[type='email']:hover,
@@ -81,7 +87,7 @@ input:focus::placeholder {
 
 .ustc-vertical-option-list {
   padding: 0;
-  margin-top: 0;
+  margin: 0;
   li {
     display: block;
   }
@@ -133,6 +139,10 @@ label.validated::after {
   }
 }
 
+.ustc-form-group {
+  margin-bottom: 20px;
+}
+
 .ustc-form-group-city {
   width: 25rem;
   margin-right: 3rem;
@@ -151,7 +161,6 @@ label.validated::after {
 
 .document-detail-one-third .blue-container {
   padding: 0;
-
   #change-email-hint {
     display: none;
   }
@@ -160,7 +169,6 @@ label.validated::after {
 .document-detail-one-third {
   overflow: scroll;
   max-height: 890px;
-
   .phone-input {
     margin-bottom: 25px;
     clear: both;

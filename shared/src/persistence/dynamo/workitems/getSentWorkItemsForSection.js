@@ -1,10 +1,8 @@
-const {
-  getSortRecordsViaMapping,
-} = require('../../dynamo/helpers/getSortRecordsViaMapping');
+const { getSortRecords } = require('../../dynamo/helpers/getSortRecords');
 const moment = require('moment');
 
 exports.getSentWorkItemsForSection = ({ section, applicationContext }) => {
-  return getSortRecordsViaMapping({
+  return getSortRecords({
     afterDate: moment
       .utc(new Date().toISOString())
       .startOf('day')
@@ -12,8 +10,7 @@ exports.getSentWorkItemsForSection = ({ section, applicationContext }) => {
       .utc()
       .format(),
     applicationContext,
-    foreignKey: 'workItemId',
     key: section,
-    type: 'sentWorkItem',
+    type: 'outbox',
   });
 };

@@ -1,16 +1,16 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseTypeSelect = connect(
   {
+    allowDefaultOption: props.allowDefaultOption,
     caseTypes: props.caseTypes,
     legend: props.legend,
-    value: props.value,
-    allowDefaultOption: props.allowDefaultOption,
     onChange: sequences[props.onChange],
     validation: sequences[props.validation],
     validationErrors: state.validationErrors,
+    value: props.value,
   },
   ({
     caseTypes,
@@ -54,7 +54,7 @@ export const CaseTypeSelect = connect(
             ))}
           </select>
         </fieldset>
-        <div className="usa-input-error-message beneath">
+        <div className="usa-input-error-message">
           {validationErrors.caseType}
         </div>
       </div>

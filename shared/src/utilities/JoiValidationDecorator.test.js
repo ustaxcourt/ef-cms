@@ -62,5 +62,16 @@ describe('Joi Validation Decorator', () => {
       const errors = obj.getFormattedValidationErrors();
       expect(Object.keys(errors).length).not.toBe(0);
     });
+
+    it('returns default validation error for field without formatted string in errorToMessageMap', () => {
+      const invalidEntity = new MockEntity1({
+        favoriteNumber: 7,
+        name: 'name',
+      });
+      expect(invalidEntity.isValid()).toBe(false);
+      const errors = invalidEntity.getFormattedValidationErrors();
+      const joiGeneratedMessageNotFromErrorToMessageMap = errors.hasNickname;
+      expect(joiGeneratedMessageNotFromErrorToMessageMap).toBeDefined();
+    });
   });
 });

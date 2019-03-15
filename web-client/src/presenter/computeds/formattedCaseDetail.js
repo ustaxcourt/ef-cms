@@ -18,7 +18,7 @@ export const formatDocketRecord = docketRecord => {
 };
 
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
-  const yearAmountError = (caseDetailErrors.yearAmounts || []).find(error => {
+  const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
     return error.index === idx;
   });
 

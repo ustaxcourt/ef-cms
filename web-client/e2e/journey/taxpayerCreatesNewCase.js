@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 const {
   PARTY_TYPES,
-} = require('../../../shared/src/business/entities/Contacts/PetitionContact');
+} = require('../../../shared/src/business/entities/contacts/PetitionContact');
 
 import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
 

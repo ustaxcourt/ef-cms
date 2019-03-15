@@ -75,6 +75,10 @@ iframe {
   margin-bottom: 30px;
 }
 
+select[disabled] {
+  background-color: $color-gray-lightest;
+}
+
 .grey-container {
   padding: 20px;
   margin-bottom: 20px;
@@ -115,6 +119,9 @@ iframe {
   padding: 20px;
   margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
+  .ustc-form-group:last-of-type {
+    margin: 0;
+  }
 
   .push-right {
     margin-right: 0;
@@ -367,4 +374,13 @@ select.ustc-input-error {
 #tabContent-inProgress {
   overflow: scroll;
   max-height: 931px;
+}
+
+.ustc-create-message-modal {
+  .usa-input-error input,
+  .usa-input-error textarea,
+  .usa-input-error select {
+    width: calc(100% + 1.9rem);
+    border: 3px solid #cd2026;
+  }
 }
