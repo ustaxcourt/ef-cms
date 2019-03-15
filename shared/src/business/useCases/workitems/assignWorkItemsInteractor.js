@@ -35,6 +35,8 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
               assigneeId: workItem.assigneeId,
               assigneeName: workItem.assigneeName,
               role: user.role,
+              sentBy: user.name,
+              sentByUserId: user.userId,
             })
             .addMessage(
               new Message({

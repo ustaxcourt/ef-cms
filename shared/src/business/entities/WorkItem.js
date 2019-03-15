@@ -114,11 +114,19 @@ WorkItem.prototype.addMessage = function(message) {
  * @param role
  * @returns {WorkItem}
  */
-WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
+WorkItem.prototype.assignToUser = function({
+  assigneeId,
+  assigneeName,
+  role,
+  sentBy,
+  sentByUserId,
+}) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
     section: getSectionForRole(role),
+    sentBy,
+    sentByUserId,
   });
   return this;
 };
@@ -132,6 +140,8 @@ WorkItem.prototype.assignToIRSBatchSystem = function({ userId, name }) {
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
     role: 'irsBatchSystem',
+    sentBy: name,
+    sentByUserId: userId,
   });
   this.addMessage(
     new Message({
@@ -153,6 +163,8 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     assigneeId: user.userId,
     assigneeName: user.name,
     role: user.role,
+    sentBy: user.name,
+    sentByUserId: user.userId,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(
