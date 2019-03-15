@@ -22,6 +22,7 @@ The end result of this is not a dev, staging, or production website, but is inst
 - [Configure the AWS CLI account](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html) on your local machine to use the role or user you just created in IAM.
 - Clone this GitHub repository locally.
 - [Create a new GitHub account](https://github.com/join), with read-level access to the repository, which Jenkins will use to interact with GitHub. (GitHub describes these as “bot accounts” or “machine accounts,” and they are the exception to GitHub’s rule that accounts are intended for humans.)
+- [Create a GitHub personal access token](https://github.com/settings/tokens), which Jenkins will use to build pull requests. Give it the following permissions: `repo:status`, `public_repo`, `admin:repo_hook`, `write:repo_hook`, and `read:repo_hook`. (This will be referred to as `GITHUB_TOKEN` when setting up Jenkins.)
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - [Create a token](https://sonarcloud.io/account/security) that Jenkins can use to interact with SonarCloud. (This will be referred to as `SONAR_TOKEN` when setting up Jenkins.)
@@ -46,7 +47,7 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Note the values of the four `NS` domains. These are what need to be added to the DNS entry for your main domain name.
    - The method of modifying your main domain name’s DNS will vary enormously, so specific guidance is impossible, but you need to create four new `NS` records, one for each of those Route 53 records, with a host name of the subdomain (e.g., `ef-cms`) and a value of the AWS DNS (e.g., `ns-123.awsdns-56.net`). If you are limited in the number of `NS` records that you can create, simply create as many of the four as you can.
 6. If completing the prior step took more than a few minutes, then step 3 failed. That’s OK! Simply re-run `deploy-infrastructure.sh`.
-7. After `deploy-infrastructure.sh` has completed successfully, run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`.
+7. After `deploy-infrastructure.sh` has completed successfully, run the script to install plugins into Jenkins, `setup-jenkins.sh`, found in `management/bin/`. This must be run from within `management/management/`, like such: `../bin/setup-jenkins.sh`.
 8. Log into Jenkins.
    - Get the Jenkins credentials, using `show-passwords.sh`, found in `management/management/`.
    - Note the Jenkins username and password.
@@ -54,29 +55,30 @@ The end result of this is not a dev, staging, or production website, but is inst
    - Click the `x` in the top right off the modal that appears.
      - You may be prompted to restart Jenkins, in which case you should do so.
      - After restarting, the modal will pop up again — just click the `x` again.
-9. Create 3 global credentials in Jenkins, so that Jenkins has permission to interact with GitHub and SonarCloud, using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
+9. Create five global credentials in Jenkins, so that Jenkins has permission to interact with GitHub, SonarCloud, and AWS Cognito using the credentials that you set up per [the prerequisites](#Prerequisites). This is done at a URL like `https://jenkins-ef-cms-ops.ef-cms.ustaxcourt.gov/jenkins/credentials/store/system/domain/_/`, which you can get to by choosing `Credentials` from the home page menu, `System` ⟶ `Global credentials` ⟶ `Add Credentials`.
    - Create a “username with password” type. Provide an ID of `GITHUB_USER`, and enter the username and password for the GitHub account that you created.
    - Create a “secret text” type. Provide an ID of `API_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `UI_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `SHARED_SONAR_TOKEN`, and a `secret` that is the value of the token that you created in SonarCloud.
    - Create a “secret text” type. Provide an ID of `USTC_ADMIN_PASS`, and a `secret` of your choice.  When the deploy runs, a Cognito user with the email of 'ustcadmin@example.com' will be created with the password you supplied in `secret`.  This ustcadmin@example.com user is currently only used for hitting the POST@v1/users endpoint for creating users.
+   - Create a “secret text” type. Provide an ID of `GITHUB_TOKEN`, and a `secret` that is the value of the token that you created in GitHub.
 
 10. Set up the Sonar organization properties in Jenkins. This is done in `Jenkins` ⟶ `Manage Jenkins` ⟶ `Configure System` ⟶ `Global properties`, and then by checking off `Environment variables` to reveal the interface to add new variables. Add the following name/value pairs:
 
-- `SONAR_ORG` / your sonar organization’s name
-- `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
-- `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
-- `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
-- `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
-- `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
+    - `SONAR_ORG` / your sonar organization’s name
+    - `EFCMS_DOMAIN` / your subdomain, e.g. `ef-cms.example.gov`
+    - `UI_SONAR_KEY` / your Sonar UI project key, e.g. `ef-cms-ui`
+    - `API_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-api`
+    - `SHARED_SONAR_KEY` / your Sonar API project key, e.g. `ef-cms-shared`
+    - `COGNITO_SUFFIX` / your suffix to use for the Cognito URL, e.g. `flexion-efcms`
 
 11. At the CLI, set up the jobs via the `setup-jobs.sh` script, which is in `management/bin/`. This script takes three arguments, with a complete command like: `../bin/setup-jobs.sh https://github.com/flexion/ef-cms.git flexion ef-cms`. Those arguments are, in this order:
     - Your Git repository’s URL, e.g. `https://github.com/examplecourt/ef-cms.git`.
-
-- Your organization’s name in GitHub, e.g. `examplecourt`.
-- The project repository’s name in GitHub, e.g. `ef-cms`.
+    - Your organization’s name in GitHub, e.g. `examplecourt`.
+    - The project repository’s name in GitHub, e.g. `ef-cms`.
 
 12. Increase the number of Jenkins executors to five. Choose `Jenkins` ⟶ `Build Executor Status` ⟶ `Master` ⟶ `Configure`, and change `# of executors` from `2` to `5`.
 13. Restart Jenkins. This can be done by choosing `Jenkins` (i.e., going to the home page), and appending `safeRestart` to the URL, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/safeRestart`.
+14. Set up Jenkins to build pull requests on GitHub. In the GitHub repository housing this project, [create a new webhook](https://github.com/ustaxcourt/ef-cms/settings/hooks). For the `Payload URL`, enter the Jenkins server URL with `/github-webhook/` appended, e.g. `https://jenkins-ef-cms-ops.ef-cms.example.gov/jenkins/github-webhook/`. Select a `Content type` of `application/x-www-form-urlencoded`, enable SSL verification, and send all events to trigger the webhook.
 
 You are done — the CI/CD pipeline is now ready to operate. To run a build, [see Jenkins documentation](https://jenkins.io/doc/).
