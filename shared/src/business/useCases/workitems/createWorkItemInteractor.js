@@ -52,8 +52,6 @@ exports.createWorkItem = async ({
   });
 
   const newWorkItem = new WorkItem({
-    assigneeId,
-    assigneeName: userToAssignTo.name,
     caseId: caseId,
     caseStatus: theCase.status,
     docketNumber: theCase.docketNumber,
@@ -64,18 +62,23 @@ exports.createWorkItem = async ({
       documentType: document.documentType,
     },
     isInitializeCase: false,
-    section: userToAssignTo.section,
-    sentBy: user.name,
-    sentByUserId: user.userId,
-  }).addMessage(
-    new Message({
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-      to: userToAssignTo.name,
-      toUserId: userToAssignTo.userId,
-    }),
-  );
+  })
+    .assignToUser({
+      assigneeId,
+      assigneeName: userToAssignTo.name,
+      role: userToAssignTo.role,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+    })
+    .addMessage(
+      new Message({
+        from: user.name,
+        fromUserId: user.userId,
+        message,
+        to: userToAssignTo.name,
+        toUserId: userToAssignTo.userId,
+      }),
+    );
 
   document.addWorkItem(newWorkItem);
 
