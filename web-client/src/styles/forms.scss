@@ -12,6 +12,7 @@ label {
 label.with-hint {
   margin-bottom: 2px;
 }
+
 label p.usa-form-hint {
   display: block;
 }
@@ -155,7 +156,6 @@ label.validated::after {
 
 .document-detail-one-third .blue-container {
   padding: 0;
-
   #change-email-hint {
     display: none;
   }
@@ -164,7 +164,6 @@ label.validated::after {
 .document-detail-one-third {
   overflow: scroll;
   max-height: 890px;
-
   .phone-input {
     margin-bottom: 25px;
     clear: both;
