@@ -183,7 +183,7 @@ export const IRSNotice = connect(
             </div>
           </fieldset>
           {caseDetailErrors.irsNoticeDate && (
-            <div className="usa-input-error-message beneath" role="alert">
+            <div className="usa-input-error-message" role="alert">
               {caseDetailErrors.irsNoticeDate}
             </div>
           )}
@@ -262,7 +262,7 @@ export const IRSNotice = connect(
                 )}
               </div>
               {yearAmount.showError && (
-                <div className="usa-input-error-message beneath">
+                <div className="usa-input-error-message">
                   {yearAmount.errorMessage}
                 </div>
               )}
