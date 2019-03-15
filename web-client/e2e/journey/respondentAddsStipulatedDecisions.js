@@ -12,5 +12,15 @@ export default (test, fakeFile) => {
     });
     await test.runSequence('submitDocumentSequence');
     expect(test.getState('caseDetail.documents').length).toEqual(4);
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'documentType',
+      value: Case.documentTypes.stipulatedDecision,
+    });
+    await test.runSequence('updateDocumentValueSequence', {
+      key: 'file',
+      value: fakeFile,
+    });
+    await test.runSequence('submitDocumentSequence');
+    expect(test.getState('caseDetail.documents').length).toEqual(5);
   });
 };

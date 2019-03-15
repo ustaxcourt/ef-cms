@@ -8,10 +8,10 @@ export default test => {
     });
     let myOutboxWorkQueue = test.getState('workQueue');
     let stipulatedDecisionWorkItem = myOutboxWorkQueue.find(
-      workItem => workItem.workItemId === test.stipulatedDecisionWorkItemId,
+      workItem => workItem.workItemId === test.workItemId,
     );
-    expect(stipulatedDecisionWorkItem.messages[0]).toMatchObject({
-      message: 'Stipulated Decision filed by Respondent is ready for review.',
+    expect(stipulatedDecisionWorkItem.messages[2]).toMatchObject({
+      message: 'hello world',
     });
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
