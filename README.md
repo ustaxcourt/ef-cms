@@ -75,7 +75,7 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 
 - `cd efcms-service && npm start`
 
-#### Login and Test Users
+## Login and Test Users
 
 - for /mock-login you can login using:
 
@@ -105,13 +105,13 @@ all passwords are:
 
 `Testing1234$`
 
-### CI/CD Setup
+## CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
-### Editor configuration
+## Editor configuration
 
-#### Atom.io
+### Atom.io
 
 Install the following for best results:
 
