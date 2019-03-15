@@ -3,7 +3,22 @@ import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
+    let sectionOutboxWorkQueue;
+    let answerWorkItem;
     await test.runSequence('gotoDashboardSequence');
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'my',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
@@ -26,6 +41,26 @@ export default test => {
       message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
     const formatted = runCompute(formattedSectionWorkQueue, {
       state: test.getState(),
     });
@@ -34,5 +69,10 @@ export default test => {
       `${test.docketNumber}W`,
     );
     expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
   });
 };

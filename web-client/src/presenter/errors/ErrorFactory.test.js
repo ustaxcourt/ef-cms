@@ -22,6 +22,13 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('NotFoundError');
     expect(result.title).toEqual('We cannot find the page you requested');
   });
+  it('creates UnauthorizedRequestError errors for status code 404 and a message', () => {
+    const error = new Error();
+    error.response = { message: 'something is missing', status: 404 };
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('NotFoundError');
+    expect(result.title).toEqual('We cannot find the page you requested');
+  });
   it('creates InvalidRequestError errors for status code 400', () => {
     const error = new Error();
     error.response = { data: 'Unauthorized', status: 400 };

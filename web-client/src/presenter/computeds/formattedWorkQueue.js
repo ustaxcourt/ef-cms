@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { state } from 'cerebral';
 import moment from 'moment';
+import { state } from 'cerebral';
 
 const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
 const DATE_TODAY_TIME = 'LT';
@@ -65,7 +65,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   );
 
   result.currentMessage = result.messages[0];
-  result.sentDateFormatted = formatDateIfToday(result.currentMessage);
+  result.sentDateFormatted = formatDateIfToday(result.currentMessage.createdAt);
   result.historyMessages = result.messages.slice(1);
 
   return result;

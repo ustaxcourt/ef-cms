@@ -19,8 +19,8 @@ const goToDashboard = [
     docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
-      ...chooseWorkQueueSequence,
       setCurrentPageAction('DashboardDocketClerk'),
+      ...chooseWorkQueueSequence,
     ],
     intakeclerk: [
       clearAlertsAction,
@@ -34,8 +34,8 @@ const goToDashboard = [
     petitionsclerk: [
       getUsersInSectionAction({ section: 'petitions' }),
       setUsersAction,
-      ...chooseWorkQueueSequence,
       setCurrentPageAction('DashboardPetitionsClerk'),
+      ...chooseWorkQueueSequence,
     ],
     respondent: [
       clearAlertsAction,
@@ -45,8 +45,8 @@ const goToDashboard = [
     ],
     seniorattorney: [
       clearAlertsAction,
-      ...chooseWorkQueueSequence,
       setCurrentPageAction('DashboardSeniorAttorney'),
+      ...chooseWorkQueueSequence,
     ],
   },
 ];

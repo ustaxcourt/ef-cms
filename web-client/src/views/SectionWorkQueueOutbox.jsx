@@ -29,13 +29,13 @@ export const SectionWorkQueueOutbox = connect(
             <th>To</th>
           </tr>
         </thead>
-        {sectionWorkQueue.map(item => (
+        {sectionWorkQueue.map((item, idx) => (
           <tbody
-            key={item.workItemId}
+            key={idx}
             onClick={() =>
               setFocusedWorkItem({
+                idx,
                 queueType: 'workQueue',
-                workItemId: item.workItemId,
               })
             }
           >

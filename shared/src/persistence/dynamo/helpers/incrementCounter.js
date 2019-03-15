@@ -5,10 +5,7 @@ const client = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-// TODO: Hard coded to update the docketNumberCounter, but should
-// be refactored to update any type of atomic counter in dynamo
-// if we can pass in table / key
-exports.incrementCounter = ({ applicationContext }) => {
+exports.incrementCounter = ({ applicationContext, key }) => {
   const year = new Date().getFullYear().toString();
 
   return client.updateConsistent({
@@ -20,8 +17,8 @@ exports.incrementCounter = ({ applicationContext }) => {
       ':x': 1,
     },
     Key: {
-      pk: `docketNumberCounter-${year}`,
-      sk: `docketNumberCounter-${year}`,
+      pk: `${key}-${year}`,
+      sk: `${key}-${year}`,
     },
     ReturnValues: 'UPDATED_NEW',
     UpdateExpression: 'ADD #a :x',

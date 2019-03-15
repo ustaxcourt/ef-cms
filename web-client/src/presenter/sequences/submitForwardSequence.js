@@ -1,6 +1,3 @@
-import { state } from 'cerebral';
-import { set } from 'cerebral/factories';
-
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearForwardFormAction } from '../actions/clearForwardFormAction';
 import { forwardWorkItemAction } from '../actions/forwardWorkItemAction';
@@ -12,6 +9,7 @@ import { validateForwardMessageAction } from '../actions/validateForwardMessageA
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
 
 export const submitForwardSequence = [
   setFormSubmittingAction,
@@ -26,7 +24,7 @@ export const submitForwardSequence = [
     success: [
       forwardWorkItemAction,
       clearForwardFormAction,
-      set(state.document.showForwardInputs, false),
+      unsetShowForwardInputs,
       setAlertSuccessAction,
       navigateToDashboardAction,
     ],

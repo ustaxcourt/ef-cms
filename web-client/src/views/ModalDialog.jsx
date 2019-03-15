@@ -70,20 +70,22 @@ export class ModalDialog extends React.Component {
           </div>
           {modal.message && <p>{modal.message}</p>}
           {this.renderBody && this.renderBody()}
-          <button
-            type="button"
-            onClick={this.runConfirmSequence}
-            className="usa-button"
-          >
-            {modal.confirmLabel}
-          </button>
-          <button
-            type="button"
-            onClick={this.runCancelSequence}
-            className="usa-button-secondary"
-          >
-            {modal.cancelLabel}
-          </button>
+          <div className="button-container">
+            <button
+              type="button"
+              onClick={this.runConfirmSequence}
+              className="usa-button"
+            >
+              {modal.confirmLabel}
+            </button>
+            <button
+              type="button"
+              onClick={this.runCancelSequence}
+              className="usa-button-secondary"
+            >
+              {modal.cancelLabel}
+            </button>
+          </div>
         </div>
       </div>
     );

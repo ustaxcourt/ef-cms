@@ -128,6 +128,8 @@ provider:
       Resource:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
+        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
+        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
 
 package:
   exclude:
@@ -371,6 +373,18 @@ functions:
       - http:
           path: v1/workitems/{workItemId}/complete
           method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createWorkItem:
+    handler: src/workitems/createWorkItemLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/workitems
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 import { Address } from './Address';
@@ -9,17 +9,17 @@ import { InternationalAddress } from './InternationalAddress';
 
 export const ContactPrimary = connect(
   {
-    parentView: props.parentView,
     bind: props.bind,
-    emailBind: props.emailBind,
-    data: state[props.bind],
     constants: state.constants,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    validationErrors: state.validationErrors,
+    contactsHelper: state[props.contactsHelper],
+    data: state[props.bind],
+    emailBind: props.emailBind,
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
-    contactsHelper: state[props.contactsHelper],
+    onChange: props.onChange,
+    onChangeSequence: sequences[props.onChange],
+    parentView: props.parentView,
+    validationErrors: state.validationErrors,
   },
   ({
     parentView,
@@ -77,7 +77,7 @@ export const ContactPrimary = connect(
               }}
             />
             {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.contactPrimary.name}
               </div>
             )}
@@ -146,7 +146,7 @@ export const ContactPrimary = connect(
                 }}
               />
               {validationErrors.contactPrimary && (
-                <div className="usa-input-error-message beneath">
+                <div className="usa-input-error-message">
                   {validationErrors.contactPrimary.inCareOf}
                 </div>
               )}
@@ -199,7 +199,7 @@ export const ContactPrimary = connect(
               }}
             />
             {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.contactPrimary.phone}
               </div>
             )}

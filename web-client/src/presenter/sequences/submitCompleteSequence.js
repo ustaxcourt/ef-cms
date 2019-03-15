@@ -1,6 +1,3 @@
-import { state } from 'cerebral';
-import { set } from 'cerebral/factories';
-
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearCompleteFormAction } from '../actions/clearCompleteFormAction';
 import { completeWorkItemAction } from '../actions/completeWorkItemAction';
@@ -8,6 +5,7 @@ import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
 
 export const submitCompleteSequence = [
   setFormSubmittingAction,
@@ -15,7 +13,7 @@ export const submitCompleteSequence = [
   completeWorkItemAction,
   refreshCaseAction,
   clearCompleteFormAction,
-  set(state.document.showForwardInputs, false), // TODO
+  unsetShowForwardInputs,
   setAlertSuccessAction,
   unsetFormSubmittingAction,
 ];
