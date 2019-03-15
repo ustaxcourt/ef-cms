@@ -481,7 +481,7 @@ export const StartCase = connect(
                     </div>
                   </div>
                 )}
-              <div className="usa-input-error usa-input-error-message padded-left">
+              <div className="usa-input-error-message">
                 {validationErrors.partyType}
               </div>
             </div>
