@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
@@ -12,7 +13,11 @@ export default get => {
   let formattedDocument = {};
   if (selectedDocument) {
     formattedDocument = formatDocument(selectedDocument);
-    const allWorkItems = formattedDocument.workItems;
+    const allWorkItems = _.orderBy(
+      formattedDocument.workItems,
+      'createdAt',
+      'desc',
+    );
     formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
       .map(items => formatWorkItem(items));
