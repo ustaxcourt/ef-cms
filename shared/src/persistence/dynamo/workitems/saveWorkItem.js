@@ -4,9 +4,6 @@ const { reassignWorkItem } = require('./syncWorkItems');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { saveVersionedCase } = require('../cases/saveCase');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
@@ -43,25 +40,22 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     existingVersion: (caseToUpdate || {}).currentVersion,
   });
 
-  await createMappingRecord({
+  await client.put({
     applicationContext,
-    item: {
-      workItemId: workItemToSave.workItemId,
+    Item: {
+      pk: `${user.userId}|outbox`,
+      sk: new Date().toISOString(),
+      ...workItemToSave,
     },
-    pkId: user.userId,
-    skId: new Date().toISOString(),
-    type: 'sentWorkItem',
   });
 
-  // section sent box
-  await createMappingRecord({
+  await client.put({
     applicationContext,
-    item: {
-      workItemId: workItemToSave.workItemId,
+    Item: {
+      pk: `${user.section}|outbox`,
+      sk: new Date().toISOString(),
+      ...workItemToSave,
     },
-    pkId: user.section,
-    skId: new Date().toISOString(),
-    type: 'sentWorkItem',
   });
 
   const workItem = await client.put({
