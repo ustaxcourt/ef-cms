@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { state } from 'cerebral';
 import moment from 'moment';
+import { state } from 'cerebral';
 
 const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
 const DATE_TODAY_TIME = 'LT';
