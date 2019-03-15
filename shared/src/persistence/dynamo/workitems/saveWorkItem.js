@@ -6,6 +6,8 @@ const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { saveVersionedCase } = require('../cases/saveCase');
 
 exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
   const existingWorkItem = await getWorkItemById({
     applicationContext,
     workItemId: workItemToSave.workItemId,
@@ -36,6 +38,24 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     applicationContext,
     caseToSave: caseToUpdate,
     existingVersion: (caseToUpdate || {}).currentVersion,
+  });
+
+  await client.put({
+    applicationContext,
+    Item: {
+      pk: `${user.userId}|outbox`,
+      sk: new Date().toISOString(),
+      ...workItemToSave,
+    },
+  });
+
+  await client.put({
+    applicationContext,
+    Item: {
+      pk: `${user.section}|outbox`,
+      sk: new Date().toISOString(),
+      ...workItemToSave,
+    },
   });
 
   const workItem = await client.put({

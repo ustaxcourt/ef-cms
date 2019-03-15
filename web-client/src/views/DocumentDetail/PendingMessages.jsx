@@ -112,7 +112,10 @@ class PendingMessagesComponent extends React.Component {
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      <FontAwesomeIcon
+                        icon={['far', 'check-circle']}
+                        size="sm"
+                      />
                       Complete
                     </button>
                   )}

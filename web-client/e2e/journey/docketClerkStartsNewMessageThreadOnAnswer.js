@@ -5,14 +5,29 @@ export default test => {
       documentId: test.answerDocumentId,
     });
 
+    expect(test.getState('validationErrors')).toEqual({});
+
+    await test.runSequence('createWorkItemSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      assigneeId: 'Recipient is a required field.',
+      message: 'Message is a required field.',
+      section: 'Section is a required field.',
+    });
+
     await test.runSequence('updateFormValueSequence', {
-      key: 'message',
-      value: 'this is a new thread test message',
+      key: 'section',
+      value: 'docket',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'assigneeId',
       value: '2805d1ab-18d0-43ec-bafb-654e83405416', // docketclerk1
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'message',
+      value: 'this is a new thread test message',
     });
 
     await test.runSequence('createWorkItemSequence');
@@ -40,6 +55,21 @@ export default test => {
       ],
       section: 'docket',
       sentBy: 'Test Docketclerk',
+    });
+
+    expect(test.getState('form')).toEqual({});
+
+    await test.runSequence('gotoDashboardSequence');
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'my',
+    });
+    let sectionOutboxWorkQueue = test.getState('workQueue');
+    let answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
     });
   });
 };

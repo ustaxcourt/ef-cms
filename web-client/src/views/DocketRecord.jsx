@@ -38,7 +38,7 @@ export const DocketRecord = connect(
           </button>
         )}
         <table
-          className="responsive-table"
+          className="responsive-table row-border-only"
           id="docket-record"
           aria-label="docket record"
         >
@@ -47,8 +47,7 @@ export const DocketRecord = connect(
               <th>Date filed</th>
               <th>Title</th>
               <th>Filed by</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Served</th>
             </tr>
           </thead>
           <tbody>
@@ -70,7 +69,7 @@ export const DocketRecord = connect(
                         rel="noreferrer noopener"
                         aria-label={`View PDF: ${document.documentType}`}
                       >
-                        <FontAwesomeIcon icon="file-pdf" />
+                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
                         {document.documentType}
                       </a>
                     )}
@@ -82,7 +81,7 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
-                        <FontAwesomeIcon icon="file-pdf" />
+                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
                         {document.documentType}
                       </a>
                     )}
@@ -93,7 +92,7 @@ export const DocketRecord = connect(
                     {record.filedBy}
                   </td>
                   <td>
-                    <span className="responsive-label">Status</span>
+                    <span className="responsive-label">Served</span>
                     {document && document.isStatusServed && (
                       <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
@@ -101,7 +100,6 @@ export const DocketRecord = connect(
                       <span>{document.status}</span>
                     )}
                   </td>
-                  <td />
                 </tr>
               ),
             )}

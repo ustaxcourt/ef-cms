@@ -44,13 +44,21 @@ export default test => {
       }),
     ).toBeUndefined();
 
+    let workItem = test
+      .getState('workQueue')
+      .find(
+        item =>
+          item.docketNumber === test.docketNumber &&
+          item.caseStatus === 'Batched for IRS',
+      );
+
     // verify that the section workitems are in state
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     // the first item in the outbox should be the Petition batched for IRS from the previous test
-    expect(test.getState('workQueue.0.caseStatus')).toEqual('Batched for IRS');
+    expect(workItem).toBeDefined();
     // goto the first work item in the section queue outbox, the one we just batched for IRS
-    const docketNumber = test.getState('workQueue.0.docketNumber');
-    const documentId = test.getState('workQueue.0.document.documentId');
+    const docketNumber = workItem.docketNumber;
+    const documentId = workItem.document.documentId;
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber,
       documentId,
@@ -124,7 +132,7 @@ export default test => {
     expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
 
     // assign to another petitionsclerk
-    const workItem = test.getState('workQueue').find(item => {
+    workItem = test.getState('workQueue').find(item => {
       return item.isInitializeCase && item.docketNumber === docketNumber;
     });
 
@@ -171,6 +179,13 @@ export default test => {
       queue: 'section',
     });
 
-    expect(test.getState('workQueue.0.caseStatus')).toEqual('Batched for IRS');
+    workItem = test
+      .getState('workQueue')
+      .find(
+        item =>
+          item.docketNumber === test.docketNumber &&
+          item.caseStatus === 'Batched for IRS',
+      );
+    expect(workItem).toBeDefined();
   });
 };

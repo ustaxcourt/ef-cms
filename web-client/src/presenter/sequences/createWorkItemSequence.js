@@ -4,16 +4,29 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 
 export const createWorkItemSequence = [
-  setFormSubmittingAction,
   clearAlertsAction,
-  createWorkItemAction,
+  startShowValidationAction,
+  validateInitialWorkItemMessageAction,
   {
-    success: [setAlertSuccessAction],
+    error: [setValidationErrorsAction],
+    success: [
+      setFormSubmittingAction,
+      createWorkItemAction,
+      {
+        success: [stopShowValidationAction, setAlertSuccessAction],
+      },
+      clearFormAction,
+      clearModalAction,
+      refreshCaseAction,
+      unsetFormSubmittingAction,
+    ],
   },
-  clearModalAction,
-  refreshCaseAction,
-  unsetFormSubmittingAction,
 ];
