@@ -103,6 +103,9 @@ const {
   updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
+  runBatchProcess,
+} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
+const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
 const {
@@ -254,6 +257,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
+        runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
         updateWorkItem,

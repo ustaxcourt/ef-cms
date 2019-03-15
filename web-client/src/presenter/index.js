@@ -41,6 +41,7 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { signOutSequence } from './sequences/signOutSequence';
 import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
 import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
+import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import state from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
@@ -117,6 +118,7 @@ export default {
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
     removeYearAmountSequence,
+    runBatchProcessSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
