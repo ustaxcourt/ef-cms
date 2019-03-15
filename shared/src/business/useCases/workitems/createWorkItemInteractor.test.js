@@ -23,7 +23,7 @@ describe('createWorkItem', () => {
       getCaseByCaseId: () => MOCK_CASE,
       getUserById: () => ({
         name: 'docketclerk',
-        section: 'docket',
+        role: 'docketclerk',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
       updateCase: updateCaseStub,

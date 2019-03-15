@@ -41,6 +41,7 @@ exports.completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
+    createOutboxEntries: true,
     workItemToSave: completedWorkItem,
   });
 
