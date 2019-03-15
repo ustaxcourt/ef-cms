@@ -23,7 +23,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             (this.props.validationErrors.section ? 'usa-input-error' : '')
           }
         >
-          <label htmlFor="section">Section</label>
+          <label htmlFor="section">Select Section</label>
 
           <select
             className="usa-input-inline"
@@ -100,8 +100,6 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
-            }}
-            onBlur={e => {
               this.props.validateInitialWorkItemMessageSequence();
             }}
           />
