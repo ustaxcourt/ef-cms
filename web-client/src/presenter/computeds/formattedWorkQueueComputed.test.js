@@ -49,7 +49,7 @@ const FORMATTED_WORK_ITEM = {
     },
   ],
   section: 'docket',
-  selected: false,
+  selected: true,
   sentBy: 'respondent',
   showComplete: true,
   showSendTo: true,
@@ -94,7 +94,7 @@ describe('formatted work queue computed', () => {
   beforeEach(() => {
     result = runCompute(formattedWorkQueue, {
       state: {
-        selectedWorkItems: [],
+        selectedWorkItems: [workItem],
         workQueue: [workItem],
       },
     });
