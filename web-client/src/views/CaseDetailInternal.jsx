@@ -18,6 +18,7 @@ export const CaseDetailInternal = connect(
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
+    runBatchProcessSequence: sequences.runBatchProcessSequence,
     showModal: state.showModal,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -36,6 +37,7 @@ export const CaseDetailInternal = connect(
     updateCaseValueSequence,
     updateCurrentTabSequence,
     updateFormValueSequence,
+    runBatchProcessSequence,
   }) => {
     return (
       <React.Fragment>
@@ -79,6 +81,7 @@ export const CaseDetailInternal = connect(
           <ErrorNotification />
 
           <div>
+            <button onClick={() => runBatchProcessSequence()}>SEND IT</button>
             <h2>Messages In Progress</h2>
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>

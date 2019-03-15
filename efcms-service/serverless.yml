@@ -231,6 +231,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  runBatchProcess:
+    handler: src/cases/runBatchProcessLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/runBatchProcess
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   createCase:
     handler: src/cases/createCaseLambda.handler
     events:
