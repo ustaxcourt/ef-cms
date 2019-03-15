@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {Function} get the cerebral get function used
  * for getting state.constants
- * @returns {Object} trialCities, trialCitiesByState
+ * @returns {Object} trialCitiesByState
  */
 export const trialCitiesHelper = get => procedureType => {
   const { TRIAL_CITIES } = get(state.constants);
@@ -22,7 +22,6 @@ export const trialCitiesHelper = get => procedureType => {
   );
 
   return {
-    trialCities: state.trialCities || [],
     trialCitiesByState: states,
   };
 };
