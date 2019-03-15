@@ -45,6 +45,7 @@
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "s3-zip": "^2.0.4",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

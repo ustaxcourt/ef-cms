@@ -1,5 +1,9 @@
+const stream = require('stream');
+const s3Zip = require('s3-zip');
+const aws = require('aws-sdk');
+
 /**
- * updateCase
+ * runBatchProcess
  *
  * @param caseId
  * @param caseToUpdate
@@ -8,36 +12,45 @@
  * @returns {*}
  */
 exports.runBatchProcess = async ({ caseId, applicationContext }) => {
-  console.log('got a caseid', caseId);
-  //   const user = applicationContext.getCurrentUser();
+  const caseToBatch = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
 
-  //   if (!isAuthorized(user, UPDATE_CASE)) {
-  //     throw new UnauthorizedError('Unauthorized for update case');
-  //   }
+  //get document ids
+  const ids = caseToBatch.documents.map(document => document.documentId);
+  const names = caseToBatch.documents.map(
+    document => `${document.documentType}.pdf`,
+  );
 
-  //   if (!caseToUpdate || caseId !== caseToUpdate.caseId) {
-  //     throw new UnprocessableEntityError();
-  //   }
+  const region = applicationContext.environment.region;
+  const bucket = applicationContext.environment.documentsBucketName;
 
-  //   if (caseToUpdate.documents) {
-  //     caseToUpdate.documents = setDocumentDetails(
-  //       user.userId,
-  //       caseToUpdate.documents,
-  //     );
-  //   }
+  const s3Client = new aws.S3({
+    endpoint: applicationContext.environment.s3Endpoint,
+    s3ForcePathStyle: 'true',
+    signatureVersion: 'v4',
+  });
 
-  //   const paidCase = new Case(caseToUpdate)
-  //     .markAsPaidByPayGov(caseToUpdate.payGovDate)
-  //     .updateCaptionDocketRecord()
-  //     .validate()
-  //     .toRawObject();
+  function uploadFromStream(s3Client) {
+    const pass = new stream.PassThrough();
 
-  //   const caseAfterUpdate = await applicationContext
-  //     .getPersistenceGateway()
-  //     .saveCase({
-  //       applicationContext,
-  //       caseToSave: paidCase,
-  //     });
+    const params = {
+      Body: pass,
+      Bucket: bucket,
+      Key: `${
+        caseToBatch.docketNumber
+      }_${caseToBatch.contactPrimary.name.replace(/\s/g, '_')}.zip`,
+    };
+    s3Client.upload(params, function() {});
 
-  //   return new Case(caseAfterUpdate).validate().toRawObject();
+    return pass;
+  }
+
+  s3Zip
+    .setArchiverOptions({ gzip: false })
+    .archive({ bucket: bucket, region: region, s3: s3Client }, '', ids, names)
+    .pipe(uploadFromStream(s3Client));
 };
