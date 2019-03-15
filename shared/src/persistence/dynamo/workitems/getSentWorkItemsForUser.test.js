@@ -30,7 +30,7 @@ describe('getSentWorkItemsForUser', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('invokes the peristence layer with the pk having docketclerk|sentWorkItem and other expected params', async () => {
+  it('invokes the peristence layer with the pk having docketclerk|outbox and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -45,7 +45,7 @@ describe('getSentWorkItemsForUser', () => {
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
-        ':pk': 'docketclerk|sentWorkItem',
+        ':pk': 'docketclerk|outbox',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     });
