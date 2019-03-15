@@ -13,6 +13,7 @@ import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
 import docketClerkViewsDashboardAfterForward from './journey/docketClerkViewsDashboardAfterForward';
+import docketClerkViewsOutboxAfterForward from './journey/docketClerkViewsOutboxAfterForward';
 import docketClerkViewsDashboardWithoutWorkItem from './journey/docketClerkViewsDashboardWithoutWorkItem';
 import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
@@ -144,6 +145,7 @@ describe('Case journey', () => {
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
   docketClerkViewsDashboardAfterForward(test);
+  docketClerkViewsOutboxAfterForward(test);
 
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);
