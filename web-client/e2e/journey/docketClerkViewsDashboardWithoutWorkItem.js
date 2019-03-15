@@ -17,9 +17,12 @@ export default test => {
     const sectionWorkItems = test
       .getState('workQueue')
       .filter(item => item.docketNumber === test.docketNumber);
-    expect(sectionWorkItems.length).toEqual(2);
+    expect(sectionWorkItems.length).toEqual(3);
     test.answerDocumentId = sectionWorkItems.find(
       item => item.document.documentType === 'Answer',
+    ).document.documentId;
+    test.stipulatedDecisionDocumentId = sectionWorkItems.find(
+      item => item.document.documentType === 'Stipulated Decision',
     ).document.documentId;
     test.answerWorkItemId = sectionWorkItems.find(
       item => item.document.documentType === 'Answer',
