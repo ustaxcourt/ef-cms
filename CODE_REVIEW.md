@@ -87,6 +87,7 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
+- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, and running `docker system prune` to remove any cached artifacts from any prior code review
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
