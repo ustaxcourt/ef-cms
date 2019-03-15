@@ -5,6 +5,7 @@ const sinon = require('sinon');
 describe('createWorkItem', () => {
   let applicationContext;
   let putStub;
+  let getCurrentUserStub;
 
   const workItem = {
     assigneeId: '123',
@@ -19,10 +20,15 @@ describe('createWorkItem', () => {
       promise: async () => null,
     });
 
+    getCurrentUserStub = sinon.stub().returns({
+      section: 'docket',
+    });
+
     applicationContext = {
       environment: {
         stage: 'dev',
       },
+      getCurrentUser: getCurrentUserStub,
       getDocumentClient: () => ({
         put: putStub,
       }),
