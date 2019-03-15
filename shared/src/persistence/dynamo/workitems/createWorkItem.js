@@ -13,6 +13,8 @@ const {
  * @returns {*}
  */
 exports.createWorkItem = async ({ workItem, applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
   // create the work item
   await put({
     applicationContext,
@@ -31,6 +33,7 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
     type: 'workItem',
   });
 
+  // sending user 'my' outbox
   await put({
     applicationContext,
     Item: {
@@ -48,10 +51,11 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
     type: 'workItem',
   });
 
+  // sending user section outbox
   await put({
     applicationContext,
     Item: {
-      pk: `${workItem.section}|outbox`,
+      pk: `${user.section}|outbox`,
       sk: workItem.createdAt,
       ...workItem,
     },
