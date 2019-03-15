@@ -122,7 +122,7 @@ describe('formatYearAmounts', () => {
     ]);
   });
 
-  it('sets shouldShowIrsNoticeDate to true when irsNoticeDate is true and hasVerifiedIrsNotice is undefined', async () => {
+  it('sets shouldShowIrsNoticeDate to true when hasIrsNotice is true and hasVerifiedIrsNotice is undefined', async () => {
     const caseDetail = {
       hasIrsNotice: true,
       hasVerifiedIrsNotice: undefined,
@@ -137,7 +137,7 @@ describe('formatYearAmounts', () => {
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
   });
 
-  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when irsNoticeDate is true and hasVerifiedIrsNotice is true', async () => {
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when hasIrsNotice is true and hasVerifiedIrsNotice is true', async () => {
     const caseDetail = {
       hasIrsNotice: true,
       hasVerifiedIrsNotice: true,
@@ -153,7 +153,7 @@ describe('formatYearAmounts', () => {
     expect(result.shouldShowYearAmounts).toBeTruthy();
   });
 
-  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when irsNoticeDate is false and hasVerifiedIrsNotice is undefined', async () => {
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is undefined', async () => {
     const caseDetail = {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: undefined,
@@ -169,7 +169,7 @@ describe('formatYearAmounts', () => {
     expect(result.shouldShowYearAmounts).toBeFalsy();
   });
 
-  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when irsNoticeDate is false and hasVerifiedIrsNotice is false', async () => {
+  it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is false', async () => {
     const caseDetail = {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
