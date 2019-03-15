@@ -28,9 +28,9 @@ joiValidationDecorator(
   }),
   undefined,
   {
-    assigneeId: 'Recipient is a required field.',
-    message: 'Message is a required field.',
-    section: 'Section is a required field.',
+    assigneeId: 'Recipient is required.',
+    message: 'Message is required.',
+    section: 'Section is required.',
   },
 );
 
