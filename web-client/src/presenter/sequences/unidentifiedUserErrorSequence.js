@@ -1,3 +1,4 @@
+import { clearModalAction } from '../actions/clearModalAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
@@ -5,5 +6,6 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 export const unidentifiedUserErrorSequence = [
   unsetFormSubmittingAction,
   setAlertFromExceptionAction,
+  clearModalAction,
   redirectToCognitoAction,
 ];
