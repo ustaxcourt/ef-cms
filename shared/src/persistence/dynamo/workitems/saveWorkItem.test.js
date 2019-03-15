@@ -40,6 +40,9 @@ describe('saveWorkItem', () => {
         stage: 'dev',
       },
       filterCaseMetadata: ({ cases }) => cases,
+      getCurrentUser: () => ({
+        userId: 'abc',
+      }),
       isAuthorizedForWorkItems: () => true,
     };
     const result = await saveWorkItem({

@@ -56,7 +56,6 @@ describe('createWorkItem', () => {
       Item: {
         pk: '123|workItem',
         sk: 'a_id',
-        workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
     });
@@ -86,7 +85,6 @@ describe('createWorkItem', () => {
       Item: {
         pk: 'docket|workItem',
         sk: 'a_id',
-        workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
     });

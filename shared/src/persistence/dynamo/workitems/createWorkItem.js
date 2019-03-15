@@ -26,9 +26,6 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
   // individual inbox
   await createMappingRecord({
     applicationContext,
-    item: {
-      workItemId: workItem.workItemId,
-    },
     pkId: workItem.assigneeId,
     skId: workItem.workItemId,
     type: 'workItem',
@@ -48,9 +45,6 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
   // section inbox
   await createMappingRecord({
     applicationContext,
-    item: {
-      workItemId: workItem.workItemId,
-    },
     pkId: workItem.section,
     skId: workItem.workItemId,
     type: 'workItem',
