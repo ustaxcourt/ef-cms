@@ -66,6 +66,7 @@ exports.createWorkItem = async ({
     isInitializeCase: false,
     section: userToAssignTo.section,
     sentBy: user.name,
+    sentByUserId: user.userId,
   }).addMessage(
     new Message({
       from: user.name,
@@ -78,9 +79,14 @@ exports.createWorkItem = async ({
 
   document.addWorkItem(newWorkItem);
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createWorkItem({
     applicationContext,
-    caseToSave: caseEntity.validate().toRawObject(),
+    workItem: newWorkItem.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
   return newWorkItem;

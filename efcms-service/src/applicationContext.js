@@ -55,7 +55,12 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-
+const {
+  createWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem');
+const {
+  updateCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 
 const {
@@ -77,7 +82,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
 
 const {
-  createWorkItem
+  createWorkItem: createWorkItemUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   createCase,
@@ -95,7 +100,7 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  updateCase,
+  updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
@@ -151,7 +156,8 @@ const User = require('ef-cms-shared/src/business/entities/User');
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  masterDynamoDbEndpoint: process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
+  masterDynamoDbEndpoint:
+    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
@@ -176,9 +182,11 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCurrentUser,
-    getDocumentClient: ({useMasterRegion} = {}) => {
+    getDocumentClient: ({ useMasterRegion } = {}) => {
       return new DynamoDB.DocumentClient({
-        endpoint: useMasterRegion ? environment.masterDynamoDbEndpoint : environment.dynamoDbEndpoint,
+        endpoint: useMasterRegion
+          ? environment.masterDynamoDbEndpoint
+          : environment.dynamoDbEndpoint,
         region: useMasterRegion ? environment.masterRegion : environment.region,
       });
     },
@@ -191,28 +199,26 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         createUser,
+        createWorkItem,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
-
-        // work items
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
-
-        // cases
         getWorkItemById,
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
         saveCase,
         saveWorkItem,
+        updateCase,
       };
     },
     getStorageClient: () => {
@@ -233,7 +239,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createDocument,
         createUser: createUserUC,
-        createWorkItem,
+        createWorkItem: createWorkItemUC,
         forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
@@ -249,7 +255,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         sendPetitionToIRSHoldingQueue,
-        updateCase,
+        updateCase: updateCaseUC,
         updateWorkItem,
       };
     },

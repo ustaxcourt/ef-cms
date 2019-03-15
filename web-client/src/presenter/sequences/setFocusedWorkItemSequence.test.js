@@ -16,8 +16,8 @@ describe('setFocusedWorkItemSequence', () => {
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
+      idx: 0,
       queueType: 'workQueue',
-      workItemId: 'abc',
     });
     expect(test.getState('workQueue')).toMatchObject([
       {
@@ -38,8 +38,8 @@ describe('setFocusedWorkItemSequence', () => {
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
+      idx: 0,
       queueType: 'workQueue',
-      workItemId: 'abc',
     });
     expect(test.getState('workQueue')).toMatchObject([
       {
