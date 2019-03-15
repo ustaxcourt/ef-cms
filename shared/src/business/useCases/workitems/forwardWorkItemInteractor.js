@@ -62,6 +62,7 @@ exports.forwardWorkItem = async ({
 
   return applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
+    createOutboxEntries: true,
     workItemToSave: workItemToForward.validate().toRawObject(),
   });
 };
