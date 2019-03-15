@@ -56,9 +56,11 @@ textarea:hover,
 textarea:focus,
 select:hover,
 select:focus {
-  border: 2px solid $color-primary;
-  transition-duration: 0.1s;
-  transition-property: all;
+  &:not([disabled]) {
+    border: 2px solid $color-primary;
+    transition-duration: 0.1s;
+    transition-property: all;
+  }
 }
 
 [type='radio']:hover + label::before,
