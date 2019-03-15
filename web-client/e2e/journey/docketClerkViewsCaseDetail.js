@@ -35,6 +35,12 @@ export default test => {
         fromUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition batched for IRS',
       },
+      {
+        assigneeId: null,
+        from: 'Test Respondent',
+        fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        message: 'Stipulated Decision filed by Respondent is ready for review.',
+      },
     ]);
   });
 };

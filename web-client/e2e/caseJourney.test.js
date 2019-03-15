@@ -9,6 +9,7 @@ import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
+import docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDashboard from './journey/docketClerkViewsDashboard';
@@ -30,7 +31,7 @@ import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 import presenter from '../src/presenter';
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
-import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
+import respondentAddsStipulatedDecisions from './journey/respondentAddsStipulatedDecisions';
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -127,13 +128,14 @@ describe('Case journey', () => {
   respondentViewsDashboard(test);
   respondentViewsCaseDetail(test);
   respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecision(test, fakeFile);
+  respondentAddsStipulatedDecisions(test, fakeFile);
 
   docketClerkLogIn(test);
   docketClerkViewsDashboardWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkViewsDecisionDocument(test);
   docketClerkStartsNewMessageThreadOnAnswer(test);
+  docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney(test);
 
   docketClerkLogIn(test, 'docketclerk1');
   docketClerkDocketDashboard(test);
