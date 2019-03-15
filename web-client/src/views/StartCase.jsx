@@ -91,8 +91,7 @@ export const StartCase = connect(
               <div className="usa-width-five-twelfths">
                 <div
                   className={
-                    'usa-form-group ' +
-                    (validationErrors.petitionFile ? 'usa-input-error' : '')
+                    validationErrors.petitionFile ? 'usa-input-error' : ''
                   }
                 >
                   <label
@@ -124,7 +123,7 @@ export const StartCase = connect(
                       validateStartCaseSequence();
                     }}
                   />
-                  <div className="usa-input-error-message beneath">
+                  <div className="usa-input-error-message">
                     {validationErrors.petitionFile}
                   </div>
                 </div>
@@ -134,12 +133,7 @@ export const StartCase = connect(
 
           <h2>Upload Your Statement of Taxpayer Identification</h2>
           <div className="blue-container">
-            <div
-              className={
-                'usa-form-group ' +
-                (validationErrors.stinFile ? 'usa-input-error' : '')
-              }
-            >
+            <div className={validationErrors.stinFile ? 'usa-input-error' : ''}>
               <label
                 htmlFor="stin-file"
                 className={
@@ -168,7 +162,7 @@ export const StartCase = connect(
                   validateStartCaseSequence();
                 }}
               />
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.stinFile}
               </div>
             </div>
@@ -487,7 +481,7 @@ export const StartCase = connect(
                     </div>
                   </div>
                 )}
-              <div className="usa-input-error usa-input-error-message beneath padded-left">
+              <div className="usa-input-error usa-input-error-message padded-left">
                 {validationErrors.partyType}
               </div>
             </div>
@@ -690,7 +684,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-input-error-message beneath">
+                        <div className="usa-input-error-message">
                           {validationErrors.irsNoticeDate}
                         </div>
                       </div>
@@ -782,11 +776,11 @@ export const StartCase = connect(
                 }}
               />
             )}
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors.procedureType}
             </div>
             {!validationErrors.procedureType && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.preferredTrialCity}
               </div>
             )}
@@ -836,7 +830,7 @@ export const StartCase = connect(
                 that you’ve verified all information is correct. You won’t be
                 able to edit your case once it’s submitted.
               </label>
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.signature}
               </div>
             </div>
