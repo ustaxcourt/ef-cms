@@ -7,6 +7,7 @@ import { connect } from '@cerebral/react';
 class CreateMessageModalDialogComponent extends ModalDialog {
   constructor(props) {
     super(props);
+    this.preventCancelOnBlur = true;
     this.modal = {
       cancelLabel: 'Cancel',
       classNames: '',
