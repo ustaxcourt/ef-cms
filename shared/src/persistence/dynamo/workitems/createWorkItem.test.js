@@ -68,7 +68,7 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'a_user|sentWorkItem',
+        pk: 'a_user|outbox',
         sk: '100',
         workItemId: 'a_id',
       },
@@ -97,7 +97,7 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(4).args[0]).toMatchObject({
       Item: {
-        pk: 'docket|sentWorkItem',
+        pk: 'docket|outbox',
         sk: '100',
         workItemId: 'a_id',
       },

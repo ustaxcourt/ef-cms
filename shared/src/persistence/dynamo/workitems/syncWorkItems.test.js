@@ -187,12 +187,10 @@ describe('syncWorkItems', function() {
       },
     });
     expect(client.put.getCall(0).args[0].Item.pk).toEqual(
-      'petitionsclerk1|sentWorkItem',
+      'petitionsclerk1|outbox',
     );
     expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
-    expect(client.put.getCall(1).args[0].Item.pk).toEqual(
-      'petitions|sentWorkItem',
-    );
+    expect(client.put.getCall(1).args[0].Item.pk).toEqual('petitions|outbox');
     expect(client.put.getCall(1).args[0].Item.sk).toEqual('123');
   });
 
@@ -246,9 +244,7 @@ describe('syncWorkItems', function() {
         status: 'New',
       },
     });
-    expect(client.put.getCall(0).args[0].Item.pk).toEqual(
-      'petitions|sentWorkItem',
-    );
+    expect(client.put.getCall(0).args[0].Item.pk).toEqual('petitions|outbox');
     expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
   });
 
@@ -303,12 +299,10 @@ describe('syncWorkItems', function() {
       },
     });
     expect(client.delete.getCall(0).args[0].key.pk).toEqual(
-      'petitionsclerk1|sentWorkItem',
+      'petitionsclerk1|outbox',
     );
     expect(client.delete.getCall(0).args[0].key.sk).toEqual('123');
-    expect(client.delete.getCall(1).args[0].key.pk).toEqual(
-      'petitions|sentWorkItem',
-    );
+    expect(client.delete.getCall(1).args[0].key.pk).toEqual('petitions|outbox');
     expect(client.delete.getCall(1).args[0].key.sk).toEqual('123');
   });
 });
