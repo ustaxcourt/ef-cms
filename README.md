@@ -77,7 +77,11 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 
 ## Login and Test Users
 
-- for /mock-login you can login using:
+There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
+
+## Mock Login
+
+You can log in using these usernames:
 
 ```
 taxpayer
@@ -88,20 +92,22 @@ respondent
 seniorattorney
 ```
 
-- to run the project locally using the dev cognito:
-  `npm run dev:cognito`
-  You can then login with:
+No password is required.
+
+## AWS Cognito 
+
+To run use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
-petitioner1@example.com - petitioner5@example.com
-petitionsclerk1@example.com - petitionsclerk5@example.com
-docketclerk1@example.com - docketclerk5@example.com
-intakeclerk1@example.com - intakeclerk5@example.com
-respondent1@example.com - respondent5@example.com
-seniorattorney1@example.com - seniorattorney5@example.com
+petitioner1@example.com – petitioner5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+intakeclerk1@example.com – intakeclerk5@example.com
+respondent1@example.com – respondent5@example.com
+seniorattorney1@example.com – seniorattorney5@example.com
 ```
 
-all passwords are:
+The password for all accounts is:
 
 `Testing1234$`
 
