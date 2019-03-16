@@ -22,11 +22,15 @@ export const createCaseAction = async ({ applicationContext, get }) => {
 
   form.contactPrimary.email = get(state.user.email);
 
-  await applicationContext.getUseCases().filePetition({
+  const caseDetail = await applicationContext.getUseCases().filePetition({
     applicationContext,
     ownershipDisclosureFile,
     petitionFile,
     petitionMetadata: form,
     stinFile,
   });
+
+  return {
+    caseDetail,
+  };
 };
