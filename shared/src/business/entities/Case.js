@@ -522,7 +522,6 @@ Case.prototype.getDocumentById = function({ documentId }) {
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
-  console.log('payGovDate', payGovDate);
 
   const newDocketItem = {
     description: 'Filing fee paid',
