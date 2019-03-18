@@ -73,6 +73,15 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       key: stinId,
     });
 
+    const caseEntity = new Case(caseToBatch).markAsSentToIRS(
+      new Date().toISOString(),
+    );
+
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
     zips = zips.concat({
       fileNames,
       s3Ids,
