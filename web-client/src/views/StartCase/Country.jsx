@@ -1,11 +1,11 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const Country = connect(
   {
-    data: state[props.bind],
     constants: state.constants,
+    data: state[props.bind],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     validateStartCaseSequence: sequences[props.onBlur],
@@ -60,7 +60,7 @@ export const Country = connect(
             </option>
           </select>
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].countryType}
             </div>
           )}
@@ -94,7 +94,7 @@ export const Country = connect(
               }}
             />
             {validationErrors && validationErrors[type] && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors[type].country}
               </div>
             )}

@@ -10,7 +10,7 @@ export default test => {
     let workItem;
     caseDetail.documents.forEach(document =>
       document.workItems.forEach(item => {
-        if (item.workItemId === test.stipulatedDecisionWorkItemId) {
+        if (item.workItemId === test.workItemId) {
           workItem = item;
         }
       }),

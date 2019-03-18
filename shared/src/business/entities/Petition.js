@@ -1,9 +1,7 @@
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('./Contacts/PetitionContact');
-
-// TODO: rename the folder Contacts to lower case contacts
+const { instantiateContacts } = require('./contacts/PetitionContact');
 
 const joi = require('joi-browser');
 
@@ -73,7 +71,7 @@ joiValidationDecorator(
       is: 'A business',
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }), // TODO: this should probably be required, but set to optional for now
+    }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),
