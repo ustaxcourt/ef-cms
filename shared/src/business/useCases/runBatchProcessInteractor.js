@@ -1,6 +1,5 @@
 const sanitize = require('sanitize-filename');
 const { Case } = require('../entities/Case');
-const DocketRecord = require('../entities/DocketRecord');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const {
   isAuthorized,
