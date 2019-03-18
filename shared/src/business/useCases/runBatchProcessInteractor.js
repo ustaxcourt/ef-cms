@@ -1,7 +1,5 @@
-const stream = require('stream');
-const s3Zip = require('s3-zip');
-const aws = require('aws-sdk');
 const sanitize = require('sanitize-filename');
+const { Case } = require('../entities/Case');
 
 /**
  * runBatchProcess
@@ -31,11 +29,20 @@ exports.runBatchProcess = async ({ caseId, applicationContext }) => {
     )}.zip`,
   );
 
-  await applicationContext.getPersistenceGateway().zipS3Documents({
+  await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
     fileNames,
     s3Ids,
     zipName,
+  });
+
+  const stinId = caseToBatch.documents.find(
+    document => document.documentType === Case.documentTypes.stin,
+  ).documentId;
+
+  await applicationContext.getPersistenceGateway().deleteDocument({
+    applicationContext,
+    key: stinId,
   });
 
   return {
