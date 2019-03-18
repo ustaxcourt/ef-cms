@@ -3,7 +3,7 @@ const s3Zip = require('s3-zip');
 const aws = require('aws-sdk');
 
 /**
- * zipS3Documents
+ * zipDocuments
  *
  * @param caseId
  * @param caseToUpdate
@@ -11,21 +11,12 @@ const aws = require('aws-sdk');
  * @param applicationContext
  * @returns {*}
  */
-exports.zipS3Documents = ({
-  s3Ids,
-  fileNames,
-  zipName,
-  applicationContext,
-}) => {
+exports.zipDocuments = ({ s3Ids, fileNames, zipName, applicationContext }) => {
   return new Promise((resolve, reject) => {
     const region = applicationContext.environment.region;
     const bucket = applicationContext.environment.documentsBucketName;
 
-    const s3Client = new aws.S3({
-      endpoint: applicationContext.environment.s3Endpoint,
-      s3ForcePathStyle: 'true',
-      signatureVersion: 'v4',
-    });
+    const s3Client = applicationContext.getStorageClient();
 
     function uploadFromStream(s3Client) {
       const pass = new stream.PassThrough();
