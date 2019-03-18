@@ -26,18 +26,21 @@ export default get => {
       .map(items => formatWorkItem(items));
   }
 
+  const formattedDocumentIsPetition =
+    (formattedDocument && formattedDocument.isPetition) || false;
+  const showCaseDetailsEdit = ['New', 'Recalled'].includes(caseDetail.status);
+  const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
+  const showDocumentInfoTab =
+    formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
+
   return {
     formattedDocument,
     showAction: (action, workItemId) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showCaseDetailsEdit: ['New', 'Recalled'].includes(caseDetail.status),
-    showCaseDetailsView: ['Batched for IRS'].includes(caseDetail.status),
-    showDocumentInfo: get(state.currentTab) === 'Document Info',
-    showDocumentInfoTab: formattedDocument
-      ? formattedDocument.isPetition
-      : false,
-    showPendingMessages: get(state.currentTab) === 'Pending Messages',
+    showCaseDetailsEdit,
+    showCaseDetailsView,
+    showDocumentInfoTab,
   };
 };
