@@ -1,3 +1,10 @@
+body.no-scroll {
+  overflow: hidden;
+  cursor: default;
+  pointer-events: none;
+  touch-action: none;
+}
+
 hr {
   display: block;
   height: 1px;

@@ -12,6 +12,19 @@ export class ModalDialog extends React.Component {
     this.runCancelSequence = this.runCancelSequence.bind(this);
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
   }
+  toggleNoScroll(scrollingOn) {
+    if (scrollingOn) {
+      document.body.classList.add('no-scroll');
+      document.addEventListener('touchmove', this.touchmoveTriggered, {
+        passive: false,
+      });
+    } else {
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('touchmove', this.touchmoveTriggered, {
+        passive: false,
+      });
+    }
+  }
 
   runCancelSequence(event) {
     event.stopPropagation();
@@ -26,6 +39,9 @@ export class ModalDialog extends React.Component {
       return this.blurDialog(event);
     }
   }
+  touchmoveTriggered(event) {
+    return event.preventDefault();
+  }
   blurDialog(event) {
     if (this.preventCancelOnBlur) {
       return false;
@@ -34,10 +50,13 @@ export class ModalDialog extends React.Component {
   }
   componentDidMount() {
     document.addEventListener('keydown', this.keydownTriggered, false);
+    this.toggleNoScroll(true);
     this.focusModal();
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keydownTriggered, false);
+
+    this.toggleNoScroll(false);
   }
 
   focusModal() {
