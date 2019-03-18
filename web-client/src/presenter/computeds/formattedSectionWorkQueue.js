@@ -1,12 +1,14 @@
 import _ from 'lodash';
+import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
-import { formatWorkItem } from './formattedWorkQueue';
-
 export const formattedSectionWorkQueue = get => {
-  const workItems = _.orderBy(get(state.workQueue), 'updatedAt', 'desc');
+  const workItems = get(state.workQueue);
   const selectedWorkItems = get(state.selectedWorkItems);
-  return workItems
+  let workQueue = workItems
     .filter(items => !items.completedAt)
     .map(items => formatWorkItem(items, selectedWorkItems));
+
+  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  return workQueue;
 };
