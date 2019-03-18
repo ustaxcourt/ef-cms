@@ -400,7 +400,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
 
   this.irsSendDate = sendDate;
-  this.status = 'General';
+  this.status = statusMap.general;
   this.documents.forEach(document => {
     const doc = new Document(document);
     if (doc.isPetitionDocument()) {
