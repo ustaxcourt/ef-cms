@@ -415,6 +415,13 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
     }
   });
 
+  this.addDocketRecord(
+    new DocketRecord({
+      description: 'The case was sent to the IRS',
+      filingDate: new Date().toISOString(),
+    }),
+  );
+
   return this;
 };
 
@@ -539,6 +546,7 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
+  return this;
 };
 
 /**
