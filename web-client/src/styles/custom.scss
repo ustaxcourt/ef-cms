@@ -379,8 +379,8 @@ select.ustc-input-error {
 
 #tabContent-completed,
 #tabContent-inProgress {
-  overflow: scroll;
   max-height: 931px;
+  overflow-y: scroll;
 }
 
 .ustc-create-message-modal {
