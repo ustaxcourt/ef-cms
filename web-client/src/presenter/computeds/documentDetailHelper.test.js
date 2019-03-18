@@ -66,4 +66,69 @@ describe('formatted work queue computed', () => {
     });
     expect(result.showCaseDetailsEdit).toEqual(true);
   });
+
+  describe('showDocumentInfoTab', () => {
+    it('should be false if document is not a petition', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'NotAPetition',
+              },
+            ],
+            status: 'Recalled',
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showDocumentInfoTab).toEqual(false);
+    });
+
+    it('should be true if document is a petition and status is New, Recalled, or Batched for IRS', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: 'Recalled',
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showDocumentInfoTab).toEqual(true);
+    });
+
+    it('should be false if document is a petition and status is not New, Recalled, or Batched for IRS', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: 'General',
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showDocumentInfoTab).toEqual(false);
+    });
+  });
 });
