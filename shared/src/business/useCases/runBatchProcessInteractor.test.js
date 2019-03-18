@@ -40,6 +40,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   const deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
   const zipDocumentsStub = sinon.stub().resolves(null);
   const deleteDocumentStub = sinon.stub().resolves(null);
+  const updateCaseStub = sinon.stub().resolves(null);
 
   let applicationContext;
   let mockCase;
@@ -62,6 +63,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          updateCase: updateCaseStub,
           zipDocuments: zipDocumentsStub,
         };
       },
@@ -111,6 +113,11 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(deleteDocumentStub.getCall(0).args[0]).toMatchObject({
       key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
+      caseToUpdate: {
+        status: 'General',
+      },
     });
   });
 });
