@@ -6,6 +6,8 @@ export class ModalDialog extends React.Component {
   constructor(props) {
     super(props);
     this.modal = {};
+    this.preventCancelOnBlur = !!this.props.preventCancelOnBlur;
+    this.blurDialog = this.blurDialog.bind(this);
     this.keydownTriggered = this.keydownTriggered.bind(this);
     this.runCancelSequence = this.runCancelSequence.bind(this);
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
@@ -21,8 +23,14 @@ export class ModalDialog extends React.Component {
   }
   keydownTriggered(event) {
     if (event.keyCode === 27) {
-      return this.runCancelSequence(event);
+      return this.blurDialog(event);
     }
+  }
+  blurDialog(event) {
+    if (this.preventCancelOnBlur) {
+      return false;
+    }
+    return this.runCancelSequence(event);
   }
   componentDidMount() {
     document.addEventListener('keydown', this.keydownTriggered, false);
@@ -40,7 +48,7 @@ export class ModalDialog extends React.Component {
   render() {
     const { modal } = this;
     return (
-      <div className="modal-screen" onClick={this.runCancelSequence}>
+      <div className="modal-screen" onClick={this.blurDialog}>
         <div
           className={`modal-dialog ${modal.classNames}`}
           data-aria-live="assertive"
@@ -62,20 +70,22 @@ export class ModalDialog extends React.Component {
           </div>
           {modal.message && <p>{modal.message}</p>}
           {this.renderBody && this.renderBody()}
-          <button
-            type="button"
-            onClick={this.runConfirmSequence}
-            className="usa-button"
-          >
-            {modal.confirmLabel}
-          </button>
-          <button
-            type="button"
-            onClick={this.runCancelSequence}
-            className="usa-button-secondary"
-          >
-            {modal.cancelLabel}
-          </button>
+          <div className="button-container">
+            <button
+              type="button"
+              onClick={this.runConfirmSequence}
+              className="usa-button"
+            >
+              {modal.confirmLabel}
+            </button>
+            <button
+              type="button"
+              onClick={this.runCancelSequence}
+              className="usa-button-secondary"
+            >
+              {modal.cancelLabel}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -86,4 +96,5 @@ ModalDialog.propTypes = {
   cancelSequence: PropTypes.func,
   confirmSequence: PropTypes.func,
   modal: PropTypes.object,
+  preventCancelOnBlur: PropTypes.bool,
 };

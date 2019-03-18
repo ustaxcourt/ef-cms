@@ -170,7 +170,7 @@ export const CaseInfo = connect(
               </div>
             </div>
             {caseDetailErrors.payGovDate && (
-              <div className="usa-input-error-message beneath" role="alert">
+              <div className="usa-input-error-message" role="alert">
                 {caseDetailErrors.payGovDate}
               </div>
             )}

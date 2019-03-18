@@ -8,7 +8,7 @@ const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const YearAmount = require('./YearAmount');
 const DocketRecord = require('./DocketRecord');
-const { PARTY_TYPES } = require('./Contacts/PetitionContact');
+const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -70,6 +70,8 @@ function Case(rawCase) {
 
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
+
+  this.initialCaption = this.initialCaption || this.caseTitle;
 
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
@@ -509,6 +511,10 @@ Case.prototype.recallFromIRSHoldingQueue = function() {
   return this;
 };
 
+Case.prototype.getDocumentById = function({ documentId }) {
+  return this.documents.find(document => document.documentId === documentId);
+};
+
 /**
  *
  * @param {string} payGovDate an ISO formatted datestring
@@ -579,12 +585,10 @@ Case.stripLeadingZeros = docketNumber => {
 
 /**
  * documentTypes
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, statementOfTaxpayerIdentificationNumber: string, answer: string, stipulatedDecision: string}}
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string, answer: string, stipulatedDecision: string}}
  */
 Case.documentTypes = {
   answer: 'Answer',
-  // statementOfTaxpayerIdentificationNumber:
-  //   'Statement of Taxpayer Identification Number',
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
   stin: 'Statement of Taxpayer Identification',

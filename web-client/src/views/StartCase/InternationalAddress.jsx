@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const InternationalAddress = connect(
@@ -47,7 +47,7 @@ export const InternationalAddress = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].address1}
             </div>
           )}
@@ -125,7 +125,7 @@ export const InternationalAddress = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].state}
             </div>
           )}
@@ -158,7 +158,7 @@ export const InternationalAddress = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].city}
             </div>
           )}
@@ -193,7 +193,7 @@ export const InternationalAddress = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].postalCode}
             </div>
           )}

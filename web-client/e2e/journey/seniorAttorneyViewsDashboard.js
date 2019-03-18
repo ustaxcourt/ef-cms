@@ -5,7 +5,7 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
-      .find(item => item.workItemId === test.stipulatedDecisionWorkItemId);
+      .find(item => item.workItemId === test.workItemId);
 
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;

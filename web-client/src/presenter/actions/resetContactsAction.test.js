@@ -1,7 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
-} from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+} from '../../../../shared/src/business/entities/contacts/PetitionContact';
 
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
@@ -38,7 +38,7 @@ describe('resetContactsAction', () => {
     });
   });
 
-  it('clears the contactPrimary except for countryType and email for an international address', async () => {
+  it('clears the contactPrimary except for countryType (which should be set back to the domestic default) and email for an international address', async () => {
     const { state } = await runAction(resetContactsAction, {
       state: {
         caseDetail: {
