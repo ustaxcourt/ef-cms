@@ -1,6 +1,5 @@
 const stream = require('stream');
 const s3Zip = require('s3-zip');
-const aws = require('aws-sdk');
 
 /**
  * zipDocuments
