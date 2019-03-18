@@ -1,6 +1,12 @@
 const sanitize = require('sanitize-filename');
 const { Case } = require('../entities/Case');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
+const {
+  isAuthorized,
+  UPDATE_CASE,
+} = require('../../authorization/authorizationClientService');
+
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * runBatchProcess
@@ -12,6 +18,12 @@ const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
  * @returns {*}
  */
 exports.runBatchProcess = async ({ applicationContext }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, UPDATE_CASE)) {
+    throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
+  }
+
   const workItemsInHoldingQueue = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsBySection({
