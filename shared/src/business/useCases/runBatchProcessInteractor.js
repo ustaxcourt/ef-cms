@@ -1,6 +1,7 @@
 const stream = require('stream');
 const s3Zip = require('s3-zip');
 const aws = require('aws-sdk');
+const sanitize = require('sanitize-filename');
 
 /**
  * runBatchProcess
@@ -23,9 +24,12 @@ exports.runBatchProcess = async ({ caseId, applicationContext }) => {
   const fileNames = caseToBatch.documents.map(
     document => `${document.documentType}.pdf`,
   );
-  const zipName = `${
-    caseToBatch.docketNumber
-  }_${caseToBatch.contactPrimary.name.replace(/\s/g, '_')}.zip`;
+  const zipName = sanitize(
+    `${caseToBatch.docketNumber}_${caseToBatch.contactPrimary.name.replace(
+      /\s/g,
+      '_',
+    )}.zip`,
+  );
 
   await applicationContext.getPersistenceGateway().zipS3Documents({
     applicationContext,
