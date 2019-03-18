@@ -1,6 +1,6 @@
 .modal-screen {
   position: fixed;
-  z-index: 100;
+  z-index: 9500;
   top: 0;
   right: 0;
   bottom: 0;
@@ -15,8 +15,9 @@
 
 @media only screen and (min-width: $medium-screen) {
   .modal-dialog {
-    top: 10%;
+    top: 50%;
     width: 500px;
+    transform: translateY(-50%);
   }
 }
 
