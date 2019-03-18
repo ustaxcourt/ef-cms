@@ -6,6 +6,10 @@ const {
 } = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
+  zipS3Documents,
+} = require('ef-cms-shared/src/persistence/s3/zipS3Documents');
+
+const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
@@ -222,6 +226,7 @@ module.exports = (appContextUser = {}) => {
         saveCase,
         saveWorkItem,
         updateCase,
+        zipS3Documents,
       };
     },
     getStorageClient: () => {
