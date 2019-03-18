@@ -22,6 +22,20 @@ export const DocketRecord = connect(
     token,
     updateCurrentTabSequence,
   }) => {
+    function renderDocumentLink(documentId, description) {
+      return (
+        <a
+          href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label={`View PDF: ${description}`}
+        >
+          <FontAwesomeIcon icon={['far', 'file-pdf']} />
+          {description}
+        </a>
+      );
+    }
+
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
@@ -60,19 +74,12 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
-                    {document && helper.showDirectDownloadLink && (
-                      <a
-                        href={`${baseUrl}/documents/${
-                          document.documentId
-                        }/documentDownloadUrl?token=${token}`}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label={`View PDF: ${document.documentType}`}
-                      >
-                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                        {document.documentType}
-                      </a>
-                    )}
+                    {document &&
+                      helper.showDirectDownloadLink &&
+                      renderDocumentLink(
+                        document.documentId,
+                        document.documentType,
+                      )}
                     {document && helper.showDocumentDetailLink && (
                       <a
                         href={documentHelper({
@@ -85,7 +92,10 @@ export const DocketRecord = connect(
                         {document.documentType}
                       </a>
                     )}
-                    {!document && record.description}
+                    {!document &&
+                      record.documentId &&
+                      renderDocumentLink(record.documentId, record.description)}
+                    {!document && !record.documentId && record.description}
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>
