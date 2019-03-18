@@ -74,17 +74,9 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       key: stinId,
     });
 
-    const caseEntity = new Case(caseToBatch)
-      .markAsSentToIRS(new Date().toISOString())
-
-      .addDocketRecord(
-        // TODO: Remove in the future when we no longer store the batch.zip
-        new DocketRecord({
-          description: zipName,
-          documentId: zipName,
-          filingDate: new Date().toISOString(),
-        }),
-      );
+    const caseEntity = new Case(caseToBatch).markAsSentToIRS(
+      new Date().toISOString(),
+    );
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
