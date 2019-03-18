@@ -12,6 +12,7 @@ import { connect } from '@cerebral/react';
 
 export const CaseDetailInternal = connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
     currentTab: state.currentTab,
@@ -20,6 +21,7 @@ export const CaseDetailInternal = connect(
     openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     showModal: state.showModal,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
+    token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -27,11 +29,13 @@ export const CaseDetailInternal = connect(
   ({
     caseDetail,
     caseHelper,
+    baseUrl,
     currentTab,
     documentHelper,
     extractedPendingMessages,
     openCaseCaptionModalSequence,
     showModal,
+    token,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
     updateCurrentTabSequence,
@@ -219,6 +223,23 @@ export const CaseDetailInternal = connect(
                 </fieldset>
               </div>
             </div>
+          )}
+        </section>
+        {/* This section below will be removed in a future story */}
+        <section>
+          {caseDetail.status === 'General' && (
+            <a
+              href={`${baseUrl}/documents/${
+                caseDetail.docketNumber
+              }_${caseDetail.contactPrimary.name.replace(
+                /\s/g,
+                '_',
+              )}.zip/documentDownloadUrl?token=${token}`}
+              aria-label="View PDF"
+            >
+              <FontAwesomeIcon icon={['far', 'file-pdf']} />
+              Batch Zip Download
+            </a>
           )}
         </section>
       </React.Fragment>
