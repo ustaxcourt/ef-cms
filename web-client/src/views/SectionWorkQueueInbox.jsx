@@ -28,7 +28,7 @@ export const SectionWorkQueueInbox = connect(
   }) => {
     return (
       <table
-        className="work-queue"
+        className="work-queue subsection"
         id="section-work-queue"
         aria-describedby="tab-work-queue"
       >
