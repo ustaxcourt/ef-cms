@@ -491,6 +491,27 @@ describe('Case entity', () => {
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
     });
+
+    it('should add item to docket record when paid', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const payGovDate = new Date().toISOString();
+      const initialDocketLength =
+        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      const docketLength = caseRecord.docketRecord.length;
+      expect(docketLength).toEqual(initialDocketLength + 1);
+    });
+
+    it('should only sets docket record once per time paid', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const payGovDate = new Date().toISOString();
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      const docketLength = caseRecord.docketRecord.length;
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      expect(docketLength).toEqual(caseRecord.docketRecord.length);
+    });
   });
 
   describe('addDocketRecord', () => {

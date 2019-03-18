@@ -529,13 +529,23 @@ Case.prototype.getDocumentById = function({ documentId }) {
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
-  if (payGovDate) {
-    this.addDocketRecord(
-      new DocketRecord({
-        description: 'Filing fee paid',
-        filingDate: payGovDate,
-      }),
-    );
+
+  const newDocketItem = {
+    description: 'Filing fee paid',
+    filingDate: payGovDate,
+  };
+
+  let found;
+
+  this.docketRecord.forEach(docketRecord => {
+    found =
+      found ||
+      (docketRecord.description === newDocketItem.description &&
+        docketRecord.filingDate === newDocketItem.filingDate);
+  });
+
+  if (payGovDate && !found) {
+    this.addDocketRecord(new DocketRecord(newDocketItem));
   }
   return this;
 };
