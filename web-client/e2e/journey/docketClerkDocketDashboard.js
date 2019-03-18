@@ -1,4 +1,4 @@
-import { formattedSectionWorkQueue } from '../../src/presenter/computeds/formattedSectionWorkQueue';
+import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 
 export default test => {
@@ -61,7 +61,7 @@ export default test => {
       message: 'this is a new thread test message',
     });
 
-    const formatted = runCompute(formattedSectionWorkQueue, {
+    const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
     expect(formatted[0].createdAtFormatted).toBeDefined();
