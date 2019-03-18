@@ -6,6 +6,16 @@ const {
 } = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
+  zipDocuments,
+} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
+const {
+  deleteWorkItemFromSection
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  deleteDocument,
+} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
+
+const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
@@ -102,6 +112,9 @@ const {
 const {
   updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
+const {
+  runBatchProcess,
+} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
@@ -200,6 +213,8 @@ module.exports = (appContextUser = {}) => {
       return {
         createUser,
         createWorkItem,
+        deleteDocument,
+        deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByStatus,
@@ -219,6 +234,7 @@ module.exports = (appContextUser = {}) => {
         saveCase,
         saveWorkItem,
         updateCase,
+        zipDocuments,
       };
     },
     getStorageClient: () => {
@@ -254,6 +270,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
+        runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
         updateWorkItem,
