@@ -47,12 +47,12 @@ const syncChangedCaseStatus = async ({
     const batchedMessage = workItem.messages.find(
       message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
     );
-    const { userId, createdAt } = batchedMessage;
+    const { fromUserId, createdAt } = batchedMessage;
 
     await client.put({
       applicationContext,
       Item: {
-        pk: `${userId}|outbox`,
+        pk: `${fromUserId}|outbox`,
         sk: createdAt,
         ...workItem,
       },
@@ -71,14 +71,14 @@ const syncChangedCaseStatus = async ({
     const batchedMessage = workItem.messages.find(
       message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
     );
-    let userId, createdAt;
+    let fromUserId, createdAt;
     if (batchedMessage) {
-      userId = batchedMessage.userId;
+      fromUserId = batchedMessage.fromUserId;
       createdAt = batchedMessage.createdAt;
 
       await deleteMappingRecord({
         applicationContext,
-        pkId: userId,
+        pkId: fromUserId,
         skId: createdAt,
         type: 'outbox',
       });

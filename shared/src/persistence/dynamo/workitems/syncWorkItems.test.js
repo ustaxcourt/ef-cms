@@ -152,8 +152,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 workItemId: 'abc',
@@ -173,8 +173,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -208,8 +208,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -231,8 +231,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -262,8 +262,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -285,8 +285,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'irsBatchSection',
