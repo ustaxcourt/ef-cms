@@ -86,11 +86,13 @@ class DocumentDetailComponent extends React.Component {
           <ErrorNotification />
 
           <Tabs className="classic-horizontal-header3" bind="currentTab">
-            <Tab
-              tabName="Document Info"
-              title="Document Info"
-              id="tab-document-info"
-            />
+            {helper.showDocumentInfoTab && (
+              <Tab
+                tabName="Document Info"
+                title="Document Info"
+                id="tab-document-info"
+              />
+            )}
             <Tab
               tabName="Messages"
               title="Messages"
