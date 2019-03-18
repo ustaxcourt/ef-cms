@@ -400,7 +400,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
 
   this.irsSendDate = sendDate;
-  this.status = 'General';
+  this.status = statusMap.general;
   this.documents.forEach(document => {
     const doc = new Document(document);
     if (doc.isPetitionDocument()) {
@@ -414,6 +414,13 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
       docketRecord.status = status;
     }
   });
+
+  this.addDocketRecord(
+    new DocketRecord({
+      description: 'The case was sent to the IRS',
+      filingDate: new Date().toISOString(),
+    }),
+  );
 
   return this;
 };
@@ -539,6 +546,7 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
+  return this;
 };
 
 /**

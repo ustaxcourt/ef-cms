@@ -1,5 +1,6 @@
 const sanitize = require('sanitize-filename');
 const { Case } = require('../entities/Case');
+const DocketRecord = require('../entities/DocketRecord');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const {
   isAuthorized,
@@ -71,6 +72,23 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     await applicationContext.getPersistenceGateway().deleteDocument({
       applicationContext,
       key: stinId,
+    });
+
+    const caseEntity = new Case(caseToBatch)
+      .markAsSentToIRS(new Date().toISOString())
+
+      .addDocketRecord(
+        // TODO: Remove in the future when we no longer store the batch.zip
+        new DocketRecord({
+          description: zipName,
+          documentId: zipName,
+          filingDate: new Date().toISOString(),
+        }),
+      );
+
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
     zips = zips.concat({
