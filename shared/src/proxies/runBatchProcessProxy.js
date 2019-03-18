@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+const { post } = require('./requests');
 
 /**
  * runBatchProcess
@@ -8,9 +8,9 @@ const { get } = require('./requests');
  * @param userId
  * @returns {Promise<*>}
  */
-exports.runBatchProcess = ({ applicationContext, caseId }) => {
-  return get({
+exports.runBatchProcess = ({ applicationContext }) => {
+  return post({
     applicationContext,
-    endpoint: `/cases/${caseId}/runBatchProcess`,
+    endpoint: '/runBatchProcess',
   });
 };

@@ -1,5 +1,6 @@
 const sanitize = require('sanitize-filename');
 const { Case } = require('../entities/Case');
+const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 
 /**
  * runBatchProcess
@@ -10,44 +11,64 @@ const { Case } = require('../entities/Case');
  * @param applicationContext
  * @returns {*}
  */
-exports.runBatchProcess = async ({ caseId, applicationContext }) => {
-  const caseToBatch = await applicationContext
+exports.runBatchProcess = async ({ applicationContext }) => {
+  const workItemsInHoldingQueue = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getWorkItemsBySection({
       applicationContext,
-      caseId,
+      section: IRS_BATCH_SYSTEM_SECTION,
     });
 
-  const s3Ids = caseToBatch.documents.map(document => document.documentId);
-  const fileNames = caseToBatch.documents.map(
-    document => `${document.documentType}.pdf`,
-  );
-  const zipName = sanitize(
-    `${caseToBatch.docketNumber}_${caseToBatch.contactPrimary.name.replace(
-      /\s/g,
-      '_',
-    )}.zip`,
-  );
+  let zips = [];
+  for (let workItem of workItemsInHoldingQueue) {
+    const caseToBatch = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId: workItem.caseId,
+      });
 
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
+      applicationContext,
+      section: IRS_BATCH_SYSTEM_SECTION,
+      workItemId: workItem.workItemId,
+    });
 
-  const stinId = caseToBatch.documents.find(
-    document => document.documentType === Case.documentTypes.stin,
-  ).documentId;
+    const s3Ids = caseToBatch.documents.map(document => document.documentId);
+    const fileNames = caseToBatch.documents.map(
+      document => `${document.documentType}.pdf`,
+    );
+    const zipName = sanitize(
+      `${caseToBatch.docketNumber}_${caseToBatch.contactPrimary.name.replace(
+        /\s/g,
+        '_',
+      )}.zip`,
+    );
 
-  await applicationContext.getPersistenceGateway().deleteDocument({
-    applicationContext,
-    key: stinId,
-  });
+    await applicationContext.getPersistenceGateway().zipDocuments({
+      applicationContext,
+      fileNames,
+      s3Ids,
+      zipName,
+    });
+
+    const stinId = caseToBatch.documents.find(
+      document => document.documentType === Case.documentTypes.stin,
+    ).documentId;
+
+    await applicationContext.getPersistenceGateway().deleteDocument({
+      applicationContext,
+      key: stinId,
+    });
+
+    zips = zips.concat({
+      fileNames,
+      s3Ids,
+      zipName,
+    });
+  }
 
   return {
-    fileNames,
-    s3Ids,
-    zipName,
+    processedCases: zips,
   };
 };

@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * takes the state.caseDetail and updates it via the updateCase use case.
  *
@@ -9,10 +7,8 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral store used for getting props.combinedCaseDetailWithForm
  * @returns {Object} the alertSuccess and the caseDetail
  */
-export const runBatchProcessAction = async ({ applicationContext, get }) => {
-  const caseId = get(state.caseDetail.caseId);
+export const runBatchProcessAction = async ({ applicationContext }) => {
   await applicationContext.getUseCases().runBatchProcess({
     applicationContext,
-    caseId,
   });
 };

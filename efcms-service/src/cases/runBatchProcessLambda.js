@@ -16,7 +16,6 @@ exports.handler = event => {
     const applicationContext = createApplicationContext(user);
     return applicationContext.getUseCases().runBatchProcess({
       applicationContext,
-      caseId: event.pathParameters.caseId,
     });
   });
 };
