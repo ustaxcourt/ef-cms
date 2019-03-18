@@ -108,7 +108,7 @@ describe('createWorkItem', () => {
     });
     expect(updateCaseStub.calledOnce).toBeTruthy();
     expect(
-      updateCaseStub.getCall(0).args[0].caseToUpdate.documents[1].workItems[0],
+      updateCaseStub.getCall(0).args[0].caseToUpdate.documents[2].workItems[0],
     ).toMatchObject({
       assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       assigneeName: 'docketclerk',
