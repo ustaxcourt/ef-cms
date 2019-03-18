@@ -74,7 +74,10 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 export const formattedWorkQueue = get => {
   const workItems = get(state.workQueue);
   const selectedWorkItems = get(state.selectedWorkItems);
-  return workItems
+  let workQueue = workItems
     .filter(items => !items.completedAt)
     .map(items => formatWorkItem(items, selectedWorkItems));
+
+  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  return workQueue;
 };

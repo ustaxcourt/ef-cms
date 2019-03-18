@@ -6,7 +6,7 @@ import React from 'react';
 export const SectionWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedSectionWorkQueue,
+    sectionWorkQueue: state.formattedWorkQueue,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
   },
   ({ documentHelper, sectionWorkQueue, setFocusedWorkItem }) => {

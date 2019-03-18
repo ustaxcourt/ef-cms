@@ -7,7 +7,7 @@ export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedSectionWorkQueue,
+    sectionWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,

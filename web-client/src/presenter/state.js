@@ -15,7 +15,6 @@ import documentDetailHelper from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
-import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import startCaseHelper from './computeds/startCaseHelper';
@@ -54,7 +53,6 @@ export default {
   form: {},
   formattedCaseDetail,
   formattedCases,
-  formattedSectionWorkQueue,
   formattedWorkQueue,
   getTrialCityName,
   mobileMenu: {
