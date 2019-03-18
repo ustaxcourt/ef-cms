@@ -8,7 +8,9 @@ const {
 const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
-
+const {
+  deleteWorkItemFromSection
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
   deleteDocument,
 } = require('ef-cms-shared/src/persistence/s3/deleteDocument');
@@ -212,6 +214,7 @@ module.exports = (appContextUser = {}) => {
         createUser,
         createWorkItem,
         deleteDocument,
+        deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByStatus,
