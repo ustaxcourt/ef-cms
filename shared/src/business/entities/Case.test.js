@@ -504,12 +504,11 @@ describe('Case entity', () => {
 
     it('should only sets docket record once per time paid', () => {
       const caseRecord = new Case(MOCK_CASE);
-      const payGovDate = new Date().toISOString();
-      caseRecord.markAsPaidByPayGov(payGovDate);
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
       const docketLength = caseRecord.docketRecord.length;
-      caseRecord.markAsPaidByPayGov(payGovDate);
-      caseRecord.markAsPaidByPayGov(payGovDate);
-      caseRecord.markAsPaidByPayGov(payGovDate);
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
     });
   });
