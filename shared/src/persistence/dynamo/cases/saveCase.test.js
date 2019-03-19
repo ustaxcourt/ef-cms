@@ -75,7 +75,7 @@ describe('saveCase', () => {
       applicationContext,
       caseToSave: {
         caseId: '123',
-        status: 'General',
+        status: 'General Docket',
       },
     });
     expect(client.delete.getCall(0).args[0].key.pk).toEqual('New|case-status');
@@ -93,7 +93,7 @@ describe('saveCase', () => {
       caseToSave: {
         caseId: '123',
         docketNumber: '101-18',
-        status: 'General',
+        status: 'General Docket',
         userId: 'taxpayer',
       },
     });

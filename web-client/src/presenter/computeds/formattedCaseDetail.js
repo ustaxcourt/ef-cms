@@ -144,9 +144,6 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   formatYearAmounts(result, caseDetailErrors);
 
-  result.status =
-    result.status === 'general' ? 'general docket' : result.status;
-
   return result;
 };
 

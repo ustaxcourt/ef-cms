@@ -2,21 +2,6 @@ import { runCompute } from 'cerebral/test';
 
 import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
 
-describe('formattedCaseDetail', () => {
-  it('should convert the status to general docket when it is general', async () => {
-    const result = await runCompute(formattedCaseDetail, {
-      state: {
-        caseDetail: {
-          docketRecord: [],
-          petitioners: [{ name: 'bob' }],
-          status: 'general',
-        },
-      },
-    });
-    expect(result.status).toEqual('general docket');
-  });
-});
-
 describe('formatYearAmounts', () => {
   it('does not return 2018 when a blank string is passed in', () => {
     const caseDetail = {
