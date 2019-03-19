@@ -8,7 +8,7 @@ const DATE_MMDDYYYY = 'L';
 
 const formatDateIfToday = date => {
   const now = moment();
-  const then = moment(date);
+  const then = moment.utc(date);
   let formattedDate;
   if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
     formattedDate = then.format(DATE_TODAY_TIME);
@@ -20,18 +20,20 @@ const formatDateIfToday = date => {
 
 export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   const result = _.cloneDeep(workItem);
-  result.createdAtFormatted = moment(result.createdAt).format(DATE_MMDDYYYY);
+  result.createdAtFormatted = moment
+    .utc(result.createdAt)
+    .format(DATE_MMDDYYYY);
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(message.createdAt);
     message.to = message.to || 'Unassigned';
-    message.createdAtTimeFormatted = moment(message.createdAt).format(
-      DATE_FORMAT_LONG,
-    );
+    message.createdAtTimeFormatted = moment
+      .utc(message.createdAt)
+      .format(DATE_FORMAT_LONG);
   });
-  result.completedAtFormatted = moment(result.completedAt).format(
-    DATE_FORMAT_LONG,
-  );
+  result.completedAtFormatted = moment
+    .utc(result.completedAt)
+    .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showComplete = !result.isInitializeCase;
