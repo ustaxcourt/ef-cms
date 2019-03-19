@@ -251,6 +251,21 @@ describe('Case entity', () => {
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
     });
+    it('updates docket record status on petition documents', () => {
+      const caseRecord = new Case({
+        ...MOCK_CASE,
+        docketRecord: [
+          {
+            description: 'Petition',
+            filedBy: 'Test Petitioner',
+            filingDate: '2019-03-01T21:42:29.073Z',
+          },
+        ],
+      });
+      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
+      assert.ok(caseRecord.irsSendDate);
+      expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
+    });
   });
 
   describe('getCaseTitle', () => {
@@ -507,8 +522,8 @@ describe('Case entity', () => {
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       const docketLength = caseRecord.docketRecord.length;
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
+      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
     });
   });
