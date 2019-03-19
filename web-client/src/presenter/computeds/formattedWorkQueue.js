@@ -47,7 +47,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       result.showBatchedStatusIcon = true;
       result.statusIcon = 'iconStatusRecalled';
       break;
-    case 'General':
+    case 'General Docket':
       result.caseStatus = 'General Docket';
       result.statusIcon = '';
       result.showBatchedStatusIcon = false;

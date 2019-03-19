@@ -116,7 +116,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General',
+        status: 'General Docket',
       },
     });
   });
