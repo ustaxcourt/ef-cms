@@ -16,7 +16,7 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
-  general: 'General',
+  generalDocket: 'General Docket',
   new: 'New',
   recalled: 'Recalled',
 };
@@ -400,7 +400,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   const Document = require('./Document');
 
   this.irsSendDate = sendDate;
-  this.status = statusMap.general;
+  this.status = statusMap.generalDocket;
   this.documents.forEach(document => {
     const doc = new Document(document);
     if (doc.isPetitionDocument()) {
