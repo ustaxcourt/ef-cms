@@ -191,4 +191,16 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
   return this;
 };
 
+/**
+ *
+ * @param userId
+ */
+WorkItem.prototype.setAsSentToIRS = function() {
+  this.completedAt = new Date().toISOString();
+  this.completedByUserId = IRS_BATCH_SYSTEM_USER_ID;
+  this.completedMessage = 'Served on IRS';
+
+  return this;
+};
+
 module.exports = WorkItem;

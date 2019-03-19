@@ -35,7 +35,8 @@ class CompletedMessagesComponent extends React.Component {
                     <div className="completed-content">
                       <p>
                         <span className="label-inline">
-                          Closed by {workItem.completedBy}
+                          Closed{' '}
+                          {workItem.completedBy && `by ${workItem.completedBy}`}
                         </span>
                       </p>
 
