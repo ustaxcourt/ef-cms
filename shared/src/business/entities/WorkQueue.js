@@ -15,8 +15,9 @@ exports.SECTIONS = [
   exports.SENIOR_ATTORNEY_SECTION,
   exports.CHIEF_JUDGE_SECTION,
   exports.CLERK_OF_COURT_SECTION,
-  exports.IRS_BATCH_SYSTEM_SECTION,
+  // intentially leavinvg out IRS_BATCH_SYSTEM_SECTION since that is an internal section
 ];
+
 /**
  *
  * @param role
