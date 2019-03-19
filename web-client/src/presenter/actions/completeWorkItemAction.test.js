@@ -4,15 +4,17 @@ import presenter from '..';
 
 import { completeWorkItemAction } from './completeWorkItemAction';
 
+import sinon from 'sinon';
+
+const completeWorkItemStub = sinon.stub().returns(null);
+
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
     name: 'Docket Clerk',
     userId: 'docketclerk',
   }),
   getUseCases: () => ({
-    updateWorkItem: async () => {
-      return null;
-    },
+    completeWorkItem: completeWorkItemStub,
   }),
 };
 
@@ -21,9 +23,9 @@ presenter.providers.path = {
   success() {},
 };
 
-describe('completeWorkItem', async () => {
-  it('should attach an assignee id if one does not already exist', async () => {
-    const result = await runAction(completeWorkItemAction, {
+describe('completeWorkItem', () => {
+  it('should have undefined completedMessage if completeForm is empty', async () => {
+    await runAction(completeWorkItemAction, {
       modules: {
         presenter,
       },
@@ -51,11 +53,42 @@ describe('completeWorkItem', async () => {
         },
       },
     });
-    expect(result.state.caseDetail.documents[0].workItems).toMatchObject([
-      {
-        assigneeId: 'docketclerk',
-        assigneeName: 'Docket Clerk',
+    expect(
+      completeWorkItemStub.getCall(0).args[0].completedMessage,
+    ).toBeUndefined();
+  });
+
+  it('should set completedMessage to completeMessage in completeForm', async () => {
+    await runAction(completeWorkItemAction, {
+      modules: {
+        presenter,
       },
-    ]);
+      props: {
+        workItemId: 'abc',
+      },
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              workItems: [
+                {
+                  messages: [],
+                  workItemId: 'abc',
+                },
+              ],
+            },
+          ],
+        },
+        completeForm: { abc: { completeMessage: 'Completed' } },
+        user: {
+          name: 'Docket Clerk',
+          token: 'docketclerk',
+          userId: 'docketclerk',
+        },
+      },
+    });
+    expect(completeWorkItemStub.getCall(1).args[0].completedMessage).toEqual(
+      'Completed',
+    );
   });
 });

@@ -9,7 +9,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoCaseDetailSequence = [
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   getCaseAction,
   setCaseAction,

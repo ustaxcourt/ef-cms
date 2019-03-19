@@ -1,0 +1,101 @@
+pipeline {
+
+  agent any
+
+  options { 
+    buildDiscarder(logRotator(daysToKeepStr: '3', artifactDaysToKeepStr: '3')) 
+    disableConcurrentBuilds()
+  }
+
+  stages {
+    stage('Terraform - Dev') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        script {
+          dir('web-client') {
+            sh "./docker-terraform.sh dev"
+          }
+        }
+      }
+    }
+    stage('Deploy Dev') {
+      when {
+        expression {
+          env.branch_name == 'develop'
+        }
+      }
+      steps {
+        deployTo('dev')
+      }
+    }
+    stage('Terraform - Staging') {
+      when {
+        expression {
+          env.branch_name == 'staging'
+        }
+      }
+      steps {
+        script {
+          dir('web-client') {
+            sh "./docker-terraform.sh stg"
+          }
+        }
+      }
+    }
+    stage('Deploy Staging') {
+      when {
+        expression {
+          env.branch_name == 'staging'
+        }
+      }
+      steps {
+        deployTo('stg')
+      }
+    }
+    stage('Terraform - Prod') {
+      when {
+        expression {
+          env.branch_name == 'master'
+        }
+      }
+      steps {
+        script {
+          dir('web-client') {
+            sh "./docker-terraform.sh prod"
+          }
+        }
+      }
+    }
+    stage('Deploy Prod') {
+      when {
+        expression {
+          env.branch_name == 'master'
+        }
+      }
+      steps {
+        deployTo('prod')
+      }
+    }
+  }
+  post {
+    always {
+      deleteDir()
+    }
+  }
+}
+
+def deployTo(env) {
+  dir('web-client') {
+    sh "CONTAINER_NAME=ui-dist-${BUILD_NUMBER} ./docker-build.sh ${env}"
+    s3Upload(
+      bucket: "ui-${env}.${EFCMS_DOMAIN}",
+      file: 'dist',
+      path: "",
+      cacheControl: 'no-cache'
+    )
+  }
+}

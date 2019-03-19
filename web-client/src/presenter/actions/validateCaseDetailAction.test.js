@@ -1,6 +1,5 @@
-import { runAction } from 'cerebral/test';
-
 import presenter from '..';
+import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 import { validateCaseDetailAction } from './validateCaseDetailAction';
 
@@ -19,7 +18,7 @@ presenter.providers.path = {
   success: successStub,
 };
 
-describe('validateCaseDetail', async () => {
+describe('validateCaseDetail', () => {
   it('should call the path success when no errors are found', async () => {
     await runAction(validateCaseDetailAction, {
       modules: {

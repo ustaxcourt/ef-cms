@@ -11,6 +11,6 @@ export const setDefaultDocumentDetailTabAction = ({ store, get }) => {
   const { showDocumentInfoTab } = get(state.documentDetailHelper);
   store.set(
     state.currentTab,
-    showDocumentInfoTab ? 'Document Info' : 'Pending Messages',
+    showDocumentInfoTab ? 'Document Info' : 'Messages',
   );
 };

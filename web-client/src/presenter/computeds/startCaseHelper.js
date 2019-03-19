@@ -25,11 +25,12 @@ export default get => {
       form.filingType === 'Myself and my spouse',
     showPetitionFileValid: petition && petition.petitionFile,
     showPrimaryContact: showContacts.contactPrimary,
-
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSecondaryContact: showContacts.contactSecondary,
 
     showSelectTrial: !!form.procedureType,
     showSmallTrialCitiesHint: form.procedureType === 'Small',
+
+    showStinFileValid: petition && petition.stinFile,
   };
 };

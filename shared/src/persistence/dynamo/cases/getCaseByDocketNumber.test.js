@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
@@ -69,7 +66,7 @@ describe('getCaseByDocketNumber', () => {
       pk: '123',
       sk: '123',
     });
-    expect(result).to.deep.equal({ caseId: '123', status: 'New' });
+    expect(result).toEqual({ caseId: '123', status: 'New' });
   });
 
   it('should return null if no mapping records are returned from the query', async () => {
@@ -80,6 +77,6 @@ describe('getCaseByDocketNumber', () => {
       pk: '123',
       sk: '123',
     });
-    expect(result).to.be.null;
+    expect(result).toBeNull();
   });
 });

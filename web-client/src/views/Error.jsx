@@ -30,7 +30,7 @@ export const Error = connect(
           )}
 
           <a
-            className="usa-button usa-button-secondary"
+            className="usa-button-secondary"
             href="https://www.ustaxcourt.gov/"
             id="us-tax-court"
           >

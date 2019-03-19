@@ -1,4 +1,4 @@
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const DocketRecord = require('../entities/DocketRecord');
 const Document = require('../entities/Document');
@@ -31,11 +31,11 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   workItemEntity.addMessage(
     new Message({
-      createdAt: new Date().toISOString(),
-      message: `A ${documentEntity.documentType} filed by ${capitalize(
+      from: user.name,
+      fromUserId: user.userId,
+      message: `${documentEntity.documentType} filed by ${capitalize(
         user.role,
       )} is ready for review.`,
-      sentBy: user.name,
     }),
   );
 
@@ -56,6 +56,7 @@ exports.createCase = async ({
   petitionFileId,
   ownershipDisclosureFileId,
   applicationContext,
+  stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, PETITION)) {
@@ -91,6 +92,14 @@ exports.createCase = async ({
   });
   addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
 
+  const stinDocumentEntity = new Document({
+    documentId: stinFileId,
+    documentType: Case.documentTypes.stin,
+    filedBy: user.name,
+    userId: user.userId,
+  });
+  caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+
   caseToAdd.addDocketRecord(
     new DocketRecord({
       description: `Request for Place of Trial at ${
@@ -109,7 +118,7 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
+  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,

@@ -1,18 +1,19 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueOutbox = connect(
   {
+    documentHelper: state.documentHelper,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
-  ({ setFocusedWorkItem, workQueue }) => {
+  ({ documentHelper, setFocusedWorkItem, workQueue }) => {
     return (
       <React.Fragment>
         <table
-          className="work-queue"
+          className="work-queue subsection"
           id="my-work-queue"
           aria-describedby="tab-my-queue"
         >
@@ -28,12 +29,12 @@ export const IndividualWorkQueueOutbox = connect(
               <th>To</th>
             </tr>
           </thead>
-          {workQueue.map(item => (
+          {workQueue.map((item, idx) => (
             <tbody
-              key={item.workItemId}
+              key={idx}
               onClick={() =>
                 setFocusedWorkItem({
-                  workItemId: item.workItemId,
+                  idx,
                   queueType: 'workQueue',
                 })
               }
@@ -63,9 +64,10 @@ export const IndividualWorkQueueOutbox = connect(
                     onClick={e => {
                       e.stopPropagation();
                     }}
-                    href={`/case-detail/${item.docketNumber}/documents/${
-                      item.document.documentId
-                    }`}
+                    href={documentHelper({
+                      docketNumber: item.docketNumber,
+                      documentId: item.document.documentId,
+                    })}
                     className="case-link"
                   >
                     {item.document.documentType}

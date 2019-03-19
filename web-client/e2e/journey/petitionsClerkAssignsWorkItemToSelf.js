@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
@@ -38,7 +37,7 @@ export default test => {
     // select an assignee
     expect(test.getState('assigneeId')).toBeNull();
     await test.runSequence('selectAssigneeSequence', {
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk',
     });
     expect(test.getState('assigneeId')).toBeDefined();
@@ -55,7 +54,7 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(assignedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
 
@@ -65,14 +64,14 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(movedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk',
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
     const formattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'A Petition filed by Test petitioner is ready for review.',
+      'Petition filed by Test petitioner is ready for review.',
     );
   });
 };

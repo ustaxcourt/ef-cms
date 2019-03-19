@@ -4,7 +4,7 @@ import moment from 'moment';
 
 export const formatDocument = document => {
   const result = _.cloneDeep(document);
-  result.createdAtFormatted = moment(result.createdAt).format('L');
+  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
@@ -13,12 +13,12 @@ export const formatDocument = document => {
 
 export const formatDocketRecord = docketRecord => {
   const result = _.cloneDeep(docketRecord);
-  result.createdAtFormatted = moment(result.filingDate).format('L');
+  result.createdAtFormatted = moment.utc(result.filingDate).format('L');
   return result;
 };
 
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
-  const yearAmountError = (caseDetailErrors.yearAmounts || []).find(error => {
+  const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
     return error.index === idx;
   });
 
@@ -45,7 +45,7 @@ const formatYearAmount = (caseDetailErrors, caseDetail) => (
   yearAmount,
   idx,
 ) => {
-  const formattedYear = moment(yearAmount.year, 'YYYY').format('YYYY');
+  const formattedYear = moment.utc(yearAmount.year, 'YYYY').format('YYYY');
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
   yearAmount.amountFormatted = yearAmount.amount
@@ -117,9 +117,9 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.petitionerName = result.petitioners[0].name;
 
-  result.createdAtFormatted = moment(result.createdAt).format('L');
-  result.irsDateFormatted = moment(result.irsDate).format('L LT');
-  result.payGovDateFormatted = moment(result.payGovDate).format('L');
+  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
+  result.irsDateFormatted = moment.utc(result.irsDate).format('L LT');
+  result.payGovDateFormatted = moment.utc(result.payGovDate).format('L');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -127,7 +127,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? moment.utc(result.irsNoticeDate).format('L')
-    : 'No notice';
+    : 'No notice provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
     result.irsDateFormatted

@@ -2,7 +2,7 @@ import presenter from '..';
 import { runAction } from 'cerebral/test';
 import { setValidationAlertErrorsAction } from './setValidationAlertErrorsAction';
 
-describe('setValidationAlertErrors', async () => {
+describe('setValidationAlertErrors', () => {
   it('state.alertError contains 3 errors, one from the irsNoticeDate error, and two from the yearAmounts array', async () => {
     const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {

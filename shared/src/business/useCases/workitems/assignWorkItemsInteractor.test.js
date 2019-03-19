@@ -18,10 +18,11 @@ const MOCK_WORK_ITEM = {
   messages: [
     {
       createdAt: '2018-12-27T18:06:02.968Z',
-      message: 'a Stipulated Decision filed by respondent is ready for review',
+      from: 'Test Respondent',
+      fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      message: 'Stipulated Decision filed by respondent is ready for review',
       messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-      sentBy: 'Test Respondent',
-      sentTo: null,
+      to: null,
       userId: 'respondent',
     },
   ],
@@ -86,7 +87,7 @@ describe('assignWorkItems', () => {
         return new User({
           name: 'Test Docketclerk',
           role: 'docketclerk',
-          userId: 'docketclerk1',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getPersistenceGateway: () => {
@@ -100,7 +101,7 @@ describe('assignWorkItems', () => {
     };
     await assignWorkItems({
       applicationContext,
-      userId: 'docketclerk',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [MOCK_WORK_ITEM],
     });
   });

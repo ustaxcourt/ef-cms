@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 const {
   PARTY_TYPES,
-} = require('../../../shared/src/business/entities/Contacts/PetitionContact');
+} = require('../../../shared/src/business/entities/contacts/PetitionContact');
 
 import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
 
@@ -9,6 +9,11 @@ export default (test, fakeFile) => {
   return it('Taxpayer creates a new case', async () => {
     await test.runSequence('updatePetitionValueSequence', {
       key: 'petitionFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'stinFile',
       value: fakeFile,
     });
 

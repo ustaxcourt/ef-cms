@@ -12,6 +12,7 @@ export const getSentWorkItemsForUserAction = async ({ applicationContext }) => {
     .getUseCases()
     .getSentWorkItemsForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
   workItems = _.orderBy(workItems, 'createdAt', 'desc');
   return { workItems };

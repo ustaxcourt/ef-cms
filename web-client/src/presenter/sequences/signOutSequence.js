@@ -5,7 +5,7 @@ import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const signOutSequence = [
-  setCurrentPageAction('Loading'),
+  setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearUserAction,
   clearLoginFormAction,

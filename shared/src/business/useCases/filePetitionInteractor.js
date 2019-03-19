@@ -1,4 +1,3 @@
-//TODO remove
 const {
   isAuthorized,
   PETITION,
@@ -9,7 +8,7 @@ exports.filePetition = async ({
   petitionMetadata,
   petitionFile,
   ownershipDisclosureFile,
-  fileHasUploaded,
+  stinFile,
   applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -24,7 +23,6 @@ exports.filePetition = async ({
       applicationContext,
       document: petitionFile,
     });
-  fileHasUploaded();
 
   let ownershipDisclosureFileId;
   if (ownershipDisclosureFile) {
@@ -34,13 +32,23 @@ exports.filePetition = async ({
         applicationContext,
         document: ownershipDisclosureFile,
       });
-    fileHasUploaded();
   }
 
-  await applicationContext.getUseCases().createCase({
+  let stinFileId;
+  if (stinFile) {
+    stinFileId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: stinFile,
+      });
+  }
+
+  return await applicationContext.getUseCases().createCase({
     applicationContext,
     ownershipDisclosureFileId,
     petitionFileId,
     petitionMetadata,
+    stinFileId,
   });
 };
