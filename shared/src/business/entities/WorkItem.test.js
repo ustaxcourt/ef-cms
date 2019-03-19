@@ -122,5 +122,26 @@ describe('WorkItem', () => {
       });
       expect(workItem.messages.length === 0).toBe(true);
     });
+
+    it('no message added when set as sentToIRS', () => {
+      const workItem = new WorkItem({
+        assigneeId: 'bob',
+        assigneeName: 'bob',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        caseStatus: 'Batched for IRS',
+        caseTitle: 'testing',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: {},
+        messages: [],
+        sentBy: 'bob',
+      });
+      workItem.setAsSentToIRS();
+      expect(workItem.messages.length === 0).toBe(true);
+      expect(workItem.completedByUserId).toEqual(
+        '63784910-c1af-4476-8988-a02f92da8e09',
+      );
+      expect(workItem.completedMessage).toEqual('Served on IRS');
+    });
   });
 });
