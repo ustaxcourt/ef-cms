@@ -8,7 +8,7 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General',
+          status: 'General Docket',
         },
         documentId: 'abc',
         workItemActions: {
@@ -19,12 +19,12 @@ describe('formatted work queue computed', () => {
     expect(result.showAction('complete', 'abc')).toEqual(true);
   });
 
-  it('sets the showCaseDetailsEdit boolean false when case status is general', () => {
+  it('sets the showCaseDetailsEdit boolean false when case status is general docket', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General',
+          status: 'General Docket',
         },
         documentId: 'abc',
         workItemActions: {
@@ -120,7 +120,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'General',
+            status: 'General Docket',
           },
           documentId: 'abc',
           workItemActions: {
