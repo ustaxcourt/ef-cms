@@ -56,11 +56,11 @@ export const PartyInformation = connect(
             )}{' '}
           </div>
           <div className="usa-width-one-sixth">
-            <p className="label" id="secondary-label">
-              Secondary Contact
-            </p>
             {caseDetail.contactSecondary && (
               <React.Fragment>
+                <p className="label" id="secondary-label">
+                  Secondary Contact
+                </p>
                 <div>
                   <address aria-labelledby="secondary-label">
                     {caseDetail.contactSecondary.name &&
