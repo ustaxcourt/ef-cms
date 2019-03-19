@@ -4,9 +4,10 @@ import { state } from 'cerebral';
 
 export const extractedPendingMessagesFromCaseDetail = get => {
   const documents = get(state.caseDetail).documents || [];
-  const workItems = documents
+  let workQueue = documents
     .reduce((acc, document) => [...acc, ...(document.workItems || [])], [])
     .filter(items => !items.completedAt)
     .map(workItem => formatWorkItem(workItem, []));
-  return _.orderBy(workItems, 'createdAt', 'desc');
+  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  return workQueue;
 };
