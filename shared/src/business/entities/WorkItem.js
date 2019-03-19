@@ -198,6 +198,7 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 WorkItem.prototype.setAsSentToIRS = function() {
   this.completedAt = new Date().toISOString();
   this.completedByUserId = IRS_BATCH_SYSTEM_USER_ID;
+  this.completedBy = 'IRS Batch Service';
   this.completedMessage = 'Served on IRS';
 
   return this;
