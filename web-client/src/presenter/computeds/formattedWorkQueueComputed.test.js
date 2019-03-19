@@ -60,7 +60,7 @@ describe('formatted work queue computed', () => {
     assigneeId: null,
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'General',
+    caseStatus: 'General Docket',
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {
