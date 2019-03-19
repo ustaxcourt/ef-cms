@@ -42,7 +42,7 @@ function getFormattedValidationErrorsHelper(entity) {
           errors[key] = errorObject;
         }
       }
-    } else {
+    } else if (errorMap) {
       errors[key] = errorMap;
     }
   }

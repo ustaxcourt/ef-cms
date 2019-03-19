@@ -1,4 +1,4 @@
-import Case from '../../../shared/src/business/entities/Case';
+import { Case } from '../../../shared/src/business/entities/Case';
 
 export default (test, fakeFile) => {
   return it('Respondent adds answer', async () => {
@@ -11,6 +11,6 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
     await test.runSequence('submitDocumentSequence');
-    expect(test.getState('caseDetail.documents').length).toEqual(2);
+    expect(test.getState('caseDetail.documents').length).toEqual(3);
   });
 };

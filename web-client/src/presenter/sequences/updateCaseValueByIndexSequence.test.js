@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import applicationContext from '../../applicationContext';
 import presenter from '..';
 
@@ -8,7 +7,7 @@ presenter.providers.applicationContext = applicationContext;
 
 test = CerebralTest(presenter);
 
-describe('updateCaseValueByIndexSequence', async () => {
+describe('updateCaseValueByIndexSequence', () => {
   it('updates the expected key and index inside the caseDetail', async () => {
     test.setState('caseDetail', {
       yearAmounts: [

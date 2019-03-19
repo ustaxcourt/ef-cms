@@ -1,21 +1,23 @@
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import { Tabs, Tab } from '../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
 
 export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    runBatchProcessSequence: sequences.runBatchProcessSequence,
+    workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence }) => {
+  ({ chooseWorkQueueSequence, runBatchProcessSequence, workQueueHelper }) => {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
         <Tabs
-          className="horizontal-tabs"
+          className="classic-horizontal"
           defaultActiveTab="my"
           bind="workQueueToDisplay.queue"
           onSelect={() =>
@@ -35,6 +37,14 @@ export const WorkQueue = connect(
             </div>
           </Tab>
         </Tabs>
+        {workQueueHelper.showRunBatchIRSProcessButton && (
+          <button
+            className="usa-button-secondary"
+            onClick={() => runBatchProcessSequence()}
+          >
+            Run IRS Batch Process
+          </button>
+        )}
       </React.Fragment>
     );
   },

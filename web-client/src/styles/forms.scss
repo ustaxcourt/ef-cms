@@ -1,37 +1,76 @@
 label {
   max-width: 100%;
-  margin: 0 0 8px;
+  margin: 0 0 15px;
   font-size: 17px;
   font-weight: $font-semibold;
-  line-height: 1.45em;
+  line-height: 1;
+  .usa-form-hint {
+    margin: 0;
+  }
 }
 
 label.with-hint {
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
+
 label p.usa-form-hint {
   display: block;
 }
 
 legend {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   font-size: 17px;
   font-weight: $font-semibold;
+  line-height: 1;
 }
 
 input[type='file'] {
   height: auto;
 }
 
+input[type='email'],
 input[type='file'],
 input[type='number'],
-input[type='text'],
 input[type='tel'],
+input[type='text'],
 textarea,
 select {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin: 0 0 2rem;
+  margin: 0;
+}
+
+textarea.caption {
+  width: 379px;
+  height: 107px;
+  margin-bottom: 2px;
+}
+
+input[type='email']:hover,
+input[type='email']:focus,
+input[type='number']:hover,
+input[type='number']:focus,
+input[type='tel']:hover,
+input[type='tel']:focus,
+input[type='text']:hover,
+input[type='text']:focus,
+textarea:hover,
+textarea:focus,
+select:hover,
+select:focus {
+  &:not([disabled]) {
+    border: 2px solid $color-primary;
+    transition-duration: 0.1s;
+    transition-property: all;
+  }
+}
+
+[type='radio']:hover + label::before,
+[type='radio']:focus + label::before {
+  box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
+}
+
+[type='checkbox']:hover + label::before,
+[type='checkbox']:focus + label::before {
+  box-shadow: 0 0 0 1px $color-primary;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -46,6 +85,14 @@ input[type='number'] {
 
 input:focus::placeholder {
   color: transparent;
+}
+
+.ustc-vertical-option-list {
+  padding: 0;
+  margin: 0;
+  li {
+    display: block;
+  }
 }
 
 label.validated::after {
@@ -94,6 +141,10 @@ label.validated::after {
   }
 }
 
+.ustc-form-group {
+  margin-bottom: 20px;
+}
+
 .ustc-form-group-city {
   width: 25rem;
   margin-right: 3rem;
@@ -112,16 +163,14 @@ label.validated::after {
 
 .document-detail-one-third .blue-container {
   padding: 0;
-
   #change-email-hint {
     display: none;
   }
 }
 
 .document-detail-one-third {
-  overflow: scroll;
   max-height: 890px;
-
+  overflow-y: scroll;
   .phone-input {
     margin-bottom: 25px;
     clear: both;
@@ -130,7 +179,32 @@ label.validated::after {
     margin-bottom: 25px;
   }
   .contact-group {
-    margin-top: 45px;
+    margin-top: 40px;
+  }
+  .usa-form-hint {
+    margin-bottom: 0;
+  }
+  .ustc-form-group-city input,
+  .ustc-form-group-state select {
+    margin-bottom: 0;
+  }
+}
+
+.order-checkbox {
+  margin-top: 15px;
+}
+
+.usa-date-of-birth .usa-form-group {
+  margin-bottom: 0;
+}
+
+#orders-needed {
+  margin-top: 50px;
+}
+
+.orders-needed {
+  .usa-form-group {
+    margin-bottom: 20px;
   }
 }
 
@@ -148,7 +222,8 @@ label.validated::after {
   }
 }
 
-label.ustc-upload-petition {
+label.ustc-upload-petition,
+label.ustc-upload-stin {
   .success-message {
     display: none;
     color: $color-green;

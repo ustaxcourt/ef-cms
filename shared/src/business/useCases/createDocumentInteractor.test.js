@@ -17,7 +17,7 @@ const MOCK_CASE = {
   preferredTrialCity: 'Washington, D.C.',
   procedureType: 'Regular',
   status: 'New',
-  userId: 'userId',
+  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 describe('createDocument', () => {
   let applicationContext;
@@ -46,7 +46,7 @@ describe('createDocument', () => {
         return new User({
           name: 'Test Respondent',
           role: 'respondent',
-          userId: 'respondent',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getEntityConstructors: () => ({
@@ -79,7 +79,7 @@ describe('createDocument', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
           filedBy: 'Test Respondent',
-          userId: 'respondent',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -97,10 +97,10 @@ describe('createDocument', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'A Answer filed by Respondent is ready for review.',
+                  from: 'Test Respondent',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'Answer filed by Respondent is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Respondent',
-                  userId: 'respondent',
                 },
               ],
             },
@@ -121,7 +121,7 @@ describe('createDocument', () => {
         return new User({
           name: 'Test Taxpayer',
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getEntityConstructors: () => ({
@@ -154,7 +154,7 @@ describe('createDocument', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Answer',
           filedBy: 'Test Taxpayer',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -172,10 +172,10 @@ describe('createDocument', () => {
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message: 'A Answer filed by Petitioner is ready for review.',
+                  from: 'Test Taxpayer',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'Answer filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
-                  userId: 'taxpayer',
                 },
               ],
             },

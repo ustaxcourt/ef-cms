@@ -20,14 +20,14 @@ export default test => {
       }),
     );
     expect(workItem).toMatchObject({
-      assigneeId: 'docketclerk',
+      assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Docketclerk',
     });
 
     expect(workItem.messages[0]).toMatchObject({
+      from: test.selectedWorkItem.messages[0].from,
+      fromUserId: test.selectedWorkItem.messages[0].fromUserId,
       message: test.selectedWorkItem.messages[0].message,
-      userId: test.selectedWorkItem.messages[0].userId,
-      sentBy: test.selectedWorkItem.messages[0].sentBy,
     });
 
     const documentResult = runCompute(extractedDocument, {

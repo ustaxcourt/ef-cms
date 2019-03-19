@@ -1,9 +1,9 @@
-import { runAction } from 'cerebral/test';
-import presenter from '..';
 import { getDocumentTypeAction } from './getDocumentTypeAction';
+import presenter from '..';
+import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-describe('getDocumentType', async () => {
+describe('getDocumentType', () => {
   let spy;
 
   beforeEach(() => {

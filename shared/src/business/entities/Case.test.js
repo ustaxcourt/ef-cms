@@ -1,11 +1,46 @@
 const assert = require('assert');
 
-const Case = require('./Case');
+const { Case } = require('./Case');
 const DocketRecord = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
-const { PARTY_TYPES } = require('./Contacts/PetitionContact');
+const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
 describe('Case entity', () => {
+  it('defaults the orders to false', () => {
+    const myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      noticeOfAttachments: false,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: false,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: false,
+    });
+  });
+
+  it('sets the expected order booleans', () => {
+    const myCase = new Case({
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: true,
+    });
+    expect(myCase).toMatchObject({
+      noticeOfAttachments: true,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: true,
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE);
@@ -456,6 +491,26 @@ describe('Case entity', () => {
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       assert.ok(caseRecord.payGovDate);
     });
+
+    it('should add item to docket record when paid', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const payGovDate = new Date().toISOString();
+      const initialDocketLength =
+        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
+      caseRecord.markAsPaidByPayGov(payGovDate);
+      const docketLength = caseRecord.docketRecord.length;
+      expect(docketLength).toEqual(initialDocketLength + 1);
+    });
+
+    it('should only sets docket record once per time paid', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      const docketLength = caseRecord.docketRecord.length;
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      expect(docketLength).toEqual(caseRecord.docketRecord.length);
+    });
   });
 
   describe('addDocketRecord', () => {
@@ -631,6 +686,72 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord[0].description).toEqual(
         "Docket Number is amended from 'BobW' to 'Bob'",
       );
+    });
+  });
+
+  describe('updateCaptionDocketRecord', () => {
+    it('should not add to the docket record when the caption is not set', () => {
+      const caseToVerify = new Case({}).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should not add to the docket record when the caption is initially being set', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should not add to the docket record when the caption is the initial caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'Caption',
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add to the docket record when the caption changes from initial caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A New Caption',
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not add to the docket record when the caption is not changing from the last updated caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A Very New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption' to 'A New Caption'",
+          },
+          {
+            description:
+              "Caption of case is amended from 'A New Caption' to 'A Very New Caption'",
+          },
+        ],
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(2);
+    });
+
+    it('should add to the docket record when the caption changes from the last updated caption', () => {
+      const caseToVerify = new Case({
+        caseTitle: 'A Very Berry New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption' to 'A New Caption'",
+          },
+          {
+            description:
+              "Caption of case is amended from 'A New Caption' to 'A Very New Caption'",
+          },
+        ],
+        initialCaption: 'Caption',
+      }).updateCaptionDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(3);
     });
   });
 });

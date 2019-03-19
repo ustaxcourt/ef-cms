@@ -10,7 +10,7 @@ import moment from 'moment';
  */
 export const setFormForCaseAction = ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
-  const irsNoticeDate = moment(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
+  const irsNoticeDate = moment.utc(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
   if (
     irsNoticeDate &&
     irsNoticeDate.toDate() instanceof Date &&
@@ -21,7 +21,7 @@ export const setFormForCaseAction = ({ get, store }) => {
     store.set(state.form.irsYear, irsNoticeDate.format('YYYY'));
   }
 
-  const payGovDate = moment(caseDetail.payGovDate, 'YYYY/MM/DD');
+  const payGovDate = moment.utc(caseDetail.payGovDate, 'YYYY/MM/DD');
   if (
     payGovDate &&
     payGovDate.toDate() instanceof Date &&

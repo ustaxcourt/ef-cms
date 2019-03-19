@@ -64,21 +64,20 @@
 
 .usa-input-error {
   padding-top: unset;
+  padding-bottom: 0;
   margin-top: auto;
+  margin-bottom: 20px;
 }
 
 .usa-input-error-message {
-  padding: 0;
-  margin: 10px 0 0;
+  padding: 15px 0 0 0;
+  margin: 0;
   clear: left;
   line-height: 1;
+}
 
-  &.beneath {
-    margin: 0 0 10px;
-  }
-  &.padded-left {
-    padding-left: 10px;
-  }
+.usa-fieldset-inputs {
+  margin-bottom: 5px;
 }
 
 .usa-alert-error,
@@ -89,6 +88,14 @@
   .usa-alert-heading {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  &.usa-alert-success-message-only {
+    @media only screen and (min-width: $medium-screen) {
+      .usa-grid-full {
+        margin-top: 6px;
+      }
+    }
   }
 
   button {

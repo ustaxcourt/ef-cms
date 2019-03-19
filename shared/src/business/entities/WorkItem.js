@@ -25,6 +25,8 @@ function WorkItem(rawWorkItem) {
   this.messages = (this.messages || []).map(message => new Message(message));
 }
 
+const IRS_BATCH_SYSTEM_USER_ID = '63784910-c1af-4476-8988-a02f92da8e09';
+
 WorkItem.name = 'WorkItem';
 
 joiValidationDecorator(
@@ -47,6 +49,19 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    completedBy: joi
+      .string()
+      .optional()
+      .allow(null),
+    completedByUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional()
+      .allow(null),
+    completedMessage: joi
+      .string()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -64,6 +79,10 @@ joiValidationDecorator(
       .required(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
+    sentByUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
     updatedAt: joi
       .date()
       .iso()
@@ -95,11 +114,19 @@ WorkItem.prototype.addMessage = function(message) {
  * @param role
  * @returns {WorkItem}
  */
-WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
+WorkItem.prototype.assignToUser = function({
+  assigneeId,
+  assigneeName,
+  role,
+  sentBy,
+  sentByUserId,
+}) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
     section: getSectionForRole(role),
+    sentBy,
+    sentByUserId,
   });
   return this;
 };
@@ -108,18 +135,21 @@ WorkItem.prototype.assignToUser = function({ assigneeId, assigneeName, role }) {
  *
  * @param userId
  */
-WorkItem.prototype.assignToIRSBatchSystem = function({ userId }) {
+WorkItem.prototype.assignToIRSBatchSystem = function({ userId, name }) {
   this.assignToUser({
-    assigneeId: 'irsBatchSystem',
+    assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
     role: 'irsBatchSystem',
+    sentBy: name,
+    sentByUserId: userId,
   });
   this.addMessage(
     new Message({
+      from: name,
+      fromUserId: userId,
       message: 'Petition batched for IRS',
-      sentBy: userId,
-      sentTo: 'IRS Holding Queue',
-      userId: userId,
+      to: 'IRS Holding Queue',
+      toUserId: IRS_BATCH_SYSTEM_USER_ID,
     }),
   );
 };
@@ -133,14 +163,17 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     assigneeId: user.userId,
     assigneeName: user.name,
     role: user.role,
+    sentBy: user.name,
+    sentByUserId: user.userId,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(
     new Message({
+      from: 'IRS Holding Queue',
+      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
       message: 'Petition recalled from IRS Holding Queue',
-      sentBy: 'IRS Holding Queue',
-      sentTo: user.name,
-      userId: 'irsBatchSystem',
+      to: user.name,
+      toUserId: user.userId,
     }),
   );
 };
@@ -149,16 +182,13 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
  *
  * @param userId
  */
-WorkItem.prototype.setAsCompleted = function(userId) {
+WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedAt = new Date().toISOString();
+  this.completedBy = user.name;
+  this.completedByUserId = user.userId;
+  this.completedMessage = message;
 
-  this.addMessage(
-    new Message({
-      message: 'work item completed',
-      sentBy: userId,
-      userId: userId,
-    }),
-  );
+  return this;
 };
 
 module.exports = WorkItem;

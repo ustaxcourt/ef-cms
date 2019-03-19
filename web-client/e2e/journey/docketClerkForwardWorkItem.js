@@ -4,8 +4,8 @@ export default test => {
   return it('Docket clerk forward work item', async () => {
     test.setState('form', {
       [test.workItemId]: {
-        forwardRecipientId: 'seniorattorney',
         forwardMessage: 'hello world',
+        forwardRecipientId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
     await test.runSequence('submitForwardSequence', {
@@ -15,21 +15,21 @@ export default test => {
     let workItem;
     caseDetail.documents.forEach(document =>
       document.workItems.forEach(item => {
-        if (item.workItemId === test.stipulatedDecisionWorkItemId) {
+        if (item.workItemId === test.workItemId) {
           workItem = item;
         }
       }),
     );
     expect(workItem).toMatchObject({
-      assigneeId: 'seniorattorney',
+      assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Seniorattorney',
     });
     const messages = _.orderBy(workItem.messages, 'createdAt', 'desc');
     expect(messages.length).toEqual(3);
     expect(messages[0]).toMatchObject({
+      from: 'Test Docketclerk',
+      fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'hello world',
-      userId: 'docketclerk',
-      sentBy: 'Test Docketclerk',
     });
   });
 };

@@ -1,3 +1,5 @@
+const { put } = require('../requests');
+
 /**
  * getWorkItem
  *
@@ -5,13 +7,10 @@
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({ workItems, applicationContext }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .put(`${applicationContext.getBaseUrl()}/workitems`, workItems, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    });
-  return response.data;
+exports.assignWorkItems = ({ workItems, applicationContext }) => {
+  return put({
+    applicationContext,
+    body: workItems,
+    endpoint: '/workitems',
+  });
 };

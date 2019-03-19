@@ -5,7 +5,13 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { saveVersionedCase } = require('../cases/saveCase');
 
-exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
+exports.saveWorkItem = async ({
+  workItemToSave,
+  createOutboxEntries,
+  applicationContext,
+}) => {
+  const user = applicationContext.getCurrentUser();
+
   const existingWorkItem = await getWorkItemById({
     applicationContext,
     workItemId: workItemToSave.workItemId,
@@ -38,6 +44,26 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
     existingVersion: (caseToUpdate || {}).currentVersion,
   });
 
+  if (createOutboxEntries) {
+    await client.put({
+      applicationContext,
+      Item: {
+        pk: `${user.userId}|outbox`,
+        sk: new Date().toISOString(),
+        ...workItemToSave,
+      },
+    });
+
+    await client.put({
+      applicationContext,
+      Item: {
+        pk: `${user.section}|outbox`,
+        sk: new Date().toISOString(),
+        ...workItemToSave,
+      },
+    });
+  }
+
   const workItem = await client.put({
     applicationContext,
     Item: {
@@ -45,7 +71,6 @@ exports.saveWorkItem = async ({ workItemToSave, applicationContext }) => {
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 
   return stripInternalKeys(workItem);

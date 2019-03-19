@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('../../dynamodbClientService');
 const mappings = require('../../dynamo/helpers/createMappingRecord');
@@ -47,7 +44,7 @@ describe('syncWorkItems', function() {
       },
       currentCaseState: {},
     });
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('abc');
   });
 
   it('should create a new work item record for the work item and the mapping record for the assignee when a new work item is added to a document', async () => {
@@ -76,7 +73,7 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('abc');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('abc');
   });
 
   it('updates the workitems when the case status changes', async () => {
@@ -108,7 +105,7 @@ describe('syncWorkItems', function() {
         status: 'New',
       },
     });
-    expect(sync.updateWorkItem.called).to.be.true;
+    expect(sync.updateWorkItem.called).toBeTruthy();
   });
 
   it('reassigns the work item from one user to another', async () => {
@@ -139,7 +136,7 @@ describe('syncWorkItems', function() {
         ],
       },
     });
-    expect(sync.reassignWorkItem.called).to.be.true;
+    expect(sync.reassignWorkItem.called).toBeTruthy();
   });
 
   it('creates 2 mapping records if the case status changes to Batched for IRS', async () => {
@@ -155,8 +152,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 workItemId: 'abc',
@@ -176,8 +173,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -189,14 +186,12 @@ describe('syncWorkItems', function() {
         status: 'New',
       },
     });
-    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
-      'petitionsclerk1|sentWorkItem',
+    expect(client.put.getCall(0).args[0].Item.pk).toEqual(
+      'petitionsclerk1|outbox',
     );
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
-    expect(client.put.getCall(1).args[0].Item.pk).to.equal(
-      'petitions|sentWorkItem',
-    );
-    expect(client.put.getCall(1).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
+    expect(client.put.getCall(1).args[0].Item.pk).toEqual('petitions|outbox');
+    expect(client.put.getCall(1).args[0].Item.sk).toEqual('123');
   });
 
   it('creates a mapping record when the work item is completed', async () => {
@@ -213,8 +208,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -236,8 +231,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -249,10 +244,8 @@ describe('syncWorkItems', function() {
         status: 'New',
       },
     });
-    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
-      'petitions|sentWorkItem',
-    );
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.pk).toEqual('petitions|outbox');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
   });
 
   it('deletes the mapping records for the sent box items when the status changes to Recalled', async () => {
@@ -269,8 +262,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'petitions',
@@ -292,8 +285,8 @@ describe('syncWorkItems', function() {
                 messages: [
                   {
                     createdAt: '123',
+                    fromUserId: 'petitionsclerk1',
                     message: 'Petition batched for IRS',
-                    userId: 'petitionsclerk1',
                   },
                 ],
                 section: 'irsBatchSection',
@@ -305,13 +298,11 @@ describe('syncWorkItems', function() {
         status: 'New',
       },
     });
-    expect(client.delete.getCall(0).args[0].key.pk).to.equal(
-      'petitionsclerk1|sentWorkItem',
+    expect(client.delete.getCall(0).args[0].key.pk).toEqual(
+      'petitionsclerk1|outbox',
     );
-    expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
-    expect(client.delete.getCall(1).args[0].key.pk).to.equal(
-      'petitions|sentWorkItem',
-    );
-    expect(client.delete.getCall(1).args[0].key.sk).to.equal('123');
+    expect(client.delete.getCall(0).args[0].key.sk).toEqual('123');
+    expect(client.delete.getCall(1).args[0].key.pk).toEqual('petitions|outbox');
+    expect(client.delete.getCall(1).args[0].key.sk).toEqual('123');
   });
 });

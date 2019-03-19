@@ -13,12 +13,7 @@ export const ProcedureType = connect(
   },
   ({ procedureTypes, value, validationErrors, onChange, legend }) => {
     return (
-      <div
-        className={
-          'usa-form-group ' +
-          (validationErrors.procedureType ? 'usa-input-error' : '')
-        }
-      >
+      <div className={validationErrors.procedureType ? 'usa-input-error' : ''}>
         <fieldset
           id="procedure-type-radios"
           className="usa-fieldset-inputs usa-sans"

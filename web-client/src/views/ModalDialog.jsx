@@ -6,9 +6,24 @@ export class ModalDialog extends React.Component {
   constructor(props) {
     super(props);
     this.modal = {};
+    this.preventCancelOnBlur = !!this.props.preventCancelOnBlur;
+    this.blurDialog = this.blurDialog.bind(this);
     this.keydownTriggered = this.keydownTriggered.bind(this);
     this.runCancelSequence = this.runCancelSequence.bind(this);
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
+  }
+  toggleNoScroll(scrollingOn) {
+    if (scrollingOn) {
+      document.body.classList.add('no-scroll');
+      document.addEventListener('touchmove', this.touchmoveTriggered, {
+        passive: false,
+      });
+    } else {
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('touchmove', this.touchmoveTriggered, {
+        passive: false,
+      });
+    }
   }
 
   runCancelSequence(event) {
@@ -21,19 +36,27 @@ export class ModalDialog extends React.Component {
   }
   keydownTriggered(event) {
     if (event.keyCode === 27) {
-      return this.runCancelSequence(event);
+      return this.blurDialog(event);
     }
+  }
+  touchmoveTriggered(event) {
+    return event.preventDefault();
+  }
+  blurDialog(event) {
+    if (this.preventCancelOnBlur) {
+      return false;
+    }
+    return this.runCancelSequence(event);
   }
   componentDidMount() {
     document.addEventListener('keydown', this.keydownTriggered, false);
+    this.toggleNoScroll(true);
     this.focusModal();
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keydownTriggered, false);
-  }
 
-  componentDidUpdate() {
-    this.focusModal();
+    this.toggleNoScroll(false);
   }
 
   focusModal() {
@@ -44,7 +67,7 @@ export class ModalDialog extends React.Component {
   render() {
     const { modal } = this;
     return (
-      <div className="modal-screen" onClick={this.runCancelSequence}>
+      <div className="modal-screen" onClick={this.blurDialog}>
         <div
           className={`modal-dialog ${modal.classNames}`}
           data-aria-live="assertive"
@@ -64,21 +87,24 @@ export class ModalDialog extends React.Component {
               {modal.title}
             </h3>
           </div>
-          <p>{modal.message}</p>
-          <button
-            type="button"
-            onClick={this.runConfirmSequence}
-            className="usa-button"
-          >
-            {modal.confirmLabel}
-          </button>
-          <button
-            type="button"
-            onClick={this.runCancelSequence}
-            className="usa-button-secondary"
-          >
-            {modal.cancelLabel}
-          </button>
+          {modal.message && <p>{modal.message}</p>}
+          {this.renderBody && this.renderBody()}
+          <div className="button-container">
+            <button
+              type="button"
+              onClick={this.runConfirmSequence}
+              className="usa-button"
+            >
+              {modal.confirmLabel}
+            </button>
+            <button
+              type="button"
+              onClick={this.runCancelSequence}
+              className="usa-button-secondary"
+            >
+              {modal.cancelLabel}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -86,7 +112,8 @@ export class ModalDialog extends React.Component {
 }
 
 ModalDialog.propTypes = {
-  modal: PropTypes.object,
   cancelSequence: PropTypes.func,
   confirmSequence: PropTypes.func,
+  modal: PropTypes.object,
+  preventCancelOnBlur: PropTypes.bool,
 };
