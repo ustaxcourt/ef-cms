@@ -529,16 +529,22 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   };
 
   let found;
+  let docketRecordIndex;
+  let datesMatch;
 
-  this.docketRecord.forEach(docketRecord => {
-    found =
-      found ||
+  this.docketRecord.forEach((docketRecord, index) => {
+    found = found || docketRecord.description === newDocketItem.description;
+    docketRecordIndex = found ? index : docketRecordIndex;
+    datesMatch =
+      datesMatch ||
       (docketRecord.description === newDocketItem.description &&
         docketRecord.filingDate === newDocketItem.filingDate);
   });
 
   if (payGovDate && !found) {
     this.addDocketRecord(new DocketRecord(newDocketItem));
+  } else if (payGovDate && found && !datesMatch) {
+    this.updateDocketRecord(docketRecordIndex, new DocketRecord(newDocketItem));
   }
   return this;
 };
@@ -549,6 +555,19 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
+  return this;
+};
+
+/**
+ *
+ * @param docketRecordIndex
+ * @param docketRecordEntity
+ */
+Case.prototype.updateDocketRecord = function(
+  docketRecordIndex,
+  docketRecordEntity,
+) {
+  this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
 };
 
