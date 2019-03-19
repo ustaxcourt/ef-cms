@@ -56,19 +56,19 @@ export const PartyInformation = connect(
             )}{' '}
           </div>
           <div className="usa-width-one-sixth">
-            {caseDetail.contactSecondary && (
-              <React.Fragment>
-                <p className="label" id="secondary-label">
-                  Secondary Contact
-                </p>
-                <div>
-                  <address aria-labelledby="secondary-label">
-                    {caseDetail.contactSecondary.name &&
-                      addressDisplay(caseDetail.contactSecondary)}
-                  </address>
-                </div>
-              </React.Fragment>
-            )}{' '}
+            {caseDetail.contactSecondary &&
+              caseDetail.contactSecondary.name && (
+                <React.Fragment>
+                  <p className="label" id="secondary-label">
+                    Secondary Contact
+                  </p>
+                  <div>
+                    <address aria-labelledby="secondary-label">
+                      {addressDisplay(caseDetail.contactSecondary)}
+                    </address>
+                  </div>
+                </React.Fragment>
+              )}{' '}
           </div>
 
           <div className="usa-width-one-sixth">
