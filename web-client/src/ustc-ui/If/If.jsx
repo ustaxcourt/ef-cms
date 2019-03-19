@@ -1,7 +1,7 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
-export default connect(function If(props) {
+export const If = connect(props => {
   const { get, bind, children } = props;
 
   let show = false;
