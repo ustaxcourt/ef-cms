@@ -1,7 +1,6 @@
 [
   {
     "procedureType": "Small",
-    "contactSecondary": {},
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -164,7 +163,6 @@
   },
   {
     "procedureType": "Small",
-    "contactSecondary": {},
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -269,7 +267,6 @@
   },
   {
     "procedureType": "Small",
-    "contactSecondary": {},
     "docketNumberSuffix": "S",
     "documents": [
       {
@@ -817,7 +814,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -957,7 +953,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "docketNumberSuffix": null,
     "documents": [
       {
@@ -1083,7 +1078,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1213,7 +1207,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1344,7 +1337,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1476,7 +1468,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1609,7 +1600,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1743,7 +1733,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -1878,7 +1867,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -2014,7 +2002,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "documents": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -2351,7 +2338,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "docketNumberSuffix": "W",
     "documents": [
       {
@@ -2458,7 +2444,6 @@
   },
   {
     "procedureType": "Regular",
-    "contactSecondary": {},
     "docketNumberSuffix": "W",
     "documents": [
       {

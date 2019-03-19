@@ -36,17 +36,20 @@ const internationalErrorToMessageMap = {
   state: 'State/Province/Region is a required field.',
 };
 
-const domesticValidationObject = {
+const commonValidationRequirements = {
   address1: joi.string().required(),
   address2: joi.string().optional(),
   address3: joi.string().optional(),
   city: joi.string().required(),
+  name: joi.string().required(),
+  phone: joi.string().required(),
+};
+const domesticValidationObject = {
+  ...commonValidationRequirements,
   countryType: joi
     .string()
     .valid(exports.COUNTRY_TYPES.DOMESTIC)
     .required(),
-  name: joi.string().required(),
-  phone: joi.string().required(),
   postalCode: joi
     .string()
     .regex(/^\d{5}(-\d{4})?$/)
@@ -55,17 +58,12 @@ const domesticValidationObject = {
 };
 
 const internationalValidationObject = {
-  address1: joi.string().required(),
-  address2: joi.string().optional(),
-  address3: joi.string().optional(),
-  city: joi.string().required(),
+  ...commonValidationRequirements,
   country: joi.string().required(),
   countryType: joi
     .string()
     .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
-  name: joi.string().required(),
-  phone: joi.string().required(),
   postalCode: joi.string().required(),
   state: joi.string().optional(),
 };
