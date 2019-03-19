@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { state } from 'cerebral';
 import moment from 'moment';
+import { state } from 'cerebral';
 
 const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
 const DATE_TODAY_TIME = 'LT';
@@ -8,7 +8,7 @@ const DATE_MMDDYYYY = 'L';
 
 const formatDateIfToday = date => {
   const now = moment();
-  const then = moment(date);
+  const then = moment.utc(date);
   let formattedDate;
   if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
     formattedDate = then.format(DATE_TODAY_TIME);
@@ -20,15 +20,20 @@ const formatDateIfToday = date => {
 
 export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   const result = _.cloneDeep(workItem);
-  result.createdAtFormatted = moment(result.createdAt).format(DATE_MMDDYYYY);
+  result.createdAtFormatted = moment
+    .utc(result.createdAt)
+    .format(DATE_MMDDYYYY);
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(message.createdAt);
-    message.sentTo = message.sentTo || 'Unassigned';
-    message.createdAtTimeFormatted = moment(message.createdAt).format(
-      DATE_FORMAT_LONG,
-    );
+    message.to = message.to || 'Unassigned';
+    message.createdAtTimeFormatted = moment
+      .utc(message.createdAt)
+      .format(DATE_FORMAT_LONG);
   });
+  result.completedAtFormatted = moment
+    .utc(result.completedAt)
+    .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showComplete = !result.isInitializeCase;
@@ -62,7 +67,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   );
 
   result.currentMessage = result.messages[0];
-  result.sentDateFormatted = formatDateIfToday(result.currentMessage);
+  result.sentDateFormatted = formatDateIfToday(result.currentMessage.createdAt);
   result.historyMessages = result.messages.slice(1);
 
   return result;
@@ -71,7 +76,10 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 export const formattedWorkQueue = get => {
   const workItems = get(state.workQueue);
   const selectedWorkItems = get(state.selectedWorkItems);
-  return workItems
+  let workQueue = workItems
     .filter(items => !items.completedAt)
     .map(items => formatWorkItem(items, selectedWorkItems));
+
+  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  return workQueue;
 };

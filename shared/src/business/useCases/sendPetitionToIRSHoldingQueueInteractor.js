@@ -1,4 +1,4 @@
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -48,7 +48,10 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   );
 
   if (initializeCaseWorkItem) {
-    initializeCaseWorkItem.assignToIRSBatchSystem({ userId: user.userId });
+    initializeCaseWorkItem.assignToIRSBatchSystem({
+      name: user.name,
+      userId: user.userId,
+    });
     const invalidEntityError = new InvalidEntityError(
       'Invalid for send to IRS',
     );

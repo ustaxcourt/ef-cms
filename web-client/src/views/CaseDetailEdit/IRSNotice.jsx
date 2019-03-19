@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
@@ -10,14 +10,14 @@ export const IRSNotice = connect(
     appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
-    caseTypes: state.caseTypes,
     caseDetailErrors: state.caseDetailErrors,
+    caseTypes: state.caseTypes,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     removeYearAmountSequence: sequences.removeYearAmountSequence,
+    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
   },
   ({
     appendNewYearAmountSequence,
@@ -39,7 +39,7 @@ export const IRSNotice = connect(
           className="usa-fieldset-inputs usa-sans usa-form-group"
         >
           <legend htmlFor="irs-verified-notice-radios">
-            Notice Attached to Petition
+            Notice Attached to Petition?
           </legend>
           <ul className="usa-unstyled-list">
             <li>
@@ -183,7 +183,7 @@ export const IRSNotice = connect(
             </div>
           </fieldset>
           {caseDetailErrors.irsNoticeDate && (
-            <div className="usa-input-error-message beneath" role="alert">
+            <div className="usa-input-error-message" role="alert">
               {caseDetailErrors.irsNoticeDate}
             </div>
           )}
@@ -262,7 +262,7 @@ export const IRSNotice = connect(
                 )}
               </div>
               {yearAmount.showError && (
-                <div className="usa-input-error-message beneath">
+                <div className="usa-input-error-message">
                   {yearAmount.errorMessage}
                 </div>
               )}

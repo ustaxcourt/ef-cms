@@ -104,6 +104,35 @@ describe('updateCase', () => {
     );
   });
 
+  it('should throw an error if caseToUpdate is not passed in', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          saveCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+    };
+    let error;
+    try {
+      await updateCase({
+        applicationContext,
+        caseId: MOCK_CASE.caseId,
+        petitioners: [{ name: 'Test Taxpayer' }],
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).not.toBeNull();
+    expect(error.message).toContain('cannot process');
+  });
+
   it('should update a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;

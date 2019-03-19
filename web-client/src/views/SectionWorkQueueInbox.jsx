@@ -1,12 +1,13 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    sectionWorkQueue: state.formattedSectionWorkQueue,
+    documentHelper: state.documentHelper,
+    sectionWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -16,6 +17,7 @@ export const SectionWorkQueueInbox = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
+    documentHelper,
     sectionWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -26,7 +28,7 @@ export const SectionWorkQueueInbox = connect(
   }) => {
     return (
       <table
-        className="work-queue"
+        className="work-queue subsection"
         id="section-work-queue"
         aria-describedby="tab-work-queue"
       >
@@ -82,12 +84,12 @@ export const SectionWorkQueueInbox = connect(
             </tr>
           </tbody>
         )}
-        {sectionWorkQueue.map(item => (
+        {sectionWorkQueue.map((item, idx) => (
           <tbody
-            key={item.workItemId}
+            key={idx}
             onClick={() =>
               setFocusedWorkItem({
-                workItemId: item.workItemId,
+                idx,
                 queueType: 'workQueue',
               })
             }
@@ -139,18 +141,17 @@ export const SectionWorkQueueInbox = connect(
                   onClick={e => {
                     e.stopPropagation();
                   }}
-                  href={`/case-detail/${item.docketNumber}/documents/${
-                    item.document.documentId
-                  }`}
+                  href={documentHelper({
+                    docketNumber: item.docketNumber,
+                    documentId: item.document.documentId,
+                  })}
                   className="case-link"
                 >
                   {item.document.documentType}
                 </a>
               </td>
               <td className="section-queue-row">{item.caseStatus}</td>
-              <td className="section-queue-row">
-                {item.currentMessage.sentBy}
-              </td>
+              <td className="section-queue-row">{item.currentMessage.from}</td>
               <td className="section-queue-row">{item.assigneeName}</td>
             </tr>
             {item.isFocused && (

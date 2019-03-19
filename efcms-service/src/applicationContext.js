@@ -6,6 +6,16 @@ const {
 } = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 
 const {
+  zipDocuments,
+} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
+const {
+  deleteWorkItemFromSection
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  deleteDocument,
+} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
+
+const {
   getSentWorkItemsForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
@@ -49,11 +59,18 @@ const {
 const {
   getUsersInSection,
 } = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
-const { getInternalUsers} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
+const {
+  getInternalUsers,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
 const {
   getCaseByDocketNumber,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-
+const {
+  createWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem');
+const {
+  updateCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 
 const {
@@ -65,7 +82,7 @@ const {
 
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserUC
+  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
   getCase,
@@ -73,6 +90,10 @@ const {
 const {
   getCasesByStatus: getCasesByStatusUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
+
+const {
+  createWorkItem: createWorkItemUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
@@ -81,7 +102,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
 const {
   getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor')
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUserInteractor');
@@ -89,14 +110,20 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  updateCase,
+  updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
+const {
+  runBatchProcess,
+} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
 } = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
 const {
   getWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
+const {
+  completeWorkItem,
+} = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   updateWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
@@ -114,20 +141,20 @@ const {
   getUsersInSection: getUsersInSectionUC,
 } = require('ef-cms-shared/src/business/useCases/users/getUsersInSectionInteractor');
 const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionUC
+  getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
 const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
-  recallPetitionFromIRSHoldingQueue
+  recallPetitionFromIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
-  createUser: createUserUC
+  createUser: createUserUC,
 } = require('ef-cms-shared/src/business/useCases/users/createUserInteractor');
 
 const {
-  forwardWorkItem
+  forwardWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 
 const {
@@ -142,10 +169,14 @@ const User = require('ef-cms-shared/src/business/entities/User');
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  masterDynamoDbEndpoint:
+    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
+  masterRegion: process.env.MASTER_REGION || 'us-east-1',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
 };
+
 let user;
 const getCurrentUser = () => {
   return user;
@@ -155,24 +186,21 @@ const setCurrentUser = newUser => {
 };
 
 /**
- * 
+ *
  */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
     docketNumberGenerator,
-    environment: {
-      documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-      region: process.env.AWS_REGION || 'us-east-1',
-      s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-      stage: process.env.STAGE || 'local',
-    },
+    environment,
     getCurrentUser,
-    getDocumentClient: () => {
+    getDocumentClient: ({ useMasterRegion } = {}) => {
       return new DynamoDB.DocumentClient({
-        endpoint: environment.dynamoDbEndpoint,
-        region: environment.region,
+        endpoint: useMasterRegion
+          ? environment.masterDynamoDbEndpoint
+          : environment.dynamoDbEndpoint,
+        region: useMasterRegion ? environment.masterRegion : environment.region,
       });
     },
     getDocumentsBucketName: () => {
@@ -184,28 +212,29 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         createUser,
+        createWorkItem,
+        deleteDocument,
+        deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
-
-        // work items
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
-
-        // cases
         getWorkItemById,
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
         saveCase,
         saveWorkItem,
+        updateCase,
+        zipDocuments,
       };
     },
     getStorageClient: () => {
@@ -222,9 +251,11 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         assignWorkItems: assignWorkItemsUC,
+        completeWorkItem,
         createCase,
         createDocument,
         createUser: createUserUC,
+        createWorkItem: createWorkItemUC,
         forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
@@ -239,8 +270,9 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsBySection: getWorkItemsBySectionUC,
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
+        runBatchProcess,
         sendPetitionToIRSHoldingQueue,
-        updateCase,
+        updateCase: updateCaseUC,
         updateWorkItem,
       };
     },

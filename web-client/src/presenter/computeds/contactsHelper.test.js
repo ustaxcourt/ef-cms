@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
 import { contactsHelper } from './contactsHelper';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
 
 describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator', async () => {

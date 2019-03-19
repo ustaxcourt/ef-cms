@@ -25,6 +25,10 @@ This is a React-based Javascript application. It’s housed in a [monorepo](http
 - A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
 - Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
 
+## AWS Diagram
+
+<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
+
 ## Backlog
 
 The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
@@ -75,9 +79,13 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 
 - `cd efcms-service && npm start`
 
-#### Login and Test Users
+## Login and Test Users
 
-- for /mock-login you can login using:
+There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
+
+## Mock Login
+
+You can log in using these usernames:
 
 ```
 taxpayer
@@ -88,30 +96,32 @@ respondent
 seniorattorney
 ```
 
-- to run the project locally using the dev cognito:
-  `npm run dev:cognito`
-  You can then login with:
+No password is required.
+
+## AWS Cognito 
+
+To run use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
-petitioner1@example.com - petitioner5@example.com
-petitionsclerk1@example.com - petitionsclerk5@example.com
-docketclerk1@example.com - docketclerk5@example.com
-intakeclerk1@example.com - intakeclerk5@example.com
-respondent1@example.com - respondent5@example.com
-seniorattorney1@example.com - seniorattorney5@example.com
+petitioner1@example.com – petitioner5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+intakeclerk1@example.com – intakeclerk5@example.com
+respondent1@example.com – respondent5@example.com
+seniorattorney1@example.com – seniorattorney5@example.com
 ```
 
-all passwords are:
+The password for all accounts is:
 
 `Testing1234$`
 
-### CI/CD Setup
+## CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
-### Editor configuration
+## Editor configuration
 
-#### Atom.io
+### Atom.io
 
 Install the following for best results:
 

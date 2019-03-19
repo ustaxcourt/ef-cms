@@ -7,6 +7,7 @@ describe('formattedCaseDetail', () => {
     const result = await runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
+          docketRecord: [],
           petitioners: [{ name: 'bob' }],
           status: 'general',
         },

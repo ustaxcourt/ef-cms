@@ -1,3 +1,4 @@
+const { post } = require('../requests');
 /**
  *
  * @param applicationContext
@@ -6,17 +7,10 @@
  * @param userId
  * @returns {Promise<*>}
  */
-exports.createDocument = async ({ applicationContext, caseId, document }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .post(
-      `${applicationContext.getBaseUrl()}/cases/${caseId}/documents`,
-      document,
-      {
-        headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-      },
-    );
-  return response.data;
+exports.createDocument = ({ applicationContext, caseId, document }) => {
+  return post({
+    applicationContext,
+    body: document,
+    endpoint: `/cases/${caseId}/documents`,
+  });
 };

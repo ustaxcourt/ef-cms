@@ -3,7 +3,8 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 
-const { getDocumentTypes } = require('./Case');
+const { Case } = require('./Case');
+const { getDocumentTypes } = Case;
 
 const uuidVersions = {
   version: ['uuidv4'],

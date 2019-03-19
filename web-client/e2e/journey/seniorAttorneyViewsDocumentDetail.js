@@ -10,20 +10,20 @@ export default test => {
     let workItem;
     caseDetail.documents.forEach(document =>
       document.workItems.forEach(item => {
-        if (item.workItemId === test.stipulatedDecisionWorkItemId) {
+        if (item.workItemId === test.workItemId) {
           workItem = item;
         }
       }),
     );
     expect(workItem).toMatchObject({
-      assigneeId: 'seniorattorney',
+      assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Seniorattorney',
     });
 
     expect(workItem.messages[0]).toMatchObject({
+      from: test.selectedWorkItem.messages[0].from,
+      fromUserId: test.selectedWorkItem.messages[0].fromUserId,
       message: test.selectedWorkItem.messages[0].message,
-      userId: test.selectedWorkItem.messages[0].userId,
-      sentBy: test.selectedWorkItem.messages[0].sentBy,
     });
   });
 };

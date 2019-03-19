@@ -137,11 +137,10 @@ exports.getAuthHeader = event => {
 exports.getUserFromAuthHeader = event => {
   const token = exports.getAuthHeader(event);
   const decoded = jwt.decode(token);
-
   if (decoded) {
     decoded.token = token;
     decoded.role = decoded['custom:role'];
-    decoded.userId = decoded.email;
+    decoded.userId = decoded.sub;
     return decoded;
   } else {
     return null;

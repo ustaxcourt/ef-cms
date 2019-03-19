@@ -1,3 +1,5 @@
+const { get } = require('./requests');
+
 /**
  * getCaseProxy
  *
@@ -6,13 +8,9 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ applicationContext, docketNumber }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/cases/${docketNumber}`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    });
-  return response.data;
+exports.getCase = ({ applicationContext, docketNumber }) => {
+  return get({
+    applicationContext,
+    endpoint: `/cases/${docketNumber}`,
+  });
 };

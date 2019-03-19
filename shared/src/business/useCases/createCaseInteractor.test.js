@@ -31,7 +31,7 @@ describe('createCase', () => {
         return new User({
           name: 'Test Taxpayer',
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getEntityConstructors: () => ({
@@ -69,6 +69,7 @@ describe('createCase', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
     });
 
     const expectedCaseRecordToPersist = {
@@ -105,7 +106,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Test Taxpayer',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -120,20 +121,20 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Test Taxpayer',
-                userId: 'taxpayer',
+                userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Petition filed by Petitioner is ready for review.',
+                  from: 'Test Taxpayer',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'Petition filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
                 },
               ],
               section: 'petitions',
-              sentBy: 'taxpayer',
+              sentBy: '6805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2018-11-21T20:49:28.192Z',
               workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
             },
@@ -142,10 +143,19 @@ describe('createCase', () => {
         {
           caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+          documentType: 'Statement of Taxpayer Identification',
+          filedBy: 'Test Taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
           documentId: '413f62ce-7c8d-446e-aeda-14a2a625a626',
           documentType: 'Ownership Disclosure Statement',
           filedBy: 'Test Taxpayer',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
       ],
@@ -157,13 +167,13 @@ describe('createCase', () => {
         {
           name: 'Test Taxpayer',
           section: undefined,
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       status: 'New',
-      userId: 'taxpayer',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -182,7 +192,7 @@ describe('createCase', () => {
         return new User({
           name: 'Test Taxpayer',
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getEntityConstructors: () => ({
@@ -219,6 +229,7 @@ describe('createCase', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
     });
 
     const expectedCaseRecordToPersist = {
@@ -237,7 +248,7 @@ describe('createCase', () => {
           documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
           documentType: 'Petition',
           filedBy: 'Test Taxpayer',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -252,28 +263,39 @@ describe('createCase', () => {
                 documentId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 documentType: 'Petition',
                 filedBy: 'Test Taxpayer',
-                userId: 'taxpayer',
+                userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
                   createdAt: '2018-11-21T20:49:28.192Z',
-                  message:
-                    'A Petition filed by Petitioner is ready for review.',
+                  from: 'Test Taxpayer',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'Petition filed by Petitioner is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-                  sentBy: 'Test Taxpayer',
                 },
               ],
               section: 'petitions',
-              sentBy: 'taxpayer',
+              sentBy: '6805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2018-11-21T20:49:28.192Z',
               workItemId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
             },
           ],
         },
+        {
+          caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          documentId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+          documentType: 'Statement of Taxpayer Identification',
+          filedBy: 'Test Taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
       ],
       filingType: 'Myself',
       hasIrsNotice: true,
+      initialCaption:
+        'Diana Prince, Petitioner v. Commissioner of Internal Revenue, Respondent',
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
 
@@ -281,13 +303,13 @@ describe('createCase', () => {
         {
           name: 'Test Taxpayer',
           section: undefined,
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       status: 'New',
-      userId: 'taxpayer',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     };
     const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
       .caseToSave;
@@ -305,7 +327,7 @@ describe('createCase', () => {
         return new User({
           name: 'Test Taxpayer',
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
       getEntityConstructors: () => ({
@@ -339,6 +361,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (error) {
       expect(error.message).toEqual('problem');
@@ -352,7 +375,10 @@ describe('createCase', () => {
       },
       environment: { stage: 'local' },
       getCurrentUser: () => {
-        return new User({ role: 'petitioner', userId: 'taxpayer' });
+        return new User({
+          role: 'petitioner',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
       },
       getEntityConstructors: () => ({
         Petition: PetitionWithoutFiles,
@@ -390,6 +416,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (err) {
       error = err;
@@ -417,6 +444,7 @@ describe('createCase', () => {
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       });
     } catch (err) {
       error = err;

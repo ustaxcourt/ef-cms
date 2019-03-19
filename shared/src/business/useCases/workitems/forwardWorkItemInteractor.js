@@ -30,7 +30,7 @@ exports.forwardWorkItem = async ({
   const userToForwardTo = new User(
     await applicationContext
       .getPersistenceGateway()
-      .getUserById({ userId: assigneeId }),
+      .getUserById({ applicationContext, userId: assigneeId }),
   );
 
   const workItemToForward = await applicationContext
@@ -45,20 +45,24 @@ exports.forwardWorkItem = async ({
           assigneeId: userToForwardTo.userId,
           assigneeName: userToForwardTo.name,
           role: userToForwardTo.role,
+          sentBy: user.name,
+          sentByUserId: user.userId,
         })
         .addMessage(
           new Message({
             createdAt: new Date().toISOString(),
+            from: user.name,
+            fromUserId: user.userId,
             message,
-            sentBy: user.name,
-            sentTo: userToForwardTo.name,
-            userId: user.userId,
+            to: userToForwardTo.name,
+            toUserId: userToForwardTo.userId,
           }),
         ),
     );
 
   return applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
+    createOutboxEntries: true,
     workItemToSave: workItemToForward.validate().toRawObject(),
   });
 };

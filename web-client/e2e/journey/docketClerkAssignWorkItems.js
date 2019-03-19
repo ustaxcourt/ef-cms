@@ -17,7 +17,7 @@ export default test => {
     );
     expect(sectionWorkQueue.length).toBeGreaterThanOrEqual(2);
     expect(selectedWorkItem).toMatchObject({
-      assigneeId: 'docketclerk',
+      assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
 };

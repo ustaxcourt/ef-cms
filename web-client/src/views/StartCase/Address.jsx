@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const Address = connect(
@@ -47,7 +47,7 @@ export const Address = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].address1}
             </div>
           )}
@@ -225,10 +225,10 @@ export const Address = connect(
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state) && (
               <React.Fragment>
-                <div className="usa-input-error-message beneath">
+                <div className="usa-input-error-message">
                   {validationErrors[type].city}
                 </div>
-                <div className="usa-input-error-message beneath">
+                <div className="usa-input-error-message">
                   {validationErrors[type].state}
                 </div>
               </React.Fragment>
@@ -265,7 +265,7 @@ export const Address = connect(
             }}
           />
           {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors[type].postalCode}
             </div>
           )}
