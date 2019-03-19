@@ -13,7 +13,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text id="some-text" />
+        <Text />
       </Container>,
     );
 
@@ -29,7 +29,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text bind="text" id="some-text" />
+        <Text bind="text" />
       </Container>,
     );
 
