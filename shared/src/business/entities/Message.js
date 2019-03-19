@@ -29,20 +29,25 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    from: joi.string().required(),
+    fromUserId: joi
+      .string()
+      .uuid(uuidVersions)
+      .required(),
     message: joi.string().required(),
     messageId: joi
       .string()
       .uuid(uuidVersions)
       .required(),
-    sentBy: joi.string().required(),
-    sentTo: joi
+    to: joi
       .string()
-      .allow(null)
-      .optional(),
-    userId: joi
+      .optional()
+      .allow(null),
+    toUserId: joi
       .string()
-      // .uuid(uuidVersions)
-      .optional(),
+      .uuid(uuidVersions)
+      .optional()
+      .allow(null),
   }),
 );
 

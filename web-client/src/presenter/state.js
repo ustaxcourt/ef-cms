@@ -12,9 +12,9 @@ import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
 import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
 import documentDetailHelper from './computeds/documentDetailHelper';
+import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
-import { formattedSectionWorkQueue } from './computeds/formattedSectionWorkQueue';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import startCaseHelper from './computeds/startCaseHelper';
@@ -24,6 +24,7 @@ import workQueueHelper from './computeds/workQueueHelper';
 export default {
   alertHelper,
   assigneeId: null,
+  caseCaption: '',
   caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
@@ -35,7 +36,7 @@ export default {
   cognitoLoginUrl: null,
   completeForm: {},
   contactsHelper,
-  currentPage: 'Loading',
+  currentPage: 'Interstitial',
   currentTab: '',
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
@@ -44,6 +45,7 @@ export default {
     tab: '',
   },
   documentDetailHelper,
+  documentHelper,
   documentId: null,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
@@ -51,7 +53,6 @@ export default {
   form: {},
   formattedCaseDetail,
   formattedCases,
-  formattedSectionWorkQueue,
   formattedWorkQueue,
   getTrialCityName,
   mobileMenu: {

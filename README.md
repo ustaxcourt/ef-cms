@@ -6,22 +6,28 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 <a href="docs/images/screenshot_petitioner.png"><img src="docs/images/screenshot_petitioner.png" width="32%" style="float: left;" /></a>
 <a href="docs/images/screenshot_docket_record.png"><img src="docs/images/screenshot_docket_record.png" width="32%" style="float: left;" /></a>
 
-The main fork of this project in which most development is occurring is located at [flexion ef-cms](https://github.com/flexion/ef-cms).  
+The main fork of this project in which most development is occurring is located at [flexion ef-cms](https://github.com/flexion/ef-cms).
 [Zenhub](https://www.zenhub.com/) can be used to view the project board to see the github issues.
 
 Artifacts for on-going development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+
 ## Technical overview
 
 This is a React-based Javascript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`efcms-service/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via a Jenkins server, and [that process is documented in `SETUP.md`](SETUP.md).
 
 ## Documentation
-* There is a style guide available at http://localhost:1234/style-guide.
-* The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
-* The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
-* The deployment process is documented in [`SETUP.md`](SETUP.md).
-* The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
-* A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
-* Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
+
+- There is a style guide available at http://localhost:1234/style-guide.
+- The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
+- The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
+- The deployment process is documented in [`SETUP.md`](SETUP.md).
+- The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
+- A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
+- Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
+
+## AWS Diagram
+
+<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
 
 ## Backlog
 
@@ -41,7 +47,7 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 
 `./docker-run.sh`
 
-You can access the UI at  http://localhost:1234
+You can access the UI at http://localhost:1234
 You can access the API at http://localhost:3000
 You can access the dynamodb shell at http://localhost:8000/shell
 You can access the dynamodb-admin ui at http://localhost:8001
@@ -53,6 +59,7 @@ You can access the style guide at http://localhost:1234/style-guide
 The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
 
 ### Prerequisites
+
 - Node v8.10.0
 - npm 6.4.1
 
@@ -65,13 +72,17 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 - `cd ../efcms-service && npm i`
 
 #### Terminal A
+
 - `cd web-client && npm start`
 
 #### Terminal B
+
 - `cd efcms-service && npm start`
 
 #### Login and Test Users
+
 - for /mock-login you can login using:
+
 ```
 taxpayer
 petitionsclerk
@@ -80,9 +91,11 @@ intakeclerk
 respondent
 seniorattorney
 ```
+
 - to run the project locally using the dev cognito:
-```npm run dev:cognito``` 
-You can then login with:
+  `npm run dev:cognito`
+  You can then login with:
+
 ```
 petitioner1@example.com - petitioner5@example.com
 petitionsclerk1@example.com - petitionsclerk5@example.com
@@ -94,7 +107,7 @@ seniorattorney1@example.com - seniorattorney5@example.com
 
 all passwords are:
 
-```Testing1234$```
+`Testing1234$`
 
 ### CI/CD Setup
 
@@ -116,11 +129,12 @@ Install the following for best results:
 If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at https://get.adobe.com/reader/. Install as directed. This will permit PDFs to be viewed in-browser with Internet Explorer 11.
 
 ## Forked dependencies
+
 The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
 
-* [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
-* [s3rver](https://github.com/ustaxcourt/s3rver)
-* [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
+- [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
+- [s3rver](https://github.com/ustaxcourt/s3rver)
+- [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
 
 _If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
 
@@ -147,6 +161,6 @@ Follow these steps for creating the end of sprint PRs for the court.
 5. Verify PR passed
 6. Merge PR and verify prod deployed correctly in Jenkins
 7. Create a PR from flexion/ef-cms master -> ustaxcourt/ef-cms staging
-8. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
-9. When PR comments come in, make changes to master to fix the comments
-10. Back merge master into develop after all changes are fixed
+8. When PR comments come in, make changes to master to fix the comments
+9. After the court approves and merges PR, merge master into develop
+10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court

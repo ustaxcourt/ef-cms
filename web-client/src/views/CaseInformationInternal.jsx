@@ -4,8 +4,8 @@ import React from 'react';
 
 export const CaseInformationInternal = connect(
   {
-    helper: state.caseDetailHelper,
     caseDetail: state.formattedCaseDetail,
+    helper: state.caseDetailHelper,
   },
   ({ helper, caseDetail }) => {
     return (

@@ -1,8 +1,7 @@
 import { runAction } from 'cerebral/test';
-
 import { setDefaultDocumentDetailTabAction } from './setDefaultDocumentDetailTabAction';
 
-describe('setDefaultDocumentDetailTab', async () => {
+describe('setDefaultDocumentDetailTab', () => {
   it('returns "Document Info" when showDocumentInfoTab is true', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       state: {
@@ -14,7 +13,7 @@ describe('setDefaultDocumentDetailTab', async () => {
     expect(state.currentTab).toEqual('Document Info');
   });
 
-  it('returns "Pending Messages" when showDocumentInfoTab is false', async () => {
+  it('returns "Messages" when showDocumentInfoTab is false', async () => {
     const { state } = await runAction(setDefaultDocumentDetailTabAction, {
       state: {
         documentDetailHelper: {
@@ -22,6 +21,6 @@ describe('setDefaultDocumentDetailTab', async () => {
         },
       },
     });
-    expect(state.currentTab).toEqual('Pending Messages');
+    expect(state.currentTab).toEqual('Messages');
   });
 });

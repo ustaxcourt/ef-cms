@@ -5,8 +5,8 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThanOrEqual(0);
     expect(test.getState('users').length).toBeGreaterThan(0);
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
     const workItem = test
       .getState('workQueue')
@@ -18,7 +18,7 @@ export default test => {
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual('New');
     expect(workItem.messages[0].message).toEqual(
-      'A Petition filed by Petitioner is ready for review.',
+      'Petition filed by Petitioner is ready for review.',
     );
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;

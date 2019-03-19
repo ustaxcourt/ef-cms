@@ -1,6 +1,3 @@
-const chai = require('chai');
-const expect = require('chai').expect;
-chai.use(require('chai-string'));
 const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
@@ -70,7 +67,7 @@ describe('saveCase', () => {
         status: 'New',
       },
     });
-    expect(result).to.deep.equal({ caseId: '123', status: 'New' });
+    expect(result).toEqual({ caseId: '123', status: 'New' });
   });
 
   it('should attempt to delete and put a new status mapping if the status changes', async () => {
@@ -81,12 +78,12 @@ describe('saveCase', () => {
         status: 'General',
       },
     });
-    expect(client.delete.getCall(0).args[0].key.pk).to.equal('New|case-status');
-    expect(client.delete.getCall(0).args[0].key.sk).to.equal('123');
-    expect(client.put.getCall(0).args[0].Item.pk).to.equal(
+    expect(client.delete.getCall(0).args[0].key.pk).toEqual('New|case-status');
+    expect(client.delete.getCall(0).args[0].key.sk).toEqual('123');
+    expect(client.put.getCall(0).args[0].Item.pk).toEqual(
       'General|case-status',
     );
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
   });
 
   it('creates a docket number mapping if this is the first time a case was created', async () => {
@@ -100,9 +97,9 @@ describe('saveCase', () => {
         userId: 'taxpayer',
       },
     });
-    expect(client.put.getCall(0).args[0].Item.pk).to.equal('taxpayer|case');
-    expect(client.put.getCall(0).args[0].Item.sk).to.equal('123');
-    expect(client.put.getCall(1).args[0].Item.pk).to.equal('101-18|case');
-    expect(client.put.getCall(1).args[0].Item.sk).to.equal('123');
+    expect(client.put.getCall(0).args[0].Item.pk).toEqual('taxpayer|case');
+    expect(client.put.getCall(0).args[0].Item.sk).toEqual('123');
+    expect(client.put.getCall(1).args[0].Item.pk).toEqual('101-18|case');
+    expect(client.put.getCall(1).args[0].Item.sk).toEqual('123');
   });
 });

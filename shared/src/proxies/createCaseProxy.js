@@ -1,3 +1,5 @@
+const { post } = require('./requests');
+
 /**
  * createCaseProxy
  *
@@ -5,24 +7,21 @@
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = async ({
+exports.createCase = ({
   petitionMetadata,
   petitionFileId,
   ownershipDisclosureFileId,
   applicationContext,
+  stinFileId,
 }) => {
-  const response = await applicationContext.getHttpClient().post(
-    `${applicationContext.getBaseUrl()}/cases`,
-    {
+  return post({
+    applicationContext,
+    body: {
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,
+      stinFileId,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    },
-  );
-  return response.data;
+    endpoint: '/cases',
+  });
 };

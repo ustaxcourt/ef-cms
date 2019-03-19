@@ -5,23 +5,22 @@ export default test => {
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     const workItem = test
       .getState('workQueue')
-      .find(item => item.workItemId === test.stipulatedDecisionWorkItemId);
+      .find(item => item.workItemId === test.workItemId);
 
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
     expect(workItem).toMatchObject({
-      sentBy: 'respondent',
+      assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Seniorattorney',
     });
     expect(workItem.messages).toMatchObject([
       {
-        message:
-          'A Stipulated Decision filed by Respondent is ready for review.',
+        message: 'Stipulated Decision filed by Respondent is ready for review.',
       },
       {
         message:
-          'A Stipulated Decision filed by Test respondent is ready for review.',
+          'Stipulated Decision filed by Test respondent is ready for review.',
       },
       {
         message: 'hello world',

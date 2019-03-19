@@ -9,8 +9,8 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object used for passing the props.workItemId
  */
 export const setFocusedWorkItemAction = ({ get, store, props }) => {
-  const queue = get(state[props.queueType]).map(item => {
-    if (item.workItemId === props.workItemId) {
+  const queue = get(state[props.queueType]).map((item, i) => {
+    if (i === props.idx) {
       item.isFocused = !item.isFocused;
     }
     return item;

@@ -1,12 +1,23 @@
+import { ActionError } from './errors/ActionError';
+import { InvalidRequestError } from './errors/InvalidRequestError';
+import { NotFoundError } from './errors/NotFoundError';
+import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
+import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
+import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -16,10 +27,12 @@ import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
+import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
-import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
@@ -28,6 +41,8 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { signOutSequence } from './sequences/signOutSequence';
 import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
 import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
+import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
+import state from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitDocumentSequence } from './sequences/submitDocumentSequence';
@@ -45,6 +60,7 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
+import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
@@ -58,17 +74,9 @@ import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequ
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-
-import { ActionError } from './errors/ActionError';
-import { InvalidRequestError } from './errors/InvalidRequestError';
-import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
-import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
-import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
-import { NotFoundError } from './errors/NotFoundError';
-
-import state from './state';
 
 /**
  * Main Cerebral module
@@ -93,8 +101,12 @@ export default {
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
+    createWorkItemSequence,
     dismissAlertSequence,
+    dismissCaseCaptionModalSequence,
+    dismissCreateMessageModalSequence,
     dismissModalSequence,
+    getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -103,9 +115,13 @@ export default {
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     loginWithTokenSequence,
+    openCaseCaptionModalSequence,
+    openCreateMessageModalSequence,
     removeYearAmountSequence,
+    runBatchProcessSequence,
     selectAssigneeSequence,
     selectWorkItemSequence,
+    setCaseCaptionSequence,
     setFocusedWorkItemSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
@@ -130,6 +146,7 @@ export default {
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
+    updateCaseDetailSequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
@@ -143,6 +160,7 @@ export default {
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
+    validateInitialWorkItemMessageSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
   },

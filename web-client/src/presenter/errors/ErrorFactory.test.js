@@ -22,6 +22,13 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('NotFoundError');
     expect(result.title).toEqual('We cannot find the page you requested');
   });
+  it('creates UnauthorizedRequestError errors for status code 404 and a message', () => {
+    const error = new Error();
+    error.response = { message: 'something is missing', status: 404 };
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('NotFoundError');
+    expect(result.title).toEqual('We cannot find the page you requested');
+  });
   it('creates InvalidRequestError errors for status code 400', () => {
     const error = new Error();
     error.response = { data: 'Unauthorized', status: 400 };
@@ -61,6 +68,14 @@ describe('ErrorFactory', () => {
     const result = ErrorFactory.getError(error);
     expect(result.className).toEqual('ActionError');
     expect(result.title).toEqual('An error occurred');
+  });
+
+  it('creates UnidentifiedUserError errors for null responses (when cors error happen in cognito)', () => {
+    const error = new Error();
+    error.response = null;
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('UnidentifiedUserError');
+    expect(result.title).toEqual('You are not logged in');
   });
   it('creates ActionError errors for unusually constructed Errors', () => {
     const error = new Error('something completely different');

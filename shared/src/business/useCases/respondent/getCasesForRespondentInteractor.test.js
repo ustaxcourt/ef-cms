@@ -25,6 +25,7 @@ describe('Get cases for respondent', () => {
     try {
       await getCasesForRespondent({
         applicationContext,
+        respondentId: 'respondent',
       });
     } catch (err) {
       error = err;

@@ -3,7 +3,7 @@ const {
   PETITION,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 
 /**
  *

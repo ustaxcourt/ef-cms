@@ -17,7 +17,6 @@ export const sendPetitionToIRSHoldingQueueAction = async ({
   await applicationContext.getUseCases().sendPetitionToIRSHoldingQueue({
     applicationContext,
     caseId: get(state.caseDetail).caseId,
-    userId: get(state.user.token),
   });
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {

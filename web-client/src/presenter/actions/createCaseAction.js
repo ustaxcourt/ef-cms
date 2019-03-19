@@ -7,17 +7,11 @@ import { omit } from 'lodash';
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
- * @param {Object} providers.store the cerebral store object used for getting petition
  */
-export const createCaseAction = async ({ applicationContext, get, store }) => {
-  const { petitionFile, ownershipDisclosureFile } = get(state.petition);
-
-  const fileHasUploaded = () => {
-    store.set(
-      state.petition.uploadsFinished,
-      get(state.petition.uploadsFinished) + 1,
-    );
-  };
+export const createCaseAction = async ({ applicationContext, get }) => {
+  const { petitionFile, ownershipDisclosureFile, stinFile } = get(
+    state.petition,
+  );
 
   const form = omit(
     {
@@ -28,11 +22,15 @@ export const createCaseAction = async ({ applicationContext, get, store }) => {
 
   form.contactPrimary.email = get(state.user.email);
 
-  await applicationContext.getUseCases().filePetition({
+  const caseDetail = await applicationContext.getUseCases().filePetition({
     applicationContext,
-    fileHasUploaded,
     ownershipDisclosureFile,
     petitionFile,
     petitionMetadata: form,
+    stinFile,
   });
+
+  return {
+    caseDetail,
+  };
 };

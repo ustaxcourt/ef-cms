@@ -1,4 +1,4 @@
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const Message = require('../entities/Message');
 const Document = require('../entities/Document');
@@ -39,12 +39,11 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
   });
 
   const message = new Message({
-    createdAt: new Date().toISOString(),
-    message: `A ${document.documentType} filed by ${capitalize(
+    from: user.name,
+    fromUserId: user.userId,
+    message: `${document.documentType} filed by ${capitalize(
       user.role,
     )} is ready for review.`,
-    sentBy: user.name,
-    userId: user.userId,
   });
 
   workItem.addMessage(message);

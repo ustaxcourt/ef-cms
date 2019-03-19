@@ -1,20 +1,13 @@
-const client = require('../../dynamodbClientService');
+const {
+  getRecordsViaMapping,
+} = require('../../dynamo/helpers/getRecordsViaMapping');
+
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
-exports.getUsersInSection = async ({ applicationContext, section }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-
-  const users = await client.query({
+exports.getUsersInSection = ({ applicationContext, section }) => {
+  return getRecordsViaMapping({
     applicationContext,
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `${section}|user`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    TableName: TABLE,
-  });
-
-  return stripInternalKeys(users);
+    key: section,
+    type: 'user',
+  }).then(stripInternalKeys);
 };

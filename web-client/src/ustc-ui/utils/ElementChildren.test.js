@@ -3,7 +3,7 @@ import React from 'react';
 import { forEach, getDefaultAttribute, map } from './ElementChildren';
 
 describe('map', () => {
-  it('should map items and skip non elements', () => {
+  it('should map items and not alter non elements', () => {
     const children = [
       <div key="what">sds</div>,
       22,
@@ -17,7 +17,7 @@ describe('map', () => {
     ).toEqual([0, 22, 1]);
   });
 
-  it('should map items and exclude null', () => {
+  it('should map items and exclude null values from results', () => {
     const children = [
       <div key="what">sds</div>,
       <div key="whatever">something</div>,
@@ -36,7 +36,7 @@ describe('map', () => {
 });
 
 describe('forEach', () => {
-  it('should map items and exclude null', () => {
+  it('should loop over items and skip non-react items', () => {
     const children = [
       <div key="what">sds</div>,
       22,
@@ -54,7 +54,7 @@ describe('forEach', () => {
 });
 
 describe('getDefaultAttribute', () => {
-  it('should find first attribute and return', () => {
+  it('should find the first attribute and return that attribute', () => {
     const children = [
       <div key="what" kid="someIds">
         sds

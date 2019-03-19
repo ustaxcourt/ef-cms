@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import presenter from '..';
 import sinon from 'sinon';
 
@@ -15,7 +14,7 @@ presenter.providers.applicationContext = {
 };
 test = CerebralTest(presenter);
 
-describe('chooseWorkQueueSequence', async () => {
+describe('chooseWorkQueueSequence', () => {
   it('should set the workQueueToDisplay to match the props passed in', async () => {
     test.setState('workQueueToDisplay', null);
     await test.runSequence('chooseWorkQueueSequence', {

@@ -2,6 +2,8 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
+import { CaseDetailReadOnlyPartyInformation } from './CaseDetailReadOnlyPartyInformation';
+
 export const CaseDetailReadOnly = connect(
   {
     caseDetail: state.caseDetail,
@@ -11,17 +13,16 @@ export const CaseDetailReadOnly = connect(
   ({ caseDetail, formattedCaseDetail }) => {
     return (
       <React.Fragment>
+        <CaseDetailReadOnlyPartyInformation />
+
         <div className="blue-container">
-          <h3>IRS Notice</h3>
+          <h3>IRS Notice(s)</h3>
 
-          <span className="label">Notice Attached to Petition</span>
-          <p>{caseDetail.hasIrsNotice ? 'Yes' : 'No'}</p>
-
-          <span className="label">Type of Case</span>
+          <span className="label">Notice/Case Type</span>
           <p>{caseDetail.caseType}</p>
 
-          <div className="label">Date of Notice</div>
-          <p>{caseDetail.formattedIrsNoticeDate || 'No notice provided'}</p>
+          <div className="label">Notice Date</div>
+          <p>{formattedCaseDetail.irsNoticeDateFormatted}</p>
           <div>
             {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
               <div key={idx}>
@@ -56,7 +57,7 @@ export const CaseDetailReadOnly = connect(
           <p>{caseDetail.procedureType} Tax Case</p>
           <div className="label">Trial Location</div>
           <p>{caseDetail.preferredTrialCity}</p>
-          <div className="label">Filing Date</div>
+          <div className="label">Fee Payment Date</div>
           <p>{caseDetail.formattedPayGovDate || 'Unpaid'}</p>
           <div className="label">Fee Payment ID</div>
           <p id="fee-payment-id" name="payGovId">

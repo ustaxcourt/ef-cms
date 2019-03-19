@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { formattedWorkQueue } from './formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,
@@ -10,11 +9,11 @@ const FORMATTED_WORK_ITEM = {
   createdAtFormatted: '12/27/2018',
   currentMessage: {
     createdAtFormatted: '12/27/2018',
-    message: 'a Answer filed by respondent is ready for review',
+    from: 'Test Respondent',
+    fromUserId: 'respondent',
+    message: 'Answer filed by respondent is ready for review',
     messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-    sentBy: 'Test Respondent',
-    sentTo: 'Unassigned',
-    userId: 'respondent',
+    to: 'Unassigned',
   },
   docketNumber: '101-18',
   document: {
@@ -24,33 +23,33 @@ const FORMATTED_WORK_ITEM = {
   historyMessages: [
     {
       createdAtFormatted: '12/27/2018',
+      from: 'Test Docketclerk',
+      fromUserId: 'docketclerk',
       message: 'a message',
       messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      sentBy: 'Test Docketclerk',
-      sentTo: 'Unassigned',
-      userId: 'docketclerk',
+      to: 'Unassigned',
     },
   ],
   messages: [
     {
       createdAtFormatted: '12/27/2018',
-      message: 'a Answer filed by respondent is ready for review',
+      from: 'Test Respondent',
+      fromUserId: 'respondent',
+      message: 'Answer filed by respondent is ready for review',
       messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      sentBy: 'Test Respondent',
-      sentTo: 'Unassigned',
-      userId: 'respondent',
+      to: 'Unassigned',
     },
     {
       createdAtFormatted: '12/27/2018',
+      from: 'Test Docketclerk',
+      fromUserId: 'docketclerk',
       message: 'a message',
       messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      sentBy: 'Test Docketclerk',
-      sentTo: 'Unassigned',
-      userId: 'docketclerk',
+      to: 'Unassigned',
     },
   ],
   section: 'docket',
-  selected: false,
+  selected: true,
   sentBy: 'respondent',
   showComplete: true,
   showSendTo: true,
@@ -72,17 +71,17 @@ describe('formatted work queue computed', () => {
     messages: [
       {
         createdAt: '2018-12-27T18:05:54.164Z',
-        message: 'a Answer filed by respondent is ready for review',
+        from: 'Test Respondent',
+        fromUserId: 'respondent',
+        message: 'Answer filed by respondent is ready for review',
         messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-        sentBy: 'Test Respondent',
-        userId: 'respondent',
       },
       {
         createdAt: '2018-12-27T18:05:54.164Z',
+        from: 'Test Docketclerk',
+        fromUserId: 'docketclerk',
         message: 'a message',
         messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-        sentBy: 'Test Docketclerk',
-        userId: 'docketclerk',
       },
     ],
     section: 'docket',
@@ -95,7 +94,7 @@ describe('formatted work queue computed', () => {
   beforeEach(() => {
     result = runCompute(formattedWorkQueue, {
       state: {
-        selectedWorkItems: [],
+        selectedWorkItems: [workItem],
         workQueue: [workItem],
       },
     });

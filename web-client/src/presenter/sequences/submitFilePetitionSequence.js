@@ -13,6 +13,7 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
+import { setCaseAction } from '../actions/setCaseAction';
 
 export const submitFilePetitionSequence = [
   clearAlertsAction,
@@ -30,6 +31,7 @@ export const submitFilePetitionSequence = [
       set(state.showValidation, false),
       setFormSubmittingAction,
       createCaseAction,
+      setCaseAction,
       getCreateCaseAlertSuccessAction,
       setAlertSuccessAction,
       unsetFormSubmittingAction,
