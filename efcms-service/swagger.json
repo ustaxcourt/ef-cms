@@ -437,6 +437,25 @@
         }
       }
     },
+    "/v1/runBatchProcess": {
+      "post": {
+        "summary": "run IRS batch process",
+        "description": "Run the (temporary) send to IRS batch process, which creates a ZIP file of petition documents and uploads it to S3.\n",
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/v1/sections/{section}/inbox": {
       "get": {
         "tags": ["workitems"],
