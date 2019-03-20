@@ -70,7 +70,7 @@ class DocumentDetailComponent extends React.Component {
             </span>
           </p>
           <hr aria-hidden="true" />
-          <h1>{helper.formattedDocument.documentType}</h1>
+          <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
 
           <SuccessNotification />
           <ErrorNotification />
@@ -130,39 +130,39 @@ class DocumentDetailComponent extends React.Component {
             </div>
             <div className="usa-width-two-thirds">
               <div className="top-bar clear-both">
-                <p>
+                <p className="full-width">
                   Filed {helper.formattedDocument.createdAtFormatted} by{' '}
                   {helper.formattedDocument.filedBy}
-                </p>
-                <div className="float-right">
-                  {caseHelper.showServeToIrsButton &&
-                    helper.formattedDocument.isPetition && (
-                      <button
-                        className="serve-to-irs"
-                        onClick={() => clickServeToIrsSequence()}
-                      >
-                        <FontAwesomeIcon icon={['far', 'clock']} />
-                        Serve to IRS
-                      </button>
-                    )}
-                  {caseHelper.showRecallButton &&
-                    helper.formattedDocument.isPetition && (
-                      <div className="recall-button-box">
-                        <FontAwesomeIcon icon={['far', 'clock']} />
-                        Batched for IRS
+                  <div className="float-right">
+                    {caseHelper.showServeToIrsButton &&
+                      helper.formattedDocument.isPetition && (
                         <button
-                          className="recall-petition"
-                          onClick={() =>
-                            setModalDialogNameSequence({
-                              showModal: 'RecallPetitionModalDialog',
-                            })
-                          }
+                          className="serve-to-irs"
+                          onClick={() => clickServeToIrsSequence()}
                         >
-                          Recall
+                          <FontAwesomeIcon icon={['far', 'clock']} />
+                          Serve to IRS
                         </button>
-                      </div>
-                    )}
-                </div>
+                      )}
+                    {caseHelper.showRecallButton &&
+                      helper.formattedDocument.isPetition && (
+                        <div className="recall-button-box">
+                          <FontAwesomeIcon icon={['far', 'clock']} />
+                          Batched for IRS
+                          <button
+                            className="recall-petition"
+                            onClick={() =>
+                              setModalDialogNameSequence({
+                                showModal: 'RecallPetitionModalDialog',
+                              })
+                            }
+                          >
+                            Recall
+                          </button>
+                        </div>
+                      )}
+                  </div>
+                </p>
               </div>
               <iframe
                 title={`Document type: ${
