@@ -154,7 +154,7 @@ export const SectionWorkQueueInbox = connect(
               <td className="section-queue-row">{item.caseStatus}</td>
               <td className="section-queue-row">{item.assigneeName}</td>
               <td className="section-queue-row">{item.currentMessage.from}</td>
-              <td className="section-queue-row">{item.section}</td>
+              <td className="section-queue-row">{item.sentBySection}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">
