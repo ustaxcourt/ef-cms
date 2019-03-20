@@ -3,7 +3,7 @@ import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
-export default get => {
+export const documentDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
 
   const documentId = get(state.documentId);
