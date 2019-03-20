@@ -17,7 +17,7 @@ export const CaseDetailHeader = connect(
         <h2 className="captioned" tabIndex="-1">
           <a href={'/case-detail/' + caseDetail.docketNumber}>
             Docket Number: {caseDetail.docketNumberWithSuffix}
-          </a>
+          </a>{' '}
           <span
             className="usa-label case-status-label"
             aria-label={`status: ${caseDetail.status}`}
@@ -25,9 +25,9 @@ export const CaseDetailHeader = connect(
             <span aria-hidden="true">{caseDetail.status}</span>
           </span>
         </h2>
-        <p className="float-left">{caseDetail.caseTitle} </p>
+        <p className="float-left no-bottom-margin">{caseDetail.caseTitle} </p>
         {caseHelper.showCaptionEditButton && (
-          <p className="float-left">
+          <p className="float-left no-bottom-margin">
             <button
               className="link"
               id="caption-edit-button"
