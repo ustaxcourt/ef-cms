@@ -11,6 +11,7 @@ export const PartyInformation = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    constants: state.constants,
     setCaseCaptionSequence: sequences.setCaseCaptionSequence,
     token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
@@ -21,6 +22,7 @@ export const PartyInformation = connect(
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
+    constants,
     setCaseCaptionSequence,
     token,
     updateCasePartyTypeSequence,
@@ -42,7 +44,7 @@ export const PartyInformation = connect(
               autoSaveCaseSequence();
             }}
           />
-          v. Commissioner of Internal Revenue, Respondent
+          {constants.CASE_CAPTION_POSTFIX}
         </div>
         <div className="usa-form-group">
           <label htmlFor="party-type">Party Type</label>
