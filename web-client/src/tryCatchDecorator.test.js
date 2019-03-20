@@ -1,9 +1,9 @@
-import { UnidentifiedUserError } from './presenter/errors/UnidentifiedUserError';
-import decorateWithTryCatch from './tryCatchDecorator';
-import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';
-import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
-import { UnauthorizedRequestError } from './presenter/errors/UnauthorizedRequestError';
 import { ActionError } from './presenter/errors/ActionError';
+import { tryCatchDecorator } from './tryCatchDecorator';
+import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
+import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './presenter/errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './presenter/errors/UnidentifiedUserError';
 
 describe('decorateWithTryCatch', () => {
   it('catches and returns the expected error on 500 status', async () => {
@@ -16,7 +16,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -36,7 +36,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -56,7 +56,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -75,7 +75,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -95,7 +95,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
