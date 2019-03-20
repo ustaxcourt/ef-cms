@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default get => {
+export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const currentPage = get(state.currentPage);
