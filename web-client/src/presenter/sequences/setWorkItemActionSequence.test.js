@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import applicationContext from '../../applicationContext';
+import { applicationContext } from '../../applicationContext';
 import presenter from '..';
 
 let test;

@@ -47,6 +47,7 @@ exports.forwardWorkItem = async ({
           role: userToForwardTo.role,
           sentBy: user.name,
           sentByUserId: user.userId,
+          sentByUserRole: user.role,
         })
         .addMessage(
           new Message({

@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import { showContactsHelper } from './showContactsHelper';
 
-export default get => {
+export const startCaseHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
 
   const form = get(state.form);

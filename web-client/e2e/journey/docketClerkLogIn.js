@@ -1,4 +1,4 @@
-import applicationContext from '../../src/applicationContext';
+import { applicationContext } from '../../src/applicationContext';
 import { userMap } from '../../../shared/src/persistence/dynamo/users/getUserById';
 
 export default (test, token = 'docketclerk') => {
