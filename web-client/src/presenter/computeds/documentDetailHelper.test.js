@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import documentDetailHelper from './documentDetailHelper';
+import { documentDetailHelper } from './documentDetailHelper';
 
 describe('formatted work queue computed', () => {
   it('formats the workitems', () => {
