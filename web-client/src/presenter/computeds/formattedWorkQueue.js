@@ -32,7 +32,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       .local()
       .format(DATE_FORMAT_LONG);
   });
-  result.section = _.capitalize(result.section);
+  result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = moment
     .utc(result.completedAt)
     .local()
