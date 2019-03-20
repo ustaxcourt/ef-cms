@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default get => {
+export const workQueueHelper = get => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const userSection = get(state.user.section);
