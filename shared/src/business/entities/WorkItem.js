@@ -79,6 +79,7 @@ joiValidationDecorator(
       .required(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
+    sentBySection: joi.string().optional(),
     sentByUserId: joi
       .string()
       .uuid(uuidVersions)
@@ -120,12 +121,14 @@ WorkItem.prototype.assignToUser = function({
   role,
   sentBy,
   sentByUserId,
+  sentByUserRole,
 }) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
     section: getSectionForRole(role),
     sentBy,
+    sentBySection: getSectionForRole(sentByUserRole),
     sentByUserId,
   });
   return this;
@@ -135,13 +138,18 @@ WorkItem.prototype.assignToUser = function({
  *
  * @param userId
  */
-WorkItem.prototype.assignToIRSBatchSystem = function({ userId, name }) {
+WorkItem.prototype.assignToIRSBatchSystem = function({
+  userRole,
+  userId,
+  name,
+}) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
     role: 'irsBatchSystem',
     sentBy: name,
     sentByUserId: userId,
+    sentByUserRole: userRole,
   });
   this.addMessage(
     new Message({
@@ -165,6 +173,7 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     role: user.role,
     sentBy: user.name,
     sentByUserId: user.userId,
+    sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(
