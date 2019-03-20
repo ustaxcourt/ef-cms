@@ -1,3 +1,6 @@
+import axios from 'axios';
+import uuidv4 from 'uuid/v4';
+
 import {
   BUSINESS_TYPES,
   COUNTRY_TYPES,
@@ -6,28 +9,23 @@ import {
   PARTY_TYPES,
 } from '../../shared/src/business/entities/contacts/PetitionContact';
 
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
-import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
-
-import ErrorFactory from './presenter/errors/ErrorFactory';
-import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
-import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import Petition from '../../shared/src/business/entities/Petition';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
-import axios from 'axios';
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
-import decorateWithTryCatch from './tryCatchDecorator';
+import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
-import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
@@ -35,24 +33,25 @@ import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/g
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
-import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
+import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
-import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
-import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
+import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
-import uuidv4 from 'uuid/v4';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
-
-const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
-const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+import decorateWithTryCatch from './tryCatchDecorator';
+import ErrorFactory from './presenter/errors/ErrorFactory';
+import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
+import Petition from '../../shared/src/business/entities/Petition';
 
 const {
   uploadDocument,
@@ -163,4 +162,4 @@ const applicationContext = {
   setCurrentUserToken,
 };
 
-export default applicationContext;
+export { applicationContext };
