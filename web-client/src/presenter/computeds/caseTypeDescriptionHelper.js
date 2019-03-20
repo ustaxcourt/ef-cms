@@ -75,9 +75,6 @@ export const caseTypeDescriptionHelper = get => {
     caseTypes.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
-        case 'Deficiency':
-          caseDescription = 'Deficiency';
-          break;
         case 'CDP (Lien/Levy)':
           caseDescription = 'CDP (Lien/Levy)';
           break;
