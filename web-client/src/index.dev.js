@@ -1,10 +1,10 @@
 import '@babel/polyfill';
+import Devtools from 'cerebral/devtools';
 
 import { Case } from '../../shared/src/business/entities/Case';
-import Devtools from 'cerebral/devtools';
 import User from '../../shared/src/business/entities/User';
-import app from './app';
-import applicationContext from './applicationContext';
+import { app } from './app';
+import { applicationContext } from './applicationContext';
 
 /**
  * Initializes the app with dev environment context

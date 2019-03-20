@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import alertHelper from './alertHelper';
+import { alertHelper } from './alertHelper';
 
 describe('alertHelper', () => {
   it('single message error alert', async () => {
