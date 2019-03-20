@@ -70,80 +70,35 @@ class DocumentDetailComponent extends React.Component {
             </span>
           </p>
           <hr aria-hidden="true" />
-          <h2>{helper.formattedDocument.documentType}</h2>
-          <div className="usa-grid-full subsection">
-            <div className="usa-width-one-sixth">
-              <span className="label-inline">Date filed</span>
-              <span>{helper.formattedDocument.createdAtFormatted}</span>
-            </div>
-            <div className="usa-width-one-sixth">
-              <span className="label-inline">Filed by</span>
-              <span>{helper.formattedDocument.filedBy}</span>
-            </div>
-          </div>
+          <h1>{helper.formattedDocument.documentType}</h1>
 
           <SuccessNotification />
           <ErrorNotification />
 
-          <Tabs className="classic-horizontal-header3" bind="currentTab">
-            {helper.showDocumentInfoTab && (
-              <Tab
-                tabName="Document Info"
-                title="Document Info"
-                id="tab-document-info"
-              />
-            )}
-            <Tab
-              tabName="Messages"
-              title="Messages"
-              id="tab-pending-messages"
-            />
-
-            <div className="fix-top-right">
-              {caseHelper.showServeToIrsButton &&
-                helper.formattedDocument.isPetition && (
-                  <button
-                    className="serve-to-irs"
-                    onClick={() => clickServeToIrsSequence()}
-                  >
-                    <FontAwesomeIcon icon={['far', 'clock']} />
-                    Serve to IRS
-                  </button>
-                )}
-              {caseHelper.showRecallButton &&
-                helper.formattedDocument.isPetition && (
-                  <div className="recall-button-box">
-                    <FontAwesomeIcon icon={['far', 'clock']} />
-                    Batched for IRS
-                    <button
-                      className="recall-petition"
-                      onClick={() =>
-                        setModalDialogNameSequence({
-                          showModal: 'RecallPetitionModalDialog',
-                        })
-                      }
-                    >
-                      Recall
-                    </button>
-                  </div>
-                )}
-            </div>
-          </Tabs>
-
           <div className="usa-grid-full">
             <div className="usa-width-one-third">
-              <Tabs bind="currentTab">
-                <Tab tabName="Document Info">
-                  <div
-                    id="tab-document-info-panel"
-                    aria-labelledby="tab-document-info"
-                    tabIndex="0"
+              <Tabs className="classic-horizontal-header3" bind="currentTab">
+                {helper.showDocumentInfoTab && (
+                  <Tab
+                    tabName="Document Info"
+                    title="Document Info"
+                    id="tab-document-info"
                   >
-                    {helper.showCaseDetailsEdit && <CaseDetailEdit />}
-                    {helper.showCaseDetailsView && <CaseDetailReadOnly />}
-                  </div>
-                </Tab>
-                <Tab tabName="Messages">
+                    <div
+                      id="tab-document-info-panel"
+                      aria-labelledby="tab-document-info"
+                      tabIndex="0"
+                    >
+                      {helper.showCaseDetailsEdit && <CaseDetailEdit />}
+                      {helper.showCaseDetailsView && <CaseDetailReadOnly />}
+                    </div>
+                  </Tab>
+                )}
+                <Tab
+                  tabName="Messages"
+                  title="Messages"
+                  id="tab-pending-messages"
+                >
                   <div
                     id="tab-pending-messages-panel"
                     aria-labelledby="tab-pending-messages"
@@ -173,8 +128,42 @@ class DocumentDetailComponent extends React.Component {
                 </Tab>
               </Tabs>
             </div>
-
             <div className="usa-width-two-thirds">
+              <div className="top-bar clear-both">
+                <p>
+                  Filed {helper.formattedDocument.createdAtFormatted} by{' '}
+                  {helper.formattedDocument.filedBy}
+                </p>
+                <div className="float-right">
+                  {caseHelper.showServeToIrsButton &&
+                    helper.formattedDocument.isPetition && (
+                      <button
+                        className="serve-to-irs"
+                        onClick={() => clickServeToIrsSequence()}
+                      >
+                        <FontAwesomeIcon icon={['far', 'clock']} />
+                        Serve to IRS
+                      </button>
+                    )}
+                  {caseHelper.showRecallButton &&
+                    helper.formattedDocument.isPetition && (
+                      <div className="recall-button-box">
+                        <FontAwesomeIcon icon={['far', 'clock']} />
+                        Batched for IRS
+                        <button
+                          className="recall-petition"
+                          onClick={() =>
+                            setModalDialogNameSequence({
+                              showModal: 'RecallPetitionModalDialog',
+                            })
+                          }
+                        >
+                          Recall
+                        </button>
+                      </div>
+                    )}
+                </div>
+              </div>
               <iframe
                 title={`Document type: ${
                   helper.formattedDocument.documentType
