@@ -1,5 +1,5 @@
 import { getDocumentTypeAction } from './getDocumentTypeAction';
-import presenter from '..';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
