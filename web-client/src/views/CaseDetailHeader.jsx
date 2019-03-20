@@ -14,7 +14,7 @@ export const CaseDetailHeader = connect(
   ({ caseDetail, caseHelper, showModal, openCaseCaptionModalSequence }) => {
     return (
       <React.Fragment>
-        <h2 className="captioned" tabIndex="-1">
+        <h1 className="heading-2 captioned" tabIndex="-1">
           <a href={'/case-detail/' + caseDetail.docketNumber}>
             Docket Number: {caseDetail.docketNumberWithSuffix}
           </a>{' '}
@@ -24,7 +24,7 @@ export const CaseDetailHeader = connect(
           >
             <span aria-hidden="true">{caseDetail.status}</span>
           </span>
-        </h2>
+        </h1>
         <p className="float-left no-bottom-margin">{caseDetail.caseTitle} </p>
         {caseHelper.showCaptionEditButton && (
           <p className="float-left no-bottom-margin">
