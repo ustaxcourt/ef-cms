@@ -29,10 +29,13 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     message.to = message.to || 'Unassigned';
     message.createdAtTimeFormatted = moment
       .utc(message.createdAt)
+      .local()
       .format(DATE_FORMAT_LONG);
   });
+  result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = moment
     .utc(result.completedAt)
+    .local()
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
