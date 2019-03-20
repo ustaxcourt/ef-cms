@@ -1,4 +1,4 @@
-import applicationContext from '../../src/applicationContext';
+import { applicationContext } from '../../src/applicationContext';
 
 export default test => {
   return it('Taxpayer logs in', async () => {
