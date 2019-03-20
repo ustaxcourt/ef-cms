@@ -19,16 +19,16 @@ function ForwardMessage(rawMessage) {
 joiValidationDecorator(
   ForwardMessage,
   joi.object().keys({
-    forwardMessage: joi.string().required(),
-    forwardRecipientId: joi
+    assigneeId: joi
       .string()
       .uuid(uuidVersions)
       .required(),
+    forwardMessage: joi.string().required(),
   }),
   undefined,
   {
+    assigneeId: 'Send To is a required field.',
     forwardMessage: 'Message is a required field.',
-    forwardRecipientId: 'Send To is a required field.',
   },
 );
 
