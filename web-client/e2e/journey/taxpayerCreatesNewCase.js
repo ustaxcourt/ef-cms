@@ -3,7 +3,7 @@ const {
   PARTY_TYPES,
 } = require('../../../shared/src/business/entities/contacts/PetitionContact');
 
-import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
+import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default (test, fakeFile) => {
   return it('Taxpayer creates a new case', async () => {
@@ -68,14 +68,14 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('form.contactPrimary')).toEqual({
-      name: 'Test Person',
       address1: '123 Abc Ln',
-      countryType: 'international',
-      country: 'Switzerland',
       city: 'Cityville',
-      postalCode: '23-skidoo',
+      country: 'Switzerland',
+      countryType: 'international',
       email: 'test@example.com',
+      name: 'Test Person',
       phone: '1234567890',
+      postalCode: '23-skidoo',
     });
 
     // Petitioner party type primary contact
@@ -126,15 +126,15 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('form.contactPrimary')).toEqual({
-      countryType: 'domestic',
-      name: 'Test Person',
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
-      state: 'CA',
-      postalCode: '12345',
+      countryType: 'domestic',
       email: 'test@example.com',
+      name: 'Test Person',
       phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
     });
 
     // Petitioner & Spouse party type primary/secondary contact
@@ -661,15 +661,15 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('form.contactSecondary')).toEqual({
-      name: 'Test Person',
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
       countryType: 'domestic',
-      state: 'CA',
-      postalCode: '12345',
       email: 'test@example.com',
+      name: 'Test Person',
       phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -705,15 +705,15 @@ export default (test, fakeFile) => {
       value: '1234567890',
     });
     expect(test.getState('form.contactPrimary')).toEqual({
-      name: 'Test Person',
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
       countryType: 'domestic',
-      state: 'CA',
-      postalCode: '12345',
       email: 'test@example.com',
+      name: 'Test Person',
       phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
     });
 
     await test.runSequence('updateHasIrsNoticeFormValueSequence', {
@@ -773,8 +773,8 @@ export default (test, fakeFile) => {
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({
-      title: 'Your petition has been successfully submitted.',
       message: 'You can access your case at any time from the case list below.',
+      title: 'Your petition has been successfully submitted.',
     });
   });
 };
