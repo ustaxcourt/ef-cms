@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 
-import presenter from '../src/presenter';
+import { presenter } from '../src/presenter/presenter';
 import { applicationContext } from '../src/applicationContext';
 
 presenter.providers.applicationContext = applicationContext;
