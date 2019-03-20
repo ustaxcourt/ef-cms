@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 
-import app from './app';
+import { app } from './app';
 import { applicationContext } from './applicationContext';
 
 /**

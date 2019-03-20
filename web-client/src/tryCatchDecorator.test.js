@@ -1,9 +1,9 @@
-import { UnidentifiedUserError } from './presenter/errors/UnidentifiedUserError';
-import decorateWithTryCatch from './tryCatchDecorator';
-import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';
-import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
-import { UnauthorizedRequestError } from './presenter/errors/UnauthorizedRequestError';
 import { ActionError } from './presenter/errors/ActionError';
+import { decorateWithTryCatch } from './tryCatchDecorator';
+import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
+import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './presenter/errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './presenter/errors/UnidentifiedUserError';
 
 describe('decorateWithTryCatch', () => {
   it('catches and returns the expected error on 500 status', async () => {
