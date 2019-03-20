@@ -48,7 +48,7 @@ import { validateCaseDetail } from '../../shared/src/business/useCases/validateC
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
-import { decorateWithTryCatch } from './tryCatchDecorator';
+import { tryCatchDecorator } from './tryCatchDecorator';
 import ErrorFactory from './presenter/errors/ErrorFactory';
 import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
 import Petition from '../../shared/src/business/entities/Petition';
@@ -109,7 +109,7 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
 };
-decorateWithTryCatch(allUseCases);
+tryCatchDecorator(allUseCases);
 
 const applicationContext = {
   getBaseUrl: () => {

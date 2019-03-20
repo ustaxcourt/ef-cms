@@ -1,5 +1,5 @@
 import { ActionError } from './presenter/errors/ActionError';
-import { decorateWithTryCatch } from './tryCatchDecorator';
+import { tryCatchDecorator } from './tryCatchDecorator';
 import { InvalidRequestError } from './presenter/errors/InvalidRequestError';
 import { ServerInvalidResponseError } from './presenter/errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './presenter/errors/UnauthorizedRequestError';
@@ -16,7 +16,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -36,7 +36,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -56,7 +56,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -75,7 +75,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
@@ -95,7 +95,7 @@ describe('decorateWithTryCatch', () => {
         });
       },
     };
-    decorateWithTryCatch(functions);
+    tryCatchDecorator(functions);
     let error;
     try {
       await functions.fun();
