@@ -4,7 +4,7 @@ import FormData from 'form-data';
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
-import presenter from '../src/presenter';
+import { presenter } from '../src/presenter/presenter';
 
 const {
   PARTY_TYPES,
