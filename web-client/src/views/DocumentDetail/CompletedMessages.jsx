@@ -55,8 +55,7 @@ class CompletedMessagesComponent extends React.Component {
                       {workItem.completedMessage === 'Served on IRS' && (
                         <p>
                           <span className="label-inline">
-                            Served on IRS at
-                            {workItem.completedAtFormatted}
+                            Served on IRS at {workItem.completedAtFormatted}
                           </span>
                         </p>
                       )}
