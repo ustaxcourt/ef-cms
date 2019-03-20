@@ -4,8 +4,8 @@ export default test => {
   return it('Docket clerk forward work item', async () => {
     test.setState('form', {
       [test.workItemId]: {
+        assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         forwardMessage: 'hello world',
-        forwardRecipientId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
     await test.runSequence('submitForwardSequence', {

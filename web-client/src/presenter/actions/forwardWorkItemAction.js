@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Forwards the workItem associated with props.workItemId to a form.forwardRecipientId and also adds the message set on form.forwardMessage.
+ * Forwards the workItem associated with props.workItemId to a form.assigneeId and also adds the message set on form.forwardMessage.
  * Displays a success alert on success.
  *
  * @param {Object} providers the providers object
@@ -26,7 +26,7 @@ export const forwardWorkItemAction = async ({
     .getUseCases()
     .forwardWorkItem({
       applicationContext,
-      assigneeId: form.forwardRecipientId,
+      assigneeId: form.assigneeId,
       message: form.forwardMessage,
       userId,
       workItemId: workItemId,
