@@ -3,7 +3,9 @@ import FormData from 'form-data';
 
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+
 import { applicationContext } from '../src/applicationContext';
+import { presenter } from '../src/presenter/presenter';
 
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
@@ -31,7 +33,6 @@ import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCase
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
-import presenter from '../src/presenter';
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsStipulatedDecisions from './journey/respondentAddsStipulatedDecisions';
 import respondentLogIn from './journey/respondentLogIn';
