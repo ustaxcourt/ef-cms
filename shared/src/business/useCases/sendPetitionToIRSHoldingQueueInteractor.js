@@ -13,7 +13,6 @@ const {
 /**
  *
  * @param caseId
- * @param userId
  * @param applicationContext
  * @returns {Promise<*>}
  */

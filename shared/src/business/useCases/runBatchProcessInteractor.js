@@ -77,6 +77,16 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       new Date().toISOString(),
     );
 
+    const petitionDocument = caseEntity.documents.find(
+      document => document.documentType === Case.documentTypes.petitionFile,
+    );
+    const initializeCaseWorkItem = petitionDocument.workItems.find(
+      workItem => workItem.isInitializeCase,
+    );
+
+    //set the work item as completed
+    initializeCaseWorkItem.setAsSentToIRS();
+
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
