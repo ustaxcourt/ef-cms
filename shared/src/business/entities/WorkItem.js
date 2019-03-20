@@ -192,8 +192,7 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 };
 
 /**
- *
- * @param userId
+ * complete the work item as the IRS user with the message 'Served on IRS'
  */
 WorkItem.prototype.setAsSentToIRS = function() {
   this.completedAt = new Date().toISOString();
