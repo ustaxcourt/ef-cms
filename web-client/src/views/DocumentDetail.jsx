@@ -12,7 +12,7 @@ import React from 'react';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
-import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { CaseDetailHeader } from './CaseDetailHeader';
 import { connect } from '@cerebral/react';
 import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
 
@@ -20,11 +20,9 @@ class DocumentDetailComponent extends React.Component {
   render() {
     const {
       baseUrl,
-      caseDetail,
       caseHelper,
       clickServeToIrsSequence,
       helper,
-      openCaseCaptionModalSequence,
       showModal,
       token,
       setModalDialogNameSequence,
@@ -38,37 +36,7 @@ class DocumentDetailComponent extends React.Component {
           </a>
         </div>
         <section className="usa-section usa-grid DocumentDetail">
-          <h1 className="captioned" tabIndex="-1">
-            <a href={'/case-detail/' + caseDetail.docketNumber}>
-              Docket Number: {caseDetail.docketNumberWithSuffix}
-            </a>
-          </h1>
-          <p className="float-left">{caseDetail.caseTitle} </p>
-          {caseHelper.showCaptionEditButton && (
-            <p className="float-left">
-              <button
-                className="link"
-                id="caption-edit-button"
-                onClick={() => {
-                  openCaseCaptionModalSequence();
-                }}
-              >
-                <FontAwesomeIcon icon="edit" size="sm" /> Edit
-              </button>
-            </p>
-          )}
-          {showModal == 'UpdateCaseCaptionModalDialog' && (
-            <UpdateCaseCaptionModalDialog />
-          )}
-
-          <p className="clear-both">
-            <span
-              className="usa-label case-status-label"
-              aria-label={`status: ${caseDetail.status}`}
-            >
-              <span aria-hidden="true">{caseDetail.status}</span>
-            </span>
-          </p>
+          <CaseDetailHeader />
           <hr aria-hidden="true" />
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
 
@@ -205,11 +173,9 @@ DocumentDetailComponent.propTypes = {
 export const DocumentDetail = connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
-    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
