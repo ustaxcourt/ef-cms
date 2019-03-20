@@ -9,7 +9,8 @@ WORKDIR /home/app
 RUN apt-get install -y shellcheck
 
 COPY shared/package.json /home/app/shared/package.json
-RUN cd /home/app/shared && npm i
+COPY shared/package-lock.json /home/app/shared/package-lock.json
+RUN cd /home/app/shared && npm ci
 
 COPY . /home/app
 

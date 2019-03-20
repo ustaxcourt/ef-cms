@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 
 export default test => {
   return it('Petitions clerk views case detail', async () => {
