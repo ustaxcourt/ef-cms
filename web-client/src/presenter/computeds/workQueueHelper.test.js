@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import workQueueHelper from './workQueueHelper';
+import { workQueueHelper } from './workQueueHelper';
 
 describe('workQueueHelper', () => {
   it('returns the expected state when set', async () => {
