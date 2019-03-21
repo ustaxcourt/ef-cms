@@ -1,6 +1,6 @@
 .loading-overlay {
   position: fixed;
-  z-index: 9500;
+  z-index: 9600;
   top: 0;
   right: 0;
   bottom: 0;
@@ -21,5 +21,18 @@
     margin-top: -50px;
     margin-left: -50px;
     color: $color-gray-light;
+  }
+}
+
+* {
+  animation: fadein 0.2s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
