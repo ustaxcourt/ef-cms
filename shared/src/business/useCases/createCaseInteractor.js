@@ -32,7 +32,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   let message;
 
   if (documentEntity.documentType === 'Petition') {
-    let caseCaption = caseToAdd.initialCaption;
+    let caseCaption = caseToAdd.caseTitle;
     caseCaption = caseCaption
       .replace(CASE_CAPTION_POSTFIX, '')
       .replace(/,[^,]*$/, '') //remove from final comma to end of string (Petitioner/(s) portion)
