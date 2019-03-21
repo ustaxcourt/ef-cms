@@ -8,7 +8,12 @@ import _ from 'lodash';
  * @param {Object} providers.store the cerebral store used for setting state.workQueue
  * @param {Object} providers.props the cerebral props object used for getting the props.workItems
  */
-export const setWorkItemsAction = ({ store, props }) => {
-  const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc');
+export const setWorkItemsAction = ({ applicationContext, store, props }) => {
+  const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc').map(
+    workItem => ({
+      ...workItem,
+      uiKey: applicationContext.getUniqueId(),
+    }),
+  );
   store.set(state.workQueue, orderedWorkItems);
 };
