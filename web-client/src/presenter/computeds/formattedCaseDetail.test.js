@@ -1,6 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
 import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
+import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
 
 describe('formatYearAmounts', () => {
   it('does not return 2018 when a blank string is passed in', () => {
@@ -117,6 +118,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -132,6 +136,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -148,6 +155,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -164,6 +174,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -187,6 +200,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
@@ -219,6 +235,9 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
