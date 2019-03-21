@@ -73,6 +73,7 @@ describe('createCase', () => {
     });
 
     const expectedCaseRecordToPersist = {
+      caseCaption: 'Diana Prince, Petitioner',
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       caseType: 'other',
       contactPrimary: {
@@ -233,6 +234,7 @@ describe('createCase', () => {
     });
 
     const expectedCaseRecordToPersist = {
+      caseCaption: 'Diana Prince, Petitioner',
       caseId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       caseType: 'other',
       contactPrimary: {
@@ -294,8 +296,6 @@ describe('createCase', () => {
       ],
       filingType: 'Myself',
       hasIrsNotice: true,
-      initialCaption:
-        'Diana Prince, Petitioner v. Commissioner of Internal Revenue, Respondent',
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
 

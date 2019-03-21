@@ -118,7 +118,7 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
+  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,
