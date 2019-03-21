@@ -51,7 +51,7 @@ exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
 
   const paidCase = new Case(caseToUpdate)
     .markAsPaidByPayGov(caseToUpdate.payGovDate)
-    .updateCaptionDocketRecord()
+    .updateCaseTitleDocketRecord()
     .validate()
     .toRawObject();
 
