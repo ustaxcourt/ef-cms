@@ -32,7 +32,12 @@ custom:
         sources:
           - table: ${opt:efcmsTableName}
             sources:
-              - ./storage/fixtures/efcms.json
+              - ./storage/fixtures/seed/misc.json
+              - ./storage/fixtures/seed/users.json
+              - ./storage/fixtures/seed/101-19.json
+              - ./storage/fixtures/seed/102-19.json
+              - ./storage/fixtures/seed/103-19.json
+              - ./storage/fixtures/seed/104-19.json
 
   alerts:
     stages:
