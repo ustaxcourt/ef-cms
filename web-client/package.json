@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "cypress": "cypress run",
-    "cypress:open": "cypress open --config watchForFileChanges=true",
+    "cypress:open": "CYPRESS=true cypress open --config watchForFileChanges=true",
+    "dev:cypress": "CYPRESS=true USTC_ENV=dev parcel --no-cache --no-hmr src/index.pug",
     "dev": "USTC_ENV=dev parcel --no-cache --no-hmr src/index.pug",
     "dev:cognito": "COGNITO=true USTC_ENV=dev parcel --no-cache --no-hmr src/index.pug",
     "dev:debug": "USTC_DEBUG=true npm run dev",
@@ -106,5 +107,8 @@
     "uswds": "^1.6.9",
     "webdriver-manager": "^12.1.1",
     "wicg-inert": "^2.1.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.426.0"
   }
 }
