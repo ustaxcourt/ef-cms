@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import presenter from '..';
+import { presenter } from '../presenter';
 import sinon from 'sinon';
 
 let test;

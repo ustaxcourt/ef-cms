@@ -49,7 +49,7 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
-import ErrorFactory from './presenter/errors/ErrorFactory';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
 import Petition from '../../shared/src/business/entities/Petition';
 

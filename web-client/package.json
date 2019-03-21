@@ -93,6 +93,7 @@
     "pug": "^2.0.3",
     "query-string": "5.1.0",
     "react-dom": "^16.8.4",
+    "react-focus-lock": "^1.18.3",
     "react-test-renderer": "^16.8.4",
     "react": "^16.8.4",
     "riot-route": "^3.1.4",
@@ -103,6 +104,7 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint": "^9.10.1",
     "uswds": "^1.6.9",
-    "webdriver-manager": "^12.1.1"
+    "webdriver-manager": "^12.1.1",
+    "wicg-inert": "^2.1.0"
   }
 }

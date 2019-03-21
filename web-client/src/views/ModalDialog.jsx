@@ -1,10 +1,17 @@
+import FocusLock from 'react-focus-lock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom';
+
+const appRoot = document.getElementById('app');
+const modalRoot = document.getElementById('modal-root');
 
 export class ModalDialog extends React.Component {
   constructor(props) {
     super(props);
+    this.el = document.createElement('div');
+
     this.modal = {};
     this.preventCancelOnBlur = !!this.props.preventCancelOnBlur;
     this.blurDialog = this.blurDialog.bind(this);
@@ -49,11 +56,17 @@ export class ModalDialog extends React.Component {
     return this.runCancelSequence(event);
   }
   componentDidMount() {
+    modalRoot.appendChild(this.el);
+    appRoot.inert = true;
+    appRoot.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
     this.focusModal();
   }
   componentWillUnmount() {
+    modalRoot.removeChild(this.el);
+    appRoot.inert = false;
+    appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.keydownTriggered, false);
 
     this.toggleNoScroll(false);
@@ -65,48 +78,54 @@ export class ModalDialog extends React.Component {
   }
 
   render() {
+    return ReactDOM.createPortal(this.renderModalContent(), this.el);
+  }
+
+  renderModalContent() {
     const { modal } = this;
     return (
-      <div className="modal-screen" onClick={this.blurDialog}>
-        <div
-          className={`modal-dialog ${modal.classNames}`}
-          data-aria-live="assertive"
-          aria-modal="true"
-          role="dialog"
-          onClick={event => event.stopPropagation()}
-        >
-          <div className="modal-header">
-            <button
-              type="button"
-              className="modal-close-button text-style"
-              onClick={this.runCancelSequence}
-            >
-              Close <FontAwesomeIcon icon="times-circle" />
-            </button>
-            <h3 tabIndex="-1" className="title">
-              {modal.title}
-            </h3>
+      <FocusLock>
+        <dialog open className="modal-screen" onClick={this.blurDialog}>
+          <div
+            className={`modal-dialog ${modal.classNames}`}
+            data-aria-live="assertive"
+            aria-modal="true"
+            role="dialog"
+            onClick={event => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <button
+                type="button"
+                className="modal-close-button text-style"
+                onClick={this.runCancelSequence}
+              >
+                Close <FontAwesomeIcon icon="times-circle" />
+              </button>
+              <h3 tabIndex="-1" className="title">
+                {modal.title}
+              </h3>
+            </div>
+            {modal.message && <p>{modal.message}</p>}
+            {this.renderBody && this.renderBody()}
+            <div className="button-container">
+              <button
+                type="button"
+                onClick={this.runConfirmSequence}
+                className="usa-button"
+              >
+                {modal.confirmLabel}
+              </button>
+              <button
+                type="button"
+                onClick={this.runCancelSequence}
+                className="usa-button-secondary"
+              >
+                {modal.cancelLabel}
+              </button>
+            </div>
           </div>
-          {modal.message && <p>{modal.message}</p>}
-          {this.renderBody && this.renderBody()}
-          <div className="button-container">
-            <button
-              type="button"
-              onClick={this.runConfirmSequence}
-              className="usa-button"
-            >
-              {modal.confirmLabel}
-            </button>
-            <button
-              type="button"
-              onClick={this.runCancelSequence}
-              className="usa-button-secondary"
-            >
-              {modal.cancelLabel}
-            </button>
-          </div>
-        </div>
-      </div>
+        </dialog>
+      </FocusLock>
     );
   }
 }
