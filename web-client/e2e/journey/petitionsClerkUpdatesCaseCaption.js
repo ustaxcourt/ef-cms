@@ -25,9 +25,7 @@ export default test => {
       'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
     );
     expect(test.getState('showModal')).toEqual('');
-    expect(test.getState('caseCaption')).toEqual(
-      'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
-    );
+    expect(test.getState('caseCaption')).toEqual('');
 
     await test.runSequence('openCaseCaptionModalSequence');
 
@@ -44,6 +42,6 @@ export default test => {
       'Sisqo v. Commissioner of Internal Revenue, Respondent',
     );
     expect(test.getState('showModal')).toEqual('');
-    expect(test.getState('caseCaption')).toEqual('Sisqo');
+    expect(test.getState('caseCaption')).toEqual('');
   });
 };

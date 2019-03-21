@@ -14,11 +14,6 @@ export const caseDetailEditHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
   const partyType = get(state.caseDetail.partyType);
   const documents = get(state.caseDetail.documents);
-  const showModal = get(state.showModal);
-  const caseTitle = get(state.caseDetail.caseTitle);
-  const { CASE_CAPTION_POSTFIX } = get(state.constants);
-  const caseCaption = get(state.caseCaption);
-
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
@@ -42,15 +37,7 @@ export const caseDetailEditHelper = get => {
     }
   }
 
-  let caseCaptionValue;
-  if (showModal == 'UpdateCaseCaptionModalDialog') {
-    caseCaptionValue = caseTitle.replace(CASE_CAPTION_POSTFIX, '').trim();
-  } else {
-    caseCaptionValue = caseCaption;
-  }
-
   return {
-    caseCaptionValue,
     ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
     showOwnershipDisclosureStatement,
