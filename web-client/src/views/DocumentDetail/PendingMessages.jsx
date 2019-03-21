@@ -385,7 +385,7 @@ PendingMessagesComponent.propTypes = {
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
-  validationErrors: PropTypes.func,
+  validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
 };
 

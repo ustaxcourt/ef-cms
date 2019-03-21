@@ -1,20 +1,20 @@
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
+import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { CompletedMessages } from './DocumentDetail/CompletedMessages';
+import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
-import PropTypes from 'prop-types';
-import React from 'react';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
-import { CaseDetailHeader } from './CaseDetailHeader';
-import { connect } from '@cerebral/react';
-import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 
 class DocumentDetailComponent extends React.Component {
   render() {
@@ -101,7 +101,7 @@ class DocumentDetailComponent extends React.Component {
                 <p className="full-width">
                   Filed {helper.formattedDocument.createdAtFormatted} by{' '}
                   {helper.formattedDocument.filedBy}
-                  <div className="float-right">
+                  <span className="float-right">
                     {caseHelper.showServeToIrsButton &&
                       helper.formattedDocument.isPetition && (
                         <button
@@ -114,7 +114,7 @@ class DocumentDetailComponent extends React.Component {
                       )}
                     {caseHelper.showRecallButton &&
                       helper.formattedDocument.isPetition && (
-                        <div className="recall-button-box">
+                        <span className="recall-button-box">
                           <FontAwesomeIcon icon={['far', 'clock']} />
                           Batched for IRS
                           <button
@@ -127,9 +127,9 @@ class DocumentDetailComponent extends React.Component {
                           >
                             Recall
                           </button>
-                        </div>
+                        </span>
                       )}
-                  </div>
+                  </span>
                 </p>
               </div>
               <iframe
