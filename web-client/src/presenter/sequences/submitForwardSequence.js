@@ -6,7 +6,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setForwardMessageValidationErrorsAction } from '../actions/setForwardMessageValidationErrorsAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
@@ -18,7 +18,7 @@ export const submitForwardSequence = [
   {
     error: [
       setAlertErrorAction,
-      setValidationErrorsAction,
+      setForwardMessageValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
     success: [
