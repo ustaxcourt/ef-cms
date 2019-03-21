@@ -12,7 +12,6 @@ export const PartyInformation = connect(
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
     constants: state.constants,
-    setCaseCaptionSequence: sequences.setCaseCaptionSequence,
     token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -23,7 +22,6 @@ export const PartyInformation = connect(
     caseDetail,
     caseDetailEditHelper,
     constants,
-    setCaseCaptionSequence,
     token,
     updateCasePartyTypeSequence,
     updateCaseValueSequence,
@@ -36,9 +34,12 @@ export const PartyInformation = connect(
             className="usa-input-inline"
             id="case-caption"
             name="caseCaption"
-            value={caseDetailEditHelper.caseCaptionValue}
+            value={caseDetail.caseCaption}
             onChange={e => {
-              setCaseCaptionSequence({ caseCaption: e.target.value });
+              updateCaseValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
             }}
             onBlur={() => {
               autoSaveCaseSequence();
