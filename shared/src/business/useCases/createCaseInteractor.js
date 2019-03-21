@@ -1,4 +1,4 @@
-const { Case } = require('../entities/Case');
+const { Case, CASE_CAPTION_POSTFIX } = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const DocketRecord = require('../entities/DocketRecord');
 const Document = require('../entities/Document');
@@ -29,13 +29,28 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
     sentBy: user.userId,
   });
 
+  let message;
+
+  if (documentEntity.documentType === 'Petition') {
+    let caseCaption = caseToAdd.caseTitle;
+    caseCaption = caseCaption
+      .replace(CASE_CAPTION_POSTFIX, '')
+      .replace(/,[^,]*$/, '') //remove from final comma to end of string (Petitioner/(s) portion)
+      .trim();
+    message = `${
+      documentEntity.documentType
+    } filed by ${caseCaption} is ready for review.`;
+  } else {
+    message = `${documentEntity.documentType} filed by ${capitalize(
+      user.role,
+    )} is ready for review.`;
+  }
+
   workItemEntity.addMessage(
     new Message({
       from: user.name,
       fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
+      message,
     }),
   );
 
@@ -83,6 +98,7 @@ exports.createCase = async ({
     ],
     docketNumber,
   });
+  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
@@ -118,7 +134,6 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,

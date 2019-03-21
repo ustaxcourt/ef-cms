@@ -18,6 +18,7 @@ class PendingMessagesComponent extends React.Component {
       validationErrors,
       getUsersInSectionSequence,
       form,
+      validateForwardMessageSequence,
       constants,
     } = this.props;
     return (
@@ -269,7 +270,10 @@ class PendingMessagesComponent extends React.Component {
                       <div
                         className={
                           'usa-form-group ' +
-                          (validationErrors.section ? 'usa-input-error' : '')
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].section
+                            ? 'usa-input-error'
+                            : '')
                         }
                       >
                         <label htmlFor={`section-${idx}`}>Select Section</label>
@@ -285,7 +289,11 @@ class PendingMessagesComponent extends React.Component {
                               workItemId: workItem.workItemId,
                             });
                             getUsersInSectionSequence({
+                              form: `form.${workItem.workItemId}`,
                               section: e.target.value,
+                            });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
                             });
                           }}
                         >
@@ -297,14 +305,18 @@ class PendingMessagesComponent extends React.Component {
                           ))}
                         </select>
                         <div className="usa-input-error-message beneath">
-                          {validationErrors.section}
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section}
                         </div>
                       </div>
 
                       <div
                         className={
                           'usa-form-group ' +
-                          (validationErrors.assigneeId ? 'usa-input-error' : '')
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].assigneeId
+                            ? 'usa-input-error'
+                            : '')
                         }
                       >
                         <label htmlFor={`assignee-id-${idx}`}>
@@ -330,6 +342,9 @@ class PendingMessagesComponent extends React.Component {
                               value: e.target.value,
                               workItemId: workItem.workItemId,
                             });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
+                            });
                           }}
                         >
                           <option value="">- Select -</option>
@@ -340,25 +355,45 @@ class PendingMessagesComponent extends React.Component {
                           ))}
                         </select>
                         <div className="usa-input-error-message beneath">
-                          {validationErrors.assigneeId}
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].assigneeId}
                         </div>
                       </div>
 
-                      <label htmlFor={`forward-message-${idx}`}>
-                        Add Message
-                      </label>
-                      <textarea
-                        aria-labelledby={`message-label-${idx}`}
-                        name="forwardMessage"
-                        id={`forward-message-${idx}`}
-                        onChange={e => {
-                          updateForwardFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
-                      />
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].forwardMessage
+                            ? 'usa-input-error'
+                            : '')
+                        }
+                      >
+                        <label htmlFor={`forward-message-${idx}`}>
+                          Add Message
+                        </label>
+                        <textarea
+                          aria-labelledby={`message-label-${idx}`}
+                          name="forwardMessage"
+                          id={`forward-message-${idx}`}
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        />{' '}
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId]
+                              .forwardMessage}
+                        </div>
+                      </div>
+
                       <button type="submit" className="usa-button">
                         Send
                       </button>
@@ -385,6 +420,7 @@ PendingMessagesComponent.propTypes = {
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
+  validateForwardMessageSequence: PropTypes.func,
   validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
 };
@@ -402,6 +438,7 @@ export const PendingMessages = connect(
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
     users: state.users,
+    validateForwardMessageSequence: sequences.validateForwardMessageSequence,
     validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
   },

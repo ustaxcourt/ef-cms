@@ -36,6 +36,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 value: e.target.value,
               });
               this.props.getUsersInSectionSequence({
+                form: 'form',
                 section: e.target.value,
               });
               this.props.validateInitialWorkItemMessageSequence();
