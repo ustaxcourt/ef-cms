@@ -156,7 +156,7 @@ const formatCase = (caseDetail, caseDetailErrors, constants) => {
 export const formattedCases = get => {
   const cases = get(state.cases);
   const constants = get(state.constants);
-  return cases.map(caseDetail => formatCase(caseDetail, null, constants));
+  return cases.map(caseDetail => formatCase(caseDetail, undefined, constants));
 };
 
 export const formattedCaseDetail = get => {
