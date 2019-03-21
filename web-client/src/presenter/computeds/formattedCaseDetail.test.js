@@ -245,40 +245,56 @@ describe('formatYearAmounts', () => {
     );
   });
 
-  it('maps case name', async () => {
-    const caseDetail = {
-      caseTitle:
-        'Sisqo, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: 'Petition',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
+  describe('case name mapping', () => {
+    it("should remove ', Petitioner' from caseCaption", async () => {
+      const caseDetail = {
+        caseCaption: 'Sisqo, Petitioner',
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants: {
+            CASE_CAPTION_POSTFIX,
+          },
         },
-      ],
-      documents: [
-        {
-          createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'Petition',
-          documentType: 'Petition',
-          showValidationInput: '2019-02-28T21:14:39.488Z',
-          status: 'served',
-        },
-      ],
-      hasIrsNotice: false,
-      hasVerifiedIrsNotice: false,
-      petitioners: [{ name: 'bob' }],
-    };
-    const result = await runCompute(formattedCaseDetail, {
-      state: {
-        caseDetail,
-        caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
-      },
+      });
+      expect(result.caseName).toEqual('Sisqo');
     });
-    expect(result.caseName).toEqual('Sisqo');
+
+    it("should remove ', Petitioners' from caseCaption", async () => {
+      const caseDetail = {
+        caseCaption: 'Sisqo and friends,  Petitioners ',
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants: {
+            CASE_CAPTION_POSTFIX,
+          },
+        },
+      });
+      expect(result.caseName).toEqual('Sisqo and friends');
+    });
+
+    it("should remove ', Petitioner(s)' from caseCaption", async () => {
+      const caseDetail = {
+        caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants: {
+            CASE_CAPTION_POSTFIX,
+          },
+        },
+      });
+      expect(result.caseName).toEqual("Sisqo's entourage,");
+    });
   });
 });

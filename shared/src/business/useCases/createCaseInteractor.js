@@ -1,4 +1,4 @@
-const { Case, CASE_CAPTION_POSTFIX } = require('../entities/Case');
+const { Case } = require('../entities/Case');
 const WorkItem = require('../entities/WorkItem');
 const DocketRecord = require('../entities/DocketRecord');
 const Document = require('../entities/Document');
@@ -32,9 +32,8 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   let message;
 
   if (documentEntity.documentType === 'Petition') {
-    let caseCaption = caseToAdd.caseTitle;
+    let caseCaption = caseToAdd.caseCaption;
     caseCaption = caseCaption
-      .replace(CASE_CAPTION_POSTFIX, '')
       .replace(/,[^,]*$/, '') //remove from final comma to end of string (Petitioner/(s) portion)
       .trim();
     message = `${
@@ -98,7 +97,8 @@ exports.createCase = async ({
     ],
     docketNumber,
   });
-  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
+
+  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,

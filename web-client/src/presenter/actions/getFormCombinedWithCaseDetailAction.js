@@ -65,12 +65,12 @@ const checkDate = (updatedDateString, originalDate) => {
  *
  * @param {Object} providers the cerebral providers
  * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
+ * @param {Object} providers.props the cerebral props object
  * @returns {Object} the combinedCaseDetailWithForm
  */
-export const getFormCombinedWithCaseDetailAction = ({ get }) => {
-  const { CASE_CAPTION_POSTFIX } = get(state.constants);
+export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
   const caseDetail = { ...get(state.caseDetail) };
-  let caseCaption = get(state.caseCaption);
+  let caseCaption = props.caseCaption;
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),
   };
@@ -110,7 +110,7 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
 
   if (caseCaption && (caseCaption = caseCaption.trim())) {
-    caseDetail.caseTitle = `${caseCaption} ${CASE_CAPTION_POSTFIX}`;
+    caseDetail.caseCaption = caseCaption;
   }
 
   return {
