@@ -23,6 +23,7 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import { reseedDatabase } from './database';
 
 // https://github.com/cypress-io/cypress/issues/170
 // Usage: cy.upload_file('building.jpg', '#building [type="file"]');
@@ -38,8 +39,15 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
+        return cy.wrap(subject).trigger('change');
       });
     });
+  });
+});
+
+Cypress.Commands.add('seed', () => {
+  cy.wrap(null).then(() => {
+    return reseedDatabase();
   });
 });
 
