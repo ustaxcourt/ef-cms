@@ -148,11 +148,11 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
-    initialTitle: joi
+    initialDocketNumberSuffix: joi
       .string()
       .allow(null)
       .optional(),
-    initialDocketNumberSuffix: joi
+    initialTitle: joi
       .string()
       .allow(null)
       .optional(),
@@ -413,24 +413,24 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
 
 /**
  *
- * @param updateCaptionDocketRecord
+ * @param updateCaseTitleDocketRecord
  * @returns {Case}
  */
-Case.prototype.updateCaptionDocketRecord = function() {
-  const captionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+Case.prototype.updateCaseTitleDocketRecord = function() {
+  const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
   this.docketRecord.forEach(docketRecord => {
-    const result = captionRegex.exec(docketRecord.description);
+    const result = caseTitleRegex.exec(docketRecord.description);
     if (result) {
-      const [, , changedCaption] = result;
-      lastTitle = changedCaption;
+      const [, , changedTitle] = result;
+      lastTitle = changedTitle;
     }
   });
 
-  const hasCaptionChanged = this.initialTitle && lastTitle !== this.caseTitle;
+  const hasTitleChanged = this.initialTitle && lastTitle !== this.caseTitle;
 
-  if (hasCaptionChanged) {
+  if (hasTitleChanged) {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${

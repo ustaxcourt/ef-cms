@@ -694,36 +694,36 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateCaptionDocketRecord', () => {
+  describe('updateCaseTitleDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
-      const caseToVerify = new Case({}).updateCaptionDocketRecord();
+      const caseToVerify = new Case({}).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is initially being set', () => {
       const caseToVerify = new Case({
-        caseTitle: 'Caption',
-      }).updateCaptionDocketRecord();
+        caseCaption: 'Caption',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is the initial caption', () => {
+    it('should not add to the docket record when the caption equivalent to the initial title', () => {
       const caseToVerify = new Case({
         caseCaption: 'Caption',
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
-      }).updateCaptionDocketRecord();
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record when the caption changes from initial caption', () => {
+    it('should add to the docket record when the caption changes from the initial title', () => {
       const caseToVerify = new Case({
         caseCaption: 'A New Caption',
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
-      }).updateCaptionDocketRecord();
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
-    it('should not add to the docket record when the caption is not changing from the last updated caption', () => {
+    it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
       const caseToVerify = new Case({
         caseCaption: 'A Very New Caption',
         docketRecord: [
@@ -737,11 +737,11 @@ describe('Case entity', () => {
           },
         ],
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
-      }).updateCaptionDocketRecord();
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
-    it('should add to the docket record when the caption changes from the last updated caption', () => {
+    it('should add to the docket record when the caption changes from the last updated title', () => {
       const caseToVerify = new Case({
         caseCaption: 'A Very Berry New Caption',
         docketRecord: [
@@ -755,7 +755,7 @@ describe('Case entity', () => {
           },
         ],
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
-      }).updateCaptionDocketRecord();
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
     });
   });
