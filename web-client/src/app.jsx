@@ -37,7 +37,7 @@ import { Container } from '@cerebral/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import presenter from './presenter';
+import { presenter } from './presenter/presenter';
 
 /**
  * Instantiates the Cerebral app with React
