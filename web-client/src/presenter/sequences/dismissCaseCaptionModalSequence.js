@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { clearCaseCaptionAction } from '../actions/clearCaseCaptionAction';
+import { defaultCaseCaptionAction } from '../actions/defaultCaseCaptionAction';
 
 export const dismissCaseCaptionModalSequence = [
   clearModalAction,
-  clearCaseCaptionAction,
+  defaultCaseCaptionAction,
 ];
