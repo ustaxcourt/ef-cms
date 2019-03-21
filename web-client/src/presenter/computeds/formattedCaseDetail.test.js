@@ -244,4 +244,41 @@ describe('formatYearAmounts', () => {
       'Petition',
     );
   });
+
+  it('maps case name', async () => {
+    const caseDetail = {
+      caseTitle:
+        'Sisqo, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      docketRecord: [
+        {
+          description: 'Petition',
+          documentId: 'Petition',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+        },
+      ],
+      documents: [
+        {
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'Petition',
+          documentType: 'Petition',
+          showValidationInput: '2019-02-28T21:14:39.488Z',
+          status: 'served',
+        },
+      ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
+      },
+    });
+    expect(result.caseName).toEqual('Sisqo');
+  });
 });
