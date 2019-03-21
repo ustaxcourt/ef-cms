@@ -97,7 +97,8 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, constants) => {
+  const { CASE_CAPTION_POSTFIX } = constants;
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -142,6 +143,12 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
+  result.caseName = (result.caseTitle || '')
+    .replace(CASE_CAPTION_POSTFIX, '')
+    .trim()
+    .replace(/, Petitioner(s)?$/, '')
+    .trim();
+
   formatYearAmounts(result, caseDetailErrors);
 
   return result;
@@ -149,11 +156,13 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
 export const formattedCases = get => {
   const cases = get(state.cases);
-  return cases.map(formatCase);
+  const constants = get(state.constants);
+  return cases.map(caseDetail => formatCase(caseDetail, undefined, constants));
 };
 
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const constants = get(state.constants);
+  return formatCase(caseDetail, caseDetailErrors, constants);
 };

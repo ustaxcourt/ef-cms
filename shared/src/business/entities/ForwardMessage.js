@@ -24,11 +24,13 @@ joiValidationDecorator(
       .uuid(uuidVersions)
       .required(),
     forwardMessage: joi.string().required(),
+    section: joi.string().required(),
   }),
   undefined,
   {
-    assigneeId: 'Send To is a required field.',
-    forwardMessage: 'Message is a required field.',
+    assigneeId: 'Recipient is required.',
+    forwardMessage: 'Message is required.',
+    section: 'Section is required',
   },
 );
 

@@ -35,8 +35,8 @@ export const IndividualWorkQueueInbox = connect(
               key={idx}
               onClick={() =>
                 setFocusedWorkItem({
-                  idx,
                   queueType: 'workQueue',
+                  uiKey: item.uiKey,
                 })
               }
             >

@@ -29,13 +29,27 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
     sentBy: user.userId,
   });
 
+  let message;
+
+  if (documentEntity.documentType === 'Petition') {
+    let caseCaption = caseToAdd.caseCaption;
+    caseCaption = caseCaption
+      .replace(/,[^,]*$/, '') //remove from final comma to end of string (Petitioner/(s) portion)
+      .trim();
+    message = `${
+      documentEntity.documentType
+    } filed by ${caseCaption} is ready for review.`;
+  } else {
+    message = `${documentEntity.documentType} filed by ${capitalize(
+      user.role,
+    )} is ready for review.`;
+  }
+
   workItemEntity.addMessage(
     new Message({
       from: user.name,
       fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
+      message,
     }),
   );
 
@@ -84,6 +98,8 @@ exports.createCase = async ({
     docketNumber,
   });
 
+  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
@@ -118,7 +134,6 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,

@@ -6,6 +6,7 @@ export default test => {
       [test.workItemId]: {
         assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         forwardMessage: 'hello world',
+        section: 'seniorattorney',
       },
     });
     await test.runSequence('submitForwardSequence', {
