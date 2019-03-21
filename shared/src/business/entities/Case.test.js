@@ -268,29 +268,25 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseTitle', () => {
+  describe('getCaseCaption', () => {
     it('party type Petitioner', () => {
-      const caseTitle = Case.getCaseTitle(MOCK_CASE);
-      expect(caseTitle).toEqual(
-        'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      );
+      const caseTitle = Case.getCaseCaption(MOCK_CASE);
+      expect(caseTitle).toEqual('Test Taxpayer, Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
       });
-      expect(caseTitle).toEqual(
-        'Test Taxpayer & Test Taxpayer 2, Petitioners v. Commissioner of Internal Revenue, Respondent',
-      );
+      expect(caseTitle).toEqual('Test Taxpayer & Test Taxpayer 2, Petitioners');
     });
 
     it('party type Petitioner & Deceased Spouse', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
@@ -298,12 +294,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer & Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioners v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer & Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioners',
       );
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.estate,
         contactSecondary: {
@@ -311,22 +307,22 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s)',
       );
     });
 
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseTitle).toEqual(
-        'Estate of Test Taxpayer, Deceased, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Estate of Test Taxpayer, Deceased, Petitioner',
       );
     });
 
     it('party type Trust', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.trust,
         contactSecondary: {
@@ -334,22 +330,20 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Trustee, Petitioner(s)',
       );
     });
 
     it('party type Corporation', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.corporation,
       });
-      expect(caseTitle).toEqual(
-        'Test Taxpayer, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      );
+      expect(caseTitle).toEqual('Test Taxpayer, Petitioner');
     });
 
     it('party type Partnership Tax Matters', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         contactSecondary: {
@@ -357,12 +351,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Tax Matters Partner, Petitioner',
       );
     });
 
     it('party type Partnership Other Than Tax Matters', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         contactSecondary: {
@@ -370,12 +364,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, A Partner Other Than the Tax Matters Partner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, A Partner Other Than the Tax Matters Partner, Petitioner',
       );
     });
 
     it('party type Partnership BBA', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipBBA,
         contactSecondary: {
@@ -383,12 +377,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Partnership Representative, Petitioner(s)',
       );
     });
 
     it('party type Conservator', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.conservator,
         contactSecondary: {
@@ -396,12 +390,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Conservator, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Conservator, Petitioner',
       );
     });
 
     it('party type Guardian', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.guardian,
         contactSecondary: {
@@ -409,12 +403,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Guardian, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Guardian, Petitioner',
       );
     });
 
     it('party type Custodian', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.custodian,
         contactSecondary: {
@@ -422,12 +416,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Custodian, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Test Taxpayer, Custodian, Petitioner',
       );
     });
 
     it('party type Minor', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.nextFriendForMinor,
         contactSecondary: {
@@ -435,12 +429,12 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Minor, Test Taxpayer, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Minor, Test Taxpayer, Next Friend, Petitioner',
       );
     });
 
     it('party type Legally Incompetent Person', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         contactSecondary: {
@@ -448,38 +442,34 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Incompetent, Test Taxpayer, Next Friend, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Incompetent, Test Taxpayer, Next Friend, Petitioner',
       );
     });
 
     it('party type Donor', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.donor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
       });
-      expect(caseTitle).toEqual(
-        'Test Taxpayer, Donor, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      );
+      expect(caseTitle).toEqual('Test Taxpayer, Donor, Petitioner');
     });
 
     it('party type Transferee', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.transferee,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
       });
-      expect(caseTitle).toEqual(
-        'Test Taxpayer, Transferee, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      );
+      expect(caseTitle).toEqual('Test Taxpayer, Transferee, Petitioner');
     });
 
     it('party type Surviving Spouse', () => {
-      const caseTitle = Case.getCaseTitle({
+      const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.survivingSpouse,
         contactSecondary: {
@@ -487,7 +477,7 @@ describe('Case entity', () => {
         },
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioner',
       );
     });
   });
@@ -704,68 +694,68 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateCaptionDocketRecord', () => {
+  describe('updateCaseTitleDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
-      const caseToVerify = new Case({}).updateCaptionDocketRecord();
+      const caseToVerify = new Case({}).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is initially being set', () => {
       const caseToVerify = new Case({
-        caseTitle: 'Caption',
-      }).updateCaptionDocketRecord();
+        caseCaption: 'Caption',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is the initial caption', () => {
+    it('should not add to the docket record when the caption equivalent to the initial title', () => {
       const caseToVerify = new Case({
-        caseTitle: 'Caption',
-        initialCaption: 'Caption',
-      }).updateCaptionDocketRecord();
+        caseCaption: 'Caption',
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record when the caption changes from initial caption', () => {
+    it('should add to the docket record when the caption changes from the initial title', () => {
       const caseToVerify = new Case({
-        caseTitle: 'A New Caption',
-        initialCaption: 'Caption',
-      }).updateCaptionDocketRecord();
+        caseCaption: 'A New Caption',
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
-    it('should not add to the docket record when the caption is not changing from the last updated caption', () => {
+    it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
       const caseToVerify = new Case({
-        caseTitle: 'A Very New Caption',
+        caseCaption: 'A Very New Caption',
         docketRecord: [
           {
             description:
-              "Caption of case is amended from 'Caption' to 'A New Caption'",
+              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
           },
           {
             description:
-              "Caption of case is amended from 'A New Caption' to 'A Very New Caption'",
+              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
           },
         ],
-        initialCaption: 'Caption',
-      }).updateCaptionDocketRecord();
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
-    it('should add to the docket record when the caption changes from the last updated caption', () => {
+    it('should add to the docket record when the caption changes from the last updated title', () => {
       const caseToVerify = new Case({
-        caseTitle: 'A Very Berry New Caption',
+        caseCaption: 'A Very Berry New Caption',
         docketRecord: [
           {
             description:
-              "Caption of case is amended from 'Caption' to 'A New Caption'",
+              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
           },
           {
             description:
-              "Caption of case is amended from 'A New Caption' to 'A Very New Caption'",
+              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
           },
         ],
-        initialCaption: 'Caption',
-      }).updateCaptionDocketRecord();
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
     });
   });
