@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './PartyInformation';
 import React from 'react';
 import { SuccessNotification } from './SuccessNotification';
-import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
 import { connect } from '@cerebral/react';
+import { CaseDetailHeader } from './CaseDetailHeader';
 
 export const CaseDetailInternal = connect(
   {
@@ -18,8 +18,6 @@ export const CaseDetailInternal = connect(
     currentTab: state.currentTab,
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
-    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
-    showModal: state.showModal,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -33,8 +31,6 @@ export const CaseDetailInternal = connect(
     currentTab,
     documentHelper,
     extractedPendingMessages,
-    openCaseCaptionModalSequence,
-    showModal,
     token,
     submitUpdateCaseSequence,
     updateCaseValueSequence,
@@ -50,34 +46,7 @@ export const CaseDetailInternal = connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 className="captioned" tabIndex="-1">
-            Docket Number: {caseDetail.docketNumberWithSuffix}
-          </h1>
-          <p className="float-left">{caseDetail.caseTitle} </p>
-          {caseHelper.showCaptionEditButton && (
-            <p className="float-left">
-              <button
-                className="link"
-                id="caption-edit-button"
-                onClick={() => {
-                  openCaseCaptionModalSequence();
-                }}
-              >
-                <FontAwesomeIcon icon="edit" size="sm" /> Edit
-              </button>
-            </p>
-          )}
-          {showModal == 'UpdateCaseCaptionModalDialog' && (
-            <UpdateCaseCaptionModalDialog />
-          )}
-          <p className="clear-both">
-            <span
-              className="usa-label case-status-label"
-              aria-label={'status: ' + caseDetail.status}
-            >
-              <span aria-hidden="true">{caseDetail.status}</span>
-            </span>
-          </p>
+          <CaseDetailHeader />
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />

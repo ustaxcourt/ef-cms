@@ -33,21 +33,30 @@ class CompletedMessagesComponent extends React.Component {
                       <FontAwesomeIcon icon={['far', 'check-circle']} />
                     </div>
                     <div className="completed-content">
-                      <p>
-                        <span className="label-inline">
-                          Closed by {workItem.completedBy}
-                        </span>
-                      </p>
-
-                      <p>
-                        <span className="label-inline">
-                          {workItem.completedAtFormatted}
-                        </span>
-                      </p>
-
-                      {workItem.completedMessage && (
-                        <p className="completed-message">
-                          <span>{workItem.completedMessage}</span>
+                      {workItem.completedBy && (
+                        <React.Fragment>
+                          <p>
+                            <span className="label-inline">
+                              Closed by {workItem.completedBy}
+                            </span>
+                          </p>
+                          <p>
+                            <span className="label-inline">
+                              {workItem.completedAtFormatted}
+                            </span>
+                          </p>
+                          {workItem.completedMessage && (
+                            <p className="completed-message">
+                              <span>{workItem.completedMessage}</span>
+                            </p>
+                          )}
+                        </React.Fragment>
+                      )}
+                      {workItem.completedMessage === 'Served on IRS' && (
+                        <p>
+                          <span className="label-inline">
+                            Served on IRS at {workItem.completedAtFormatted}
+                          </span>
                         </p>
                       )}
                     </div>

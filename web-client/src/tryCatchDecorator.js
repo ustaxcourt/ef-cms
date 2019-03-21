@@ -1,4 +1,4 @@
-import ErrorFactory from './presenter/errors/ErrorFactory';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
 
 /**
  * Decorates a list of use cases so that they return cerebral specific errors from the ErrorFactory when exceptions occur
