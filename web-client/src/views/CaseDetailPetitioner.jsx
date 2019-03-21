@@ -36,9 +36,12 @@ export const CaseDetailPetitioner = connect(
             Docket Number: {caseDetail.docketNumberWithSuffix}
           </h1>
           <p>{caseDetail.caseTitle}</p>
+
           <hr aria-hidden="true" />
+
           <SuccessNotification />
           <ErrorNotification />
+
           {!caseDetail.payGovId && (
             <div className="subsection">
               <h2>Action Required</h2>
