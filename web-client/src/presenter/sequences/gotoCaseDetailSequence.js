@@ -21,7 +21,6 @@ export const gotoCaseDetailSequence = [
     intakeclerk: [setCurrentPageAction('CaseDetailInternal')],
     petitioner: [setCurrentPageAction('CaseDetailPetitioner')],
     petitionsclerk: [setCurrentPageAction('CaseDetailInternal')],
-    public: [setCurrentPageAction('CaseDetailPublic')],
     respondent: [setCurrentPageAction('CaseDetailRespondent')],
     seniorattorney: [setCurrentPageAction('CaseDetailInternal')],
   },
