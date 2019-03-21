@@ -9,10 +9,6 @@ import { state } from 'cerebral';
  */
 export const defaultCaseCaptionAction = ({ store, get }) => {
   const caseDetail = { ...get(state.caseDetail) };
-  let { caseTitle } = caseDetail;
-  const { CASE_CAPTION_POSTFIX } = get(state.constants);
-
-  caseTitle = caseTitle.replace(CASE_CAPTION_POSTFIX, '').trim();
-
-  store.set(state.caseCaption, caseTitle);
+  let { caseCaption } = caseDetail;
+  store.set(state.caseCaption, caseCaption);
 };
