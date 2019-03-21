@@ -1,17 +1,18 @@
 import { connect } from '@cerebral/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { state } from 'cerebral';
 import React from 'react';
-
-import spinner from '../images/spinner.svg';
 
 export const Loading = connect(
   { submitting: state.submitting },
   ({ submitting }) => {
     return (
       submitting && (
-        <div className="modal-screen progress-indicator" aria-live="assertive">
-          <img src={spinner} className="spinner" alt="progress indicator" />
-          <p>Loading</p>
+        <div
+          className="loading-overlay progress-indicator"
+          aria-live="assertive"
+        >
+          <FontAwesomeIcon icon="sync" className="fa-spin spinner" size="6x" />
         </div>
       )
     );
