@@ -8,8 +8,8 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 export const submitRecallPetitionFromIRSHoldingQueueSequence = [
   clearAlertsAction,
   clearModalAction,
-  setCurrentPageAction('Interstitial'),
   recallPetitionFromIRSHoldingQueueAction,
+  setCurrentPageAction('Interstitial'),
   setAlertSuccessAction,
   navigateToDashboardAction,
 ];
