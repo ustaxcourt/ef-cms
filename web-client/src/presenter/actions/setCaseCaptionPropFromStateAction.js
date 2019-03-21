@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 /**
  * Sets the prop for caseCaption so that is can be used in other actions.
