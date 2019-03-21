@@ -143,10 +143,11 @@ const formatCase = (caseDetail, caseDetailErrors, constants) => {
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
-  if (result.caseTitle) {
-    result.caseName = result.caseTitle.replace(CASE_CAPTION_POSTFIX, '').trim();
-    result.caseName = result.caseName.replace(/, Petitioner(s)?$/, '').trim();
-  }
+  result.caseName = (result.caseTitle || '')
+    .replace(CASE_CAPTION_POSTFIX, '')
+    .trim()
+    .replace(/, Petitioner(s)?$/, '')
+    .trim();
 
   formatYearAmounts(result, caseDetailErrors);
 
