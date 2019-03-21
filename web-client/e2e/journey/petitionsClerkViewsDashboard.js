@@ -18,7 +18,7 @@ export default test => {
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual('New');
     expect(workItem.messages[0].message).toEqual(
-      'Petition filed by Petitioner is ready for review.',
+      'Petition filed by Test Person, Deceased, Test Person, Surviving Spouse is ready for review.',
     );
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
