@@ -71,7 +71,12 @@ function Case(rawCase) {
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
-  this.initialCaption = this.initialCaption || this.caseTitle;
+  if (this.caseCaption) {
+    this.caseTitle = `${this.caseCaption.trim()} ${
+      exports.CASE_CAPTION_POSTFIX
+    }`;
+    this.initialTitle = this.initialTitle || this.caseTitle;
+  }
 
   this.yearAmounts = (this.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
@@ -143,11 +148,11 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
-    initialCaption: joi
+    initialDocketNumberSuffix: joi
       .string()
       .allow(null)
       .optional(),
-    initialDocketNumberSuffix: joi
+    initialTitle: joi
       .string()
       .allow(null)
       .optional(),
@@ -249,107 +254,95 @@ joiValidationDecorator(
 );
 
 /**
- * builds the case title from case contact name(s) based on party type
+ * builds the case caption from case contact name(s) based on party type
  *
  * @param rawCase
  * @returns {string}
  */
-Case.getCaseTitle = function(rawCase) {
+Case.getCaseCaption = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
-      caseCaption = `${rawCase.contactPrimary.name}, Petitioner ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
-      }, Petitioners ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${
         rawCase.contactSecondary.name
       }, Deceased, ${
         rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioners ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
       caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
-      }, ${rawCase.contactPrimary.title}, Petitioner(s) ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      }, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${
         rawCase.contactPrimary.name
-      }, Deceased, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Deceased, Petitioner`;
       break;
     case PARTY_TYPES.trust:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Trustee, Petitioner(s) ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Trustee, Petitioner(s)`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Tax Matters Partner, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, A Partner Other Than the Tax Matters Partner, Petitioner ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      }, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipBBA:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Partnership Representative, Petitioner(s) ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      }, Partnership Representative, Petitioner(s)`;
       break;
     case PARTY_TYPES.conservator:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Conservator, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Conservator, Petitioner`;
       break;
     case PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Guardian, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Guardian, Petitioner`;
       break;
     case PARTY_TYPES.custodian:
       caseCaption = `${rawCase.contactSecondary.name}, ${
         rawCase.contactPrimary.name
-      }, Custodian, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Custodian, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForMinor:
       caseCaption = `${rawCase.contactSecondary.name}, Minor, ${
         rawCase.contactPrimary.name
-      }, Next Friend, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForIncompetentPerson:
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
         rawCase.contactPrimary.name
-      }, Next Friend, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.donor:
-      caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
       break;
     case PARTY_TYPES.transferee:
-      caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner ${
-        exports.CASE_CAPTION_POSTFIX
-      }`;
+      caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
     case PARTY_TYPES.survivingSpouse:
       caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${
         rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioner ${exports.CASE_CAPTION_POSTFIX}`;
+      }, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
@@ -420,28 +413,27 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
 
 /**
  *
- * @param updateCaptionDocketRecord
+ * @param updateCaseTitleDocketRecord
  * @returns {Case}
  */
-Case.prototype.updateCaptionDocketRecord = function() {
-  const captionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
-  let lastCaption = this.initialCaption;
+Case.prototype.updateCaseTitleDocketRecord = function() {
+  const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+  let lastTitle = this.initialTitle;
 
   this.docketRecord.forEach(docketRecord => {
-    const result = captionRegex.exec(docketRecord.description);
+    const result = caseTitleRegex.exec(docketRecord.description);
     if (result) {
-      const [, , changedCaption] = result;
-      lastCaption = changedCaption;
+      const [, , changedTitle] = result;
+      lastTitle = changedTitle;
     }
   });
 
-  const hasCaptionChanged =
-    this.initialCaption && lastCaption !== this.caseTitle;
+  const hasTitleChanged = this.initialTitle && lastTitle !== this.caseTitle;
 
-  if (hasCaptionChanged) {
+  if (hasTitleChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Caption of case is amended from '${lastCaption}' to '${
+        description: `Caption of case is amended from '${lastTitle}' to '${
           this.caseTitle
         }'`,
         filingDate: new Date().toISOString(),
