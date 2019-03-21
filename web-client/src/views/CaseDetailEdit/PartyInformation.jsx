@@ -11,6 +11,8 @@ export const PartyInformation = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    constants: state.constants,
+    setCaseCaptionSequence: sequences.setCaseCaptionSequence,
     token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -20,12 +22,30 @@ export const PartyInformation = connect(
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
+    constants,
+    setCaseCaptionSequence,
     token,
     updateCasePartyTypeSequence,
     updateCaseValueSequence,
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
+        <div className="usa-form-group">
+          <label htmlFor="case-caption">Case Caption</label>
+          <textarea
+            className="usa-input-inline"
+            id="case-caption"
+            name="caseCaption"
+            value={caseDetailEditHelper.caseCaptionValue}
+            onChange={e => {
+              setCaseCaptionSequence({ caseCaption: e.target.value });
+            }}
+            onBlur={() => {
+              autoSaveCaseSequence();
+            }}
+          />
+          {constants.CASE_CAPTION_POSTFIX}
+        </div>
         <div className="usa-form-group">
           <label htmlFor="party-type">Party Type</label>
           <select
