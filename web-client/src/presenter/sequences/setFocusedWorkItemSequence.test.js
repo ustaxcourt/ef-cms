@@ -12,12 +12,13 @@ describe('setFocusedWorkItemSequence', () => {
     test.setState('workQueue', [
       {
         isFocused: false,
+        uiKey: 'a',
         workItemId: 'abc',
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
-      idx: 0,
       queueType: 'workQueue',
+      uiKey: 'a',
     });
     expect(test.getState('workQueue')).toMatchObject([
       {
@@ -26,28 +27,63 @@ describe('setFocusedWorkItemSequence', () => {
     ]);
   });
 
-  it('should set the workItems isFocused to false when called if the work item is already focused', async () => {
+  it('should collapse the alaready expanded work item of uiKey of a', async () => {
     test.setState('workQueue', [
       {
         isFocused: true,
+        uiKey: 'a',
         workItemId: 'abc',
       },
       {
-        isfocused: false,
+        isFocused: false,
+        uiKey: 'b',
         workItemId: 'gg',
       },
     ]);
     await test.runSequence('setFocusedWorkItemSequence', {
-      idx: 0,
       queueType: 'workQueue',
+      uiKey: 'a',
     });
     expect(test.getState('workQueue')).toMatchObject([
       {
         isFocused: false,
+        uiKey: 'a',
         workItemId: 'abc',
       },
       {
-        isfocused: false,
+        isFocused: false,
+        uiKey: 'b',
+        workItemId: 'gg',
+      },
+    ]);
+  });
+
+  it('should expand the work item with a key of b', async () => {
+    test.setState('workQueue', [
+      {
+        isFocused: true,
+        uiKey: 'a',
+        workItemId: 'abc',
+      },
+      {
+        isFocused: false,
+        uiKey: 'b',
+        workItemId: 'gg',
+      },
+    ]);
+    await test.runSequence('setFocusedWorkItemSequence', {
+      queueType: 'workQueue',
+      uiKey: 'b',
+    });
+    expect(test.getState('workQueue')).toMatchObject([
+      {
+        isFocused: true,
+        uiKey: 'a',
+        workItemId: 'abc',
+      },
+      {
+        isFocused: true,
+        uiKey: 'b',
         workItemId: 'gg',
       },
     ]);
