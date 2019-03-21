@@ -15,6 +15,10 @@ class PendingMessagesComponent extends React.Component {
       updateForwardFormValueSequence,
       openCreateMessageModalSequence,
       users,
+      validationErrors,
+      getUsersInSectionSequence,
+      form,
+      constants,
     } = this.props;
     return (
       <>
@@ -262,28 +266,84 @@ class PendingMessagesComponent extends React.Component {
                         });
                       }}
                     >
-                      <label htmlFor={`forward-recipient-id-${idx}`}>
-                        Send To
-                      </label>
-                      <select
-                        name="forwardRecipientId"
-                        id={`forward-recipient-id-${idx}`}
-                        aria-labelledby={`recipient-label-${idx}`}
-                        onChange={e => {
-                          updateForwardFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors.section ? 'usa-input-error' : '')
+                        }
                       >
-                        <option value="">-- Select --</option>
-                        {users.map(user => (
-                          <option key={user.userId} value={user.userId}>
-                            {user.name}
-                          </option>
-                        ))}
-                      </select>
+                        <label htmlFor={`section-${idx}`}>Select Section</label>
+
+                        <select
+                          className="usa-input-inline"
+                          id={`section-${idx}`}
+                          name="section"
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                            getUsersInSectionSequence({
+                              section: e.target.value,
+                            });
+                          }}
+                        >
+                          <option value="">- Select -</option>
+                          {constants.SECTIONS.map(section => (
+                            <option key={section} value={section}>
+                              {section}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors.section}
+                        </div>
+                      </div>
+
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors.assigneeId ? 'usa-input-error' : '')
+                        }
+                      >
+                        <label htmlFor={`assignee-id-${idx}`}>
+                          Select Recipient
+                        </label>
+                        <select
+                          className="usa-input-inline"
+                          id={`assignee-id-${idx}`}
+                          name="assigneeId"
+                          disabled={
+                            !form[workItem.workItemId] ||
+                            !form[workItem.workItemId].section
+                          }
+                          aria-disabled={
+                            !form[workItem.workItemId] ||
+                            !form[workItem.workItemId].section
+                              ? 'true'
+                              : 'false'
+                          }
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        >
+                          <option value="">- Select -</option>
+                          {users.map(user => (
+                            <option key={user.userId} value={user.userId}>
+                              {user.name}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors.assigneeId}
+                        </div>
+                      </div>
+
                       <label htmlFor={`forward-message-${idx}`}>
                         Add Message
                       </label>
@@ -314,7 +374,10 @@ class PendingMessagesComponent extends React.Component {
 }
 
 PendingMessagesComponent.propTypes = {
+  constants: PropTypes.object,
   documentDetailHelper: PropTypes.object,
+  form: PropTypes.object,
+  getUsersInSectionSequence: PropTypes.func,
   openCreateMessageModalSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
@@ -322,19 +385,24 @@ PendingMessagesComponent.propTypes = {
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
+  validationErrors: PropTypes.func,
   workItemActions: PropTypes.object,
 };
 
 export const PendingMessages = connect(
   {
+    constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
+    form: state.form,
+    getUsersInSectionSequence: sequences.getUsersInSectionSequence,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
-    users: state.internalUsers,
+    users: state.users,
+    validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
   },
   PendingMessagesComponent,

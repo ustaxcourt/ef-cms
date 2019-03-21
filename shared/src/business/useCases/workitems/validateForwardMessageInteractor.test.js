@@ -15,8 +15,8 @@ describe('validateForwardMessage', () => {
     });
 
     expect(errors).toEqual({
+      assigneeId: 'Send To is a required field.',
       forwardMessage: 'Message is a required field.',
-      forwardRecipientId: 'Send To is a required field.',
     });
   });
 
@@ -31,18 +31,18 @@ describe('validateForwardMessage', () => {
     });
 
     expect(errors).toEqual({
-      forwardRecipientId: 'Send To is a required field.',
+      assigneeId: 'Send To is a required field.',
     });
   });
 
-  it('returns the expected errors object when only forwardRecipientId is defined', () => {
+  it('returns the expected errors object when only assigneeId is defined', () => {
     const errors = validateForwardMessage({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,
         }),
       },
-      message: { forwardRecipientId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+      message: { assigneeId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
     });
 
     expect(errors).toEqual({
@@ -50,7 +50,7 @@ describe('validateForwardMessage', () => {
     });
   });
 
-  it('returns no errors when forwardMessage and forwardRecipientId are defined', () => {
+  it('returns no errors when forwardMessage and assigneeId are defined', () => {
     const errors = validateForwardMessage({
       applicationContext: {
         getEntityConstructors: () => ({
@@ -58,8 +58,8 @@ describe('validateForwardMessage', () => {
         }),
       },
       message: {
+        assigneeId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         forwardMessage: 'test message',
-        forwardRecipientId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
