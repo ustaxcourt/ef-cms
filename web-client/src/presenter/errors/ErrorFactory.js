@@ -5,7 +5,7 @@ import { ServerInvalidResponseError } from './ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './UnauthorizedRequestError';
 import { UnidentifiedUserError } from './UnidentifiedUserError';
 
-export default {
+export const ErrorFactory = {
   getError: e => {
     let responseCode = (e.response && e.response.status) || e.statusCode;
     if (403 == responseCode) {

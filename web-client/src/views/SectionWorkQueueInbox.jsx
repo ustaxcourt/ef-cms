@@ -39,8 +39,9 @@ export const SectionWorkQueueInbox = connect(
             <th>Received</th>
             <th>Document</th>
             <th>Status</th>
-            <th>From</th>
             <th>To</th>
+            <th>From</th>
+            <th>Section</th>
           </tr>
         </thead>
         {workQueueHelper.showSendToBar && (
@@ -151,8 +152,9 @@ export const SectionWorkQueueInbox = connect(
                 </a>
               </td>
               <td className="section-queue-row">{item.caseStatus}</td>
-              <td className="section-queue-row">{item.currentMessage.from}</td>
               <td className="section-queue-row">{item.assigneeName}</td>
+              <td className="section-queue-row">{item.currentMessage.from}</td>
+              <td className="section-queue-row">{item.sentBySection}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">

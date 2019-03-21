@@ -106,7 +106,6 @@ describe('caseTypeDescriptionHelper', () => {
     });
     expect(result).toMatchObject({
       caseTypes: [
-        { description: 'Deficiency', type: 'Deficiency' },
         {
           description: 'CDP (Lien/Levy)',
           type: 'CDP (Lien/Levy)',
