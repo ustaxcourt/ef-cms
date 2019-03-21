@@ -138,9 +138,6 @@ describe('WorkItem', () => {
       });
       workItem.setAsSentToIRS();
       expect(workItem.messages.length === 0).toBe(true);
-      expect(workItem.completedByUserId).toEqual(
-        '63784910-c1af-4476-8988-a02f92da8e09',
-      );
       expect(workItem.completedMessage).toEqual('Served on IRS');
     });
   });

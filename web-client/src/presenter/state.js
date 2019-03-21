@@ -21,7 +21,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 
-export default {
+export const state = {
   alertHelper,
   assigneeId: null,
   caseCaption: '',

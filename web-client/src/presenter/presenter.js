@@ -78,12 +78,12 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
-import state from './state';
+import { state } from './state';
 
 /**
  * Main Cerebral module
  */
-export default {
+export const presenter = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
