@@ -3,7 +3,7 @@ import {
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/contacts/PetitionContact';
 
-import presenter from '..';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
