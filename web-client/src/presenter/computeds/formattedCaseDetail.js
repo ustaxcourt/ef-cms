@@ -143,11 +143,11 @@ const formatCase = (caseDetail, caseDetailErrors, constants) => {
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
-  result.caseName = (result.caseTitle || '')
-    .replace(CASE_CAPTION_POSTFIX, '')
-    .trim()
-    .replace(/, Petitioner(s)?$/, '')
-    .trim();
+  // const postfixs = [', Petitioner', ', Petitioners', ', Petitioner(s)'];
+  result.caseName = (result.caseCaption || '').replace(
+    /\s*,\s*Petitioner(s|\(s\))?\s*$/,
+    '',
+  );
 
   formatYearAmounts(result, caseDetailErrors);
 
