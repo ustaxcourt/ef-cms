@@ -7,14 +7,7 @@ import { ContactSecondary } from './ContactSecondary';
 
 export const Contacts = connect(
   {
-    bind: props.bind,
-    contactsHelper: props.contactsHelper,
-    emailBind: props.emailBind,
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    parentView: props.parentView,
-    showPrimaryContact: props.showPrimaryContact,
-    showSecondaryContact: props.showSecondaryContact,
+    ...props,
   },
   ({
     parentView,
