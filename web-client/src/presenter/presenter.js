@@ -73,6 +73,7 @@ import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequ
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
@@ -161,6 +162,7 @@ export const presenter = {
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
     validateCaseDetailSequence,
+    validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
