@@ -129,7 +129,8 @@ describe('createCase', () => {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   from: 'Test Taxpayer',
                   fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'Petition filed by Petitioner is ready for review.',
+                  message:
+                    'Petition filed by Diana Prince is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 },
               ],
@@ -271,7 +272,8 @@ describe('createCase', () => {
                   createdAt: '2018-11-21T20:49:28.192Z',
                   from: 'Test Taxpayer',
                   fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'Petition filed by Petitioner is ready for review.',
+                  message:
+                    'Petition filed by Diana Prince is ready for review.',
                   messageId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
                 },
               ],
