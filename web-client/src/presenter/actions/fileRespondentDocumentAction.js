@@ -17,9 +17,6 @@ export const fileRespondentDocumentAction = async ({
   const documentType = get(state.document.documentType);
 
   const user = get(state.user);
-  console.log('here');
-
-  console.log(get(state.document));
 
   await applicationContext.getUseCases().fileRespondentDocument({
     applicationContext,
@@ -28,7 +25,6 @@ export const fileRespondentDocumentAction = async ({
     documentType,
     userId: user.token,
   });
-  console.log('there');
 
   return {
     alertSuccess: {
