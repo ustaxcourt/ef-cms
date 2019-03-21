@@ -34,8 +34,8 @@ export const SectionWorkQueueOutbox = connect(
             key={idx}
             onClick={() =>
               setFocusedWorkItem({
-                idx,
                 queueType: 'workQueue',
+                uiKey: item.uiKey,
               })
             }
           >
