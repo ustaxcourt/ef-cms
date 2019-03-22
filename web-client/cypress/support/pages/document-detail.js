@@ -37,3 +37,15 @@ exports.getCardContaining = text => {
 exports.getModal = () => {
   return cy.get('.modal-dialog');
 };
+
+exports.getCaseTitleTextArea = () => {
+  return cy.get('textarea#case-caption');
+};
+
+exports.getCaseTitleContaining = text => {
+  return cy.contains('p#case-title', text);
+};
+
+exports.getSaveButton = () => {
+  return cy.contains('button', 'Save');
+};
