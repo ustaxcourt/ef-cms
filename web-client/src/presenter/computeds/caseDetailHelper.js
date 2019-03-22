@@ -5,7 +5,7 @@ export const caseDetailHelper = get => {
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = [
-    'CaseDetailPetitioner',
+    'CaseDetailPublic',
     'CaseDetailRespondent',
   ].includes(currentPage);
 

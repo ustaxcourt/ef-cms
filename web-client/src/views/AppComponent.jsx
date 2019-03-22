@@ -5,7 +5,7 @@ import React from 'react';
 
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetailInternal } from './CaseDetailInternal';
-import { CaseDetailPetitioner } from './CaseDetailPetitioner';
+import { CaseDetailPublic } from './CaseDetailPublic';
 import { CaseDetailRespondent } from './CaseDetailRespondent';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
@@ -28,7 +28,7 @@ import { UsaBanner } from './UsaBanner';
 const pages = {
   BeforeStartingCase,
   CaseDetailInternal,
-  CaseDetailPetitioner,
+  CaseDetailPublic,
   CaseDetailRespondent,
   DashboardDocketClerk,
   DashboardIntakeClerk,
