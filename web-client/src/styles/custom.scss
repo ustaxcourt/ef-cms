@@ -257,6 +257,10 @@ select[disabled] {
   background: $color-gold-lightest;
   color: $color-base;
 
+  .usa-form-hint {
+    margin: 0;
+  }
+
   svg {
     margin-right: 5px;
   }
