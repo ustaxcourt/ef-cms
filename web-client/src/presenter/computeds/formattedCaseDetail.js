@@ -150,7 +150,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   );
 
   result.caseName = applicationContext.getCaseCaptionNames(
-    caseDetail.caseCaption,
+    caseDetail.caseCaption || '',
   );
 
   formatYearAmounts(result, caseDetailErrors);
