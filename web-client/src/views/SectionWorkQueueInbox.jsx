@@ -167,7 +167,7 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 <td colSpan="4" aria-hidden="true" />
                 <td
-                  colSpan="4"
+                  colSpan="5"
                   className="message-detail"
                   aria-label="Message detail"
                   aria-live="polite"
