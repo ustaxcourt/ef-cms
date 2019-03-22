@@ -8,6 +8,7 @@ describe('formatted case details computed', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
+          caseCaption: 'Brett Osborne, Petitioner',
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -34,6 +35,7 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
+            caseCaption: 'Brett Osborne, Petitioner',
             documents: [
               {
                 createdAt: '2018-11-21T20:49:28.192Z',
@@ -59,6 +61,7 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
+            caseCaption: 'Brett Osborne, Petitioner',
             petitioners: [{ name: 'bob' }],
             respondent: { barNumber: '123', name: 'test' },
           },
