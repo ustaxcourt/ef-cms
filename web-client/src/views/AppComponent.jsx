@@ -9,6 +9,7 @@ import { CaseDetailPetitioner } from './CaseDetailPetitioner';
 import { CaseDetailRespondent } from './CaseDetailRespondent';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
+import { DashboardPractitioner } from './DashboardPractitioner';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardRespondent } from './DashboardRespondent';
@@ -33,6 +34,7 @@ const pages = {
   DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
+  DashboardPractitioner,
   DashboardRespondent,
   DashboardSeniorAttorney,
   DocumentDetail,

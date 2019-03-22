@@ -65,5 +65,14 @@
   {
     "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "petitions|user"
+  },
+  {
+    "role": "practitioner",
+    "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Practitioner",
+    "section": "practitioner",
+    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "practitioner"
   }
 ]
