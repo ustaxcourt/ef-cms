@@ -70,7 +70,21 @@ export const PartyInformation = connect(
               </React.Fragment>
             )}{' '}
           </div>
-
+          <div className="usa-width-one-sixth">
+            {caseDetail.petitionerCounsel && (
+              <React.Fragment>
+                <p className="label" id="secondary-label">
+                  Petitioner Counsel
+                </p>
+                <div>
+                  <address aria-labelledby="secondary-label">
+                    {caseDetail.petitionerCounsel.name &&
+                      addressDisplay(caseDetail.petitionerCounsel)}
+                  </address>
+                </div>
+              </React.Fragment>
+            )}{' '}
+          </div>
           <div className="usa-width-one-sixth">
             {caseDetail.respondent && (
               <React.Fragment>
