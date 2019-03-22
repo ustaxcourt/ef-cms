@@ -27,7 +27,9 @@ export const CaseDetailHeader = connect(
             <span aria-hidden="true">{caseDetail.status}</span>
           </span>
         </div>
-        <p className="float-left no-bottom-margin">{caseDetail.caseTitle} </p>
+        <p id="case-title" className="float-left no-bottom-margin">
+          {caseDetail.caseTitle}{' '}
+        </p>
         {caseHelper.showCaptionEditButton && (
           <p className="float-left no-bottom-margin">
             <button
