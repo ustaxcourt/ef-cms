@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const CaseTypeSelect = connect(
   {
@@ -54,9 +55,10 @@ export const CaseTypeSelect = connect(
             ))}
           </select>
         </fieldset>
-        <div className="usa-input-error-message">
-          {validationErrors.caseType}
-        </div>
+        <Text
+          className="usa-input-error-message"
+          bind="validationErrors.caseType"
+        />
       </div>
     );
   },

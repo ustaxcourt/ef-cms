@@ -5,6 +5,7 @@ import React from 'react';
 import { Address } from './Address';
 import { Country } from './Country';
 import { InternationalAddress } from './InternationalAddress';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const ContactSecondary = connect(
   {
@@ -73,13 +74,21 @@ export const ContactSecondary = connect(
                 onBlurSequence();
               }}
             />
-            <div className="usa-input-error-message">
-              {validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.name}
-            </div>
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactSecondary.name"
+            />
           </div>
           {contactsHelper.contactSecondary.displayInCareOf && (
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.inCareOf
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryInCareOf">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
                   <span>
@@ -112,11 +121,10 @@ export const ContactSecondary = connect(
                   onBlurSequence();
                 }}
               />
-              {validationErrors.contactSecondary && (
-                <div className="usa-input-error-message">
-                  {validationErrors.contactSecondary.inCareOf}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactSecondary.inCareOf"
+              />
             </div>
           )}
           {data.contactSecondary.countryType ===
@@ -165,10 +173,10 @@ export const ContactSecondary = connect(
                   onBlurSequence();
                 }}
               />
-              <div className="usa-input-error-message">
-                {validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.phone}
-              </div>
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactSecondary.phone"
+              />
             </div>
           )}
         </div>
