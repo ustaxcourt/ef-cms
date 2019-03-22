@@ -29,3 +29,23 @@ exports.getWorkItemContaining = text => {
 exports.getTableRows = () => {
   return cy.get('table').find('tbody');
 };
+
+exports.getWorkItemCheckboxLabel = workItemId => {
+  return cy.get(`label#label-${workItemId}`);
+};
+
+exports.getSectionUsersSelect = () => {
+  return cy.get('select#options');
+};
+
+exports.getWorkItemRow = docketNumber => {
+  return cy.contains('tr', docketNumber);
+};
+
+exports.getSendButton = () => {
+  return cy.contains('button', 'Send');
+};
+
+exports.getWorkItemMessage = workItemId => {
+  return cy.get(`td#detail-${workItemId}`);
+};

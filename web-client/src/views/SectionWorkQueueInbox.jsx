@@ -48,7 +48,7 @@ export const SectionWorkQueueInbox = connect(
           <tbody className="action-bar">
             <tr>
               <td
-                colSpan="9"
+                colSpan="10"
                 className="action-bar"
                 aria-label="Action bar: choose an assignee."
                 aria-live="polite"
@@ -152,7 +152,7 @@ export const SectionWorkQueueInbox = connect(
                 </a>
               </td>
               <td className="section-queue-row">{item.caseStatus}</td>
-              <td className="section-queue-row">{item.assigneeName}</td>
+              <td className="to section-queue-row">{item.assigneeName}</td>
               <td className="section-queue-row">{item.currentMessage.from}</td>
               <td className="section-queue-row">{item.sentBySection}</td>
             </tr>
