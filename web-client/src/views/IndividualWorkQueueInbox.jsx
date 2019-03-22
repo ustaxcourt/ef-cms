@@ -89,7 +89,7 @@ export const IndividualWorkQueueInbox = connect(
                   </td>
                   <td colSpan="3" aria-hidden="true" />
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="message-detail"
                     aria-label="Message detail"
                     aria-live="polite"
