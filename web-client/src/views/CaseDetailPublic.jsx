@@ -7,8 +7,9 @@ import { DocketRecord } from './DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
+import { CaseInformationPublic } from './CaseInformationPublic';
 
-export const CaseDetailPetitioner = connect(
+export const CaseDetailPublic = connect(
   {
     caseDetail: state.formattedCaseDetail,
     currentTab: state.currentTab,
@@ -158,6 +159,7 @@ export const CaseDetailPetitioner = connect(
           </nav>
           {currentTab == 'Case Information' && (
             <div className="tab-content" role="tabpanel">
+              <CaseInformationPublic />
               <PartyInformation />
             </div>
           )}
