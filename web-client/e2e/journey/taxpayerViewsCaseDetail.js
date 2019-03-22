@@ -12,7 +12,7 @@ export default test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailPetitioner');
+    expect(test.getState('currentPage')).toEqual('CaseDetailPublic');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual('W');
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
