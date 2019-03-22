@@ -5,7 +5,6 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 const WorkItem = require('../../entities/WorkItem');
 const Message = require('../../entities/Message');
-const { capitalize } = require('lodash');
 
 /**
  * getWorkItem

@@ -98,7 +98,7 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors, get) => {
+const formatCase = (caseDetail, caseDetailErrors) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -166,5 +166,5 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors, get);
+  return formatCase(caseDetail, caseDetailErrors);
 };
