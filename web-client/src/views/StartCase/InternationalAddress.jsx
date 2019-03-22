@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const InternationalAddress = connect(
   {
@@ -46,11 +47,10 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].address1}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.address1`}
+          />
         </div>
         <div className="usa-form-group">
           <label htmlFor={`${type}.address2`}>
@@ -124,11 +124,10 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].state}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.state`}
+          />
         </div>
         <div
           className={
@@ -157,11 +156,10 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].city}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.city`}
+          />
         </div>
         <div
           className={
@@ -192,11 +190,10 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].postalCode}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.postalCode`}
+          />
         </div>
       </React.Fragment>
     );
