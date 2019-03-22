@@ -38,6 +38,37 @@ describe('Text Component', () => {
     expect(() => testInstance.find(el => el.type == 'span')).toThrow();
   });
 
+  it('should not show the text if binded value is an empty string', () => {
+    const testModule = {
+      state: { text: '' },
+    };
+    const app = App(testModule);
+    const testRenderer = TestRenderer.create(
+      <Container app={app}>
+        <Text bind="text" />
+      </Container>,
+    );
+
+    const testInstance = testRenderer.root;
+
+    expect(() => testInstance.find(el => el.type == 'span')).toThrow();
+  });
+
+  it('should not show the text if binded value path is not available', () => {
+    const testModule = {
+      state: {},
+    };
+    const app = App(testModule);
+    const testRenderer = TestRenderer.create(
+      <Container app={app}>
+        <Text bind="messages.text" />
+      </Container>,
+    );
+
+    const testInstanceJson = testRenderer.toJSON();
+    expect(testInstanceJson).toEqual(null);
+  });
+
   it('should show the text if binded value is available', () => {
     const testModule = {
       state: {

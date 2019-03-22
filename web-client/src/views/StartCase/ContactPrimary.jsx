@@ -6,6 +6,7 @@ import { Address } from './Address';
 import { Country } from './Country';
 import { Email } from './Email';
 import { InternationalAddress } from './InternationalAddress';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const ContactPrimary = connect(
   {
@@ -76,11 +77,10 @@ export const ContactPrimary = connect(
                 onBlurSequence();
               }}
             />
-            {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message">
-                {validationErrors.contactPrimary.name}
-              </div>
-            )}
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactPrimary.name"
+            />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
@@ -145,11 +145,10 @@ export const ContactPrimary = connect(
                   onBlurSequence();
                 }}
               />
-              {validationErrors.contactPrimary && (
-                <div className="usa-input-error-message">
-                  {validationErrors.contactPrimary.inCareOf}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactPrimary.inCareOf"
+              />
             </div>
           )}
           {data.contactPrimary.countryType ===
@@ -198,11 +197,10 @@ export const ContactPrimary = connect(
                 onBlurSequence();
               }}
             />
-            {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message">
-                {validationErrors.contactPrimary.phone}
-              </div>
-            )}
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactPrimary.phone"
+            />
           </div>
         </div>
       </div>
