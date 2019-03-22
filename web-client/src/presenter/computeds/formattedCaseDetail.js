@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
+import { applicationContext } from '../../applicationContext';
 
 export const formatDocument = document => {
   const result = _.cloneDeep(document);
@@ -146,6 +147,10 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   result.caseName = (result.caseCaption || '').replace(
     /\s*,\s*Petitioner(s|\(s\))?\s*$/,
     '',
+  );
+
+  result.caseName = applicationContext.getCaseCaptionNames(
+    caseDetail.caseCaption,
   );
 
   formatYearAmounts(result, caseDetailErrors);

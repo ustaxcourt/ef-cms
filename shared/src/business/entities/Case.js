@@ -348,6 +348,15 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
+/**
+ * get the case caption without the ", Petitioner/s/(s)" postfix
+ * @param caseCaption
+ * @returns caseCaptionNames
+ */
+Case.getCaseCaptionNames = function(caseCaption) {
+  return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
+};
+
 Case.prototype.attachRespondent = function({ user }) {
   const respondent = {
     ...user,

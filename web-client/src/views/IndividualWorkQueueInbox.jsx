@@ -75,7 +75,7 @@ export const IndividualWorkQueueInbox = connect(
                   </a>
                 </td>
                 <td>{item.caseStatus}</td>
-                <td>{item.currentMessage.from}</td>
+                <td className="from">{item.currentMessage.from}</td>
                 <td>{item.sentBySection}</td>
               </tr>
               {item.isFocused && (

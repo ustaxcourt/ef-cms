@@ -31,7 +31,7 @@
               {
                 "createdAt": "2019-03-01T21:40:46.415Z",
                 "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-                "message": "Petition filed by Petitioner is ready for review.",
+                "message": "Petition filed by Brett Osborne is ready for review.",
                 "from": "Test Petitioner",
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
               }
@@ -86,9 +86,9 @@
       }
     ],
     "sk": "0",
-    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
-    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
     "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
@@ -142,7 +142,7 @@
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
         "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-        "message": "Petition filed by Petitioner is ready for review.",
+        "message": "Petition filed by Brett Osborne is ready for review.",
         "from": "Test Petitioner",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
