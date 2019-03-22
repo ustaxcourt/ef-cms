@@ -19,7 +19,7 @@ describe('Assign a work item ', () => {
     viewSectionInbox();
     getWorkItemRow('101-19W').click();
     getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
-      'Petition filed by Petitioner is ready for review.',
+      'Petition filed by Brett Osborne is ready for review.',
     );
   });
 
@@ -40,7 +40,7 @@ describe('Assign a work item ', () => {
       .click();
 
     getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
-      'Petition filed by Petitioner is ready for review.',
+      'Petition filed by Brett Osborne is ready for review.',
     );
   });
 

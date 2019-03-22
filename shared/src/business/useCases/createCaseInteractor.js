@@ -32,13 +32,10 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   let message;
 
   if (documentEntity.documentType === 'Petition') {
-    let caseCaption = caseToAdd.caseCaption;
-    caseCaption = caseCaption
-      .replace(/,[^,]*$/, '') //remove from final comma to end of string (Petitioner/(s) portion)
-      .trim();
+    const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
     message = `${
       documentEntity.documentType
-    } filed by ${caseCaption} is ready for review.`;
+    } filed by ${caseCaptionNames} is ready for review.`;
   } else {
     message = `${documentEntity.documentType} filed by ${capitalize(
       user.role,

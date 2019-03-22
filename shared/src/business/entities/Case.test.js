@@ -482,6 +482,31 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getCaseCaptionNames', () => {
+    it('party type Petitioner', () => {
+      const caseCaptionNames = Case.getCaseCaptionNames(
+        'Test Taxpayer, Petitioner',
+      );
+      expect(caseCaptionNames).toEqual('Test Taxpayer');
+    });
+
+    it('party type Petitioner & Spouse', () => {
+      const caseCaptionNames = Case.getCaseCaptionNames(
+        'Test Taxpayer & Test Taxpayer 2, Petitioners',
+      );
+      expect(caseCaptionNames).toEqual('Test Taxpayer & Test Taxpayer 2');
+    });
+
+    it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
+      const caseCaptionNames = Case.getCaseCaptionNames(
+        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s)',
+      );
+      expect(caseCaptionNames).toEqual(
+        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor',
+      );
+    });
+  });
+
   describe('sendToIRSHoldingQueue', () => {
     it('sets status for irs batch', () => {
       const caseRecord = new Case(MOCK_CASE);

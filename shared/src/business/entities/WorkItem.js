@@ -2,6 +2,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
+const { orderBy } = require('lodash');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -106,6 +107,14 @@ joiValidationDecorator(
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...this.messages, message];
   return this;
+};
+
+/**
+ * get the latest message (by createdAt)
+ * @returns {Message}
+ */
+WorkItem.prototype.getLatestMessageEntity = function() {
+  return orderBy(this.messages, 'createdAt', 'desc')[0];
 };
 
 /**
