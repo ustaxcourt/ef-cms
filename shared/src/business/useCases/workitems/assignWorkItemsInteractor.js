@@ -29,8 +29,10 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
           applicationContext,
           workItemId: workItem.workItemId,
         })
-        .then(fullWorkItem =>
-          new WorkItem(fullWorkItem)
+        .then(fullWorkItem => {
+          const workItemEntity = new WorkItem(fullWorkItem);
+
+          workItemEntity
             .assignToUser({
               assigneeId: workItem.assigneeId,
               assigneeName: workItem.assigneeName,
@@ -44,16 +46,14 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
                 createdAt: new Date().toISOString(),
                 from: user.name,
                 fromUserId: user.userId,
-                message: `${
-                  fullWorkItem.document.documentType
-                } filed by ${capitalize(
-                  fullWorkItem.document.filedBy,
-                )} is ready for review.`,
+                message: workItemEntity.getLatestMessageEntity().message,
                 to: workItem.assigneeName,
                 toUserId: workItem.assigneeId,
               }),
-            ),
-        );
+            );
+
+          return workItemEntity;
+        });
     }),
   );
 

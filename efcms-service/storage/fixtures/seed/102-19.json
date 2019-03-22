@@ -42,7 +42,7 @@
               {
                 "createdAt": "2019-03-01T21:42:29.073Z",
                 "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-                "message": "Petition filed by Petitioner is ready for review.",
+                "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
                 "from": "Test Petitioner",
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
               }
@@ -159,7 +159,7 @@
       {
         "createdAt": "2019-03-01T21:42:29.073Z",
         "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-        "message": "Petition filed by Petitioner is ready for review.",
+        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
         "from": "Test Petitioner",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }

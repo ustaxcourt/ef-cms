@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
+import { applicationContext } from '../../applicationContext';
 
 export const formatDocument = document => {
   const result = _.cloneDeep(document);
@@ -97,7 +98,7 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, get) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -148,6 +149,10 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     '',
   );
 
+  result.caseName = applicationContext.getCaseCaptionNames(
+    caseDetail.caseCaption,
+  );
+
   formatYearAmounts(result, caseDetailErrors);
 
   return result;
@@ -161,5 +166,5 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  return formatCase(caseDetail, caseDetailErrors, get);
 };

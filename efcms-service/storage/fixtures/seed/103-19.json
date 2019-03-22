@@ -31,7 +31,7 @@
               {
                 "createdAt": "2019-03-01T22:53:50.098Z",
                 "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
-                "message": "Petition filed by Petitioner is ready for review.",
+                "message": "Petition filed by Samson Workman is ready for review.",
                 "from": "Test Petitioner",
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
               }
@@ -141,9 +141,9 @@
       }
     ],
     "sk": "0",
-    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
-    "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
+    "caseCaption": "Samson Workman, Petitioner",
+    "caseTitle": "Samson Workman, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialTitle": "Samson Workman, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "filingType": "Myself",
     "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "hasIrsNotice": false,
@@ -201,7 +201,7 @@
       {
         "createdAt": "2019-03-01T22:53:50.098Z",
         "messageId": "a53dc4c8-e550-4c19-8cff-223e92fab526",
-        "message": "Petition filed by Petitioner is ready for review.",
+        "message": "Petition filed by Samson Workman is ready for review.",
         "from": "Test Petitioner",
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }

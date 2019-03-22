@@ -6,6 +6,7 @@ import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/C
 describe('formatYearAmounts', () => {
   it('does not return 2018 when a blank string is passed in', () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       yearAmounts: [
         {
           amount: '',
@@ -38,6 +39,7 @@ describe('formatYearAmounts', () => {
 
   it('returns the yearAmount that has year 5000 as an error', () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       yearAmounts: [
         {
           amount: '',
@@ -74,6 +76,7 @@ describe('formatYearAmounts', () => {
 
   it('returns duplication errors for the second year Amount on duplicates', () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       yearAmounts: [
         {
           amount: '1000',
@@ -110,6 +113,7 @@ describe('formatYearAmounts', () => {
 
   it('sets shouldShowIrsNoticeDate to true when hasIrsNotice is true and hasVerifiedIrsNotice is undefined', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       hasIrsNotice: true,
       hasVerifiedIrsNotice: undefined,
       petitioners: [{ name: 'bob' }],
@@ -128,6 +132,7 @@ describe('formatYearAmounts', () => {
 
   it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when hasIrsNotice is true and hasVerifiedIrsNotice is true', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       hasIrsNotice: true,
       hasVerifiedIrsNotice: true,
       petitioners: [{ name: 'bob' }],
@@ -147,6 +152,7 @@ describe('formatYearAmounts', () => {
 
   it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is undefined', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       hasIrsNotice: false,
       hasVerifiedIrsNotice: undefined,
       petitioners: [{ name: 'bob' }],
@@ -166,6 +172,7 @@ describe('formatYearAmounts', () => {
 
   it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is false', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
@@ -185,6 +192,7 @@ describe('formatYearAmounts', () => {
 
   it('maps docket record dates', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
         {
           description: 'Petition',
@@ -210,6 +218,7 @@ describe('formatYearAmounts', () => {
 
   it('maps docket record documents', async () => {
     const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
         {
           description: 'Petition',

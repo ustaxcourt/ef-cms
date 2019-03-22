@@ -12,7 +12,10 @@ import {
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import {
+  CASE_CAPTION_POSTFIX,
+  Case,
+} from '../../shared/src/business/entities/Case';
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
@@ -115,6 +118,7 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
+  getCaseCaptionNames: Case.getCaseCaptionNames,
   getCognitoLoginUrl: () => {
     if (process.env.COGNITO) {
       return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
