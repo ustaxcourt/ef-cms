@@ -184,6 +184,10 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    practitioner: joi
+      .object()
+      .allow(null)
+      .optional(),
     preferredTrialCity: joi
       .string()
       .optional()
