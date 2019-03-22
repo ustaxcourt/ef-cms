@@ -165,13 +165,6 @@ describe('createCase', () => {
       hasIrsNotice: true,
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
-      petitioners: [
-        {
-          name: 'Test Taxpayer',
-          section: undefined,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       status: 'New',
@@ -301,13 +294,6 @@ describe('createCase', () => {
       irsNoticeDate: '2018-11-21T20:49:28.192Z',
       partyType: 'Petitioner',
 
-      petitioners: [
-        {
-          name: 'Test Taxpayer',
-          section: undefined,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       status: 'New',
@@ -452,5 +438,74 @@ describe('createCase', () => {
       error = err;
     }
     expect(error.message).toContain('Unauthorized');
+  });
+
+  it('creating a case as a practitioner', async () => {
+    const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
+    applicationContext = {
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
+      },
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'Test Taxpayer',
+          role: 'practitioner',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getEntityConstructors: () => ({
+        Petition: PetitionWithoutFiles,
+      }),
+      getPersistenceGateway: () => {
+        return {
+          getUserById: () => ({
+            barnumber: '12345-67',
+          }),
+          saveCase: saveCaseStub,
+        };
+      },
+      getUseCases: () => ({
+        getUser: () => ({
+          address: '123',
+          email: 'test@example.com',
+          name: 'test taxpayer',
+          phone: '(123) 456-7890',
+        }),
+      }),
+    };
+
+    const createdCase = await createCase({
+      applicationContext,
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: 'other',
+        contactPrimary: {
+          name: 'Diana Prince',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+
+        irsNoticeDate: DATE,
+        partyType: 'Petitioner',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+      },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+    });
+
+    const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
+      .caseToSave;
+
+    expect(createdCase).toMatchObject({
+      practitioner: {
+        barnumber: '12345-67',
+      },
+    });
+    expect(caseRecordSentToPersistence).toMatchObject({
+      practitioner: {
+        barnumber: '12345-67',
+      },
+    });
   });
 });
