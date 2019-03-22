@@ -10,6 +10,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { TrialCity } from './StartCase/TrialCity';
+import { Text } from '../ustc-ui/Text/Text';
 
 export const StartCase = connect(
   {
@@ -124,11 +125,10 @@ export const StartCase = connect(
                       validateStartCaseSequence();
                     }}
                   />
-                  {validationErrors.petitionFile && (
-                    <span className="usa-input-error-message">
-                      {validationErrors.petitionFile}
-                    </span>
-                  )}
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.petitionFile"
+                  />
                 </div>
               </div>
             </div>
@@ -169,11 +169,10 @@ export const StartCase = connect(
                   validateStartCaseSequence();
                 }}
               />
-              {validationErrors.stinFile && (
-                <div className="usa-input-error-message">
-                  {validationErrors.stinFile}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.stinFile"
+              />
             </div>
           </div>
 
@@ -237,11 +236,10 @@ export const StartCase = connect(
                         </li>
                       ))}
                     </ul>
-                    {validationErrors.partyType && (
-                      <div className="usa-input-error-message">
-                        {validationErrors.partyType}
-                      </div>
-                    )}
+                    <Text
+                      className="usa-input-error-message"
+                      bind="validationErrors.partyType"
+                    />
                   </fieldset>
                 </div>
               </div>
@@ -589,9 +587,10 @@ export const StartCase = connect(
                     </li>
                   ))}
                 </ul>
-                <div className="usa-input-error-message">
-                  {validationErrors.hasIrsNotice}
-                </div>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.hasIrsNotice"
+                />
               </fieldset>
 
               {startCaseHelper.showHasIrsNoticeOptions && (
@@ -693,9 +692,10 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-input-error-message">
-                          {validationErrors.irsNoticeDate}
-                        </div>
+                        <Text
+                          className="usa-input-error-message"
+                          bind="validationErrors.irsNoticeDate"
+                        />
                       </div>
                     </fieldset>
                   </div>
@@ -785,13 +785,15 @@ export const StartCase = connect(
                 }}
               />
             )}
-            <div className="usa-input-error-message">
-              {validationErrors.procedureType}
-            </div>
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.procedureType"
+            />
             {!validationErrors.procedureType && (
-              <div className="usa-input-error-message">
-                {validationErrors.preferredTrialCity}
-              </div>
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.preferredTrialCity"
+              />
             )}
           </div>
           <h2>Review Your Information</h2>
@@ -839,11 +841,10 @@ export const StartCase = connect(
                 that you’ve verified all information is correct. You won’t be
                 able to edit your case once it’s submitted.
               </label>
-              {validationErrors.signature && (
-                <div className="usa-input-error-message">
-                  {validationErrors.signature}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.signature"
+              />
             </div>
           </div>
 
