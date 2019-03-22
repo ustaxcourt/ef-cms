@@ -8,7 +8,6 @@ export const CaseListPractitioner = connect(
     helper: state.dashboardPetitionerHelper,
   },
   ({ caseList, helper }) => {
-    helper.showCaseList = true;
     const renderTable = () => (
       <table className="responsive-table dashboard" id="case-list">
         <thead>
