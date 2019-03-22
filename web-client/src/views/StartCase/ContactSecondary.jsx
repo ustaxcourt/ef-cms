@@ -33,13 +33,13 @@ export const ContactSecondary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="contact-group">
+      <>
         {parentView === 'CaseDetail' ? (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         ) : (
           <h3>{contactsHelper.contactSecondary.header}</h3>
         )}
-        <div className="blue-container">
+        <div className="blue-container contact-group">
           <Country
             type="contactSecondary"
             bind={bind}
@@ -180,7 +180,7 @@ export const ContactSecondary = connect(
             </div>
           )}
         </div>
-      </div>
+      </>
     );
   },
 );
