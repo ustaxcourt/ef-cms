@@ -40,6 +40,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
   ],
+  practitioner: [exports.PETITION],
   respondent: [
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
