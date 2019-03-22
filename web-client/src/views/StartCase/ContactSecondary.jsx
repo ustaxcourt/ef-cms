@@ -33,7 +33,7 @@ export const ContactSecondary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group contact-group">
+      <div className="contact-group">
         {parentView === 'CaseDetail' ? (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         ) : (
@@ -48,7 +48,7 @@ export const ContactSecondary = connect(
           />
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
                 ? 'usa-input-error'
@@ -82,7 +82,7 @@ export const ContactSecondary = connect(
           {contactsHelper.contactSecondary.displayInCareOf && (
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.inCareOf
                   ? 'usa-input-error'
@@ -148,7 +148,7 @@ export const ContactSecondary = connect(
           {contactsHelper.contactSecondary.displayPhone && (
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
                   ? 'usa-input-error'

@@ -22,7 +22,7 @@ export const Address = connect(
       <React.Fragment>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].address1
@@ -52,7 +52,7 @@ export const Address = connect(
             bind={`validationErrors.${type}.address1`}
           />
         </div>
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor={`${type}.address2`}>
             Address Line 2 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -73,7 +73,7 @@ export const Address = connect(
             }}
           />
         </div>
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor={`${type}.address3`}>
             Address Line 3 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -103,7 +103,7 @@ export const Address = connect(
               : ''
           }
         >
-          <div className="usa-form-group ustc-form-group-city">
+          <div className="ustc-form-group ustc-form-group-city">
             <label htmlFor={`${type}.city`}>City</label>
             <input
               id={`${type}.city`}
@@ -130,7 +130,7 @@ export const Address = connect(
               }}
             />
           </div>
-          <div className="usa-form-group ustc-form-group-state">
+          <div className="ustc-form-group ustc-form-group-state">
             <label htmlFor={`${type}.state`}>State</label>
             <select
               className={
@@ -138,7 +138,7 @@ export const Address = connect(
                 (validationErrors &&
                 validationErrors[type] &&
                 validationErrors[type].state
-                  ? 'ustc-input-error'
+                  ? 'usa-input-error'
                   : '')
               }
               id={`${type}.state`}
@@ -232,7 +232,7 @@ export const Address = connect(
         </div>
         <div
           className={
-            'usa-form-group clear-both ' +
+            'ustc-form-group clear-both ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode

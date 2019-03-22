@@ -24,7 +24,7 @@ export const Country = connect(
       <React.Fragment>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].countryType
@@ -34,14 +34,7 @@ export const Country = connect(
         >
           <label htmlFor={`${type}.countryType`}>Country</label>
           <select
-            className={
-              `usa-input-inline ${type}-country-type ` +
-              (validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].countryType
-                ? 'ustc-input-error'
-                : '')
-            }
+            className={`${type}-country-type `}
             id={`${type}.countryType`}
             name={`${type}.countryType`}
             value={data[type].countryType}
@@ -68,7 +61,7 @@ export const Country = connect(
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].country
