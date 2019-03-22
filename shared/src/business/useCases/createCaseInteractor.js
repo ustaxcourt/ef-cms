@@ -84,14 +84,21 @@ exports.createCase = async ({
     },
   );
 
+  let practitioner = null;
+  if (user.role === 'practitioner') {
+    const practitionerUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({
+        applicationContext,
+        userId: user.userId,
+      });
+    practitioner = practitionerUser;
+  }
+
   const caseToAdd = new Case({
     userId: user.userId,
+    practitioner,
     ...petitionEntity.toRawObject(),
-    petitioners: [
-      {
-        ...user.toRawObject(),
-      },
-    ],
     docketNumber,
   });
 
