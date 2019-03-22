@@ -36,13 +36,13 @@ export const ContactPrimary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="contact-group">
+      <>
         {parentView === 'StartCase' ? (
           <h3>{contactsHelper.contactPrimary.header}</h3>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
-        <div className="blue-container">
+        <div className="blue-container contact-group">
           <Country
             type="contactPrimary"
             bind={bind}
@@ -203,7 +203,7 @@ export const ContactPrimary = connect(
             />
           </div>
         </div>
-      </div>
+      </>
     );
   },
 );
