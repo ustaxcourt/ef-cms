@@ -4,7 +4,7 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 
-const { UnauthorizedError } = require('../../errors/errors');
+const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
 
 /**
  *
@@ -29,11 +29,14 @@ exports.sendPetitionToIRSHoldingQueue = async ({
       caseId,
     });
 
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${caseId} was not found.`);
+  }
+
   const caseEntity = new Case(caseToUpdate);
   caseEntity.sendToIRSHoldingQueue();
 
   for (let workItem of caseEntity.getWorkItems()) {
-    workItem.caseStatus = caseEntity.status;
     if (workItem.isInitializeCase) {
       await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
         applicationContext,
@@ -61,10 +64,8 @@ exports.sendPetitionToIRSHoldingQueue = async ({
     });
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
-
-  return { message: 'success' };
 };

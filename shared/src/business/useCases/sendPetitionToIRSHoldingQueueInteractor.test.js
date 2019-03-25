@@ -39,6 +39,36 @@ const MOCK_WORK_ITEMS = [
     updatedAt: '2018-12-27T18:06:02.968Z',
     workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   },
+  {
+    assigneeId: null,
+    assigneeName: 'Test Petitionsclerk',
+    caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    caseStatus: 'Batched for IRS',
+    createdAt: '2018-12-27T18:12:02.971Z',
+    docketNumber: '101-18',
+    docketNumberSuffix: 'S',
+    document: {
+      createdAt: '2018-12-27T18:06:02.968Z',
+      documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+      documentType: Case.documentTypes.petitionFile,
+    },
+    isInitializeCase: false,
+    messages: [
+      {
+        createdAt: '2018-12-27T18:06:02.968Z',
+        from: 'Petitioner',
+        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        message: 'Test messsage',
+        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
+        role: 'petitioner',
+        to: null,
+      },
+    ],
+    section: 'petitions',
+    sentBy: 'petitioner',
+    updatedAt: '2018-12-27T18:06:02.968Z',
+    workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+  },
 ];
 describe('Send petition to IRS Holding Queue', () => {
   let applicationContext;
@@ -58,8 +88,13 @@ describe('Send petition to IRS Holding Queue', () => {
       },
       getPersistenceGateway: () => {
         return {
+          addWorkItemToSectionInbox: () => Promise.resolve(null),
+          deleteWorkItemFromInbox: () => Promise.resolve(null),
           getCaseByCaseId: () => Promise.resolve(mockCase),
-          saveCase: ({ caseToSave }) => Promise.resolve(new Case(caseToSave)),
+          putWorkItemInOutbox: () => Promise.resolve(null),
+          updateCase: ({ caseToUpdate }) =>
+            Promise.resolve(new Case(caseToUpdate)),
+          updateWorkItem: () => Promise.resolve(null),
         };
       },
       getUseCases: () => ({ getCase }),
@@ -88,9 +123,7 @@ describe('Send petition to IRS Holding Queue', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toContain(
-      'Unauthorized for send to IRS Holding Queue',
-    );
+    expect(error.message).toContain('Unauthorized for update case');
   });
 
   it('case not found if caseId does not exist', async () => {
@@ -98,6 +131,7 @@ describe('Send petition to IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
+          name: 'Suzie Petitionsclerk',
           role: 'petitionsclerk',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
@@ -105,7 +139,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => null,
-          saveCase: () => null,
+          updateCase: () => null,
         };
       },
       getUseCases: () => ({ getCase }),
@@ -130,12 +164,22 @@ describe('Send petition to IRS Holding Queue', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
-        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+        return new User({
+          name: 'Suzie Petitionsclerk',
+          role: 'petitionsclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
       },
       getPersistenceGateway: () => {
         return {
+          addWorkItemToSectionInbox: () => Promise.resolve(null),
+          deleteWorkItemFromInbox: () => Promise.resolve(null),
           getCaseByCaseId: () =>
             Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
+          putWorkItemInOutbox: () => Promise.resolve(null),
+          updateCase: ({ caseToUpdate }) =>
+            Promise.resolve(new Case(caseToUpdate)),
+          updateWorkItem: () => Promise.resolve(null),
         };
       },
       getUseCases: () => ({ getCase }),
