@@ -1,4 +1,7 @@
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const {
+  handle,
+  getUserFromAuthHeader,
+} = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
 
 /**

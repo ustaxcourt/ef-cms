@@ -1,7 +1,7 @@
 const assert = require('assert');
 
 const { Case } = require('./Case');
-const DocketRecord = require('./DocketRecord');
+const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 

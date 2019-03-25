@@ -1,4 +1,4 @@
-const Petition = require('../Petition');
+const { Petition } = require('../Petition');
 const { PARTY_TYPES } = require('./PetitionContact');
 
 let petition;
