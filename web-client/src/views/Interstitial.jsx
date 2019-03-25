@@ -10,7 +10,7 @@ export const Interstitial = connect(
   ({ alertHelper }) => {
     return (
       <>
-        {!alertHelper.showErrorAlert && (
+        {alertHelper.showErrorAlert && (
           <section className="usa-section usa-grid">
             <h1 tabIndex="-1">We’re experiencing technical problems</h1>
             <h2>Where do you go from here?</h2>
@@ -28,7 +28,7 @@ export const Interstitial = connect(
             </button>
           </section>
         )}
-        {alertHelper.showErrorAlert && (
+        {!alertHelper.showErrorAlert && (
           <>
             <div
               aria-label="please wait"
