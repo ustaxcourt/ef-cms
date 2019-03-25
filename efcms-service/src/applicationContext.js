@@ -162,10 +162,14 @@ const {
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
-const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
-const PetitionFromPaper = require('ef-cms-shared/src/business/entities/PetitionFromPaper');
+const {
+  PetitionFromPaper,
+} = require('ef-cms-shared/src/business/entities/PetitionFromPaper');
+const {
+  PetitionWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
-const User = require('ef-cms-shared/src/business/entities/User');
+const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -186,9 +190,6 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-/**
- *
- */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 

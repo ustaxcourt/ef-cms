@@ -34,4 +34,4 @@ joiValidationDecorator(
   },
 );
 
-module.exports.InitialWorkItemMessage = InitialWorkItemMessage;
+module.exports = { InitialWorkItemMessage };

@@ -46,4 +46,4 @@ joiValidationDecorator(
   PetitionFromPaper.errorToMessageMap,
 );
 
-module.exports = PetitionFromPaper;
+module.exports = { PetitionFromPaper };
