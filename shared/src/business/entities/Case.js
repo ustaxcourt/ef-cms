@@ -21,6 +21,8 @@ const statusMap = {
   recalled: 'Recalled',
 };
 
+exports.STATUS_TYPES = statusMap;
+
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 const CASE_TYPES = [
@@ -670,6 +672,18 @@ Case.getProcedureTypes = () => {
  */
 Case.getFilingTypes = userRole => {
   return FILING_TYPES[userRole];
+};
+
+/**
+ * getWorkItems
+ * @returns {WorkItem[]}
+ */
+Case.prototype.getWorkItems = function() {
+  let workItems = [];
+  this.documents.forEach(
+    document => (workItems = [...workItems, ...(document.workItems || [])]),
+  );
+  return workItems;
 };
 
 exports.Case = Case;
