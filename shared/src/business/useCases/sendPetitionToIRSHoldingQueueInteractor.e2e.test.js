@@ -92,7 +92,7 @@ const MOCK_CASE = {
   procedureType: 'Regular',
   status: 'New',
 };
-const User = require('../entities/User');
+const { User } = require('../entities/User');
 const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
