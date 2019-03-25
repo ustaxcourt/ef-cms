@@ -3,8 +3,27 @@ const { getSentWorkItemsForUser } = require('./getSentWorkItemsForUser');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 
+const MOCK_ITEM = {
+  docketNumber: '123-19',
+  status: 'New',
+};
+
 describe('getSentWorkItemsForUser', () => {
+  let getStub;
+
   beforeEach(() => {
+    getStub = sinon.stub().returns({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            'aws:rep:deleting': 'a',
+            'aws:rep:updateregion': 'b',
+            'aws:rep:updatetime': 'c',
+            ...MOCK_ITEM,
+          },
+        }),
+    });
+
     sinon.stub(client, 'query').resolves([
       {
         pk: 'abc',
@@ -35,12 +54,18 @@ describe('getSentWorkItemsForUser', () => {
       environment: {
         stage: 'dev',
       },
+      getDocumentClient: () => ({
+        get: getStub,
+      }),
+      isAuthorizedForWorkItems: () => {
+        return true;
+      },
     };
     await getSentWorkItemsForUser({
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(client.query.getCall(0).args[0]).toEqual({
+    expect(client.query.getCall(0).args[0]).toMatchObject({
       applicationContext: { environment: { stage: 'dev' } },
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
