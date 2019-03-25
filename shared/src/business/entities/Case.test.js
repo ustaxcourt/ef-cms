@@ -654,6 +654,20 @@ describe('Case entity', () => {
       expect(filingTypes[0]).toEqual('Myself');
     });
 
+    it('returns the filing types for user role petitioner as default', () => {
+      const filingTypes = Case.getFilingTypes();
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
+    it('returns the filing types for user role petitioner for unknown role', () => {
+      const filingTypes = Case.getFilingTypes('whodat');
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
     it('returns the filing types for user role practitioner', () => {
       const filingTypes = Case.getFilingTypes('practitioner');
       expect(filingTypes).not.toBeNull();

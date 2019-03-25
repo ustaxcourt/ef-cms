@@ -36,6 +36,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
     exports.GET_CASES_BY_STATUS,
+    exports.PETITION,
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,

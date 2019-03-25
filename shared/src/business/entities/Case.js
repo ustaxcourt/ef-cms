@@ -669,7 +669,7 @@ Case.getProcedureTypes = () => {
  * @returns {string[]}
  */
 Case.getFilingTypes = userRole => {
-  return FILING_TYPES[userRole];
+  return FILING_TYPES[userRole] || FILING_TYPES.petitioner;
 };
 
 exports.Case = Case;
