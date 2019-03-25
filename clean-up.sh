@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 pushd shared
 rm -rf node_modules
 rm package-lock.json
