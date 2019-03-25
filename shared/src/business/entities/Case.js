@@ -42,7 +42,15 @@ const CASE_TYPES = [
 // This is the order that they appear in the UI
 const PROCEDURE_TYPES = ['Regular', 'Small'];
 
-const FILING_TYPES = ['Myself', 'Myself and my spouse', 'A business', 'Other'];
+const FILING_TYPES = {
+  petitioner: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  practitioner: [
+    'Individual petitioner',
+    'Petitioner and spouse',
+    'A business',
+    'Other',
+  ],
+};
 
 exports.CASE_CAPTION_POSTFIX =
   'v. Commissioner of Internal Revenue, Respondent';
@@ -657,10 +665,11 @@ Case.getProcedureTypes = () => {
 
 /**
  * getFilingTypes
+ * @param userRole - the role of the user logged in
  * @returns {string[]}
  */
-Case.getFilingTypes = () => {
-  return FILING_TYPES;
+Case.getFilingTypes = userRole => {
+  return FILING_TYPES[userRole];
 };
 
 exports.Case = Case;
