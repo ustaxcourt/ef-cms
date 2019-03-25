@@ -8,7 +8,7 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 const uuid = require('uuid');
-const Message = require('./Message');
+const { Message } = require('./Message');
 const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 
 /**
@@ -219,4 +219,4 @@ WorkItem.prototype.setAsSentToIRS = function() {
   return this;
 };
 
-module.exports = WorkItem;
+module.exports = { WorkItem };

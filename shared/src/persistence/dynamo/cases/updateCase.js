@@ -10,7 +10,7 @@ const { saveVersionedCase } = require('./saveCase');
  * @returns {*}
  */
 exports.updateCase = async ({ caseToUpdate, applicationContext }) => {
-  await saveVersionedCase({
+  return await saveVersionedCase({
     applicationContext,
     caseToSave: caseToUpdate,
     existingVersion: (caseToUpdate || {}).currentVersion,
