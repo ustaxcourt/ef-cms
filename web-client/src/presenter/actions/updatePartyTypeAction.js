@@ -18,10 +18,8 @@ export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';
   const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
   if (props.key === 'filingType') {
-    switch (props.value) {
-      case 'Myself':
-        partyType = PARTY_TYPES.petitioner;
-        break;
+    if (props.value === 'Myself' || props.value === 'Individual petitioner') {
+      partyType = PARTY_TYPES.petitioner;
     }
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
