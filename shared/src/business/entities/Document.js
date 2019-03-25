@@ -29,6 +29,7 @@ function Document(rawDocument) {
 }
 
 Document.name = 'Document';
+
 /**
  *
  * @returns {boolean}
@@ -73,6 +74,7 @@ joiValidationDecorator(
     return WorkItem.validateCollection(this.workItems);
   },
 );
+
 /**
  *
  * @param workItem
