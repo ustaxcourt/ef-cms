@@ -1,7 +1,7 @@
 const {
   validateForwardMessage,
 } = require('./validateForwardMessageInteractor');
-const ForwardMessage = require('../../entities/ForwardMessage');
+const { ForwardMessage } = require('../../entities/ForwardMessage');
 
 describe('validateForwardMessage', () => {
   it('returns the expected errors object on an empty message', () => {

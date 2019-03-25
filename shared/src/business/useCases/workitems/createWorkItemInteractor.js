@@ -1,5 +1,5 @@
-const WorkItem = require('../../entities/WorkItem');
-const Message = require('../../entities/Message');
+const { WorkItem } = require('../../entities/WorkItem');
+const { Message } = require('../../entities/Message');
 const { Case } = require('../../entities/Case');
 
 const {

@@ -1,4 +1,4 @@
-const Petition = require('./Petition');
+const { Petition } = require('./Petition');
 
 describe('Petition entity', () => {
   describe('isValid', () => {

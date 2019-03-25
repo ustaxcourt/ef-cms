@@ -1,4 +1,4 @@
-const DocketRecord = require('./DocketRecord');
+const { DocketRecord } = require('./DocketRecord');
 
 describe('DocketRecord', () => {
   describe('validation', () => {

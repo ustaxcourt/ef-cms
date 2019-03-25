@@ -34,4 +34,4 @@ joiValidationDecorator(
   },
 );
 
-module.exports = ForwardMessage;
+module.exports = { ForwardMessage };

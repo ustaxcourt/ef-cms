@@ -9,7 +9,7 @@ const headers = {
   'Access-Control-Allow-Origin': '*',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
-  'Pragma': 'no-cache',
+  Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
 };
 
@@ -110,7 +110,7 @@ exports.getAuthHeader = event => {
   let usernameTokenArray;
   const authorizationHeader =
     event.headers &&
-    (event.headers.Authorization || event.headers.authorization)
+    (event.headers.Authorization || event.headers.authorization);
   if ((event.queryStringParameters || {}).token) {
     return (event.queryStringParameters || {}).token;
   }
@@ -130,7 +130,7 @@ exports.getAuthHeader = event => {
 
 /**
  * extracts and decodes the JWT token from the gateway response event's header / query string and returns the decoded user object
- * 
+ *
  * @param {Object} event the api gateway request event
  * @returns {Object} the user decoded from the JWT token
  */
