@@ -36,6 +36,15 @@ export const WorkQueue = connect(
               <SectionWorkQueue />
             </div>
           </Tab>
+          <div className="fix-top-right">
+            <a
+              className="usa-button new-case"
+              href="/start-a-case"
+              id="init-file-petition"
+            >
+              Start a Case
+            </a>
+          </div>
         </Tabs>
         {workQueueHelper.showRunBatchIRSProcessButton && (
           <button
