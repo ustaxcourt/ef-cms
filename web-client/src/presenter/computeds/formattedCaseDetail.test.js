@@ -294,5 +294,19 @@ describe('formatYearAmounts', () => {
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
     });
+    it('should not add barnumber into formatted name if not available', async () => {
+      const caseDetail = {
+        caseCaption: 'Sisqo, Petitioner',
+        petitioners: [{ name: 'bob' }],
+        practitioner: { name: 'Jackie Chan' },
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.practitioner.formattedName).toEqual('Jackie Chan');
+    });
   });
 });
