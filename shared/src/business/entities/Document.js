@@ -81,4 +81,4 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-module.exports = Document;
+module.exports = { Document };

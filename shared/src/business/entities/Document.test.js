@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const Document = require('./Document');
+const { Document } = require('./Document');
 const WorkItem = require('./WorkItem');
 const Message = require('./Message');
 
