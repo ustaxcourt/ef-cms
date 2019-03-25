@@ -4,11 +4,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
-const { uniqBy } = require('lodash');
-const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const YearAmount = require('./YearAmount');
 const { DocketRecord } = require('./DocketRecord');
+const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
+const { uniqBy } = require('lodash');
+const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
   version: ['uuidv4'],

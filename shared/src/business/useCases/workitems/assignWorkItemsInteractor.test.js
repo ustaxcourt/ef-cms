@@ -1,6 +1,6 @@
 const { assignWorkItems } = require('./assignWorkItemsInteractor');
 const _ = require('lodash');
-const User = require('../../entities/User');
+const { User } = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,

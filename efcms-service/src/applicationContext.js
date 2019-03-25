@@ -9,7 +9,7 @@ const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 const {
-  deleteWorkItemFromSection
+  deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
   deleteDocument,
@@ -162,9 +162,11 @@ const {
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
-const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+const {
+  PetitionWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
-const User = require('ef-cms-shared/src/business/entities/User');
+const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -185,9 +187,6 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-/**
- *
- */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 

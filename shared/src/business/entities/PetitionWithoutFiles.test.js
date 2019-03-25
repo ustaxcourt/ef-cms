@@ -1,4 +1,4 @@
-const PetitionWithoutFiles = require('./PetitionWithoutFiles');
+const { PetitionWithoutFiles } = require('./PetitionWithoutFiles');
 
 describe('PetitionWithoutFiles entity', () => {
   describe('isValid', () => {
