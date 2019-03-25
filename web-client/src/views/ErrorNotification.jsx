@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 class ErrorNotificationComponent extends React.Component {
   componentDidUpdate() {
