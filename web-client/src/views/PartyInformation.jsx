@@ -20,7 +20,8 @@ export const PartyInformation = connect(
               <span className="address-line">{contact.address3}</span>
             )}
             <span className="address-line">
-              {contact.city}, {contact.state} {contact.postalCode}
+              {contact.city && `${contact.city}, `}
+              {contact.state} {contact.postalCode}
             </span>
             <span className="address-line">
               {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&

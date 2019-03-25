@@ -1,7 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
 import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
 
 describe('formatYearAmounts', () => {
   it('does not return 2018 when a blank string is passed in', () => {
@@ -122,9 +121,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -141,9 +137,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -161,9 +154,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -181,9 +171,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -208,9 +195,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
@@ -244,9 +228,6 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          CASE_CAPTION_POSTFIX,
-        },
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
@@ -264,9 +245,6 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants: {
-            CASE_CAPTION_POSTFIX,
-          },
         },
       });
       expect(result.caseName).toEqual('Sisqo');
@@ -281,9 +259,6 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants: {
-            CASE_CAPTION_POSTFIX,
-          },
         },
       });
       expect(result.caseName).toEqual('Sisqo and friends');
@@ -298,12 +273,26 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants: {
-            CASE_CAPTION_POSTFIX,
-          },
         },
       });
       expect(result.caseName).toEqual("Sisqo's entourage,");
+    });
+  });
+
+  describe('practitioner mapping', () => {
+    it('should add barnumber into formatted name if available', async () => {
+      const caseDetail = {
+        caseCaption: 'Sisqo, Petitioner',
+        petitioners: [{ name: 'bob' }],
+        practitioner: { barNumber: '9999', name: 'Jackie Chan' },
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
     });
   });
 });
