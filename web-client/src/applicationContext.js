@@ -55,6 +55,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import ForwardMessage from '../../shared/src/business/entities/ForwardMessage';
 import Petition from '../../shared/src/business/entities/Petition';
+import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 
 const {
   uploadDocument,
@@ -111,6 +112,7 @@ const allUseCases = {
   validateForwardMessage,
   validateInitialWorkItemMessage,
   validatePetition,
+  validatePetitionFromPaper,
 };
 tryCatchDecorator(allUseCases);
 

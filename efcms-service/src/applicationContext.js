@@ -9,7 +9,7 @@ const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 const {
-  deleteWorkItemFromSection
+  deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
   deleteDocument,
@@ -163,6 +163,7 @@ const {
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+const PetitionFromPaper = require('ef-cms-shared/src/business/entities/PetitionFromPaper');
 
 const User = require('ef-cms-shared/src/business/entities/User');
 
@@ -208,6 +209,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
+      PetitionFromPaper,
     }),
     getPersistenceGateway: () => {
       return {
