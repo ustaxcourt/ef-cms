@@ -255,7 +255,7 @@ export const StartCase = connect(
                   className="usa-fieldset-inputs usa-sans"
                 >
                   <legend htmlFor="deceased-spouse-radios">
-                    Is your spouse deceased?
+                    {startCaseHelper.deceasedSpouseLegend}
                   </legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map((isSpouseDeceased, idx) => (
@@ -443,8 +443,7 @@ export const StartCase = connect(
                     className="usa-fieldset-inputs usa-sans"
                   >
                     <legend htmlFor="minorIncompetent-type-radios">
-                      What is your role in filing for this minor or legally
-                      incompetent person?
+                      {startCaseHelper.minorIncompetentLegend}
                     </legend>
                     <ul className="ustc-unstyled-list">
                       {[
@@ -549,7 +548,7 @@ export const StartCase = connect(
                   (validationErrors.hasIrsNotice ? 'usa-input-error' : '')
                 }
               >
-                <legend>Did you receive a Notice from the IRS?</legend>
+                <legend>{startCaseHelper.noticeLegend}</legend>
                 <ul className="usa-unstyled-list">
                   {['Yes', 'No'].map((hasIrsNotice, idx) => (
                     <li key={hasIrsNotice}>

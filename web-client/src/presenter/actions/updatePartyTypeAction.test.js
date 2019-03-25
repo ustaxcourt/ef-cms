@@ -27,6 +27,9 @@ const getFixtures = (props, state = {}) => ({
       COUNTRY_TYPES,
       PARTY_TYPES,
     },
+    user: {
+      role: 'petitioner',
+    },
   },
 });
 

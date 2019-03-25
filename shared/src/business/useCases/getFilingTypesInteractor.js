@@ -17,5 +17,5 @@ exports.getFilingTypes = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return Case.getFilingTypes();
+  return Case.getFilingTypes(user.role);
 };
