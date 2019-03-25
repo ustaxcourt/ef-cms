@@ -1,7 +1,8 @@
 const assert = require('assert');
 
 const { Case } = require('./Case');
-const DocketRecord = require('./DocketRecord');
+const { WorkItem } = require('./WorkItem');
+const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
@@ -654,6 +655,20 @@ describe('Case entity', () => {
       expect(filingTypes[0]).toEqual('Myself');
     });
 
+    it('returns the filing types for user role petitioner as default', () => {
+      const filingTypes = Case.getFilingTypes();
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
+    it('returns the filing types for user role petitioner for unknown role', () => {
+      const filingTypes = Case.getFilingTypes('whodat');
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
     it('returns the filing types for user role practitioner', () => {
       const filingTypes = Case.getFilingTypes('practitioner');
       expect(filingTypes).not.toBeNull();
@@ -789,6 +804,42 @@ describe('Case entity', () => {
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
       }).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
+    });
+  });
+
+  describe('getWorkItems', () => {
+    it('should get all the work items associated with the documents in the case', () => {
+      const myCase = new Case(MOCK_CASE);
+      myCase.addDocument({
+        documentId: '123',
+        documentType: 'Answer',
+        userId: 'respondent',
+      });
+      const workItem = new WorkItem({
+        assigneeId: 'bob',
+        assigneeName: 'bob',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        caseStatus: 'new',
+        caseTitle: 'testing',
+        docketNumber: '101-18',
+        document: {},
+        sentBy: 'bob',
+      });
+      myCase.documents[0].addWorkItem(workItem);
+      const workItems = myCase.getWorkItems();
+      expect(workItems.length).toEqual(1);
+      expect(workItems).toMatchObject([
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          document: {},
+          sentBy: 'bob',
+        },
+      ]);
     });
   });
 });

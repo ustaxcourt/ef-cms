@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const Message = require('./Message');
+const { Message } = require('./Message');
 
 describe('Message', () => {
   describe('isValid', () => {

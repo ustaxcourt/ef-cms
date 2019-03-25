@@ -36,13 +36,13 @@ export const ContactPrimary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group contact-group">
+      <>
         {parentView === 'StartCase' ? (
           <h3>{contactsHelper.contactPrimary.header}</h3>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
-        <div className="blue-container usa-grid-full">
+        <div className="blue-container contact-group">
           <Country
             type="contactPrimary"
             bind={bind}
@@ -51,7 +51,7 @@ export const ContactPrimary = connect(
           />
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
                 ? 'usa-input-error'
@@ -83,7 +83,7 @@ export const ContactPrimary = connect(
             />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
-            <div className="usa-form-group">
+            <div className="ustc-form-group">
               <label htmlFor="title">
                 Title
                 <p className="usa-form-hint">For example, Executor, PR, etc.</p>
@@ -106,7 +106,7 @@ export const ContactPrimary = connect(
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.inCareOf
                   ? 'usa-input-error'
@@ -172,7 +172,7 @@ export const ContactPrimary = connect(
           <Email bind={emailBind} />
           <div
             className={
-              'usa-form-group phone-input ' +
+              'ustc-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
                 ? 'usa-input-error'
@@ -203,7 +203,7 @@ export const ContactPrimary = connect(
             />
           </div>
         </div>
-      </div>
+      </>
     );
   },
 );

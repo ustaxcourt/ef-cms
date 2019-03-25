@@ -36,11 +36,11 @@ RUN git config --global user.email "blank@example.com" && \
 
 COPY shared/package.json /home/app/shared/package.json
 COPY shared/package-lock.json /home/app/shared/package-lock.json
-RUN cd /home/app/shared && npm ci --only=production
+RUN cd /home/app/shared && npm i --only=production
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
-RUN cd /home/app/efcms-service && npm ci
+RUN cd /home/app/efcms-service && npm i
 
 COPY . /home/app
 

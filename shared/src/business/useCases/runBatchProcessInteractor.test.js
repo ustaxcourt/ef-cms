@@ -1,6 +1,6 @@
 const { runBatchProcess } = require('./runBatchProcessInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const User = require('../entities/User');
+const { User } = require('../entities/User');
 const { Case } = require('../entities/Case');
 const sinon = require('sinon');
 
