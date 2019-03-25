@@ -20,7 +20,8 @@ export const PartyInformation = connect(
               <span className="address-line">{contact.address3}</span>
             )}
             <span className="address-line">
-              {contact.city}, {contact.state} {contact.postalCode}
+              {contact.city && `${contact.city}, `}
+              {contact.state} {contact.postalCode}
             </span>
             <span className="address-line">
               {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&
@@ -70,7 +71,25 @@ export const PartyInformation = connect(
               </React.Fragment>
             )}{' '}
           </div>
-
+          <div className="usa-width-one-sixth">
+            {caseDetail.practitioner && (
+              <React.Fragment>
+                <p className="label" id="petitioner-label">
+                  Petitioner Counsel
+                </p>
+                <div>
+                  <address aria-labelledby="petitioner-label">
+                    {caseDetail.practitioner.name &&
+                      addressDisplay({
+                        ...caseDetail.practitioner,
+                        name: caseDetail.practitioner.formattedName,
+                        address1: caseDetail.practitioner.address,
+                      })}
+                  </address>
+                </div>
+              </React.Fragment>
+            )}{' '}
+          </div>
           <div className="usa-width-one-sixth">
             {caseDetail.respondent && (
               <React.Fragment>

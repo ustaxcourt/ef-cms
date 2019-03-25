@@ -4,11 +4,11 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
 const uuid = require('uuid');
-const { uniqBy } = require('lodash');
+const { DocketRecord } = require('./DocketRecord');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const YearAmount = require('./YearAmount');
-const DocketRecord = require('./DocketRecord');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
+const { uniqBy } = require('lodash');
+const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -63,7 +63,7 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  const Document = require('./Document');
+  const { Document } = require('./Document');
 
   Object.assign(
     this,
@@ -222,7 +222,7 @@ joiValidationDecorator(
       .optional(),
   }),
   function() {
-    const Document = require('./Document');
+    const { Document } = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
@@ -413,7 +413,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
  * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
-  const Document = require('./Document');
+  const { Document } = require('./Document');
 
   this.irsSendDate = sendDate;
   this.status = statusMap.generalDocket;
@@ -671,7 +671,7 @@ Case.getProcedureTypes = () => {
  * @returns {string[]}
  */
 Case.getFilingTypes = userRole => {
-  return FILING_TYPES[userRole];
+  return FILING_TYPES[userRole] || FILING_TYPES.petitioner;
 };
 
 /**

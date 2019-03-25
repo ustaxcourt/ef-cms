@@ -1,8 +1,8 @@
 const assert = require('assert');
 
 const { Case } = require('./Case');
-const WorkItem = require('./WorkItem');
-const DocketRecord = require('./DocketRecord');
+const { WorkItem } = require('./WorkItem');
+const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
@@ -650,6 +650,20 @@ describe('Case entity', () => {
   describe('getFilingTypes', () => {
     it('returns the filing types for user role petitioner', () => {
       const filingTypes = Case.getFilingTypes('petitioner');
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
+    it('returns the filing types for user role petitioner as default', () => {
+      const filingTypes = Case.getFilingTypes();
+      expect(filingTypes).not.toBeNull();
+      expect(filingTypes.length).toEqual(4);
+      expect(filingTypes[0]).toEqual('Myself');
+    });
+
+    it('returns the filing types for user role petitioner for unknown role', () => {
+      const filingTypes = Case.getFilingTypes('whodat');
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
