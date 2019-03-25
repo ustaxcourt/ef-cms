@@ -31,4 +31,4 @@ joiValidationDecorator(
   }),
 );
 
-module.exports = PetitionWithoutFiles;
+module.exports = { PetitionWithoutFiles };

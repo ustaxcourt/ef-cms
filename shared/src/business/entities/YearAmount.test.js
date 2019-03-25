@@ -1,4 +1,4 @@
-const YearAmount = require('./YearAmount');
+const { YearAmount } = require('./YearAmount');
 
 describe('YearAmount', () => {
   describe('isValid - year', () => {

@@ -1,4 +1,4 @@
-const Petition = require('./Petition');
+const { Petition } = require('./Petition');
 
 describe('Petition', () => {
   describe('for Partnership (as the tax matters partner) Contacts', () => {

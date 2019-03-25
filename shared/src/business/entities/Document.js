@@ -12,7 +12,7 @@ const uuidVersions = {
 
 const petitionDocumentTypes = ['Petition'];
 
-const WorkItem = require('./WorkItem');
+const { WorkItem } = require('./WorkItem');
 
 /**
  * constructor

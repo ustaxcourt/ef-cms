@@ -5,7 +5,7 @@ const {
 const { getCase } = require('./getCaseInteractor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
-const User = require('../entities/User');
+const { User } = require('../entities/User');
 const { Case } = require('../entities/Case');
 
 const MOCK_WORK_ITEMS = [

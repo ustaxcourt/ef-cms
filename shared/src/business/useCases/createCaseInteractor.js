@@ -1,8 +1,9 @@
 const { Case } = require('../entities/Case');
-const WorkItem = require('../entities/WorkItem');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
-const Message = require('../entities/Message');
+const { Message } = require('../entities/Message');
+const { WorkItem } = require('../entities/WorkItem');
+
 const { capitalize } = require('lodash');
 
 const {
@@ -63,10 +64,10 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
  * @returns {Promise<*>}
  */
 exports.createCase = async ({
-  petitionMetadata,
-  petitionFileId,
-  ownershipDisclosureFileId,
   applicationContext,
+  ownershipDisclosureFileId,
+  petitionFileId,
+  petitionMetadata,
   stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();

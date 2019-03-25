@@ -51,4 +51,4 @@ joiValidationDecorator(
   }),
 );
 
-module.exports = Message;
+module.exports = { Message };
