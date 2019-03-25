@@ -1,9 +1,10 @@
-const { Case } = require('../entities/Case');
-const WorkItem = require('../entities/WorkItem');
-const Message = require('../entities/Message');
-const Document = require('../entities/Document');
-const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { capitalize } = require('lodash');
+
+const { Case } = require('../entities/Case');
+const { DOCKET_SECTION } = require('../entities/WorkQueue');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
+const { WorkItem } = require('../entities/WorkItem');
 
 exports.createDocument = async ({ applicationContext, caseId, document }) => {
   const user = applicationContext.getCurrentUser();
