@@ -41,4 +41,4 @@ joiValidationDecorator(
   {},
 );
 
-module.exports = DocketRecord;
+module.exports = { DocketRecord };

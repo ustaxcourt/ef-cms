@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const { uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const YearAmount = require('./YearAmount');
-const DocketRecord = require('./DocketRecord');
+const { DocketRecord } = require('./DocketRecord');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
 const uuidVersions = {
@@ -61,7 +61,7 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  const Document = require('./Document');
+  const { Document } = require('./Document');
 
   Object.assign(
     this,
@@ -220,7 +220,7 @@ joiValidationDecorator(
       .optional(),
   }),
   function() {
-    const Document = require('./Document');
+    const { Document } = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
@@ -411,7 +411,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
  * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
-  const Document = require('./Document');
+  const { Document } = require('./Document');
 
   this.irsSendDate = sendDate;
   this.status = statusMap.generalDocket;
