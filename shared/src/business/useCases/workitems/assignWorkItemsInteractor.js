@@ -3,8 +3,8 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
-const Message = require('../../entities/Message');
+const { WorkItem } = require('../../entities/WorkItem');
+const { Message } = require('../../entities/Message');
 
 /**
  * getWorkItem
