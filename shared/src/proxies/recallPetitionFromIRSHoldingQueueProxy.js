@@ -12,6 +12,6 @@ exports.recallPetitionFromIRSHoldingQueue = ({
 }) => {
   return remove({
     applicationContext,
-    endpoint: `/cases/${caseId}/irsPetitionPackage`,
+    endpoint: `/cases/${caseId}/recallFromIRSHoldingQueue`,
   });
 };

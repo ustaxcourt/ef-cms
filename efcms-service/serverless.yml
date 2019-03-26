@@ -102,6 +102,7 @@ provider:
     - Effect: 'Allow'
       Action:
         - cognito-idp:AdminCreateUser
+        - cognito-idp:AdminGetUser
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
@@ -309,7 +310,7 @@ functions:
     handler: src/cases/sendPetitionToIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/sendToIRSHoldingQueue
           method: post
           cors: true
           authorizer:
@@ -321,7 +322,7 @@ functions:
     handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/recallFromIRSHoldingQueue
           method: delete
           cors: true
           authorizer:
