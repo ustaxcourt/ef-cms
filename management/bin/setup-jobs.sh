@@ -32,11 +32,11 @@ sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/cleanup/config.xml.tpl \
 
 sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-api-deploy/config.xml.tpl \
   | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
-  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/cleanup/config.xml
+  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-api-deploy/config.xml
 
 sed "s|GITHUB_URL|${GITHUB_URL}|g" ../jobs/ef-cms-ui-deploy/config.xml.tpl \
   | sed "s|REPO_OWNER|${REPO_OWNER}|g" \
-  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/cleanup/config.xml
+  | sed "s|REPOSITORY|${REPOSITORY}|g" > ../jobs/ef-cms-ui-deploy/config.xml
 
 echo "creating job directories on Jenkins machine"
 ssh -A -oStrictHostKeyChecking=no ubuntu@${BASTION_PUBLIC_IP} "ssh -oStrictHostKeyChecking=no bitnami@${JENKINS_PRIVATE_IP} 'sudo su -c \"mkdir -p /opt/bitnami/apps/jenkins/jenkins_home/jobs/ef-cms\" tomcat'"
