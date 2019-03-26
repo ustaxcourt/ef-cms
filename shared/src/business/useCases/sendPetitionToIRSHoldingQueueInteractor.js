@@ -4,11 +4,7 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 
-const {
-  UnauthorizedError,
-  InvalidEntityError,
-  NotFoundError,
-} = require('../../errors/errors');
+const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
 
 /**
  *
@@ -23,47 +19,53 @@ exports.sendPetitionToIRSHoldingQueue = async ({
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {
-    throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
+    throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const caseRecord = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
       caseId,
     });
 
-  if (!caseRecord) {
-    throw new NotFoundError(`Case ${caseId} was not found`);
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case(caseRecord).validate();
+  const caseEntity = new Case(caseToUpdate);
+  caseEntity.sendToIRSHoldingQueue();
 
-  const petitionDocument = caseEntity.documents.find(
-    document => document.documentType === Case.documentTypes.petitionFile,
-  );
-  const initializeCaseWorkItem = petitionDocument.workItems.find(
-    workItem => workItem.isInitializeCase,
-  );
-
-  if (initializeCaseWorkItem) {
-    initializeCaseWorkItem.assignToIRSBatchSystem({
-      name: user.name,
-      userId: user.userId,
-    });
-    const invalidEntityError = new InvalidEntityError(
-      'Invalid for send to IRS',
-    );
-    caseEntity.validateWithError(invalidEntityError);
-
-    caseEntity.sendToIRSHoldingQueue().validateWithError(invalidEntityError);
-    return await applicationContext.getPersistenceGateway().saveCase({
+  for (let workItem of caseEntity.getWorkItems()) {
+    if (workItem.isInitializeCase) {
+      await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+      workItem.assignToIRSBatchSystem({
+        name: user.name,
+        userId: user.userId,
+        userRole: user.role,
+      });
+      await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+      await applicationContext
+        .getPersistenceGateway()
+        .addWorkItemToSectionInbox({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
+    }
+    await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,
-      caseToSave: caseEntity.toRawObject(),
+      workItemToUpdate: workItem.validate().toRawObject(),
     });
-  } else {
-    throw new NotFoundError(
-      `Petition workItem for Case ${caseId} was not found`,
-    );
   }
+
+  return await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 };

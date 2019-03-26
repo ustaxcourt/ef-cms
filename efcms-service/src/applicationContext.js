@@ -12,6 +12,12 @@ const {
   deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  deleteWorkItemFromInbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
+const {
+  addWorkItemToSectionInbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
+const {
   deleteDocument,
 } = require('ef-cms-shared/src/persistence/s3/deleteDocument');
 
@@ -36,6 +42,12 @@ const {
 const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  updateWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  putWorkItemInOutbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
   getWorkItemsBySection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
@@ -125,7 +137,7 @@ const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
-  updateWorkItem,
+  updateWorkItem: updateWorkItemUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
 const {
   createDocument,
@@ -210,9 +222,11 @@ module.exports = (appContextUser = {}) => {
     }),
     getPersistenceGateway: () => {
       return {
+        addWorkItemToSectionInbox,
         createUser,
         createWorkItem,
         deleteDocument,
+        deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
@@ -230,9 +244,11 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
+        putWorkItemInOutbox,
         saveCase,
         saveWorkItem,
         updateCase,
+        updateWorkItem,
         zipDocuments,
       };
     },
@@ -272,7 +288,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
-        updateWorkItem,
+        updateWorkItem: updateWorkItemUC,
       };
     },
     irsGateway,

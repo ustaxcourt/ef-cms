@@ -309,7 +309,7 @@ functions:
     handler: src/cases/sendPetitionToIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/sendToIRSHoldingQueue
           method: post
           cors: true
           authorizer:
@@ -321,7 +321,7 @@ functions:
     handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/recallFromIRSHoldingQueue
           method: delete
           cors: true
           authorizer:
