@@ -1,17 +1,15 @@
+const { get } = require('./requests');
+
 /**
  *
  * @param applicationContext
  * @param userId
  * @returns {Promise<*>}
  */
-exports.getCasesByUser = async ({ applicationContext }) => {
+exports.getCasesByUser = ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
-  const response = await applicationContext
-    .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/users/${user.userId}/cases`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    });
-  return response.data;
+  return get({
+    applicationContext,
+    endpoint: `/users/${user.userId}/cases`,
+  });
 };

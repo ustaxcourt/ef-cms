@@ -13,8 +13,6 @@ exports.saveVersionedCase = async ({
   caseToSave,
   applicationContext,
 }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
-
   // used for associating a case to the latest version
   const currentVersion = existingVersion;
   const nextVersionToSave = parseInt(currentVersion || '0') + 1;
@@ -28,7 +26,6 @@ exports.saveVersionedCase = async ({
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
-    TableName: TABLE,
   });
 
   // add a history entry
@@ -40,7 +37,6 @@ exports.saveVersionedCase = async ({
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
-    TableName: TABLE,
   });
 };
 /**
@@ -50,14 +46,12 @@ exports.saveVersionedCase = async ({
  * @returns {*}
  */
 exports.saveCase = async ({ caseToSave, applicationContext }) => {
-  const TABLE = `efcms-${applicationContext.environment.stage}`;
   const currentCaseState = await client.get({
     applicationContext,
     Key: {
       pk: caseToSave.caseId,
       sk: '0',
     },
-    TableName: TABLE,
   });
 
   if (!currentCaseState) {
@@ -105,7 +99,6 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
           pk: `${currentStatus}|case-status`,
           sk: caseToSave.caseId,
         },
-        tableName: TABLE,
       });
     }
 
@@ -115,7 +108,6 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
         pk: `${caseToSave.status}|case-status`,
         sk: caseToSave.caseId,
       },
-      TableName: TABLE,
     });
   }
 

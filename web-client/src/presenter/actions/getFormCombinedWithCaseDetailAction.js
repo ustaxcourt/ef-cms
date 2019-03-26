@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 import moment from 'moment';
 
 /**
- * returns a generic success alert for when a file is successfully uploaded.
+ *
  *
  * @param {string} dateString the date string to cast to an ISO string
  * @returns {string} the ISO string.
@@ -16,11 +16,13 @@ export const castToISO = dateString => {
     .split('-')
     .map(segment => segment.padStart(2, '0'))
     .join('-');
-  if (moment(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+  if (moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
     return moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).toISOString();
-  } else if (moment(dateString, 'YYYY-MM-DD', true).isValid()) {
+  } else if (moment.utc(dateString, 'YYYY-MM-DD', true).isValid()) {
     return moment.utc(dateString, 'YYYY-MM-DD', true).toISOString();
-  } else if (moment(dateString, 'YYYY-MM-DDT00:00:00.000Z', true).isValid()) {
+  } else if (
+    moment.utc(dateString, 'YYYY-MM-DDT00:00:00.000Z', true).isValid()
+  ) {
     return moment
       .utc(dateString, 'YYYY-MM-DDT00:00:00.000Z', true)
       .toISOString();
@@ -66,7 +68,9 @@ const checkDate = (updatedDateString, originalDate) => {
  * @returns {Object} the combinedCaseDetailWithForm
  */
 export const getFormCombinedWithCaseDetailAction = ({ get }) => {
+  const { CASE_CAPTION_POSTFIX } = get(state.constants);
   const caseDetail = { ...get(state.caseDetail) };
+  let caseCaption = get(state.caseCaption);
   const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
     ...get(state.form),
   };
@@ -104,6 +108,10 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
       year: castToISO(yearAmount.year),
     }))
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
+
+  if (caseCaption && (caseCaption = caseCaption.trim())) {
+    caseDetail.caseTitle = `${caseCaption} ${CASE_CAPTION_POSTFIX}`;
+  }
 
   return {
     combinedCaseDetailWithForm: {

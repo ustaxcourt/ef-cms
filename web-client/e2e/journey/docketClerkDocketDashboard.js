@@ -1,13 +1,27 @@
+import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
-
-import { formattedSectionWorkQueue } from '../../src/presenter/computeds/formattedSectionWorkQueue';
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {
+    let sectionOutboxWorkQueue;
+    let answerWorkItem;
     await test.runSequence('gotoDashboardSequence');
+
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'my',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -22,12 +36,32 @@ export default test => {
     test.workItemId = workItem.workItemId;
 
     expect(workItem.messages[0]).toMatchObject({
-      message: 'A Stipulated Decision filed by Respondent is ready for review.',
-      sentBy: 'Test Respondent',
-      userId: 'respondent',
+      from: 'Test Respondent',
+      fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+      message: 'Stipulated Decision filed by Respondent is ready for review.',
     });
 
-    const formatted = runCompute(formattedSectionWorkQueue, {
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+    sectionOutboxWorkQueue = test.getState('workQueue');
+    answerWorkItem = sectionOutboxWorkQueue.find(
+      workItem => workItem.workItemId === test.answerWorkItemId,
+    );
+    expect(answerWorkItem.messages[0]).toMatchObject({
+      message: 'this is a new thread test message',
+    });
+
+    const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
     expect(formatted[0].createdAtFormatted).toBeDefined();
@@ -35,5 +69,10 @@ export default test => {
       `${test.docketNumber}W`,
     );
     expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
   });
 };

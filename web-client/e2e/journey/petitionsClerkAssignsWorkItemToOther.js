@@ -2,8 +2,8 @@ export default test => {
   return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'section',
       box: 'inbox',
+      queue: 'section',
     });
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -34,7 +34,7 @@ export default test => {
     // select an assignee
     expect(test.getState('assigneeId')).toBeNull();
     await test.runSequence('selectAssigneeSequence', {
-      assigneeId: 'petitionsclerk1',
+      assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk1',
     });
     expect(test.getState('assigneeId')).toBeDefined();
@@ -52,14 +52,14 @@ export default test => {
       workItem => workItem.workItemId === test.petitionWorkItemId,
     );
     expect(assignedWorkItem).toMatchObject({
-      assigneeId: 'petitionsclerk1',
+      assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
 
     // the work item should be removed from the individual work queue
     await test.runSequence('chooseWorkQueueSequence', {
-      queue: 'my',
       box: 'inbox',
+      queue: 'my',
     });
     const workQueue = test.getState('workQueue');
     const movedWorkItem = workQueue.find(

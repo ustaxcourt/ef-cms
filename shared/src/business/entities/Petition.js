@@ -1,9 +1,7 @@
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('./Contacts/PetitionContact');
-
-// TODO: rename the folder Contacts to lower case contacts
+const { instantiateContacts } = require('./contacts/PetitionContact');
 
 const joi = require('joi-browser');
 
@@ -42,6 +40,7 @@ Petition.errorToMessageMap = {
   preferredTrialCity: 'Preferred Trial City is a required field.',
   procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',
+  stinFile: 'Statement of Taxpayer Identification Number is required.',
 };
 
 joiValidationDecorator(
@@ -72,12 +71,13 @@ joiValidationDecorator(
       is: 'A business',
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }), // TODO: this should probably be required, but set to optional for now
+    }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
     signature: joi.boolean().required(),
+    stinFile: joi.object().required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();

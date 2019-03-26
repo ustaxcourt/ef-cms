@@ -18,13 +18,13 @@ export default test => {
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
       `${test.docketNumber}W`,
     );
-    expect(caseDetail.documents.length).toEqual(1);
+    expect(caseDetail.documents.length).toEqual(2);
     expect(caseDetail.preferredTrialCity).toEqual('Chattanooga, TN');
     await test.runSequence('viewDocumentSequence', {
-      documentId: test.getState('caseDetail.documents.0.documentId'),
       callback: documentBlob => {
         expect(documentBlob).toBeTruthy();
       },
+      documentId: test.getState('caseDetail.documents.0.documentId'),
     });
   });
 };

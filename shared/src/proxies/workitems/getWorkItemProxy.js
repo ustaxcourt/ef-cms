@@ -1,3 +1,5 @@
+const { get } = require('../requests');
+
 /**
  * getWorkItemProxy
  *
@@ -6,13 +8,9 @@
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getWorkItem = async ({ applicationContext, workItemId }) => {
-  const response = await applicationContext
-    .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/workitems/${workItemId}`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
-    });
-  return response.data;
+exports.getWorkItem = ({ applicationContext, workItemId }) => {
+  return get({
+    applicationContext,
+    endpoint: `/workitems/${workItemId}`,
+  });
 };

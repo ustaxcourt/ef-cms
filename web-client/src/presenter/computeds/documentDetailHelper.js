@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import _ from 'lodash';
 import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
+import { state } from 'cerebral';
 
 export default get => {
   const caseDetail = get(state.caseDetail);
@@ -12,10 +13,25 @@ export default get => {
   let formattedDocument = {};
   if (selectedDocument) {
     formattedDocument = formatDocument(selectedDocument);
-    formattedDocument.workItems = (formattedDocument.workItems || [])
+    const allWorkItems = _.orderBy(
+      formattedDocument.workItems,
+      'createdAt',
+      'desc',
+    );
+    formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
       .map(items => formatWorkItem(items));
+    formattedDocument.completedWorkItems = (allWorkItems || [])
+      .filter(items => items.completedAt)
+      .map(items => formatWorkItem(items));
   }
+
+  const formattedDocumentIsPetition =
+    (formattedDocument && formattedDocument.isPetition) || false;
+  const showCaseDetailsEdit = ['New', 'Recalled'].includes(caseDetail.status);
+  const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
+  const showDocumentInfoTab =
+    formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
 
   return {
     formattedDocument,
@@ -23,12 +39,8 @@ export default get => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showCaseDetailsEdit: ['New', 'Recalled'].includes(caseDetail.status),
-    showCaseDetailsView: ['Batched for IRS'].includes(caseDetail.status),
-    showDocumentInfo: get(state.currentTab) === 'Document Info',
-    showDocumentInfoTab: formattedDocument
-      ? formattedDocument.isPetition
-      : false,
-    showPendingMessages: get(state.currentTab) === 'Pending Messages',
+    showCaseDetailsEdit,
+    showCaseDetailsView,
+    showDocumentInfoTab,
   };
 };

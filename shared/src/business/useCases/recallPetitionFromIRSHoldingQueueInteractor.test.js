@@ -6,7 +6,7 @@ const { getCase } = require('./getCaseInteractor');
 const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 const User = require('../entities/User');
-const Case = require('../entities/Case');
+const { Case } = require('../entities/Case');
 
 const MOCK_WORK_ITEMS = [
   {
@@ -26,12 +26,13 @@ const MOCK_WORK_ITEMS = [
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
+        from: 'Petitioner',
+        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition ready for review',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         role: 'petitioner',
         sentBy: 'Petitioner',
-        sentTo: null,
-        userId: 'taxpayer',
+        to: null,
       },
     ],
     section: 'petitions',
@@ -51,7 +52,11 @@ describe('Recall petition from IRS Holding Queue', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
-        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+        return new User({
+          name: 'Petitions Clerk',
+          role: 'petitionsclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
       },
       getPersistenceGateway: () => {
         return {

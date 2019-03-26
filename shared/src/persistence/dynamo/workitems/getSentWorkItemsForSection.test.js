@@ -30,7 +30,7 @@ describe('getSentWorkItemsForSection', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('invokes the peristence layer with the proper request object and date filter', async () => {
+  it('invokes the peristence layer with pk of petitions|outbox and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -45,10 +45,9 @@ describe('getSentWorkItemsForSection', () => {
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
-        ':pk': 'petitions|sentWorkItem',
+        ':pk': 'petitions|outbox',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
-      TableName: 'efcms-dev',
     });
   });
 });

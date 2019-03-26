@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
 import startCaseHelper from './startCaseHelper';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/Contacts/PetitionContact';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
 import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 

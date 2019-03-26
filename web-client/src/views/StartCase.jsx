@@ -13,26 +13,26 @@ import { TrialCity } from './StartCase/TrialCity';
 
 export const StartCase = connect(
   {
+    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
+    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
+    constants: state.constants,
     filingTypes: state.filingTypes,
     form: state.form,
-    constants: state.constants,
     showModal: state.showModal,
-    clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
-    caseTypeDescriptionHelper: state.caseTypeDescriptionHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     submitting: state.submitting,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateHasIrsNoticeFormValueSequence:
+      sequences.updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
-    updateHasIrsNoticeFormValueSequence:
-      sequences.updateHasIrsNoticeFormValueSequence,
-    trialCitiesHelper: state.trialCitiesHelper,
-    validationErrors: state.validationErrors,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     filingTypes,
@@ -82,7 +82,7 @@ export const StartCase = connect(
                       className="fa-icon-gold"
                       size="sm"
                     />
-                    This should include your petition form and any IRS notice
+                    This should include your Petition form and any IRS notice
                     <span aria-hidden="true">(s)</span> you received.
                   </span>
                 </div>
@@ -91,8 +91,7 @@ export const StartCase = connect(
               <div className="usa-width-five-twelfths">
                 <div
                   className={
-                    'usa-form-group ' +
-                    (validationErrors.petitionFile ? 'usa-input-error' : '')
+                    validationErrors.petitionFile ? 'usa-input-error' : ''
                   }
                 >
                   <label
@@ -121,18 +120,54 @@ export const StartCase = connect(
                         key: e.target.name,
                         value: e.target.files[0],
                       });
-                    }}
-                    onBlur={() => {
                       validateStartCaseSequence();
                     }}
                   />
-                  <div className="usa-input-error-message beneath">
+                  <div className="usa-input-error-message">
                     {validationErrors.petitionFile}
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <h2>Upload Your Statement of Taxpayer Identification</h2>
+          <div className="blue-container">
+            <div className={validationErrors.stinFile ? 'usa-input-error' : ''}>
+              <label
+                htmlFor="stin-file"
+                className={
+                  'ustc-upload-stin with-hint ' +
+                  (startCaseHelper.showStinFileValid ? 'validated' : '')
+                }
+              >
+                Upload Your Statement of Taxpayer Identification{' '}
+                <span className="success-message">
+                  <FontAwesomeIcon icon="check-circle" size="sm" />
+                </span>
+              </label>
+              <span className="usa-form-hint">
+                File must be in PDF format (.pdf)
+              </span>
+              <input
+                id="stin-file"
+                type="file"
+                accept=".pdf"
+                name="stinFile"
+                onChange={e => {
+                  updatePetitionValueSequence({
+                    key: e.target.name,
+                    value: e.target.files[0],
+                  });
+                  validateStartCaseSequence();
+                }}
+              />
+              <div className="usa-input-error-message">
+                {validationErrors.stinFile}
+              </div>
+            </div>
+          </div>
+
           <div className="usa-form-group">
             <h3>Who is Filing This Case?</h3>
             <div className="blue-container">
@@ -446,7 +481,7 @@ export const StartCase = connect(
                     </div>
                   </div>
                 )}
-              <div className="usa-input-error usa-input-error-message beneath padded-left">
+              <div className="usa-input-error-message">
                 {validationErrors.partyType}
               </div>
             </div>
@@ -649,7 +684,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-input-error-message beneath">
+                        <div className="usa-input-error-message">
                           {validationErrors.irsNoticeDate}
                         </div>
                       </div>
@@ -741,11 +776,11 @@ export const StartCase = connect(
                 }}
               />
             )}
-            <div className="usa-input-error-message beneath">
+            <div className="usa-input-error-message">
               {validationErrors.procedureType}
             </div>
             {!validationErrors.procedureType && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.preferredTrialCity}
               </div>
             )}
@@ -764,7 +799,7 @@ export const StartCase = connect(
               </li>
               <li>You have not included any evidence with your Petition.</li>
               <li>
-                Your Petition and any IRS Notices have been saved and uploaded
+                Your Petition and any IRS notices have been saved and uploaded
                 as a single PDF.
               </li>
             </ol>
@@ -795,7 +830,7 @@ export const StartCase = connect(
                 that you’ve verified all information is correct. You won’t be
                 able to edit your case once it’s submitted.
               </label>
-              <div className="usa-input-error-message beneath">
+              <div className="usa-input-error-message">
                 {validationErrors.signature}
               </div>
             </div>
