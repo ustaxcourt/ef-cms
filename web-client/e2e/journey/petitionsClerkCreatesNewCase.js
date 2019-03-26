@@ -48,7 +48,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updatePetitionValueSequence', {
-      key: 'ownershipDisclosureFileId',
+      key: 'ownershipDisclosureFile',
       value: fakeFile,
     });
 
