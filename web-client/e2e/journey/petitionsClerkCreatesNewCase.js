@@ -47,6 +47,11 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'ownershipDisclosureFileId',
+      value: fakeFile,
+    });
+
     await test.runSequence('validatePetitionFromPaperSequence');
     expect(test.getState('alertError')).toEqual(null);
     expect(test.getState('validationErrors')).toEqual({});
