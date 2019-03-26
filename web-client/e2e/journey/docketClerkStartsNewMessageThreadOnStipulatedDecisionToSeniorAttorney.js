@@ -1,6 +1,5 @@
 export default test => {
   return it('Docket clerk starts a new message thread on the Stipulated Decision document to senior attorney', async () => {
-    //console.log(JSON.stringify(test.getState('caseDetail')));
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.stipulatedDecisionDocumentId,
