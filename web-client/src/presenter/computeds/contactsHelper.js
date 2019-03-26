@@ -14,6 +14,7 @@ export const contactsHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
 
   let contactPrimary, contactSecondary;
+  let showEmail = true;
   if (userRole === 'petitioner') {
     switch (form.partyType) {
       case PARTY_TYPES.conservator:
@@ -209,6 +210,8 @@ export const contactsHelper = get => {
         break;
     }
   } else {
+    showEmail = false;
+
     switch (form.partyType) {
       case PARTY_TYPES.conservator:
         contactPrimary = {
@@ -227,7 +230,6 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In Care Of',
-          inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business Name',
         };
         break;
@@ -266,7 +268,6 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In Care Of',
-          inCareOfLabelHint: 'Your Name',
           nameLabel: 'Name of Decedent',
         };
         break;
@@ -404,7 +405,8 @@ export const contactsHelper = get => {
   }
 
   return {
-    contactPrimary: contactPrimary,
-    contactSecondary: contactSecondary,
+    contactPrimary,
+    contactSecondary,
+    showEmail,
   };
 };
