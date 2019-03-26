@@ -16,6 +16,7 @@ describe('workQueueHelper', () => {
       showOutbox: false,
       showSectionWorkQueue: true,
       showSendToBar: true,
+      showStartCaseButton: false,
     });
   });
 
@@ -32,6 +33,22 @@ describe('workQueueHelper', () => {
       showOutbox: true,
       showSectionWorkQueue: false,
       showSendToBar: false,
+      showStartCaseButton: false,
+    });
+  });
+
+  it('shows the start a case button when role is petitions clerk', async () => {
+    const result = await runCompute(workQueueHelper, {
+      state: {
+        selectedWorkItems: [],
+        user: {
+          role: 'petitionsclerk',
+        },
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result).toMatchObject({
+      showStartCaseButton: true,
     });
   });
 });
