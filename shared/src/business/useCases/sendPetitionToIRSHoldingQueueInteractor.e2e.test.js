@@ -1,10 +1,8 @@
-const assert = require('assert');
+const sinon = require('sinon');
+
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('./sendPetitionToIRSHoldingQueueInteractor');
-const { getCase } = require('./getCaseInteractor');
-const { omit } = require('lodash');
-const sinon = require('sinon');
 const DATE = '2019-03-01T22:54:06.000Z';
 const WORK_ITEM = {
   assigneeId: '191b05b4-483f-4b85-8dd7-2dd4c069eb50',
