@@ -175,9 +175,6 @@ const {
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
 const {
-  PetitionFromPaper,
-} = require('ef-cms-shared/src/business/entities/PetitionFromPaper');
-const {
   PetitionWithoutFiles,
 } = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
@@ -222,7 +219,6 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
-      PetitionFromPaper,
     }),
     getPersistenceGateway: () => {
       return {
