@@ -169,7 +169,7 @@ export const ContactPrimary = connect(
               onBlur={onBlur}
             />
           )}
-          <Email bind={emailBind} />
+          {contactsHelper.showEmail && <Email bind={emailBind} />}
           <div
             className={
               'ustc-form-group phone-input ' +
