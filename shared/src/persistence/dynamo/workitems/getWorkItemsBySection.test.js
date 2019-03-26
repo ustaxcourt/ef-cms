@@ -2,8 +2,27 @@ const { getWorkItemsBySection } = require('./getWorkItemsBySection');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 
+const MOCK_ITEM = {
+  docketNumber: '123-19',
+  status: 'New',
+};
+
 describe('getWorkItemsBySection', () => {
+  let getStub;
+
   beforeEach(() => {
+    getStub = sinon.stub().returns({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            'aws:rep:deleting': 'a',
+            'aws:rep:updateregion': 'b',
+            'aws:rep:updatetime': 'c',
+            ...MOCK_ITEM,
+          },
+        }),
+    });
+
     sinon.stub(client, 'query').resolves([
       {
         pk: 'abc',
@@ -20,19 +39,23 @@ describe('getWorkItemsBySection', () => {
     ]);
   });
 
-  afterEach(() => {
-    client.query.restore();
-  });
-
   it('makes a post request to the expected endpoint with the expected data', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
       },
+      getDocumentClient: () => ({
+        get: getStub,
+      }),
+      isAuthorizedForWorkItems: () => {
+        return true;
+      },
     };
     const result = await getWorkItemsBySection({
       applicationContext,
     });
-    expect(result).toEqual([{ workItemId: 'abc' }]);
+    expect(result).toMatchObject([
+      { caseStatus: 'New', docketNumber: '123-19', workItemId: 'abc' },
+    ]);
   });
 });
