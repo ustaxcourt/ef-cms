@@ -22,9 +22,7 @@ describe('getSentWorkItemsForSection', () => {
       error = err;
     }
     expect(error).toBeDefined();
-    expect(error.message).toEqual(
-      'Unauthorized for getting completed work items',
-    );
+    expect(error.message).toEqual('Unauthorized for getting sent work items');
   });
 
   it('returns the work items that is returned from the persistence', async () => {
