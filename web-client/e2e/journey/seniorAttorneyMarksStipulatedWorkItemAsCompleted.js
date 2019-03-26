@@ -4,9 +4,9 @@ import { extractedDocument } from '../../src/presenter/computeds/extractDocument
 export default test => {
   return it('Senior Attorney marks the work item as completed', async () => {
     await test.runSequence('updateCompleteFormValueSequence', {
-      workItemId: test.stipulatedDecisionWorkItemId,
       key: 'completeMessage',
       value: 'good job',
+      workItemId: test.stipulatedDecisionWorkItemId,
     });
     await test.runSequence('submitCompleteSequence', {
       workItemId: test.stipulatedDecisionWorkItemId,

@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { state, sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import iconDotGov from '../../node_modules/uswds/dist/img/icon-dot-gov.svg';

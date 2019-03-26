@@ -8,6 +8,7 @@ export const DocketRecord = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
+    documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     token: state.token,
     updateCurrentTabSequence: sequences.updateCurrentTabSequence,
@@ -16,10 +17,25 @@ export const DocketRecord = connect(
     baseUrl,
     caseDetail,
     clearDocumentSequence,
+    documentHelper,
     helper,
     token,
     updateCurrentTabSequence,
   }) => {
+    function renderDocumentLink(documentId, description) {
+      return (
+        <a
+          href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label={`View PDF: ${description}`}
+        >
+          <FontAwesomeIcon icon={['far', 'file-pdf']} />
+          {description}
+        </a>
+      );
+    }
+
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
@@ -36,7 +52,7 @@ export const DocketRecord = connect(
           </button>
         )}
         <table
-          className="responsive-table"
+          className="responsive-table row-border-only"
           id="docket-record"
           aria-label="docket record"
         >
@@ -45,8 +61,7 @@ export const DocketRecord = connect(
               <th>Date filed</th>
               <th>Title</th>
               <th>Filed by</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Served</th>
             </tr>
           </thead>
           <tbody>
@@ -59,38 +74,35 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Title</span>
-                    {document && helper.showDirectDownloadLink && (
-                      <a
-                        href={`${baseUrl}/documents/${
-                          document.documentId
-                        }/documentDownloadUrl?token=${token}`}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label={`View PDF: ${document.documentType}`}
-                      >
-                        <FontAwesomeIcon icon="file-pdf" />
-                        {document.documentType}
-                      </a>
-                    )}
+                    {document &&
+                      helper.showDirectDownloadLink &&
+                      renderDocumentLink(
+                        document.documentId,
+                        document.documentType,
+                      )}
                     {document && helper.showDocumentDetailLink && (
                       <a
-                        href={`/case-detail/${
-                          caseDetail.docketNumber
-                        }/documents/${document.documentId}`}
+                        href={documentHelper({
+                          docketNumber: caseDetail.docketNumber,
+                          documentId: document.documentId,
+                        })}
                         aria-label="View PDF"
                       >
-                        <FontAwesomeIcon icon="file-pdf" />
+                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
                         {document.documentType}
                       </a>
                     )}
-                    {!document && record.description}
+                    {!document &&
+                      record.documentId &&
+                      renderDocumentLink(record.documentId, record.description)}
+                    {!document && !record.documentId && record.description}
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>
                     {record.filedBy}
                   </td>
                   <td>
-                    <span className="responsive-label">Status</span>
+                    <span className="responsive-label">Served</span>
                     {document && document.isStatusServed && (
                       <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
@@ -98,7 +110,6 @@ export const DocketRecord = connect(
                       <span>{document.status}</span>
                     )}
                   </td>
-                  <td />
                 </tr>
               ),
             )}

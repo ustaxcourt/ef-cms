@@ -9,10 +9,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*|*>}
  */
-exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
+exports.getSentWorkItemsForUser = async ({ userId, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(user, WORKITEM, userId)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
@@ -22,7 +22,7 @@ exports.getSentWorkItemsForUser = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getSentWorkItemsForUser({
       applicationContext,
-      userId: user.userId,
+      userId,
     });
 
   return workItems;

@@ -1,8 +1,6 @@
-import { runAction } from 'cerebral/test';
-
-import presenter from '..';
-
 import { assignSelectedWorkItemsAction } from './assignSelectedWorkItemsAction';
+import presenter from '..';
+import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
@@ -10,7 +8,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('setPathAction', async () => {
+describe('setPathAction', () => {
   it('updates only the section queue items to have the new assignee informaion', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       modules: {

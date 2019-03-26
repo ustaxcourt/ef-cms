@@ -1,8 +1,3 @@
-const expect = require('chai').expect;
-
-const chai = require('chai');
-chai.use(require('chai-string'));
-
 const {
   NotFoundError,
   UnknownUserError,
@@ -19,11 +14,11 @@ describe('NotFoundError', () => {
   });
 
   it('should set a status code of 404', () => {
-    expect(error.statusCode).to.equal(404);
+    expect(error.statusCode).toEqual(404);
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('some error');
+    expect(error.message).toEqual('some error');
   });
 });
 
@@ -35,11 +30,11 @@ describe('UnauthorizedError', () => {
   });
 
   it('should set a status code of 403', () => {
-    expect(error.statusCode).to.equal(403);
+    expect(error.statusCode).toEqual(403);
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('some error');
+    expect(error.message).toEqual('some error');
   });
 });
 
@@ -51,11 +46,11 @@ describe('UnknownUserError', () => {
   });
 
   it('should set a status code of 401', () => {
-    expect(error.statusCode).to.equal(401);
+    expect(error.statusCode).toEqual(401);
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('some error');
+    expect(error.message).toEqual('some error');
   });
 });
 
@@ -67,11 +62,11 @@ describe('UnprocessableEntityError', () => {
   });
 
   it('should set a status code of 422', () => {
-    expect(error.statusCode).to.equal(422);
+    expect(error.statusCode).toEqual(422);
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal('cannot process');
+    expect(error.message).toEqual('cannot process');
   });
 });
 
@@ -83,12 +78,10 @@ describe('InvalidEntityError', () => {
   });
 
   it('should set a status code of 422', () => {
-    expect(error.statusCode).to.equal(422);
+    expect(error.statusCode).toEqual(422);
   });
 
   it('should set the message', () => {
-    expect(error.message).to.equal(
-      'entity is invalid or invalid for operation',
-    );
+    expect(error.message).toEqual('entity is invalid or invalid for operation');
   });
 });

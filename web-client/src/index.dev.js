@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 
-import Case from '../../shared/src/business/entities/Case';
+import { Case } from '../../shared/src/business/entities/Case';
 import Devtools from 'cerebral/devtools';
 import User from '../../shared/src/business/entities/User';
 import app from './app';

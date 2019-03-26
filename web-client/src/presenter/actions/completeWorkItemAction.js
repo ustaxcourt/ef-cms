@@ -5,7 +5,6 @@ import { state } from 'cerebral';
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.get the cerebral store object used for setting workQueue
- * @param {Object} providers.store the cerebral store object used for setting workQueue
  * @param {Object} providers.applicationContext the cerebral store object used for setting workQueue
  * @param {Object} providers.props the cerebral props object
  * @param {Object} providers.props.workItemId the workItemId to set as completed
@@ -13,47 +12,18 @@ import { state } from 'cerebral';
  */
 export const completeWorkItemAction = async ({
   get,
-  store,
   applicationContext,
   props,
 }) => {
-  const completeWorkItemDate = new Date().toISOString();
-
-  const caseDetail = get(state.caseDetail);
-  let workItems = [];
-
-  caseDetail.documents.forEach(
-    document => (workItems = [...workItems, ...document.workItems]),
-  );
-  const workItemToUpdate = workItems.find(
-    workItem => workItem.workItemId === props.workItemId,
-  );
   const completeForm = get(state.completeForm);
-  const message =
-    (completeForm[props.workItemId] || {}).completeMessage ||
-    'work item completed';
 
-  workItemToUpdate.completedAt = completeWorkItemDate;
-  workItemToUpdate.messages = [
-    ...workItemToUpdate.messages,
-    {
-      message,
-      sentBy: applicationContext.getCurrentUser().userId,
-      userId: applicationContext.getCurrentUser().userId,
-    },
-  ];
+  const completedMessage = (completeForm[props.workItemId] || {})
+    .completeMessage;
 
-  if (!workItemToUpdate.assigneeId) {
-    workItemToUpdate.assigneeId = applicationContext.getCurrentUser().userId;
-    workItemToUpdate.assigneeName = applicationContext.getCurrentUser().name;
-  }
-
-  store.set(state.caseDetail, caseDetail);
-
-  await applicationContext.getUseCases().updateWorkItem({
+  await applicationContext.getUseCases().completeWorkItem({
     applicationContext,
+    completedMessage,
     userId: applicationContext.getCurrentUser().userId,
     workItemId: props.workItemId,
-    workItemToUpdate,
   });
 };

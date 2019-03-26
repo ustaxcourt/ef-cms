@@ -32,7 +32,6 @@ const processNewWorkItem = async ({ workItem, applicationContext }) => {
       sk: workItem.workItemId,
       ...workItem,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };
 
@@ -48,48 +47,46 @@ const syncChangedCaseStatus = async ({
     const batchedMessage = workItem.messages.find(
       message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
     );
-    const { userId, createdAt } = batchedMessage;
+    const { fromUserId, createdAt } = batchedMessage;
 
-    await createMappingRecord({
+    await client.put({
       applicationContext,
-      item: {
-        workItemId: existing.workItemId,
+      Item: {
+        pk: `${fromUserId}|outbox`,
+        sk: createdAt,
+        ...workItem,
       },
-      pkId: userId,
-      skId: createdAt,
-      type: 'sentWorkItem',
     });
 
-    await createMappingRecord({
+    await client.put({
       applicationContext,
-      item: {
-        workItemId: existing.workItemId,
+      Item: {
+        pk: `${existing.section}|outbox`,
+        sk: createdAt,
+        ...workItem,
       },
-      pkId: existing.section,
-      skId: createdAt,
-      type: 'sentWorkItem',
     });
   } else if (caseToSave.status === 'Recalled') {
     // TODO: this seems like business logic, refactor
     const batchedMessage = workItem.messages.find(
       message => message.message === 'Petition batched for IRS', // TODO: this probably shouldn't be hard coded
     );
-    let userId, createdAt;
+    let fromUserId, createdAt;
     if (batchedMessage) {
-      userId = batchedMessage.userId;
+      fromUserId = batchedMessage.fromUserId;
       createdAt = batchedMessage.createdAt;
 
       await deleteMappingRecord({
         applicationContext,
-        pkId: userId,
+        pkId: fromUserId,
         skId: createdAt,
-        type: 'sentWorkItem',
+        type: 'outbox',
       });
       await deleteMappingRecord({
         applicationContext,
         pkId: 'petitions', // TODO: this probably shouldn't be hard coded
         skId: createdAt,
-        type: 'sentWorkItem',
+        type: 'outbox',
       });
     }
   }
@@ -122,14 +119,13 @@ const handleExistingWorkItem = async ({
   }
 
   if (!existing.completedAt && workItem.completedAt) {
-    await createMappingRecord({
+    await client.put({
       applicationContext,
-      item: {
-        workItemId: existing.workItemId,
+      Item: {
+        pk: `${workItem.section}|outbox`,
+        sk: workItem.completedAt,
+        ...workItem,
       },
-      pkId: workItem.section,
-      skId: workItem.completedAt,
-      type: 'sentWorkItem',
     });
   }
 
@@ -236,6 +232,5 @@ exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

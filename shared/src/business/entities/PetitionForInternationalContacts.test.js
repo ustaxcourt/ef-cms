@@ -23,6 +23,7 @@ describe('Petition', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
+        stinFile: {},
       });
       expect(petition.getFormattedValidationErrors()).toEqual({
         contactPrimary: { country: 'Country is a required field.' },
@@ -51,6 +52,7 @@ describe('Petition', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
+        stinFile: {},
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!/bin/bash groovy
 
 pipeline {
 
@@ -70,7 +70,7 @@ pipeline {
         }
       }
     }
-    stage('Tests') {
+    stage('Testing') {
       parallel {
         stage('Pa11y') {
           agent any
@@ -87,13 +87,45 @@ pipeline {
         stage('Cypress') {
           agent any
           steps {
-            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER} ./docker-cypress.sh"
+            sh "CONTAINER_NAME=ui-cypress-${BUILD_NUMBER}-${GIT_COMMIT} ./docker-cypress.sh"
           }
           post {
             always {
               archiveArtifacts(artifacts: 'cypress/**/*.mp4', allowEmptyArchive: true)
               archiveArtifacts(artifacts: 'cypress/**/*.png', allowEmptyArchive: true)
             }
+          }
+        }
+      }
+    }
+    stage('Deploy') {
+      parallel {
+        stage('efcms-service') {
+          when {
+            expression {
+              shouldDeploy(env.BRANCH_NAME)
+            }
+          }
+          steps {
+            build job: 'ef-cms-api-deploy', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
+          }
+        }
+        stage('web-client') {
+          when {
+            expression {
+              shouldDeploy(env.BRANCH_NAME)
+            }
+          }
+          steps {
+            build job: 'ef-cms-ui-deploy', parameters: [
+              [$class: 'StringParameterValue', name: 'sha1', value: "${GIT_COMMIT}"],
+              [$class: 'StringParameterValue', name: 'target_sha1', value: "${env.CHANGE_TARGET}"],
+              [$class: 'StringParameterValue', name: 'branch_name', value: "${env.BRANCH_NAME}"]
+            ]
           }
         }
       }
@@ -105,6 +137,11 @@ pipeline {
     }
   }
 }
+
+def shouldDeploy(branchName) {
+  ['develop', 'staging', 'master'].contains(branchName) == true
+}
+
 
 def checkCommit(folder) {
   if (env.CHANGE_TARGET) {

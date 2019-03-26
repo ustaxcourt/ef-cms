@@ -14,6 +14,5 @@ exports.createMappingRecord = async ({
       sk: skId,
       ...item,
     },
-    TableName: `efcms-${applicationContext.environment.stage}`,
   });
 };

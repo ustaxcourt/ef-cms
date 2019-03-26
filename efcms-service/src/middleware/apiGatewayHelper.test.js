@@ -1,5 +1,4 @@
 const { redirect, handle, getAuthHeader, getUserFromAuthHeader } = require('./apiGatewayHelper');
-const expect = require('chai').expect;
 const {
   UnauthorizedError,
   NotFoundError,
@@ -16,7 +15,7 @@ const EXPECTED_HEADERS = {
 describe('handle', () => {
   it('should return warm up string if warm up source is passed in', async () => {
     const response = await handle({source: 'serverless-plugin-warmup'}, async () => 'success');
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: '\"Lambda is warm!\"',
       headers: EXPECTED_HEADERS,
       statusCode: '200'
@@ -25,7 +24,7 @@ describe('handle', () => {
 
   it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
     const response = await handle({}, async () => 'success');
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: JSON.stringify('success'),
       headers: EXPECTED_HEADERS,
       statusCode: '200',
@@ -36,7 +35,7 @@ describe('handle', () => {
     const response = await handle({}, async () => {
       throw new NotFoundError('not-found error');
     });
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: JSON.stringify('not-found error'),
       headers: EXPECTED_HEADERS,
       statusCode: 404,
@@ -47,7 +46,7 @@ describe('handle', () => {
     const response = await handle({}, async () => {
       throw new UnauthorizedError('unauthorized error');
     });
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: JSON.stringify('unauthorized error'),
       headers: EXPECTED_HEADERS,
       statusCode: 403,
@@ -58,7 +57,7 @@ describe('handle', () => {
     const response = await handle({}, async () => {
       throw new Error('other error');
     });
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: JSON.stringify('other error'),
       headers: EXPECTED_HEADERS,
       statusCode: '400',
@@ -73,7 +72,7 @@ describe('getAuthHeader', () => {
         Authorization: 'Bearer taxpayer',
       },
     });
-    expect(response).to.deep.equal('taxpayer');
+    expect(response).toEqual('taxpayer');
   });
 
   it('should return the user token from the authorization header (lowercase a in authorization)', () => {
@@ -82,7 +81,7 @@ describe('getAuthHeader', () => {
         authorization: 'Bearer taxpayer',
       },
     });
-    expect(response).to.deep.equal('taxpayer');
+    expect(response).toEqual('taxpayer');
   });
 
   it('should return the user token from the Authorization header #2', () => {
@@ -94,7 +93,7 @@ describe('getAuthHeader', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.not.be.undefined;
+    expect(error).toBeDefined();
   });
 
   it('should return the user token from the Authorization header #3', () => {
@@ -108,7 +107,7 @@ describe('getAuthHeader', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.not.be.undefined;
+    expect(error).toBeDefined();
   });
 
   it('should return the user token from the Authorization header query string params', () => {
@@ -126,8 +125,8 @@ describe('getAuthHeader', () => {
     } catch (err) {
       error = err;
     }
-    expect(response).equal('teoken');
-    expect(error).equal(undefined);
+    expect(response).toEqual('teoken');
+    expect(error).toEqual(undefined);
   });
 });
 
@@ -139,7 +138,7 @@ describe('getUserFromAuthHeader', () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    expect(user.name).to.equal('Test Petitioner');
+    expect(user.name).toEqual('Test Petitioner');
   });
 
 });
@@ -148,7 +147,7 @@ describe('redirect', () => {
   
   it('should return warm up string if warm up source is passed in', async () => {
     const response = await redirect({source: 'serverless-plugin-warmup'}, async () => 'success');
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: '\"Lambda is warm!\"',
       headers: EXPECTED_HEADERS,
       statusCode: '200'
@@ -157,7 +156,7 @@ describe('redirect', () => {
 
   it('should return a redirect status in the header', async () => {
     const response = await redirect({}, async () => ({ url: 'example.com' }));
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       headers: {
         Location: 'example.com',
       },
@@ -169,7 +168,7 @@ describe('redirect', () => {
     const response = await redirect({}, async () => {
       throw new Error('an error');
     });
-    expect(response).to.deep.equal({
+    expect(response).toEqual({
       body: JSON.stringify('an error'),
       headers: EXPECTED_HEADERS,
       statusCode: '400',

@@ -7,6 +7,16 @@ exports.CHIEF_JUDGE_SECTION = 'chiefjudge';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 
+exports.SECTIONS = [
+  exports.DOCKET_SECTION,
+  exports.PETITIONS_SECTION,
+  exports.CALENDAR_SECTION,
+  exports.ADMISSIONS_SECTION,
+  exports.SENIOR_ATTORNEY_SECTION,
+  exports.CHIEF_JUDGE_SECTION,
+  exports.CLERK_OF_COURT_SECTION,
+  exports.IRS_BATCH_SYSTEM_SECTION,
+];
 /**
  *
  * @param role

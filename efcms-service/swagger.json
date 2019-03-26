@@ -1,990 +1,1134 @@
 {
-  "swagger" : "2.0",
-  "info" : {
-    "description" : "Documents API for U.S. Tax Court EF-CMS",
-    "version" : "2019-02-27T17:02:41Z",
-    "title" : "dev-ef-cms",
-    "contact" : {
-      "url" : "https://www.ustaxcourt.gov",
-      "email" : "webmaster@ustaxcourt.gov"
+  "swagger": "2.0",
+  "info": {
+    "description": "Documents API for U.S. Tax Court EF-CMS",
+    "version": "2019-03-06T15:30:48Z",
+    "title": "dev-ef-cms",
+    "contact": {
+      "url": "https://www.ustaxcourt.gov",
+      "email": "webmaster@ustaxcourt.gov"
     },
-    "license" : {
-      "name" : "Creative Commons 0",
-      "url" : "https://creativecommons.org/share-your-work/public-domain/cc0/"
+    "license": {
+      "name": "Creative Commons 0",
+      "url": "https://creativecommons.org/share-your-work/public-domain/cc0/"
     }
   },
-  "host" : "efcms-dev.ustc-case-mgmt.flexion.us",
-  "tags" : [ {
-    "name" : "ef-cms",
-    "description" : "EF-CMS"
-  }, {
-    "name" : "documents",
-    "description" : "rawDocument service"
-  } ],
-  "schemes" : [ "https" ],
-  "paths" : {
-    "/v1/cases" : {
-      "post" : {
-        "tags" : [ "cases" ],
-        "summary" : "create a case",
-        "description" : "Create a case.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+  "host": "efcms-dev.ustc-case-mgmt.flexion.us",
+  "tags": [
+    {
+      "name": "ef-cms",
+      "description": "EF-CMS"
+    },
+    {
+      "name": "documents",
+      "description": "rawDocument service"
+    }
+  ],
+  "schemes": ["https"],
+  "paths": {
+    "/v1/cases": {
+      "post": {
+        "tags": ["cases"],
+        "summary": "create a case",
+        "description": "Create a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/cases/{caseId}" : {
-      "get" : {
-        "tags" : [ "cases" ],
-        "summary" : "get a case by caseId",
-        "description" : "Get a case by caseId.\n",
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "caseId",
-          "in" : "path",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+    "/v1/cases/{caseId}": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "get a case by caseId",
+        "description": "Get a case by caseId.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "put" : {
-        "tags" : [ "cases" ],
-        "summary" : "update a case",
-        "description" : "Update a case.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+      "put": {
+        "tags": ["cases"],
+        "summary": "update a case",
+        "description": "Update a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           },
-          "422" : {
-            "description" : "422 response",
-            "schema" : {
-              "$ref" : "#/definitions/unprocessableEntityError"
+          "422": {
+            "description": "422 response",
+            "schema": {
+              "$ref": "#/definitions/unprocessableEntityError"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/cases/{caseId}/documents" : {
-      "post" : {
-        "tags" : [ "documents" ],
-        "summary" : "create a new document inside of a case",
-        "description" : "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/document"
+    "/v1/cases/{caseId}/documents": {
+      "post": {
+        "tags": ["documents"],
+        "summary": "create a new document inside of a case",
+        "description": "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/cases/{caseId}/irsPetitionPackage" : {
-      "post" : {
-        "tags" : [ "cases" ],
-        "summary" : "sends the case to the holding queue",
-        "description" : "Send a packaged case to the respondent.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+    "/v1/cases/{caseId}/irsPetitionPackage": {
+      "post": {
+        "tags": ["cases"],
+        "summary": "sends the case to the holding queue",
+        "description": "Send a packaged case to the respondent.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           },
-          "422" : {
-            "description" : "422 response",
-            "schema" : {
-              "$ref" : "#/definitions/unprocessableEntityError"
+          "422": {
+            "description": "422 response",
+            "schema": {
+              "$ref": "#/definitions/unprocessableEntityError"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "delete" : {
-        "tags" : [ "cases" ],
-        "summary" : "deletes the petition on the case from the holding queue",
-        "description" : "Deletes the petition on the case from the holding queue.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+      "delete": {
+        "tags": ["cases"],
+        "summary": "deletes the petition on the case from the holding queue",
+        "description": "Deletes the petition on the case from the holding queue.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           },
-          "422" : {
-            "description" : "422 response",
-            "schema" : {
-              "$ref" : "#/definitions/unprocessableEntityError"
+          "422": {
+            "description": "422 response",
+            "schema": {
+              "$ref": "#/definitions/unprocessableEntityError"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/documents/uploadPolicy" : {
-      "get" : {
-        "tags" : [ "documents" ],
-        "summary" : "create a pre-signed url for uploads",
-        "description" : "Create a pre-signed url for  document uploads to S3.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/policyUrl"
+    "/v1/documents/uploadPolicy": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "create a pre-signed url for uploads",
+        "description": "Create a pre-signed url for  document uploads to S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/documents/{documentId}/documentDownloadUrl" : {
-      "get" : {
-        "tags" : [ "documents" ],
-        "summary" : "redirects to the s3 url for downloading a document",
-        "description" : "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "302" : {
-            "description" : "302 response",
-            "schema" : {
-              "$ref" : "#/definitions/policyUrl"
+    "/v1/documents/{documentId}/documentDownloadUrl": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "redirects to the s3 url for downloading a document",
+        "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "302": {
+            "description": "302 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
             }
           }
         }
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/documents/{documentId}/downloadPolicyUrl" : {
-      "get" : {
-        "tags" : [ "documents" ],
-        "summary" : "create a pre-signed url for downloads",
-        "description" : "Create a pre-signed url for  document downloads from S3.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/policyUrl"
+    "/v1/documents/{documentId}/downloadPolicyUrl": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "create a pre-signed url for downloads",
+        "description": "Create a pre-signed url for  document downloads from S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/respondents/{respondentId}/cases" : {
-      "get" : {
-        "tags" : [ "cases" ],
-        "summary" : "get all cases for a user",
-        "description" : "Get all cases for a user.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+    "/v1/respondents/{respondentId}/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "get all cases for a user",
+        "description": "Get all cases for a user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/sections/{section}/inbox" : {
-      "get" : {
-        "tags" : [ "workitems" ],
-        "summary" : "get all workitems in the sections inbox",
-        "description" : "Get all workitems in the sections inbox.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/sections/{section}/inbox": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get all workitems in the sections inbox",
+        "description": "Get all workitems in the sections inbox.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/sections/{section}/outbox" : {
-      "get" : {
-        "tags" : [ "workitems" ],
-        "summary" : "get all workitems in the sections outbox",
-        "description" : "Get all workitems in the sections outbox.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+
+    "/v1/cases/{caseId}/documents/{documentId}/workitems": {
+      "post": {
+        "tags": ["workitems"],
+        "summary": "creates a new work item and attaches it to the case document",
+        "description": "creates a new work item and attaches it to the case document\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/sections/{section}/users" : {
-      "get" : {
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/user"
+    "/v1/sections/{section}/outbox": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get all workitems in the sections outbox",
+        "description": "Get all workitems in the sections outbox.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/statuses/{status}/cases" : {
-      "get" : {
-        "tags" : [ "cases" ],
-        "summary" : "get all cases by a status",
-        "description" : "get all cases by a status\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+    "/v1/sections/{section}/users": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get all users in a section",
+        "description": "get all users in a section\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/swagger" : {
-      "get" : {
-        "responses" : { }
+    "/v1/statuses/{status}/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "get all cases by a status",
+        "description": "get all cases by a status\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/swagger.json" : {
-      "get" : {
-        "responses" : { }
+    "/v1/swagger": {
+      "get": {
+        "responses": {}
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/users" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "summary" : "creates a user",
-        "description" : "creates a user.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/user"
+    "/v1/swagger.json": {
+      "get": {
+        "responses": {}
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users": {
+      "post": {
+        "tags": ["user"],
+        "summary": "creates a user",
+        "description": "creates a user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
             }
           },
-          "422" : {
-            "description" : "422 response",
-            "schema" : {
-              "$ref" : "#/definitions/unprocessableEntityError"
+          "422": {
+            "description": "422 response",
+            "schema": {
+              "$ref": "#/definitions/unprocessableEntityError"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/users/internal" : {
-      "get" : {
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/user"
+    "/v1/users/internal": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get all internal users",
+        "description": "get all internal users\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/users/{userId}/cases" : {
-      "get" : {
-        "tags" : [ "cases" ],
-        "summary" : "get all cases for a user",
-        "description" : "Get all cases for a user.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/case"
+    "/v1/users/{userId}/cases": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "get all cases for a user",
+        "description": "Get all cases for a user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/users/{userId}/inbox" : {
-      "get" : {
-        "tags" : [ "workitems" ],
-        "summary" : "get a users work item inbox",
-        "description" : "get a users work item inbox\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/users/{userId}/inbox": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get a users work item inbox",
+        "description": "get a users work item inbox\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/users/{userId}/outbox" : {
-      "get" : {
-        "tags" : [ "workitems" ],
-        "summary" : "get a users work item outbox",
-        "description" : "get a users work item outbox\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/users/{userId}/outbox": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get a users work item outbox",
+        "description": "get a users work item outbox\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/workitems" : {
-      "put" : {
-        "tags" : [ "workitems" ],
-        "summary" : "assigns an assigneId to a list of work item ids",
-        "description" : "Get a workitem.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/workitems": {
+      "put": {
+        "tags": ["workitems"],
+        "summary": "assigns an assigneId to a list of work item ids",
+        "description": "Get a workitem.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/workitems/{workItemId}" : {
-      "get" : {
-        "tags" : [ "workitems" ],
-        "summary" : "get a workitem by workItemId",
-        "description" : "Get a workitem.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/workitems/{workItemId}": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "get a workitem by workItemId",
+        "description": "Get a workitem.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "put" : {
-        "tags" : [ "workitems" ],
-        "summary" : "update a workitem by workItemId",
-        "description" : "Update a workitem.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+      "put": {
+        "tags": ["workitems"],
+        "summary": "update a workitem by workItemId",
+        "description": "Update a workitem.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
         }
       }
     },
-    "/v1/workitems/{workItemId}/assignee" : {
-      "put" : {
-        "tags" : [ "workitems" ],
-        "summary" : "sets the assigneeId of the workitem to a new user",
-        "description" : "sets the assigneeId of the workitem to a new user.\n",
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "schema" : {
-              "$ref" : "#/definitions/workItem"
+    "/v1/workitems/{workItemId}/assignee": {
+      "put": {
+        "tags": ["workitems"],
+        "summary": "sets the assigneeId of the workitem to a new user",
+        "description": "sets the assigneeId of the workitem to a new user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
             }
           }
         },
-        "security" : [ {
-          "CognitoUserPool" : [ ]
-        } ]
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
       },
-      "options" : {
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "type" : "string"
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
               },
-              "Access-Control-Allow-Methods" : {
-                "type" : "string"
+              "Access-Control-Allow-Methods": {
+                "type": "string"
               },
-              "Access-Control-Allow-Credentials" : {
-                "type" : "string"
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
               },
-              "Access-Control-Allow-Headers" : {
-                "type" : "string"
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/workitems/{workItemId}/complete": {
+      "put": {
+        "tags": ["workitems"],
+        "summary": "marks the workitem complete",
+        "description": "marks the workitem complete.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
               }
             }
           }
@@ -992,269 +1136,269 @@
       }
     }
   },
-  "securityDefinitions" : {
-    "CognitoUserPool" : {
-      "type" : "apiKey",
-      "name" : "Authorization",
-      "in" : "header",
-      "x-amazon-apigateway-authtype" : "cognito_user_pools"
+  "securityDefinitions": {
+    "CognitoUserPool": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "x-amazon-apigateway-authtype": "cognito_user_pools"
     }
   },
-  "definitions" : {
-    "policyUrl" : {
-      "type" : "object",
-      "properties" : {
-        "fields" : {
-          "$ref" : "#/definitions/fields"
+  "definitions": {
+    "policyUrl": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "$ref": "#/definitions/fields"
         },
-        "url" : {
-          "type" : "string",
-          "description" : "url"
+        "url": {
+          "type": "string",
+          "description": "url"
         }
       },
-      "description" : "a policy url response"
+      "description": "a policy url response"
     },
-    "document" : {
-      "type" : "object",
-      "properties" : {
-        "createdAt" : {
-          "type" : "string",
-          "description" : "date document created"
+    "document": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "date document created"
         },
-        "validated" : {
-          "type" : "boolean",
-          "description" : "if the document has been validated"
+        "validated": {
+          "type": "boolean",
+          "description": "if the document has been validated"
         },
-        "documentType" : {
-          "type" : "string",
-          "description" : "type of this document"
+        "documentType": {
+          "type": "string",
+          "description": "type of this document"
         },
-        "reviewDate" : {
-          "type" : "string",
-          "description" : "the date the user reviewed the document"
+        "reviewDate": {
+          "type": "string",
+          "description": "the date the user reviewed the document"
         },
-        "filedBy" : {
-          "type" : "boolean",
-          "description" : "the user name who filed the document"
+        "filedBy": {
+          "type": "boolean",
+          "description": "the user name who filed the document"
         },
-        "reviewUser" : {
-          "type" : "string",
-          "description" : "the user who reviewed the document"
+        "reviewUser": {
+          "type": "string",
+          "description": "the user who reviewed the document"
         },
-        "documentId" : {
-          "type" : "string",
-          "description" : "id of rawDocument"
+        "documentId": {
+          "type": "string",
+          "description": "id of rawDocument"
         },
-        "userId" : {
-          "type" : "string",
-          "description" : "id of user who created the document"
+        "userId": {
+          "type": "string",
+          "description": "id of user who created the document"
         },
-        "servedDate" : {
-          "type" : "string",
-          "description" : "date document served"
+        "servedDate": {
+          "type": "string",
+          "description": "date document served"
         },
-        "status" : {
-          "type" : "string",
-          "description" : "the status of the document"
+        "status": {
+          "type": "string",
+          "description": "the status of the document"
         }
       },
-      "description" : "a document response"
+      "description": "a document response"
     },
-    "unprocessableEntityError" : {
-      "type" : "object",
-      "required" : [ "message" ],
-      "properties" : {
-        "message" : {
-          "type" : "string"
+    "unprocessableEntityError": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string"
         }
       },
-      "description" : "a unprocessable entity error (422), due to a problem in the body or the id in the url"
+      "description": "a unprocessable entity error (422), due to a problem in the body or the id in the url"
     },
-    "workItem" : {
-      "type" : "object",
-      "properties" : {
-        "createdAt" : {
-          "type" : "string",
-          "description" : "date workItem created"
+    "workItem": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "date workItem created"
         },
-        "assigneeName" : {
-          "type" : "string",
-          "description" : "the name of the user currently assigned the work item"
+        "assigneeName": {
+          "type": "string",
+          "description": "the name of the user currently assigned the work item"
         },
-        "caseId" : {
-          "type" : "string",
-          "description" : "the case id"
+        "caseId": {
+          "type": "string",
+          "description": "the case id"
         },
-        "document" : {
-          "type" : "object",
-          "properties" : {
-            "documentType" : {
-              "type" : "string"
+        "document": {
+          "type": "object",
+          "properties": {
+            "documentType": {
+              "type": "string"
             },
-            "documentId" : {
-              "type" : "string"
+            "documentId": {
+              "type": "string"
             },
-            "createAt" : {
-              "type" : "string"
+            "createAt": {
+              "type": "string"
             }
           }
         },
-        "messages" : {
-          "type" : "array",
-          "description" : "array of messages associated with the workitem",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "messageType" : {
-                "type" : "string"
+        "messages": {
+          "type": "array",
+          "description": "array of messages associated with the workitem",
+          "items": {
+            "type": "object",
+            "properties": {
+              "messageType": {
+                "type": "string"
               },
-              "messageId" : {
-                "type" : "string"
+              "messageId": {
+                "type": "string"
               }
             }
           }
         },
-        "workItemId" : {
-          "type" : "string",
-          "description" : "id of work item"
+        "workItemId": {
+          "type": "string",
+          "description": "id of work item"
         },
-        "assigneeId" : {
-          "type" : "string",
-          "description" : "id of user currently assigned the work item"
+        "assigneeId": {
+          "type": "string",
+          "description": "id of user currently assigned the work item"
         },
-        "docketNumber" : {
-          "type" : "string",
-          "description" : "date workItem created"
+        "docketNumber": {
+          "type": "string",
+          "description": "date workItem created"
         },
-        "sentBy" : {
-          "type" : "string",
-          "description" : "the user or system function that generate or sent this original work item"
+        "sentBy": {
+          "type": "string",
+          "description": "the user or system function that generate or sent this original work item"
         },
-        "updatedAt" : {
-          "type" : "string",
-          "description" : "date workItem created"
+        "updatedAt": {
+          "type": "string",
+          "description": "date workItem created"
         }
       },
-      "description" : "a workItem response"
+      "description": "a workItem response"
     },
-    "fields" : {
-      "type" : "object",
-      "properties" : {
-        "bucket" : {
-          "type" : "string",
-          "description" : "The bucket name."
+    "fields": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "type": "string",
+          "description": "The bucket name."
         },
-        "Policy" : {
-          "type" : "string",
-          "description" : "The policy."
+        "Policy": {
+          "type": "string",
+          "description": "The policy."
         },
-        "X-Amz-Date" : {
-          "type" : "string",
-          "description" : "The date."
+        "X-Amz-Date": {
+          "type": "string",
+          "description": "The date."
         },
-        "X-Amz-Algorithm" : {
-          "type" : "string",
-          "description" : "The algorithm."
+        "X-Amz-Algorithm": {
+          "type": "string",
+          "description": "The algorithm."
         },
-        "X-Amz-Signature" : {
-          "type" : "string",
-          "description" : "The signature."
+        "X-Amz-Signature": {
+          "type": "string",
+          "description": "The signature."
         },
-        "X-Amz-Security-Token" : {
-          "type" : "string",
-          "description" : "The security token."
+        "X-Amz-Security-Token": {
+          "type": "string",
+          "description": "The security token."
         },
-        "X-Amz-Credential" : {
-          "type" : "string",
-          "description" : "The credential."
+        "X-Amz-Credential": {
+          "type": "string",
+          "description": "The credential."
         }
       },
-      "description" : "a policy url response"
+      "description": "a policy url response"
     },
-    "user" : {
-      "type" : "object",
-      "properties" : {
-        "userId" : {
-          "type" : "string",
-          "description" : "the userId"
+    "user": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "the userId"
         }
       },
-      "description" : "a user object"
+      "description": "a user object"
     },
-    "case" : {
-      "type" : "object",
-      "properties" : {
-        "createdAt" : {
-          "type" : "string",
-          "description" : "date case created"
+    "case": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "date case created"
         },
-        "payGovDate" : {
-          "type" : "string",
-          "description" : "the date the pay gov id was updated"
+        "payGovDate": {
+          "type": "string",
+          "description": "the date the pay gov id was updated"
         },
-        "documents" : {
-          "type" : "array",
-          "description" : "array of rawDocument ids and types associated with the case",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "documentType" : {
-                "type" : "string"
+        "documents": {
+          "type": "array",
+          "description": "array of rawDocument ids and types associated with the case",
+          "items": {
+            "type": "object",
+            "properties": {
+              "documentType": {
+                "type": "string"
               },
-              "workItems" : {
-                "type" : "array",
-                "items" : {
-                  "type" : "object",
-                  "properties" : { }
+              "workItems": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
-              "documentId" : {
-                "type" : "string"
+              "documentId": {
+                "type": "string"
               }
             }
           }
         },
-        "payGovId" : {
-          "type" : "string",
-          "description" : "the pay gov id generated from pay.gov"
+        "payGovId": {
+          "type": "string",
+          "description": "the pay gov id generated from pay.gov"
         },
-        "caseId" : {
-          "type" : "string",
-          "description" : "id of case"
+        "caseId": {
+          "type": "string",
+          "description": "id of case"
         },
-        "respondent" : {
-          "type" : "string",
-          "description" : "the respondent who is associated with the case"
+        "respondent": {
+          "type": "string",
+          "description": "the respondent who is associated with the case"
         },
-        "petitioners" : {
-          "type" : "array",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "userId" : {
-                "type" : "string"
+        "petitioners": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
               }
             }
           }
         },
-        "userId" : {
-          "type" : "string",
-          "description" : "id of user who created the case"
+        "userId": {
+          "type": "string",
+          "description": "id of user who created the case"
         },
-        "docketNumber" : {
-          "type" : "string",
-          "description" : "the unique docket number associated with the case"
+        "docketNumber": {
+          "type": "string",
+          "description": "the unique docket number associated with the case"
         },
-        "irsSendDate" : {
-          "type" : "string",
-          "description" : "the date the case was sent to the IRS"
+        "irsSendDate": {
+          "type": "string",
+          "description": "the date the case was sent to the IRS"
         },
-        "status" : {
-          "type" : "string",
-          "description" : "the status of the case"
+        "status": {
+          "type": "string",
+          "description": "the status of the case"
         }
       },
-      "description" : "a case response"
+      "description": "a case response"
     }
   }
 }

@@ -172,12 +172,18 @@ table.work-queue {
 }
 
 table.row-border-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
   td {
     border: none;
   }
 
+  thead tr,
   tbody tr {
-    border: 1px solid $color-gray-light;
+    border: 1px solid $color-gray-lighter;
   }
 }
 
