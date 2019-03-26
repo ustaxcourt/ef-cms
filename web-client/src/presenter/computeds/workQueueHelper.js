@@ -15,6 +15,7 @@ export const workQueueHelper = get => {
     showRunBatchIRSProcessButton: userSection === 'petitions',
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSendToBar: selectedWorkItems.length > 0,
-    showStartCaseButton: !!userRoleMap.petitionsclerk,
+    showStartCaseButton:
+      !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
   };
 };
