@@ -2,8 +2,27 @@ const { getWorkItemsForUser } = require('./getWorkItemsForUser');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 
+const MOCK_ITEM = {
+  docketNumber: '123-19',
+  status: 'New',
+};
+
 describe('getWorkItemsForUser', () => {
+  let getStub;
+
   beforeEach(() => {
+    getStub = sinon.stub().returns({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            'aws:rep:deleting': 'a',
+            'aws:rep:updateregion': 'b',
+            'aws:rep:updatetime': 'c',
+            ...MOCK_ITEM,
+          },
+        }),
+    });
+
     sinon.stub(client, 'query').resolves([
       {
         pk: 'abc',
@@ -29,10 +48,18 @@ describe('getWorkItemsForUser', () => {
       environment: {
         stage: 'dev',
       },
+      getDocumentClient: () => ({
+        get: getStub,
+      }),
+      isAuthorizedForWorkItems: () => {
+        return true;
+      },
     };
     const result = await getWorkItemsForUser({
       applicationContext,
     });
-    expect(result).toEqual([{ workItemId: 'abc' }]);
+    expect(result).toMatchObject([
+      { caseStatus: 'New', docketNumber: '123-19', workItemId: 'abc' },
+    ]);
   });
 });
