@@ -9,6 +9,7 @@ exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
 exports.CREATE_USER = 'createUser';
 exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
+exports.START_PAPER_CASE = 'startPaperCase';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -20,6 +21,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.UPDATE_CASE,
     exports.GET_USERS_IN_SECTION,
+    exports.START_PAPER_CASE,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
@@ -40,6 +42,7 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
+    exports.START_PAPER_CASE,
   ],
   practitioner: [exports.PETITION],
   respondent: [

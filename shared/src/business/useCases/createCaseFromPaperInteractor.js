@@ -8,7 +8,7 @@ const { capitalize } = require('lodash');
 
 const {
   isAuthorized,
-  PETITION,
+  START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
@@ -71,12 +71,18 @@ exports.createCase = async ({
   stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, PETITION)) {
+  if (!isAuthorized(user, START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // TODO: I'm pretty sure this needs to be PetitionFromPaperWithoutFiles, and we need to create that entity
   const Petition = applicationContext.getEntityConstructors().PetitionFromPaper;
-  const petitionEntity = new Petition(petitionMetadata).validate();
+  const petitionEntity = new Petition({
+    ...petitionMetadata,
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  }).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
@@ -85,25 +91,13 @@ exports.createCase = async ({
     },
   );
 
-  let practitioner = null;
-  if (user.role === 'practitioner') {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
-    practitioner = practitionerUser;
-  }
-
   const caseToAdd = new Case({
     userId: user.userId,
-    practitioner,
     ...petitionEntity.toRawObject(),
     docketNumber,
   });
 
-  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  caseToAdd.caseCaption = petitionEntity.caseCaption;
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
@@ -113,14 +107,6 @@ exports.createCase = async ({
   });
   addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
 
-  const stinDocumentEntity = new Document({
-    documentId: stinFileId,
-    documentType: Case.documentTypes.stin,
-    filedBy: user.name,
-    userId: user.userId,
-  });
-  caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
-
   caseToAdd.addDocketRecord(
     new DocketRecord({
       description: `Request for Place of Trial at ${
@@ -129,6 +115,16 @@ exports.createCase = async ({
       filingDate: caseToAdd.createdAt,
     }),
   );
+
+  if (stinFileId) {
+    const stinDocumentEntity = new Document({
+      documentId: stinFileId,
+      documentType: Case.documentTypes.stin,
+      filedBy: user.name,
+      userId: user.userId,
+    });
+    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+  }
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
