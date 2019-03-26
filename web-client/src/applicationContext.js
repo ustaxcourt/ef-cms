@@ -14,6 +14,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { Petition } from '../../shared/src/business/entities/Petition';
+import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -147,6 +148,7 @@ const applicationContext = {
     ForwardMessage,
     InitialWorkItemMessage,
     Petition,
+    PetitionFromPaper,
   }),
   getError: e => {
     return ErrorFactory.getError(e);
