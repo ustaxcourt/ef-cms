@@ -1,6 +1,7 @@
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 import { DocketRecord } from './DocketRecord';
@@ -12,10 +13,9 @@ import { SuccessNotification } from './SuccessNotification';
 export const CaseDetailRespondent = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    currentTab: state.currentTab,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    showFileDocumentForm: state.showFileDocumentForm,
   },
-  ({ caseDetail, currentTab, updateCurrentTabSequence }) => {
+  ({ caseDetail, showFileDocumentForm }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -32,53 +32,24 @@ export const CaseDetailRespondent = connect(
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          {currentTab == 'File Document' && <FileDocument />}
-          {currentTab != 'File Document' && (
-            <nav className="horizontal-tabs">
-              <ul role="tabslist">
-                <li
-                  role="presentation"
-                  className={currentTab == 'Docket Record' ? 'active' : ''}
-                >
-                  <button
-                    role="tab"
-                    className="tab-link"
-                    aria-selected={currentTab === 'Docket Record'}
-                    onClick={() =>
-                      updateCurrentTabSequence({ value: 'Docket Record' })
-                    }
-                    id="docket-record-tab"
-                  >
-                    Docket Record
-                  </button>
-                </li>
-                <li
-                  className={currentTab == 'Case Information' ? 'active' : ''}
-                >
-                  <button
-                    role="tab"
-                    className="tab-link"
-                    id="case-info-tab"
-                    aria-selected={currentTab === 'Case Information'}
-                    onClick={() =>
-                      updateCurrentTabSequence({ value: 'Case Information' })
-                    }
-                  >
-                    Case Information
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          )}
-          {currentTab == 'Docket Record' && (
-            <div className="tab-content" role="tabpanel">
-              <DocketRecord />
-            </div>
-          )}
-          {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel">
-              <PartyInformation />
-            </div>
+          {showFileDocumentForm && <FileDocument />}
+          {!showFileDocumentForm && (
+            <Tabs className="classic-horizontal" bind="documentDetail.tab">
+              <Tab
+                tabName="docketRecord"
+                title="Docket Record"
+                id="tab-docket-record"
+              >
+                <DocketRecord />
+              </Tab>
+              <Tab
+                tabName="caseInfo"
+                title="Case Information"
+                id="tab-case-info"
+              >
+                <PartyInformation />
+              </Tab>
+            </Tabs>
           )}
         </section>
       </React.Fragment>
