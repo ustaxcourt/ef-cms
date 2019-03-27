@@ -53,7 +53,7 @@ export const StartCaseInternal = connect(
             <div
               className={
                 'usa-form-group ' +
-                (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                (validationErrors.createdAt ? 'usa-input-error' : '')
               }
             >
               <fieldset>
@@ -136,13 +136,18 @@ export const StartCaseInternal = connect(
                   </div>
                   <Text
                     className="usa-input-error-message"
-                    bind="validationErrors.irsNoticeDate"
+                    bind="validationErrors.createdAt"
                   />
                 </div>
               </fieldset>
             </div>
 
-            <div className="usa-form-group">
+            <div
+              className={
+                'usa-form-group ' +
+                (validationErrors.caseCaption ? 'usa-input-error' : '')
+              }
+            >
               <label htmlFor="case-caption">
                 Case Caption <span className="usa-form-hint">(required)</span>
               </label>
@@ -161,6 +166,10 @@ export const StartCaseInternal = connect(
                 }}
               />
               {constants.CASE_CAPTION_POSTFIX}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.caseCaption"
+              />
             </div>
 
             <div
