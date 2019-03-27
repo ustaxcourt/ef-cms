@@ -174,7 +174,7 @@ export const StartCase = connect(
             </div>
           </div>
 
-          <h3>Who is Filing This Case?</h3>
+          <h2>Who is Filing This Case?</h2>
           <div className="blue-container">
             <div className="usa-grid-full">
               <div className="usa-width-seven-twelfths push-right">
@@ -539,7 +539,7 @@ export const StartCase = connect(
           )}
 
           <div className="usa-form-group">
-            <h3>What Kind of Case Are You Filing?</h3>
+            <h2>What Kind of Case Are You Filing?</h2>
             <div className="blue-container">
               <fieldset
                 id="irs-notice-radios"
