@@ -4,9 +4,7 @@ import { set } from 'cerebral/factories';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
-import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
@@ -36,8 +34,6 @@ export const submitPetitionFromPaperSequence = [
       setPetitionIdAction,
       unsetFormSubmittingAction,
       ...gotoDocumentDetailSequence,
-      getCreateCaseAlertSuccessAction,
-      setAlertSuccessAction,
     ],
   },
 ];
