@@ -254,6 +254,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  createCaseFromPaper:
+    handler: src/cases/createCaseFromPaperLambda.handler
+    events:
+      - http:
+          path: v1/cases/paper
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCasesByUser:
     handler: src/cases/getCasesByUserLambda.handler
     events:
