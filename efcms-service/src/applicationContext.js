@@ -181,6 +181,10 @@ const {
   PetitionWithoutFiles,
 } = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
+const {
+  PetitionFromPaperWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionFromPaperWithoutFiles');
+
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
@@ -222,6 +226,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
+      PetitionFromPaper: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
