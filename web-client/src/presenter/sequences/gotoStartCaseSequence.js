@@ -32,5 +32,14 @@ export const gotoStartCaseSequence = [
       setCurrentPageAction('StartCase'),
     ],
     petitionsclerk: [setCurrentPageAction('StartCaseInternal')],
+    practitioner: [
+      getCaseTypesAction,
+      setCaseTypesAction,
+      getFilingTypesAction,
+      setFilingTypesAction,
+      getProcedureTypesAction,
+      setProcedureTypesAction,
+      setCurrentPageAction('StartCase'),
+    ],
   },
 ];
