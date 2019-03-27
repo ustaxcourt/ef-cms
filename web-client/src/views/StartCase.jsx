@@ -514,7 +514,7 @@ export const StartCase = connect(
                 <label
                   htmlFor="ownership-disclosure-file"
                   className={
-                    'ustc-upload-ods ' +
+                    'ustc-upload-ods with-hint ' +
                     (startCaseHelper.showOwnershipDisclosureValid
                       ? 'validated'
                       : '')
