@@ -1,3 +1,4 @@
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { sequences, state } from 'cerebral';
 
 import { CaseInformationInternal } from './CaseInformationInternal';
@@ -15,26 +16,22 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
-    currentTab: state.currentTab,
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
+    baseUrl,
     caseDetail,
     caseHelper,
-    baseUrl,
-    currentTab,
     documentHelper,
     extractedPendingMessages,
-    token,
     submitUpdateCaseSequence,
+    token,
     updateCaseValueSequence,
-    updateCurrentTabSequence,
     updateFormValueSequence,
   }) => {
     return (
@@ -95,46 +92,15 @@ export const CaseDetailInternal = connect(
             </table>
           </div>
 
-          <nav className="horizontal-tabs">
-            <ul role="tabslist">
-              <li
-                role="presentation"
-                className={currentTab == 'Docket Record' ? 'active' : ''}
-              >
-                <button
-                  role="tab"
-                  className="tab-link"
-                  aria-selected={currentTab === 'Docket Record'}
-                  onClick={() =>
-                    updateCurrentTabSequence({ value: 'Docket Record' })
-                  }
-                  id="docket-record-tab"
-                >
-                  Docket Record
-                </button>
-              </li>
-              <li className={currentTab == 'Case Information' ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  aria-selected={currentTab === 'Case Information'}
-                  id="case-info-tab"
-                  onClick={() =>
-                    updateCurrentTabSequence({ value: 'Case Information' })
-                  }
-                >
-                  Case Information
-                </button>
-              </li>
-            </ul>
-          </nav>
-          {currentTab == 'Docket Record' && (
-            <div className="" role="tabpanel">
+          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+            <Tab
+              tabName="docketRecord"
+              title="Docket Record"
+              id="tab-docket-record"
+            >
               <DocketRecord />
-            </div>
-          )}
-          {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel">
+            </Tab>
+            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
               <CaseInformationInternal />
               <PartyInformation />
 
@@ -191,8 +157,8 @@ export const CaseDetailInternal = connect(
                   )}
                 </fieldset>
               </div>
-            </div>
-          )}
+            </Tab>
+          </Tabs>
         </section>
         {/* This section below will be removed in a future story */}
         <section>

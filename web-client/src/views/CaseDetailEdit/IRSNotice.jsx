@@ -34,57 +34,59 @@ export const IRSNotice = connect(
   }) => {
     const renderIrsNoticeRadios = () => {
       return (
-        <fieldset
-          id="irs-verified-notice-radios"
-          className="usa-fieldset-inputs usa-sans usa-form-group"
-        >
-          <legend htmlFor="irs-verified-notice-radios">
-            Notice Attached to Petition?
-          </legend>
-          <ul className="usa-unstyled-list">
-            <li>
-              <input
-                id="hasVerifiedIrsNotice-yes"
-                type="radio"
-                name="hasVerifiedIrsNotice"
-                checked={caseDetail.hasVerifiedIrsNotice === true}
-                value="Yes"
-                onChange={e => {
-                  updateCaseValueSequence({
-                    key: e.target.name,
-                    value: true,
-                  });
-                  autoSaveCaseSequence();
-                }}
-              />
-              <label
-                id="has-irs-verified-notice-yes"
-                htmlFor="hasVerifiedIrsNotice-yes"
-              >
-                Yes
-              </label>
-            </li>
-            <li>
-              <input
-                id="hasVerifiedIrsNotice-no"
-                type="radio"
-                name="hasVerifiedIrsNotice"
-                checked={caseDetail.hasVerifiedIrsNotice === false}
-                value="No"
-                onChange={() => {
-                  setIrsNoticeFalseSequence();
-                  autoSaveCaseSequence();
-                }}
-              />
-              <label
-                id="has-irs-verified-notice-no"
-                htmlFor="hasVerifiedIrsNotice-no"
-              >
-                No
-              </label>
-            </li>
-          </ul>
-        </fieldset>
+        <div className="ustc-form-group">
+          <fieldset
+            id="irs-verified-notice-radios"
+            className="usa-fieldset-inputs usa-sans"
+          >
+            <legend htmlFor="irs-verified-notice-radios">
+              Notice Attached to Petition?
+            </legend>
+            <ul className="usa-unstyled-list">
+              <li>
+                <input
+                  id="hasVerifiedIrsNotice-yes"
+                  type="radio"
+                  name="hasVerifiedIrsNotice"
+                  checked={caseDetail.hasVerifiedIrsNotice === true}
+                  value="Yes"
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: e.target.name,
+                      value: true,
+                    });
+                    autoSaveCaseSequence();
+                  }}
+                />
+                <label
+                  id="has-irs-verified-notice-yes"
+                  htmlFor="hasVerifiedIrsNotice-yes"
+                >
+                  Yes
+                </label>
+              </li>
+              <li>
+                <input
+                  id="hasVerifiedIrsNotice-no"
+                  type="radio"
+                  name="hasVerifiedIrsNotice"
+                  checked={caseDetail.hasVerifiedIrsNotice === false}
+                  value="No"
+                  onChange={() => {
+                    setIrsNoticeFalseSequence();
+                    autoSaveCaseSequence();
+                  }}
+                />
+                <label
+                  id="has-irs-verified-notice-no"
+                  htmlFor="hasVerifiedIrsNotice-no"
+                >
+                  No
+                </label>
+              </li>
+            </ul>
+          </fieldset>
+        </div>
       );
     };
 

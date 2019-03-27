@@ -26,7 +26,108 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
-        <div className="usa-form-group">
+        <div
+          className={`ustc-form-group ${
+            caseDetailErrors.dateReceived ? 'usa-input-error' : ''
+          }`}
+        >
+          <fieldset>
+            <legend id="date-received-legend">Date Received</legend>
+            <div className="usa-date-of-birth">
+              <div className="usa-form-group usa-form-group-month">
+                <label htmlFor="date-received-month" aria-hidden="true">
+                  MM
+                </label>
+                <input
+                  aria-describedby="date-received-legend"
+                  aria-label="month, two digits"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
+                  }
+                  id="date-received-month"
+                  max="12"
+                  min="1"
+                  name="dateReceivedMonth"
+                  type="number"
+                  value={form.dateReceivedMonth || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="usa-form-group usa-form-group-day">
+                <label htmlFor="date-received-day" aria-hidden="true">
+                  DD
+                </label>
+                <input
+                  aria-describedby="date-received-legend"
+                  aria-label="day, two digits"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
+                  }
+                  id="date-received-day"
+                  max="31"
+                  min="1"
+                  name="dateReceivedDay"
+                  type="number"
+                  value={form.dateReceivedDay || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="usa-form-group usa-form-group-year">
+                <label htmlFor="date-received-year" aria-hidden="true">
+                  YYYY
+                </label>
+                <input
+                  aria-describedby="date-received-legend"
+                  aria-label="year, four digits"
+                  className={
+                    'usa-input-inline' +
+                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
+                  }
+                  id="date-received-year"
+                  max="2100"
+                  min="1900"
+                  name="dateReceivedYear"
+                  type="number"
+                  value={form.dateReceivedYear || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            {caseDetailErrors.dateReceivedDate && (
+              <div className="usa-input-error-message" role="alert">
+                {caseDetailErrors.dateReceivedDate}
+              </div>
+            )}
+          </fieldset>
+        </div>
+
+        <div className="ustc-form-group">
           <ProcedureType
             value={caseDetail.procedureType}
             onChange={e => {
@@ -80,7 +181,11 @@ export const CaseInfo = connect(
           }}
         />
 
-        <div className={caseDetailErrors.payGovDate ? 'usa-input-error' : ''}>
+        <div
+          className={`ustc-form-group ${
+            caseDetailErrors.payGovDate ? 'usa-input-error' : ''
+          }`}
+        >
           <fieldset>
             <legend id="fee-payment-date-legend">Fee Payment Date</legend>
             <div className="usa-date-of-birth">
@@ -177,7 +282,7 @@ export const CaseInfo = connect(
           </fieldset>
         </div>
 
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor="fee-payment-id">Fee Payment ID</label>
           <input
             id="fee-payment-id"
@@ -219,7 +324,7 @@ export const CaseInfo = connect(
           role="list"
           aria-labelledby="orders-needed"
         >
-          <div className="usa-form-group" role="listitem">
+          <div className="ustc-form-group" role="listitem">
             <input
               id="order-for-ratification"
               type="checkbox"
@@ -237,7 +342,7 @@ export const CaseInfo = connect(
               Order for Ratification of Petition
             </label>
           </div>
-          <div className="usa-form-group" role="listitem">
+          <div className="ustc-form-group" role="listitem">
             <input
               id="notice-of-attachments"
               type="checkbox"
@@ -255,7 +360,7 @@ export const CaseInfo = connect(
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
-          <div className="usa-form-group" role="listitem">
+          <div className="ustc-form-group" role="listitem">
             <input
               id="order-for-amended-petition"
               type="checkbox"
@@ -273,7 +378,7 @@ export const CaseInfo = connect(
               Order for Amended Petition
             </label>
           </div>
-          <div className="usa-form-group" role="listitem">
+          <div className="ustc-form-group" role="listitem">
             <input
               id="order-for-amended-petition-and-filing-fee"
               type="checkbox"
