@@ -15,8 +15,8 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 
 const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   const workItemEntity = new WorkItem({
-    assigneeId: null,
-    assigneeName: null,
+    assigneeId: user.userId,
+    assigneeName: user.name,
     caseId: caseToAdd.caseId,
     caseStatus: caseToAdd.status,
     docketNumber: caseToAdd.docketNumber,

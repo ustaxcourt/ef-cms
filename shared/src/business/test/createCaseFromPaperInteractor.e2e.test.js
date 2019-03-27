@@ -70,8 +70,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
           filedBy: 'richard',
           workItems: [
             {
-              assigneeId: null,
-              assigneeName: null,
+              assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              assigneeName: 'richard',
               caseStatus: 'New',
               createdAt: '2019-03-01T22:54:06.000Z',
               docketNumber: '101-19',
