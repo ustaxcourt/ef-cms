@@ -22,6 +22,9 @@ legend {
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
+  .usa-form-hint {
+    margin: 0;
+  }
 }
 
 input[type='file'] {

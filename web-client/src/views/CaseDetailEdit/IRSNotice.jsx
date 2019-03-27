@@ -96,7 +96,10 @@ export const IRSNotice = connect(
       return (
         <div className="subsection">
           <div
-            className={caseDetailErrors.irsNoticeDate ? 'usa-input-error' : ''}
+            className={
+              'ustc-form-group ' +
+              (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+            }
           >
             <fieldset>
               <legend id="date-of-notice-legend">Date of Notice</legend>
