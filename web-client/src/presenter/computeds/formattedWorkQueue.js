@@ -8,7 +8,7 @@ const DATE_MMDDYYYY = 'L';
 
 const formatDateIfToday = date => {
   const now = moment();
-  const then = moment.utc(date);
+  const then = moment.utc(date).local();
   let formattedDate;
   if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
     formattedDate = then.format(DATE_TODAY_TIME);
