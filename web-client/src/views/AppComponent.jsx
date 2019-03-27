@@ -22,6 +22,7 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { StartCase } from './StartCase';
+import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { UsaBanner } from './UsaBanner';
 
@@ -43,6 +44,7 @@ const pages = {
   Loading,
   LogIn,
   StartCase,
+  StartCaseInternal,
   StyleGuide,
 };
 

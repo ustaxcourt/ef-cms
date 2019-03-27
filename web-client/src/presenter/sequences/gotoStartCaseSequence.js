@@ -4,6 +4,7 @@ import { clearPetitionAction } from '../actions/clearPetitionAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getFilingTypesAction } from '../actions/getFilingTypesAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
+import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { prepareFormAction } from '../actions/prepareFormAction';
 import { set } from 'cerebral/factories';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
@@ -18,11 +19,18 @@ export const gotoStartCaseSequence = [
   clearFormAction,
   prepareFormAction,
   set(state.showValidation, false),
-  getCaseTypesAction,
-  setCaseTypesAction,
-  getFilingTypesAction,
-  setFilingTypesAction,
-  getProcedureTypesAction,
-  setProcedureTypesAction,
-  setCurrentPageAction('StartCase'),
+  getUserRoleAction,
+  {
+    docketclerk: [setCurrentPageAction('StartCaseInternal')],
+    petitioner: [
+      getCaseTypesAction,
+      setCaseTypesAction,
+      getFilingTypesAction,
+      setFilingTypesAction,
+      getProcedureTypesAction,
+      setProcedureTypesAction,
+      setCurrentPageAction('StartCase'),
+    ],
+    petitionsclerk: [setCurrentPageAction('StartCaseInternal')],
+  },
 ];
