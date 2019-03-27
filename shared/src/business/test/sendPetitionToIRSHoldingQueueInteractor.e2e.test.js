@@ -1,196 +1,42 @@
 const {
   sendPetitionToIRSHoldingQueue,
-} = require('./sendPetitionToIRSHoldingQueueInteractor');
-const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
+} = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
 
-const { createCase } = require('./createCaseInteractor');
-const { createWorkItem } = require('./workitems/createWorkItemInteractor');
+const { createCase } = require('../useCases/createCaseInteractor');
+const {
+  createWorkItem,
+} = require('../useCases/workitems/createWorkItemInteractor');
 const {
   getSentWorkItemsForSection,
-} = require('./workitems/getSentWorkItemsForSectionInteractor');
+} = require('../useCases/workitems/getSentWorkItemsForSectionInteractor');
 const {
   getSentWorkItemsForUser,
-} = require('./workitems/getSentWorkItemsForUserInteractor');
+} = require('../useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
   getWorkItemsBySection,
-} = require('./workitems/getWorkItemsBySectionInteractor');
-const { assignWorkItems } = require('./workitems/assignWorkItemsInteractor');
-const { saveCase } = require('../../persistence/dynamo/cases/saveCase');
+} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
 const {
-  incrementCounter,
-} = require('../../persistence/dynamo/helpers/incrementCounter');
+  assignWorkItems,
+} = require('../useCases/workitems/assignWorkItemsInteractor');
 const {
   getWorkItemsForUser,
-} = require('./workitems/getWorkItemsForUserInteractor');
-const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
+} = require('../useCases/workitems/getWorkItemsForUserInteractor');
 
 const sinon = require('sinon');
 const DATE = '2019-03-01T22:54:06.000Z';
 
 const { User } = require('../entities/User');
-const {
-  getWorkItemsBySection: getWorkItemsBySectionPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemsBySection');
-const {
-  getWorkItemsForUser: getWorkItemsForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemsForUser');
-const {
-  getUserById: getUserByIdPersistence,
-} = require('../../persistence/dynamo/users/getUserById');
-const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
-} = require('../../persistence/dynamo/workitems/getSentWorkItemsForSection');
-const {
-  saveWorkItem: saveWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/saveWorkItem');
-const {
-  createWorkItem: createWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/createWorkItem');
-const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getSentWorkItemsForUser');
 
 const {
-  getWorkItemById: getWorkItemByIdPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemById');
-const {
-  getCaseByCaseId,
-} = require('../../persistence/dynamo/cases/getCaseByCaseId');
-const {
-  deleteWorkItemFromInbox,
-} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
-const {
-  putWorkItemInOutbox,
-} = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
-const {
-  updateWorkItem,
-} = require('../../persistence/dynamo/workitems/updateWorkItem');
-const {
-  addWorkItemToSectionInbox,
-} = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
-const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
+  createTestApplicationContext,
+} = require('./createTestApplicationContext');
 
-const createMockDocumentClient = () => {
-  const data = {
-    ['1805d1ab-18d0-43ec-bafb-654e83405416 1805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'docketclerk',
-      name: 'Test Docketclerk',
-      pk: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      role: 'docketclerk',
-      section: 'docket',
-      sk: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-  };
-
-  return {
-    batchGet: ({ RequestItems }) => {
-      const { Keys } = RequestItems['efcms-local'];
-      const arr = [];
-      for (let { pk, sk } of Keys) {
-        arr.push(data[`${pk} ${sk}`]);
-      }
-      return {
-        promise: async () => ({
-          Responses: {
-            ['efcms-local']: arr,
-          },
-        }),
-      };
-    },
-    delete: ({ Key: { pk, sk } }) => {
-      delete data[`${pk} ${sk}`];
-      return {
-        promise: async () => null,
-      };
-    },
-    get: ({ Key: { pk, sk } }) => {
-      return {
-        promise: async () => ({
-          Item: data[`${pk} ${sk}`],
-        }),
-      };
-    },
-    getData: () => data,
-    put: ({ Item }) => {
-      data[`${Item.pk} ${Item.sk}`] = Item;
-      return {
-        promise: async () => null,
-      };
-    },
-    query: ({ ExpressionAttributeValues }) => {
-      const arr = [];
-      for (let key in data) {
-        const value = ExpressionAttributeValues[':pk'];
-        if (key.split(' ')[0].indexOf(value) !== -1) {
-          arr.push(data[key]);
-        }
-      }
-      return {
-        promise: async () => ({
-          Items: arr,
-        }),
-      };
-    },
-    update: ({ Key }) => {
-      let id = (data[`${Key.pk} ${Key.sk}`] || {}).id;
-      data[`${Key.pk} ${Key.sk}`] = {
-        id: (id || 0) + 1,
-      };
-      return {
-        promise: async () => ({
-          Attributes: data[`${Key.pk} ${Key.sk}`],
-        }),
-      };
-    },
-  };
-};
-
-describe('sendPetitionToIRSHoldingQueueInteractor e2e', () => {
+describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
   let applicationContext;
-  let mockDocClient;
 
   beforeEach(() => {
     sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
-
-    mockDocClient = createMockDocumentClient();
-    applicationContext = {
-      docketNumberGenerator,
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'richard',
-          role: 'petitioner',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getDocumentClient: () => mockDocClient,
-      getEntityConstructors: () => ({
-        Petition: PetitionWithoutFiles,
-      }),
-      getPersistenceGateway: () => {
-        return {
-          addWorkItemToSectionInbox,
-          createWorkItem: createWorkItemPersistence,
-          deleteWorkItemFromInbox,
-          getCaseByCaseId,
-
-          getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
-          getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
-          getUserById: getUserByIdPersistence,
-          getWorkItemById: getWorkItemByIdPersistence,
-          getWorkItemsBySection: getWorkItemsBySectionPersistence,
-          getWorkItemsForUser: getWorkItemsForUserPersistence,
-          incrementCounter,
-          putWorkItemInOutbox,
-          saveCase,
-          saveWorkItem: saveWorkItemPersistence,
-          updateCase,
-          updateWorkItem,
-        };
-      },
-      isAuthorizedForWorkItems: () => true,
-    };
+    applicationContext = createTestApplicationContext();
   });
 
   afterEach(() => {
