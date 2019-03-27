@@ -20,12 +20,11 @@ button.link {
   text-align: left;
   text-decoration: underline;
   svg {
-    margin-right: 0;
+    margin-right: 5px;
   }
 }
 
-button.pdf-link:hover,
-button.link {
+button.pdf-link:hover {
   color: $color-blue;
 }
 
