@@ -46,6 +46,7 @@ import { submitDocumentSequence } from './sequences/submitDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitSearchSequence } from './sequences/submitSearchSequence';
@@ -75,6 +76,7 @@ import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFor
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
+import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
@@ -137,6 +139,7 @@ export const presenter = {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
+    submitPetitionFromPaperSequence,
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
@@ -164,6 +167,7 @@ export const presenter = {
     validateCaseDetailSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
+    validatePetitionFromPaperSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
   },
