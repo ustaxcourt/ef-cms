@@ -34,10 +34,10 @@ export const ContactSecondary = connect(
   }) => {
     return (
       <>
-        {parentView === 'CaseDetail' ? (
-          <h4>{contactsHelper.contactSecondary.header}</h4>
+        {parentView === 'StartCase' ? (
+          <h2>{contactsHelper.contactSecondary.header}</h2>
         ) : (
-          <h3>{contactsHelper.contactSecondary.header}</h3>
+          <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
         <div className="blue-container contact-group">
           <Country

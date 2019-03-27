@@ -20,6 +20,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.UPDATE_CASE,
     exports.GET_USERS_IN_SECTION,
+    exports.PETITION,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
