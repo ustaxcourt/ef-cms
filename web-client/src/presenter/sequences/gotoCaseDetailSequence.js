@@ -13,7 +13,7 @@ export const gotoCaseDetailSequence = [
   clearAlertsAction,
   getCaseAction,
   setCaseAction,
-  set(state.currentTab, 'Docket Record'),
+  set(state.documentDetail.tab, 'docketRecord'),
   setBaseUrlAction,
   getUserRoleAction,
   {

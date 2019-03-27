@@ -16,7 +16,8 @@ class FilePetitionComponent extends React.Component {
     const document = this.props.document;
     const submitDocumentSequence = this.props.submitDocumentSequence;
     const submitting = this.props.submitting;
-    const updateCurrentTabSequence = this.props.updateCurrentTabSequence;
+    const toggleFileDocumentFormSequence = this.props
+      .toggleFileDocumentFormSequence;
     const updateDocumentValueSequence = this.props.updateDocumentValueSequence;
 
     return (
@@ -76,7 +77,7 @@ class FilePetitionComponent extends React.Component {
           <button
             type="button"
             className="usa-button-secondary"
-            onClick={() => updateCurrentTabSequence({ value: 'Docket Record' })}
+            onClick={() => toggleFileDocumentFormSequence({ value: false })}
           >
             Cancel
           </button>
@@ -90,7 +91,7 @@ FilePetitionComponent.propTypes = {
   document: PropTypes.object,
   submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
-  updateCurrentTabSequence: PropTypes.func,
+  toggleFileDocumentFormSequence: PropTypes.func,
   updateDocumentValueSequence: PropTypes.func,
 };
 
@@ -99,7 +100,7 @@ export const FileDocument = connect(
     document: state.document,
     submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
+    toggleFileDocumentFormSequence: sequences.toggleFileDocumentFormSequence,
     updateDocumentValueSequence: sequences.updateDocumentValueSequence,
   },
   FilePetitionComponent,

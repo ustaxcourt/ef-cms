@@ -10,8 +10,8 @@ export const DocketRecord = connect(
     clearDocumentSequence: sequences.clearDocumentSequence,
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
+    toggleFileDocumentFormSequence: sequences.toggleFileDocumentFormSequence,
     token: state.token,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
   ({
     baseUrl,
@@ -19,8 +19,8 @@ export const DocketRecord = connect(
     clearDocumentSequence,
     documentHelper,
     helper,
+    toggleFileDocumentFormSequence,
     token,
-    updateCurrentTabSequence,
   }) => {
     function renderDocumentLink(documentId, description) {
       return (
@@ -44,7 +44,7 @@ export const DocketRecord = connect(
             className="usa-button"
             onClick={() => {
               clearDocumentSequence();
-              updateCurrentTabSequence({ value: 'File Document' });
+              toggleFileDocumentFormSequence({ value: true });
             }}
           >
             <FontAwesomeIcon icon="cloud-upload-alt" />
