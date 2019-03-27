@@ -24,6 +24,7 @@ import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkIte
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
+import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
@@ -89,6 +90,7 @@ const allUseCases = {
   createWorkItem,
   downloadDocumentFile,
   filePetition,
+  filePetitionFromPaper,
   fileRespondentDocument,
   forwardWorkItem,
   getCase,
