@@ -110,6 +110,9 @@ const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseFromPaper,
+} = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
+const {
   getCasesByUser: getCasesByUserUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
 const {
@@ -268,6 +271,7 @@ module.exports = (appContextUser = {}) => {
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
         createCase,
+        createCaseFromPaper,
         createDocument,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
