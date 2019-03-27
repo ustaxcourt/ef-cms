@@ -28,10 +28,9 @@ export const PartyInformation = connect(
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor="case-caption">Case Caption</label>
           <textarea
-            className="usa-input-inline"
             id="case-caption"
             name="caseCaption"
             value={caseDetail.caseCaption}
@@ -47,10 +46,9 @@ export const PartyInformation = connect(
           />
           {constants.CASE_CAPTION_POSTFIX}
         </div>
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor="party-type">Party Type</label>
           <select
-            className="usa-input-inline"
             id="party-type"
             name="partyType"
             value={caseDetail.partyType}
@@ -72,11 +70,11 @@ export const PartyInformation = connect(
             ))}
           </select>
         </div>
-        {caseDetailEditHelper.showOwnershipDisclosureStatement &&
-          caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
-            <React.Fragment>
-              <div className="usa-form-group">
-                <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+        {caseDetailEditHelper.showOwnershipDisclosureStatement && (
+          <React.Fragment>
+            <div className="ustc-form-group">
+              <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+              {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
                   href={`${baseUrl}/documents/${
                     caseDetailEditHelper.ownershipDisclosureStatementDocumentId
@@ -88,27 +86,30 @@ export const PartyInformation = connect(
                   <FontAwesomeIcon icon="file-pdf" />
                   Ownership Disclosure Statement
                 </a>
-                <div className="order-checkbox">
-                  <input
-                    id="order-for-ods"
-                    type="checkbox"
-                    name="orderForOds"
-                    checked={caseDetail.orderForOds}
-                    onChange={e => {
-                      updateCaseValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      autoSaveCaseSequence();
-                    }}
-                  />
-                  <label htmlFor="order-for-ods">
-                    Order for Ownership Disclosure Statement
-                  </label>
-                </div>
+              )}
+              {!caseDetailEditHelper.ownershipDisclosureStatementDocumentId &&
+                'No file uploaded.'}
+              <div className="order-checkbox">
+                <input
+                  id="order-for-ods"
+                  type="checkbox"
+                  name="orderForOds"
+                  checked={caseDetail.orderForOds}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    autoSaveCaseSequence();
+                  }}
+                />
+                <label htmlFor="order-for-ods">
+                  Order for Ownership Disclosure Statement
+                </label>
               </div>
-            </React.Fragment>
-          )}
+            </div>
+          </React.Fragment>
+        )}
         <Contacts
           parentView="CaseDetail"
           bind="caseDetail"
