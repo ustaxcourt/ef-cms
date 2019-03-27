@@ -1,5 +1,5 @@
 const {
-  createCase: createCaseFromPaper,
+  createCaseFromPaper,
 } = require('../useCases/createCaseFromPaperInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 
