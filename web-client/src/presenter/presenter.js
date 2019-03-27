@@ -52,6 +52,7 @@ import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/sub
 import { submitSearchSequence } from './sequences/submitSearchSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
+import { toggleFileDocumentFormSequence } from './sequences/toggleFileDocumentFormSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
@@ -145,6 +146,7 @@ export const presenter = {
     submitSearchSequence,
     submitUpdateCaseSequence,
     toggleCaseDifferenceSequence,
+    toggleFileDocumentFormSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
