@@ -28,50 +28,54 @@ export const PartyInformation = connect(
   }) => {
     return (
       <div className="blue-container document-detail-one-third">
-        <div className="ustc-form-group">
-          <label htmlFor="case-caption">Case Caption</label>
-          <textarea
-            id="case-caption"
-            name="caseCaption"
-            value={caseDetail.caseCaption}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-            onBlur={() => {
-              autoSaveCaseSequence();
-            }}
-          />
-          {constants.CASE_CAPTION_POSTFIX}
+        <div className="subsection">
+          <div className="ustc-form-group">
+            <label htmlFor="case-caption">Case Caption</label>
+            <textarea
+              id="case-caption"
+              name="caseCaption"
+              value={caseDetail.caseCaption}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onBlur={() => {
+                autoSaveCaseSequence();
+              }}
+            />
+            {constants.CASE_CAPTION_POSTFIX}
+          </div>
         </div>
-        <div className="ustc-form-group">
-          <label htmlFor="party-type">Party Type</label>
-          <select
-            id="party-type"
-            name="partyType"
-            value={caseDetail.partyType}
-            onChange={e => {
-              updateCasePartyTypeSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              autoSaveCaseSequence();
-            }}
-          >
-            {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
-              <option
-                key={partyType}
-                value={caseDetailEditHelper.partyTypes[partyType]}
-              >
-                {caseDetailEditHelper.partyTypes[partyType]}
-              </option>
-            ))}
-          </select>
+        <div className="subsection">
+          <div className="ustc-form-group">
+            <label htmlFor="party-type">Party Type</label>
+            <select
+              id="party-type"
+              name="partyType"
+              value={caseDetail.partyType}
+              onChange={e => {
+                updateCasePartyTypeSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                autoSaveCaseSequence();
+              }}
+            >
+              {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
+                <option
+                  key={partyType}
+                  value={caseDetailEditHelper.partyTypes[partyType]}
+                >
+                  {caseDetailEditHelper.partyTypes[partyType]}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
-          <React.Fragment>
+          <div className="subsection">
             <div className="ustc-form-group">
               <label htmlFor="ods-link">Ownership Disclosure Statement</label>
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
@@ -108,7 +112,7 @@ export const PartyInformation = connect(
                 </label>
               </div>
             </div>
-          </React.Fragment>
+          </div>
         )}
         <Contacts
           parentView="CaseDetail"

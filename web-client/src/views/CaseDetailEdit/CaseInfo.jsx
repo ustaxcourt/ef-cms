@@ -26,295 +26,311 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
-        <div
-          className={`ustc-form-group ${
-            caseDetailErrors.dateReceived ? 'usa-input-error' : ''
-          }`}
-        >
-          <fieldset>
-            <legend id="date-received-legend">Date Received</legend>
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="date-received-month" aria-hidden="true">
-                  MM
-                </label>
-                <input
-                  aria-describedby="date-received-legend"
-                  aria-label="month, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
-                  }
-                  id="date-received-month"
-                  max="12"
-                  min="1"
-                  name="dateReceivedMonth"
-                  type="number"
-                  value={form.dateReceivedMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+        <div className="subsection">
+          <div
+            className={`ustc-form-group ${
+              caseDetailErrors.dateReceived ? 'usa-input-error' : ''
+            }`}
+          >
+            <fieldset>
+              <legend id="date-received-legend">Date Received</legend>
+              <div className="usa-date-of-birth">
+                <div className="usa-form-group usa-form-group-month">
+                  <label htmlFor="date-received-month" aria-hidden="true">
+                    MM
+                  </label>
+                  <input
+                    aria-describedby="date-received-legend"
+                    aria-label="month, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.dateReceivedDate
+                        ? 'usa-input-error'
+                        : '')
+                    }
+                    id="date-received-month"
+                    max="12"
+                    min="1"
+                    name="dateReceivedMonth"
+                    type="number"
+                    value={form.dateReceivedMonth || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-day">
+                  <label htmlFor="date-received-day" aria-hidden="true">
+                    DD
+                  </label>
+                  <input
+                    aria-describedby="date-received-legend"
+                    aria-label="day, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.dateReceivedDate
+                        ? 'usa-input-error'
+                        : '')
+                    }
+                    id="date-received-day"
+                    max="31"
+                    min="1"
+                    name="dateReceivedDay"
+                    type="number"
+                    value={form.dateReceivedDay || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-year">
+                  <label htmlFor="date-received-year" aria-hidden="true">
+                    YYYY
+                  </label>
+                  <input
+                    aria-describedby="date-received-legend"
+                    aria-label="year, four digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.dateReceivedDate
+                        ? 'usa-input-error'
+                        : '')
+                    }
+                    id="date-received-year"
+                    max="2100"
+                    min="1900"
+                    name="dateReceivedYear"
+                    type="number"
+                    value={form.dateReceivedYear || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="date-received-day" aria-hidden="true">
-                  DD
-                </label>
-                <input
-                  aria-describedby="date-received-legend"
-                  aria-label="day, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
-                  }
-                  id="date-received-day"
-                  max="31"
-                  min="1"
-                  name="dateReceivedDay"
-                  type="number"
-                  value={form.dateReceivedDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="date-received-year" aria-hidden="true">
-                  YYYY
-                </label>
-                <input
-                  aria-describedby="date-received-legend"
-                  aria-label="year, four digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.dateReceivedDate ? 'usa-input-error' : '')
-                  }
-                  id="date-received-year"
-                  max="2100"
-                  min="1900"
-                  name="dateReceivedYear"
-                  type="number"
-                  value={form.dateReceivedYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            {caseDetailErrors.dateReceivedDate && (
-              <div className="usa-input-error-message" role="alert">
-                {caseDetailErrors.dateReceivedDate}
-              </div>
-            )}
-          </fieldset>
-        </div>
-
-        <div className="ustc-form-group">
-          <ProcedureType
-            value={caseDetail.procedureType}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: 'procedureType',
-                value: e.target.value,
-              });
-              updateCaseValueSequence({
-                key: 'preferredTrialCity',
-                value: '',
-              });
-              autoSaveCaseSequence();
-            }}
-            legend="Case Procedure"
-          />
-
-          <div className="order-checkbox">
-            <input
-              id="order-to-show-cause"
-              type="checkbox"
-              name="orderToShowCause"
-              checked={caseDetail.orderToShowCause}
-              onChange={e => {
-                updateCaseValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                autoSaveCaseSequence();
-              }}
-            />
-            <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+              {caseDetailErrors.dateReceivedDate && (
+                <div className="usa-input-error-message" role="alert">
+                  {caseDetailErrors.dateReceivedDate}
+                </div>
+              )}
+            </fieldset>
           </div>
         </div>
 
-        <TrialCity
-          label="Trial Location"
-          showHint={false}
-          showSmallTrialCitiesHint={false}
-          showRegularTrialCitiesHint={false}
-          showDefaultOption={true}
-          value={caseDetail.preferredTrialCity}
-          trialCitiesByState={
-            trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
-          }
-          onChange={e => {
-            updateCaseValueSequence({
-              key: 'preferredTrialCity',
-              value: e.target.value,
-            });
-            autoSaveCaseSequence();
-          }}
-        />
-
-        <div
-          className={`ustc-form-group ${
-            caseDetailErrors.payGovDate ? 'usa-input-error' : ''
-          }`}
-        >
-          <fieldset>
-            <legend id="fee-payment-date-legend">Fee Payment Date</legend>
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="fee-payment-date-month" aria-hidden="true">
-                  MM
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="month, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-month"
-                  max="12"
-                  min="1"
-                  name="payGovMonth"
-                  type="number"
-                  value={form.payGovMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="fee-payment-date-day" aria-hidden="true">
-                  DD
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="day, two digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-day"
-                  max="31"
-                  min="1"
-                  name="payGovDay"
-                  type="number"
-                  value={form.payGovDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="fee-payment-date-year" aria-hidden="true">
-                  YYYY
-                </label>
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="year, four digits"
-                  className={
-                    'usa-input-inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
-                  id="fee-payment-date-year"
-                  max="2100"
-                  min="1900"
-                  name="payGovYear"
-                  type="number"
-                  value={form.payGovYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            {caseDetailErrors.payGovDate && (
-              <div className="usa-input-error-message" role="alert">
-                {caseDetailErrors.payGovDate}
-              </div>
-            )}
-          </fieldset>
-        </div>
-
-        <div className="ustc-form-group">
-          <label htmlFor="fee-payment-id">Fee Payment ID</label>
-          <input
-            id="fee-payment-id"
-            name="payGovId"
-            type="number"
-            value={caseDetail.payGovId || ''}
-            onBlur={() => {
-              autoSaveCaseSequence();
-            }}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-
-          <div className="order-checkbox">
-            <input
-              id="order-for-filing-fee"
-              type="checkbox"
-              name="orderForFilingFee"
-              checked={caseDetail.orderForFilingFee}
+        <div className="subsection">
+          <div className="ustc-form-group">
+            <ProcedureType
+              value={caseDetail.procedureType}
               onChange={e => {
                 updateCaseValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
+                  key: 'procedureType',
+                  value: e.target.value,
+                });
+                updateCaseValueSequence({
+                  key: 'preferredTrialCity',
+                  value: '',
                 });
                 autoSaveCaseSequence();
               }}
+              legend="Case Procedure"
             />
-            <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+
+            <div className="order-checkbox">
+              <input
+                id="order-to-show-cause"
+                type="checkbox"
+                name="orderToShowCause"
+                checked={caseDetail.orderToShowCause}
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  autoSaveCaseSequence();
+                }}
+              />
+              <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+            </div>
+          </div>
+        </div>
+
+        <div className="subsection">
+          <TrialCity
+            label="Trial Location"
+            showHint={false}
+            showSmallTrialCitiesHint={false}
+            showRegularTrialCitiesHint={false}
+            showDefaultOption={true}
+            value={caseDetail.preferredTrialCity}
+            trialCitiesByState={
+              trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
+            }
+            onChange={e => {
+              updateCaseValueSequence({
+                key: 'preferredTrialCity',
+                value: e.target.value,
+              });
+              autoSaveCaseSequence();
+            }}
+          />
+        </div>
+
+        <div className="subsection">
+          <div
+            className={`ustc-form-group ${
+              caseDetailErrors.payGovDate ? 'usa-input-error' : ''
+            }`}
+          >
+            <fieldset>
+              <legend id="fee-payment-date-legend">Fee Payment Date</legend>
+              <div className="usa-date-of-birth">
+                <div className="usa-form-group usa-form-group-month">
+                  <label htmlFor="fee-payment-date-month" aria-hidden="true">
+                    MM
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="month, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-month"
+                    max="12"
+                    min="1"
+                    name="payGovMonth"
+                    type="number"
+                    value={form.payGovMonth || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-day">
+                  <label htmlFor="fee-payment-date-day" aria-hidden="true">
+                    DD
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="day, two digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-day"
+                    max="31"
+                    min="1"
+                    name="payGovDay"
+                    type="number"
+                    value={form.payGovDay || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="usa-form-group usa-form-group-year">
+                  <label htmlFor="fee-payment-date-year" aria-hidden="true">
+                    YYYY
+                  </label>
+                  <input
+                    aria-describedby="fee-payment-date-legend"
+                    aria-label="year, four digits"
+                    className={
+                      'usa-input-inline' +
+                      (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
+                    }
+                    id="fee-payment-date-year"
+                    max="2100"
+                    min="1900"
+                    name="payGovYear"
+                    type="number"
+                    value={form.payGovYear || ''}
+                    onBlur={() => {
+                      autoSaveCaseSequence();
+                    }}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              {caseDetailErrors.payGovDate && (
+                <div className="usa-input-error-message" role="alert">
+                  {caseDetailErrors.payGovDate}
+                </div>
+              )}
+            </fieldset>
+          </div>
+        </div>
+
+        <div className="subsection">
+          <div className="ustc-form-group">
+            <label htmlFor="fee-payment-id">Fee Payment ID</label>
+            <input
+              id="fee-payment-id"
+              name="payGovId"
+              type="number"
+              value={caseDetail.payGovId || ''}
+              onBlur={() => {
+                autoSaveCaseSequence();
+              }}
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+
+            <div className="order-checkbox">
+              <input
+                id="order-for-filing-fee"
+                type="checkbox"
+                name="orderForFilingFee"
+                checked={caseDetail.orderForFilingFee}
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  autoSaveCaseSequence();
+                }}
+              />
+              <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+            </div>
           </div>
         </div>
 

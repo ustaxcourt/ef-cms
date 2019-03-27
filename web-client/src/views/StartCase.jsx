@@ -514,10 +514,16 @@ export const StartCase = connect(
                 <label
                   htmlFor="ownership-disclosure-file"
                   className={
-                    startCaseHelper.showOwnershipDisclosureValid && 'validated'
+                    'ustc-upload-ods ' +
+                    (startCaseHelper.showOwnershipDisclosureValid
+                      ? 'validated'
+                      : '')
                   }
                 >
                   Upload your Ownership Disclosure Statement
+                  <span className="success-message">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
                 </label>
                 <span className="usa-form-hint">
                   File must be in PDF format (.pdf).

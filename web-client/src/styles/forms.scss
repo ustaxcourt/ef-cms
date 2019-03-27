@@ -220,7 +220,8 @@ label.validated::after {
 }
 
 label.ustc-upload-petition,
-label.ustc-upload-stin {
+label.ustc-upload-stin,
+label.ustc-upload-ods {
   .success-message {
     display: none;
     color: $color-green;
