@@ -21,6 +21,17 @@ export const setFormForCaseAction = ({ get, store }) => {
     store.set(state.form.irsYear, irsNoticeDate.format('YYYY'));
   }
 
+  const receivedAt = moment.utc(caseDetail.receivedAt, 'YYYY/MM/DD');
+  if (
+    receivedAt &&
+    receivedAt.toDate() instanceof Date &&
+    !isNaN(receivedAt.toDate())
+  ) {
+    store.set(state.form.receivedAtMonth, receivedAt.format('M'));
+    store.set(state.form.receivedAtDay, receivedAt.format('D'));
+    store.set(state.form.receivedAtYear, receivedAt.format('YYYY'));
+  }
+
   const payGovDate = moment.utc(caseDetail.payGovDate, 'YYYY/MM/DD');
   if (
     payGovDate &&

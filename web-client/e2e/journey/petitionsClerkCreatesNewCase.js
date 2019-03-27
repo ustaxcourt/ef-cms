@@ -11,7 +11,7 @@ export default (test, fakeFile) => {
       'Case Caption is required.',
     );
 
-    expect(test.getState('validationErrors.createdAt')).toEqual(
+    expect(test.getState('validationErrors.receivedAt')).toEqual(
       'Please enter a valid date.',
     );
 
