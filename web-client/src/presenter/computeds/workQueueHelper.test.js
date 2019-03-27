@@ -51,4 +51,19 @@ describe('workQueueHelper', () => {
       showStartCaseButton: true,
     });
   });
+
+  it('shows the start a case button when role is docket clerk', async () => {
+    const result = await runCompute(workQueueHelper, {
+      state: {
+        selectedWorkItems: [],
+        user: {
+          role: 'docketclerk',
+        },
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result).toMatchObject({
+      showStartCaseButton: true,
+    });
+  });
 });

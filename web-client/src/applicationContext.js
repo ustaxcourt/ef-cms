@@ -44,6 +44,7 @@ import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWor
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { Petition } from '../../shared/src/business/entities/Petition';
+import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
@@ -149,6 +150,7 @@ const applicationContext = {
     ForwardMessage,
     InitialWorkItemMessage,
     Petition,
+    PetitionFromPaper,
   }),
   getError: e => {
     return ErrorFactory.getError(e);
