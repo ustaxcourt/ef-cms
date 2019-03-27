@@ -1,3 +1,4 @@
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
@@ -12,17 +13,13 @@ import { CaseInformationPublic } from './CaseInformationPublic';
 export const CaseDetailPublic = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    currentTab: state.currentTab,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
   function CaseDetail({
     caseDetail,
-    currentTab,
     showDetails,
     togglePaymentDetailsSequence,
-    updateCurrentTabSequence,
   }) {
     return (
       <React.Fragment>
@@ -124,50 +121,20 @@ export const CaseDetailPublic = connect(
               </ul>
             </div>
           )}
-          <nav className="horizontal-tabs subsection">
-            <ul role="tabslist">
-              <li
-                role="presentation"
-                className={currentTab == 'Docket Record' ? 'active' : ''}
-              >
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="tab-docket-record"
-                  aria-selected={currentTab === 'Docket Record'}
-                  onClick={() =>
-                    updateCurrentTabSequence({ value: 'Docket Record' })
-                  }
-                >
-                  Docket Record
-                </button>
-              </li>
-              <li className={currentTab == 'Case Information' ? 'active' : ''}>
-                <button
-                  role="tab"
-                  className="tab-link"
-                  id="tab-case-info"
-                  aria-selected={currentTab === 'Case Information'}
-                  onClick={() =>
-                    updateCurrentTabSequence({ value: 'Case Information' })
-                  }
-                >
-                  Case Information
-                </button>
-              </li>
-            </ul>
-          </nav>
-          {currentTab == 'Case Information' && (
-            <div className="tab-content" role="tabpanel">
+
+          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+            <Tab
+              tabName="docketRecord"
+              title="Docket Record"
+              id="tab-docket-record"
+            >
+              <DocketRecord />
+            </Tab>
+            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
               <CaseInformationPublic />
               <PartyInformation />
-            </div>
-          )}
-          {currentTab == 'Docket Record' && (
-            <div className="tab-content" role="tabpanel">
-              <DocketRecord />
-            </div>
-          )}
+            </Tab>
+          </Tabs>
         </section>
       </React.Fragment>
     );
