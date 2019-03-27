@@ -101,6 +101,7 @@ exports.createCase = async ({
     practitioner,
     ...petitionEntity.toRawObject(),
     docketNumber,
+    isPaper: false,
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
