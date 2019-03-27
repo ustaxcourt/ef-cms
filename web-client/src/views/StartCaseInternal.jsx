@@ -10,7 +10,6 @@ import { Text } from '../ustc-ui/Text/Text';
 export const StartCaseInternal = connect(
   {
     constants: state.constants,
-    form: state.form,
     showModal: state.showModal,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
@@ -22,7 +21,6 @@ export const StartCaseInternal = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    form,
     constants,
     showModal,
     startACaseToggleCancelSequence,
