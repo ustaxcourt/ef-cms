@@ -28,11 +28,14 @@ export const TrialCity = connect(
     return (
       <div
         className={
-          'usa-form-group ' +
+          'ustc-form-group ' +
           (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
         }
       >
-        <label htmlFor="preferred-trial-city" className="with-hint">
+        <label
+          htmlFor="preferred-trial-city"
+          className={showHint && 'with-hint'}
+        >
           {label}
         </label>
         {showHint && (
