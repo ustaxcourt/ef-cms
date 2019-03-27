@@ -52,12 +52,12 @@ export const StartCaseInternal = connect(
           <div className="blue-container">
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.createdAt ? 'usa-input-error' : '')
               }
             >
               <fieldset>
-                <legend id="date-received-legend">
+                <legend id="date-received-legend with-hint">
                   Date Received{' '}
                   <span className="usa-form-hint">(required)</span>
                 </legend>
@@ -144,7 +144,7 @@ export const StartCaseInternal = connect(
 
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.caseCaption ? 'usa-input-error' : '')
               }
             >
@@ -180,7 +180,7 @@ export const StartCaseInternal = connect(
               <label
                 htmlFor="petition-file"
                 className={
-                  'ustc-upload-petition with-hint ' +
+                  'ustc-upload-petition ' +
                   (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                 }
               >
@@ -221,7 +221,7 @@ export const StartCaseInternal = connect(
               <label
                 htmlFor="stin-file"
                 className={
-                  'ustc-upload-stin with-hint ' +
+                  'ustc-upload-stin ' +
                   (startCaseHelper.showStinFileValid ? 'validated' : '')
                 }
               >
@@ -255,10 +255,16 @@ export const StartCaseInternal = connect(
             <label
               htmlFor="ownership-disclosure-file"
               className={
-                startCaseHelper.showOwnershipDisclosureValid && 'validated'
+                'ustc-upload-ods ' +
+                (startCaseHelper.showOwnershipDisclosureValid
+                  ? 'validated'
+                  : '')
               }
             >
               Upload the Ownership Disclosure Statement
+              <span className="success-message">
+                <FontAwesomeIcon icon="check-circle" size="sm" />
+              </span>
             </label>
             <input
               id="ownership-disclosure-file"
