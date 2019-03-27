@@ -7,7 +7,7 @@ const { post } = require('./requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = ({
+exports.createCaseFromPaper = ({
   petitionMetadata,
   petitionFileId,
   ownershipDisclosureFileId,
