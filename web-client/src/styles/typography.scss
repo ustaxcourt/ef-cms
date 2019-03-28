@@ -71,7 +71,7 @@ h6,
 .captioned {
   display: inline-block;
   margin-right: 15px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 h1,
@@ -86,13 +86,15 @@ h6 {
   }
 }
 
-h1[tabIndex='-1'],
-h2[tabIndex='-1'],
-h3[tabIndex='-1'],
-h4[tabIndex='-1'],
-h5[tabIndex='-1'],
-h6[tabIndex='-1']:focus {
-  outline: none;
+#main-content {
+  h1[tabIndex='-1'],
+  h2[tabIndex='-1'],
+  h3[tabIndex='-1'],
+  h4[tabIndex='-1'],
+  h5[tabIndex='-1'],
+  h6[tabIndex='-1']:focus {
+    outline: none;
+  }
 }
 
 p {

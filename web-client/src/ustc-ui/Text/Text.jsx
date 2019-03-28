@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
 export const Text = connect(props => {
-  const { get, bind } = props;
+  const { get, bind, className } = props;
 
   let text;
 
@@ -15,5 +15,5 @@ export const Text = connect(props => {
     return null;
   }
 
-  return <span {...props}>{text}</span>;
+  return <span className={className}>{text}</span>;
 });
