@@ -3,8 +3,15 @@ const {
 } = require('../useCases/createCaseFromPaperInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 
+const {
+  getWorkItemsBySection,
+} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+const {
+  getWorkItemsForUser,
+} = require('../useCases/workitems/getWorkItemsForUserInteractor');
 const sinon = require('sinon');
-const DATE = '2019-03-01T22:54:06.000Z';
+const CREATED_DATE = '2019-03-01T22:54:06.000Z';
+const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
 
 const {
   createTestApplicationContext,
@@ -14,11 +21,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(DATE);
+    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
-        name: 'richard',
-        role: 'petitionsclerk',
+        name: 'Alex Docketclerk',
+        role: 'docketclerk',
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -33,8 +40,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
-        caseCaption: 'Rage vs. The Machine',
-        createdAt: DATE,
+        caseCaption: 'Bob Jones, Petitioner',
+        receivedAt: RECEIVED_DATE,
       },
     });
 
@@ -44,55 +51,50 @@ describe('createCaseFromPaperInteractor integration test', () => {
     });
 
     expect(createdCase).toMatchObject({
-      caseCaption: 'Rage vs. The Machine',
+      caseCaption: 'Bob Jones, Petitioner',
       caseTitle:
-        'Rage vs. The Machine v. Commissioner of Internal Revenue, Respondent',
-      createdAt: DATE,
+        'Bob Jones, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      createdAt: CREATED_DATE,
       currentVersion: '1',
       docketNumber: '101-19',
       docketNumberSuffix: null,
       docketRecord: [
         {
           description: 'Petition',
-          filedBy: 'richard',
-          filingDate: '2019-03-01T22:54:06.000Z',
+          filedBy: 'Bob Jones',
+          filingDate: RECEIVED_DATE,
           status: undefined,
-        },
-        {
-          description: 'Request for Place of Trial at undefined',
-          filingDate: '2019-03-01T22:54:06.000Z',
         },
       ],
       documents: [
         {
-          createdAt: '2019-03-01T22:54:06.000Z',
+          createdAt: RECEIVED_DATE,
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Bob Jones',
           workItems: [
             {
-              assigneeId: null,
-              assigneeName: null,
+              assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              assigneeName: 'Alex Docketclerk',
               caseStatus: 'New',
-              createdAt: '2019-03-01T22:54:06.000Z',
+              createdAt: CREATED_DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
               document: {
                 documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
                 documentType: 'Petition',
-                filedBy: 'richard',
+                filedBy: 'Bob Jones',
                 workItems: [],
               },
               isInitializeCase: true,
               messages: [
                 {
-                  createdAt: '2019-03-01T22:54:06.000Z',
-                  from: 'richard',
+                  createdAt: CREATED_DATE,
+                  from: 'Alex Docketclerk',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Rage vs. The Machine is ready for review.',
+                  message: 'Petition filed by Bob Jones is ready for review.',
                 },
               ],
-              section: 'petitions',
+              section: 'docket',
               sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
@@ -100,7 +102,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       ],
       initialDocketNumberSuffix: '_',
       initialTitle:
-        'Rage vs. The Machine v. Commissioner of Internal Revenue, Respondent',
+        'Bob Jones, Petitioner v. Commissioner of Internal Revenue, Respondent',
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
@@ -110,10 +112,71 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderToShowCause: false,
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+      receivedAt: RECEIVED_DATE,
       status: 'New',
       stinFileId: undefined,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       yearAmounts: [],
     });
+
+    const docketclerkInbox = await getWorkItemsForUser({
+      applicationContext,
+    });
+
+    expect(docketclerkInbox).toMatchObject([
+      {
+        assigneeName: 'Alex Docketclerk',
+        caseStatus: 'New',
+        docketNumber: '101-19',
+        docketNumberSuffix: null,
+        document: {
+          createdAt: RECEIVED_DATE,
+          documentType: 'Petition',
+          filedBy: 'Bob Jones',
+          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        isInitializeCase: true,
+        messages: [
+          {
+            from: 'Alex Docketclerk',
+            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            message: 'Petition filed by Bob Jones is ready for review.',
+          },
+        ],
+        section: 'docket',
+        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    ]);
+
+    const docketsSectionInbox = await getWorkItemsBySection({
+      applicationContext,
+      section: 'docket',
+    });
+
+    expect(docketsSectionInbox).toMatchObject([
+      {
+        assigneeName: 'Alex Docketclerk',
+        caseStatus: 'New',
+        docketNumber: '101-19',
+        docketNumberSuffix: null,
+        document: {
+          createdAt: RECEIVED_DATE,
+          documentType: 'Petition',
+          filedBy: 'Bob Jones',
+          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
+        isInitializeCase: true,
+        messages: [
+          {
+            from: 'Alex Docketclerk',
+            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            message: 'Petition filed by Bob Jones is ready for review.',
+          },
+        ],
+        section: 'docket',
+        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    ]);
   });
 });

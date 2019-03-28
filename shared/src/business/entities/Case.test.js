@@ -7,6 +7,17 @@ const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 
 describe('Case entity', () => {
+  it('creates a trial city docket record if preferredTrialCity is updated and a docket record does not exist', () => {
+    const myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      docketRecord: [
+        {
+          description: 'Request for Place of Trial at Washington, D.C.',
+        },
+      ],
+    });
+  });
+
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE);
     expect(myCase).toMatchObject({
@@ -553,8 +564,8 @@ describe('Case entity', () => {
           filingDate: new Date().toISOString(),
         }),
       );
-      expect(caseRecord.docketRecord).toHaveLength(1);
-      expect(caseRecord.docketRecord[0].description).toEqual('test');
+      expect(caseRecord.docketRecord).toHaveLength(2);
+      expect(caseRecord.docketRecord[1].description).toEqual('test');
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);

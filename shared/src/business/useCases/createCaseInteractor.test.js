@@ -94,14 +94,14 @@ describe('createCase', () => {
       docketNumberSuffix: 'S',
       docketRecord: [
         {
+          description: 'Request for Place of Trial at Chattanooga, TN',
+          filingDate: '2018-11-21T20:49:28.192Z',
+        },
+        {
           description: 'Petition',
           filedBy: 'Test Taxpayer',
           filingDate: '2018-11-21T20:49:28.192Z',
           status: undefined,
-        },
-        {
-          description: 'Request for Place of Trial at Chattanooga, TN',
-          filingDate: '2018-11-21T20:49:28.192Z',
         },
         {
           description: 'Ownership Disclosure Statement',

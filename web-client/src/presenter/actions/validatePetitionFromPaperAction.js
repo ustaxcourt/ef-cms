@@ -19,7 +19,7 @@ export const validatePetitionFromPaperAction = ({
 }) => {
   const petition = get(state.petition);
 
-  const createdAt = props.computedDate;
+  const receivedAt = props.computedDate;
 
   const form = omit(
     {
@@ -30,7 +30,7 @@ export const validatePetitionFromPaperAction = ({
 
   const errors = applicationContext.getUseCases().validatePetitionFromPaper({
     applicationContext,
-    petition: { ...petition, ...form, createdAt },
+    petition: { ...petition, ...form, receivedAt },
   });
 
   if (!errors) {
