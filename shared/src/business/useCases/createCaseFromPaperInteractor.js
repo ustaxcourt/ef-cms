@@ -1,5 +1,4 @@
 const { Case } = require('../entities/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { WorkItem } = require('../entities/WorkItem');
