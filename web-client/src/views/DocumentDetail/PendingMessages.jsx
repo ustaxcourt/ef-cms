@@ -17,10 +17,10 @@ class PendingMessagesComponent extends React.Component {
       openCreateMessageModalSequence,
       users,
       validationErrors,
-      getUsersInSectionSequence,
       form,
       validateForwardMessageSequence,
       constants,
+      workQueueSectionHelper,
     } = this.props;
     return (
       <>
@@ -299,7 +299,7 @@ class PendingMessagesComponent extends React.Component {
                           <option value="">- Select -</option>
                           {constants.SECTIONS.map(section => (
                             <option key={section} value={section}>
-                              {section}
+                              {workQueueSectionHelper.sectionDisplay(section)}
                             </option>
                           ))}
                         </select>
@@ -343,7 +343,9 @@ class PendingMessagesComponent extends React.Component {
                             <option value="">- Select -</option>
                             {constants.CHAMBERS_SECTIONS.map(section => (
                               <option key={section} value={section}>
-                                {section}
+                                {workQueueSectionHelper.chambersDisplay(
+                                  section,
+                                )}
                               </option>
                             ))}
                           </select>
@@ -456,7 +458,6 @@ PendingMessagesComponent.propTypes = {
   constants: PropTypes.object,
   documentDetailHelper: PropTypes.object,
   form: PropTypes.object,
-  getUsersInSectionSequence: PropTypes.func,
   openCreateMessageModalSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
@@ -467,6 +468,7 @@ PendingMessagesComponent.propTypes = {
   validateForwardMessageSequence: PropTypes.func,
   validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
+  workQueueSectionHelper: PropTypes.object,
 };
 
 export const PendingMessages = connect(
@@ -474,7 +476,6 @@ export const PendingMessages = connect(
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
     form: state.form,
-    getUsersInSectionSequence: sequences.getUsersInSectionSequence,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
@@ -485,6 +486,7 @@ export const PendingMessages = connect(
     validateForwardMessageSequence: sequences.validateForwardMessageSequence,
     validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
+    workQueueSectionHelper: state.workQueueSectionHelper,
   },
   PendingMessagesComponent,
 );
