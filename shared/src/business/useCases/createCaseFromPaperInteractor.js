@@ -93,6 +93,7 @@ exports.createCaseFromPaper = async ({
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
+    createdAt: caseToAdd.receivedAt,
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
     filedBy: caseCaptionNames,
@@ -106,6 +107,7 @@ exports.createCaseFromPaper = async ({
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({
+      createdAt: caseToAdd.receivedAt,
       documentId: stinFileId,
       documentType: Case.documentTypes.stin,
       filedBy: caseCaptionNames,
@@ -116,6 +118,7 @@ exports.createCaseFromPaper = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
+      createdAt: caseToAdd.receivedAt,
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
