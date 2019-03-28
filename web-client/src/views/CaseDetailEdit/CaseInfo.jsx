@@ -26,114 +26,110 @@ export const CaseInfo = connect(
   }) => {
     return (
       <div className="blue-container">
-        <div className="subsection">
-          <div
-            className={`ustc-form-group ${
-              caseDetailErrors.dateReceived ? 'usa-input-error' : ''
-            }`}
-          >
-            <fieldset>
-              <legend id="date-received-legend">Date Received</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-received-month" aria-hidden="true">
-                    MM
-                  </label>
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="month, two digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.dateReceivedDate
-                        ? 'usa-input-error'
-                        : '')
-                    }
-                    id="date-received-month"
-                    max="12"
-                    min="1"
-                    name="dateReceivedMonth"
-                    type="number"
-                    value={form.dateReceivedMonth || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
+        {caseDetail.isPaper && (
+          <div className="subsection">
+            <div
+              className={`ustc-form-group ${
+                caseDetailErrors.receivedAt ? 'usa-input-error' : ''
+              }`}
+            >
+              <fieldset>
+                <legend id="received-at-legend">Date Received</legend>
+                <div className="usa-date-of-birth">
+                  <div className="usa-form-group usa-form-group-month">
+                    <label htmlFor="received-at-month" aria-hidden="true">
+                      MM
+                    </label>
+                    <input
+                      aria-describedby="received-at-legend"
+                      aria-label="month, two digits"
+                      className={
+                        'usa-input-inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                      }
+                      id="received-at-month"
+                      max="12"
+                      min="1"
+                      name="receivedAtMonth"
+                      type="number"
+                      value={form.receivedAtMonth || ''}
+                      onBlur={() => {
+                        autoSaveCaseSequence();
+                      }}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="usa-form-group usa-form-group-day">
+                    <label htmlFor="received-at-day" aria-hidden="true">
+                      DD
+                    </label>
+                    <input
+                      aria-describedby="received-at-legend"
+                      aria-label="day, two digits"
+                      className={
+                        'usa-input-inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                      }
+                      id="received-at-day"
+                      max="31"
+                      min="1"
+                      name="receivedAtDay"
+                      type="number"
+                      value={form.receivedAtDay || ''}
+                      onBlur={() => {
+                        autoSaveCaseSequence();
+                      }}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="usa-form-group usa-form-group-year">
+                    <label htmlFor="received-at-year" aria-hidden="true">
+                      YYYY
+                    </label>
+                    <input
+                      aria-describedby="received-at-legend"
+                      aria-label="year, four digits"
+                      className={
+                        'usa-input-inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                      }
+                      id="received-at-year"
+                      max="2100"
+                      min="1900"
+                      name="receivedAtYear"
+                      type="number"
+                      value={form.receivedAtYear || ''}
+                      onBlur={() => {
+                        autoSaveCaseSequence();
+                      }}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-received-day" aria-hidden="true">
-                    DD
-                  </label>
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="day, two digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.dateReceivedDate
-                        ? 'usa-input-error'
-                        : '')
-                    }
-                    id="date-received-day"
-                    max="31"
-                    min="1"
-                    name="dateReceivedDay"
-                    type="number"
-                    value={form.dateReceivedDay || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-received-year" aria-hidden="true">
-                    YYYY
-                  </label>
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="year, four digits"
-                    className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.dateReceivedDate
-                        ? 'usa-input-error'
-                        : '')
-                    }
-                    id="date-received-year"
-                    max="2100"
-                    min="1900"
-                    name="dateReceivedYear"
-                    type="number"
-                    value={form.dateReceivedYear || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              {caseDetailErrors.dateReceivedDate && (
-                <div className="usa-input-error-message" role="alert">
-                  {caseDetailErrors.dateReceivedDate}
-                </div>
-              )}
-            </fieldset>
+                {caseDetailErrors.receivedAt && (
+                  <div className="usa-input-error-message" role="alert">
+                    {caseDetailErrors.receivedAt}
+                  </div>
+                )}
+              </fieldset>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="subsection">
           <div className="ustc-form-group">

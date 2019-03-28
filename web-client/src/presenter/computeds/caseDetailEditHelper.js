@@ -31,8 +31,8 @@ export const caseDetailEditHelper = get => {
     const odsDocs = documents.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
+    showOwnershipDisclosureStatement = true;
     if (odsDocs[0]) {
-      showOwnershipDisclosureStatement = true;
       ownershipDisclosureStatementDocumentId = odsDocs[0].documentId;
     }
   }

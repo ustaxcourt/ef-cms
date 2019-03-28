@@ -38,7 +38,7 @@ export const castToISO = dateString => {
  * @param {string} originalDate the original date to return if the updatedDateString is bad
  * @returns {string} the updatedDateString if everything is correct.
  */
-const checkDate = (updatedDateString, originalDate) => {
+export const checkDate = (updatedDateString, originalDate) => {
   const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
@@ -71,7 +71,17 @@ const checkDate = (updatedDateString, originalDate) => {
 export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
   const caseDetail = { ...get(state.caseDetail) };
   let caseCaption = props.caseCaption;
-  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
+  const {
+    irsYear,
+    irsMonth,
+    irsDay,
+    payGovYear,
+    payGovMonth,
+    payGovDay,
+    receivedAtYear,
+    receivedAtMonth,
+    receivedAtDay,
+  } = {
     ...get(state.form),
   };
 
@@ -80,6 +90,7 @@ export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
       ...get(state.form),
       irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
       payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
+      receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
@@ -88,12 +99,16 @@ export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
       'payGovYear',
       'payGovMonth',
       'payGovDay',
+      'receivedAtYear',
+      'receivedAtMonth',
+      'receivedAtDay',
       'trialCities',
     ],
   );
 
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
+  form.receivedAt = checkDate(form.receivedAt, caseDetail.receivedAt);
 
   // cannot store empty strings in persistence
   if (caseDetail.preferredTrialCity === '') {
