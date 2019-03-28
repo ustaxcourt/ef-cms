@@ -319,7 +319,7 @@ class PendingMessagesComponent extends React.Component {
                               : '')
                           }
                         >
-                          <label htmlFor={`section-${idx}`}>
+                          <label htmlFor={`chambers-${idx}`}>
                             Select Chambers
                           </label>
 
