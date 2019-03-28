@@ -56,13 +56,8 @@ export default (test, fakeFile) => {
     expect(test.getState('alertError')).toEqual(null);
     expect(test.getState('validationErrors')).toEqual({});
 
-    // await test.runSequence('submitPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
-    // expect(test.getState('alertError')).toEqual(null);
-
-    // expect(test.getState('alertSuccess')).toEqual({
-    //   message: 'You can access your case at any time from the case list below.',
-    //   title: 'Your petition has been successfully submitted.',
-    // });
+    expect(test.getState('currentPage')).toEqual('DocumentDetail');
   });
 };

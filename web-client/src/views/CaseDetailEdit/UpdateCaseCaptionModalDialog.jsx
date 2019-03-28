@@ -17,10 +17,9 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
   renderBody() {
     return (
       <div>
-        <p className="semi-bold" id="caption-label">
-          Case Caption
-        </p>
+        <label htmlFor="caption">Case Caption</label>
         <textarea
+          id="caption"
           className="caption"
           defaultValue={this.props.caseCaption}
           aria-labelledby="caption-label"
