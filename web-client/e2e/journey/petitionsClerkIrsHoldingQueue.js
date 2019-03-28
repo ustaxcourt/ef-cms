@@ -94,12 +94,14 @@ export default test => {
       queue: 'section',
     });
 
+    // TODO: FIX ME
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     const recalledWorkItem = test
       .getState('workQueue')
       .find(
         workItem =>
           workItem.docketNumber === test.docketNumber &&
+          workItem.status === 'Recalled' &&
           workItem.document.documentType === 'Petition',
       );
 
