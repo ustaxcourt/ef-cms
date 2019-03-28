@@ -61,17 +61,13 @@ describe('createCaseFromPaperInteractor integration test', () => {
         {
           description: 'Petition',
           filedBy: 'Bob Jones',
-          filingDate: '2019-03-01T22:54:06.000Z',
+          filingDate: DATE,
           status: undefined,
-        },
-        {
-          description: 'Request for Place of Trial at undefined',
-          filingDate: '2019-03-01T22:54:06.000Z',
         },
       ],
       documents: [
         {
-          createdAt: '2019-03-01T22:54:06.000Z',
+          createdAt: DATE,
           documentType: 'Petition',
           filedBy: 'Bob Jones',
           workItems: [
@@ -79,7 +75,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               assigneeName: 'Alex Docketclerk',
               caseStatus: 'New',
-              createdAt: '2019-03-01T22:54:06.000Z',
+              createdAt: DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
               document: {
@@ -91,7 +87,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
               isInitializeCase: true,
               messages: [
                 {
-                  createdAt: '2019-03-01T22:54:06.000Z',
+                  createdAt: DATE,
                   from: 'Alex Docketclerk',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
                   message: 'Petition filed by Bob Jones is ready for review.',

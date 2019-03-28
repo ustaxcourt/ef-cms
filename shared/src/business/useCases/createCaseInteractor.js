@@ -121,15 +121,6 @@ exports.createCase = async ({
   });
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
-  caseToAdd.addDocketRecord(
-    new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
-      filingDate: caseToAdd.createdAt,
-    }),
-  );
-
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
