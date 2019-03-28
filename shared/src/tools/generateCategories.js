@@ -39,7 +39,7 @@ const whitespaceCleanup = str => {
   str = str.trim();
   return str;
 };
-
+/* eslint no-console: "off"*/
 const main = () => {
   if (files.length < 1) {
     console.log(USAGE);
