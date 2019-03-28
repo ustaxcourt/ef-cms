@@ -48,7 +48,11 @@ import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
-import { SECTIONS } from '../../shared/src/business/entities/WorkQueue';
+import {
+  CHAMBERS_SECTION,
+  CHAMBERS_SECTIONS,
+  SECTIONS,
+} from '../../shared/src/business/entities/WorkQueue';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -139,6 +143,8 @@ const applicationContext = {
   getConstants: () => ({
     BUSINESS_TYPES,
     CASE_CAPTION_POSTFIX,
+    CHAMBERS_SECTION,
+    CHAMBERS_SECTIONS,
     COUNTRY_TYPES,
     ESTATE_TYPES,
     OTHER_TYPES,
