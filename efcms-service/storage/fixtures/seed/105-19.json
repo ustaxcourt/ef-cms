@@ -1,10 +1,5 @@
 [
   {
-    "sk": "docketNumberCounter-2019",
-    "id": 5,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
     "procedureType": "Regular",
     "contactSecondary": {},
     "documents": [
