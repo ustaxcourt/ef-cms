@@ -126,6 +126,23 @@ function Case(rawCase) {
   this.orderForOds = this.orderForOds || false;
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
+
+  const trialRecord = this.docketRecord.find(
+    record => record.description.indexOf('Request for Place of Trial') !== -1,
+  );
+
+  if (this.preferredTrialCity) {
+    if (!trialRecord) {
+      this.addDocketRecord(
+        new DocketRecord({
+          description: `Request for Place of Trial at ${
+            this.preferredTrialCity
+          }`,
+          filingDate: this.receivedAt || this.createdAt,
+        }),
+      );
+    }
+  }
 }
 
 Case.name = 'Case';
