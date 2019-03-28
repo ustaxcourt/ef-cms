@@ -40,7 +40,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
         caseCaption: 'Bob Jones, Petitioner',
-        createdAt: DATE,
+        receivedAt: DATE,
       },
     });
 
@@ -111,6 +111,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderToShowCause: false,
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+      receivedAt: DATE,
       status: 'New',
       stinFileId: undefined,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',

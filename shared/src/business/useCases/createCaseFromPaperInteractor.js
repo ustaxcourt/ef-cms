@@ -87,6 +87,7 @@ exports.createCaseFromPaper = async ({
     userId: user.userId,
     ...petitionEntity.toRawObject(),
     docketNumber,
+    isPaper: true,
   });
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
