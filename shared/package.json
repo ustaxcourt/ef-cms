@@ -26,6 +26,7 @@
     "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
+      "!src/tools/**/*.js",
       "!src/proxies/**/*.js",
       "!src/**/ContactFactory.js"
     ],
