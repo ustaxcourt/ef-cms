@@ -44,7 +44,7 @@ class DocumentDetailComponent extends React.Component {
           <ErrorNotification />
 
           <div className="usa-grid-full">
-            <div className="usa-width-one-third">
+            <div className="usa-width-five-twelfths">
               <Tabs className="classic-horizontal-header3" bind="currentTab">
                 {helper.showDocumentInfoTab && (
                   <Tab
@@ -96,11 +96,13 @@ class DocumentDetailComponent extends React.Component {
                 </Tab>
               </Tabs>
             </div>
-            <div className="usa-width-two-thirds">
+            <div className="usa-width-seven-twelfths">
               <div className="top-bar clear-both">
-                <p className="full-width">
-                  Filed {helper.formattedDocument.createdAtFormatted} by{' '}
-                  {helper.formattedDocument.filedBy}
+                <div className="full-width">
+                  <span className="filed-by">
+                    Filed {helper.formattedDocument.createdAtFormatted} by{' '}
+                    {helper.formattedDocument.filedBy}
+                  </span>
                   <span className="float-right">
                     {caseHelper.showServeToIrsButton &&
                       helper.formattedDocument.isPetition && (
@@ -130,7 +132,7 @@ class DocumentDetailComponent extends React.Component {
                         </span>
                       )}
                   </span>
-                </p>
+                </div>
               </div>
               {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
               {!process.env.CYPRESS && (
