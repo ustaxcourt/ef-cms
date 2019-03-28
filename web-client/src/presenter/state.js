@@ -78,6 +78,7 @@ export const state = {
   user: null,
   users: [],
   validationErrors: {},
+  workItem: {},
   workItemActions: {},
   workQueue: [],
   workQueueHelper,

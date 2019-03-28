@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { If } from '../../ustc-ui/If/If';
 
 class PendingMessagesComponent extends React.Component {
   render() {
@@ -284,13 +285,11 @@ class PendingMessagesComponent extends React.Component {
                           name="section"
                           onChange={e => {
                             updateForwardFormValueSequence({
+                              form: `form.${workItem.workItemId}`,
                               key: e.target.name,
+                              section: e.target.value,
                               value: e.target.value,
                               workItemId: workItem.workItemId,
-                            });
-                            getUsersInSectionSequence({
-                              form: `form.${workItem.workItemId}`,
-                              section: e.target.value,
                             });
                             validateForwardMessageSequence({
                               workItemId: workItem.workItemId,
@@ -309,6 +308,51 @@ class PendingMessagesComponent extends React.Component {
                             validationErrors[workItem.workItemId].section}
                         </div>
                       </div>
+
+                      <If bind="workItem.showChambersSelect">
+                        <div
+                          className={
+                            'usa-form-group ' +
+                            (validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section
+                              ? 'usa-input-error'
+                              : '')
+                          }
+                        >
+                          <label htmlFor={`section-${idx}`}>
+                            Select Chambers
+                          </label>
+
+                          <select
+                            className="usa-input-inline"
+                            id={`chambers-${idx}`}
+                            name="chambers"
+                            onChange={e => {
+                              updateForwardFormValueSequence({
+                                form: `form.${workItem.workItemId}`,
+                                key: e.target.name,
+                                section: e.target.value,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                              validateForwardMessageSequence({
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          >
+                            <option value="">- Select -</option>
+                            {constants.CHAMBERS_SECTIONS.map(section => (
+                              <option key={section} value={section}>
+                                {section}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="usa-input-error-message beneath">
+                            {validationErrors[workItem.workItemId] &&
+                              validationErrors[workItem.workItemId].section}
+                          </div>
+                        </div>
+                      </If>
 
                       <div
                         className={
