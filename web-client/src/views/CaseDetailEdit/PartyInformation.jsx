@@ -63,6 +63,7 @@ export const PartyInformation = connect(
                 autoSaveCaseSequence();
               }}
             >
+              <option value="">- Select -</option>
               {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
                 <option
                   key={partyType}
