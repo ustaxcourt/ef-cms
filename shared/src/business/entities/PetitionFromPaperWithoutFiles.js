@@ -15,14 +15,14 @@ function PetitionFromPaperWithoutFiles(rawPetition) {
 
 PetitionFromPaperWithoutFiles.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
-  createdAt: [
+  petitionFileId: 'A petition file id is required.',
+  receivedAt: [
     {
       contains: 'must be less than or equal to',
       message: 'The received date is in the future. Please enter a valid date.',
     },
     'Please enter a valid date.',
   ],
-  petitionFileId: 'A petition file id is required.',
 };
 
 const uuidVersions = {
@@ -31,14 +31,14 @@ const uuidVersions = {
 
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
-  createdAt: joi
-    .date()
-    .iso()
-    .max('now')
-    .required(),
   petitionFileId: joi
     .string()
     .uuid(uuidVersions)
+    .required(),
+  receivedAt: joi
+    .date()
+    .iso()
+    .max('now')
     .required(),
 });
 

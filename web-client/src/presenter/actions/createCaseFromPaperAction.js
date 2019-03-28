@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 import { omit } from 'lodash';
+import { checkDate } from './getFormCombinedWithCaseDetailAction';
 
 /**
  * invokes the filePetition useCase.
@@ -18,12 +19,12 @@ export const createCaseFromPaperAction = async ({
     state.petition,
   );
 
-  const createdAt = props.computedDate;
+  const receivedAt = checkDate(props.computedDate);
 
   const form = omit(
     {
       ...get(state.form),
-      createdAt,
+      receivedAt,
     },
     ['year', 'month', 'day'],
   );
