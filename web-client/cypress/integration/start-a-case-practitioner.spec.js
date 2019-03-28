@@ -13,7 +13,7 @@ describe('Assign a work item ', () => {
 
   it('go to the practitioner dashboard and expect that no case list table is displayed', () => {
     navigateToDashboard('practitioner');
-    getCaseList().should('not.exist');
+    getCaseList().should('have.length', 1);
   });
 
   it('click the start a case button', () => {
@@ -26,6 +26,6 @@ describe('Assign a work item ', () => {
 
   it('expect the cast list to be displayed with 1 item now', () => {
     getCaseList().should('exist');
-    getCaseList().should('have.length', 1);
+    getCaseList().should('have.length', 2);
   });
 });
