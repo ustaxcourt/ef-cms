@@ -44,7 +44,7 @@ export const WorkQueue = connect(
                 href="/start-a-case"
                 id="init-file-petition"
               >
-                Start a Case
+                Create a Case
               </a>
             </div>
           </If>

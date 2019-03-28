@@ -126,6 +126,23 @@ function Case(rawCase) {
   this.orderForOds = this.orderForOds || false;
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
+
+  const trialRecord = this.docketRecord.find(
+    record => record.description.indexOf('Request for Place of Trial') !== -1,
+  );
+
+  if (this.preferredTrialCity) {
+    if (!trialRecord) {
+      this.addDocketRecord(
+        new DocketRecord({
+          description: `Request for Place of Trial at ${
+            this.preferredTrialCity
+          }`,
+          filingDate: this.receivedAt || this.createdAt,
+        }),
+      );
+    }
+  }
 }
 
 Case.name = 'Case';
@@ -176,6 +193,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    isPaper: joi.boolean().optional(),
     noticeOfAttachments: joi.boolean().optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
@@ -203,6 +221,12 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
+    receivedAt: joi //TODO - should we be storing M/D/YY as ISO strings?
+      .date()
+      .iso()
+      .max('now')
+      .optional()
+      .allow(null),
     respondent: joi
       .object()
       .allow(null)
@@ -257,6 +281,14 @@ joiValidationDecorator(
     payGovId: 'Fee Payment Id must be in a valid format',
     preferredTrialCity: 'Preferred Trial City is required.',
     procedureType: 'Procedure Type is required.',
+    receivedAt: [
+      {
+        contains: 'must be less than or equal to',
+        message:
+          'The Date Received is in the future. Please enter a valid date.',
+      },
+      'Please enter a valid Date Received.',
+    ],
     yearAmounts: [
       {
         contains: 'contains a duplicate',
@@ -392,7 +424,7 @@ Case.prototype.addDocument = function(document) {
       description: document.documentType,
       documentId: document.documentId,
       filedBy: document.filedBy,
-      filingDate: document.createdAt,
+      filingDate: this.receivedAt || document.createdAt,
       status: document.status,
     }),
   );

@@ -63,6 +63,7 @@ export const PartyInformation = connect(
                 autoSaveCaseSequence();
               }}
             >
+              <option value="">- Select -</option>
               {Object.keys(caseDetailEditHelper.partyTypes).map(partyType => (
                 <option
                   key={partyType}
@@ -114,16 +115,18 @@ export const PartyInformation = connect(
             </div>
           </div>
         )}
-        <Contacts
-          parentView="CaseDetail"
-          bind="caseDetail"
-          emailBind="caseDetail.contactPrimary"
-          onChange="updateCaseValueSequence"
-          onBlur="autoSaveCaseSequence"
-          contactsHelper="caseDetailEditContactsHelper"
-          showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
-          showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
-        />
+        <div className="subsection">
+          <Contacts
+            parentView="CaseDetail"
+            bind="caseDetail"
+            emailBind="caseDetail.contactPrimary"
+            onChange="updateCaseValueSequence"
+            onBlur="autoSaveCaseSequence"
+            contactsHelper="caseDetailEditContactsHelper"
+            showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
+            showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
+          />
+        </div>
       </div>
     );
   },

@@ -53,7 +53,7 @@ export const StartCaseInternal = connect(
             <div
               className={
                 'ustc-form-group ' +
-                (validationErrors.createdAt ? 'usa-input-error' : '')
+                (validationErrors.receivedAt ? 'usa-input-error' : '')
               }
             >
               <fieldset>
@@ -136,7 +136,7 @@ export const StartCaseInternal = connect(
                   </div>
                   <Text
                     className="usa-input-error-message"
-                    bind="validationErrors.createdAt"
+                    bind="validationErrors.receivedAt"
                   />
                 </div>
               </fieldset>
