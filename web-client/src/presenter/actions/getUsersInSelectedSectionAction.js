@@ -1,3 +1,5 @@
+import { sortBy } from 'lodash';
+
 /**
  * returns a callback function scoped to a section the users in a section
  *
@@ -16,7 +18,8 @@ export const getUsersInSelectedSectionAction = async ({
   const users = await applicationContext
     .getUseCases()
     .getUsersInSection({ applicationContext, section: props.section });
+
   return {
-    users,
+    users: sortBy(users, 'name'),
   };
 };
