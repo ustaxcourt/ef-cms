@@ -7,5 +7,5 @@ exports.getStartCaseButton = () => {
 };
 
 exports.getCaseList = () => {
-  return cy.get('#case-list tbody');
+  return cy.get('#case-list tbody tr');
 };
