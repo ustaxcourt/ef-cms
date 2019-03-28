@@ -20,6 +20,7 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
+import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   alertHelper,
@@ -79,6 +80,7 @@ export const state = {
   users: [],
   validationErrors: {},
   workItem: {},
+  workQueueSectionHelper,
   workItemActions: {},
   workQueue: [],
   workQueueHelper,
