@@ -59,6 +59,7 @@ export const state = {
   mobileMenu: {
     isVisible: false,
   },
+  modal: {},
 
   path: '/',
   paymentInfo: {
@@ -80,9 +81,9 @@ export const state = {
   users: [],
   validationErrors: {},
   workItem: {},
-  workQueueSectionHelper,
   workItemActions: {},
   workQueue: [],
   workQueueHelper,
+  workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
