@@ -4,16 +4,21 @@ const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { WorkItem } = require('../entities/WorkItem');
 
-const { capitalize } = require('lodash');
-
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
-const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 
-const addDocumentToCase = (user, caseToAdd, documentEntity) => {
+const addPetitionDocumentWithWorkItemToCase = (
+  user,
+  caseToAdd,
+  documentEntity,
+) => {
+  const message = `${documentEntity.documentType} filed by ${
+    documentEntity.filedBy
+  } is ready for review.`;
+
   const workItemEntity = new WorkItem({
     assigneeId: user.userId,
     assigneeName: user.name,
@@ -26,22 +31,9 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-    section: PETITIONS_SECTION,
+    section: user.section,
     sentBy: user.userId,
   });
-
-  let message;
-
-  if (documentEntity.documentType === 'Petition') {
-    const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-    message = `${
-      documentEntity.documentType
-    } filed by ${caseCaptionNames} is ready for review.`;
-  } else {
-    message = `${documentEntity.documentType} filed by ${capitalize(
-      user.role,
-    )} is ready for review.`;
-  }
 
   workItemEntity.addMessage(
     new Message({
@@ -98,14 +90,19 @@ exports.createCaseFromPaper = async ({
   });
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     userId: user.userId,
   });
-  addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
+  addPetitionDocumentWithWorkItemToCase(
+    user,
+    caseToAdd,
+    petitionDocumentEntity,
+  );
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
@@ -120,7 +117,7 @@ exports.createCaseFromPaper = async ({
     const stinDocumentEntity = new Document({
       documentId: stinFileId,
       documentType: Case.documentTypes.stin,
-      filedBy: user.name,
+      filedBy: caseCaptionNames,
       userId: user.userId,
     });
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
@@ -130,7 +127,7 @@ exports.createCaseFromPaper = async ({
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
-      filedBy: user.name,
+      filedBy: caseCaptionNames,
       userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);

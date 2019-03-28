@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  PETITION,
+  START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -13,7 +13,7 @@ exports.filePetitionFromPaper = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, PETITION)) {
+  if (!isAuthorized(user, START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
