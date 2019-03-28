@@ -101,7 +101,7 @@ export default test => {
       .find(
         workItem =>
           workItem.docketNumber === test.docketNumber &&
-          workItem.status === 'Recalled' &&
+          workItem.caseStatus === 'Recalled' &&
           workItem.document.documentType === 'Petition',
       );
 
