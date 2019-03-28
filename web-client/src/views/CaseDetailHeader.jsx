@@ -28,7 +28,7 @@ export const CaseDetailHeader = connect(
           </span>
         </div>
         <p id="case-title" className="float-left no-bottom-margin">
-          {caseDetail.caseTitle}{' '}
+          {caseDetail.caseTitle}
         </p>
         {caseHelper.showCaptionEditButton && (
           <p className="float-left no-bottom-margin">
@@ -39,7 +39,8 @@ export const CaseDetailHeader = connect(
                 openCaseCaptionModalSequence();
               }}
             >
-              <FontAwesomeIcon icon="edit" size="sm" /> Edit
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
             </button>
           </p>
         )}
