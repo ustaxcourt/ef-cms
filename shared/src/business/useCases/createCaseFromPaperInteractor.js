@@ -104,15 +104,6 @@ exports.createCaseFromPaper = async ({
     petitionDocumentEntity,
   );
 
-  caseToAdd.addDocketRecord(
-    new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
-      filingDate: caseToAdd.createdAt,
-    }),
-  );
-
   if (stinFileId) {
     const stinDocumentEntity = new Document({
       documentId: stinFileId,
