@@ -7,40 +7,53 @@ class ChooseCategoryComponent extends React.Component {
   render() {
     return (
       <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="category">Document Category</label>
-          <select
-            name="category"
-            id="document-category"
-            onChange={e => {
-              this.props.updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          >
-            <option value="">- Select -</option>
-            {this.props.constants.CATEGORIES.map(category => {
-              return (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className="ustc-form-group">
-          <button
-            type="button"
-            className="usa-button"
-            onClick={() => {
-              this.props.closeDocumentCategoryAccordionSequence();
-              this.props.openSelectDocumentTypeModalSequence();
-            }}
-          >
-            Next, Choose Document Type
-          </button>
-        </div>
+        <form
+          id="file-a-document"
+          aria-labelledby="file-a-document-header"
+          role="form"
+          noValidate
+          onSubmit={e => {
+            e.preventDefault();
+            this.props.closeDocumentCategoryAccordionSequence();
+            this.props.openSelectDocumentTypeModalSequence();
+          }}
+        >
+          <div className="ustc-form-group">
+            <label htmlFor="category">Document Category</label>
+            <select
+              name="category"
+              id="document-category"
+              aria-label="category"
+              onChange={e => {
+                this.props.updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {this.props.constants.CATEGORIES.map(category => {
+                return (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="ustc-form-group">
+            <button
+              type="submit"
+              className="usa-button"
+              onClick={() => {
+                this.props.closeDocumentCategoryAccordionSequence();
+                this.props.openSelectDocumentTypeModalSequence();
+              }}
+            >
+              Next, Choose Document Type
+            </button>
+          </div>
+        </form>
       </div>
     );
   }

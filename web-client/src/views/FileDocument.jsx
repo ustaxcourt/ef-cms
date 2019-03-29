@@ -80,22 +80,11 @@ class FilePetitionComponent extends React.Component {
 
           <div className="usa-grid-full">
             <div className="usa-width-one-half">
-              <form
-                id="file-a-document"
-                aria-labelledby="file-a-document-header"
-                role="form"
-                noValidate
-                onSubmit={e => {
-                  e.preventDefault();
-                  submitDocumentSequence();
-                }}
-              >
-                {this.props.form.isDocumentTypeSelected && (
-                  <SelectedDocumentType />
-                )}
+              {this.props.form.isDocumentTypeSelected && (
+                <SelectedDocumentType />
+              )}
 
-                {!this.props.form.isDocumentTypeSelected && <ChooseCategory />}
-              </form>
+              {!this.props.form.isDocumentTypeSelected && <ChooseCategory />}
             </div>
             <div className="usa-width-one-third push-right">
               <div className="blue-container gray-background">
