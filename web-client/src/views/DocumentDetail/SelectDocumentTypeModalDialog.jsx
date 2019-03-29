@@ -60,6 +60,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
           <select
             size="2"
             className="ustc-select-multi"
+            id="documentType"
             name="documentType"
             disabled={!this.props.form.category}
             aria-disabled={!this.props.form.category ? 'true' : 'false'}
