@@ -5,33 +5,36 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
-import { CaseDetailHeader } from './CaseDetailHeader';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
 
 class FilePetitionComponent extends React.Component {
   render() {
+    const caseDetail = this.props.caseDetail;
+    const constants = this.props.constants;
+    const form = this.props.form;
     const submitDocumentSequence = this.props.submitDocumentSequence;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
     const updateDocumentValueSequence = this.props.updateDocumentValueSequence;
-    const form = this.props.form;
-    const constants = this.props.constants;
 
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
+          <a href={`/case-detail/${caseDetail.docketNumber}`} id="queue-nav">
             Back
           </a>
         </div>
-        <section className="usa-section usa-grid FileDocument">
-          <CaseDetailHeader />
+        <section className="usa-section usa-grid">
+          <h1 className="captioned" tabIndex="-1">
+            Docket Number: {caseDetail.docketNumberWithSuffix}
+          </h1>
+          <p>{caseDetail.caseTitle}</p>
           <hr aria-hidden="true" />
-
           <SuccessNotification />
           <ErrorNotification />
+
           <h2 tabIndex="-1" id="file-a-document-header">
             File a Document
           </h2>
@@ -104,7 +107,7 @@ class FilePetitionComponent extends React.Component {
                   </div>
                   <div className="ustc-form-group">
                     <button
-                      type="button"
+                      type="submit"
                       className="usa-button"
                       onClick={() =>
                         toggleDocumentCategoryAccordionSequence({
@@ -123,21 +126,25 @@ class FilePetitionComponent extends React.Component {
                 <h3>Frequently Used Documents</h3>
                 <ul className="ustc-unstyled-list">
                   <li>
-                    <a href="#a">Motion for Judgment on The Pleadings</a>
+                    <a href="#file-a-document-header">
+                      Motion for Judgment on The Pleadings
+                    </a>
                   </li>
                   <li>
-                    <a href="#a">Application for Waiver of Filing Fee</a>
+                    <a href="#file-a-document-header">
+                      Application for Waiver of Filing Fee
+                    </a>
                   </li>
                   <li>
-                    <a href="#a">Motion for a New Trial</a>
+                    <a href="#file-a-document-header">Motion for a New Trial</a>
                   </li>
                   <li>
-                    <a href="#a">
+                    <a href="#file-a-document-header">
                       Motion for Protective Order Persuant to Rule 103
                     </a>
                   </li>
                   <li>
-                    <a href="#a">Motion for Continuance</a>
+                    <a href="#file-a-document-header">Motion for Continuance</a>
                   </li>
                 </ul>
               </div>
@@ -150,8 +157,8 @@ class FilePetitionComponent extends React.Component {
 }
 
 FilePetitionComponent.propTypes = {
+  caseDetail: PropTypes.object,
   constants: PropTypes.object,
-  document: PropTypes.object,
   form: PropTypes.object,
   submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
@@ -161,8 +168,8 @@ FilePetitionComponent.propTypes = {
 
 export const FileDocument = connect(
   {
+    caseDetail: state.formattedCaseDetail,
     constants: state.constants,
-    document: state.document,
     form: state.form,
     submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
