@@ -98,6 +98,31 @@ input:focus::placeholder {
   }
 }
 
+.ustc-select-multi {
+  height: 300px;
+  padding: 0;
+  background: none;
+  option {
+    overflow: hidden;
+    max-width: 100%;
+    margin: 4px;
+    white-space: normal;
+    /*Altered two below to make word wrap work */
+    word-wrap: normal !important;
+    &:hover {
+      background-color: $color-gray-cool-light;
+    }
+    &:focus,
+    &:checked {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+    &:first-child {
+      font-weight: inherit;
+    }
+  }
+}
+
 label.validated::after {
   display: inline-block;
   width: 1.8rem;
