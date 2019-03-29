@@ -17,11 +17,11 @@ exports.handler = event =>
         applicationContext,
         caseId: event.pathParameters.caseId,
       });
-      console.info(`user =${JSON.stringify(user)}`);
-      console.info(`case =${JSON.stringify(caseDetail)}`);
+      console.log('user =', JSON.stringify(user));
+      console.info('case =', JSON.stringify(caseDetail));
       return caseDetail;
     } catch (e) {
-      console.error(`error =${JSON.stringify(e)}`);
+      console.error('error =', JSON.stringify(e));
       throw e;
     }
   });
