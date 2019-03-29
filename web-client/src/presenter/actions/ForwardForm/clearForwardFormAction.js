@@ -11,4 +11,5 @@ import { state } from 'cerebral';
  */
 export const clearForwardFormAction = ({ store, props }) => {
   store.set(state.form[props.workItemId], {});
+  store.set(state.workItemMetadata, {});
 };
