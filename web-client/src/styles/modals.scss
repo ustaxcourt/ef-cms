@@ -11,6 +11,8 @@
   background-color: rgba(0, 0, 0, 0.4);
   pointer-events: all;
   touch-action: auto;
+  padding: 0;
+  overflow: auto;
 }
 
 @media only screen and (min-width: $medium-screen) {
