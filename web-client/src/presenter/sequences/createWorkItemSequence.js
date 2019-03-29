@@ -11,6 +11,7 @@ import { validateInitialWorkItemMessageAction } from '../actions/validateInitial
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 
 export const createWorkItemSequence = [
   clearAlertsAction,
@@ -27,6 +28,7 @@ export const createWorkItemSequence = [
       clearFormAction,
       clearUsersAction,
       clearModalAction,
+      clearModalStateAction,
       refreshCaseAction,
       unsetFormSubmittingAction,
     ],

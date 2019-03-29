@@ -72,6 +72,7 @@ import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequ
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
+import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
@@ -164,6 +165,7 @@ export const presenter = {
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateHasIrsNoticeFormValueSequence,
+    updateMessageValueSequence,
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
