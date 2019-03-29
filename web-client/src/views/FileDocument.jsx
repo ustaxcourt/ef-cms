@@ -8,6 +8,8 @@ import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
 import { SelectDocumentTypeModalDialog } from './DocumentDetail/SelectDocumentTypeModalDialog';
+import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
+import { ChooseCategory } from './FileDocument/ChooseCategory';
 
 class FilePetitionComponent extends React.Component {
   render() {
@@ -88,42 +90,11 @@ class FilePetitionComponent extends React.Component {
                   submitDocumentSequence();
                 }}
               >
-                <div className="blue-container">
-                  <div className="ustc-form-group">
-                    <label htmlFor="category">Document Category</label>
-                    <select
-                      name="category"
-                      id="document-category"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    >
-                      <option value="">- Select -</option>
-                      {constants.CATEGORIES.map(category => {
-                        return (
-                          <option key={category} value={category}>
-                            {category}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                  <div className="ustc-form-group">
-                    <button
-                      type="button"
-                      className="usa-button"
-                      onClick={() => {
-                        closeDocumentCategoryAccordionSequence();
-                        openSelectDocumentTypeModalSequence();
-                      }}
-                    >
-                      Next, Choose Document Type
-                    </button>
-                  </div>
-                </div>
+                {this.props.form.isDocumentTypeSelected && (
+                  <SelectedDocumentType />
+                )}
+
+                {!this.props.form.isDocumentTypeSelected && <ChooseCategory />}
               </form>
             </div>
             <div className="usa-width-one-third push-right">

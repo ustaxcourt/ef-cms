@@ -21,7 +21,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.section ? 'usa-input-error' : '')
+            (this.props.validationErrors.category ? 'usa-input-error' : '')
           }
         >
           <label htmlFor="category">Document Category</label>
@@ -36,7 +36,6 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
-              // this.props.validateInitialWorkItemMessageSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -47,22 +46,29 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
             ))}
           </select>
           <div className="usa-input-error-message beneath">
-            {this.props.validationErrors.section}
+            {this.props.validationErrors.category}
           </div>
         </div>
 
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.assigneeId ? 'usa-input-error' : '')
+            (this.props.validationErrors.documentType ? 'usa-input-error' : '')
           }
         >
           <label htmlFor="documentType">Document Type</label>
           <select
             size="2"
             className="ustc-select-multi"
+            name="documentType"
             disabled={!this.props.form.category}
             aria-disabled={!this.props.form.category ? 'true' : 'false'}
+            onChange={e => {
+              this.props.updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
           >
             {(this.props.constants.CATEGORY_MAP[this.props.form.category] || []) // TODO: should be in a computed?
               .map(documentType => (
@@ -75,7 +81,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
               ))}
           </select>
           <div className="usa-input-error-message beneath">
-            {this.props.validationErrors.assigneeId}
+            {this.props.validationErrors.documentType}
           </div>
         </div>
       </div>
@@ -85,8 +91,8 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
 
 export const SelectDocumentTypeModalDialog = connect(
   {
-    cancelSequence: sequences.dismissCreateMessageModalSequence,
-    confirmSequence: sequences.createWorkItemSequence,
+    cancelSequence: sequences.dismissSelectDocumentTypeModalSequence,
+    confirmSequence: sequences.selectDocumentSequence,
     constants: state.constants,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
