@@ -1,5 +1,4 @@
 const { Case } = require('../entities/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { WorkItem } = require('../entities/WorkItem');
@@ -101,6 +100,7 @@ exports.createCase = async ({
     practitioner,
     ...petitionEntity.toRawObject(),
     docketNumber,
+    isPaper: false,
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
@@ -120,15 +120,6 @@ exports.createCase = async ({
     userId: user.userId,
   });
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
-
-  caseToAdd.addDocketRecord(
-    new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
-      filingDate: caseToAdd.createdAt,
-    }),
-  );
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
