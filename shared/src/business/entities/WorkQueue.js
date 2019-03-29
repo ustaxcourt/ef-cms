@@ -6,6 +6,7 @@ exports.CALENDAR_SECTION = 'calendar';
 exports.CHAMBERS_SECTION = 'chambers';
 exports.CLERK_OF_THE_COURT_SECTION = 'clerkOfTheCourt';
 exports.DOCKET_SECTION = 'docket';
+exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 exports.PETITIONS_SECTION = 'petitions';
 exports.TRIAL_CLERKS_SECTION = 'trialClerks';
 
