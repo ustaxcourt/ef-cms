@@ -60,7 +60,8 @@ textarea:focus,
 select:hover,
 select:focus {
   &:not([disabled]) {
-    border: 2px solid $color-primary;
+    border: 1px solid $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
     transition-duration: 0.1s;
     transition-property: all;
   }
@@ -95,6 +96,29 @@ input:focus::placeholder {
   margin: 0;
   li {
     display: block;
+  }
+}
+
+.ustc-select-multi {
+  height: 300px;
+  padding: 0;
+  background: none;
+  overflow-y: auto;
+  option {
+    overflow: hidden;
+    max-width: 100%;
+    padding: 10px;
+    margin: 0;
+    font-weight: $font-semibold;
+    white-space: normal;
+    /*Altered two below to make word wrap work */
+    word-wrap: normal !important;
+    &:hover {
+      background-color: $color-gray-cool-light;
+    }
+    &:first-child {
+      font-weight: $font-semibold;
+    }
   }
 }
 
