@@ -10,7 +10,8 @@ export const caseDetailHelper = get => {
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
     showCaptionEditButton: caseDetail.status !== 'Batched for IRS',
-    showCaseInformationPublic: userRole === 'petitioner',
+    showCaseInformationPublic:
+      userRole === 'petitioner' || userRole === 'practitioner',
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
