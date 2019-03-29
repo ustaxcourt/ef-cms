@@ -308,7 +308,7 @@ describe('case detail edit computed', () => {
     );
   });
 
-  it('sets showOwnershipDisclosureStatement false if partyType is corporation but there is no document for ODS', () => {
+  it('sets showOwnershipDisclosureStatement true if partyType is corporation but there is no document for ODS', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
@@ -325,7 +325,7 @@ describe('case detail edit computed', () => {
         },
       },
     });
-    expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+    expect(result.showOwnershipDisclosureStatement).toBeTruthy();
   });
 
   it('sets showOwnershipDisclosureStatement false if partyType is petitioner', () => {

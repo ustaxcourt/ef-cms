@@ -14,6 +14,11 @@ const petitionDocumentTypes = ['Petition'];
 
 const { WorkItem } = require('./WorkItem');
 
+const documentMap = require('../../tools/externalFilingEvents.json');
+
+module.exports.CATEGORIES = Object.keys(documentMap);
+module.exports.CATEGORY_MAP = documentMap;
+
 /**
  * constructor
  * @param rawDocument
@@ -83,4 +88,4 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-module.exports = { Document };
+exports.Document = Document;
