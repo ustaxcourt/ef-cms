@@ -58,37 +58,18 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
           }
         >
           <label htmlFor="documentType">Document Type</label>
-          <fieldset
-            style={{ maxHeight: '200px', overflowY: 'scroll' }}
-            className="usa-input-inline"
-            id="documentType"
-            name="documentType"
-            disabled={!this.props.form.category}
-            aria-disabled={!this.props.form.category ? 'true' : 'false'}
-            onChange={e => {
-              this.props.updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              // this.props.validateInitialWorkItemMessageSequence();
-            }}
-          >
+          <select size="2" className="ustc-select-multi">
             {this.props.constants.CATEGORY_MAP[this.props.form.category].map(
               documentType => (
-                <label
+                <option
                   key={documentType.documentTitle}
-                  htmlFor={`type-${documentType.documentTitle}`}
+                  value={documentType.documentTitle}
                 >
-                  <input
-                    type="radio"
-                    id={`type-${documentType.documentTitle}`}
-                    value={documentType.documentTitle}
-                  />
                   {documentType.documentTitle}
-                </label>
+                </option>
               ),
             )}
-          </fieldset>
+          </select>
           <div className="usa-input-error-message beneath">
             {this.props.validationErrors.assigneeId}
           </div>
