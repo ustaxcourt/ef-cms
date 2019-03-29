@@ -4,7 +4,7 @@ exports.ADC_SECTION = 'adc';
 exports.ADMISSIONS_SECTION = 'admissions';
 exports.CALENDAR_SECTION = 'calendar';
 exports.CHAMBERS_SECTION = 'chambers';
-exports.CLERK_OF_THE_COURT_SECTION = 'clerkOfTheCourt';
+exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.DOCKET_SECTION = 'docket';
 exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 exports.PETITIONS_SECTION = 'petitions';
@@ -47,7 +47,7 @@ exports.SECTIONS = sortBy([
   exports.ADMISSIONS_SECTION,
   exports.CALENDAR_SECTION,
   exports.CHAMBERS_SECTION,
-  exports.CLERK_OF_THE_COURT_SECTION,
+  exports.CLERK_OF_COURT_SECTION,
   exports.DOCKET_SECTION,
   // intentially leavinvg out IRS_BATCH_SYSTEM_SECTION since that is an internal section
   exports.PETITIONS_SECTION,
