@@ -64,7 +64,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
         >
           <label htmlFor="documentType">Document Type</label>
           <select
-            size="2"
+            size="4"
             className="ustc-select-multi"
             id="modalDocumentType"
             name="modalDocumentType"
