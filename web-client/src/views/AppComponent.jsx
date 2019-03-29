@@ -9,13 +9,14 @@ import { CaseDetailPublic } from './CaseDetailPublic';
 import { CaseDetailRespondent } from './CaseDetailRespondent';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
-import { DashboardPractitioner } from './DashboardPractitioner';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
+import { DashboardPractitioner } from './DashboardPractitioner';
 import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
+import { FileDocument } from './FileDocument';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Interstitial } from './Interstitial';
@@ -40,6 +41,7 @@ const pages = {
   DashboardSeniorAttorney,
   DocumentDetail,
   Error,
+  FileDocument,
   Interstitial,
   Loading,
   LogIn,

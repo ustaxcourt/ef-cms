@@ -5,9 +5,9 @@ import { state } from 'cerebral';
 export const CaseDetailReadOnlyPartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    constants: state.constants,
-    caseDetailEditHelper: state.caseDetailEditHelper,
     caseDetailEditContactsHelper: state.caseDetailEditContactsHelper,
+    caseDetailEditHelper: state.caseDetailEditHelper,
+    constants: state.constants,
   },
   ({
     caseDetail,
