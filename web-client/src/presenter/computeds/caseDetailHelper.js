@@ -15,7 +15,10 @@ export const caseDetailHelper = get => {
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
-    showFileDocumentButton: ['CaseDetailRespondent'].includes(currentPage),
+    showFileDocumentButton: [
+      'CaseDetailRespondent',
+      'CaseDetailPublic',
+    ].includes(currentPage),
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),

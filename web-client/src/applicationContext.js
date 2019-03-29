@@ -13,6 +13,11 @@ import {
   Case,
 } from '../../shared/src/business/entities/Case';
 
+import {
+  CATEGORIES,
+  CATEGORY_MAP,
+} from '../../shared/src/business/entities/Document';
+
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -139,6 +144,8 @@ const applicationContext = {
   getConstants: () => ({
     BUSINESS_TYPES,
     CASE_CAPTION_POSTFIX,
+    CATEGORIES,
+    CATEGORY_MAP,
     COUNTRY_TYPES,
     ESTATE_TYPES,
     OTHER_TYPES,
