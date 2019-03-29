@@ -70,15 +70,16 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
               });
             }}
           >
-            {(this.props.constants.CATEGORY_MAP[this.props.form.category] || []) // TODO: should be in a computed?
-              .map(documentType => (
-                <option
-                  key={documentType.documentTitle}
-                  value={documentType.documentTitle}
-                >
-                  {documentType.documentTitle}
-                </option>
-              ))}
+            {(
+              this.props.constants.CATEGORY_MAP[this.props.form.category] || []
+            ).map(documentType => (
+              <option
+                key={documentType.documentTitle}
+                value={documentType.documentTitle}
+              >
+                {documentType.documentTitle}
+              </option>
+            ))}
           </select>
           <div className="usa-input-error-message beneath">
             {this.props.validationErrors.documentType}
