@@ -3,32 +3,32 @@ import { set } from 'cerebral/factories';
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
-import { setForwardFormValueAction } from '../actions/ForwardForm/setForwardFormValueAction';
 import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
-import { setSectionAction } from '../actions/ForwardForm/setSectionAction';
-import { clearSectionAction } from '../actions/ForwardForm/clearSectionAction';
 import { getUsersInSectionSequence } from './getUsersInSectionSequence';
 
-export const updateForwardFormValueSequence = [
+export const updateMessageValueSequence = [
   runKeyPathAction,
   {
     section: [
       isChambersPathAction,
       {
         yes: [
-          set(state.workItemMetadata.showChambersSelect, true),
-          clearSectionAction,
+          set(state.modal.showChambersSelect, true),
+          set(state.form.section, ''),
           set(state[props.form].assigneeId, ''),
           clearUsersAction,
         ],
         no: [
-          set(state.workItemMetadata.showChambersSelect, false),
-          setForwardFormValueAction,
+          set(state.modal.showChambersSelect, false),
+          set(state.form[props.key], props.value),
           ...getUsersInSectionSequence,
         ],
       },
     ],
-    chambers: [setSectionAction, ...getUsersInSectionSequence],
-    default: [setForwardFormValueAction],
+    chambers: [
+      set(state.form.section, props.value),
+      ...getUsersInSectionSequence,
+    ],
+    default: [set(state.form[props.key], props.value)],
   },
 ];

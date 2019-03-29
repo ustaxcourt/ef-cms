@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { If } from '../../ustc-ui/If/If';
 
 class PendingMessagesComponent extends React.Component {
   render() {
@@ -16,10 +17,11 @@ class PendingMessagesComponent extends React.Component {
       openCreateMessageModalSequence,
       users,
       validationErrors,
-      getUsersInSectionSequence,
       form,
       validateForwardMessageSequence,
       constants,
+      workItemMetadata,
+      workQueueSectionHelper,
     } = this.props;
     return (
       <>
@@ -271,7 +273,8 @@ class PendingMessagesComponent extends React.Component {
                         className={
                           'usa-form-group ' +
                           (validationErrors[workItem.workItemId] &&
-                          validationErrors[workItem.workItemId].section
+                          validationErrors[workItem.workItemId].section &&
+                          !workItemMetadata.showChambersSelect
                             ? 'usa-input-error'
                             : '')
                         }
@@ -284,13 +287,11 @@ class PendingMessagesComponent extends React.Component {
                           name="section"
                           onChange={e => {
                             updateForwardFormValueSequence({
+                              form: `form.${workItem.workItemId}`,
                               key: e.target.name,
+                              section: e.target.value,
                               value: e.target.value,
                               workItemId: workItem.workItemId,
-                            });
-                            getUsersInSectionSequence({
-                              form: `form.${workItem.workItemId}`,
-                              section: e.target.value,
                             });
                             validateForwardMessageSequence({
                               workItemId: workItem.workItemId,
@@ -300,15 +301,67 @@ class PendingMessagesComponent extends React.Component {
                           <option value="">- Select -</option>
                           {constants.SECTIONS.map(section => (
                             <option key={section} value={section}>
-                              {section}
+                              {workQueueSectionHelper.sectionDisplay(section)}
                             </option>
                           ))}
                         </select>
-                        <div className="usa-input-error-message beneath">
-                          {validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId].section}
-                        </div>
+                        {!workItemMetadata.showChambersSelect && (
+                          <div className="usa-input-error-message beneath">
+                            {validationErrors[workItem.workItemId] &&
+                              validationErrors[workItem.workItemId].section}
+                          </div>
+                        )}
                       </div>
+
+                      {workItemMetadata.showChambersSelect && (
+                        <div
+                          className={
+                            'usa-form-group ' +
+                            (validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section
+                              ? 'usa-input-error'
+                              : '')
+                          }
+                        >
+                          <label htmlFor={`chambers-${idx}`}>
+                            Select Chambers
+                          </label>
+
+                          <select
+                            className="usa-input-inline"
+                            id={`chambers-${idx}`}
+                            name="chambers"
+                            onChange={e => {
+                              updateForwardFormValueSequence({
+                                form: `form.${workItem.workItemId}`,
+                                key: e.target.name,
+                                section: e.target.value,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                              validateForwardMessageSequence({
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          >
+                            <option value="">- Select -</option>
+                            {constants.CHAMBERS_SECTIONS.map(section => (
+                              <option key={section} value={section}>
+                                {workQueueSectionHelper.chambersDisplay(
+                                  section,
+                                )}
+                              </option>
+                            ))}
+                          </select>
+
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section && (
+                              <div className="usa-input-error-message beneath">
+                                Chambers is required.
+                              </div>
+                            )}
+                        </div>
+                      )}
 
                       <div
                         className={
@@ -412,7 +465,6 @@ PendingMessagesComponent.propTypes = {
   constants: PropTypes.object,
   documentDetailHelper: PropTypes.object,
   form: PropTypes.object,
-  getUsersInSectionSequence: PropTypes.func,
   openCreateMessageModalSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
@@ -423,6 +475,8 @@ PendingMessagesComponent.propTypes = {
   validateForwardMessageSequence: PropTypes.func,
   validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
+  workItemMetadata: PropTypes.object,
+  workQueueSectionHelper: PropTypes.object,
 };
 
 export const PendingMessages = connect(
@@ -430,7 +484,6 @@ export const PendingMessages = connect(
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
     form: state.form,
-    getUsersInSectionSequence: sequences.getUsersInSectionSequence,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
@@ -441,6 +494,8 @@ export const PendingMessages = connect(
     validateForwardMessageSequence: sequences.validateForwardMessageSequence,
     validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
+    workItemMetadata: state.workItemMetadata,
+    workQueueSectionHelper: state.workQueueSectionHelper,
   },
   PendingMessagesComponent,
 );
