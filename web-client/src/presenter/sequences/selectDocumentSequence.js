@@ -1,10 +1,14 @@
 import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 import { clearModalAction } from '../actions/clearModalAction';
+import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 
-// TODO: run validation on the form
-// TOOD: run a goto sequence to view the next page which changes depending on the document type selected
 export const selectDocumentSequence = [
   set(state.form.isDocumentTypeSelected, true),
-  clearModalAction,
+  validateSelectDocumentTypeAction,
+  {
+    error: [setValidationErrorsAction],
+    success: [clearModalAction],
+  },
 ];
