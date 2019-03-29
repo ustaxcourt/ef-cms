@@ -10,14 +10,16 @@ import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { CaseInformationPublic } from './CaseInformationPublic';
 
-export const CaseDetailPublic = connect(
+export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    caseHelper: state.caseDetailHelper,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
   },
   function CaseDetail({
     caseDetail,
+    caseHelper,
     showDetails,
     togglePaymentDetailsSequence,
   }) {
@@ -40,7 +42,7 @@ export const CaseDetailPublic = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          {!caseDetail.payGovId && (
+          {caseHelper.showActionRequired && (
             <div className="subsection">
               <h2>Action Required</h2>
               <ul className="usa-accordion">
@@ -130,7 +132,9 @@ export const CaseDetailPublic = connect(
               <DocketRecord />
             </Tab>
             <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
-              <CaseInformationPublic />
+              {caseHelper.showCaseInformationPublic && (
+                <CaseInformationPublic />
+              )}
               <PartyInformation />
             </Tab>
           </Tabs>
