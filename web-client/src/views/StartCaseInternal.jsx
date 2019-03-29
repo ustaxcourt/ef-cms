@@ -152,7 +152,6 @@ export const StartCaseInternal = connect(
                 Case Caption <span className="usa-form-hint">(required)</span>
               </label>
               <textarea
-                className="usa-input-inline"
                 id="case-caption"
                 name="caseCaption"
                 onChange={e => {

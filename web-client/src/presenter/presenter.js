@@ -7,10 +7,12 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
+import { dismissSelectDocumentTypeModalSequence } from './sequences/dismissSelectDocumentTypeModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
@@ -27,10 +29,12 @@ import { NotFoundError } from './errors/NotFoundError';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
+import { openSelectDocumentTypeModalSequence } from './sequences/openSelectDocumentTypeModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -107,11 +111,13 @@ export const presenter = {
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
     clickServeToIrsSequence,
+    closeDocumentCategoryAccordionSequence,
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
+    dismissSelectDocumentTypeModalSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -124,9 +130,11 @@ export const presenter = {
     loginWithTokenSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
+    openSelectDocumentTypeModalSequence,
     removeYearAmountSequence,
     runBatchProcessSequence,
     selectAssigneeSequence,
+    selectDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
     setFocusedWorkItemSequence,

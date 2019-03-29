@@ -90,7 +90,7 @@ async function createCase(test) {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-  await waitForRouter();
+  return await waitForRouter();
 }
 
 function findByDocumentType(test, documentType) {
@@ -136,6 +136,8 @@ async function findWorkItemInWorkQueue({
 
 describe('Create a work item', () => {
   beforeAll(() => {
+    jest.setTimeout(30000);
+
     global.window = {
       localStorage: {
         removeItem: () => null,
@@ -156,6 +158,7 @@ describe('Create a work item', () => {
 
   it('create the case for this test', async () => {
     await loginAs('taxpayer');
+    await waitForRouter();
     await createCase(test);
   });
 
