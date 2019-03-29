@@ -9,6 +9,7 @@ exports.DOCKET_SECTION = 'docket';
 exports.IRS_BATCH_SYSTEM_SECTION = 'irsBatchSection';
 exports.PETITIONS_SECTION = 'petitions';
 exports.TRIAL_CLERKS_SECTION = 'trialClerks';
+exports.SENIOR_ATTORNEY_SECTION = 'seniorattorney';
 
 exports.ARMENS_CHAMBERS_SECTION = 'armensChambers';
 exports.ASHFORDS_CHAMBERS_SECTION = 'ashfordsChambers';
@@ -51,6 +52,7 @@ exports.SECTIONS = sortBy([
   // intentially leavinvg out IRS_BATCH_SYSTEM_SECTION since that is an internal section
   exports.PETITIONS_SECTION,
   exports.TRIAL_CLERKS_SECTION,
+  exports.SENIOR_ATTORNEY_SECTION, // left in for tests
 ]);
 
 exports.CHAMBERS_SECTIONS = sortBy([
