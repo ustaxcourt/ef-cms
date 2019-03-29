@@ -60,7 +60,8 @@ textarea:focus,
 select:hover,
 select:focus {
   &:not([disabled]) {
-    border: 2px solid $color-primary;
+    border: 1px solid $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
     transition-duration: 0.1s;
     transition-property: all;
   }
@@ -102,11 +103,7 @@ input:focus::placeholder {
   height: 300px;
   padding: 0;
   background: none;
-  &:hover:not([disabled]),
-  &:focus:not([disabled]) {
-    border: 1px solid $color-primary;
-    box-shadow: 0 0 3px $color-primary;
-  }
+  overflow-y: auto;
   option {
     overflow: hidden;
     max-width: 100%;
