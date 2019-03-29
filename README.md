@@ -1,5 +1,11 @@
 # Electronic Filing / Case Management System
 
+| Project | Status |
+| ------------- |-------------|
+| UI      | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-ui)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-ui) |
+| API     | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api) |
+| Shared  | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)      |
+
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source Electronic Filing / Case Management System (EF-CMS) — software that allows case documents to be filed with the court, and for the court to manage cases. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
 
 <a href="docs/images/screenshot_new_petition.png"><img src="docs/images/screenshot_new_petition.png" width="32%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
