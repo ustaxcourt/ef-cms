@@ -17,6 +17,7 @@ import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequ
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
@@ -53,7 +54,6 @@ import { submitSearchSequence } from './sequences/submitSearchSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
-import { toggleFileDocumentFormSequence } from './sequences/toggleFileDocumentFormSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
@@ -81,7 +81,6 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-
 import { state } from './state';
 
 /**
@@ -117,6 +116,7 @@ export const presenter = {
     gotoCaseDetailSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoFileDocumentSequence,
     gotoLoginSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
@@ -148,7 +148,6 @@ export const presenter = {
     submitUpdateCaseSequence,
     toggleCaseDifferenceSequence,
     toggleDocumentCategoryAccordionSequence,
-    toggleFileDocumentFormSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
