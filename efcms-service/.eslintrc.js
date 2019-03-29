@@ -4,7 +4,7 @@ module.exports = {
   rules: {
     quotes: ['error', 'single'],
     'arrow-parens': ['error', 'as-needed'],
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-useless-escape': 'off',
     indent: ['error', 2],
     'dot-notation': 'error',
