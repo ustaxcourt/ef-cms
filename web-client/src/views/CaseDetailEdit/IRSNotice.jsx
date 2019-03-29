@@ -301,7 +301,7 @@ export const IRSNotice = connect(
         {renderIrsNoticeRadios()}
 
         <CaseTypeSelect
-          allowDefaultOption={false}
+          allowDefaultOption={true}
           legend="Type of Case"
           onChange="updateCaseValueSequence"
           validation="autoSaveCaseSequence"

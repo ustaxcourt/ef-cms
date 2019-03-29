@@ -90,7 +90,7 @@ async function createCase(test) {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-  await waitForRouter();
+  return await waitForRouter();
 }
 
 function findByDocumentType(test, documentType) {
