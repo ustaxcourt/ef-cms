@@ -19,10 +19,10 @@ export const gotoCaseDetailSequence = [
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
     intakeclerk: [setCurrentPageAction('CaseDetailInternal')],
-    petitioner: [setCurrentPageAction('CaseDetailPublic')],
+    petitioner: [setCurrentPageAction('CaseDetail')],
     petitionsclerk: [setCurrentPageAction('CaseDetailInternal')],
-    practitioner: [setCurrentPageAction('CaseDetailPublic')],
-    respondent: [setCurrentPageAction('CaseDetailRespondent')],
+    practitioner: [setCurrentPageAction('CaseDetail')],
+    respondent: [setCurrentPageAction('CaseDetail')],
     seniorattorney: [setCurrentPageAction('CaseDetailInternal')],
   },
 ];
