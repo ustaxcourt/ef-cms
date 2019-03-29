@@ -66,6 +66,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
           <select
             size="2"
             className="ustc-select-multi"
+            id="modalDocumentType"
             name="modalDocumentType"
             value={this.props.form.modalDocumentType}
             disabled={!this.props.form.category}
