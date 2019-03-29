@@ -7,16 +7,22 @@ import React from 'react';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
+import { SelectDocumentTypeModalDialog } from './DocumentDetail/SelectDocumentTypeModalDialog';
 
 class FilePetitionComponent extends React.Component {
   render() {
     const caseDetail = this.props.caseDetail;
     const constants = this.props.constants;
     const form = this.props.form;
+    const showModal = this.props.showModal;
+    const closeDocumentCategoryAccordionSequence = this.props
+      .closeDocumentCategoryAccordionSequence;
+    const openSelectDocumentTypeModalSequence = this.props
+      .openSelectDocumentTypeModalSequence;
     const submitDocumentSequence = this.props.submitDocumentSequence;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
-    const updateDocumentValueSequence = this.props.updateDocumentValueSequence;
+    const updateFormValueSequence = this.props.updateFormValueSequence;
 
     return (
       <React.Fragment>
@@ -84,12 +90,12 @@ class FilePetitionComponent extends React.Component {
               >
                 <div className="blue-container">
                   <div className="ustc-form-group">
-                    <label htmlFor="document-type">Document Category</label>
+                    <label htmlFor="category">Document Category</label>
                     <select
-                      name="documentType"
-                      id="document-type"
+                      name="category"
+                      id="document-category"
                       onChange={e => {
-                        updateDocumentValueSequence({
+                        updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -107,13 +113,12 @@ class FilePetitionComponent extends React.Component {
                   </div>
                   <div className="ustc-form-group">
                     <button
-                      type="submit"
+                      type="button"
                       className="usa-button"
-                      onClick={() =>
-                        toggleDocumentCategoryAccordionSequence({
-                          value: false,
-                        })
-                      }
+                      onClick={() => {
+                        closeDocumentCategoryAccordionSequence();
+                        openSelectDocumentTypeModalSequence();
+                      }}
                     >
                       Next, Choose Document Type
                     </button>
@@ -151,6 +156,9 @@ class FilePetitionComponent extends React.Component {
             </div>
           </div>
         </section>
+        {showModal === 'SelectDocumentTypeModalDialog' && (
+          <SelectDocumentTypeModalDialog />
+        )}
       </React.Fragment>
     );
   }
@@ -158,24 +166,32 @@ class FilePetitionComponent extends React.Component {
 
 FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
+  closeDocumentCategoryAccordionSequence: PropTypes.func,
   constants: PropTypes.object,
   form: PropTypes.object,
+  openSelectDocumentTypeModalSequence: PropTypes.func,
+  showModal: PropTypes.string,
   submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
-  updateDocumentValueSequence: PropTypes.func,
+  updateFormValueSequence: PropTypes.func,
 };
 
 export const FileDocument = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    closeDocumentCategoryAccordionSequence:
+      sequences.closeDocumentCategoryAccordionSequence,
     constants: state.constants,
     form: state.form,
+    openSelectDocumentTypeModalSequence:
+      sequences.openSelectDocumentTypeModalSequence,
+    showModal: state.showModal,
     submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateDocumentValueSequence: sequences.updateDocumentValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   FilePetitionComponent,
 );
