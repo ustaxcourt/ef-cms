@@ -8,7 +8,7 @@ class SelectedDocumentTypeComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="blue-container">
+        <div className="blue-container" role="alert" aria-live="polite">
           <div className="ustc-form-group">
             <div>
               <label htmlFor="category" className="inline-block mr-1">
@@ -16,7 +16,6 @@ class SelectedDocumentTypeComponent extends React.Component {
               </label>
               <button
                 className="link"
-                type="button"
                 id="edit-selected-document-type"
                 onClick={() => {
                   this.props.closeDocumentCategoryAccordionSequence();

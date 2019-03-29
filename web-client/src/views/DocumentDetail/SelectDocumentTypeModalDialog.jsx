@@ -36,6 +36,10 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
+              this.props.updateFormValueSequence({
+                key: 'modalDocumentType',
+                value: undefined,
+              });
             }}
           >
             <option value="">- Select -</option>
@@ -53,14 +57,17 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.documentType ? 'usa-input-error' : '')
+            (this.props.validationErrors.modalDocumentType
+              ? 'usa-input-error'
+              : '')
           }
         >
           <label htmlFor="documentType">Document Type</label>
           <select
             size="2"
             className="ustc-select-multi"
-            name="documentType"
+            name="modalDocumentType"
+            value={this.props.form.modalDocumentType}
             disabled={!this.props.form.category}
             aria-disabled={!this.props.form.category ? 'true' : 'false'}
             onChange={e => {
@@ -82,7 +89,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
             ))}
           </select>
           <div className="usa-input-error-message beneath">
-            {this.props.validationErrors.documentType}
+            {this.props.validationErrors.modalDocumentType}
           </div>
         </div>
       </div>
