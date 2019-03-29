@@ -20,5 +20,5 @@ export const setWorkItemActionMapAction = ({ get, store, props }) => {
     actions[workItemId] = props.action;
   }
   store.set(state.workItemActions, actions);
-  store.set(state.workItem, {});
+  store.set(state.workItemMetadata, {});
 };

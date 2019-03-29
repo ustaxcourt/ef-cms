@@ -494,7 +494,7 @@ export const PendingMessages = connect(
     validateForwardMessageSequence: sequences.validateForwardMessageSequence,
     validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
-    workItemMetadata: state.workItem,
+    workItemMetadata: state.workItemMetadata,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   PendingMessagesComponent,

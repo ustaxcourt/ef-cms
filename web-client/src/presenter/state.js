@@ -82,6 +82,7 @@ export const state = {
   validationErrors: {},
   workItem: {},
   workItemActions: {},
+  workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
   workQueueSectionHelper,
