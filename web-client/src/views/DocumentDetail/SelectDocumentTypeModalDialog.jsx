@@ -30,22 +30,19 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
             className="usa-input-inline"
             id="category"
             name="category"
+            value={this.props.form.category}
             onChange={e => {
               this.props.updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              this.props.getUsersInSectionSequence({
-                form: 'form',
-                section: e.target.value,
-              });
-              this.props.validateInitialWorkItemMessageSequence();
+              // this.props.validateInitialWorkItemMessageSequence();
             }}
           >
             <option value="">- Select -</option>
-            {this.props.constants.SECTIONS.map(section => (
-              <option key={section} value={section}>
-                {section}
+            {this.props.constants.CATEGORIES.map(category => (
+              <option key={category} value={category}>
+                {category}
               </option>
             ))}
           </select>
@@ -61,31 +58,22 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
           }
         >
           <label htmlFor="documentType">Document Type</label>
-          <fieldset
-            className="usa-input-inline"
-            id="documentType"
-            name="documentType"
-            disabled={!this.props.form.section}
-            aria-disabled={!this.props.form.section ? 'true' : 'false'}
-            onChange={e => {
-              this.props.updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              this.props.validateInitialWorkItemMessageSequence();
-            }}
+          <select
+            size="2"
+            className="ustc-select-multi"
+            disabled={!this.props.form.category}
+            aria-disabled={!this.props.form.category ? 'true' : 'false'}
           >
-            {this.props.users.map(user => (
-              <label key={user.userId} htmlFor={`type-${user.userId}`}>
-                <input
-                  type="radio"
-                  id={`type-${user.userId}`}
-                  value={user.userId}
-                />
-                {user.name}
-              </label>
-            ))}
-          </fieldset>
+            {(this.props.constants.CATEGORY_MAP[this.props.form.category] || []) // TODO: should be in a computed?
+              .map(documentType => (
+                <option
+                  key={documentType.documentTitle}
+                  value={documentType.documentTitle}
+                >
+                  {documentType.documentTitle}
+                </option>
+              ))}
+          </select>
           <div className="usa-input-error-message beneath">
             {this.props.validationErrors.assigneeId}
           </div>
@@ -100,6 +88,9 @@ export const SelectDocumentTypeModalDialog = connect(
     cancelSequence: sequences.dismissCreateMessageModalSequence,
     confirmSequence: sequences.createWorkItemSequence,
     constants: state.constants,
+    form: state.form,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    users: state.users,
     validationErrors: state.validationErrors,
   },
   SelectDocumentTypeModalDialogComponent,
