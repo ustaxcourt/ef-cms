@@ -58,17 +58,21 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
           }
         >
           <label htmlFor="documentType">Document Type</label>
-          <select size="2" className="ustc-select-multi">
-            {this.props.constants.CATEGORY_MAP[this.props.form.category].map(
-              documentType => (
+          <select
+            size="2"
+            className="ustc-select-multi"
+            disabled={!this.props.form.category}
+            aria-disabled={!this.props.form.category ? 'true' : 'false'}
+          >
+            {(this.props.constants.CATEGORY_MAP[this.props.form.category] || []) // TODO: should be in a computed?
+              .map(documentType => (
                 <option
                   key={documentType.documentTitle}
                   value={documentType.documentTitle}
                 >
                   {documentType.documentTitle}
                 </option>
-              ),
-            )}
+              ))}
           </select>
           <div className="usa-input-error-message beneath">
             {this.props.validationErrors.assigneeId}
