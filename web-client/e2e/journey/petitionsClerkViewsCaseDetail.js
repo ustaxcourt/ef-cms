@@ -20,6 +20,5 @@ export default test => {
     expect(helper.showIrsServedDate).toEqual(false);
     expect(helper.showPayGovIdInput).toEqual(false);
     expect(helper.showPaymentOptions).toEqual(true);
-    expect(helper.showActionRequired).toEqual(true);
   });
 };
