@@ -33,7 +33,7 @@ describe('updateForwardFormValueSequence', () => {
     expect(test.getState('form.abc')).toMatchObject({
       section: 'something',
     });
-    expect(test.getState('workItem')).toMatchObject({
+    expect(test.getState('workItemMetadata')).toMatchObject({
       showChambersSelect: false,
     });
   });
@@ -49,7 +49,7 @@ describe('updateForwardFormValueSequence', () => {
       workItemId: 'abc',
     });
     expect(test.getState('form.abc')).toMatchObject({ section: '' });
-    expect(test.getState('workItem')).toMatchObject({
+    expect(test.getState('workItemMetadata')).toMatchObject({
       showChambersSelect: true,
     });
   });
