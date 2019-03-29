@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import { omit } from 'lodash';
 
 /**
  * validates the select document type form.
@@ -11,12 +10,7 @@ import { omit } from 'lodash';
  * @param {Object} providers.props the cerebral props object
  * @returns {Object} the next path based on if validation was successful or error
  */
-export const validateSelectDocumentTypeAction = ({
-  applicationContext,
-  path,
-  get,
-  props,
-}) => {
+export const validateSelectDocumentTypeAction = ({ path, get }) => {
   const form = get(state.form);
 
   const errors = {};
