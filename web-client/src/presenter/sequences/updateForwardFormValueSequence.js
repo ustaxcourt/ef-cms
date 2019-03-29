@@ -16,13 +16,13 @@ export const updateForwardFormValueSequence = [
       isChambersPathAction,
       {
         yes: [
-          set(state.workItem.showChambersSelect, true),
+          set(state.workItemMetadata.showChambersSelect, true),
           clearSectionAction,
           set(state[props.form].assigneeId, ''),
           clearUsersAction,
         ],
         no: [
-          set(state.workItem.showChambersSelect, false),
+          set(state.workItemMetadata.showChambersSelect, false),
           setForwardFormValueAction,
           ...getUsersInSectionSequence,
         ],
