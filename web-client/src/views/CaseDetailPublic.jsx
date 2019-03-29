@@ -9,20 +9,17 @@ import { ErrorNotification } from './ErrorNotification';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { CaseInformationPublic } from './CaseInformationPublic';
-import { FileDocument } from './FileDocument';
 
 export const CaseDetailPublic = connect(
   {
     caseDetail: state.formattedCaseDetail,
     showDetails: state.paymentInfo.showDetails,
-    showFileDocumentForm: state.showFileDocumentForm,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
   },
   function CaseDetail({
     caseDetail,
     showDetails,
     togglePaymentDetailsSequence,
-    showFileDocumentForm,
   }) {
     return (
       <React.Fragment>
@@ -124,26 +121,19 @@ export const CaseDetailPublic = connect(
               </ul>
             </div>
           )}
-          {showFileDocumentForm && <FileDocument />}
-          {!showFileDocumentForm && (
-            <Tabs className="classic-horizontal" bind="documentDetail.tab">
-              <Tab
-                tabName="docketRecord"
-                title="Docket Record"
-                id="tab-docket-record"
-              >
-                <DocketRecord />
-              </Tab>
-              <Tab
-                tabName="caseInfo"
-                title="Case Information"
-                id="tab-case-info"
-              >
-                <CaseInformationPublic />
-                <PartyInformation />
-              </Tab>
-            </Tabs>
-          )}
+          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+            <Tab
+              tabName="docketRecord"
+              title="Docket Record"
+              id="tab-docket-record"
+            >
+              <DocketRecord />
+            </Tab>
+            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
+              <CaseInformationPublic />
+              <PartyInformation />
+            </Tab>
+          </Tabs>
         </section>
       </React.Fragment>
     );
