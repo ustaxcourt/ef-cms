@@ -20,6 +20,7 @@ class PendingMessagesComponent extends React.Component {
       form,
       validateForwardMessageSequence,
       constants,
+      workItemMetadata,
       workQueueSectionHelper,
     } = this.props;
     return (
@@ -272,7 +273,8 @@ class PendingMessagesComponent extends React.Component {
                         className={
                           'usa-form-group ' +
                           (validationErrors[workItem.workItemId] &&
-                          validationErrors[workItem.workItemId].section
+                          validationErrors[workItem.workItemId].section &&
+                          !workItemMetadata.showChambersSelect
                             ? 'usa-input-error'
                             : '')
                         }
@@ -303,13 +305,15 @@ class PendingMessagesComponent extends React.Component {
                             </option>
                           ))}
                         </select>
-                        <div className="usa-input-error-message beneath">
-                          {validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId].section}
-                        </div>
+                        {!workItemMetadata.showChambersSelect && (
+                          <div className="usa-input-error-message beneath">
+                            {validationErrors[workItem.workItemId] &&
+                              validationErrors[workItem.workItemId].section}
+                          </div>
+                        )}
                       </div>
 
-                      <If bind="workItem.showChambersSelect">
+                      {workItemMetadata.showChambersSelect && (
                         <div
                           className={
                             'usa-form-group ' +
@@ -349,12 +353,15 @@ class PendingMessagesComponent extends React.Component {
                               </option>
                             ))}
                           </select>
-                          <div className="usa-input-error-message beneath">
-                            {validationErrors[workItem.workItemId] &&
-                              validationErrors[workItem.workItemId].section}
-                          </div>
+
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section && (
+                              <div className="usa-input-error-message beneath">
+                                Chambers is required.
+                              </div>
+                            )}
                         </div>
-                      </If>
+                      )}
 
                       <div
                         className={
@@ -468,6 +475,7 @@ PendingMessagesComponent.propTypes = {
   validateForwardMessageSequence: PropTypes.func,
   validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
+  workItemMetadata: PropTypes.object,
   workQueueSectionHelper: PropTypes.object,
 };
 
@@ -486,6 +494,7 @@ export const PendingMessages = connect(
     validateForwardMessageSequence: sequences.validateForwardMessageSequence,
     validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
+    workItemMetadata: state.workItem,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   PendingMessagesComponent,

@@ -2,6 +2,7 @@
 import { set } from 'cerebral/factories';
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
+import { clearUsersAction } from '../actions/clearUsersAction';
 import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
 import { getUsersInSectionSequence } from './getUsersInSectionSequence';
 
@@ -14,6 +15,8 @@ export const updateMessageValueSequence = [
         yes: [
           set(state.modal.showChambersSelect, true),
           set(state.form.section, ''),
+          set(state[props.form].assigneeId, ''),
+          clearUsersAction,
         ],
         no: [
           set(state.modal.showChambersSelect, false),
