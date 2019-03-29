@@ -4,12 +4,14 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { clearFormAction } from '../actions/clearFormAction';
 
 const gotoFileDocument = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   getCaseAction,
   setCaseAction,
+  clearFormAction,
   setCurrentPageAction('FileDocument'),
 ];
 
