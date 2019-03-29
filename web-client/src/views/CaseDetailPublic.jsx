@@ -121,7 +121,6 @@ export const CaseDetailPublic = connect(
               </ul>
             </div>
           )}
-
           <Tabs className="classic-horizontal" bind="documentDetail.tab">
             <Tab
               tabName="docketRecord"
