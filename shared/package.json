@@ -43,6 +43,7 @@
   "dependencies": {
     "aws-sdk": "^2.431.0",
     "axios": "^0.18.0",
+    "csv-parse": "^4.3.4",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
