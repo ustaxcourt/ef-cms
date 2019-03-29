@@ -6,7 +6,7 @@ import { CaseDetailReadOnlyPartyInformation } from './CaseDetailReadOnlyPartyInf
 
 export const CaseDetailReadOnly = connect(
   {
-    caseDetail: state.caseDetail,
+    caseDetail: state.formattedCaseDetail,
     caseDetailErrors: state.caseDetailErrors,
     formattedCaseDetail: state.formattedCaseDetail,
   },
@@ -58,7 +58,7 @@ export const CaseDetailReadOnly = connect(
           <div className="label">Trial Location</div>
           <p>{caseDetail.preferredTrialCity}</p>
           <div className="label">Fee Payment Date</div>
-          <p>{caseDetail.formattedPayGovDate || 'Unpaid'}</p>
+          <p>{caseDetail.payGovDateFormatted || 'Unpaid'}</p>
           <div className="label">Fee Payment ID</div>
           <p id="fee-payment-id" name="payGovId">
             {caseDetail.payGovId || 'Unpaid'}
