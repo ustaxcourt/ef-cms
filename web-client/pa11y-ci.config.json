@@ -297,6 +297,17 @@
     },
 
     "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document",
+    {
+      "notes": "Check accessibility of elements within document type chooser modal dialog",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection",
+      "actions": [
+        "wait for element #document-category to be visible",
+        "set field #document-category to Motions",
+        "click element #file-a-document button",
+        "wait for #documentType to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/",
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/start-a-case",
