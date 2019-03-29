@@ -5,9 +5,10 @@ export const workQueueSectionHelper = () => {
       admissions: 'Admissions',
       calendar: 'Calendar',
       chambers: 'Chambers',
-      clerkOfTheCourt: 'Clerk of the Court',
+      clerkofcourt: 'Clerk of the Court',
       docket: 'Docket',
       petitions: 'Petitions',
+      seniorattorney: 'Senior Attorney',
       trialClerks: 'Trial Clerks',
     }[key];
   }
