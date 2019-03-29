@@ -425,7 +425,8 @@ select.ustc-input-error {
   overflow-y: scroll;
 }
 
-.ustc-create-message-modal {
+.ustc-create-message-modal,
+.forward-form {
   .usa-input-error input,
   .usa-input-error textarea,
   .usa-input-error select {

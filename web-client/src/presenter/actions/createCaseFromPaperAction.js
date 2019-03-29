@@ -29,8 +29,6 @@ export const createCaseFromPaperAction = async ({
     ['year', 'month', 'day'],
   );
 
-  form.contactPrimary.email = get(state.user.email);
-
   const caseDetail = await applicationContext
     .getUseCases()
     .filePetitionFromPaper({
