@@ -10,10 +10,17 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.handler = event =>
   handle(event, () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().getCase({
-      applicationContext,
-      caseId: event.pathParameters.caseId,
-    });
+    try {
+      const user = getUserFromAuthHeader(event);
+      const applicationContext = createApplicationContext(user);
+      const caseDetail = applicationContext.getUseCases().getCase({
+        applicationContext,
+        caseId: event.pathParameters.caseId,
+      });
+      console.info(user, caseDetail);
+      return caseDetail;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   });
