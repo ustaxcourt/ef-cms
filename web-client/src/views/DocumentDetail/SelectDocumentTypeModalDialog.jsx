@@ -78,6 +78,9 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
               });
             }}
           >
+            <option selected="selected" value="">
+              - Select -
+            </option>
             {(
               this.props.constants.CATEGORY_MAP[this.props.form.category] || []
             ).map(documentType => (
