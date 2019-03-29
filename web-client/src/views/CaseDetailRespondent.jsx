@@ -6,16 +6,14 @@ import React from 'react';
 
 import { DocketRecord } from './DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
-import { FileDocument } from './FileDocument';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 
 export const CaseDetailRespondent = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    showFileDocumentForm: state.showFileDocumentForm,
   },
-  ({ caseDetail, showFileDocumentForm }) => {
+  ({ caseDetail }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -32,25 +30,18 @@ export const CaseDetailRespondent = connect(
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          {showFileDocumentForm && <FileDocument />}
-          {!showFileDocumentForm && (
-            <Tabs className="classic-horizontal" bind="documentDetail.tab">
-              <Tab
-                tabName="docketRecord"
-                title="Docket Record"
-                id="tab-docket-record"
-              >
-                <DocketRecord />
-              </Tab>
-              <Tab
-                tabName="caseInfo"
-                title="Case Information"
-                id="tab-case-info"
-              >
-                <PartyInformation />
-              </Tab>
-            </Tabs>
-          )}
+          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+            <Tab
+              tabName="docketRecord"
+              title="Docket Record"
+              id="tab-docket-record"
+            >
+              <DocketRecord />
+            </Tab>
+            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
+              <PartyInformation />
+            </Tab>
+          </Tabs>
         </section>
       </React.Fragment>
     );
