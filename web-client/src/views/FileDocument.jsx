@@ -97,7 +97,7 @@ class FilePetitionComponent extends React.Component {
                 </div>
                 <div className="ustc-form-group">
                   <button
-                    type="button"
+                    type="submit"
                     className="usa-button"
                     onClick={() =>
                       toggleDocumentCategoryAccordionSequence({ value: false })
@@ -114,21 +114,25 @@ class FilePetitionComponent extends React.Component {
               <h3>Frequently Used Documents</h3>
               <ul className="ustc-unstyled-list">
                 <li>
-                  <a href="#a">Motion for Judgment on The Pleadings</a>
+                  <a href="#file-a-document-header">
+                    Motion for Judgment on The Pleadings
+                  </a>
                 </li>
                 <li>
-                  <a href="#a">Application for Waiver of Filing Fee</a>
+                  <a href="#file-a-document-header">
+                    Application for Waiver of Filing Fee
+                  </a>
                 </li>
                 <li>
-                  <a href="#a">Motion for a New Trial</a>
+                  <a href="#file-a-document-header">Motion for a New Trial</a>
                 </li>
                 <li>
-                  <a href="#a">
+                  <a href="#file-a-document-header">
                     Motion for Protective Order Persuant to Rule 103
                   </a>
                 </li>
                 <li>
-                  <a href="#a">Motion for Continuance</a>
+                  <a href="#file-a-document-header">Motion for Continuance</a>
                 </li>
               </ul>
             </div>
