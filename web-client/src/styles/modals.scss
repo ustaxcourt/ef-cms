@@ -15,21 +15,6 @@
   touch-action: auto;
 }
 
-@media only screen and (min-width: $medium-screen) {
-  .modal-dialog {
-    top: 50%;
-    width: 500px;
-    transform: translateY(-50%);
-  }
-}
-
-@media only screen and (max-width: $medium-screen - 1px) {
-  .modal-dialog {
-    top: 0;
-    overflow: auto;
-  }
-}
-
 .modal-dialog {
   position: relative;
   display: block;
@@ -38,6 +23,22 @@
   margin: auto;
   border-top: 10px solid $color-gold;
   background: $color-white;
+
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    top: 50%;
+    width: 500px;
+    transform: translateY(-50%);
+  }
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    height: 100%;
+  }
 
   .modal-header {
     margin-bottom: 0.75em;
