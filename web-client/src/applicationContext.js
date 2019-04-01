@@ -153,6 +153,7 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES,
+    DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
