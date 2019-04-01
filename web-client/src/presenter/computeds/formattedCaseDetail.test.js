@@ -295,6 +295,12 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants: {
+          DOCUMENT_TYPES_MAP: {
+            ownershipDisclosure: 'Ownership Disclosure Statement',
+            petitionFile: 'Petition',
+          },
+        },
       },
     });
     expect(result.docketRecordWithDocument[0]).toMatchObject({
