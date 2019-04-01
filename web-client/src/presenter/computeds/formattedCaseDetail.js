@@ -111,6 +111,26 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     );
   }
 
+  // sort to make petition first, place of trial second, and everything else in cronological order
+  const getScore = entry => {
+    const documentType = (entry.document || {}).documentType;
+    const description = entry.record.description || '';
+    if (documentType === 'Petition') return 1;
+    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
+    else if (documentType === 'Ownership Disclosure Statement') return 3;
+    else return 4;
+  };
+
+  result.docketRecordWithDocument.sort((a, b) => {
+    const aScore = getScore(a);
+    const bScore = getScore(b);
+    if (aScore === bScore) {
+      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
+    } else {
+      return aScore - bScore;
+    }
+  });
+
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
       result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
