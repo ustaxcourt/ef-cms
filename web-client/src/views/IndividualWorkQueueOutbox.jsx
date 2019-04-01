@@ -8,8 +8,14 @@ export const IndividualWorkQueueOutbox = connect(
     documentHelper: state.documentHelper,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
+    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, setFocusedWorkItem, workQueue }) => {
+  ({
+    documentHelper,
+    setFocusedWorkItem,
+    workQueue,
+    workQueueSectionHelper,
+  }) => {
     return (
       <React.Fragment>
         <table
@@ -76,7 +82,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td>{item.caseStatus}</td>
                 <td>{item.assigneeName}</td>
-                <td>{item.sentBySection}</td>
+                <td>{workQueueSectionHelper.sectionDisplay(item.section)}</td>
               </tr>
               {item.isFocused && (
                 <tr className="queue-message">
