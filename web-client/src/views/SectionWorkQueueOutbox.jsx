@@ -27,6 +27,7 @@ export const SectionWorkQueueOutbox = connect(
             <th>Status</th>
             <th>From</th>
             <th>To</th>
+            <th>Section</th>
           </tr>
         </thead>
         {sectionWorkQueue.map((item, idx) => (
@@ -76,6 +77,7 @@ export const SectionWorkQueueOutbox = connect(
               <td>{item.caseStatus}</td>
               <td>{item.currentMessage.from}</td>
               <td>{item.assigneeName}</td>
+              <td>{item.sentBySection}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">
