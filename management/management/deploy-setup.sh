@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 AUTO=false
 ARG_OPTS=""
