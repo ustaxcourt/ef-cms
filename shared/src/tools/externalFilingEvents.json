@@ -33,16 +33,6 @@
   ],
   "Supplement": [
     {
-      "documentTitle": "Supplemental Brief",
-      "eventCode": "SB",
-      "categoryCurrent": "Brief",
-      "categoryUpdated": "Supplement",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
       "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
       "eventCode": "SUPM",
       "categoryCurrent": "Supplement",
@@ -61,12 +51,22 @@
       "label-previous": "Which Document is This Supplemental for?",
       "label-free": "",
       "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "Supplemental Brief",
+      "eventCode": "SB",
+      "categoryCurrent": "Brief",
+      "categoryUpdated": "Supplement",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
     }
   ],
   "Computation": [
     {
-      "documentTitle": "Revised Computation",
-      "eventCode": "RCOM",
+      "documentTitle": "Computation for Entry of Decision",
+      "eventCode": "COED",
       "categoryCurrent": "Computation",
       "categoryUpdated": "Computation",
       "scenario": "Standard",
@@ -75,8 +75,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Computation for Entry of Decision",
-      "eventCode": "COED",
+      "documentTitle": "Revised Computation",
+      "eventCode": "RCOM",
       "categoryCurrent": "Computation",
       "categoryUpdated": "Computation",
       "scenario": "Standard",
@@ -87,9 +87,9 @@
   ],
   "Decision": [
     {
-      "documentTitle": "Proposed Stipulated Decision",
-      "eventCode": "PSDEC",
-      "categoryCurrent": "Decision",
+      "documentTitle": "Agreed Computation For Entry Of Decision",
+      "eventCode": "",
+      "categoryCurrent": "Not currently efiled",
       "categoryUpdated": "Decision",
       "scenario": "Standard",
       "label-previous": "",
@@ -97,9 +97,9 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Agreed Computation For Entry Of Decision",
-      "eventCode": "",
-      "categoryCurrent": "Not currently efiled",
+      "documentTitle": "Proposed Stipulated Decision",
+      "eventCode": "PSDEC",
+      "categoryCurrent": "Decision",
       "categoryUpdated": "Decision",
       "scenario": "Standard",
       "label-previous": "",
@@ -109,29 +109,29 @@
   ],
   "Miscellaneous": [
     {
-      "documentTitle": "Exhibit(s)",
-      "eventCode": "EXH",
+      "documentTitle": "[First, Second, etc.] Amended [Document Name]",
+      "eventCode": "ADED",
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
-      "scenario": "Standard",
-      "label-previous": "",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document Are You Amending?",
       "label-free": "",
-      "ordinal-field": ""
+      "ordinal-field": "What Iteration is This Filing?"
     },
     {
-      "documentTitle": "Unredacted [Document Name]",
-      "eventCode": "URED",
+      "documentTitle": "[First, Second, etc.] Amendment to [Document Name}",
+      "eventCode": "AMNT",
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard A",
-      "label-previous": "Which Document Has Been Unredacted?",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document Are You Amending?",
       "label-free": "",
-      "ordinal-field": ""
+      "ordinal-field": "What Iteration is This Filing?"
     },
     {
-      "documentTitle": "Memorandum",
-      "eventCode": "MEMO",
-      "categoryCurrent": "Memorandum",
+      "documentTitle": "Administrative Record",
+      "eventCode": "ADMR",
+      "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
       "label-previous": "",
@@ -145,16 +145,6 @@
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard A",
       "label-previous": "What Document is this Certificate of Service for?",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Administrative Record",
-      "eventCode": "ADMR",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Standard",
-      "label-previous": "",
       "label-free": "",
       "ordinal-field": ""
     },
@@ -189,24 +179,34 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "[First, Second, etc.] Amended [Document Name]",
-      "eventCode": "ADED",
-      "categoryCurrent": "Miscellaneous",
+      "documentTitle": "Designation of Counsel to Receive Service",
+      "eventCode": "DSC",
+      "categoryCurrent": "",
       "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document Are You Amending?",
+      "scenario": "Standard",
+      "label-previous": "",
       "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "ordinal-field": ""
     },
     {
-      "documentTitle": "[First, Second, etc.] Amendment to [Document Name}",
-      "eventCode": "AMNT",
+      "documentTitle": "Exhibit(s)",
+      "eventCode": "EXH",
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document Are You Amending?",
+      "scenario": "Standard",
+      "label-previous": "",
       "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Memorandum",
+      "eventCode": "MEMO",
+      "categoryCurrent": "Memorandum",
+      "categoryUpdated": "Miscellaneous",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
     },
     {
       "documentTitle": "Partial Administrative Record",
@@ -259,12 +259,12 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Designation of Counsel to Receive Service",
-      "eventCode": "DSC",
-      "categoryCurrent": "",
+      "documentTitle": "Unredacted [Document Name]",
+      "eventCode": "URED",
+      "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
-      "scenario": "Standard",
-      "label-previous": "",
+      "scenario": "Nonstandard A",
+      "label-previous": "Which Document Has Been Unredacted?",
       "label-free": "",
       "ordinal-field": ""
     }
@@ -333,168 +333,8 @@
   ],
   "Notice": [
     {
-      "documentTitle": "Notice of Intervention",
-      "eventCode": "NOI",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Telephone Number",
-      "eventCode": "NTN",
-      "categoryCurrent": "",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Issue Concerning Foreign Law",
-      "eventCode": "NIFL",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
       "documentTitle": "Notice of Abatement of Jeopardy Assessment",
       "eventCode": "NAJA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Jeopardy Assessment",
-      "eventCode": "NJAR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Change of Address and Telephone Number",
-      "eventCode": "NCAP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Judicial Ruling",
-      "eventCode": "NRJR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Clarification of Tax Matters Partner",
-      "eventCode": "NCTP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of No Objection to [Document Name[",
-      "eventCode": "NNOB",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Not Objecting to?",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)",
-      "eventCode": "NCAG",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Objection to [Document Name]",
-      "eventCode": "OBJN",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Objecting to?",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Election to Intervene",
-      "eventCode": "NOEI",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Partial Abatement of Jeopardy Assessment",
-      "eventCode": "NPJR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Filing of Petition and Right to Intervene",
-      "eventCode": "NIS",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Proceeding in Bankruptcy",
-      "eventCode": "NPB",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Identification of Tax Matters Partner",
-      "eventCode": "NITM",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Relevant Judicial Decisions",
-      "eventCode": "NRJD",
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
@@ -513,88 +353,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Notice of Settlement Agreement Pursuant to Rule 248(c)(1)",
-      "eventCode": "NOST",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Concession",
-      "eventCode": "NCON",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Election to Participate",
-      "eventCode": "NOEP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Unavailability",
-      "eventCode": "NOU",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Termination Assessment",
-      "eventCode": "NTA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Supplemental Authority",
-      "eventCode": "NSA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Small Tax Case Election",
-      "eventCode": "NSTE",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Filing of the Administrative Record",
-      "eventCode": "NFAR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Death of Counsel",
-      "eventCode": "NDC",
+      "documentTitle": "Notice of Change of Address and Telephone Number",
+      "eventCode": "NCAP",
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
@@ -613,6 +373,96 @@
       "ordinal-field": ""
     },
     {
+      "documentTitle": "Notice of Clarification of Tax Matters Partner",
+      "eventCode": "NCTP",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Concession",
+      "eventCode": "NCON",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)",
+      "eventCode": "NCAG",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Death of Counsel",
+      "eventCode": "NDC",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Intervene",
+      "eventCode": "NOEI",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Participate",
+      "eventCode": "NOEP",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Filing of Petition and Right to Intervene",
+      "eventCode": "NIS",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Filing of the Administrative Record",
+      "eventCode": "NFAR",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Identification of Tax Matters Partner",
+      "eventCode": "NITM",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
       "documentTitle": "Notice of Intent Not to File [anything]",
       "eventCode": "NINF",
       "categoryCurrent": "Notice",
@@ -621,16 +471,166 @@
       "label-previous": "",
       "label-free": "What Do You Intend Not to File?",
       "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Intervention",
+      "eventCode": "NOI",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Issue Concerning Foreign Law",
+      "eventCode": "NIFL",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Jeopardy Assessment",
+      "eventCode": "NJAR",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Judicial Ruling",
+      "eventCode": "NRJR",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of No Objection to [Document Name[",
+      "eventCode": "NNOB",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Nonstandard A",
+      "label-previous": "Which Document Are You Not Objecting to?",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Objection to [Document Name]",
+      "eventCode": "OBJN",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Nonstandard A",
+      "label-previous": "Which Document Are You Objecting to?",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Partial Abatement of Jeopardy Assessment",
+      "eventCode": "NPJR",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Proceeding in Bankruptcy",
+      "eventCode": "NPB",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Relevant Judicial Decisions",
+      "eventCode": "NRJD",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Settlement Agreement Pursuant to Rule 248(c)(1)",
+      "eventCode": "NOST",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Small Tax Case Election",
+      "eventCode": "NSTE",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Supplemental Authority",
+      "eventCode": "NSA",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Telephone Number",
+      "eventCode": "NTN",
+      "categoryCurrent": "",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Termination Assessment",
+      "eventCode": "NTA",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Notice of Unavailability",
+      "eventCode": "NOU",
+      "categoryCurrent": "Notice",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
     }
   ],
   "Opposition or Objection": [
     {
-      "documentTitle": "Opposition to [Document Name]",
-      "eventCode": "OPPO",
-      "categoryCurrent": "Opposition",
+      "documentTitle": "No Objection to [Document Name]",
+      "eventCode": "NOB",
+      "categoryCurrent": "Objection",
       "categoryUpdated": "Opposition or Objection",
       "scenario": "Nonstandard A",
-      "label-previous": "Select the Document that is Being Opposed",
+      "label-previous": "What Document Are You Not Objecting?",
       "label-free": "",
       "ordinal-field": ""
     },
@@ -645,20 +645,20 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "No Objection to [Document Name]",
-      "eventCode": "NOB",
-      "categoryCurrent": "Objection",
+      "documentTitle": "Opposition to [Document Name]",
+      "eventCode": "OPPO",
+      "categoryCurrent": "Opposition",
       "categoryUpdated": "Opposition or Objection",
       "scenario": "Nonstandard A",
-      "label-previous": "What Document Are You Not Objecting?",
+      "label-previous": "Select the Document that is Being Opposed",
       "label-free": "",
       "ordinal-field": ""
     }
   ],
   "Petition": [
     {
-      "documentTitle": "Redacted Petition Filed",
-      "eventCode": "PTFR",
+      "documentTitle": "Amended Petition",
+      "eventCode": "PAP",
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
@@ -667,48 +667,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Third Amendment to Petition",
-      "eventCode": "PTAT",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Third Amended Petition",
-      "eventCode": "PTAP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Supplement to Petition",
-      "eventCode": "PSUP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Second Amendment to Petition",
-      "eventCode": "PSAT",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Second Amended Petition",
-      "eventCode": "PSAP",
+      "documentTitle": "Amendment to Amended Petition",
+      "eventCode": "PAAP",
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
@@ -747,8 +707,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amendment to Amended Petition",
-      "eventCode": "PAAP",
+      "documentTitle": "Redacted Petition Filed",
+      "eventCode": "PTFR",
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
@@ -757,8 +717,48 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Petition",
-      "eventCode": "PAP",
+      "documentTitle": "Second Amended Petition",
+      "eventCode": "PSAP",
+      "categoryCurrent": "Petition",
+      "categoryUpdated": "Petition",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Second Amendment to Petition",
+      "eventCode": "PSAT",
+      "categoryCurrent": "Petition",
+      "categoryUpdated": "Petition",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Supplement to Petition",
+      "eventCode": "PSUP",
+      "categoryCurrent": "Petition",
+      "categoryUpdated": "Petition",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Third Amended Petition",
+      "eventCode": "PTAP",
+      "categoryCurrent": "Petition",
+      "categoryUpdated": "Petition",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Third Amendment to Petition",
+      "eventCode": "PTAT",
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
@@ -768,56 +768,6 @@
     }
   ],
   "Pretrial Memorandum": [
-    {
-      "documentTitle": "Supplement to Pretrial Memorandum",
-      "eventCode": "STPM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Supplement to Prehearing Memorandum",
-      "eventCode": "STMP",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Second Supplement to Pretrial Memorandum",
-      "eventCode": "SSPM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Pretrial Memorandum",
-      "eventCode": "PMT",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Prehearing Memorandum",
-      "eventCode": "PHM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
     {
       "documentTitle": "Amended Prehearing Memorandum",
       "eventCode": "APHM",
@@ -857,12 +807,62 @@
       "label-previous": "",
       "label-free": "",
       "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Prehearing Memorandum",
+      "eventCode": "PHM",
+      "categoryCurrent": "Pretrial Memorandum",
+      "categoryUpdated": "Pretrial Memorandum",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Pretrial Memorandum",
+      "eventCode": "PMT",
+      "categoryCurrent": "Pretrial Memorandum",
+      "categoryUpdated": "Pretrial Memorandum",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Second Supplement to Pretrial Memorandum",
+      "eventCode": "SSPM",
+      "categoryCurrent": "Pretrial Memorandum",
+      "categoryUpdated": "Pretrial Memorandum",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Supplement to Prehearing Memorandum",
+      "eventCode": "STMP",
+      "categoryCurrent": "Pretrial Memorandum",
+      "categoryUpdated": "Pretrial Memorandum",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Supplement to Pretrial Memorandum",
+      "eventCode": "STPM",
+      "categoryCurrent": "Pretrial Memorandum",
+      "categoryUpdated": "Pretrial Memorandum",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
     }
   ],
   "Reply": [
     {
-      "documentTitle": "Reply to Answer to Amendment to Petition",
-      "eventCode": "RATA",
+      "documentTitle": "Amended Reply to Answer",
+      "eventCode": "RA",
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
@@ -871,78 +871,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Sur-Reply to [Document Name]",
-      "eventCode": "SURP",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Replying to?",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Third Amended Petition",
-      "eventCode": "RTAP",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Supplement to Petition",
-      "eventCode": "RSTA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Second Amended Petition",
-      "eventCode": "RTSA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Petition, as Amended",
-      "eventCode": "RAPA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer to Amended Petition",
-      "eventCode": "RTAA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Answer",
-      "eventCode": "RTA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Reply to Amendment to Answer",
-      "eventCode": "RPAA",
+      "documentTitle": "Amendment to Reply to Answer",
+      "eventCode": "RAA",
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
@@ -961,8 +891,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amendment to Reply to Answer",
-      "eventCode": "RAA",
+      "documentTitle": "Reply to Amendment to Answer",
+      "eventCode": "RPAA",
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
@@ -971,20 +901,110 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Reply to Answer",
-      "eventCode": "RA",
+      "documentTitle": "Reply to Answer",
+      "eventCode": "RTA",
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
       "label-previous": "",
       "label-free": "",
       "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Amended Petition",
+      "eventCode": "RTAA",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Amendment to Petition",
+      "eventCode": "RATA",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Petition, as Amended",
+      "eventCode": "RAPA",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Second Amended Petition",
+      "eventCode": "RTSA",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Supplement to Petition",
+      "eventCode": "RSTA",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Reply to Answer to Third Amended Petition",
+      "eventCode": "RTAP",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Sur-Reply to [Document Name]",
+      "eventCode": "SURP",
+      "categoryCurrent": "Reply",
+      "categoryUpdated": "Reply",
+      "scenario": "Nonstandard A",
+      "label-previous": "Which Document Are You Replying to?",
+      "label-free": "",
+      "ordinal-field": ""
     }
   ],
   "Request": [
     {
-      "documentTitle": "Request for Pretrial Conference",
-      "eventCode": "RFPC",
+      "documentTitle": "[First, Second, etc.] Request for Admissions",
+      "eventCode": "REQA",
+      "categoryCurrent": "Request",
+      "categoryUpdated": "Request",
+      "scenario": "Nonstandard G",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "Request for Judicial Notice",
+      "eventCode": "RJN",
+      "categoryCurrent": "Request",
+      "categoryUpdated": "Request",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Request for Place of Submission of Declaratory Judgment Case",
+      "eventCode": "RQSD",
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Standard",
@@ -1003,34 +1023,14 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Request for Place of Submission of Declaratory Judgment Case",
-      "eventCode": "RQSD",
+      "documentTitle": "Request for Pretrial Conference",
+      "eventCode": "RFPC",
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Standard",
       "label-previous": "",
       "label-free": "",
       "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Request for Judicial Notice",
-      "eventCode": "RJN",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Request for Admissions",
-      "eventCode": "REQA",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
-      "scenario": "Nonstandard G",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
     }
   ],
   "Response": [
@@ -1047,8 +1047,8 @@
   ],
   "Seriatum Brief": [
     {
-      "documentTitle": "Seriatim Answering Memorandum Brief",
-      "eventCode": "SAMB",
+      "documentTitle": "Amended Seriatim Answering Brief",
+      "eventCode": "ADSA",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1057,18 +1057,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
-      "eventCode": "SSSR",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Seriatim Opening Brief",
-      "eventCode": "SEOB",
+      "documentTitle": "Amended Seriatim Opening Brief",
+      "eventCode": "AEDS",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1079,6 +1069,16 @@
     {
       "documentTitle": "Amended Seriatim Reply Brief",
       "eventCode": "ADSB",
+      "categoryCurrent": "Seriatum Brief",
+      "categoryUpdated": "Seriatum Brief",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Amended Seriatim Sur-Reply Brief",
+      "eventCode": "ASRB",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1147,8 +1147,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Seriatim Opening Brief",
-      "eventCode": "AEDS",
+      "documentTitle": "Seriatim Answering Memorandum Brief",
+      "eventCode": "SAMB",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1157,8 +1157,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Seriatim Sur-Reply Brief",
-      "eventCode": "ASRB",
+      "documentTitle": "Seriatim Opening Brief",
+      "eventCode": "SEOB",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1237,8 +1237,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
-      "eventCode": "MBSR",
+      "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
+      "eventCode": "SSSR",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1247,8 +1247,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Seriatim Answering Brief",
-      "eventCode": "ADSA",
+      "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
+      "eventCode": "MBSR",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -1259,8 +1259,8 @@
   ],
   "Simultaneous Brief": [
     {
-      "documentTitle": "Simultaneous Answering Memoranda of Law",
-      "eventCode": "SIAM",
+      "documentTitle": "Amended Simultaneous Answering Brief",
+      "eventCode": "ASAB",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1269,18 +1269,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
-      "eventCode": "SSSM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Simultaneous Answering Memorandum Brief",
-      "eventCode": "SIMB",
+      "documentTitle": "Amended Simultaneous Answering Memoranda of Law",
+      "eventCode": "ASAM",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1291,6 +1281,16 @@
     {
       "documentTitle": "Amended Simultaneous Answering Memorandum Brief",
       "eventCode": "ASMB",
+      "categoryCurrent": "Simultaneous Brief",
+      "categoryUpdated": "Simultaneous Brief",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Amended Simultaneous Memoranda of Law",
+      "eventCode": "ASML",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1429,8 +1429,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Simultaneous Answering Memoranda of Law",
-      "eventCode": "ASAM",
+      "documentTitle": "Simultaneous Answering Memoranda of Law",
+      "eventCode": "SIAM",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1439,8 +1439,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Simultaneous Memoranda of Law",
-      "eventCode": "ASML",
+      "documentTitle": "Simultaneous Answering Memorandum Brief",
+      "eventCode": "SIMB",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1589,8 +1589,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Amended Simultaneous Answering Brief",
-      "eventCode": "ASAB",
+      "documentTitle": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
+      "eventCode": "SSSM",
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
@@ -1601,28 +1601,8 @@
   ],
   "Statement": [
     {
-      "documentTitle": "Statement under Rule 50(c)",
-      "eventCode": "STAR",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Statement under Rule 212",
-      "eventCode": "S212",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Statement of Redacted Information",
-      "eventCode": "SORI",
+      "documentTitle": "Ownership Disclosure Statement",
+      "eventCode": "DISC",
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
@@ -1641,8 +1621,28 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Ownership Disclosure Statement",
-      "eventCode": "DISC",
+      "documentTitle": "Statement of Redacted Information",
+      "eventCode": "SORI",
+      "categoryCurrent": "Statement",
+      "categoryUpdated": "Statement",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Statement under Rule 212",
+      "eventCode": "S212",
+      "categoryCurrent": "Statement",
+      "categoryUpdated": "Statement",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Statement under Rule 50(c)",
+      "eventCode": "STAR",
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
@@ -1653,24 +1653,14 @@
   ],
   "Stipulation": [
     {
-      "documentTitle": "Stipulation as to the Partial Administrative Record",
-      "eventCode": "SPAR",
+      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
+      "eventCode": "SSF",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
-      "scenario": "Standard",
+      "scenario": "Nonstandard G",
       "label-previous": "",
       "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Stipulation to Take Deposition of [Name]",
-      "eventCode": "STPD",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Name",
-      "ordinal-field": ""
+      "ordinal-field": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "{First, Second, etc.] Stipulation of Facts",
@@ -1683,48 +1673,8 @@
       "ordinal-field": "What Iteration is This Filing?"
     },
     {
-      "documentTitle": "Stipulation to Be Bound by [docket #]",
-      "eventCode": "STBB",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Docket Number",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Stipulation of Settlement",
-      "eventCode": "STS",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Stipulation of Settled Issues",
-      "eventCode": "STST",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Stipulation of Pretrial Deadlines",
-      "eventCode": "SPD",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Stipulation as to the Administrative Record",
-      "eventCode": "SADM",
+      "documentTitle": "Settlement Stipulation",
+      "eventCode": "SSTP",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
@@ -1743,8 +1693,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Settlement Stipulation",
-      "eventCode": "SSTP",
+      "documentTitle": "Stipulation as to the Administrative Record",
+      "eventCode": "SADM",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
@@ -1753,37 +1703,67 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
-      "eventCode": "SSF",
+      "documentTitle": "Stipulation as to the Partial Administrative Record",
+      "eventCode": "SPAR",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
-      "scenario": "Nonstandard G",
+      "scenario": "Standard",
       "label-previous": "",
       "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Stipulation of Pretrial Deadlines",
+      "eventCode": "SPD",
+      "categoryCurrent": "Stipulation",
+      "categoryUpdated": "Stipulation",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Stipulation of Settled Issues",
+      "eventCode": "STST",
+      "categoryCurrent": "Stipulation",
+      "categoryUpdated": "Stipulation",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Stipulation of Settlement",
+      "eventCode": "STS",
+      "categoryCurrent": "Stipulation",
+      "categoryUpdated": "Stipulation",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Stipulation to Be Bound by [docket #]",
+      "eventCode": "STBB",
+      "categoryCurrent": "Stipulation",
+      "categoryUpdated": "Stipulation",
+      "scenario": "Nonstandard B",
+      "label-previous": "",
+      "label-free": "Docket Number",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Stipulation to Take Deposition of [Name]",
+      "eventCode": "STPD",
+      "categoryCurrent": "Stipulation",
+      "categoryUpdated": "Stipulation",
+      "scenario": "Nonstandard B",
+      "label-previous": "",
+      "label-free": "Name",
+      "ordinal-field": ""
     }
   ],
   "Supporting Document": [
-    {
-      "documentTitle": "Unsworn Declaration of [Name] under Penalty of Perjury in Support of [Document Name]",
-      "eventCode": "USDL",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
-      "scenario": "Nonstandard C",
-      "label-previous": "Which Document is This Declaration in Support of?",
-      "label-free": "Who Signed This?",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Memorandum in Support of [Document Name]",
-      "eventCode": "MISP",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
-      "scenario": "Nonstandard A",
-      "label-previous": "What Document is this Memorandum in Support of?",
-      "label-free": "",
-      "ordinal-field": ""
-    },
     {
       "documentTitle": "Affidavit Of [Name] in Support Of [Document Name]",
       "eventCode": "AFF",
@@ -1811,6 +1791,26 @@
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard C",
       "label-previous": "What Document is This Declaration in Support of?",
+      "label-free": "Who Signed This?",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Memorandum in Support of [Document Name]",
+      "eventCode": "MISP",
+      "categoryCurrent": "Supporting Document",
+      "categoryUpdated": "Supporting Document",
+      "scenario": "Nonstandard A",
+      "label-previous": "What Document is this Memorandum in Support of?",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Unsworn Declaration of [Name] under Penalty of Perjury in Support of [Document Name]",
+      "eventCode": "USDL",
+      "categoryCurrent": "Supporting Document",
+      "categoryUpdated": "Supporting Document",
+      "scenario": "Nonstandard C",
+      "label-previous": "Which Document is This Declaration in Support of?",
       "label-free": "Who Signed This?",
       "ordinal-field": ""
     }
