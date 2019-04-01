@@ -14,17 +14,10 @@ import { ChooseCategory } from './FileDocument/ChooseCategory';
 class FilePetitionComponent extends React.Component {
   render() {
     const caseDetail = this.props.caseDetail;
-    const constants = this.props.constants;
     const form = this.props.form;
     const showModal = this.props.showModal;
-    const closeDocumentCategoryAccordionSequence = this.props
-      .closeDocumentCategoryAccordionSequence;
-    const openSelectDocumentTypeModalSequence = this.props
-      .openSelectDocumentTypeModalSequence;
-    const submitDocumentSequence = this.props.submitDocumentSequence;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
-    const updateFormValueSequence = this.props.updateFormValueSequence;
 
     return (
       <React.Fragment>
@@ -127,14 +120,10 @@ class FilePetitionComponent extends React.Component {
 FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
   closeDocumentCategoryAccordionSequence: PropTypes.func,
-  constants: PropTypes.object,
   form: PropTypes.object,
-  openSelectDocumentTypeModalSequence: PropTypes.func,
   showModal: PropTypes.string,
-  submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
 };
 
 export const FileDocument = connect(
@@ -142,16 +131,11 @@ export const FileDocument = connect(
     caseDetail: state.formattedCaseDetail,
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
-    constants: state.constants,
     form: state.form,
-    openSelectDocumentTypeModalSequence:
-      sequences.openSelectDocumentTypeModalSequence,
     showModal: state.showModal,
-    submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   FilePetitionComponent,
 );
