@@ -97,9 +97,12 @@ const main = () => {
     });
     Object.keys(result).forEach(category => {
       let values = result[category];
-      result[category] = values.sort(
-        (a, b) => a.documentTitle.toLowerCase < b.documentTitle.toLowerCase(),
-      );
+      result[category] = values.sort((a, b) => {
+        return a.documentTitle.localeCompare(b.documentTitle, {
+          ignorePunctuation: true,
+          sensitivity: 'base',
+        });
+      });
     });
     result['Motion'] = sortMotions(result['Motion']);
     console.log(JSON.stringify(result, null, 2));
