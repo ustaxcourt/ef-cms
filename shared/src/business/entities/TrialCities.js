@@ -76,9 +76,10 @@ const SMALL = [
   { city: 'Burlington', state: 'Vermont' },
   { city: 'Roanoke', state: 'Virginia' },
   { city: 'Cheyenne', state: 'Wyoming' },
+  ...COMMON,
 ];
 
-const REGULAR = [...COMMON, ...SMALL];
+const REGULAR = [...COMMON];
 
 exports.TRIAL_CITIES = {
   REGULAR,
