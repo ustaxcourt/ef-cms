@@ -31,38 +31,6 @@
       "ordinal-field": ""
     }
   ],
-  "Supplement": [
-    {
-      "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
-      "eventCode": "SUPM",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This a Supplement to?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
-      "eventCode": "SPML",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This Supplemental for?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "Supplemental Brief",
-      "eventCode": "SB",
-      "categoryCurrent": "Brief",
-      "categoryUpdated": "Supplement",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    }
-  ],
   "Computation": [
     {
       "documentTitle": "Computation for Entry of Decision",
@@ -323,6 +291,1226 @@
     {
       "documentTitle": "Motion to Change or Correct Caption",
       "eventCode": "M056",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for a New Trial",
+      "eventCode": "M218",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for an Order under Federal Rule of Evidence 502(d)",
+      "eventCode": "M001",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for an Order under Model Rule of Professional Conduct 4.2",
+      "eventCode": "M002",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Appointment of Mediator",
+      "eventCode": "M003",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Assignment of Judge",
+      "eventCode": "M004",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Audio of Trial Proceeding(s)",
+      "eventCode": "M136",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal",
+      "eventCode": "M005",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Default and Dismissal",
+      "eventCode": "M009",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Entry of Decision",
+      "eventCode": "M007",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
+      "eventCode": "M008",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156",
+      "eventCode": "M010",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for in Camera Review",
+      "eventCode": "M135",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for International Judicial Assistance",
+      "eventCode": "M012",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Judgment on the Pleadings",
+      "eventCode": "M121",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)",
+      "eventCode": "M013",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Leave to File [Document Name]",
+      "eventCode": "M115",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard H",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Leave to File Out of Time [Document Name]",
+      "eventCode": "M014",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard H",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Leave to Serve Additional Interrogatories",
+      "eventCode": "M015",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Leave to Use Electronic Equipment",
+      "eventCode": "M118",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for More Definite Statement Pursuant to Rule 51",
+      "eventCode": "M016",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Non-Binding Mediation",
+      "eventCode": "M017",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Oral Argument",
+      "eventCode": "M018",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Order Fixing Amount of an Appeal Bond",
+      "eventCode": "M019",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Order to Release the Amount of an Appeal Bond",
+      "eventCode": "M020",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record",
+      "eventCode": "M021",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case",
+      "eventCode": "M022",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)",
+      "eventCode": "M023",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Partial Summary Judgment",
+      "eventCode": "M024",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Preliminary Injunction",
+      "eventCode": "M025",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Pretrial Conference",
+      "eventCode": "M122",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Protective Order Pursuant to Rule 103",
+      "eventCode": "M026",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Reasonable Litigation or Administrative Costs",
+      "eventCode": "M027",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161",
+      "eventCode": "M028",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Reconsideration of Order",
+      "eventCode": "M029",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Recusal of Judge",
+      "eventCode": "M030",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
+      "eventCode": "M033",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for the Court to Pay the Expenses of a Transcript",
+      "eventCode": "M035",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for the Court to Pay the Expenses of an Interpreter",
+      "eventCode": "M036",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Voluntary Binding Arbitration",
+      "eventCode": "M037",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Writ of Habeas Corpus Ad Testificandum",
+      "eventCode": "M039",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion in Limine",
+      "eventCode": "M040",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Add Lien or Levy Designation",
+      "eventCode": "M041",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Add Small Tax case Designation",
+      "eventCode": "M042",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Amend Order",
+      "eventCode": "M043",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Appoint an Interpreter Pursuant to Rule 143(f)",
+      "eventCode": "M045",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Appoint New Tax Matters Partner",
+      "eventCode": "M044",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Appoint Tax Matters Partner",
+      "eventCode": "M117",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Authorize Proposed Sale of Seized Property",
+      "eventCode": "M046",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Be Excused from Appearing at the Trial Session",
+      "eventCode": "M047",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Be Recognized as Next Friend",
+      "eventCode": "M049",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Bifurcate",
+      "eventCode": "M050",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Calendar",
+      "eventCode": "M051",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Calendar and Consolidate Docket Numbers [docket numbers]",
+      "eventCode": "M052",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard B",
+      "label-previous": "",
+      "label-free": "Docket Numbers (separate with comma)",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Calendar in the Electronic (North) Courtroom",
+      "eventCode": "M038",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Certify for Interlocutory Appeal",
+      "eventCode": "M055",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Change or Correct Docket Entry",
+      "eventCode": "M133",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Change Place of Submission of Declaratory Judgment Case to [Place]",
+      "eventCode": "M058",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard E",
+      "label-previous": "",
+      "label-free": "Requested Place of Submission of Declatory Judgement",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Change Place of Trial [Place]",
+      "eventCode": "M059",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard E",
+      "label-previous": "",
+      "label-free": "Requested Trial Location",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Change Service Method",
+      "eventCode": "M060",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Clarify Order",
+      "eventCode": "M061",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Close on Ground of Duplication",
+      "eventCode": "M062",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Compel Discovery",
+      "eventCode": "M063",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Compel Production of Documents",
+      "eventCode": "M064",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Compel Responses to Interrogatories",
+      "eventCode": "M065",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Compel the Taking of Deposition",
+      "eventCode": "M066",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Conform the Pleadings to the Proof",
+      "eventCode": "M134",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Consolidate Docket Numbers [docket numbers]",
+      "eventCode": "M067",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard B",
+      "label-previous": "",
+      "label-free": "Docket Numbers to Be Consolidated (separate with comma)",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Correct and Certify Record on Appeal",
+      "eventCode": "M053",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Correct Clerical Order",
+      "eventCode": "M124",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Correct Transcript",
+      "eventCode": "M054",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Depose Pursuant to Rule 74",
+      "eventCode": "M068",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Determine the Tax Matters Partner",
+      "eventCode": "M069",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss",
+      "eventCode": "M070",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss for Failure to Properly Prosecute",
+      "eventCode": "M071",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
+      "eventCode": "M072",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
+      "eventCode": "M126",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Nonstandard B",
+      "label-previous": "",
+      "label-free": "Person, Notice, or Year",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss on Grounds of Mootness",
+      "eventCode": "M075",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Disqualify Counsel",
+      "eventCode": "M130",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260",
+      "eventCode": "M076",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Enforce Subpoena",
+      "eventCode": "M077",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Extend Time to Move or File Answer",
+      "eventCode": "M078",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Impose a Penalty",
+      "eventCode": "M080",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Impose Sanctions",
+      "eventCode": "M081",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
+      "eventCode": "M083",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Modify Order",
+      "eventCode": "M125",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
+      "eventCode": "M084",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Permit Levy",
+      "eventCode": "M088",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Preclude",
+      "eventCode": "M085",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Quash or Modify Subpoena",
+      "eventCode": "M087",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Redetermine Interest Pursuant to Rule 261",
+      "eventCode": "M089",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Remand",
+      "eventCode": "M090",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Remove Lien/Levy Designation",
+      "eventCode": "M132",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Remove Small Tax Case Designation",
+      "eventCode": "M091",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Remove Tax Matters Partner",
+      "eventCode": "M092",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Reopen the Record",
+      "eventCode": "M093",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)",
+      "eventCode": "M094",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Restore Case to the General Docket",
+      "eventCode": "M095",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected",
+      "eventCode": "M096",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157",
+      "eventCode": "M097",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "MOTION TO REVIEW THE SUFFICIENCY OF ANSWERS OR OBJECTIONS TO REQUEST FOR ADMISSIONS",
+      "eventCode": "M098",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Seal Case",
+      "eventCode": "M114",
+      "categoryCurrent": "",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Seal Documents",
+      "eventCode": "M127",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Set for a Time & Date Certain",
+      "eventCode": "M099",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Set Pretrial Scheduling Order",
+      "eventCode": "M131",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Sever",
+      "eventCode": "M100",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Shift the Burden of Proof",
+      "eventCode": "M101",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Shorten the Time",
+      "eventCode": "M102",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Stay Proceedings",
+      "eventCode": "M103",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Stay Proposed Sale of Seized Property",
+      "eventCode": "M104",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Strike",
+      "eventCode": "M105",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Submit Case Pursuant to Rule 122",
+      "eventCode": "M106",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Substitute Parties and Change Caption",
+      "eventCode": "M107",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Substitute Trial Exhibit(s)",
+      "eventCode": "M123",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Supplement the Record",
+      "eventCode": "M129",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Suppress Evidence",
+      "eventCode": "M119",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Take Deposition Pursuant to Rule 74(c)(3)",
+      "eventCode": "M108",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Take Judicial Notice",
+      "eventCode": "M109",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Vacate",
+      "eventCode": "M120",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Vacate or Revise Pursuant to Rule 162",
+      "eventCode": "M110",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Withdraw",
+      "eventCode": "M111",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Withdraw Counsel",
+      "eventCode": "M116",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
+      "eventCode": "M113",
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
@@ -1760,6 +2948,38 @@
       "scenario": "Nonstandard B",
       "label-previous": "",
       "label-free": "Name",
+      "ordinal-field": ""
+    }
+  ],
+  "Supplement": [
+    {
+      "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
+      "eventCode": "SUPM",
+      "categoryCurrent": "Supplement",
+      "categoryUpdated": "Supplement",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document is This a Supplement to?",
+      "label-free": "",
+      "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
+      "eventCode": "SPML",
+      "categoryCurrent": "Supplement",
+      "categoryUpdated": "Supplement",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document is This Supplemental for?",
+      "label-free": "",
+      "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "Supplemental Brief",
+      "eventCode": "SB",
+      "categoryCurrent": "Brief",
+      "categoryUpdated": "Supplement",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
       "ordinal-field": ""
     }
   ],
