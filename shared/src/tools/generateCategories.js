@@ -50,8 +50,7 @@ const sortMotions = presortedMotions => {
     );
     return foundObj;
   });
-  sortedMotions.push.apply(presortedMotions);
-  return sortedMotions;
+  return [...sortedMotions, ...presortedMotions];
 };
 
 const whitespaceCleanup = str => {
@@ -72,6 +71,7 @@ const main = () => {
 
   let output = [];
   let result = {};
+  let sortedResult = {};
 
   const stream = parse(data, csvOptions);
 
@@ -95,17 +95,19 @@ const main = () => {
       }
       result[el.categoryUpdated].push(el);
     });
-    Object.keys(result).forEach(category => {
-      let values = result[category];
-      result[category] = values.sort((a, b) => {
-        return a.documentTitle.localeCompare(b.documentTitle, {
-          ignorePunctuation: true,
-          sensitivity: 'base',
+    Object.keys(result)
+      .sort()
+      .forEach(category => {
+        let values = result[category];
+        sortedResult[category] = values.sort((a, b) => {
+          return a.documentTitle.localeCompare(b.documentTitle, {
+            ignorePunctuation: true,
+            sensitivity: 'base',
+          });
         });
       });
-    });
-    result['Motion'] = sortMotions(result['Motion']);
-    console.log(JSON.stringify(result, null, 2));
+    sortedResult['Motion'] = sortMotions(sortedResult['Motion']);
+    console.log(JSON.stringify(sortedResult, null, 2));
   });
 };
 
