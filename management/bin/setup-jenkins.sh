@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 BASTION_PUBLIC_IP=$(terraform output bastion_public_ip)
 JENKINS_PRIVATE_IP=$(terraform output jenkins_private_ip)

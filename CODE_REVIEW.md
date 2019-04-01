@@ -87,15 +87,16 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
+- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, and running `docker system prune` to remove any cached artifacts from any prior code review
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
-	- [ ] read the description of every commit that comprises the pull request
+	- [ ] read the description of the commits that comprise the pull request
 - [ ] stand up the site locally
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-		- [ ] perform the most thorough testing in Chrome and Internet Explorer 11, on Windows 7 and 10
-		- [ ] test in Edge and Firefox
-		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all functionality will be necessary on these platforms
+		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
+		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/), including Internet Explorer 11
+		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility
@@ -103,19 +104,14 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] navigate site only with the keyboard
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
-- [ ] review static code analysis results
-- [ ] examine OWASP ZAP output in `docs/`, ensure that any errors are known to be false positives or have been previously declared to be acceptable
-- [ ] critically read all new code, in the context of existing code, [looking for problems](#what-we-look-for), e.g.:
-	- [ ] make sure names of methods and variables are sensible
-	- [ ] make sure code does not contain secrets
-	- [ ] be suspicious of commented-out code
-	- [ ] any code with a purpose that isn’t immediately clear should have a comment explaining it
-	- [ ] check that code style is consistent
-	- [ ] be suspicious of any code that accepts input from the outside world, ensure that it doesn’t enable any kind of buffer overflows or SQL injection attacks
-- [ ] tests
+- [ ] review static code analysis results in SonarCloud
+- [ ] run a security audit of dependencies (`npm audit`) in `efcms-service`, `web-client`, and `shared`, to ensure that there are no vulnerabilities that will be deployed to production (as opposed to vulnerabilities that only have an impact on the development environment)
+- [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
+- [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
+- [ ] review all tests
 	- [ ] look at code coverage of tests in SonarCloud
-	- [ ] review all new tests for correctness, quality of naming
-	- [ ] determine what code isn’t tested, review that especially carefully
+	- [ ] methodically review all new tests for correctness, quality of naming
+- [ ] determine what code isn’t tested, review that rigorously
 - [ ] review documentation to ensure that it matches changes
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
