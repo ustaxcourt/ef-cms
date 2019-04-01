@@ -1,4 +1,3 @@
-const { getCaseByCaseId } = require('../../dynamo/cases/getCaseByCaseId');
 const { uniq } = require('lodash');
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
