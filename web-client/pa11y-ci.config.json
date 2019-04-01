@@ -304,8 +304,8 @@
       "actions": [
         "wait for element #document-category to be visible",
         "set field #document-category to Motions",
-        "click element #file-a-document button",
-        "wait for #documentType to be visible"
+        "click element #open-choose-document-type-modal",
+        "wait for #modalDocumentType to be visible"
       ]
     },
 

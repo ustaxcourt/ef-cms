@@ -1,6 +1,5 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { openSelectDocumentTypeModalAction } from '../actions/openSelectDocumentTypeModalAction';
 
 export const openSelectDocumentTypeModalSequence = [
-  set(state.showModal, 'SelectDocumentTypeModalDialog'),
+  openSelectDocumentTypeModalAction,
 ];
