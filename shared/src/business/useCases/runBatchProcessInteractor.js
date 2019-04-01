@@ -50,12 +50,14 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     const fileNames = caseToBatch.documents.map(
       document => `${document.documentType}.pdf`,
     );
-    const zipName = sanitize(
-      `${caseToBatch.docketNumber}_${caseToBatch.contactPrimary.name.replace(
-        /\s/g,
-        '_',
-      )}.zip`,
-    );
+    let zipName = sanitize(`${caseToBatch.docketNumber}`);
+
+    if (caseToBatch.contactPrimary && caseToBatch.contactPrimary.name) {
+      zipName += sanitize(
+        `_${caseToBatch.contactPrimary.name.replace(/\s/g, '_')}`,
+      );
+    }
+    zipName += '.zip';
 
     await applicationContext.getPersistenceGateway().zipDocuments({
       applicationContext,
@@ -64,14 +66,16 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       zipName,
     });
 
-    const stinId = caseToBatch.documents.find(
+    const stinDocument = caseToBatch.documents.find(
       document => document.documentType === Case.documentTypes.stin,
-    ).documentId;
+    );
 
-    await applicationContext.getPersistenceGateway().deleteDocument({
-      applicationContext,
-      key: stinId,
-    });
+    if (stinDocument) {
+      await applicationContext.getPersistenceGateway().deleteDocument({
+        applicationContext,
+        key: stinDocument.documentId,
+      });
+    }
 
     const caseEntity = new Case(caseToBatch).markAsSentToIRS(
       new Date().toISOString(),
