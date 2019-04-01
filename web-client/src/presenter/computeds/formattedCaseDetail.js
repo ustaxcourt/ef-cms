@@ -98,7 +98,7 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -115,9 +115,9 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   const getScore = entry => {
     const documentType = (entry.document || {}).documentType;
     const description = entry.record.description || '';
-    if (documentType === 'Petition') return 1;
+    if (documentType === documentTypesMap.petitionFile) return 1;
     else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
-    else if (documentType === 'Ownership Disclosure Statement') return 3;
+    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
     else return 4;
   };
 
@@ -193,5 +193,6 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const { DOCUMENT_TYPES_MAP } = get(state.constants);
+  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
 };
