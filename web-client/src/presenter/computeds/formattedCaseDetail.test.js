@@ -2,6 +2,13 @@ import { runCompute } from 'cerebral/test';
 
 import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
 
+const constants = {
+  DOCUMENT_TYPES_MAP: {
+    ownershipDisclosure: 'Ownership Disclosure Statement',
+    petitionFile: 'Petition',
+  },
+};
+
 describe('formatYearAmounts', () => {
   it('does not return 2018 when a blank string is passed in', () => {
     const caseDetail = {
@@ -121,6 +128,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -137,6 +145,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -154,6 +163,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -171,6 +181,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -195,6 +206,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
@@ -228,6 +240,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
+        constants,
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
@@ -295,12 +308,7 @@ describe('formatYearAmounts', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants: {
-          DOCUMENT_TYPES_MAP: {
-            ownershipDisclosure: 'Ownership Disclosure Statement',
-            petitionFile: 'Petition',
-          },
-        },
+        constants,
       },
     });
     expect(result.docketRecordWithDocument[0]).toMatchObject({
@@ -335,6 +343,7 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
+          constants,
         },
       });
       expect(result.caseName).toEqual('Sisqo');
@@ -349,6 +358,7 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
+          constants,
         },
       });
       expect(result.caseName).toEqual('Sisqo and friends');
@@ -363,6 +373,7 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
+          constants,
         },
       });
       expect(result.caseName).toEqual("Sisqo's entourage,");
@@ -380,6 +391,7 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
+          constants,
         },
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
@@ -394,6 +406,7 @@ describe('formatYearAmounts', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
+          constants,
         },
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan');
