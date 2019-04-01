@@ -98,7 +98,7 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -110,6 +110,26 @@ const formatCase = (caseDetail, caseDetailErrors) => {
       result.documents,
     );
   }
+
+  // sort to make petition first, place of trial second, and everything else in cronological order
+  const getScore = entry => {
+    const documentType = (entry.document || {}).documentType;
+    const description = entry.record.description || '';
+    if (documentType === documentTypesMap.petitionFile) return 1;
+    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
+    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
+    else return 4;
+  };
+
+  result.docketRecordWithDocument.sort((a, b) => {
+    const aScore = getScore(a);
+    const bScore = getScore(b);
+    if (aScore === bScore) {
+      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
+    } else {
+      return aScore - bScore;
+    }
+  });
 
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
@@ -173,5 +193,6 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const { DOCUMENT_TYPES_MAP } = get(state.constants);
+  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
 };
