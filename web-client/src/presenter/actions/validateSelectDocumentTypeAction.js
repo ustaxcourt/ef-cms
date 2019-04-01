@@ -15,9 +15,9 @@ export const validateSelectDocumentTypeAction = ({ path, get }) => {
 
   const errors = {};
 
-  if (!form.category) errors.category = 'You must select a category';
-  if (!form.documentType)
-    errors.documentType = 'You must select a documentType';
+  if (!form.category) errors.category = 'You must select a category.';
+  if (!form.modalDocumentType)
+    errors.modalDocumentType = 'You must select a document type.';
 
   if (Object.keys(errors).length === 0) {
     return path.success();
