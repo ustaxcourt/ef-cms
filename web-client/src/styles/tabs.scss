@@ -195,6 +195,10 @@ nav.horizontal-tabs,
   }
 
   &.subsection-container-tabs {
+    * {
+      animation: none;
+    }
+
     > nav {
       margin-bottom: 0;
       border: 1px solid $color-gray-lighter;
