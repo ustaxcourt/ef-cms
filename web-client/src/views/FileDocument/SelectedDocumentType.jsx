@@ -19,7 +19,7 @@ class SelectedDocumentTypeComponent extends React.Component {
                 id="edit-selected-document-type"
                 onClick={() => {
                   this.props.closeDocumentCategoryAccordionSequence();
-                  this.props.openSelectDocumentTypeModalSequence();
+                  this.props.editSelectedDocumentSequence();
                 }}
               >
                 <FontAwesomeIcon icon="edit" size="sm" />
@@ -44,17 +44,16 @@ class SelectedDocumentTypeComponent extends React.Component {
 
 SelectedDocumentTypeComponent.propTypes = {
   closeDocumentCategoryAccordionSequence: PropTypes.func,
+  editSelectedDocumentSequence: PropTypes.func,
   form: PropTypes.object,
-  openSelectDocumentTypeModalSequence: PropTypes.func,
 };
 
 export const SelectedDocumentType = connect(
   {
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
+    editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     form: state.form,
-    openSelectDocumentTypeModalSequence:
-      sequences.openSelectDocumentTypeModalSequence,
   },
   SelectedDocumentTypeComponent,
 );
