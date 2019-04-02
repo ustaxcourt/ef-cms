@@ -269,7 +269,13 @@ describe('Case entity', () => {
         docketRecord: [
           {
             description: 'Petition',
+            documentId: '123',
             filedBy: 'Test Petitioner',
+            filingDate: '2019-03-01T21:42:29.073Z',
+          },
+          {
+            description:
+              'Request for Place of Trial at Charleston, West Virginia',
             filingDate: '2019-03-01T21:42:29.073Z',
           },
         ],
@@ -277,6 +283,7 @@ describe('Case entity', () => {
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       assert.ok(caseRecord.irsSendDate);
       expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
+      expect(caseRecord.docketRecord[1].status).toBeUndefined();
     });
   });
 
@@ -544,7 +551,7 @@ describe('Case entity', () => {
       expect(docketLength).toEqual(initialDocketLength + 1);
     });
 
-    it('should only sets docket record once per time paid', () => {
+    it('should only set docket record once per time paid', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       const docketLength = caseRecord.docketRecord.length;
@@ -593,7 +600,7 @@ describe('Case entity', () => {
       expect(error.message).toContain('Imarealerror');
     });
 
-    it('doesnt passes back an error passed in if valid', () => {
+    it('does not pass back an error passed in if valid', () => {
       let error = null;
       const caseRecord = new Case(MOCK_CASE);
       try {

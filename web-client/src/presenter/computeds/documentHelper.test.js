@@ -1,17 +1,9 @@
+import { documentHelper } from './documentHelper';
 import { runCompute } from 'cerebral/test';
 
-import { documentHelper } from './documentHelper';
-
 describe('documentHelper', () => {
-  it('should return an empty object if no document was found', async () => {
-    const result = await runCompute(documentHelper, {
-      state: {
-        caseDetail: {
-          documents: [],
-        },
-        documentId: 'abc',
-      },
-    })({
+  it('should return a correctly-assembled URI to document details based on docket number and document id', async () => {
+    const result = await runCompute(documentHelper)({
       docketNumber: 'abc',
       documentId: '123',
     });

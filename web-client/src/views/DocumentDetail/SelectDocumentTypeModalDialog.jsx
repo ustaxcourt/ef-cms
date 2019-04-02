@@ -67,6 +67,7 @@ class SelectDocumentTypeModalDialogComponent extends ModalDialog {
             size="1"
             id="modalDocumentType"
             name="modalDocumentType"
+            aria-label="Document type"
             value={this.props.form.modalDocumentType}
             disabled={!this.props.form.category}
             aria-disabled={!this.props.form.category ? 'true' : 'false'}

@@ -6,6 +6,11 @@
 | API     | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api) |
 | Shared  | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)      |
 
+
+API | Front-End | Shared Code
+--- | --------- | -----------
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
+
 An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source Electronic Filing / Case Management System (EF-CMS) — software that allows case documents to be filed with the court, and for the court to manage cases. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
 
 <a href="docs/images/screenshot_new_petition.png"><img src="docs/images/screenshot_new_petition.png" width="32%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
@@ -85,9 +90,13 @@ Both the web-client and efcms-service share code that exists in the `shared` dir
 
 - `cd efcms-service && npm start`
 
-#### Login and Test Users
+## Login and Test Users
 
-- for /mock-login you can login using:
+There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
+
+## Mock Login
+
+You can log in using these usernames:
 
 ```
 taxpayer
@@ -98,30 +107,32 @@ respondent
 seniorattorney
 ```
 
-- to run the project locally using the dev cognito:
-  `npm run dev:cognito`
-  You can then login with:
+No password is required.
+
+## AWS Cognito 
+
+To run use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
-petitioner1@example.com - petitioner5@example.com
-petitionsclerk1@example.com - petitionsclerk5@example.com
-docketclerk1@example.com - docketclerk5@example.com
-intakeclerk1@example.com - intakeclerk5@example.com
-respondent1@example.com - respondent5@example.com
-seniorattorney1@example.com - seniorattorney5@example.com
+petitioner1@example.com – petitioner5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+intakeclerk1@example.com – intakeclerk5@example.com
+respondent1@example.com – respondent5@example.com
+seniorattorney1@example.com – seniorattorney5@example.com
 ```
 
-all passwords are:
+The password for all accounts is:
 
 `Testing1234$`
 
-### CI/CD Setup
+## CI/CD Setup
 
 For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
-### Editor configuration
+## Editor configuration
 
-#### Atom.io
+### Atom.io
 
 Install the following for best results:
 

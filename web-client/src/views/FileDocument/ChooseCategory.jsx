@@ -108,6 +108,7 @@ class ChooseCategoryComponent extends React.Component {
             <button
               type="submit"
               className="usa-button"
+              id="open-choose-document-type-modal"
               onClick={() => {
                 this.props.selectDocumentSequence();
               }}
