@@ -51,7 +51,7 @@
     "seed:db": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls dynamodb seed --seed test --noTimeout --stage local --region us-east-1 --domain noop  --userPoolId noop --efcmsTableName=efcms-local --accountId noop",
     "install:lambda": "docker pull lambci/lambda",
     "start:dynamodb": "sls dynamodb start -p 8000 --migrate true --stage local",
-    "start:local": "XRAY_DEBUG_MODE=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls offline start --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop",
+    "start:local": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls offline start --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop",
     "dynamo:export": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node dynamo-export.js > ./storage/fixtures/efcms.json",
     "start": "(../wait-until.sh http://localhost:3000/v1/swagger && npm run create-tables && npm run seed:db && npm run seed:s3) & npm run start:local",
     "watch": "nodemon -e yml --exec sls offline start",
