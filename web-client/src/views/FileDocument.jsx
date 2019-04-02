@@ -7,24 +7,15 @@ import React from 'react';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
-import { SelectDocumentTypeModalDialog } from './DocumentDetail/SelectDocumentTypeModalDialog';
 import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
-import { ChooseCategory } from './FileDocument/ChooseCategory';
+import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
 
 class FilePetitionComponent extends React.Component {
   render() {
     const caseDetail = this.props.caseDetail;
-    const constants = this.props.constants;
     const form = this.props.form;
-    const showModal = this.props.showModal;
-    const closeDocumentCategoryAccordionSequence = this.props
-      .closeDocumentCategoryAccordionSequence;
-    const openSelectDocumentTypeModalSequence = this.props
-      .openSelectDocumentTypeModalSequence;
-    const submitDocumentSequence = this.props.submitDocumentSequence;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
-    const updateFormValueSequence = this.props.updateFormValueSequence;
 
     return (
       <React.Fragment>
@@ -84,7 +75,9 @@ class FilePetitionComponent extends React.Component {
                 <SelectedDocumentType />
               )}
 
-              {!this.props.form.isDocumentTypeSelected && <ChooseCategory />}
+              {!this.props.form.isDocumentTypeSelected && (
+                <ChooseDocumentType />
+              )}
             </div>
             <div className="usa-width-one-third push-right">
               <div className="blue-container gray-background">
@@ -116,9 +109,6 @@ class FilePetitionComponent extends React.Component {
             </div>
           </div>
         </section>
-        {showModal === 'SelectDocumentTypeModalDialog' && (
-          <SelectDocumentTypeModalDialog />
-        )}
       </React.Fragment>
     );
   }
@@ -127,14 +117,9 @@ class FilePetitionComponent extends React.Component {
 FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
   closeDocumentCategoryAccordionSequence: PropTypes.func,
-  constants: PropTypes.object,
   form: PropTypes.object,
-  openSelectDocumentTypeModalSequence: PropTypes.func,
-  showModal: PropTypes.string,
-  submitDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
 };
 
 export const FileDocument = connect(
@@ -142,16 +127,10 @@ export const FileDocument = connect(
     caseDetail: state.formattedCaseDetail,
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
-    constants: state.constants,
     form: state.form,
-    openSelectDocumentTypeModalSequence:
-      sequences.openSelectDocumentTypeModalSequence,
-    showModal: state.showModal,
-    submitDocumentSequence: sequences.submitDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   FilePetitionComponent,
 );

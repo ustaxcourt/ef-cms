@@ -73,6 +73,7 @@ export const Country = connect(
             <input
               id={`${type}.country`}
               type="text"
+              className={`${type}-country`}
               name={`${type}.country`}
               autoCapitalize="none"
               value={data[type].country || ''}
