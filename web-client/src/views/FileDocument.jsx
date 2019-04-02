@@ -16,6 +16,8 @@ class FilePetitionComponent extends React.Component {
     const form = this.props.form;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
+    const updateFormValueSequence = this.props.updateFormValueSequence;
+    const selectDocumentSequence = this.props.selectDocumentSequence;
 
     return (
       <React.Fragment>
@@ -84,25 +86,100 @@ class FilePetitionComponent extends React.Component {
                 <h3>Frequently Used Documents</h3>
                 <ul className="ustc-unstyled-list">
                   <li>
-                    <a href="#file-a-document-header">
+                    <button
+                      className="link"
+                      type="button"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'category',
+                          value: 'Motion',
+                        });
+                        updateFormValueSequence({
+                          key: 'documentType',
+                          value: 'Motion for Judgment on The Pleadings',
+                        });
+                        selectDocumentSequence();
+                      }}
+                    >
                       Motion for Judgment on The Pleadings
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#file-a-document-header">
+                    <button
+                      className="link"
+                      type="button"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'category',
+                          value: 'Application',
+                        });
+                        updateFormValueSequence({
+                          key: 'documentType',
+                          value: 'Application for Waiver of Filing Fee',
+                        });
+                        selectDocumentSequence();
+                      }}
+                    >
                       Application for Waiver of Filing Fee
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#file-a-document-header">Motion for a New Trial</a>
+                    <button
+                      className="link"
+                      type="button"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'category',
+                          value: 'Motion',
+                        });
+                        updateFormValueSequence({
+                          key: 'documentType',
+                          value: 'Motion for a New Trial',
+                        });
+                        selectDocumentSequence();
+                      }}
+                    >
+                      Motion for a New Trial
+                    </button>
                   </li>
                   <li>
-                    <a href="#file-a-document-header">
+                    <button
+                      className="link"
+                      type="button"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'category',
+                          value: 'Motion',
+                        });
+                        updateFormValueSequence({
+                          key: 'documentType',
+                          value:
+                            'Motion for Protective Order Persuant to Rule 103',
+                        });
+                        selectDocumentSequence();
+                      }}
+                    >
                       Motion for Protective Order Persuant to Rule 103
-                    </a>
+                    </button>
                   </li>
                   <li>
-                    <a href="#file-a-document-header">Motion for Continuance</a>
+                    <button
+                      className="link"
+                      type="button"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'category',
+                          value: 'Motion',
+                        });
+                        updateFormValueSequence({
+                          key: 'documentType',
+                          value: 'Motion for Continuance',
+                        });
+                        selectDocumentSequence();
+                      }}
+                    >
+                      Motion for Continuance
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -118,8 +195,10 @@ FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
   closeDocumentCategoryAccordionSequence: PropTypes.func,
   form: PropTypes.object,
+  selectDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
+  updateFormValueSequence: PropTypes.func,
 };
 
 export const FileDocument = connect(
@@ -128,9 +207,11 @@ export const FileDocument = connect(
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   FilePetitionComponent,
 );
