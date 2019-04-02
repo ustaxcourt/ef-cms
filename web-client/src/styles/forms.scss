@@ -99,6 +99,18 @@ input:focus::placeholder {
   }
 }
 
+.ustc-hide-radio-buttons {
+  li label {
+    padding-bottom: 10px;
+    color: $color-primary;
+    text-decoration: underline;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
 @media only screen and (min-width: $medium-screen) {
   .ustc-select-multi {
     height: 300px;
@@ -121,6 +133,24 @@ input:focus::placeholder {
         font-weight: $font-semibold;
       }
     }
+  }
+}
+
+@media only screen and (min-width: $medium-screen) {
+  .only-large-screens {
+    display: block;
+  }
+  .only-small-screens {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $medium-screen - 1px) {
+  .only-large-screens {
+    display: none;
+  }
+  .only-small-screens {
+    display: block;
   }
 }
 

@@ -14,6 +14,7 @@ import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionM
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissSelectDocumentTypeModalSequence } from './sequences/dismissSelectDocumentTypeModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -29,7 +30,6 @@ import { NotFoundError } from './errors/NotFoundError';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
-import { openSelectDocumentTypeModalSequence } from './sequences/openSelectDocumentTypeModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
@@ -118,6 +118,7 @@ export const presenter = {
     dismissCreateMessageModalSequence,
     dismissModalSequence,
     dismissSelectDocumentTypeModalSequence,
+    editSelectedDocumentSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -130,7 +131,6 @@ export const presenter = {
     loginWithTokenSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
-    openSelectDocumentTypeModalSequence,
     removeYearAmountSequence,
     runBatchProcessSequence,
     selectAssigneeSequence,
