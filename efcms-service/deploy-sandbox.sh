@@ -21,6 +21,12 @@ function check_env_vars_exist() {
         echo "No EFCMS_DOMAIN environment variable was specified."
         exit 2
     fi
+
+    if [[ -z "${COGNITO_SUFFIX}" ]]
+    then
+        echo "No COGNITO_SUFFIX environment variable was specified."
+        exit 2
+    fi
 }
 
 
@@ -28,11 +34,13 @@ function prepare_serverless() {
     echo "Preparing to run Serverless."
     export NODE_PRESERVE_SYMLINKS=1
     rm -rf ./node_modules/
-    npm install
+    rm package-lock.json || true
     pushd ../shared
     rm -rf ./node_modules/
+    rm package-lock.json || true
     npm install --production
     popd
+    npm i
 }
 
 function run_development() {
@@ -67,6 +75,6 @@ function configure_custom_logging() {
 }
 
 check_env_vars_exist
-prepare_serverless
+# prepare_serverless
 run_development
 configure_custom_logging
