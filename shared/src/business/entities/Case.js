@@ -445,20 +445,15 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
  * @returns {Case}
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
-  const { Document } = require('./Document');
-
   this.irsSendDate = sendDate;
   this.status = statusMap.generalDocket;
   this.documents.forEach(document => {
-    const doc = new Document(document);
-    if (doc.isPetitionDocument()) {
-      document.status = 'served';
-    }
+    document.status = 'served';
   });
 
   const status = `R served on ${moment(sendDate).format('L LT')}`;
   this.docketRecord.forEach(docketRecord => {
-    if (docketRecord.description === Case.documentTypes.petitionFile) {
+    if (docketRecord.documentId) {
       docketRecord.status = status;
     }
   });

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const parse = require('csv-parse');
+const _ = require('lodash');
 
 const USAGE = `
 Usage: node generateCategories.js spreadsheet.csv > output.json
@@ -31,6 +32,27 @@ const csvOptions = {
   trim: true,
 };
 
+const sortMotions = presortedMotions => {
+  let sortedMotions = [];
+  const firstEntries = [
+    'Motion for Continuance',
+    'Motion for Extension of Time',
+    'Motion to Dismiss for Lack of Jurisdiction',
+    'Motion to Dismiss for Lack of Prosecution',
+    'Motion for Summary Judgment',
+    'Motion to Change or Correct Caption',
+  ];
+
+  sortedMotions = firstEntries.map(title => {
+    const [foundObj] = _.remove(
+      presortedMotions,
+      m => m.documentTitle.toLowerCase() === title.toLowerCase(),
+    );
+    return foundObj;
+  });
+  return [...sortedMotions, ...presortedMotions];
+};
+
 const whitespaceCleanup = str => {
   str = str.replace(/\[\s+/g, '[');
   str = str.replace(/\s+\]/g, ']');
@@ -49,6 +71,7 @@ const main = () => {
 
   let output = [];
   let result = {};
+  let sortedResult = {};
 
   const stream = parse(data, csvOptions);
 
@@ -72,7 +95,19 @@ const main = () => {
       }
       result[el.categoryUpdated].push(el);
     });
-    console.log(JSON.stringify(result, null, 2));
+    Object.keys(result)
+      .sort()
+      .forEach(category => {
+        let values = result[category];
+        sortedResult[category] = values.sort((a, b) => {
+          return a.documentTitle.localeCompare(b.documentTitle, {
+            ignorePunctuation: true,
+            sensitivity: 'base',
+          });
+        });
+      });
+    sortedResult['Motion'] = sortMotions(sortedResult['Motion']);
+    console.log(JSON.stringify(sortedResult, null, 2));
   });
 };
 

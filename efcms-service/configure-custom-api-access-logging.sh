@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 if [ "$#" -ne 3 ] || ! [ -f "$2" ]; then
   echo "Usage: $0 [stage_name] [config_file_name] [region]" >&2

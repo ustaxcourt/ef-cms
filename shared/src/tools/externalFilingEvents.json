@@ -31,38 +31,6 @@
       "ordinal-field": ""
     }
   ],
-  "Supplement": [
-    {
-      "documentTitle": "Supplemental Brief",
-      "eventCode": "SB",
-      "categoryCurrent": "Brief",
-      "categoryUpdated": "Supplement",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
-      "eventCode": "SUPM",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This a Supplement to?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
-      "eventCode": "SPML",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
-      "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This Supplemental for?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
-    }
-  ],
   "Computation": [
     {
       "documentTitle": "Computation for Entry of Decision",
@@ -109,16 +77,6 @@
   ],
   "Miscellaneous": [
     {
-      "documentTitle": "Designation of Counsel to Receive Service",
-      "eventCode": "DSC",
-      "categoryCurrent": "",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
       "documentTitle": "[First, Second, etc.] Amended [Document Name]",
       "eventCode": "ADED",
       "categoryCurrent": "Miscellaneous",
@@ -127,16 +85,6 @@
       "label-previous": "Which Document Are You Amending?",
       "label-free": "",
       "ordinal-field": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "Amended Certificate of Service Of [Document Name]",
-      "eventCode": "AMDC",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard A",
-      "label-previous": "What Document is this Certificate of Service for?",
-      "label-free": "",
-      "ordinal-field": ""
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [Document Name}",
@@ -155,6 +103,16 @@
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
       "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Amended Certificate of Service Of [Document Name]",
+      "eventCode": "AMDC",
+      "categoryCurrent": "Miscellaneous",
+      "categoryUpdated": "Miscellaneous",
+      "scenario": "Nonstandard A",
+      "label-previous": "What Document is this Certificate of Service for?",
       "label-free": "",
       "ordinal-field": ""
     },
@@ -182,6 +140,16 @@
       "documentTitle": "Civil Penalty Approval Form",
       "eventCode": "CIVP",
       "categoryCurrent": "Miscellaneous",
+      "categoryUpdated": "Miscellaneous",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Designation of Counsel to Receive Service",
+      "eventCode": "DSC",
+      "categoryCurrent": "",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
       "label-previous": "",
@@ -271,6 +239,66 @@
   ],
   "Motion": [
     {
+      "documentTitle": "Motion for Continuance",
+      "eventCode": "M006",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Extension of Time",
+      "eventCode": "M011",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
+      "eventCode": "M073",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Dismiss for Lack of Prosecution",
+      "eventCode": "M074",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion for Summary Judgment",
+      "eventCode": "M034",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
+      "documentTitle": "Motion to Change or Correct Caption",
+      "eventCode": "M056",
+      "categoryCurrent": "Motion",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
       "documentTitle": "Motion for a New Trial",
       "eventCode": "M218",
       "categoryCurrent": "Motion",
@@ -341,16 +369,6 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Motion for Continuance",
-      "eventCode": "M006",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
       "documentTitle": "Motion for Default and Dismissal",
       "eventCode": "M009",
       "categoryCurrent": "Motion",
@@ -383,16 +401,6 @@
     {
       "documentTitle": "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156",
       "eventCode": "M010",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Motion for Extension of Time",
-      "eventCode": "M011",
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
@@ -651,16 +659,6 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Motion for Summary Judgment",
-      "eventCode": "M034",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
       "documentTitle": "Motion for the Court to Pay the Expenses of a Transcript",
       "eventCode": "M035",
       "categoryCurrent": "Motion",
@@ -843,16 +841,6 @@
     {
       "documentTitle": "Motion to Certify for Interlocutory Appeal",
       "eventCode": "M055",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Motion to Change or Correct Caption",
-      "eventCode": "M056",
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
@@ -1053,26 +1041,6 @@
     {
       "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
       "eventCode": "M072",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Motion to Dismiss for Lack of Prosecution",
-      "eventCode": "M074",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
-      "eventCode": "M073",
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
@@ -1331,6 +1299,16 @@
       "ordinal-field": ""
     },
     {
+      "documentTitle": "Motion to Seal Case",
+      "eventCode": "M114",
+      "categoryCurrent": "",
+      "categoryUpdated": "Motion",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
       "documentTitle": "Motion to Seal Documents",
       "eventCode": "M127",
       "categoryCurrent": "Motion",
@@ -1534,16 +1512,6 @@
       "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
       "eventCode": "M113",
       "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Motion to Seal Case",
-      "eventCode": "M114",
-      "categoryCurrent": "",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
       "label-previous": "",
@@ -1813,6 +1781,16 @@
       "ordinal-field": ""
     },
     {
+      "documentTitle": "Notice of Telephone Number",
+      "eventCode": "NTN",
+      "categoryCurrent": "",
+      "categoryUpdated": "Notice",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
+      "ordinal-field": ""
+    },
+    {
       "documentTitle": "Notice of Termination Assessment",
       "eventCode": "NTA",
       "categoryCurrent": "Notice",
@@ -1826,16 +1804,6 @@
       "documentTitle": "Notice of Unavailability",
       "eventCode": "NOU",
       "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
-      "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
-    },
-    {
-      "documentTitle": "Notice of Telephone Number",
-      "eventCode": "NTN",
-      "categoryCurrent": "",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
       "label-previous": "",
@@ -2457,8 +2425,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
-      "eventCode": "MBSR",
+      "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
+      "eventCode": "SSSR",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -2467,8 +2435,8 @@
       "ordinal-field": ""
     },
     {
-      "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
-      "eventCode": "SSSR",
+      "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
+      "eventCode": "MBSR",
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
@@ -2873,8 +2841,8 @@
   ],
   "Stipulation": [
     {
-      "documentTitle": "{First, Second, etc.] Stipulation of Facts",
-      "eventCode": "STIP",
+      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
+      "eventCode": "SSF",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard G",
@@ -2883,8 +2851,8 @@
       "ordinal-field": "What Iteration is This Filing?"
     },
     {
-      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
-      "eventCode": "SSF",
+      "documentTitle": "{First, Second, etc.] Stipulation of Facts",
+      "eventCode": "STIP",
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard G",
@@ -2980,6 +2948,38 @@
       "scenario": "Nonstandard B",
       "label-previous": "",
       "label-free": "Name",
+      "ordinal-field": ""
+    }
+  ],
+  "Supplement": [
+    {
+      "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
+      "eventCode": "SUPM",
+      "categoryCurrent": "Supplement",
+      "categoryUpdated": "Supplement",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document is This a Supplement to?",
+      "label-free": "",
+      "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
+      "eventCode": "SPML",
+      "categoryCurrent": "Supplement",
+      "categoryUpdated": "Supplement",
+      "scenario": "Nonstandard F",
+      "label-previous": "Which Document is This Supplemental for?",
+      "label-free": "",
+      "ordinal-field": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "Supplemental Brief",
+      "eventCode": "SB",
+      "categoryCurrent": "Brief",
+      "categoryUpdated": "Supplement",
+      "scenario": "Standard",
+      "label-previous": "",
+      "label-free": "",
       "ordinal-field": ""
     }
   ],

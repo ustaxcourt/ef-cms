@@ -30,13 +30,25 @@ describe('getWorkItemsBySection', () => {
         workItemId: 'abc',
       },
     ]);
-    sinon.stub(client, 'batchGet').resolves([
-      {
-        pk: 'abc',
-        sk: 'abc',
-        workItemId: 'abc',
-      },
-    ]);
+    sinon
+      .stub(client, 'batchGet')
+      .onFirstCall()
+      .resolves([
+        {
+          caseId: '123',
+          pk: 'abc',
+          sk: 'abc',
+          workItemId: 'abc',
+        },
+      ])
+      .onSecondCall()
+      .resolves([
+        {
+          caseId: '123',
+          docketNumber: '123-19',
+          status: 'New',
+        },
+      ]);
   });
 
   it('makes a post request to the expected endpoint with the expected data', async () => {

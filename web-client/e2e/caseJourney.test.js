@@ -2,6 +2,7 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { Case } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 import { applicationContext } from '../src/applicationContext';
@@ -100,6 +101,7 @@ describe('Case journey', () => {
     test.setState('constants', {
       CASE_CAPTION_POSTFIX,
       COUNTRY_TYPES,
+      DOCUMENT_TYPES_MAP: Case.documentTypes,
       PARTY_TYPES,
       TRIAL_CITIES,
     });
