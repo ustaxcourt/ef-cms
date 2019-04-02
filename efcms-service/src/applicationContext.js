@@ -1,5 +1,8 @@
-const { S3, DynamoDB } = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk');
 const uuidv4 = require('uuid/v4');
+
+const AWS = process.env.NODE_ENV === 'production' ? AWSXRay.captureAWS(require('aws-sdk')) : require('aws-sdk')
+const { S3, DynamoDB } = AWS;
 
 const {
   incrementCounter,
@@ -214,12 +217,13 @@ module.exports = (appContextUser = {}) => {
     environment,
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion } = {}) => {
-      return new DynamoDB.DocumentClient({
+      const dynamo = new DynamoDB.DocumentClient({
         endpoint: useMasterRegion
           ? environment.masterDynamoDbEndpoint
           : environment.dynamoDbEndpoint,
         region: useMasterRegion ? environment.masterRegion : environment.region,
       });
+      return dynamo;
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -261,11 +265,12 @@ module.exports = (appContextUser = {}) => {
       };
     },
     getStorageClient: () => {
-      return new S3({
+      const s3 = new S3({
         endpoint: environment.s3Endpoint,
         region: environment.region,
         s3ForcePathStyle: true,
       });
+      return s3;
     },
     // TODO: replace external calls to environment
     getUniqueId: () => {
