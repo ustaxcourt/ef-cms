@@ -8,7 +8,7 @@ import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
 import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
-import { ChooseCategory } from './FileDocument/ChooseCategory';
+import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
 
 class FilePetitionComponent extends React.Component {
   render() {
@@ -75,7 +75,9 @@ class FilePetitionComponent extends React.Component {
                 <SelectedDocumentType />
               )}
 
-              {!this.props.form.isDocumentTypeSelected && <ChooseCategory />}
+              {!this.props.form.isDocumentTypeSelected && (
+                <ChooseDocumentType />
+              )}
             </div>
             <div className="usa-width-one-third push-right">
               <div className="blue-container gray-background">

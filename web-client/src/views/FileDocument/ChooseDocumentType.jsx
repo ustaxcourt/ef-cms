@@ -3,7 +3,7 @@ import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class ChooseCategoryComponent extends React.Component {
+class ChooseDocumentTypeComponent extends React.Component {
   render() {
     return (
       <div className="blue-container">
@@ -48,6 +48,7 @@ class ChooseCategoryComponent extends React.Component {
                 <select
                   id="document-type"
                   name="documentType"
+                  className="documentType"
                   onChange={e => {
                     this.props.updateFormValueSequence({
                       key: e.target.name,
@@ -74,7 +75,7 @@ class ChooseCategoryComponent extends React.Component {
               <div className="ustc-form-group only-small-screens">
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Document Type</legend>
-                  <ul className="ustc-vertical-option-list ustc-hide-radio-buttons">
+                  <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
                     {(
                       this.props.constants.CATEGORY_MAP[
                         this.props.form.category
@@ -125,7 +126,7 @@ class ChooseCategoryComponent extends React.Component {
   }
 }
 
-ChooseCategoryComponent.propTypes = {
+ChooseDocumentTypeComponent.propTypes = {
   closeDocumentCategoryAccordionSequence: PropTypes.func,
   constants: PropTypes.object,
   form: PropTypes.object,
@@ -133,7 +134,7 @@ ChooseCategoryComponent.propTypes = {
   updateFormValueSequence: PropTypes.func,
 };
 
-export const ChooseCategory = connect(
+export const ChooseDocumentType = connect(
   {
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
@@ -142,5 +143,5 @@ export const ChooseCategory = connect(
     selectDocumentSequence: sequences.selectDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ChooseCategoryComponent,
+  ChooseDocumentTypeComponent,
 );
