@@ -41,69 +41,71 @@ class ChooseCategoryComponent extends React.Component {
               })}
             </select>
           </div>
-          <div className="ustc-form-group only-large-screens">
-            <label htmlFor="document-type">Document Type</label>
-            <select
-              id="document-type"
-              name="documentType"
-              disabled={!this.props.form.category}
-              aria-disabled={!this.props.form.category ? 'true' : 'false'}
-              onChange={e => {
-                this.props.updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            >
-              <option selected="selected" value="">
-                - Select -
-              </option>
-              {(
-                this.props.constants.CATEGORY_MAP[this.props.form.category] ||
-                []
-              ).map(documentType => (
-                <option
-                  key={documentType.documentTitle}
-                  value={documentType.documentTitle}
+          {this.props.form.category && (
+            <>
+              <div className="ustc-form-group only-large-screens">
+                <label htmlFor="document-type">Document Type</label>
+                <select
+                  id="document-type"
+                  name="documentType"
+                  onChange={e => {
+                    this.props.updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
                 >
-                  {documentType.documentTitle}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="ustc-form-group only-small-screens">
-            <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend>Document Type</legend>
-              <ul className="ustc-vertical-option-list ustc-hide-radio-buttons">
-                {(
-                  this.props.constants.CATEGORY_MAP[this.props.form.category] ||
-                  []
-                ).map((documentType, index) => (
-                  <li
-                    key={documentType.documentTitle}
-                    value={documentType.documentTitle}
-                  >
-                    <input
-                      id={`documentType-${index}`}
-                      type="radio"
-                      name="documentType"
+                  <option value="">- Select -</option>
+                  {(
+                    this.props.constants.CATEGORY_MAP[
+                      this.props.form.category
+                    ] || []
+                  ).map(documentType => (
+                    <option
+                      key={documentType.documentTitle}
                       value={documentType.documentTitle}
-                      onClick={e => {
-                        this.props.updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        this.props.selectDocumentSequence();
-                      }}
-                    />
-                    <label htmlFor={`documentType-${index}`}>
+                    >
                       {documentType.documentTitle}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
-          </div>
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="ustc-form-group only-small-screens">
+                <fieldset className="usa-fieldset-inputs usa-sans">
+                  <legend>Document Type</legend>
+                  <ul className="ustc-vertical-option-list ustc-hide-radio-buttons">
+                    {(
+                      this.props.constants.CATEGORY_MAP[
+                        this.props.form.category
+                      ] || []
+                    ).map((documentType, index) => (
+                      <li
+                        key={documentType.documentTitle}
+                        value={documentType.documentTitle}
+                      >
+                        <input
+                          id={`documentType-${index}`}
+                          type="radio"
+                          name="documentType"
+                          value={documentType.documentTitle}
+                          onClick={e => {
+                            this.props.updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            this.props.selectDocumentSequence();
+                          }}
+                        />
+                        <label htmlFor={`documentType-${index}`}>
+                          {documentType.documentTitle}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </fieldset>
+              </div>
+            </>
+          )}
           <div className="ustc-form-group only-large-screens">
             <button
               type="submit"
