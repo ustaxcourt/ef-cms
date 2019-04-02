@@ -147,7 +147,7 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   result.createdAtFormatted = moment.utc(result.createdAt).format('L');
   result.receivedAtFormatted = moment.utc(result.receivedAt).format('L');
   result.irsDateFormatted = moment
-    .utc(result.irsDate)
+    .utc(result.irsSendDate)
     .local()
     .format('L LT');
   result.payGovDateFormatted = moment.utc(result.payGovDate).format('L');
