@@ -17,7 +17,7 @@ describe('formatted case details computed', () => {
               status: 'served',
             },
           ],
-          irsDate: '2018-11-21T20:49:28.192Z',
+          irsSendDate: '2018-11-21T20:49:28.192Z',
           petitioners: [{ name: 'bob' }],
         },
         constants: {
@@ -44,7 +44,7 @@ describe('formatted case details computed', () => {
                 status: 'served',
               },
             ],
-            irsDate: '2018-11-21T20:49:28.192Z',
+            irsSendDate: '2018-11-21T20:49:28.192Z',
             petitioners: [{ name: 'bob' }],
           },
         ],
