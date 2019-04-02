@@ -8,6 +8,8 @@ plugins:
   - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
+  - serverless-plugin-tracing
+
 custom:
   prune:
     automatic: true
@@ -70,6 +72,7 @@ custom:
 
 provider:
   name: aws
+  tracing: true 
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs8.10
@@ -93,8 +96,15 @@ provider:
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
+    NODE_ENV: ${self:custom.vars.nodeEnv}
 
   iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
     - Effect: 'Allow'
       Action:
         - 'lambda:InvokeFunction'
