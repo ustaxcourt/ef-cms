@@ -7,7 +7,6 @@ import React from 'react';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
-import { SelectDocumentTypeModalDialog } from './DocumentDetail/SelectDocumentTypeModalDialog';
 import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
 import { ChooseCategory } from './FileDocument/ChooseCategory';
 
@@ -15,7 +14,6 @@ class FilePetitionComponent extends React.Component {
   render() {
     const caseDetail = this.props.caseDetail;
     const form = this.props.form;
-    const showModal = this.props.showModal;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
 
@@ -109,9 +107,6 @@ class FilePetitionComponent extends React.Component {
             </div>
           </div>
         </section>
-        {showModal === 'SelectDocumentTypeModalDialog' && (
-          <SelectDocumentTypeModalDialog />
-        )}
       </React.Fragment>
     );
   }
@@ -121,7 +116,6 @@ FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
   closeDocumentCategoryAccordionSequence: PropTypes.func,
   form: PropTypes.object,
-  showModal: PropTypes.string,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
 };
@@ -132,7 +126,6 @@ export const FileDocument = connect(
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     form: state.form,
-    showModal: state.showModal,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,

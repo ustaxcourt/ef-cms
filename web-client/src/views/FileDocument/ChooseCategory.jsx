@@ -15,7 +15,6 @@ class ChooseCategoryComponent extends React.Component {
           onSubmit={e => {
             e.preventDefault();
             this.props.closeDocumentCategoryAccordionSequence();
-            this.props.openSelectDocumentTypeModalSequence();
           }}
         >
           <div className="ustc-form-group">
@@ -30,6 +29,7 @@ class ChooseCategoryComponent extends React.Component {
                   value: e.target.value,
                 });
               }}
+              value={this.props.form.category}
             >
               <option value="">- Select -</option>
               {this.props.constants.CATEGORIES.map(category => {
@@ -54,6 +54,7 @@ class ChooseCategoryComponent extends React.Component {
                       value: e.target.value,
                     });
                   }}
+                  value={this.props.form.documentType}
                 >
                   <option value="">- Select -</option>
                   {(
@@ -110,7 +111,7 @@ class ChooseCategoryComponent extends React.Component {
             <button
               type="submit"
               className="usa-button"
-              id="open-choose-document-type-modal"
+              id="select-document"
               onClick={() => {
                 this.props.selectDocumentSequence();
               }}
@@ -128,7 +129,6 @@ ChooseCategoryComponent.propTypes = {
   closeDocumentCategoryAccordionSequence: PropTypes.func,
   constants: PropTypes.object,
   form: PropTypes.object,
-  openSelectDocumentTypeModalSequence: PropTypes.func,
   selectDocumentSequence: PropTypes.func,
   updateFormValueSequence: PropTypes.func,
 };
@@ -139,8 +139,6 @@ export const ChooseCategory = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     constants: state.constants,
     form: state.form,
-    openSelectDocumentTypeModalSequence:
-      sequences.openSelectDocumentTypeModalSequence,
     selectDocumentSequence: sequences.selectDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
