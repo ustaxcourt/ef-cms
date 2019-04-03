@@ -33,8 +33,8 @@ RUN pip install --upgrade awscli==${AWS_CLI_VERSION}
 
 RUN apt-get install -y jq
 
-RUN wget -q -O terraform_0.11.11_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && \
-    unzip -o terraform_0.11.11_linux_amd64.zip terraform
+RUN wget -q -O terraform_0.11.13_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && \
+    unzip -o terraform_0.11.13_linux_amd64.zip terraform
 
 RUN cp terraform /usr/local/bin/
 
