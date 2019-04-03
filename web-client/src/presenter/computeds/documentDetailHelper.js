@@ -23,7 +23,13 @@ export const documentDetailHelper = get => {
       .map(items => formatWorkItem(items));
     formattedDocument.completedWorkItems = (allWorkItems || [])
       .filter(items => items.completedAt)
-      .map(items => formatWorkItem(items));
+      .map(items => {
+        const formatted = formatWorkItem(items);
+        formatted.messages = formatted.messages.filter(
+          message => message.message.indexOf('Served on IRS') === -1,
+        );
+        return formatted;
+      });
   }
 
   const formattedDocumentIsPetition =
