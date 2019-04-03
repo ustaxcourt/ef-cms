@@ -49,22 +49,24 @@ const syncChangedCaseStatus = async ({
     );
     const { fromUserId, createdAt } = batchedMessage;
 
-    await client.put({
+    await createMappingRecord({
       applicationContext,
-      Item: {
-        pk: `${fromUserId}|outbox`,
-        sk: createdAt,
-        ...workItem,
+      item: {
+        workItemId: workItem.workItemId,
       },
+      pkId: fromUserId,
+      skId: createdAt,
+      type: 'outbox',
     });
 
-    await client.put({
+    await createMappingRecord({
       applicationContext,
-      Item: {
-        pk: `${existing.section}|outbox`,
-        sk: createdAt,
-        ...workItem,
+      item: {
+        workItemId: workItem.workItemId,
       },
+      pkId: existing.section,
+      skId: createdAt,
+      type: 'outbox',
     });
   } else if (caseToSave.status === 'Recalled') {
     // TODO: this seems like business logic, refactor
@@ -119,13 +121,14 @@ const handleExistingWorkItem = async ({
   }
 
   if (!existing.completedAt && workItem.completedAt) {
-    await client.put({
+    await createMappingRecord({
       applicationContext,
-      Item: {
-        pk: `${workItem.section}|outbox`,
-        sk: workItem.completedAt,
-        ...workItem,
+      item: {
+        workItemId: workItem.workItemId,
       },
+      pkId: workItem.section,
+      skId: workItem.completedAt,
+      type: 'outbox',
     });
   }
 

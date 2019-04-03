@@ -123,7 +123,7 @@ describe('WorkItem', () => {
       expect(workItem.messages.length === 0).toBe(true);
     });
 
-    it('no message added when set as sentToIRS', () => {
+    it('a message should be added when set as sentToIRS', () => {
       const workItem = new WorkItem({
         assigneeId: 'bob',
         assigneeName: 'bob',
@@ -137,7 +137,7 @@ describe('WorkItem', () => {
         sentBy: 'bob',
       });
       workItem.setAsSentToIRS();
-      expect(workItem.messages.length === 0).toBe(true);
+      expect(workItem.messages.length === 1).toBe(true);
       expect(workItem.completedMessage).toEqual('Served on IRS');
     });
   });

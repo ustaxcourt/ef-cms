@@ -11,9 +11,8 @@ export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     runBatchProcessSequence: sequences.runBatchProcessSequence,
-    workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, runBatchProcessSequence, workQueueHelper }) => {
+  ({ chooseWorkQueueSequence, runBatchProcessSequence }) => {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
@@ -49,14 +48,14 @@ export const WorkQueue = connect(
             </div>
           </If>
         </Tabs>
-        {workQueueHelper.showRunBatchIRSProcessButton && (
+        <If bind="workQueueHelper.showRunBatchIRSProcessButton">
           <button
             className="usa-button-secondary"
             onClick={() => runBatchProcessSequence()}
           >
             Run IRS Batch Process
           </button>
-        )}
+        </If>
       </React.Fragment>
     );
   },
