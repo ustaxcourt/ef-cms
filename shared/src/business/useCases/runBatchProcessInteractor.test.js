@@ -42,6 +42,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   const zipDocumentsStub = sinon.stub().resolves(null);
   const deleteDocumentStub = sinon.stub().resolves(null);
   const updateCaseStub = sinon.stub().resolves(null);
+  const updateWorkItemStub = sinon.stub().resolves(null);
 
   let applicationContext;
   let mockCase;
@@ -65,6 +66,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
           updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
           zipDocuments: zipDocumentsStub,
         };
       },
@@ -141,6 +143,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
           updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
           zipDocuments: zipDocumentsStub,
         };
       },
@@ -197,6 +200,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
           updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
           zipDocuments: zipDocumentsStub,
         };
       },
