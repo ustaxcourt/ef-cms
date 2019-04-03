@@ -71,7 +71,7 @@ export default test => {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'Petition filed by Test petitioner is ready for review.',
+      'Petition filed by Test Person, Deceased, Test Person, Surviving Spouse is ready for review.',
     );
   });
 };

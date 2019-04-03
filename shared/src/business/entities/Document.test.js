@@ -1,8 +1,8 @@
 const assert = require('assert');
 
-const Document = require('./Document');
-const WorkItem = require('./WorkItem');
-const Message = require('./Message');
+const { Document } = require('./Document');
+const { WorkItem } = require('./WorkItem');
+const { Message } = require('./Message');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',

@@ -1,7 +1,7 @@
 const assert = require('assert');
 
-const WorkItem = require('./WorkItem');
-const Message = require('./Message');
+const { WorkItem } = require('./WorkItem');
+const { Message } = require('./Message');
 
 describe('WorkItem', () => {
   describe('isValid', () => {
@@ -121,6 +121,24 @@ describe('WorkItem', () => {
         user: { name: 'jane', userId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
       });
       expect(workItem.messages.length === 0).toBe(true);
+    });
+
+    it('no message added when set as sentToIRS', () => {
+      const workItem = new WorkItem({
+        assigneeId: 'bob',
+        assigneeName: 'bob',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        caseStatus: 'Batched for IRS',
+        caseTitle: 'testing',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: {},
+        messages: [],
+        sentBy: 'bob',
+      });
+      workItem.setAsSentToIRS();
+      expect(workItem.messages.length === 0).toBe(true);
+      expect(workItem.completedMessage).toEqual('Served on IRS');
     });
   });
 });

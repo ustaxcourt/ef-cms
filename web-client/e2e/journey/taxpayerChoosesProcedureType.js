@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import startCaseHelper from '../../src/presenter/computeds/startCaseHelper';
+import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default test => {
   it('taxpayer chooses the procedure types to get the trial cities', async () => {

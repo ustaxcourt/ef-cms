@@ -27,7 +27,7 @@ export const IndividualWorkQueueInbox = connect(
               <th>Document</th>
               <th>Status</th>
               <th>From</th>
-              <th>To</th>
+              <th>Section</th>
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
@@ -35,8 +35,8 @@ export const IndividualWorkQueueInbox = connect(
               key={idx}
               onClick={() =>
                 setFocusedWorkItem({
-                  idx,
                   queueType: 'workQueue',
+                  uiKey: item.uiKey,
                 })
               }
             >
@@ -75,8 +75,8 @@ export const IndividualWorkQueueInbox = connect(
                   </a>
                 </td>
                 <td>{item.caseStatus}</td>
-                <td>{item.currentMessage.from}</td>
-                <td>{item.assigneeName}</td>
+                <td className="from">{item.currentMessage.from}</td>
+                <td>{item.sentBySection}</td>
               </tr>
               {item.isFocused && (
                 <tr className="queue-message">
@@ -89,7 +89,7 @@ export const IndividualWorkQueueInbox = connect(
                   </td>
                   <td colSpan="3" aria-hidden="true" />
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="message-detail"
                     aria-label="Message detail"
                     aria-live="polite"

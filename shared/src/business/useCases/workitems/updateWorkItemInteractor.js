@@ -1,5 +1,5 @@
-const WorkItem = require('../../entities/WorkItem');
-const User = require('../../entities/User');
+const { WorkItem } = require('../../entities/WorkItem');
+const { User } = require('../../entities/User');
 const {
   isAuthorized,
   WORKITEM,

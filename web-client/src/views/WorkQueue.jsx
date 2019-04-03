@@ -3,6 +3,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { If } from '../ustc-ui/If/If';
 import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
 
@@ -36,6 +37,17 @@ export const WorkQueue = connect(
               <SectionWorkQueue />
             </div>
           </Tab>
+          <If bind="workQueueHelper.showStartCaseButton">
+            <div className="fix-top-right">
+              <a
+                className="usa-button new-case"
+                href="/start-a-case"
+                id="init-file-petition"
+              >
+                Create a Case
+              </a>
+            </div>
+          </If>
         </Tabs>
         {workQueueHelper.showRunBatchIRSProcessButton && (
           <button

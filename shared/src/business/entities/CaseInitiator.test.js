@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { JSDOM } = require('jsdom');
 
-const CaseInitiator = require('./CaseInitiator');
+const { CaseInitiator } = require('./CaseInitiator');
 
 const jsdom = new JSDOM('');
 global.Blob = jsdom.window.Blob;

@@ -1,8 +1,8 @@
 const { Case } = require('../entities/Case');
-const WorkItem = require('../entities/WorkItem');
-const DocketRecord = require('../entities/DocketRecord');
-const Document = require('../entities/Document');
-const Message = require('../entities/Message');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
+const { WorkItem } = require('../entities/WorkItem');
+
 const { capitalize } = require('lodash');
 
 const {
@@ -29,13 +29,24 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
     sentBy: user.userId,
   });
 
+  let message;
+
+  if (documentEntity.documentType === 'Petition') {
+    const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
+    message = `${
+      documentEntity.documentType
+    } filed by ${caseCaptionNames} is ready for review.`;
+  } else {
+    message = `${documentEntity.documentType} filed by ${capitalize(
+      user.role,
+    )} is ready for review.`;
+  }
+
   workItemEntity.addMessage(
     new Message({
       from: user.name,
       fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
+      message,
     }),
   );
 
@@ -52,10 +63,10 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
  * @returns {Promise<*>}
  */
 exports.createCase = async ({
-  petitionMetadata,
-  petitionFileId,
-  ownershipDisclosureFileId,
   applicationContext,
+  ownershipDisclosureFileId,
+  petitionFileId,
+  petitionMetadata,
   stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -73,16 +84,26 @@ exports.createCase = async ({
     },
   );
 
+  let practitioner = null;
+  if (user.role === 'practitioner') {
+    const practitionerUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({
+        applicationContext,
+        userId: user.userId,
+      });
+    practitioner = practitionerUser;
+  }
+
   const caseToAdd = new Case({
     userId: user.userId,
+    practitioner,
     ...petitionEntity.toRawObject(),
-    petitioners: [
-      {
-        ...user.toRawObject(),
-      },
-    ],
     docketNumber,
+    isPaper: false,
   });
+
+  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
@@ -100,15 +121,6 @@ exports.createCase = async ({
   });
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
-  caseToAdd.addDocketRecord(
-    new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
-      filingDate: caseToAdd.createdAt,
-    }),
-  );
-
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
@@ -118,7 +130,6 @@ exports.createCase = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-  caseToAdd.initialCaption = caseToAdd.caseTitle = Case.getCaseTitle(caseToAdd);
 
   await applicationContext.getPersistenceGateway().saveCase({
     applicationContext,

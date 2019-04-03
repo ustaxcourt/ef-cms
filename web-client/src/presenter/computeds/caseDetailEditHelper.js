@@ -14,7 +14,6 @@ export const caseDetailEditHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
   const partyType = get(state.caseDetail.partyType);
   const documents = get(state.caseDetail.documents);
-
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
@@ -32,8 +31,8 @@ export const caseDetailEditHelper = get => {
     const odsDocs = documents.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
+    showOwnershipDisclosureStatement = true;
     if (odsDocs[0]) {
-      showOwnershipDisclosureStatement = true;
       ownershipDisclosureStatementDocumentId = odsDocs[0].documentId;
     }
   }

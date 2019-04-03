@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
-import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
-import documentDetailHelper from '../../src/presenter/computeds/documentDetailHelper';
+import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { documentDetailHelper } from '../../src/presenter/computeds/documentDetailHelper';
 
 /**
  * This is needed because some sequences run router.route which runs another test.runSequence which

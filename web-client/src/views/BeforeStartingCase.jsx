@@ -148,7 +148,7 @@ export const BeforeStartingCase = () => (
       <a className="usa-button" href="/start-a-case">
         Got It, Letʼs Start My Case
       </a>
-      <a className="usa-button-secondary" href="/">
+      <a className="usa-button usa-button-secondary" href="/">
         Cancel
       </a>
     </div>
