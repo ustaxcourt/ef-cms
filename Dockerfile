@@ -57,7 +57,7 @@ RUN apt-get install -y shellcheck
 
 COPY shared/package.json /home/app/shared/package.json
 COPY shared/package-lock.json /home/app/shared/package-lock.json
-RUN cd /home/app/shared && npm i --only=production
+RUN cd /home/app/shared && npm i
 
 COPY efcms-service/package.json /home/app/efcms-service/package.json
 COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
