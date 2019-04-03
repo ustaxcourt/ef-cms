@@ -216,6 +216,16 @@ WorkItem.prototype.setAsSentToIRS = function() {
   this.completedAt = new Date().toISOString();
   this.completedMessage = 'Served on IRS';
 
+  this.addMessage(
+    new Message({
+      from: 'IRS Holding Queue',
+      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+      message: 'Served on IRS',
+      to: null,
+      toUserId: null,
+    }),
+  );
+
   return this;
 };
 
