@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const Country = connect(
   {
@@ -23,7 +24,7 @@ export const Country = connect(
       <React.Fragment>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].countryType
@@ -33,14 +34,7 @@ export const Country = connect(
         >
           <label htmlFor={`${type}.countryType`}>Country</label>
           <select
-            className={
-              `usa-input-inline ${type}-country-type ` +
-              (validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].countryType
-                ? 'ustc-input-error'
-                : '')
-            }
+            className={`${type}-country-type `}
             id={`${type}.countryType`}
             name={`${type}.countryType`}
             value={data[type].countryType}
@@ -59,16 +53,15 @@ export const Country = connect(
               - International -
             </option>
           </select>
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].countryType}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.countryType`}
+          />
         </div>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].country
@@ -80,6 +73,7 @@ export const Country = connect(
             <input
               id={`${type}.country`}
               type="text"
+              className={`${type}-country`}
               name={`${type}.country`}
               autoCapitalize="none"
               value={data[type].country || ''}
@@ -93,11 +87,10 @@ export const Country = connect(
                 validateStartCaseSequence();
               }}
             />
-            {validationErrors && validationErrors[type] && (
-              <div className="usa-input-error-message">
-                {validationErrors[type].country}
-              </div>
-            )}
+            <Text
+              className="usa-input-error-message"
+              bind={`validationErrors.${type}.country`}
+            />
           </div>
         )}
       </React.Fragment>

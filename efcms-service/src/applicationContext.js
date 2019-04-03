@@ -1,5 +1,8 @@
-const { S3, DynamoDB } = require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk');
 const uuidv4 = require('uuid/v4');
+
+const AWS = process.env.NODE_ENV === 'production' ? AWSXRay.captureAWS(require('aws-sdk')) : require('aws-sdk')
+const { S3, DynamoDB } = AWS;
 
 const {
   incrementCounter,
@@ -9,8 +12,14 @@ const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 const {
-  deleteWorkItemFromSection
+  deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  deleteWorkItemFromInbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
+const {
+  addWorkItemToSectionInbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
   deleteDocument,
 } = require('ef-cms-shared/src/persistence/s3/deleteDocument');
@@ -36,6 +45,12 @@ const {
 const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  updateWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  putWorkItemInOutbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
   getWorkItemsBySection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
@@ -98,6 +113,9 @@ const {
   createCase,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseFromPaper,
+} = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
+const {
   getCasesByUser: getCasesByUserUC,
 } = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
 const {
@@ -125,7 +143,7 @@ const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
-  updateWorkItem,
+  updateWorkItem: updateWorkItemUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
 const {
   createDocument,
@@ -162,9 +180,15 @@ const {
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
 
-const PetitionWithoutFiles = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+const {
+  PetitionWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
 
-const User = require('ef-cms-shared/src/business/entities/User');
+const {
+  PetitionFromPaperWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionFromPaperWithoutFiles');
+
+const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -185,9 +209,6 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-/**
- *
- */
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -196,24 +217,28 @@ module.exports = (appContextUser = {}) => {
     environment,
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion } = {}) => {
-      return new DynamoDB.DocumentClient({
+      const dynamo = new DynamoDB.DocumentClient({
         endpoint: useMasterRegion
           ? environment.masterDynamoDbEndpoint
           : environment.dynamoDbEndpoint,
         region: useMasterRegion ? environment.masterRegion : environment.region,
       });
+      return dynamo;
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
     getEntityConstructors: () => ({
       Petition: PetitionWithoutFiles,
+      PetitionFromPaper: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
+        addWorkItemToSectionInbox,
         createUser,
         createWorkItem,
         deleteDocument,
+        deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
@@ -231,18 +256,21 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
+        putWorkItemInOutbox,
         saveCase,
         saveWorkItem,
         updateCase,
+        updateWorkItem,
         zipDocuments,
       };
     },
     getStorageClient: () => {
-      return new S3({
+      const s3 = new S3({
         endpoint: environment.s3Endpoint,
         region: environment.region,
         s3ForcePathStyle: true,
       });
+      return s3;
     },
     // TODO: replace external calls to environment
     getUniqueId: () => {
@@ -253,6 +281,7 @@ module.exports = (appContextUser = {}) => {
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
         createCase,
+        createCaseFromPaper,
         createDocument,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
@@ -273,7 +302,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
-        updateWorkItem,
+        updateWorkItem: updateWorkItemUC,
       };
     },
     irsGateway,

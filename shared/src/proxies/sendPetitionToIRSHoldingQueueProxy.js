@@ -9,6 +9,6 @@ const { post } = require('./requests');
 exports.sendPetitionToIRSHoldingQueue = ({ caseId, applicationContext }) => {
   return post({
     applicationContext,
-    endpoint: `/cases/${caseId}/irsPetitionPackage`,
+    endpoint: `/cases/${caseId}/sendToIRSHoldingQueue`,
   });
 };

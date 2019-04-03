@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 
 const dynamo = new AWS.DynamoDB({
-  region: 'us-east-1',
   endpoint: 'http://localhost:8000',
+  region: 'us-east-1',
 });
 
 const deleteTable = async tableName => {
@@ -23,17 +23,6 @@ const createEFCMSTable = async () => {
   console.log('Creating EFCMS Table');
   return dynamo
     .createTable({
-      TableName: 'efcms-local',
-      KeySchema: [
-        {
-          AttributeName: 'pk',
-          KeyType: 'HASH',
-        },
-        {
-          AttributeName: 'sk',
-          KeyType: 'RANGE',
-        },
-      ],
       AttributeDefinitions: [
         {
           AttributeName: 'pk',
@@ -44,10 +33,21 @@ const createEFCMSTable = async () => {
           AttributeType: 'S',
         },
       ],
+      KeySchema: [
+        {
+          AttributeName: 'pk',
+          KeyType: 'HASH',
+        },
+        {
+          AttributeName: 'sk',
+          KeyType: 'RANGE',
+        },
+      ],
       ProvisionedThroughput: {
         ReadCapacityUnits: 1,
         WriteCapacityUnits: 1,
       },
+      TableName: 'efcms-local',
     })
     .promise();
 };

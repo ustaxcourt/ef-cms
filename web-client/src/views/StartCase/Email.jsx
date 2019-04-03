@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { state, props } from 'cerebral';
+import { props, state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 

@@ -1,15 +1,15 @@
 import { connect } from '@cerebral/react';
-import { sequences, state, props } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ProcedureType = connect(
   {
-    procedureTypes: state.procedureTypes,
-    onChange: props.onChange,
-    value: props.value,
-    validationErrors: state.validationErrors,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
     legend: props.legend,
+    onChange: props.onChange,
+    procedureTypes: state.procedureTypes,
+    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validationErrors: state.validationErrors,
+    value: props.value,
   },
   ({ procedureTypes, value, validationErrors, onChange, legend }) => {
     return (

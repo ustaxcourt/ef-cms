@@ -8,12 +8,12 @@ import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSu
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
-import { setCaseAction } from '../actions/setCaseAction';
 
 export const submitFilePetitionSequence = [
   clearAlertsAction,

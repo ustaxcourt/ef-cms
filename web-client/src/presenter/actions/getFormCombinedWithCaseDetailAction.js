@@ -38,7 +38,7 @@ export const castToISO = dateString => {
  * @param {string} originalDate the original date to return if the updatedDateString is bad
  * @returns {string} the updatedDateString if everything is correct.
  */
-const checkDate = (updatedDateString, originalDate) => {
+export const checkDate = (updatedDateString, originalDate) => {
   const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
@@ -65,13 +65,23 @@ const checkDate = (updatedDateString, originalDate) => {
  *
  * @param {Object} providers the cerebral providers
  * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
+ * @param {Object} providers.props the cerebral props object
  * @returns {Object} the combinedCaseDetailWithForm
  */
-export const getFormCombinedWithCaseDetailAction = ({ get }) => {
-  const { CASE_CAPTION_POSTFIX } = get(state.constants);
+export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
   const caseDetail = { ...get(state.caseDetail) };
-  let caseCaption = get(state.caseCaption);
-  const { irsYear, irsMonth, irsDay, payGovYear, payGovMonth, payGovDay } = {
+  let caseCaption = props.caseCaption;
+  const {
+    irsYear,
+    irsMonth,
+    irsDay,
+    payGovYear,
+    payGovMonth,
+    payGovDay,
+    receivedAtYear,
+    receivedAtMonth,
+    receivedAtDay,
+  } = {
     ...get(state.form),
   };
 
@@ -80,6 +90,7 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
       ...get(state.form),
       irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
       payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
+      receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
@@ -88,12 +99,16 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
       'payGovYear',
       'payGovMonth',
       'payGovDay',
+      'receivedAtYear',
+      'receivedAtMonth',
+      'receivedAtDay',
       'trialCities',
     ],
   );
 
   form.irsNoticeDate = checkDate(form.irsNoticeDate, caseDetail.irsNoticeDate);
   form.payGovDate = checkDate(form.payGovDate, caseDetail.payGovDate);
+  form.receivedAt = checkDate(form.receivedAt, caseDetail.receivedAt);
 
   // cannot store empty strings in persistence
   if (caseDetail.preferredTrialCity === '') {
@@ -110,7 +125,7 @@ export const getFormCombinedWithCaseDetailAction = ({ get }) => {
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
 
   if (caseCaption && (caseCaption = caseCaption.trim())) {
-    caseDetail.caseTitle = `${caseCaption} ${CASE_CAPTION_POSTFIX}`;
+    caseDetail.caseCaption = caseCaption;
   }
 
   return {

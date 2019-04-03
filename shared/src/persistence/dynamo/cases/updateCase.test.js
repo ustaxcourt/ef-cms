@@ -25,7 +25,7 @@ describe('updateCase', () => {
         caseId: '123',
         currentVersion: '10',
         docketNumber: '101-18',
-        status: 'General',
+        status: 'General Docket',
         userId: 'taxpayer',
       },
     });

@@ -39,15 +39,16 @@ export const SectionWorkQueueInbox = connect(
             <th>Received</th>
             <th>Document</th>
             <th>Status</th>
-            <th>From</th>
             <th>To</th>
+            <th>From</th>
+            <th>Section</th>
           </tr>
         </thead>
         {workQueueHelper.showSendToBar && (
           <tbody className="action-bar">
             <tr>
               <td
-                colSpan="9"
+                colSpan="10"
                 className="action-bar"
                 aria-label="Action bar: choose an assignee."
                 aria-live="polite"
@@ -89,8 +90,8 @@ export const SectionWorkQueueInbox = connect(
             key={idx}
             onClick={() =>
               setFocusedWorkItem({
-                idx,
                 queueType: 'workQueue',
+                uiKey: item.uiKey,
               })
             }
           >
@@ -151,8 +152,9 @@ export const SectionWorkQueueInbox = connect(
                 </a>
               </td>
               <td className="section-queue-row">{item.caseStatus}</td>
+              <td className="to section-queue-row">{item.assigneeName}</td>
               <td className="section-queue-row">{item.currentMessage.from}</td>
-              <td className="section-queue-row">{item.assigneeName}</td>
+              <td className="section-queue-row">{item.sentBySection}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">
@@ -165,7 +167,7 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 <td colSpan="4" aria-hidden="true" />
                 <td
-                  colSpan="4"
+                  colSpan="5"
                   className="message-detail"
                   aria-label="Message detail"
                   aria-live="polite"

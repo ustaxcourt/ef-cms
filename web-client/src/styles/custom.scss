@@ -14,6 +14,14 @@ hr {
   border-top: 1px solid $color-gray-light;
 }
 
+.mr-1 {
+  margin-right: 10px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
 .case-status-label {
   font-size: 1.4rem;
   font-weight: $font-bold;
@@ -64,6 +72,14 @@ iframe {
   width: 100%;
   height: 1000px;
   border: 1px solid $color-gray-lightest;
+}
+
+.case-list-header {
+  margin-bottom: 20px;
+}
+
+.petitions-details {
+  margin-bottom: 120px;
 }
 
 .party-information p {
@@ -130,6 +146,10 @@ select[disabled] {
     margin: 0;
   }
 
+  &.gray-background {
+    background-color: $color-gray-lightest;
+  }
+
   .push-right {
     margin-right: 0;
     float: right;
@@ -155,6 +175,11 @@ select[disabled] {
   }
 }
 
+.push-right {
+  margin-right: 0;
+  float: right;
+}
+
 .alert-blank-message {
   height: 24px;
 }
@@ -163,7 +188,8 @@ select[disabled] {
   font-weight: $font-semibold;
 }
 
-.usa-accordion.start-a-case {
+.usa-accordion.start-a-case,
+.usa-accordion.document-category {
   margin-bottom: 2rem;
 
   .usa-accordion-button {
@@ -215,7 +241,8 @@ select[disabled] {
   }
 }
 
-.small-case-features {
+.small-case-features,
+.document-category-features {
   h4 {
     color: $color-base;
   }
@@ -237,6 +264,17 @@ select[disabled] {
     border: 1px solid $color-gray-lighter;
     box-shadow: inset 0 -10px 0 $color-primary-alt-dark;
   }
+
+  .document-feature {
+    min-height: 27rem;
+    padding: 20px 18px 2px;
+    border: 1px solid $color-gray-lighter;
+    box-shadow: inset 0 -10px 0 $color-primary-alt-dark;
+
+    ul {
+      padding-left: 2rem;
+    }
+  }
 }
 
 .alert-dark {
@@ -256,6 +294,10 @@ select[disabled] {
   border-left: 5px solid $color-gold;
   background: $color-gold-lightest;
   color: $color-base;
+
+  .usa-form-hint {
+    margin: 0;
+  }
 
   svg {
     margin-right: 5px;
@@ -383,11 +425,21 @@ select.ustc-input-error {
   overflow-y: scroll;
 }
 
-.ustc-create-message-modal {
+.ustc-create-message-modal,
+.forward-form {
   .usa-input-error input,
   .usa-input-error textarea,
   .usa-input-error select {
     width: calc(100% + 1.9rem);
     border: 3px solid #cd2026;
   }
+}
+
+textarea#case-caption {
+  height: 6rem;
+}
+
+.filed-by {
+  display: inline-block;
+  padding-top: 20px;
 }

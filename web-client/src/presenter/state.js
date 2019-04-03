@@ -3,25 +3,26 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
-import alertHelper from './computeds/alertHelper';
+import { alertHelper } from './computeds/alertHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
-import caseDetailHelper from './computeds/caseDetailHelper';
+import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
 import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
-import documentDetailHelper from './computeds/documentDetailHelper';
+import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
-import startCaseHelper from './computeds/startCaseHelper';
+import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
-import workQueueHelper from './computeds/workQueueHelper';
+import { workQueueHelper } from './computeds/workQueueHelper';
+import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-export default {
+export const state = {
   alertHelper,
   assigneeId: null,
   caseCaption: '',
@@ -58,6 +59,7 @@ export default {
   mobileMenu: {
     isVisible: false,
   },
+  modal: {},
 
   path: '/',
   paymentInfo: {
@@ -78,8 +80,11 @@ export default {
   user: null,
   users: [],
   validationErrors: {},
+  workItem: {},
   workItemActions: {},
+  workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
+  workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };

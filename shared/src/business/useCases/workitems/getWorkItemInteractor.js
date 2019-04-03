@@ -3,7 +3,7 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getWorkItem

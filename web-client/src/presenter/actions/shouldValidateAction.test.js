@@ -1,4 +1,4 @@
-import presenter from '..';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { shouldValidateAction } from './shouldValidateAction';
 import sinon from 'sinon';

@@ -8,8 +8,14 @@ export const SectionWorkQueueOutbox = connect(
     documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedWorkQueue,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
+    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, sectionWorkQueue, setFocusedWorkItem }) => {
+  ({
+    documentHelper,
+    sectionWorkQueue,
+    setFocusedWorkItem,
+    workQueueSectionHelper,
+  }) => {
     return (
       <table
         className="work-queue subsection"
@@ -27,6 +33,7 @@ export const SectionWorkQueueOutbox = connect(
             <th>Status</th>
             <th>From</th>
             <th>To</th>
+            <th>Section</th>
           </tr>
         </thead>
         {sectionWorkQueue.map((item, idx) => (
@@ -34,8 +41,8 @@ export const SectionWorkQueueOutbox = connect(
             key={idx}
             onClick={() =>
               setFocusedWorkItem({
-                idx,
                 queueType: 'workQueue',
+                uiKey: item.uiKey,
               })
             }
           >
@@ -76,6 +83,7 @@ export const SectionWorkQueueOutbox = connect(
               <td>{item.caseStatus}</td>
               <td>{item.currentMessage.from}</td>
               <td>{item.assigneeName}</td>
+              <td>{workQueueSectionHelper.sectionDisplay(item.section)}</td>
             </tr>
             {item.isFocused && (
               <tr className="queue-focus queue-message">
