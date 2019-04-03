@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
+import { applicationContext } from '../../applicationContext';
 
 export const formatDocument = document => {
   const result = _.cloneDeep(document);
@@ -97,7 +98,7 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -110,15 +111,45 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     );
   }
 
+  // sort to make petition first, place of trial second, and everything else in cronological order
+  const getScore = entry => {
+    const documentType = (entry.document || {}).documentType;
+    const description = entry.record.description || '';
+    if (documentType === documentTypesMap.petitionFile) return 1;
+    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
+    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
+    else return 4;
+  };
+
+  result.docketRecordWithDocument.sort((a, b) => {
+    const aScore = getScore(a);
+    const bScore = getScore(b);
+    if (aScore === bScore) {
+      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
+    } else {
+      return aScore - bScore;
+    }
+  });
+
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
       result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
 
-  result.petitionerName = result.petitioners[0].name;
+  if (result.practitioner) {
+    let formattedName = result.practitioner.name;
+    if (result.practitioner.barNumber) {
+      formattedName += ` (${result.practitioner.barNumber})`;
+    }
+    result.practitioner.formattedName = formattedName;
+  }
 
   result.createdAtFormatted = moment.utc(result.createdAt).format('L');
-  result.irsDateFormatted = moment.utc(result.irsDate).format('L LT');
+  result.receivedAtFormatted = moment.utc(result.receivedAt).format('L');
+  result.irsDateFormatted = moment
+    .utc(result.irsSendDate)
+    .local()
+    .format('L LT');
   result.payGovDateFormatted = moment.utc(result.payGovDate).format('L');
 
   result.docketNumberWithSuffix = `${
@@ -142,10 +173,17 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
-  formatYearAmounts(result, caseDetailErrors);
+  // const postfixs = [', Petitioner', ', Petitioners', ', Petitioner(s)'];
+  result.caseName = (result.caseCaption || '').replace(
+    /\s*,\s*Petitioner(s|\(s\))?\s*$/,
+    '',
+  );
 
-  result.status =
-    result.status === 'general' ? 'general docket' : result.status;
+  result.caseName = applicationContext.getCaseCaptionNames(
+    caseDetail.caseCaption || '',
+  );
+
+  formatYearAmounts(result, caseDetailErrors);
 
   return result;
 };
@@ -158,5 +196,6 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const { DOCUMENT_TYPES_MAP } = get(state.constants);
+  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
 };

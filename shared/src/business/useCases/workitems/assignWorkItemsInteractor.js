@@ -3,9 +3,8 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
-const Message = require('../../entities/Message');
-const { capitalize } = require('lodash');
+const { WorkItem } = require('../../entities/WorkItem');
+const { Message } = require('../../entities/Message');
 
 /**
  * getWorkItem
@@ -29,30 +28,31 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
           applicationContext,
           workItemId: workItem.workItemId,
         })
-        .then(fullWorkItem =>
-          new WorkItem(fullWorkItem)
+        .then(fullWorkItem => {
+          const workItemEntity = new WorkItem(fullWorkItem);
+
+          workItemEntity
             .assignToUser({
               assigneeId: workItem.assigneeId,
               assigneeName: workItem.assigneeName,
               role: user.role,
               sentBy: user.name,
               sentByUserId: user.userId,
+              sentByUserRole: user.role,
             })
             .addMessage(
               new Message({
                 createdAt: new Date().toISOString(),
                 from: user.name,
                 fromUserId: user.userId,
-                message: `${
-                  fullWorkItem.document.documentType
-                } filed by ${capitalize(
-                  fullWorkItem.document.filedBy,
-                )} is ready for review.`,
+                message: workItemEntity.getLatestMessageEntity().message,
                 to: workItem.assigneeName,
                 toUserId: workItem.assigneeId,
               }),
-            ),
-        );
+            );
+
+          return workItemEntity;
+        });
     }),
   );
 

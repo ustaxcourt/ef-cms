@@ -3,7 +3,10 @@ const { Case } = require('../entities/Case');
 
 const validateFilingTypes = filingTypes => {
   filingTypes.forEach(filingType => {
-    if (!Case.getFilingTypes().includes(filingType)) {
+    if (
+      !Case.getFilingTypes('petitioner').includes(filingType) &&
+      !Case.getFilingTypes('practitioner').includes(filingType)
+    ) {
       throw new Error('invalid filing type');
     }
   });
@@ -12,7 +15,7 @@ const validateFilingTypes = filingTypes => {
 describe('Get case filing types', () => {
   beforeEach(() => {});
 
-  it('returns a collection of filing types', async () => {
+  it('returns a collection of filing types for user role petitioner', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
@@ -26,6 +29,29 @@ describe('Get case filing types', () => {
     });
     expect(filingTypes.length).toEqual(4);
     expect(filingTypes[0]).toEqual('Myself');
+    let error;
+    try {
+      validateFilingTypes(filingTypes);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeUndefined();
+  });
+
+  it('returns a collection of filing types for user role practitioner', async () => {
+    const applicationContext = {
+      getCurrentUser: () => {
+        return {
+          role: 'practitioner',
+          userId: 'someLawyer',
+        };
+      },
+    };
+    const filingTypes = await getFilingTypes({
+      applicationContext,
+    });
+    expect(filingTypes.length).toEqual(4);
+    expect(filingTypes[0]).toEqual('Individual petitioner');
     let error;
     try {
       validateFilingTypes(filingTypes);

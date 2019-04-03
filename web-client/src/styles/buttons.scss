@@ -20,12 +20,11 @@ button.link {
   text-align: left;
   text-decoration: underline;
   svg {
-    margin-right: 0;
+    margin-right: 5px;
   }
 }
 
-button.pdf-link:hover,
-button.link {
+button.pdf-link:hover {
   color: $color-blue;
 }
 
@@ -58,7 +57,7 @@ button.text-style {
 .recall-button-box {
   padding: 2px;
   margin-right: 2px;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   border: 1px solid $color-gold;
   float: right;
   font-family: $font-serif;
@@ -70,8 +69,9 @@ button.text-style {
     margin-left: 2rem;
   }
 }
+
 .serve-to-irs {
-  margin: 0 0 20px 0;
+  margin: 0 0 26px 0;
   float: right;
 }
 

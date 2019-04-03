@@ -22,6 +22,9 @@ legend {
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
+  .usa-form-hint {
+    margin: 0;
+  }
 }
 
 input[type='file'] {
@@ -41,7 +44,7 @@ select {
 textarea.caption {
   width: 379px;
   height: 107px;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
 }
 
 input[type='email']:hover,
@@ -57,7 +60,8 @@ textarea:focus,
 select:hover,
 select:focus {
   &:not([disabled]) {
-    border: 2px solid $color-primary;
+    border: 1px solid $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
     transition-duration: 0.1s;
     transition-property: all;
   }
@@ -91,6 +95,61 @@ input:focus::placeholder {
   padding: 0;
   margin: 0;
   li {
+    display: block;
+  }
+}
+
+.ustc-hide-radio-buttons {
+  li label {
+    padding-bottom: 10px;
+    color: $color-primary;
+    text-decoration: underline;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (min-width: $medium-screen) {
+  .ustc-select-multi {
+    height: 300px;
+    padding: 0;
+    background: none;
+    overflow-y: auto;
+    option {
+      overflow: hidden;
+      max-width: 100%;
+      padding: 10px;
+      margin: 0;
+      font-weight: $font-semibold;
+      white-space: normal;
+      /*Altered two below to make word wrap work */
+      word-wrap: normal !important;
+      &:hover {
+        background-color: $color-gray-cool-light;
+      }
+      &:first-child {
+        font-weight: $font-semibold;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $medium-screen) {
+  .only-large-screens {
+    display: block;
+  }
+  .only-small-screens {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $medium-screen - 1px) {
+  .only-large-screens {
+    display: none;
+  }
+  .only-small-screens {
     display: block;
   }
 }
@@ -178,9 +237,6 @@ label.validated::after {
   .email-input {
     margin-bottom: 25px;
   }
-  .contact-group {
-    margin-top: 40px;
-  }
   .usa-form-hint {
     margin-bottom: 0;
   }
@@ -223,7 +279,8 @@ label.validated::after {
 }
 
 label.ustc-upload-petition,
-label.ustc-upload-stin {
+label.ustc-upload-stin,
+label.ustc-upload-ods {
   .success-message {
     display: none;
     color: $color-green;

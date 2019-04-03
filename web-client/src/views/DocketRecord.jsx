@@ -11,17 +11,8 @@ export const DocketRecord = connect(
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     token: state.token,
-    updateCurrentTabSequence: sequences.updateCurrentTabSequence,
   },
-  ({
-    baseUrl,
-    caseDetail,
-    clearDocumentSequence,
-    documentHelper,
-    helper,
-    token,
-    updateCurrentTabSequence,
-  }) => {
+  ({ baseUrl, caseDetail, documentHelper, helper, token }) => {
     function renderDocumentLink(documentId, description) {
       return (
         <a
@@ -39,17 +30,13 @@ export const DocketRecord = connect(
     return (
       <React.Fragment>
         {helper.showFileDocumentButton && (
-          <button
-            id="button-file-document"
+          <a
             className="usa-button"
-            onClick={() => {
-              clearDocumentSequence();
-              updateCurrentTabSequence({ value: 'File Document' });
-            }}
+            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+            id="button-file-document"
           >
-            <FontAwesomeIcon icon="cloud-upload-alt" />
-            File Document
-          </button>
+            <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
+          </a>
         )}
         <table
           className="responsive-table row-border-only"
@@ -103,12 +90,7 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Served</span>
-                    {document && document.isStatusServed && (
-                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                    )}
-                    {document && helper.showDocumentStatus && (
-                      <span>{document.status}</span>
-                    )}
+                    <span>{record.status}</span>
                   </td>
                 </tr>
               ),

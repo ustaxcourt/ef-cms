@@ -89,7 +89,7 @@ describe('syncWorkItems', function() {
             ],
           },
         ],
-        status: 'General',
+        status: 'General Docket',
       },
       currentCaseState: {
         documents: [

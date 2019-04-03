@@ -1,18 +1,18 @@
 import { connect } from '@cerebral/react';
-import { state, props } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 export const TrialCity = connect(
   {
-    value: props.value,
-    onChange: props.onChange,
     label: props.label,
-    showHint: props.showHint,
-    showSmallTrialCitiesHint: props.showSmallTrialCitiesHint,
-    showRegularTrialCitiesHint: props.showRegularTrialCitiesHint,
-    validationErrors: state.validationErrors,
-    trialCitiesByState: props.trialCitiesByState,
+    onChange: props.onChange,
     showDefaultOption: props.showDefaultOption,
+    showHint: props.showHint,
+    showRegularTrialCitiesHint: props.showRegularTrialCitiesHint,
+    showSmallTrialCitiesHint: props.showSmallTrialCitiesHint,
+    trialCitiesByState: props.trialCitiesByState,
+    validationErrors: state.validationErrors,
+    value: props.value,
   },
   ({
     value,
@@ -28,11 +28,14 @@ export const TrialCity = connect(
     return (
       <div
         className={
-          'usa-form-group ' +
+          'ustc-form-group ' +
           (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
         }
       >
-        <label htmlFor="preferred-trial-city" className="with-hint">
+        <label
+          htmlFor="preferred-trial-city"
+          className={showHint && 'with-hint'}
+        >
           {label}
         </label>
         {showHint && (

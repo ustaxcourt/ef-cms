@@ -1,8 +1,16 @@
-const { getSortRecords } = require('../../dynamo/helpers/getSortRecords');
+const {
+  getSortRecordsViaMapping,
+} = require('../../dynamo/helpers/getSortRecordsViaMapping');
 const moment = require('moment');
+const {
+  updateWorkItemsUsingCases,
+} = require('../../dynamo/helpers/updateWorkItemsUsingCases');
 
-exports.getSentWorkItemsForSection = ({ section, applicationContext }) => {
-  return getSortRecords({
+exports.getSentWorkItemsForSection = async ({
+  section,
+  applicationContext,
+}) => {
+  const workItems = await getSortRecordsViaMapping({
     afterDate: moment
       .utc(new Date().toISOString())
       .startOf('day')
@@ -10,7 +18,10 @@ exports.getSentWorkItemsForSection = ({ section, applicationContext }) => {
       .utc()
       .format(),
     applicationContext,
+    foreignKey: 'workItemId',
     key: section,
     type: 'outbox',
   });
+
+  return updateWorkItemsUsingCases({ applicationContext, workItems });
 };

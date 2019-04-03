@@ -6,6 +6,7 @@ import { Address } from './Address';
 import { Country } from './Country';
 import { Email } from './Email';
 import { InternationalAddress } from './InternationalAddress';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const ContactPrimary = connect(
   {
@@ -35,13 +36,13 @@ export const ContactPrimary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group contact-group">
+      <>
         {parentView === 'StartCase' ? (
-          <h3>{contactsHelper.contactPrimary.header}</h3>
+          <h2>{contactsHelper.contactPrimary.header}</h2>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
-        <div className="blue-container usa-grid-full">
+        <div className="blue-container contact-group">
           <Country
             type="contactPrimary"
             bind={bind}
@@ -50,7 +51,7 @@ export const ContactPrimary = connect(
           />
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
                 ? 'usa-input-error'
@@ -76,14 +77,13 @@ export const ContactPrimary = connect(
                 onBlurSequence();
               }}
             />
-            {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message">
-                {validationErrors.contactPrimary.name}
-              </div>
-            )}
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactPrimary.name"
+            />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
-            <div className="usa-form-group">
+            <div className="ustc-form-group">
               <label htmlFor="title">
                 Title
                 <p className="usa-form-hint">For example, Executor, PR, etc.</p>
@@ -106,7 +106,7 @@ export const ContactPrimary = connect(
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.inCareOf
                   ? 'usa-input-error'
@@ -145,11 +145,10 @@ export const ContactPrimary = connect(
                   onBlurSequence();
                 }}
               />
-              {validationErrors.contactPrimary && (
-                <div className="usa-input-error-message">
-                  {validationErrors.contactPrimary.inCareOf}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactPrimary.inCareOf"
+              />
             </div>
           )}
           {data.contactPrimary.countryType ===
@@ -170,10 +169,10 @@ export const ContactPrimary = connect(
               onBlur={onBlur}
             />
           )}
-          <Email bind={emailBind} />
+          {contactsHelper.showEmail && <Email bind={emailBind} />}
           <div
             className={
-              'usa-form-group phone-input ' +
+              'ustc-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
                 ? 'usa-input-error'
@@ -198,14 +197,13 @@ export const ContactPrimary = connect(
                 onBlurSequence();
               }}
             />
-            {validationErrors.contactPrimary && (
-              <div className="usa-input-error-message">
-                {validationErrors.contactPrimary.phone}
-              </div>
-            )}
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactPrimary.phone"
+            />
           </div>
         </div>
-      </div>
+      </>
     );
   },
 );

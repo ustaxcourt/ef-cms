@@ -1,5 +1,5 @@
-import applicationContext from '../../applicationContext';
-import presenter from '..';
+import { applicationContext } from '../../applicationContext';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setPathAction } from './setPathAction';
 

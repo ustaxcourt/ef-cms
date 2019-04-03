@@ -8,10 +8,10 @@
   label {
     margin: 0 0 5px;
   }
+}
 
-  option:first-child {
-    font-weight: initial;
-  }
+option:first-child {
+  font-weight: initial;
 }
 
 .usa-form-hint {
@@ -76,10 +76,6 @@
   line-height: 1;
 }
 
-.usa-fieldset-inputs {
-  margin-bottom: 5px;
-}
-
 .usa-alert-error,
 .usa-alert-success {
   max-width: 700px;
@@ -127,4 +123,12 @@
 .usa-input-error textarea,
 .usa-input-error select {
   width: calc(100%);
+}
+
+.no-bottom-margin {
+  margin-bottom: 0;
+}
+
+.full-width {
+  max-width: 100%;
 }

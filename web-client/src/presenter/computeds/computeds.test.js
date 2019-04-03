@@ -1,12 +1,14 @@
 import { runCompute } from 'cerebral/test';
 
 import { formattedCaseDetail, formattedCases } from './formattedCaseDetail';
+import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
 
 describe('formatted case details computed', () => {
   it('formats the date', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail: {
+          caseCaption: 'Brett Osborne, Petitioner',
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -15,8 +17,11 @@ describe('formatted case details computed', () => {
               status: 'served',
             },
           ],
-          irsDate: '2018-11-21T20:49:28.192Z',
+          irsSendDate: '2018-11-21T20:49:28.192Z',
           petitioners: [{ name: 'bob' }],
+        },
+        constants: {
+          CASE_CAPTION_POSTFIX,
         },
         form: {},
       },
@@ -30,6 +35,7 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
+            caseCaption: 'Brett Osborne, Petitioner',
             documents: [
               {
                 createdAt: '2018-11-21T20:49:28.192Z',
@@ -38,10 +44,13 @@ describe('formatted case details computed', () => {
                 status: 'served',
               },
             ],
-            irsDate: '2018-11-21T20:49:28.192Z',
+            irsSendDate: '2018-11-21T20:49:28.192Z',
             petitioners: [{ name: 'bob' }],
           },
         ],
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result[0].irsDateFormatted).toContain('11/21/2018');
@@ -52,10 +61,14 @@ describe('formatted case details computed', () => {
       state: {
         cases: [
           {
+            caseCaption: 'Brett Osborne, Petitioner',
             petitioners: [{ name: 'bob' }],
             respondent: { barNumber: '123', name: 'test' },
           },
         ],
+        constants: {
+          CASE_CAPTION_POSTFIX,
+        },
       },
     });
     expect(result[0].respondent.formattedName).toContain('test 123');

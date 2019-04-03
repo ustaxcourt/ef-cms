@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 
 export default test => {
