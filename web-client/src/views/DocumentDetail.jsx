@@ -1,6 +1,5 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
@@ -16,17 +15,25 @@ import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 
-class DocumentDetailComponent extends React.Component {
-  render() {
-    const {
-      baseUrl,
-      caseHelper,
-      clickServeToIrsSequence,
-      helper,
-      showModal,
-      token,
-      setModalDialogNameSequence,
-    } = this.props;
+export const DocumentDetail = connect(
+  {
+    baseUrl: state.baseUrl,
+    caseHelper: state.caseDetailHelper,
+    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
+    helper: state.documentDetailHelper,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
+    showModal: state.showModal,
+    token: state.token,
+  },
+  ({
+    baseUrl,
+    caseHelper,
+    clickServeToIrsSequence,
+    helper,
+    setModalDialogNameSequence,
+    showModal,
+    token,
+  }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -159,32 +166,5 @@ class DocumentDetailComponent extends React.Component {
         <div tabIndex="0" />
       </React.Fragment>
     );
-  }
-}
-
-DocumentDetailComponent.propTypes = {
-  baseUrl: PropTypes.string,
-  caseDetail: PropTypes.object,
-  caseHelper: PropTypes.object,
-  clickServeToIrsSequence: PropTypes.func,
-  helper: PropTypes.object,
-  openCaseCaptionModalSequence: PropTypes.func,
-  setModalDialogNameSequence: PropTypes.func,
-  showModal: PropTypes.string,
-  token: PropTypes.string,
-  workItemActions: PropTypes.object,
-};
-
-export const DocumentDetail = connect(
-  {
-    baseUrl: state.baseUrl,
-    caseHelper: state.caseDetailHelper,
-    clickServeToIrsSequence: sequences.clickServeToIrsSequence,
-    helper: state.documentDetailHelper,
-    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
-    showModal: state.showModal,
-    token: state.token,
-    workItemActions: state.workItemActions,
   },
-  DocumentDetailComponent,
 );
