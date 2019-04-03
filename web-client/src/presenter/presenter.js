@@ -12,7 +12,6 @@ import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
-import { dismissSelectDocumentTypeModalSequence } from './sequences/dismissSelectDocumentTypeModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
@@ -118,7 +117,6 @@ export const presenter = {
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
-    dismissSelectDocumentTypeModalSequence,
     editSelectedDocumentSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
