@@ -2,6 +2,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Text } from '../../ustc-ui/Text/Text';
 
 class ChooseDocumentTypeComponent extends React.Component {
   render() {
@@ -17,7 +18,11 @@ class ChooseDocumentTypeComponent extends React.Component {
             this.props.closeDocumentCategoryAccordionSequence();
           }}
         >
-          <div className="ustc-form-group">
+          <div
+            className={`ustc-form-group ${
+              this.props.validationErrors.category ? 'usa-input-error' : ''
+            }`}
+          >
             <label htmlFor="category">Document Category</label>
             <select
               name="category"
@@ -28,6 +33,7 @@ class ChooseDocumentTypeComponent extends React.Component {
                   key: e.target.name,
                   value: e.target.value,
                 });
+                this.props.validateSelectDocumentTypeSequence();
               }}
               value={this.props.form.category}
             >
@@ -40,10 +46,20 @@ class ChooseDocumentTypeComponent extends React.Component {
                 );
               })}
             </select>
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.category"
+            />
           </div>
           {this.props.form.category && (
             <>
-              <div className="ustc-form-group only-large-screens">
+              <div
+                className={`ustc-form-group only-large-screens ${
+                  this.props.validationErrors.documentType
+                    ? 'usa-input-error'
+                    : ''
+                }`}
+              >
                 <label htmlFor="document-type">Document Type</label>
                 <select
                   id="document-type"
@@ -54,6 +70,7 @@ class ChooseDocumentTypeComponent extends React.Component {
                       key: e.target.name,
                       value: e.target.value,
                     });
+                    this.props.validateSelectDocumentTypeSequence();
                   }}
                   value={this.props.form.documentType}
                 >
@@ -71,6 +88,10 @@ class ChooseDocumentTypeComponent extends React.Component {
                     </option>
                   ))}
                 </select>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.documentType"
+                />
               </div>
               <div className="ustc-form-group only-small-screens">
                 <fieldset className="usa-fieldset-inputs usa-sans">
@@ -132,6 +153,8 @@ ChooseDocumentTypeComponent.propTypes = {
   form: PropTypes.object,
   selectDocumentSequence: PropTypes.func,
   updateFormValueSequence: PropTypes.func,
+  validateSelectDocumentTypeSequence: PropTypes.func,
+  validationErrors: PropTypes.object,
 };
 
 export const ChooseDocumentType = connect(
@@ -142,6 +165,9 @@ export const ChooseDocumentType = connect(
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateSelectDocumentTypeSequence:
+      sequences.validateSelectDocumentTypeSequence,
+    validationErrors: state.validationErrors,
   },
   ChooseDocumentTypeComponent,
 );
