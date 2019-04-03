@@ -23,21 +23,23 @@ export const LogIn = connect(
             submitLoginSequence();
           }}
         >
-          <div className="usa-form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              autoCapitalize="none"
-              value={form.name}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
+          <div className="blue-container">
+            <div className="ustc-form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                autoCapitalize="none"
+                id="name"
+                name="name"
+                type="text"
+                value={form.name}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
           </div>
           <button id="log-in-button" className="usa-button" type="submit">
             Log in

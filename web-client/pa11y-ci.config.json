@@ -297,15 +297,27 @@
     },
 
     "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document",
+    {
+      "notes": "Check accessibility of elements within document type chooser modal dialog",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection",
+      "actions": [
+        "wait for element #document-category to be visible",
+        "set field #document-category to Motions",
+        "click element #open-choose-document-type-modal",
+        "wait for #modalDocumentType to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/start-a-case",
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19",
     {
       "notes": "checks a11y of case information tab panel",
       "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=tab-case-info",
       "actions": [
-        "wait for #case-info-tab to be visible",
-        "click element #case-info-tab"
+        "wait for #tab-case-info to be visible",
+        "click element #tab-case-info"
       ]
     },
     {
@@ -403,6 +415,11 @@
     "http://localhost:1234/mock-login?token=seniorattorney&path=/",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+
+    "http://localhost:1234/mock-login?token=practitioner&path=/",
+    "http://localhost:1234/mock-login?token=practitioner&path=/case-detail/105-19",
+    "http://localhost:1234/mock-login?token=practitioner&path=/start-a-case",
+
     "http://localhost:1234/request-for-page-that-doesnt-exist"
   ]
 }

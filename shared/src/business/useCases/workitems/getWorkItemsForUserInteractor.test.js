@@ -1,5 +1,5 @@
 const { getWorkItemsForUser } = require('./getWorkItemsForUserInteractor');
-const User = require('../../entities/User');
+const { User } = require('../../entities/User');
 
 describe('getWorkItemsForUser', () => {
   let applicationContext;

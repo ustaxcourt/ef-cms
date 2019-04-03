@@ -28,7 +28,7 @@ export const CaseListPetitioner = connect(
             <tr>
               <th>Docket Number</th>
               <th>Date Filed</th>
-              <th>Petitioner Name</th>
+              <th>Case Name</th>
             </tr>
           </thead>
           <tbody>
@@ -45,8 +45,8 @@ export const CaseListPetitioner = connect(
                   {item.createdAtFormatted}
                 </td>
                 <td>
-                  <span className="responsive-label">Petitioner Name</span>
-                  {item.petitionerName}
+                  <span className="responsive-label">Case Name</span>
+                  {item.caseName}
                 </td>
               </tr>
             ))}

@@ -32,7 +32,13 @@ custom:
         sources:
           - table: ${opt:efcmsTableName}
             sources:
-              - ./storage/fixtures/efcms.json
+              - ./storage/fixtures/seed/misc.json
+              - ./storage/fixtures/seed/users.json
+              - ./storage/fixtures/seed/101-19.json
+              - ./storage/fixtures/seed/102-19.json
+              - ./storage/fixtures/seed/103-19.json
+              - ./storage/fixtures/seed/104-19.json
+              - ./storage/fixtures/seed/105-19.json
 
   alerts:
     stages:
@@ -97,6 +103,7 @@ provider:
     - Effect: 'Allow'
       Action:
         - cognito-idp:AdminCreateUser
+        - cognito-idp:AdminGetUser
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
@@ -248,6 +255,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  createCaseFromPaper:
+    handler: src/cases/createCaseFromPaperLambda.handler
+    events:
+      - http:
+          path: v1/cases/paper
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCasesByUser:
     handler: src/cases/getCasesByUserLambda.handler
     events:
@@ -304,7 +323,7 @@ functions:
     handler: src/cases/sendPetitionToIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/sendToIRSHoldingQueue
           method: post
           cors: true
           authorizer:
@@ -316,7 +335,7 @@ functions:
     handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.handler
     events:
       - http:
-          path: v1/cases/{caseId}/irsPetitionPackage
+          path: v1/cases/{caseId}/recallFromIRSHoldingQueue
           method: delete
           cors: true
           authorizer:

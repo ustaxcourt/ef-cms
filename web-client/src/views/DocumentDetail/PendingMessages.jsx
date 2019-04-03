@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { If } from '../../ustc-ui/If/If';
 
 class PendingMessagesComponent extends React.Component {
   render() {
@@ -15,6 +16,12 @@ class PendingMessagesComponent extends React.Component {
       updateForwardFormValueSequence,
       openCreateMessageModalSequence,
       users,
+      validationErrors,
+      form,
+      validateForwardMessageSequence,
+      constants,
+      workItemMetadata,
+      workQueueSectionHelper,
     } = this.props;
     return (
       <>
@@ -262,43 +269,184 @@ class PendingMessagesComponent extends React.Component {
                         });
                       }}
                     >
-                      <label htmlFor={`forward-recipient-id-${idx}`}>
-                        Send To
-                      </label>
-                      <select
-                        name="forwardRecipientId"
-                        id={`forward-recipient-id-${idx}`}
-                        aria-labelledby={`recipient-label-${idx}`}
-                        onChange={e => {
-                          updateForwardFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].section &&
+                          !workItemMetadata.showChambersSelect
+                            ? 'usa-input-error'
+                            : '')
+                        }
                       >
-                        <option value="">-- Select --</option>
-                        {users.map(user => (
-                          <option key={user.userId} value={user.userId}>
-                            {user.name}
-                          </option>
-                        ))}
-                      </select>
-                      <label htmlFor={`forward-message-${idx}`}>
-                        Add Message
-                      </label>
-                      <textarea
-                        aria-labelledby={`message-label-${idx}`}
-                        name="forwardMessage"
-                        id={`forward-message-${idx}`}
-                        onChange={e => {
-                          updateForwardFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                            workItemId: workItem.workItemId,
-                          });
-                        }}
-                      />
+                        <label htmlFor={`section-${idx}`}>Select Section</label>
+
+                        <select
+                          className="usa-input-inline"
+                          id={`section-${idx}`}
+                          name="section"
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              form: `form.${workItem.workItemId}`,
+                              key: e.target.name,
+                              section: e.target.value,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        >
+                          <option value="">- Select -</option>
+                          {constants.SECTIONS.map(section => (
+                            <option key={section} value={section}>
+                              {workQueueSectionHelper.sectionDisplay(section)}
+                            </option>
+                          ))}
+                        </select>
+                        {!workItemMetadata.showChambersSelect && (
+                          <div className="usa-input-error-message beneath">
+                            {validationErrors[workItem.workItemId] &&
+                              validationErrors[workItem.workItemId].section}
+                          </div>
+                        )}
+                      </div>
+
+                      {workItemMetadata.showChambersSelect && (
+                        <div
+                          className={
+                            'usa-form-group ' +
+                            (validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section
+                              ? 'usa-input-error'
+                              : '')
+                          }
+                        >
+                          <label htmlFor={`chambers-${idx}`}>
+                            Select Chambers
+                          </label>
+
+                          <select
+                            className="usa-input-inline"
+                            id={`chambers-${idx}`}
+                            name="chambers"
+                            onChange={e => {
+                              updateForwardFormValueSequence({
+                                form: `form.${workItem.workItemId}`,
+                                key: e.target.name,
+                                section: e.target.value,
+                                value: e.target.value,
+                                workItemId: workItem.workItemId,
+                              });
+                              validateForwardMessageSequence({
+                                workItemId: workItem.workItemId,
+                              });
+                            }}
+                          >
+                            <option value="">- Select -</option>
+                            {constants.CHAMBERS_SECTIONS.map(section => (
+                              <option key={section} value={section}>
+                                {workQueueSectionHelper.chambersDisplay(
+                                  section,
+                                )}
+                              </option>
+                            ))}
+                          </select>
+
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section && (
+                              <div className="usa-input-error-message beneath">
+                                Chambers is required.
+                              </div>
+                            )}
+                        </div>
+                      )}
+
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].assigneeId
+                            ? 'usa-input-error'
+                            : '')
+                        }
+                      >
+                        <label htmlFor={`assignee-id-${idx}`}>
+                          Select Recipient
+                        </label>
+                        <select
+                          className="usa-input-inline"
+                          id={`assignee-id-${idx}`}
+                          name="assigneeId"
+                          disabled={
+                            !form[workItem.workItemId] ||
+                            !form[workItem.workItemId].section
+                          }
+                          aria-disabled={
+                            !form[workItem.workItemId] ||
+                            !form[workItem.workItemId].section
+                              ? 'true'
+                              : 'false'
+                          }
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        >
+                          <option value="">- Select -</option>
+                          {users.map(user => (
+                            <option key={user.userId} value={user.userId}>
+                              {user.name}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].assigneeId}
+                        </div>
+                      </div>
+
+                      <div
+                        className={
+                          'usa-form-group ' +
+                          (validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].forwardMessage
+                            ? 'usa-input-error'
+                            : '')
+                        }
+                      >
+                        <label htmlFor={`forward-message-${idx}`}>
+                          Add Message
+                        </label>
+                        <textarea
+                          aria-labelledby={`message-label-${idx}`}
+                          name="forwardMessage"
+                          id={`forward-message-${idx}`}
+                          onChange={e => {
+                            updateForwardFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                              workItemId: workItem.workItemId,
+                            });
+                            validateForwardMessageSequence({
+                              workItemId: workItem.workItemId,
+                            });
+                          }}
+                        />{' '}
+                        <div className="usa-input-error-message beneath">
+                          {validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId]
+                              .forwardMessage}
+                        </div>
+                      </div>
+
                       <button type="submit" className="usa-button">
                         Send
                       </button>
@@ -314,7 +462,9 @@ class PendingMessagesComponent extends React.Component {
 }
 
 PendingMessagesComponent.propTypes = {
+  constants: PropTypes.object,
   documentDetailHelper: PropTypes.object,
+  form: PropTypes.object,
   openCreateMessageModalSequence: PropTypes.func,
   setWorkItemActionSequence: PropTypes.func,
   submitCompleteSequence: PropTypes.func,
@@ -322,20 +472,30 @@ PendingMessagesComponent.propTypes = {
   updateCompleteFormValueSequence: PropTypes.func,
   updateForwardFormValueSequence: PropTypes.func,
   users: PropTypes.array,
+  validateForwardMessageSequence: PropTypes.func,
+  validationErrors: PropTypes.object,
   workItemActions: PropTypes.object,
+  workItemMetadata: PropTypes.object,
+  workQueueSectionHelper: PropTypes.object,
 };
 
 export const PendingMessages = connect(
   {
+    constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
+    form: state.form,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
     submitForwardSequence: sequences.submitForwardSequence,
     updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
     updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
-    users: state.internalUsers,
+    users: state.users,
+    validateForwardMessageSequence: sequences.validateForwardMessageSequence,
+    validationErrors: state.validationErrors,
     workItemActions: state.workItemActions,
+    workItemMetadata: state.workItemMetadata,
+    workQueueSectionHelper: state.workQueueSectionHelper,
   },
   PendingMessagesComponent,
 );

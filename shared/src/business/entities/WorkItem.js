@@ -2,12 +2,13 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const joi = require('joi-browser');
+const { orderBy } = require('lodash');
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
 const uuid = require('uuid');
-const Message = require('./Message');
+const { Message } = require('./Message');
 const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 
 /**
@@ -79,6 +80,7 @@ joiValidationDecorator(
       .required(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
+    sentBySection: joi.string().optional(),
     sentByUserId: joi
       .string()
       .uuid(uuidVersions)
@@ -108,6 +110,14 @@ WorkItem.prototype.addMessage = function(message) {
 };
 
 /**
+ * get the latest message (by createdAt)
+ * @returns {Message}
+ */
+WorkItem.prototype.getLatestMessageEntity = function() {
+  return orderBy(this.messages, 'createdAt', 'desc')[0];
+};
+
+/**
  *
  * @param assigneeId
  * @param assigneeName
@@ -120,12 +130,14 @@ WorkItem.prototype.assignToUser = function({
   role,
   sentBy,
   sentByUserId,
+  sentByUserRole,
 }) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
     section: getSectionForRole(role),
     sentBy,
+    sentBySection: getSectionForRole(sentByUserRole),
     sentByUserId,
   });
   return this;
@@ -135,13 +147,18 @@ WorkItem.prototype.assignToUser = function({
  *
  * @param userId
  */
-WorkItem.prototype.assignToIRSBatchSystem = function({ userId, name }) {
+WorkItem.prototype.assignToIRSBatchSystem = function({
+  userRole,
+  userId,
+  name,
+}) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
     role: 'irsBatchSystem',
     sentBy: name,
     sentByUserId: userId,
+    sentByUserRole: userRole,
   });
   this.addMessage(
     new Message({
@@ -165,6 +182,7 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     role: user.role,
     sentBy: user.name,
     sentByUserId: user.userId,
+    sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(
@@ -191,4 +209,14 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
   return this;
 };
 
-module.exports = WorkItem;
+/**
+ * complete the work item as the IRS user with the message 'Served on IRS'
+ */
+WorkItem.prototype.setAsSentToIRS = function() {
+  this.completedAt = new Date().toISOString();
+  this.completedMessage = 'Served on IRS';
+
+  return this;
+};
+
+module.exports = { WorkItem };

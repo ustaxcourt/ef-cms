@@ -12,7 +12,12 @@ const uuidVersions = {
 
 const petitionDocumentTypes = ['Petition'];
 
-const WorkItem = require('./WorkItem');
+const { WorkItem } = require('./WorkItem');
+
+const documentMap = require('../../tools/externalFilingEvents.json');
+
+module.exports.CATEGORIES = Object.keys(documentMap);
+module.exports.CATEGORY_MAP = documentMap;
 
 /**
  * constructor
@@ -29,6 +34,7 @@ function Document(rawDocument) {
 }
 
 Document.name = 'Document';
+
 /**
  *
  * @returns {boolean}
@@ -73,6 +79,7 @@ joiValidationDecorator(
     return WorkItem.validateCollection(this.workItems);
   },
 );
+
 /**
  *
  * @param workItem
@@ -81,4 +88,4 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-module.exports = Document;
+exports.Document = Document;

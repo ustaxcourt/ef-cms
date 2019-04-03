@@ -43,9 +43,9 @@ const router = {
     );
     route(
       '/case-detail/*/file-a-document',
-      checkLoggedIn(caseId => {
+      checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        app.getSequence('gotoFileDocumentSequence')({ caseId });
+        app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
     route('/log-in...', () => {

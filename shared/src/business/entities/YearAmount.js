@@ -40,4 +40,4 @@ joiValidationDecorator(
   },
 );
 
-module.exports = YearAmount;
+module.exports = { YearAmount };

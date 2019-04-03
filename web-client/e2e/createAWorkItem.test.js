@@ -1,9 +1,10 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
+
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-import applicationContext from '../src/applicationContext';
-import presenter from '../src/presenter';
+import { applicationContext } from '../src/applicationContext';
+import { presenter } from '../src/presenter/presenter';
 
 const {
   PARTY_TYPES,
@@ -89,7 +90,7 @@ async function createCase(test) {
   });
 
   await test.runSequence('submitFilePetitionSequence');
-  await waitForRouter();
+  return await waitForRouter();
 }
 
 function findByDocumentType(test, documentType) {
@@ -135,6 +136,8 @@ async function findWorkItemInWorkQueue({
 
 describe('Create a work item', () => {
   beforeAll(() => {
+    jest.setTimeout(30000);
+
     global.window = {
       localStorage: {
         removeItem: () => null,
@@ -155,6 +158,7 @@ describe('Create a work item', () => {
 
   it('create the case for this test', async () => {
     await loginAs('taxpayer');
+    await waitForRouter();
     await createCase(test);
   });
 

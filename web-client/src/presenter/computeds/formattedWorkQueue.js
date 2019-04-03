@@ -8,7 +8,7 @@ const DATE_MMDDYYYY = 'L';
 
 const formatDateIfToday = date => {
   const now = moment();
-  const then = moment.utc(date);
+  const then = moment(date).local();
   let formattedDate;
   if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
     formattedDate = then.format(DATE_TODAY_TIME);
@@ -29,10 +29,13 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     message.to = message.to || 'Unassigned';
     message.createdAtTimeFormatted = moment
       .utc(message.createdAt)
+      .local()
       .format(DATE_FORMAT_LONG);
   });
+  result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = moment
     .utc(result.completedAt)
+    .local()
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
@@ -47,7 +50,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       result.showBatchedStatusIcon = true;
       result.statusIcon = 'iconStatusRecalled';
       break;
-    case 'General':
+    case 'General Docket':
       result.caseStatus = 'General Docket';
       result.statusIcon = '';
       result.showBatchedStatusIcon = false;

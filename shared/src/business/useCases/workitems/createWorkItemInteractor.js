@@ -1,5 +1,5 @@
-const WorkItem = require('../../entities/WorkItem');
-const Message = require('../../entities/Message');
+const { WorkItem } = require('../../entities/WorkItem');
+const { Message } = require('../../entities/Message');
 const { Case } = require('../../entities/Case');
 
 const {
@@ -69,6 +69,7 @@ exports.createWorkItem = async ({
       role: userToAssignTo.role,
       sentBy: user.name,
       sentByUserId: user.userId,
+      sentByUserRole: user.role,
     })
     .addMessage(
       new Message({

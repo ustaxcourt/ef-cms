@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export default get => {
+export const alertHelper = get => {
   const alertError = get(state.alertError) || {};
   const userIsIdentified = get(state.user) || false;
 
