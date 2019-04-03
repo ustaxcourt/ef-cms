@@ -18,8 +18,15 @@ exports.updateWorkItemsUsingCases = async ({
 
   for (let workItem of workItems) {
     const caseObject = cases.find(c => c.caseId === workItem.caseId);
-    workItem.docketNumber = caseObject.docketNumber;
-    workItem.caseStatus = caseObject.status;
+    if (caseObject) {
+      workItem.docketNumber = caseObject.docketNumber;
+      workItem.caseStatus = caseObject.status;
+    } else {
+      console.error(
+        'the caseId associated with a workItem was not found',
+        JSON.stringify(workItem),
+      );
+    }
   }
 
   return stripInternalKeys(workItems);
