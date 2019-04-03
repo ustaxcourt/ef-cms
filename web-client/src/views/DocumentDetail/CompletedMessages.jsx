@@ -1,13 +1,13 @@
 import { connect } from '@cerebral/react';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class CompletedMessagesComponent extends React.Component {
-  render() {
-    const { documentDetailHelper } = this.props;
-
+export const CompletedMessages = connect(
+  {
+    documentDetailHelper: state.documentDetailHelper,
+  },
+  ({ documentDetailHelper }) => {
     return (
       <div>
         {(!documentDetailHelper.formattedDocument ||
@@ -89,16 +89,5 @@ class CompletedMessagesComponent extends React.Component {
           )}
       </div>
     );
-  }
-}
-
-CompletedMessagesComponent.propTypes = {
-  documentDetailHelper: PropTypes.object,
-};
-
-export const CompletedMessages = connect(
-  {
-    documentDetailHelper: state.documentDetailHelper,
   },
-  CompletedMessagesComponent,
 );

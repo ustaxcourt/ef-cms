@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
@@ -10,15 +9,23 @@ import { ErrorNotification } from './ErrorNotification';
 import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
 import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
 
-class FilePetitionComponent extends React.Component {
-  render() {
-    const caseDetail = this.props.caseDetail;
-    const form = this.props.form;
-    const toggleDocumentCategoryAccordionSequence = this.props
-      .toggleDocumentCategoryAccordionSequence;
-    const updateFormValueSequence = this.props.updateFormValueSequence;
-    const selectDocumentSequence = this.props.selectDocumentSequence;
-
+export const FileDocument = connect(
+  {
+    caseDetail: state.formattedCaseDetail,
+    form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
+    submitting: state.submitting,
+    toggleDocumentCategoryAccordionSequence:
+      sequences.toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+  },
+  ({
+    caseDetail,
+    form,
+    selectDocumentSequence,
+    toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence,
+  }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -73,13 +80,9 @@ class FilePetitionComponent extends React.Component {
 
           <div className="usa-grid-full">
             <div className="usa-width-one-half">
-              {this.props.form.isDocumentTypeSelected && (
-                <SelectedDocumentType />
-              )}
+              {form.isDocumentTypeSelected && <SelectedDocumentType />}
 
-              {!this.props.form.isDocumentTypeSelected && (
-                <ChooseDocumentType />
-              )}
+              {!form.isDocumentTypeSelected && <ChooseDocumentType />}
             </div>
             <div className="usa-width-one-third push-right">
               <div className="blue-container gray-background">
@@ -137,30 +140,5 @@ class FilePetitionComponent extends React.Component {
         </section>
       </React.Fragment>
     );
-  }
-}
-
-FilePetitionComponent.propTypes = {
-  caseDetail: PropTypes.object,
-  closeDocumentCategoryAccordionSequence: PropTypes.func,
-  form: PropTypes.object,
-  selectDocumentSequence: PropTypes.func,
-  submitting: PropTypes.bool,
-  toggleDocumentCategoryAccordionSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
-};
-
-export const FileDocument = connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    closeDocumentCategoryAccordionSequence:
-      sequences.closeDocumentCategoryAccordionSequence,
-    form: state.form,
-    selectDocumentSequence: sequences.selectDocumentSequence,
-    submitting: state.submitting,
-    toggleDocumentCategoryAccordionSequence:
-      sequences.toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  FilePetitionComponent,
 );
