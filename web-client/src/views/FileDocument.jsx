@@ -16,6 +16,8 @@ class FilePetitionComponent extends React.Component {
     const form = this.props.form;
     const toggleDocumentCategoryAccordionSequence = this.props
       .toggleDocumentCategoryAccordionSequence;
+    const updateFormValueSequence = this.props.updateFormValueSequence;
+    const selectDocumentSequence = this.props.selectDocumentSequence;
 
     return (
       <React.Fragment>
@@ -83,27 +85,51 @@ class FilePetitionComponent extends React.Component {
               <div className="blue-container gray-background">
                 <h3>Frequently Used Documents</h3>
                 <ul className="ustc-unstyled-list">
-                  <li>
-                    <a href="#file-a-document-header">
-                      Motion for Judgment on The Pleadings
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#file-a-document-header">
-                      Application for Waiver of Filing Fee
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#file-a-document-header">Motion for a New Trial</a>
-                  </li>
-                  <li>
-                    <a href="#file-a-document-header">
-                      Motion for Protective Order Persuant to Rule 103
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#file-a-document-header">Motion for Continuance</a>
-                  </li>
+                  {[
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Judgment on The Pleadings',
+                    },
+                    {
+                      category: 'Application',
+                      documentType: 'Application for Waiver of Filing Fee',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for a New Trial',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion for Protective Order Persuant to Rule 103',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Continuance',
+                    },
+                  ].map(document => {
+                    return (
+                      <li key={document.documentType}>
+                        <button
+                          className="link"
+                          type="button"
+                          onClick={() => {
+                            updateFormValueSequence({
+                              key: 'category',
+                              value: document.category,
+                            });
+                            updateFormValueSequence({
+                              key: 'documentType',
+                              value: document.documentType,
+                            });
+                            selectDocumentSequence();
+                          }}
+                        >
+                          {document.documentType}
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -118,8 +144,10 @@ FilePetitionComponent.propTypes = {
   caseDetail: PropTypes.object,
   closeDocumentCategoryAccordionSequence: PropTypes.func,
   form: PropTypes.object,
+  selectDocumentSequence: PropTypes.func,
   submitting: PropTypes.bool,
   toggleDocumentCategoryAccordionSequence: PropTypes.func,
+  updateFormValueSequence: PropTypes.func,
 };
 
 export const FileDocument = connect(
@@ -128,9 +156,11 @@ export const FileDocument = connect(
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   FilePetitionComponent,
 );
