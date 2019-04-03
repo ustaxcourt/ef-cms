@@ -78,9 +78,10 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 
 export const formattedWorkQueue = get => {
   const workItems = get(state.workQueue);
+  const box = get(state.workQueueToDisplay.box);
   const selectedWorkItems = get(state.selectedWorkItems);
   let workQueue = workItems
-    .filter(items => !items.completedAt)
+    .filter(items => (box === 'inbox' ? !items.completedAt : true))
     .map(items => formatWorkItem(items, selectedWorkItems));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');

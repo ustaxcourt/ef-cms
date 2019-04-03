@@ -4,6 +4,9 @@ const { reassignWorkItem } = require('./syncWorkItems');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { saveVersionedCase } = require('../cases/saveCase');
+const {
+  createMappingRecord,
+} = require('../../dynamo/helpers/createMappingRecord');
 
 exports.saveWorkItem = async ({
   workItemToSave,
@@ -45,22 +48,25 @@ exports.saveWorkItem = async ({
   });
 
   if (createOutboxEntries) {
-    await client.put({
+    const date = new Date().toISOString();
+    await createMappingRecord({
       applicationContext,
-      Item: {
-        pk: `${user.userId}|outbox`,
-        sk: new Date().toISOString(),
-        ...workItemToSave,
+      item: {
+        workItemId: workItemToSave.workItemId,
       },
+      pkId: user.userId,
+      skId: date,
+      type: 'outbox',
     });
 
-    await client.put({
+    await createMappingRecord({
       applicationContext,
-      Item: {
-        pk: `${user.section}|outbox`,
-        sk: new Date().toISOString(),
-        ...workItemToSave,
+      item: {
+        workItemId: workItemToSave.workItemId,
       },
+      pkId: user.section,
+      skId: date,
+      type: 'outbox',
     });
   }
 
