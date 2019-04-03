@@ -8,7 +8,11 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseCaptionPropFromStateAction } from '../actions/setCaseCaptionPropFromStateAction';
 import { dismissCaseCaptionModalSequence } from './dismissCaseCaptionModalSequence';
 
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+
 export const updateCaseDetailSequence = [
+  setFormSubmittingAction,
   setCaseCaptionPropFromStateAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
@@ -22,4 +26,5 @@ export const updateCaseDetailSequence = [
     ],
   },
   ...dismissCaseCaptionModalSequence,
+  unsetFormSubmittingAction,
 ];
