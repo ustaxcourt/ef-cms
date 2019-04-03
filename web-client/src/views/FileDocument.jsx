@@ -85,102 +85,51 @@ class FilePetitionComponent extends React.Component {
               <div className="blue-container gray-background">
                 <h3>Frequently Used Documents</h3>
                 <ul className="ustc-unstyled-list">
-                  <li>
-                    <button
-                      className="link"
-                      type="button"
-                      onClick={() => {
-                        updateFormValueSequence({
-                          key: 'category',
-                          value: 'Motion',
-                        });
-                        updateFormValueSequence({
-                          key: 'documentType',
-                          value: 'Motion for Judgment on The Pleadings',
-                        });
-                        selectDocumentSequence();
-                      }}
-                    >
-                      Motion for Judgment on The Pleadings
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="link"
-                      type="button"
-                      onClick={() => {
-                        updateFormValueSequence({
-                          key: 'category',
-                          value: 'Application',
-                        });
-                        updateFormValueSequence({
-                          key: 'documentType',
-                          value: 'Application for Waiver of Filing Fee',
-                        });
-                        selectDocumentSequence();
-                      }}
-                    >
-                      Application for Waiver of Filing Fee
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="link"
-                      type="button"
-                      onClick={() => {
-                        updateFormValueSequence({
-                          key: 'category',
-                          value: 'Motion',
-                        });
-                        updateFormValueSequence({
-                          key: 'documentType',
-                          value: 'Motion for a New Trial',
-                        });
-                        selectDocumentSequence();
-                      }}
-                    >
-                      Motion for a New Trial
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="link"
-                      type="button"
-                      onClick={() => {
-                        updateFormValueSequence({
-                          key: 'category',
-                          value: 'Motion',
-                        });
-                        updateFormValueSequence({
-                          key: 'documentType',
-                          value:
-                            'Motion for Protective Order Persuant to Rule 103',
-                        });
-                        selectDocumentSequence();
-                      }}
-                    >
-                      Motion for Protective Order Persuant to Rule 103
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="link"
-                      type="button"
-                      onClick={() => {
-                        updateFormValueSequence({
-                          key: 'category',
-                          value: 'Motion',
-                        });
-                        updateFormValueSequence({
-                          key: 'documentType',
-                          value: 'Motion for Continuance',
-                        });
-                        selectDocumentSequence();
-                      }}
-                    >
-                      Motion for Continuance
-                    </button>
-                  </li>
+                  {[
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Judgment on The Pleadings',
+                    },
+                    {
+                      category: 'Application',
+                      documentType: 'Application for Waiver of Filing Fee',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for a New Trial',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion for Protective Order Persuant to Rule 103',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Continuance',
+                    },
+                  ].map(document => {
+                    return (
+                      <li key={document.documentType}>
+                        <button
+                          className="link"
+                          type="button"
+                          onClick={() => {
+                            updateFormValueSequence({
+                              key: 'category',
+                              value: document.category,
+                            });
+                            updateFormValueSequence({
+                              key: 'documentType',
+                              value: document.documentType,
+                            });
+                            selectDocumentSequence();
+                          }}
+                        >
+                          {document.documentType}
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
