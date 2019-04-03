@@ -96,6 +96,11 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: initializeCaseWorkItem,
+    });
+
     zips = zips.concat({
       fileNames,
       s3Ids,

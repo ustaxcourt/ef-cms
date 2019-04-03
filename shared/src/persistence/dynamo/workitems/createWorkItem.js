@@ -34,13 +34,14 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
   });
 
   // sending user 'my' outbox
-  await put({
+  await createMappingRecord({
     applicationContext,
-    Item: {
-      pk: `${workItem.sentByUserId}|outbox`,
-      sk: workItem.createdAt,
-      ...workItem,
+    item: {
+      workItemId: workItem.workItemId,
     },
+    pkId: workItem.sentByUserId,
+    skId: workItem.createdAt,
+    type: 'outbox',
   });
 
   // section inbox
@@ -52,12 +53,13 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
   });
 
   // sending user section outbox
-  await put({
+  await createMappingRecord({
     applicationContext,
-    Item: {
-      pk: `${user.section}|outbox`,
-      sk: workItem.createdAt,
-      ...workItem,
+    item: {
+      workItemId: workItem.workItemId,
     },
+    pkId: user.section,
+    skId: workItem.createdAt,
+    type: 'outbox',
   });
 };
