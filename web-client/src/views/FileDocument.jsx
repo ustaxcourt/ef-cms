@@ -91,7 +91,7 @@ export const FileDocument = connect(
                   {[
                     {
                       category: 'Motion',
-                      documentType: 'Motion for Judgment on The Pleadings',
+                      documentType: 'Motion for Judgment on the Pleadings',
                     },
                     {
                       category: 'Application',
@@ -104,7 +104,7 @@ export const FileDocument = connect(
                     {
                       category: 'Motion',
                       documentType:
-                        'Motion for Protective Order Persuant to Rule 103',
+                        'Motion for Protective Order Pursuant to Rule 103',
                     },
                     {
                       category: 'Motion',
