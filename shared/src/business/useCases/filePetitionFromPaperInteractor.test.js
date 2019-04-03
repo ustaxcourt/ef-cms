@@ -21,7 +21,7 @@ describe('filePetitionFromPaper', () => {
         uploadDocument: uploadDocumentStub,
       }),
       getUseCases: () => ({
-        createCase: createCaseStub,
+        createCaseFromPaper: createCaseStub,
       }),
       environment: { stage: 'local' },
       ...options,
