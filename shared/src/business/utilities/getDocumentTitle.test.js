@@ -1,6 +1,6 @@
-const { getDocumentTitle } = require('./getDocumentTitle');
 const { CATEGORY_MAP } = require('../entities/Document');
 const { find } = require('lodash');
+const { getDocumentTitle } = require('./getDocumentTitle');
 
 describe('getDocumentTitle returns correct titles', () => {
   it('for standard filing events', () => {
