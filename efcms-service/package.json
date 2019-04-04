@@ -13,7 +13,7 @@
   "devDependencies": {
     "artillery": "^1.6.0-27",
     "artillery-plugin-fuzzer": "^1.0.1",
-    "aws-sdk": "^2.435.0",
+    "aws-sdk": "^2.436.0",
     "aws-sdk-mock": "^4.3.1",
     "dynamodb-admin": "^3.1.2",
     "eslint": "^5.16.0",
@@ -34,7 +34,7 @@
     "serverless": "^1.40.0",
     "serverless-domain-manager": "2.6.13",
     "serverless-dynamodb-local": "0.2.35",
-    "serverless-offline": "^4.9.3",
+    "serverless-offline": "^4.9.4",
     "serverless-plugin-aws-alerts": "^1.2.4",
     "serverless-plugin-bind-deployment-id": "github:ustaxcourt/serverless-plugin-bind-deployment-id#update_lodash",
     "serverless-plugin-git-variables": "^3.2.0",
