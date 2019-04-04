@@ -14,8 +14,6 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-// ====;=;=;=;=;=;=\\\/\/\/\//\/\\
-
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
   generalDocket: 'General Docket',
