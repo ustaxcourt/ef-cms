@@ -1,114 +1,18 @@
-const AWSXRay = require('aws-xray-sdk');
-const uuidv4 = require('uuid/v4');
-
 const AWS =
   process.env.NODE_ENV === 'production'
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
+const AWSXRay = require('aws-xray-sdk');
+const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
-
-const {
-  incrementCounter,
-} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
-
+const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
+const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
   addWorkItemToSectionInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
-  deleteDocument,
-} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
-const {
-  deleteWorkItemFromInbox,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
-const {
-  deleteWorkItemFromSection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
-const {
-  zipDocuments,
-} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
-
-const {
-  createUser,
-} = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
-const {
-  getSentWorkItemsForSection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
-const {
-  getSentWorkItemsForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
-const {
-  getUserById,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getUserById');
-const {
-  getWorkItemById,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
-const {
-  getWorkItemsBySection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
-const {
-  getWorkItemsForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
-const {
-  putWorkItemInOutbox,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
-const {
-  saveWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
-const {
-  updateWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
-
-// cases
-const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const {
-  createWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem');
-const {
-  getCaseByCaseId,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
-const {
-  getCaseByDocketNumber,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCasesByStatus,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByStatus');
-const {
-  getCasesByUser,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByUser');
-const {
-  getCasesForRespondent,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesForRespondent');
-const {
-  getInternalUsers,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
-const {
-  getUsersInSection,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
-const {
-  saveCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
-const {
-  updateCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
-
-const {
-  getDownloadPolicyUrl,
-} = require('ef-cms-shared/src/persistence/s3/getDownloadPolicyUrl');
-const {
-  getUploadPolicy,
-} = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
-
-const irsGateway = require('ef-cms-shared/src/external/irsGateway');
-const {
-  getCase,
-} = require('ef-cms-shared/src/business/useCases/getCaseInteractor');
-const {
-  getCasesByStatus: getCasesByStatusUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
-const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
-
+  assignWorkItems: assignWorkItemsUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
@@ -122,75 +26,156 @@ const {
   createDocument,
 } = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
 const {
-  createWorkItem: createWorkItemUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
-const {
-  getCasesByUser: getCasesByUserUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
-const {
-  getCasesForRespondent: getCasesForRespondentUC,
-} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
-const {
-  getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
-const {
-  getUser,
-} = require('ef-cms-shared/src/business/useCases/getUserInteractor');
-const {
-  getWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
-const {
-  getWorkItemsBySection: getWorkItemsBySectionUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
-const {
-  getWorkItemsForUser: getWorkItemsForUserUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
-const {
-  runBatchProcess,
-} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
-const {
-  sendPetitionToIRSHoldingQueue,
-} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
-const {
-  updateCase: updateCaseUC,
-} = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
-const {
-  updateWorkItem: updateWorkItemUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
-
-const {
-  assignWorkItems: assignWorkItemsUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
+  createUser,
+} = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
   createUser: createUserUC,
 } = require('ef-cms-shared/src/business/useCases/users/createUserInteractor');
 const {
+  createWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem');
+const {
+  createWorkItem: createWorkItemUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
+const {
+  deleteDocument,
+} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
+const {
+  deleteWorkItemFromInbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
+const {
+  deleteWorkItemFromSection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  forwardWorkItem,
+} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
+const {
+  getCase,
+} = require('ef-cms-shared/src/business/useCases/getCaseInteractor');
+const {
+  getCaseByCaseId,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
+const {
+  getCaseByDocketNumber,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+const {
+  getCasesByStatus,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByStatus');
+const {
+  getCasesByStatus: getCasesByStatusUC,
+} = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
+const {
+  getCasesByUser,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByUser');
+const {
+  getCasesByUser: getCasesByUserUC,
+} = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
+const {
+  getCasesForRespondent,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesForRespondent');
+const {
+  getCasesForRespondent: getCasesForRespondentUC,
+} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
+const {
+  getDownloadPolicyUrl,
+} = require('ef-cms-shared/src/persistence/s3/getDownloadPolicyUrl');
+const {
+  getInternalUsers,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
+const {
+  getInternalUsers: getInternalUsersUC,
+} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
+const {
+  getSentWorkItemsForSection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
+const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
+const {
+  getSentWorkItemsForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
+const {
+  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+const {
+  getUploadPolicy,
+} = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
+const {
+  getUser,
+} = require('ef-cms-shared/src/business/useCases/getUserInteractor');
+const {
+  getUserById,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUserById');
+const {
+  getUsersInSection,
+} = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
 const {
   getUsersInSection: getUsersInSectionUC,
 } = require('ef-cms-shared/src/business/useCases/users/getUsersInSectionInteractor');
 const {
-  recallPetitionFromIRSHoldingQueue,
-} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
-
+  getWorkItem,
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
-  forwardWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
-
+  getWorkItemById,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
+const {
+  getWorkItemsBySection,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
+const {
+  getWorkItemsBySection: getWorkItemsBySectionUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
+const {
+  getWorkItemsForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
+const {
+  getWorkItemsForUser: getWorkItemsForUserUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
+const {
+  incrementCounter,
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
   isAuthorized,
   WORKITEM,
 } = require('ef-cms-shared/src/authorization/authorizationClientService');
-
-const {
-  PetitionWithoutFiles,
-} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
-
 const {
   PetitionFromPaperWithoutFiles,
 } = require('ef-cms-shared/src/business/entities/PetitionFromPaperWithoutFiles');
-
+const {
+  PetitionWithoutFiles,
+} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+const {
+  putWorkItemInOutbox,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
+const {
+  recallPetitionFromIRSHoldingQueue,
+} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
+const {
+  runBatchProcess,
+} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
+const {
+  saveCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
+const {
+  saveWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  sendPetitionToIRSHoldingQueue,
+} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
+const {
+  updateCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
+const {
+  updateCase: updateCaseUC,
+} = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
+const {
+  updateWorkItem,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  updateWorkItem: updateWorkItemUC,
+} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
+const {
+  zipDocuments,
+} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
@@ -212,7 +197,7 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-module.exports.applicationContext = (appContextUser = {}) => {
+module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
