@@ -20,9 +20,9 @@ const csvOptions = {
     'categoryCurrent',
     'categoryUpdated',
     'scenario',
-    'label-previous',
-    'label-free',
-    'ordinal-field',
+    'labelPreviousDocument',
+    'labelFreeText',
+    'ordinalField',
     'extra',
   ],
   delimiter: ',',
@@ -50,14 +50,20 @@ const sortMotions = presortedMotions => {
     );
     return foundObj;
   });
+
+  if (sortedMotions.length !== firstEntries.length) {
+    throw new Error(
+      'Common motions list could not be extracted from full list of motions.',
+    );
+  }
+
   return [...sortedMotions, ...presortedMotions];
 };
 
 const whitespaceCleanup = str => {
   str = str.replace(/\[\s+/g, '[');
   str = str.replace(/\s+\]/g, ']');
-  str = str.replace(/[\r\n\t]/g, ' ');
-  str = str.replace(/\s+/g, ' ');
+  str = str.replace(/[\r\n\t\s]+/g, ' ');
   str = str.trim();
   return str;
 };
