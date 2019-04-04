@@ -17,24 +17,24 @@ exports.saveVersionedCase = async ({
 
   // update the current history
   await client.put({
-    applicationContext,
     Item: {
       pk: caseToSave.caseId,
       sk: '0',
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
+    applicationContext,
   });
 
   // add a history entry
   return await client.put({
-    applicationContext,
     Item: {
       pk: caseToSave.caseId,
       sk: `${nextVersionToSave}`,
       ...caseToSave,
       currentVersion: `${nextVersionToSave}`,
     },
+    applicationContext,
   });
 };
 /**
@@ -45,11 +45,11 @@ exports.saveVersionedCase = async ({
  */
 exports.saveCase = async ({ caseToSave, applicationContext }) => {
   const currentCaseState = await client.get({
-    applicationContext,
     Key: {
       pk: caseToSave.caseId,
       sk: '0',
     },
+    applicationContext,
   });
 
   if (!currentCaseState) {
@@ -101,11 +101,11 @@ exports.saveCase = async ({ caseToSave, applicationContext }) => {
     }
 
     await client.put({
-      applicationContext,
       Item: {
         pk: `${caseToSave.status}|case-status`,
         sk: caseToSave.caseId,
       },
+      applicationContext,
     });
   }
 

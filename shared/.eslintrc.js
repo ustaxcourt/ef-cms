@@ -14,9 +14,9 @@ module.exports = {
     'jsdoc/require-param-name': 1,
     'jsdoc/check-types': 1,
     'sort-keys-fix/sort-keys-fix': [
-      'warn',
+      'error',
       'asc',
-      { caseSensitive: false, natural: true },
+      { caseSensitive: true, natural: true },
     ],
     'sort-imports': [
       'error',

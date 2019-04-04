@@ -4,6 +4,7 @@
   "description": "Electronic Filing / Case Management System Shared Components ",
   "scripts": {
     "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",

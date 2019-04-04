@@ -8,7 +8,6 @@ exports.getSortRecords = async ({
   afterDate,
 }) => {
   const records = await client.query({
-    applicationContext,
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -18,6 +17,7 @@ exports.getSortRecords = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+    applicationContext,
   });
 
   return stripInternalKeys(records);

@@ -39,11 +39,11 @@ describe('addWorkItemToSectionInbox', () => {
       },
     });
     expect(client.put.getCall(0).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
       Item: {
         pk: 'docket|workItem',
         sk: '123',
       },
+      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });

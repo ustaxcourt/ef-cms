@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { mapValueHelper } from './mapValueHelper';
+import { state } from 'cerebral';
 
 export const workQueueHelper = get => {
   const selectedWorkItems = get(state.selectedWorkItems);

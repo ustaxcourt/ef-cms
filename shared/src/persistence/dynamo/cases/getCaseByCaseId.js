@@ -10,11 +10,11 @@ const client = require('../../dynamodbClientService');
  */
 exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
   const results = await client.get({
-    applicationContext,
     Key: {
       pk: caseId,
       sk: '0',
     },
+    applicationContext,
   });
 
   return stripWorkItems(

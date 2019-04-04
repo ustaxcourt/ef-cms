@@ -1,7 +1,10 @@
 const AWSXRay = require('aws-xray-sdk');
 const uuidv4 = require('uuid/v4');
 
-const AWS = process.env.NODE_ENV === 'production' ? AWSXRay.captureAWS(require('aws-sdk')) : require('aws-sdk')
+const AWS =
+  process.env.NODE_ENV === 'production'
+    ? AWSXRay.captureAWS(require('aws-sdk'))
+    : require('aws-sdk');
 const { S3, DynamoDB } = AWS;
 
 const {
@@ -209,7 +212,7 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-module.exports = (appContextUser = {}) => {
+module.exports.applicationContext = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {

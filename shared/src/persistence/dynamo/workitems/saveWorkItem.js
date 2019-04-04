@@ -71,12 +71,12 @@ exports.saveWorkItem = async ({
   }
 
   const workItem = await client.put({
-    applicationContext,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    applicationContext,
   });
 
   return stripInternalKeys(workItem);

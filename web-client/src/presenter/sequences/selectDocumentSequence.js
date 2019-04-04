@@ -1,7 +1,7 @@
-import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { set } from 'cerebral/factories';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
+import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const selectDocumentSequence = [
   set(state.showValidation, true),
