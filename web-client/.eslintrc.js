@@ -17,22 +17,22 @@ module.exports = {
     'sort-keys-fix',
   ],
   rules: {
-    quotes: ['error', 'single', { avoidEscape: true }],
-    'jsdoc/require-param': 1,
+    'arrow-parens': ['error', 'as-needed'],
+    'jsdoc/check-param-names': 1,
+    'jsdoc/check-types': 1,
+    'jsdoc/newline-after-description': 1,
     'jsdoc/require-param-description': 1,
     'jsdoc/require-param-name': 1,
     'jsdoc/require-param-type': 1,
-    'jsdoc/valid-types': 1,
-    'jsdoc/require-returns': 1,
+    'jsdoc/require-param': 1,
     'jsdoc/require-returns-check': 1,
     'jsdoc/require-returns-description': 1,
     'jsdoc/require-returns-type': 1,
-    'jsdoc/newline-after-description': 1,
-    'jsdoc/check-param-names': 1,
-    'jsdoc/check-types': 1,
-    'prettier/prettier': 'error',
-    'arrow-parens': ['error', 'as-needed'],
+    'jsdoc/require-returns': 1,
+    'jsdoc/valid-types': 1,
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'prettier/prettier': 'error',
+    quotes: ['error', 'single', { avoidEscape: true }],
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
@@ -50,15 +50,6 @@ module.exports = {
         allowChildren: false,
       },
     ],
-    // 'sort-imports': [
-    //   'warn',
-    //   {
-    //     ignoreCase: false,
-    //     ignoreDeclarationSort: false,
-    //     ignoreMemberSort: false,
-    //     memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-    //   },
-    // ],
     'sort-imports-es6-autofix/sort-imports-es6': [
       2,
       {

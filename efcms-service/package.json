@@ -5,6 +5,7 @@
   "dependencies": {
     "aws-xray-sdk": "^2.2.0",
     "ef-cms-shared": "file:../shared",
+    "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "uuid": "^3.3.2"
   },

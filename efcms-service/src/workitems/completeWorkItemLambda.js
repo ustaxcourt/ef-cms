@@ -1,8 +1,8 @@
+const createApplicationContext = require('../applicationContext');
 const {
   handle,
   getUserFromAuthHeader,
 } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * updates a work item

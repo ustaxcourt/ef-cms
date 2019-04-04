@@ -1,6 +1,6 @@
+const createApplicationContext = require('../applicationContext');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * used for fetching a single case
