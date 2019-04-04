@@ -1,10 +1,157 @@
 {
+  "Answer": [
+    {
+      "documentTitle": "Amended Answer",
+      "eventCode": "AA",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Amendment to Answer",
+      "eventCode": "ATAN",
+      "category": "Answer",
+      "scenario": "Nonstandard G",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
+    },
+    {
+      "documentTitle": "Answer",
+      "eventCode": "A",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Amended Petition",
+      "eventCode": "AAPN",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Amended Petition, as Amended",
+      "eventCode": "ATAP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Amendment to Amended Petition",
+      "eventCode": "AAAP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Amendment to Petition",
+      "eventCode": "AATP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Petition, as Amende",
+      "eventCode": "APA",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Second Amended Petition",
+      "eventCode": "ATSP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Second Amendment to Petition",
+      "eventCode": "AATS",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Supplement to Petition",
+      "eventCode": "ASUP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Third Amended Petition",
+      "eventCode": "ASAP",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Answer to Third Amendment to Petition",
+      "eventCode": "AATT",
+      "category": "Answer",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    }
+  ],
+  "Appearance and Representation": [
+    {
+      "documentTitle": "Entry of Appearance",
+      "eventCode": "EA",
+      "category": "Appearance and Representation",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Withdraw as Counsel",
+      "eventCode": "M112",
+      "category": "Appearance and Representation",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Substitution of Counsel",
+      "eventCode": "SOC",
+      "category": "Appearance and Representation",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    }
+  ],
   "Application": [
     {
       "documentTitle": "Application for Waiver of Filing Fee",
       "eventCode": "APW",
-      "categoryCurrent": "Application",
-      "categoryUpdated": "Application",
+      "category": "Application",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -13,8 +160,7 @@
     {
       "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
       "eventCode": "APPW",
-      "categoryCurrent": "Application",
-      "categoryUpdated": "Application",
+      "category": "Application",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -23,11 +169,21 @@
     {
       "documentTitle": "Application to Take Deposition of [Name]",
       "eventCode": "APLD",
-      "categoryCurrent": "Application",
-      "categoryUpdated": "Application",
+      "category": "Application",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "ordinalField": ""
+    }
+  ],
+  "Brief": [
+    {
+      "documentTitle": "Supplemental Brief",
+      "eventCode": "SB",
+      "category": "Brief",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
       "ordinalField": ""
     }
   ],
@@ -35,8 +191,7 @@
     {
       "documentTitle": "Computation for Entry of Decision",
       "eventCode": "COED",
-      "categoryCurrent": "Computation",
-      "categoryUpdated": "Computation",
+      "category": "Computation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -45,8 +200,7 @@
     {
       "documentTitle": "Revised Computation",
       "eventCode": "RCOM",
-      "categoryCurrent": "Computation",
-      "categoryUpdated": "Computation",
+      "category": "Computation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -57,8 +211,7 @@
     {
       "documentTitle": "Agreed Computation For Entry Of Decision",
       "eventCode": "",
-      "categoryCurrent": "Not currently efiled",
-      "categoryUpdated": "Decision",
+      "category": "Decision",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -67,8 +220,7 @@
     {
       "documentTitle": "Proposed Stipulated Decision",
       "eventCode": "PSDEC",
-      "categoryCurrent": "Decision",
-      "categoryUpdated": "Decision",
+      "category": "Decision",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -77,50 +229,45 @@
   ],
   "Miscellaneous": [
     {
-      "documentTitle": "[First, Second, etc.] Amended [Document Name]",
-      "eventCode": "ADED",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard F",
-      "labelPreviousDocument": "Which Document Are You Amending?",
-      "labelFreeText": "",
-      "ordinalField": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "[First, Second, etc.] Amendment to [Document Name}",
-      "eventCode": "AMNT",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Nonstandard F",
-      "labelPreviousDocument": "Which Document Are You Amending?",
-      "labelFreeText": "",
-      "ordinalField": "What Iteration is This Filing?"
-    },
-    {
       "documentTitle": "Administrative Record",
       "eventCode": "ADMR",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
     },
     {
+      "documentTitle": "[First, Second, etc.] Amended [Document Name]",
+      "eventCode": "ADED",
+      "category": "Miscellaneous",
+      "scenario": "Nonstandard F",
+      "labelPreviousDocument": "Which Document Are You Amending?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
+    },
+    {
       "documentTitle": "Amended Certificate of Service Of [Document Name]",
       "eventCode": "AMDC",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "What Document is this Certificate of Service for?",
+      "labelPreviousDocument": "What document is this Certificate of Service for?",
       "labelFreeText": "",
       "ordinalField": ""
     },
     {
+      "documentTitle": "[First, Second, etc.] Amendment to [Document Name]",
+      "eventCode": "AMNT",
+      "category": "Miscellaneous",
+      "scenario": "Nonstandard F",
+      "labelPreviousDocument": "Which Document Are You Amending?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
+    },
+    {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
       "eventCode": "CERT",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -129,8 +276,7 @@
     {
       "documentTitle": "Certificate of Service [Document Name] [Date]",
       "eventCode": "CS",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "What Document is this Certificate of Service for?",
       "labelFreeText": "Date of Service",
@@ -139,18 +285,7 @@
     {
       "documentTitle": "Civil Penalty Approval Form",
       "eventCode": "CIVP",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Designation of Counsel to Receive Service",
-      "eventCode": "DSC",
-      "categoryCurrent": "",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -159,8 +294,7 @@
     {
       "documentTitle": "Exhibit(s)",
       "eventCode": "EXH",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -169,8 +303,7 @@
     {
       "documentTitle": "Memorandum",
       "eventCode": "MEMO",
-      "categoryCurrent": "Memorandum",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -179,8 +312,7 @@
     {
       "documentTitle": "Partial Administrative Record",
       "eventCode": "PARD",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -189,8 +321,7 @@
     {
       "documentTitle": "Ratification [anything]",
       "eventCode": "RATF",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Are You Ratifying?",
@@ -199,8 +330,7 @@
     {
       "documentTitle": "Redacted [Document Name]",
       "eventCode": "REDC",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Redacting?",
       "labelFreeText": "",
@@ -209,8 +339,7 @@
     {
       "documentTitle": "Report",
       "eventCode": "RTP",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -219,8 +348,7 @@
     {
       "documentTitle": "Status Report",
       "eventCode": "RPT",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -229,8 +357,7 @@
     {
       "documentTitle": "Unredacted [Document Name]",
       "eventCode": "URED",
-      "categoryCurrent": "Miscellaneous",
-      "categoryUpdated": "Miscellaneous",
+      "category": "Miscellaneous",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Has Been Unredacted?",
       "labelFreeText": "",
@@ -241,8 +368,7 @@
     {
       "documentTitle": "Motion for Continuance",
       "eventCode": "M006",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -251,8 +377,7 @@
     {
       "documentTitle": "Motion for Extension of Time",
       "eventCode": "M011",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -261,8 +386,7 @@
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
       "eventCode": "M073",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -271,8 +395,7 @@
     {
       "documentTitle": "Motion to Dismiss for Lack of Prosecution",
       "eventCode": "M074",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -281,8 +404,7 @@
     {
       "documentTitle": "Motion for Summary Judgment",
       "eventCode": "M034",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -291,8 +413,7 @@
     {
       "documentTitle": "Motion to Change or Correct Caption",
       "eventCode": "M056",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -301,8 +422,7 @@
     {
       "documentTitle": "Motion for a New Trial",
       "eventCode": "M218",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -311,8 +431,7 @@
     {
       "documentTitle": "Motion for an Order under Federal Rule of Evidence 502(d)",
       "eventCode": "M001",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -321,8 +440,7 @@
     {
       "documentTitle": "Motion for an Order under Model Rule of Professional Conduct 4.2",
       "eventCode": "M002",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -331,8 +449,7 @@
     {
       "documentTitle": "Motion for Appointment of Mediator",
       "eventCode": "M003",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -341,8 +458,7 @@
     {
       "documentTitle": "Motion for Assignment of Judge",
       "eventCode": "M004",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -351,8 +467,7 @@
     {
       "documentTitle": "Motion for Audio of Trial Proceeding(s)",
       "eventCode": "M136",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -361,8 +476,7 @@
     {
       "documentTitle": "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal",
       "eventCode": "M005",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -371,8 +485,7 @@
     {
       "documentTitle": "Motion for Default and Dismissal",
       "eventCode": "M009",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -381,8 +494,7 @@
     {
       "documentTitle": "Motion for Entry of Decision",
       "eventCode": "M007",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -391,8 +503,7 @@
     {
       "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
       "eventCode": "M008",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -401,8 +512,7 @@
     {
       "documentTitle": "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156",
       "eventCode": "M010",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -411,8 +521,7 @@
     {
       "documentTitle": "Motion for in Camera Review",
       "eventCode": "M135",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -421,8 +530,7 @@
     {
       "documentTitle": "Motion for International Judicial Assistance",
       "eventCode": "M012",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -431,8 +539,7 @@
     {
       "documentTitle": "Motion for Judgment on the Pleadings",
       "eventCode": "M121",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -441,8 +548,7 @@
     {
       "documentTitle": "Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)",
       "eventCode": "M013",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -451,8 +557,7 @@
     {
       "documentTitle": "Motion for Leave to File [Document Name]",
       "eventCode": "M115",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -461,8 +566,7 @@
     {
       "documentTitle": "Motion for Leave to File Out of Time [Document Name]",
       "eventCode": "M014",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -471,8 +575,7 @@
     {
       "documentTitle": "Motion for Leave to Serve Additional Interrogatories",
       "eventCode": "M015",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -481,8 +584,7 @@
     {
       "documentTitle": "Motion for Leave to Use Electronic Equipment",
       "eventCode": "M118",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -491,8 +593,7 @@
     {
       "documentTitle": "Motion for More Definite Statement Pursuant to Rule 51",
       "eventCode": "M016",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -501,8 +602,7 @@
     {
       "documentTitle": "Motion for Non-Binding Mediation",
       "eventCode": "M017",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -511,8 +611,7 @@
     {
       "documentTitle": "Motion for Oral Argument",
       "eventCode": "M018",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -521,8 +620,7 @@
     {
       "documentTitle": "Motion for Order Fixing Amount of an Appeal Bond",
       "eventCode": "M019",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -531,8 +629,7 @@
     {
       "documentTitle": "Motion for Order to Release the Amount of an Appeal Bond",
       "eventCode": "M020",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -541,8 +638,7 @@
     {
       "documentTitle": "Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record",
       "eventCode": "M021",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -551,8 +647,7 @@
     {
       "documentTitle": "Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case",
       "eventCode": "M022",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -561,8 +656,7 @@
     {
       "documentTitle": "Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)",
       "eventCode": "M023",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -571,8 +665,7 @@
     {
       "documentTitle": "Motion for Partial Summary Judgment",
       "eventCode": "M024",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -581,8 +674,7 @@
     {
       "documentTitle": "Motion for Preliminary Injunction",
       "eventCode": "M025",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -591,8 +683,7 @@
     {
       "documentTitle": "Motion for Pretrial Conference",
       "eventCode": "M122",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -601,8 +692,7 @@
     {
       "documentTitle": "Motion for Protective Order Pursuant to Rule 103",
       "eventCode": "M026",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -611,8 +701,7 @@
     {
       "documentTitle": "Motion for Reasonable Litigation or Administrative Costs",
       "eventCode": "M027",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -621,8 +710,7 @@
     {
       "documentTitle": "Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161",
       "eventCode": "M028",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -631,8 +719,7 @@
     {
       "documentTitle": "Motion for Reconsideration of Order",
       "eventCode": "M029",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -641,8 +728,7 @@
     {
       "documentTitle": "Motion for Recusal of Judge",
       "eventCode": "M030",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -651,8 +737,7 @@
     {
       "documentTitle": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
       "eventCode": "M033",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -661,8 +746,7 @@
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of a Transcript",
       "eventCode": "M035",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -671,8 +755,7 @@
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of an Interpreter",
       "eventCode": "M036",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -681,8 +764,7 @@
     {
       "documentTitle": "Motion for Voluntary Binding Arbitration",
       "eventCode": "M037",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -691,8 +773,7 @@
     {
       "documentTitle": "Motion for Writ of Habeas Corpus Ad Testificandum",
       "eventCode": "M039",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -701,8 +782,7 @@
     {
       "documentTitle": "Motion in Limine",
       "eventCode": "M040",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -711,8 +791,7 @@
     {
       "documentTitle": "Motion to Add Lien or Levy Designation",
       "eventCode": "M041",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -721,8 +800,7 @@
     {
       "documentTitle": "Motion to Add Small Tax case Designation",
       "eventCode": "M042",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -731,8 +809,7 @@
     {
       "documentTitle": "Motion to Amend Order",
       "eventCode": "M043",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -741,8 +818,7 @@
     {
       "documentTitle": "Motion to Appoint an Interpreter Pursuant to Rule 143(f)",
       "eventCode": "M045",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -751,8 +827,7 @@
     {
       "documentTitle": "Motion to Appoint New Tax Matters Partner",
       "eventCode": "M044",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -761,8 +836,7 @@
     {
       "documentTitle": "Motion to Appoint Tax Matters Partner",
       "eventCode": "M117",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -771,8 +845,7 @@
     {
       "documentTitle": "Motion to Authorize Proposed Sale of Seized Property",
       "eventCode": "M046",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -781,8 +854,7 @@
     {
       "documentTitle": "Motion to Be Excused from Appearing at the Trial Session",
       "eventCode": "M047",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -791,8 +863,7 @@
     {
       "documentTitle": "Motion to Be Recognized as Next Friend",
       "eventCode": "M049",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -801,8 +872,7 @@
     {
       "documentTitle": "Motion to Bifurcate",
       "eventCode": "M050",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -811,8 +881,7 @@
     {
       "documentTitle": "Motion to Calendar",
       "eventCode": "M051",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -821,8 +890,7 @@
     {
       "documentTitle": "Motion to Calendar and Consolidate Docket Numbers [docket numbers]",
       "eventCode": "M052",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Numbers (separate with comma)",
@@ -831,8 +899,7 @@
     {
       "documentTitle": "Motion to Calendar in the Electronic (North) Courtroom",
       "eventCode": "M038",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -841,8 +908,7 @@
     {
       "documentTitle": "Motion to Certify for Interlocutory Appeal",
       "eventCode": "M055",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -851,8 +917,7 @@
     {
       "documentTitle": "Motion to Change or Correct Docket Entry",
       "eventCode": "M133",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -861,8 +926,7 @@
     {
       "documentTitle": "Motion to Change Place of Submission of Declaratory Judgment Case to [Place]",
       "eventCode": "M058",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Place of Submission of Declatory Judgement",
@@ -871,8 +935,7 @@
     {
       "documentTitle": "Motion to Change Place of Trial [Place]",
       "eventCode": "M059",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Trial Location",
@@ -881,8 +944,7 @@
     {
       "documentTitle": "Motion to Change Service Method",
       "eventCode": "M060",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -891,8 +953,7 @@
     {
       "documentTitle": "Motion to Clarify Order",
       "eventCode": "M061",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -901,8 +962,7 @@
     {
       "documentTitle": "Motion to Close on Ground of Duplication",
       "eventCode": "M062",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -911,8 +971,7 @@
     {
       "documentTitle": "Motion to Compel Discovery",
       "eventCode": "M063",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -921,8 +980,7 @@
     {
       "documentTitle": "Motion to Compel Production of Documents",
       "eventCode": "M064",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -931,8 +989,7 @@
     {
       "documentTitle": "Motion to Compel Responses to Interrogatories",
       "eventCode": "M065",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -941,8 +998,7 @@
     {
       "documentTitle": "Motion to Compel the Taking of Deposition",
       "eventCode": "M066",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -951,8 +1007,7 @@
     {
       "documentTitle": "Motion to Conform the Pleadings to the Proof",
       "eventCode": "M134",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -961,8 +1016,7 @@
     {
       "documentTitle": "Motion to Consolidate Docket Numbers [docket numbers]",
       "eventCode": "M067",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Numbers to Be Consolidated (separate with comma)",
@@ -971,8 +1025,7 @@
     {
       "documentTitle": "Motion to Correct and Certify Record on Appeal",
       "eventCode": "M053",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -981,8 +1034,7 @@
     {
       "documentTitle": "Motion to Correct Clerical Order",
       "eventCode": "M124",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -991,8 +1043,7 @@
     {
       "documentTitle": "Motion to Correct Transcript",
       "eventCode": "M054",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1001,8 +1052,7 @@
     {
       "documentTitle": "Motion to Depose Pursuant to Rule 74",
       "eventCode": "M068",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1011,8 +1061,7 @@
     {
       "documentTitle": "Motion to Determine the Tax Matters Partner",
       "eventCode": "M069",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1021,8 +1070,7 @@
     {
       "documentTitle": "Motion to Dismiss",
       "eventCode": "M070",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1031,8 +1079,7 @@
     {
       "documentTitle": "Motion to Dismiss for Failure to Properly Prosecute",
       "eventCode": "M071",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1041,8 +1088,7 @@
     {
       "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
       "eventCode": "M072",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1051,8 +1097,7 @@
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "eventCode": "M126",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Person, Notice, or Year",
@@ -1061,8 +1106,7 @@
     {
       "documentTitle": "Motion to Dismiss on Grounds of Mootness",
       "eventCode": "M075",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1071,8 +1115,7 @@
     {
       "documentTitle": "Motion to Disqualify Counsel",
       "eventCode": "M130",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1081,8 +1124,7 @@
     {
       "documentTitle": "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260",
       "eventCode": "M076",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1091,8 +1133,7 @@
     {
       "documentTitle": "Motion to Enforce Subpoena",
       "eventCode": "M077",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1101,8 +1142,7 @@
     {
       "documentTitle": "Motion to Extend Time to Move or File Answer",
       "eventCode": "M078",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1111,8 +1151,7 @@
     {
       "documentTitle": "Motion to Impose a Penalty",
       "eventCode": "M080",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1121,8 +1160,7 @@
     {
       "documentTitle": "Motion to Impose Sanctions",
       "eventCode": "M081",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1131,8 +1169,7 @@
     {
       "documentTitle": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
       "eventCode": "M083",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1141,8 +1178,7 @@
     {
       "documentTitle": "Motion to Modify Order",
       "eventCode": "M125",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1151,8 +1187,7 @@
     {
       "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
       "eventCode": "M084",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1161,8 +1196,7 @@
     {
       "documentTitle": "Motion to Permit Levy",
       "eventCode": "M088",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1171,8 +1205,7 @@
     {
       "documentTitle": "Motion to Preclude",
       "eventCode": "M085",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1181,8 +1214,7 @@
     {
       "documentTitle": "Motion to Quash or Modify Subpoena",
       "eventCode": "M087",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1191,8 +1223,7 @@
     {
       "documentTitle": "Motion to Redetermine Interest Pursuant to Rule 261",
       "eventCode": "M089",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1201,8 +1232,7 @@
     {
       "documentTitle": "Motion to Remand",
       "eventCode": "M090",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1211,8 +1241,7 @@
     {
       "documentTitle": "Motion to Remove Lien/Levy Designation",
       "eventCode": "M132",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1221,8 +1250,7 @@
     {
       "documentTitle": "Motion to Remove Small Tax Case Designation",
       "eventCode": "M091",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1231,8 +1259,7 @@
     {
       "documentTitle": "Motion to Remove Tax Matters Partner",
       "eventCode": "M092",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1241,8 +1268,7 @@
     {
       "documentTitle": "Motion to Reopen the Record",
       "eventCode": "M093",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1251,8 +1277,7 @@
     {
       "documentTitle": "Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)",
       "eventCode": "M094",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1261,8 +1286,7 @@
     {
       "documentTitle": "Motion to Restore Case to the General Docket",
       "eventCode": "M095",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1271,8 +1295,7 @@
     {
       "documentTitle": "Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected",
       "eventCode": "M096",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1281,8 +1304,7 @@
     {
       "documentTitle": "Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157",
       "eventCode": "M097",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1291,8 +1313,7 @@
     {
       "documentTitle": "MOTION TO REVIEW THE SUFFICIENCY OF ANSWERS OR OBJECTIONS TO REQUEST FOR ADMISSIONS",
       "eventCode": "M098",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1301,8 +1322,7 @@
     {
       "documentTitle": "Motion to Seal Case",
       "eventCode": "M114",
-      "categoryCurrent": "",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1311,8 +1331,7 @@
     {
       "documentTitle": "Motion to Seal Documents",
       "eventCode": "M127",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1321,8 +1340,7 @@
     {
       "documentTitle": "Motion to Set for a Time & Date Certain",
       "eventCode": "M099",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1331,8 +1349,7 @@
     {
       "documentTitle": "Motion to Set Pretrial Scheduling Order",
       "eventCode": "M131",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1341,8 +1358,7 @@
     {
       "documentTitle": "Motion to Sever",
       "eventCode": "M100",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1351,8 +1367,7 @@
     {
       "documentTitle": "Motion to Shift the Burden of Proof",
       "eventCode": "M101",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1361,8 +1376,7 @@
     {
       "documentTitle": "Motion to Shorten the Time",
       "eventCode": "M102",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1371,8 +1385,7 @@
     {
       "documentTitle": "Motion to Stay Proceedings",
       "eventCode": "M103",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1381,8 +1394,7 @@
     {
       "documentTitle": "Motion to Stay Proposed Sale of Seized Property",
       "eventCode": "M104",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1391,8 +1403,7 @@
     {
       "documentTitle": "Motion to Strike",
       "eventCode": "M105",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1401,8 +1412,7 @@
     {
       "documentTitle": "Motion to Submit Case Pursuant to Rule 122",
       "eventCode": "M106",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1411,8 +1421,7 @@
     {
       "documentTitle": "Motion to Substitute Parties and Change Caption",
       "eventCode": "M107",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1421,8 +1430,7 @@
     {
       "documentTitle": "Motion to Substitute Trial Exhibit(s)",
       "eventCode": "M123",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1431,8 +1439,7 @@
     {
       "documentTitle": "Motion to Supplement the Record",
       "eventCode": "M129",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1441,8 +1448,7 @@
     {
       "documentTitle": "Motion to Suppress Evidence",
       "eventCode": "M119",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1451,8 +1457,7 @@
     {
       "documentTitle": "Motion to Take Deposition Pursuant to Rule 74(c)(3)",
       "eventCode": "M108",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1461,8 +1466,7 @@
     {
       "documentTitle": "Motion to Take Judicial Notice",
       "eventCode": "M109",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1471,8 +1475,7 @@
     {
       "documentTitle": "Motion to Vacate",
       "eventCode": "M120",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1481,8 +1484,7 @@
     {
       "documentTitle": "Motion to Vacate or Revise Pursuant to Rule 162",
       "eventCode": "M110",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1491,8 +1493,16 @@
     {
       "documentTitle": "Motion to Withdraw",
       "eventCode": "M111",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Withdraw as Counsel",
+      "eventCode": "M112",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1501,8 +1511,7 @@
     {
       "documentTitle": "Motion to Withdraw Counsel",
       "eventCode": "M116",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1511,8 +1520,7 @@
     {
       "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
       "eventCode": "M113",
-      "categoryCurrent": "Motion",
-      "categoryUpdated": "Motion",
+      "category": "Motion",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1523,8 +1531,7 @@
     {
       "documentTitle": "Notice of Abatement of Jeopardy Assessment",
       "eventCode": "NAJA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1533,8 +1540,7 @@
     {
       "documentTitle": "Notice of Change of Address",
       "eventCode": "NCA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1543,8 +1549,7 @@
     {
       "documentTitle": "Notice of Change of Address and Telephone Number",
       "eventCode": "NCAP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1553,8 +1558,7 @@
     {
       "documentTitle": "Notice of Change of Telephone Number",
       "eventCode": "NCP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1563,8 +1567,7 @@
     {
       "documentTitle": "Notice of Clarification of Tax Matters Partner",
       "eventCode": "NCTP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1573,8 +1576,7 @@
     {
       "documentTitle": "Notice of Concession",
       "eventCode": "NCON",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1583,8 +1585,7 @@
     {
       "documentTitle": "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)",
       "eventCode": "NCAG",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1593,8 +1594,7 @@
     {
       "documentTitle": "Notice of Death of Counsel",
       "eventCode": "NDC",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1603,8 +1603,7 @@
     {
       "documentTitle": "Notice of Election to Intervene",
       "eventCode": "NOEI",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1613,8 +1612,7 @@
     {
       "documentTitle": "Notice of Election to Participate",
       "eventCode": "NOEP",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1623,8 +1621,7 @@
     {
       "documentTitle": "Notice of Filing of Petition and Right to Intervene",
       "eventCode": "NIS",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1633,8 +1630,7 @@
     {
       "documentTitle": "Notice of Filing of the Administrative Record",
       "eventCode": "NFAR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1643,8 +1639,7 @@
     {
       "documentTitle": "Notice of Identification of Tax Matters Partner",
       "eventCode": "NITM",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1653,8 +1648,7 @@
     {
       "documentTitle": "Notice of Intent Not to File [anything]",
       "eventCode": "NINF",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Do You Intend Not to File?",
@@ -1663,8 +1657,7 @@
     {
       "documentTitle": "Notice of Intervention",
       "eventCode": "NOI",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1673,8 +1666,7 @@
     {
       "documentTitle": "Notice of Issue Concerning Foreign Law",
       "eventCode": "NIFL",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1683,8 +1675,7 @@
     {
       "documentTitle": "Notice of Jeopardy Assessment",
       "eventCode": "NJAR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1693,8 +1684,7 @@
     {
       "documentTitle": "Notice of Judicial Ruling",
       "eventCode": "NRJR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1703,8 +1693,7 @@
     {
       "documentTitle": "Notice of No Objection to [Document Name[",
       "eventCode": "NNOB",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Not Objecting to?",
       "labelFreeText": "",
@@ -1713,8 +1702,7 @@
     {
       "documentTitle": "Notice of Objection to [Document Name]",
       "eventCode": "OBJN",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Objecting to?",
       "labelFreeText": "",
@@ -1723,8 +1711,7 @@
     {
       "documentTitle": "Notice of Partial Abatement of Jeopardy Assessment",
       "eventCode": "NPJR",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1733,8 +1720,7 @@
     {
       "documentTitle": "Notice of Proceeding in Bankruptcy",
       "eventCode": "NPB",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1743,8 +1729,7 @@
     {
       "documentTitle": "Notice of Relevant Judicial Decisions",
       "eventCode": "NRJD",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1753,8 +1738,7 @@
     {
       "documentTitle": "Notice of Settlement Agreement Pursuant to Rule 248(c)(1)",
       "eventCode": "NOST",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1763,8 +1747,7 @@
     {
       "documentTitle": "Notice of Small Tax Case Election",
       "eventCode": "NSTE",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1773,8 +1756,7 @@
     {
       "documentTitle": "Notice of Supplemental Authority",
       "eventCode": "NSA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1783,8 +1765,7 @@
     {
       "documentTitle": "Notice of Telephone Number",
       "eventCode": "NTN",
-      "categoryCurrent": "",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1793,8 +1774,7 @@
     {
       "documentTitle": "Notice of Termination Assessment",
       "eventCode": "NTA",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1803,8 +1783,7 @@
     {
       "documentTitle": "Notice of Unavailability",
       "eventCode": "NOU",
-      "categoryCurrent": "Notice",
-      "categoryUpdated": "Notice",
+      "category": "Notice",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1815,8 +1794,7 @@
     {
       "documentTitle": "No Objection to [Document Name]",
       "eventCode": "NOB",
-      "categoryCurrent": "Objection",
-      "categoryUpdated": "Opposition or Objection",
+      "category": "Opposition or Objection",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "What Document Are You Not Objecting?",
       "labelFreeText": "",
@@ -1825,8 +1803,7 @@
     {
       "documentTitle": "Objection to [Document Name}",
       "eventCode": "OBJE",
-      "categoryCurrent": "Objection",
-      "categoryUpdated": "Opposition or Objection",
+      "category": "Opposition or Objection",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Objecting to?",
       "labelFreeText": "",
@@ -1835,8 +1812,7 @@
     {
       "documentTitle": "Opposition to [Document Name]",
       "eventCode": "OPPO",
-      "categoryCurrent": "Opposition",
-      "categoryUpdated": "Opposition or Objection",
+      "category": "Opposition or Objection",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Select the Document that is Being Opposed",
       "labelFreeText": "",
@@ -1847,8 +1823,7 @@
     {
       "documentTitle": "Amended Petition",
       "eventCode": "PAP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1857,8 +1832,7 @@
     {
       "documentTitle": "Amendment to Amended Petition",
       "eventCode": "PAAP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1867,8 +1841,7 @@
     {
       "documentTitle": "Amendment to Petition",
       "eventCode": "ATP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1877,8 +1850,7 @@
     {
       "documentTitle": "Amendment to Second Amended Petition",
       "eventCode": "PASP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1887,8 +1859,7 @@
     {
       "documentTitle": "Amendment to Third Amended Petition",
       "eventCode": "PATP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1897,8 +1868,7 @@
     {
       "documentTitle": "Redacted Petition Filed",
       "eventCode": "PTFR",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1907,8 +1877,7 @@
     {
       "documentTitle": "Second Amended Petition",
       "eventCode": "PSAP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1917,8 +1886,7 @@
     {
       "documentTitle": "Second Amendment to Petition",
       "eventCode": "PSAT",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1927,8 +1895,7 @@
     {
       "documentTitle": "Supplement to Petition",
       "eventCode": "PSUP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1937,8 +1904,7 @@
     {
       "documentTitle": "Third Amended Petition",
       "eventCode": "PTAP",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1947,8 +1913,7 @@
     {
       "documentTitle": "Third Amendment to Petition",
       "eventCode": "PTAT",
-      "categoryCurrent": "Petition",
-      "categoryUpdated": "Petition",
+      "category": "Petition",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1959,8 +1924,7 @@
     {
       "documentTitle": "Amended Prehearing Memorandum",
       "eventCode": "APHM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1969,8 +1933,7 @@
     {
       "documentTitle": "Amended Pretrial Memorandum",
       "eventCode": "APTM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1979,8 +1942,7 @@
     {
       "documentTitle": "Amendment to Prehearing Memorandum",
       "eventCode": "ATPH",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1989,8 +1951,7 @@
     {
       "documentTitle": "Amendment to Pretrial Memorandum",
       "eventCode": "ATPM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1999,8 +1960,7 @@
     {
       "documentTitle": "Prehearing Memorandum",
       "eventCode": "PHM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2009,8 +1969,7 @@
     {
       "documentTitle": "Pretrial Memorandum",
       "eventCode": "PMT",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2019,8 +1978,7 @@
     {
       "documentTitle": "Second Supplement to Pretrial Memorandum",
       "eventCode": "SSPM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2029,8 +1987,7 @@
     {
       "documentTitle": "Supplement to Prehearing Memorandum",
       "eventCode": "STMP",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2039,8 +1996,7 @@
     {
       "documentTitle": "Supplement to Pretrial Memorandum",
       "eventCode": "STPM",
-      "categoryCurrent": "Pretrial Memorandum",
-      "categoryUpdated": "Pretrial Memorandum",
+      "category": "Pretrial Memorandum",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2051,8 +2007,7 @@
     {
       "documentTitle": "Amended Reply to Answer",
       "eventCode": "RA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2061,8 +2016,7 @@
     {
       "documentTitle": "Amendment to Reply to Answer",
       "eventCode": "RAA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2071,8 +2025,7 @@
     {
       "documentTitle": "Reply to [Document Name]",
       "eventCode": "REPL",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Replying to?",
       "labelFreeText": "",
@@ -2081,8 +2034,7 @@
     {
       "documentTitle": "Reply to Amendment to Answer",
       "eventCode": "RPAA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2091,8 +2043,7 @@
     {
       "documentTitle": "Reply to Answer",
       "eventCode": "RTA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2101,8 +2052,7 @@
     {
       "documentTitle": "Reply to Answer to Amended Petition",
       "eventCode": "RTAA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2111,8 +2061,7 @@
     {
       "documentTitle": "Reply to Answer to Amendment to Petition",
       "eventCode": "RATA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2121,8 +2070,7 @@
     {
       "documentTitle": "Reply to Answer to Petition, as Amended",
       "eventCode": "RAPA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2131,8 +2079,7 @@
     {
       "documentTitle": "Reply to Answer to Second Amended Petition",
       "eventCode": "RTSA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2141,8 +2088,7 @@
     {
       "documentTitle": "Reply to Answer to Supplement to Petition",
       "eventCode": "RSTA",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2151,8 +2097,7 @@
     {
       "documentTitle": "Reply to Answer to Third Amended Petition",
       "eventCode": "RTAP",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2161,8 +2106,7 @@
     {
       "documentTitle": "Sur-Reply to [Document Name]",
       "eventCode": "SURP",
-      "categoryCurrent": "Reply",
-      "categoryUpdated": "Reply",
+      "category": "Reply",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Replying to?",
       "labelFreeText": "",
@@ -2173,8 +2117,7 @@
     {
       "documentTitle": "[First, Second, etc.] Request for Admissions",
       "eventCode": "REQA",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
+      "category": "Request",
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2183,8 +2126,7 @@
     {
       "documentTitle": "Request for Judicial Notice",
       "eventCode": "RJN",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
+      "category": "Request",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2193,8 +2135,7 @@
     {
       "documentTitle": "Request for Place of Submission of Declaratory Judgment Case",
       "eventCode": "RQSD",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
+      "category": "Request",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2203,8 +2144,7 @@
     {
       "documentTitle": "Request for Place of Trial [Place]",
       "eventCode": "RQT",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
+      "category": "Request",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Trial Location",
@@ -2213,8 +2153,7 @@
     {
       "documentTitle": "Request for Pretrial Conference",
       "eventCode": "RFPC",
-      "categoryCurrent": "Request",
-      "categoryUpdated": "Request",
+      "category": "Request",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2225,8 +2164,7 @@
     {
       "documentTitle": "Response to [Document Name]",
       "eventCode": "RSP",
-      "categoryCurrent": "Response",
-      "categoryUpdated": "Response",
+      "category": "Response",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Responding to?",
       "labelFreeText": "",
@@ -2237,8 +2175,7 @@
     {
       "documentTitle": "Amended Seriatim Answering Brief",
       "eventCode": "ADSA",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2247,8 +2184,7 @@
     {
       "documentTitle": "Amended Seriatim Opening Brief",
       "eventCode": "AEDS",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2257,8 +2193,7 @@
     {
       "documentTitle": "Amended Seriatim Reply Brief",
       "eventCode": "ADSB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2267,8 +2202,7 @@
     {
       "documentTitle": "Amended Seriatim Sur-Reply Brief",
       "eventCode": "ASRB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2277,8 +2211,7 @@
     {
       "documentTitle": "Amended Seriatim Sur-Reply Memorandum Brief",
       "eventCode": "MBAD",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2287,8 +2220,7 @@
     {
       "documentTitle": "Amendment to Seriatim Answering Brief",
       "eventCode": "ADTS",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2297,8 +2229,7 @@
     {
       "documentTitle": "Amendment to Seriatim Opening Brief",
       "eventCode": "ASTF",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2307,8 +2238,7 @@
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Brief",
       "eventCode": "ATRB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2317,8 +2247,7 @@
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Memorandum Brief",
       "eventCode": "MBAT",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2327,8 +2256,7 @@
     {
       "documentTitle": "Seriatim Answering Brief",
       "eventCode": "SEAB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2337,8 +2265,7 @@
     {
       "documentTitle": "Seriatim Answering Memorandum Brief",
       "eventCode": "SAMB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2347,8 +2274,7 @@
     {
       "documentTitle": "Seriatim Opening Brief",
       "eventCode": "SEOB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2357,8 +2283,7 @@
     {
       "documentTitle": "Seriatim Opening Memorandum Brief",
       "eventCode": "SOMB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2367,8 +2292,7 @@
     {
       "documentTitle": "Seriatim Reply Brief",
       "eventCode": "SERB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2377,8 +2301,7 @@
     {
       "documentTitle": "Seriatim Reply Memorandum Brief",
       "eventCode": "SRMB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2387,8 +2310,7 @@
     {
       "documentTitle": "Seriatim Sur-Reply Brief",
       "eventCode": "SESB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2397,8 +2319,7 @@
     {
       "documentTitle": "Seriatim Sur-Reply Memorandum Brief",
       "eventCode": "SSRB",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2407,8 +2328,7 @@
     {
       "documentTitle": "Supplement to Seriatim Answering Brief",
       "eventCode": "STSA",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2417,8 +2337,7 @@
     {
       "documentTitle": "Supplement to Seriatim Opening Brief",
       "eventCode": "STSO",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2427,8 +2346,7 @@
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
       "eventCode": "SSSR",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2437,8 +2355,7 @@
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
       "eventCode": "MBSR",
-      "categoryCurrent": "Seriatum Brief",
-      "categoryUpdated": "Seriatum Brief",
+      "category": "Seriatum Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2449,8 +2366,7 @@
     {
       "documentTitle": "Amended Simultaneous Answering Brief",
       "eventCode": "ASAB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2459,8 +2375,7 @@
     {
       "documentTitle": "Amended Simultaneous Answering Memoranda of Law",
       "eventCode": "ASAM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2469,8 +2384,7 @@
     {
       "documentTitle": "Amended Simultaneous Answering Memorandum Brief",
       "eventCode": "ASMB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2479,8 +2393,7 @@
     {
       "documentTitle": "Amended Simultaneous Memoranda of Law",
       "eventCode": "ASML",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2489,8 +2402,7 @@
     {
       "documentTitle": "Amended Simultaneous Opening Brief",
       "eventCode": "ASOB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2499,8 +2411,7 @@
     {
       "documentTitle": "Amended Simultaneous Opening Memorandum Brief",
       "eventCode": "ASOM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2509,8 +2420,7 @@
     {
       "documentTitle": "Amended Simultaneous Sur-Reply Brief",
       "eventCode": "AISB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2519,8 +2429,7 @@
     {
       "documentTitle": "Amended Simultaneous Sur-Reply Memorandum Brief",
       "eventCode": "ASRM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2529,8 +2438,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Answering Brief",
       "eventCode": "ATAB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2539,8 +2447,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Answering Memoranda of Law",
       "eventCode": "ATAM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2549,8 +2456,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Answering Memorandum Brief",
       "eventCode": "ATMB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2559,8 +2465,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Memoranda of Law",
       "eventCode": "ATSM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2569,8 +2474,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Opening Brief",
       "eventCode": "ATOB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2579,8 +2483,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Opening Memorandum Brief",
       "eventCode": "ATOM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2589,8 +2492,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Sur-Reply Brief",
       "eventCode": "ATSB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2599,8 +2501,7 @@
     {
       "documentTitle": "Amendment to Simultaneous Sur-Reply Memorandum Brief",
       "eventCode": "ASSM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2609,8 +2510,7 @@
     {
       "documentTitle": "Simultaneous Answering Brief",
       "eventCode": "SIAB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2619,8 +2519,7 @@
     {
       "documentTitle": "Simultaneous Answering Memoranda of Law",
       "eventCode": "SIAM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2629,8 +2528,7 @@
     {
       "documentTitle": "Simultaneous Answering Memorandum Brief",
       "eventCode": "SIMB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2639,8 +2537,7 @@
     {
       "documentTitle": "Simultaneous Memoranda of Law",
       "eventCode": "SIML",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2649,8 +2546,7 @@
     {
       "documentTitle": "Simultaneous Opening Brief",
       "eventCode": "SIOB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2659,8 +2555,7 @@
     {
       "documentTitle": "Simultaneous Opening Memorandum Brief",
       "eventCode": "SIOM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2669,8 +2564,7 @@
     {
       "documentTitle": "Simultaneous Reply Brief",
       "eventCode": "SIRB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2679,8 +2573,7 @@
     {
       "documentTitle": "Simultaneous Supplemental Brief",
       "eventCode": "SSB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2689,8 +2582,7 @@
     {
       "documentTitle": "Simultaneous Sur-Reply Brief",
       "eventCode": "SISB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2699,8 +2591,7 @@
     {
       "documentTitle": "Simultaneous Sur-Reply Memorandum Brief",
       "eventCode": "SSRM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2709,8 +2600,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Answering Brief",
       "eventCode": "SSAB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2719,8 +2609,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Answering Memoranda of Law",
       "eventCode": "STAM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2729,8 +2618,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Answering Memorandum Brief",
       "eventCode": "SSAM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2739,8 +2627,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Memoranda of Law",
       "eventCode": "STSM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2749,8 +2636,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Opening Brief",
       "eventCode": "SSOB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2759,8 +2645,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Opening Memorandum Brief",
       "eventCode": "SSOM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2769,8 +2654,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Sur-Reply Brief",
       "eventCode": "SSSB",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2779,8 +2663,7 @@
     {
       "documentTitle": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
       "eventCode": "SSSM",
-      "categoryCurrent": "Simultaneous Brief",
-      "categoryUpdated": "Simultaneous Brief",
+      "category": "Simultaneous Brief",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2791,8 +2674,7 @@
     {
       "documentTitle": "Ownership Disclosure Statement",
       "eventCode": "DISC",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
+      "category": "Statement",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2801,8 +2683,7 @@
     {
       "documentTitle": "Statement [anything]",
       "eventCode": "STAT",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
+      "category": "Statement",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What is This Statement for?",
@@ -2811,8 +2692,7 @@
     {
       "documentTitle": "Statement of Redacted Information",
       "eventCode": "SORI",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
+      "category": "Statement",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2821,8 +2701,7 @@
     {
       "documentTitle": "Statement under Rule 212",
       "eventCode": "S212",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
+      "category": "Statement",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2831,8 +2710,7 @@
     {
       "documentTitle": "Statement under Rule 50(c)",
       "eventCode": "STAR",
-      "categoryCurrent": "Statement",
-      "categoryUpdated": "Statement",
+      "category": "Statement",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2841,20 +2719,9 @@
   ],
   "Stipulation": [
     {
-      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
-      "eventCode": "SSF",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
-      "scenario": "Nonstandard G",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "What Iteration is This Filing?"
-    },
-    {
       "documentTitle": "{First, Second, etc.] Stipulation of Facts",
       "eventCode": "STIP",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2863,8 +2730,7 @@
     {
       "documentTitle": "Settlement Stipulation",
       "eventCode": "SSTP",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2873,8 +2739,7 @@
     {
       "documentTitle": "Stipulation [anything]",
       "eventCode": "STP",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What is This Stipulation for?",
@@ -2883,8 +2748,7 @@
     {
       "documentTitle": "Stipulation as to the Administrative Record",
       "eventCode": "SADM",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2893,8 +2757,7 @@
     {
       "documentTitle": "Stipulation as to the Partial Administrative Record",
       "eventCode": "SPAR",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2903,8 +2766,7 @@
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
       "eventCode": "SPD",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2913,8 +2775,7 @@
     {
       "documentTitle": "Stipulation of Settled Issues",
       "eventCode": "STST",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2923,8 +2784,7 @@
     {
       "documentTitle": "Stipulation of Settlement",
       "eventCode": "STS",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2933,8 +2793,7 @@
     {
       "documentTitle": "Stipulation to Be Bound by [docket #]",
       "eventCode": "STBB",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Number",
@@ -2943,20 +2802,27 @@
     {
       "documentTitle": "Stipulation to Take Deposition of [Name]",
       "eventCode": "STPD",
-      "categoryCurrent": "Stipulation",
-      "categoryUpdated": "Stipulation",
+      "category": "Stipulation",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
       "ordinalField": ""
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplemental Stipulation of Facts",
+      "eventCode": "SSF",
+      "category": "Stipulation",
+      "scenario": "Nonstandard G",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     }
   ],
   "Supplement": [
     {
       "documentTitle": "[First, Second, etc.] Supplement to [Document Name]",
       "eventCode": "SUPM",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
+      "category": "Supplement",
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document is This a Supplement to?",
       "labelFreeText": "",
@@ -2965,30 +2831,18 @@
     {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
       "eventCode": "SPML",
-      "categoryCurrent": "Supplement",
-      "categoryUpdated": "Supplement",
+      "category": "Supplement",
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document is This Supplemental for?",
       "labelFreeText": "",
       "ordinalField": "What Iteration is This Filing?"
-    },
-    {
-      "documentTitle": "Supplemental Brief",
-      "eventCode": "SB",
-      "categoryCurrent": "Brief",
-      "categoryUpdated": "Supplement",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
     }
   ],
   "Supporting Document": [
     {
       "documentTitle": "Affidavit Of [Name] in Support Of [Document Name]",
       "eventCode": "AFF",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
+      "category": "Supporting Document",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "What Document is this Affidavit in Support Of?",
       "labelFreeText": "Who Signed This?",
@@ -2997,8 +2851,7 @@
     {
       "documentTitle": "Brief in Support of [Document Name]",
       "eventCode": "BRF",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
+      "category": "Supporting Document",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "What Document is This Brief in Support of?",
       "labelFreeText": "",
@@ -3007,8 +2860,7 @@
     {
       "documentTitle": "Declaration of [Name] in Support of [Document Name]",
       "eventCode": "DCL",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
+      "category": "Supporting Document",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "What Document is This Declaration in Support of?",
       "labelFreeText": "Who Signed This?",
@@ -3017,8 +2869,7 @@
     {
       "documentTitle": "Memorandum in Support of [Document Name]",
       "eventCode": "MISP",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
+      "category": "Supporting Document",
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "What Document is this Memorandum in Support of?",
       "labelFreeText": "",
@@ -3027,8 +2878,7 @@
     {
       "documentTitle": "Unsworn Declaration of [Name] under Penalty of Perjury in Support of [Document Name]",
       "eventCode": "USDL",
-      "categoryCurrent": "Supporting Document",
-      "categoryUpdated": "Supporting Document",
+      "category": "Supporting Document",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document is This Declaration in Support of?",
       "labelFreeText": "Who Signed This?",
