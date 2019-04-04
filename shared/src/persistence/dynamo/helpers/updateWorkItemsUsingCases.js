@@ -1,6 +1,6 @@
-const { uniq } = require('lodash');
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
+const { uniq } = require('lodash');
 
 exports.updateWorkItemsUsingCases = async ({
   applicationContext,

@@ -1,7 +1,6 @@
-const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
 
 describe('addWorkItemToSectionInbox', () => {
   let getCurrentUserStub;

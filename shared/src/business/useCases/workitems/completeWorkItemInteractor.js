@@ -1,9 +1,9 @@
-const { WorkItem } = require('../../entities/WorkItem');
 const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * completeWorkItem

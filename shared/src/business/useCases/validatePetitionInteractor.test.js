@@ -1,7 +1,7 @@
-const { validatePetition } = require('./validatePetitionInteractor');
-const { Petition } = require('../entities/Petition');
-const { omit } = require('lodash');
 const moment = require('moment');
+const { omit } = require('lodash');
+const { Petition } = require('../entities/Petition');
+const { validatePetition } = require('./validatePetitionInteractor');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {

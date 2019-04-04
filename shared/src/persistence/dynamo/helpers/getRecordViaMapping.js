@@ -1,5 +1,5 @@
-const { stripInternalKeys } = require('./stripInternalKeys');
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getRecordViaMapping = async ({
   applicationContext,

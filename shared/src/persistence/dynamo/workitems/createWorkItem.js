@@ -1,7 +1,7 @@
-const { put } = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { put } = require('../../dynamodbClientService');
 
 /**
  * createWorkItem

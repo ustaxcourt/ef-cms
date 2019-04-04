@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
-const { getSectionForRole } = require('../../../business/entities/WorkQueue');
 const client = require('../../dynamodbClientService');
+const { getSectionForRole } = require('../../../business/entities/WorkQueue');
 
 exports.createUser = async ({ user, applicationContext }) => {
   const cognito = new AWS.CognitoIdentityServiceProvider({
