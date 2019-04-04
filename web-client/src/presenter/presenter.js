@@ -19,6 +19,7 @@ import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionM
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
+import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -36,6 +37,7 @@ import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
+import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -118,6 +120,7 @@ export const presenter = {
     dismissCreateMessageModalSequence,
     dismissModalSequence,
     editSelectedDocumentSequence,
+    editSelectedSecondaryDocumentSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -134,6 +137,7 @@ export const presenter = {
     runBatchProcessSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
+    selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
     setFocusedWorkItemSequence,
