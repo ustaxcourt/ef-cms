@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { flattenDeep } from 'lodash';
+import { state } from 'cerebral';
 
 /**
  * runs through the props.errors and sets the state.alertError based on which fields failed validation which is used for

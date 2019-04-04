@@ -1,9 +1,9 @@
-import React from 'react';
 import { Container } from '@cerebral/react';
-import App from 'cerebral';
-import { cerebralBindSimpleSetStateSequence } from '../../presenter/sequences/cerebralBindSimpleSetStateSequence';
-import TestRenderer, { act } from 'react-test-renderer';
 import { Tab, Tabs } from './Tabs';
+import { cerebralBindSimpleSetStateSequence } from '../../presenter/sequences/cerebralBindSimpleSetStateSequence';
+import App from 'cerebral';
+import React from 'react';
+import TestRenderer, { act } from 'react-test-renderer';
 
 describe('TabsComponent', () => {
   it('should show the binded item', () => {

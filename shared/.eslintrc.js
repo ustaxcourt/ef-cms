@@ -6,26 +6,17 @@ module.exports = {
   ],
   plugins: ['prettier', 'jsdoc', 'sort-keys-fix', 'sort-requires', 'jest'],
   rules: {
-    'sort-requires/sort-requires': 2,
+    'arrow-parens': ['error', 'as-needed'],
+    'jsdoc/check-types': 1,
+    'jsdoc/require-param-name': 1,
+    'jsdoc/require-param': 1,
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'error',
-    'arrow-parens': ['error', 'as-needed'],
-    'jsdoc/require-param': 1,
-    'jsdoc/require-param-name': 1,
-    'jsdoc/check-types': 1,
+    'sort-requires/sort-requires': 2,
     'sort-keys-fix/sort-keys-fix': [
-      'warn',
-      'asc',
-      { caseSensitive: false, natural: true },
-    ],
-    'sort-imports': [
       'error',
-      {
-        ignoreCase: false,
-        ignoreDeclarationSort: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-      },
+      'asc',
+      { caseSensitive: true, natural: true },
     ],
   },
   env: {

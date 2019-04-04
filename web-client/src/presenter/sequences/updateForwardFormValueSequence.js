@@ -1,13 +1,13 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { set } from 'cerebral/factories';
+import { clearSectionAction } from '../actions/ForwardForm/clearSectionAction';
+import { clearUsersAction } from '../actions/clearUsersAction';
+import { getUsersInSectionSequence } from './getUsersInSectionSequence';
+import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
-import { clearUsersAction } from '../actions/clearUsersAction';
+import { set } from 'cerebral/factories';
 import { setForwardFormValueAction } from '../actions/ForwardForm/setForwardFormValueAction';
-import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
 import { setSectionAction } from '../actions/ForwardForm/setSectionAction';
-import { clearSectionAction } from '../actions/ForwardForm/clearSectionAction';
-import { getUsersInSectionSequence } from './getUsersInSectionSequence';
 
 export const updateForwardFormValueSequence = [
   runKeyPathAction,
