@@ -6,9 +6,9 @@
       "categoryCurrent": "Application",
       "categoryUpdated": "Application",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Application for Waiver of Filing Fee and Affidavit",
@@ -16,9 +16,9 @@
       "categoryCurrent": "Application",
       "categoryUpdated": "Application",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Application to Take Deposition of [Name]",
@@ -26,9 +26,9 @@
       "categoryCurrent": "Application",
       "categoryUpdated": "Application",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Name",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Name",
+      "ordinalField": ""
     }
   ],
   "Computation": [
@@ -38,9 +38,9 @@
       "categoryCurrent": "Computation",
       "categoryUpdated": "Computation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Revised Computation",
@@ -48,9 +48,9 @@
       "categoryCurrent": "Computation",
       "categoryUpdated": "Computation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Decision": [
@@ -60,9 +60,9 @@
       "categoryCurrent": "Not currently efiled",
       "categoryUpdated": "Decision",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Proposed Stipulated Decision",
@@ -70,9 +70,9 @@
       "categoryCurrent": "Decision",
       "categoryUpdated": "Decision",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Miscellaneous": [
@@ -82,9 +82,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard F",
-      "label-previous": "Which Document Are You Amending?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "Which Document Are You Amending?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [Document Name}",
@@ -92,9 +92,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard F",
-      "label-previous": "Which Document Are You Amending?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "Which Document Are You Amending?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "Administrative Record",
@@ -102,9 +102,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Certificate of Service Of [Document Name]",
@@ -112,9 +112,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard A",
-      "label-previous": "What Document is this Certificate of Service for?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is this Certificate of Service for?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
@@ -122,9 +122,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Certificate of Service [Document Name] [Date]",
@@ -132,9 +132,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard D",
-      "label-previous": "What Document is this Certificate of Service for?",
-      "label-free": "Date of Service",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is this Certificate of Service for?",
+      "labelFreeText": "Date of Service",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Civil Penalty Approval Form",
@@ -142,9 +142,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Designation of Counsel to Receive Service",
@@ -152,9 +152,9 @@
       "categoryCurrent": "",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Exhibit(s)",
@@ -162,9 +162,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Memorandum",
@@ -172,9 +172,9 @@
       "categoryCurrent": "Memorandum",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Partial Administrative Record",
@@ -182,9 +182,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Ratification [anything]",
@@ -192,9 +192,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "What Are You Ratifying?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Are You Ratifying?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Redacted [Document Name]",
@@ -202,9 +202,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Redacting?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Redacting?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Report",
@@ -212,9 +212,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Status Report",
@@ -222,9 +222,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Unredacted [Document Name]",
@@ -232,9 +232,9 @@
       "categoryCurrent": "Miscellaneous",
       "categoryUpdated": "Miscellaneous",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Has Been Unredacted?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Has Been Unredacted?",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Motion": [
@@ -244,9 +244,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Extension of Time",
@@ -254,9 +254,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
@@ -264,9 +264,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Prosecution",
@@ -274,9 +274,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Summary Judgment",
@@ -284,9 +284,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Change or Correct Caption",
@@ -294,9 +294,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for a New Trial",
@@ -304,9 +304,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for an Order under Federal Rule of Evidence 502(d)",
@@ -314,9 +314,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for an Order under Model Rule of Professional Conduct 4.2",
@@ -324,9 +324,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Appointment of Mediator",
@@ -334,9 +334,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Assignment of Judge",
@@ -344,9 +344,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Audio of Trial Proceeding(s)",
@@ -354,9 +354,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal",
@@ -364,9 +364,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Default and Dismissal",
@@ -374,9 +374,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Entry of Decision",
@@ -384,9 +384,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
@@ -394,9 +394,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156",
@@ -404,9 +404,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for in Camera Review",
@@ -414,9 +414,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for International Judicial Assistance",
@@ -424,9 +424,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Judgment on the Pleadings",
@@ -434,9 +434,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)",
@@ -444,9 +444,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Leave to File [Document Name]",
@@ -454,9 +454,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard H",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Leave to File Out of Time [Document Name]",
@@ -464,9 +464,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard H",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Leave to Serve Additional Interrogatories",
@@ -474,9 +474,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Leave to Use Electronic Equipment",
@@ -484,9 +484,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for More Definite Statement Pursuant to Rule 51",
@@ -494,9 +494,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Non-Binding Mediation",
@@ -504,9 +504,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Oral Argument",
@@ -514,9 +514,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Order Fixing Amount of an Appeal Bond",
@@ -524,9 +524,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Order to Release the Amount of an Appeal Bond",
@@ -534,9 +534,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record",
@@ -544,9 +544,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case",
@@ -554,9 +554,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)",
@@ -564,9 +564,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Partial Summary Judgment",
@@ -574,9 +574,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Preliminary Injunction",
@@ -584,9 +584,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Pretrial Conference",
@@ -594,9 +594,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Protective Order Pursuant to Rule 103",
@@ -604,9 +604,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Reasonable Litigation or Administrative Costs",
@@ -614,9 +614,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161",
@@ -624,9 +624,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Reconsideration of Order",
@@ -634,9 +634,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Recusal of Judge",
@@ -644,9 +644,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
@@ -654,9 +654,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of a Transcript",
@@ -664,9 +664,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of an Interpreter",
@@ -674,9 +674,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Voluntary Binding Arbitration",
@@ -684,9 +684,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion for Writ of Habeas Corpus Ad Testificandum",
@@ -694,9 +694,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion in Limine",
@@ -704,9 +704,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Add Lien or Levy Designation",
@@ -714,9 +714,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Add Small Tax case Designation",
@@ -724,9 +724,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Amend Order",
@@ -734,9 +734,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Appoint an Interpreter Pursuant to Rule 143(f)",
@@ -744,9 +744,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Appoint New Tax Matters Partner",
@@ -754,9 +754,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Appoint Tax Matters Partner",
@@ -764,9 +764,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Authorize Proposed Sale of Seized Property",
@@ -774,9 +774,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Be Excused from Appearing at the Trial Session",
@@ -784,9 +784,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Be Recognized as Next Friend",
@@ -794,9 +794,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Bifurcate",
@@ -804,9 +804,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Calendar",
@@ -814,9 +814,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Calendar and Consolidate Docket Numbers [docket numbers]",
@@ -824,9 +824,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Docket Numbers (separate with comma)",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Docket Numbers (separate with comma)",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Calendar in the Electronic (North) Courtroom",
@@ -834,9 +834,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Certify for Interlocutory Appeal",
@@ -844,9 +844,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Change or Correct Docket Entry",
@@ -854,9 +854,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Change Place of Submission of Declaratory Judgment Case to [Place]",
@@ -864,9 +864,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard E",
-      "label-previous": "",
-      "label-free": "Requested Place of Submission of Declatory Judgement",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Requested Place of Submission of Declatory Judgement",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Change Place of Trial [Place]",
@@ -874,9 +874,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard E",
-      "label-previous": "",
-      "label-free": "Requested Trial Location",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Requested Trial Location",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Change Service Method",
@@ -884,9 +884,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Clarify Order",
@@ -894,9 +894,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Close on Ground of Duplication",
@@ -904,9 +904,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Compel Discovery",
@@ -914,9 +914,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Compel Production of Documents",
@@ -924,9 +924,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Compel Responses to Interrogatories",
@@ -934,9 +934,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Compel the Taking of Deposition",
@@ -944,9 +944,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Conform the Pleadings to the Proof",
@@ -954,9 +954,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Consolidate Docket Numbers [docket numbers]",
@@ -964,9 +964,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Docket Numbers to Be Consolidated (separate with comma)",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Docket Numbers to Be Consolidated (separate with comma)",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Correct and Certify Record on Appeal",
@@ -974,9 +974,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Correct Clerical Order",
@@ -984,9 +984,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Correct Transcript",
@@ -994,9 +994,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Depose Pursuant to Rule 74",
@@ -1004,9 +1004,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Determine the Tax Matters Partner",
@@ -1014,9 +1014,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss",
@@ -1024,9 +1024,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss for Failure to Properly Prosecute",
@@ -1034,9 +1034,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
@@ -1044,9 +1044,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
@@ -1054,9 +1054,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Person, Notice, or Year",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Person, Notice, or Year",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Dismiss on Grounds of Mootness",
@@ -1064,9 +1064,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Disqualify Counsel",
@@ -1074,9 +1074,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260",
@@ -1084,9 +1084,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Enforce Subpoena",
@@ -1094,9 +1094,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Extend Time to Move or File Answer",
@@ -1104,9 +1104,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Impose a Penalty",
@@ -1114,9 +1114,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Impose Sanctions",
@@ -1124,9 +1124,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
@@ -1134,9 +1134,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Modify Order",
@@ -1144,9 +1144,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
@@ -1154,9 +1154,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Permit Levy",
@@ -1164,9 +1164,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Preclude",
@@ -1174,9 +1174,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Quash or Modify Subpoena",
@@ -1184,9 +1184,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Redetermine Interest Pursuant to Rule 261",
@@ -1194,9 +1194,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Remand",
@@ -1204,9 +1204,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Remove Lien/Levy Designation",
@@ -1214,9 +1214,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Remove Small Tax Case Designation",
@@ -1224,9 +1224,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Remove Tax Matters Partner",
@@ -1234,9 +1234,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Reopen the Record",
@@ -1244,9 +1244,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)",
@@ -1254,9 +1254,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Restore Case to the General Docket",
@@ -1264,9 +1264,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected",
@@ -1274,9 +1274,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157",
@@ -1284,9 +1284,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "MOTION TO REVIEW THE SUFFICIENCY OF ANSWERS OR OBJECTIONS TO REQUEST FOR ADMISSIONS",
@@ -1294,9 +1294,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Seal Case",
@@ -1304,9 +1304,9 @@
       "categoryCurrent": "",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Seal Documents",
@@ -1314,9 +1314,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Set for a Time & Date Certain",
@@ -1324,9 +1324,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Set Pretrial Scheduling Order",
@@ -1334,9 +1334,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Sever",
@@ -1344,9 +1344,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Shift the Burden of Proof",
@@ -1354,9 +1354,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Shorten the Time",
@@ -1364,9 +1364,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Stay Proceedings",
@@ -1374,9 +1374,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Stay Proposed Sale of Seized Property",
@@ -1384,9 +1384,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Strike",
@@ -1394,9 +1394,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Submit Case Pursuant to Rule 122",
@@ -1404,9 +1404,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Substitute Parties and Change Caption",
@@ -1414,9 +1414,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Substitute Trial Exhibit(s)",
@@ -1424,9 +1424,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Supplement the Record",
@@ -1434,9 +1434,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Suppress Evidence",
@@ -1444,9 +1444,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Take Deposition Pursuant to Rule 74(c)(3)",
@@ -1454,9 +1454,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Take Judicial Notice",
@@ -1464,9 +1464,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Vacate",
@@ -1474,9 +1474,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Vacate or Revise Pursuant to Rule 162",
@@ -1484,9 +1484,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Withdraw",
@@ -1494,9 +1494,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Withdraw Counsel",
@@ -1504,9 +1504,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
@@ -1514,9 +1514,9 @@
       "categoryCurrent": "Motion",
       "categoryUpdated": "Motion",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Notice": [
@@ -1526,9 +1526,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Change of Address",
@@ -1536,9 +1536,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Change of Address and Telephone Number",
@@ -1546,9 +1546,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Change of Telephone Number",
@@ -1556,9 +1556,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Clarification of Tax Matters Partner",
@@ -1566,9 +1566,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Concession",
@@ -1576,9 +1576,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)",
@@ -1586,9 +1586,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Death of Counsel",
@@ -1596,9 +1596,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Election to Intervene",
@@ -1606,9 +1606,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Election to Participate",
@@ -1616,9 +1616,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Filing of Petition and Right to Intervene",
@@ -1626,9 +1626,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Filing of the Administrative Record",
@@ -1636,9 +1636,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Identification of Tax Matters Partner",
@@ -1646,9 +1646,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Intent Not to File [anything]",
@@ -1656,9 +1656,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "What Do You Intend Not to File?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Do You Intend Not to File?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Intervention",
@@ -1666,9 +1666,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Issue Concerning Foreign Law",
@@ -1676,9 +1676,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Jeopardy Assessment",
@@ -1686,9 +1686,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Judicial Ruling",
@@ -1696,9 +1696,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of No Objection to [Document Name[",
@@ -1706,9 +1706,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Not Objecting to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Not Objecting to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Objection to [Document Name]",
@@ -1716,9 +1716,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Objecting to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Objecting to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Partial Abatement of Jeopardy Assessment",
@@ -1726,9 +1726,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Proceeding in Bankruptcy",
@@ -1736,9 +1736,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Relevant Judicial Decisions",
@@ -1746,9 +1746,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Settlement Agreement Pursuant to Rule 248(c)(1)",
@@ -1756,9 +1756,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Small Tax Case Election",
@@ -1766,9 +1766,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Supplemental Authority",
@@ -1776,9 +1776,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Telephone Number",
@@ -1786,9 +1786,9 @@
       "categoryCurrent": "",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Termination Assessment",
@@ -1796,9 +1796,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Notice of Unavailability",
@@ -1806,9 +1806,9 @@
       "categoryCurrent": "Notice",
       "categoryUpdated": "Notice",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Opposition or Objection": [
@@ -1818,9 +1818,9 @@
       "categoryCurrent": "Objection",
       "categoryUpdated": "Opposition or Objection",
       "scenario": "Nonstandard A",
-      "label-previous": "What Document Are You Not Objecting?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document Are You Not Objecting?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Objection to [Document Name}",
@@ -1828,9 +1828,9 @@
       "categoryCurrent": "Objection",
       "categoryUpdated": "Opposition or Objection",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Objecting to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Objecting to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Opposition to [Document Name]",
@@ -1838,9 +1838,9 @@
       "categoryCurrent": "Opposition",
       "categoryUpdated": "Opposition or Objection",
       "scenario": "Nonstandard A",
-      "label-previous": "Select the Document that is Being Opposed",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Select the Document that is Being Opposed",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Petition": [
@@ -1850,9 +1850,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Amended Petition",
@@ -1860,9 +1860,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Petition",
@@ -1870,9 +1870,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Second Amended Petition",
@@ -1880,9 +1880,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Third Amended Petition",
@@ -1890,9 +1890,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Redacted Petition Filed",
@@ -1900,9 +1900,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Second Amended Petition",
@@ -1910,9 +1910,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Second Amendment to Petition",
@@ -1920,9 +1920,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Petition",
@@ -1930,9 +1930,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Third Amended Petition",
@@ -1940,9 +1940,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Third Amendment to Petition",
@@ -1950,9 +1950,9 @@
       "categoryCurrent": "Petition",
       "categoryUpdated": "Petition",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Pretrial Memorandum": [
@@ -1962,9 +1962,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Pretrial Memorandum",
@@ -1972,9 +1972,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Prehearing Memorandum",
@@ -1982,9 +1982,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Pretrial Memorandum",
@@ -1992,9 +1992,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Prehearing Memorandum",
@@ -2002,9 +2002,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Pretrial Memorandum",
@@ -2012,9 +2012,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Second Supplement to Pretrial Memorandum",
@@ -2022,9 +2022,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Prehearing Memorandum",
@@ -2032,9 +2032,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Pretrial Memorandum",
@@ -2042,9 +2042,9 @@
       "categoryCurrent": "Pretrial Memorandum",
       "categoryUpdated": "Pretrial Memorandum",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Reply": [
@@ -2054,9 +2054,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Reply to Answer",
@@ -2064,9 +2064,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to [Document Name]",
@@ -2074,9 +2074,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Replying to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Replying to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Amendment to Answer",
@@ -2084,9 +2084,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer",
@@ -2094,9 +2094,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Amended Petition",
@@ -2104,9 +2104,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Amendment to Petition",
@@ -2114,9 +2114,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Petition, as Amended",
@@ -2124,9 +2124,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Second Amended Petition",
@@ -2134,9 +2134,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Supplement to Petition",
@@ -2144,9 +2144,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Reply to Answer to Third Amended Petition",
@@ -2154,9 +2154,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Sur-Reply to [Document Name]",
@@ -2164,9 +2164,9 @@
       "categoryCurrent": "Reply",
       "categoryUpdated": "Reply",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Replying to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Replying to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Request": [
@@ -2176,9 +2176,9 @@
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Nonstandard G",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "Request for Judicial Notice",
@@ -2186,9 +2186,9 @@
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Request for Place of Submission of Declaratory Judgment Case",
@@ -2196,9 +2196,9 @@
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Request for Place of Trial [Place]",
@@ -2206,9 +2206,9 @@
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Nonstandard E",
-      "label-previous": "",
-      "label-free": "Requested Trial Location",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Requested Trial Location",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Request for Pretrial Conference",
@@ -2216,9 +2216,9 @@
       "categoryCurrent": "Request",
       "categoryUpdated": "Request",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Response": [
@@ -2228,9 +2228,9 @@
       "categoryCurrent": "Response",
       "categoryUpdated": "Response",
       "scenario": "Nonstandard A",
-      "label-previous": "Which Document Are You Responding to?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document Are You Responding to?",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Seriatum Brief": [
@@ -2240,9 +2240,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Seriatim Opening Brief",
@@ -2250,9 +2250,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Seriatim Reply Brief",
@@ -2260,9 +2260,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Seriatim Sur-Reply Brief",
@@ -2270,9 +2270,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Seriatim Sur-Reply Memorandum Brief",
@@ -2280,9 +2280,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Seriatim Answering Brief",
@@ -2290,9 +2290,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Seriatim Opening Brief",
@@ -2300,9 +2300,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Brief",
@@ -2310,9 +2310,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Memorandum Brief",
@@ -2320,9 +2320,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Answering Brief",
@@ -2330,9 +2330,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Answering Memorandum Brief",
@@ -2340,9 +2340,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Opening Brief",
@@ -2350,9 +2350,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Opening Memorandum Brief",
@@ -2360,9 +2360,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Reply Brief",
@@ -2370,9 +2370,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Reply Memorandum Brief",
@@ -2380,9 +2380,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Sur-Reply Brief",
@@ -2390,9 +2390,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Seriatim Sur-Reply Memorandum Brief",
@@ -2400,9 +2400,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Seriatim Answering Brief",
@@ -2410,9 +2410,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Seriatim Opening Brief",
@@ -2420,9 +2420,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
@@ -2430,9 +2430,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
@@ -2440,9 +2440,9 @@
       "categoryCurrent": "Seriatum Brief",
       "categoryUpdated": "Seriatum Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Simultaneous Brief": [
@@ -2452,9 +2452,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Answering Memoranda of Law",
@@ -2462,9 +2462,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Answering Memorandum Brief",
@@ -2472,9 +2472,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Memoranda of Law",
@@ -2482,9 +2482,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Opening Brief",
@@ -2492,9 +2492,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Opening Memorandum Brief",
@@ -2502,9 +2502,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Sur-Reply Brief",
@@ -2512,9 +2512,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Simultaneous Sur-Reply Memorandum Brief",
@@ -2522,9 +2522,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Answering Brief",
@@ -2532,9 +2532,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Answering Memoranda of Law",
@@ -2542,9 +2542,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Answering Memorandum Brief",
@@ -2552,9 +2552,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Memoranda of Law",
@@ -2562,9 +2562,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Opening Brief",
@@ -2572,9 +2572,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Opening Memorandum Brief",
@@ -2582,9 +2582,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Sur-Reply Brief",
@@ -2592,9 +2592,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amendment to Simultaneous Sur-Reply Memorandum Brief",
@@ -2602,9 +2602,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Answering Brief",
@@ -2612,9 +2612,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Answering Memoranda of Law",
@@ -2622,9 +2622,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Answering Memorandum Brief",
@@ -2632,9 +2632,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Memoranda of Law",
@@ -2642,9 +2642,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Opening Brief",
@@ -2652,9 +2652,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Opening Memorandum Brief",
@@ -2662,9 +2662,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Reply Brief",
@@ -2672,9 +2672,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Supplemental Brief",
@@ -2682,9 +2682,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Sur-Reply Brief",
@@ -2692,9 +2692,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Simultaneous Sur-Reply Memorandum Brief",
@@ -2702,9 +2702,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Answering Brief",
@@ -2712,9 +2712,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Answering Memoranda of Law",
@@ -2722,9 +2722,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Answering Memorandum Brief",
@@ -2732,9 +2732,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Memoranda of Law",
@@ -2742,9 +2742,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Opening Brief",
@@ -2752,9 +2752,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Opening Memorandum Brief",
@@ -2762,9 +2762,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Sur-Reply Brief",
@@ -2772,9 +2772,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Supplement to Simultaneous Sur-Reply Memorandum Brief",
@@ -2782,9 +2782,9 @@
       "categoryCurrent": "Simultaneous Brief",
       "categoryUpdated": "Simultaneous Brief",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Statement": [
@@ -2794,9 +2794,9 @@
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Statement [anything]",
@@ -2804,9 +2804,9 @@
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "What is This Statement for?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is This Statement for?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Statement of Redacted Information",
@@ -2814,9 +2814,9 @@
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Statement under Rule 212",
@@ -2824,9 +2824,9 @@
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Statement under Rule 50(c)",
@@ -2834,9 +2834,9 @@
       "categoryCurrent": "Statement",
       "categoryUpdated": "Statement",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Stipulation": [
@@ -2846,9 +2846,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard G",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "{First, Second, etc.] Stipulation of Facts",
@@ -2856,9 +2856,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard G",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "Settlement Stipulation",
@@ -2866,9 +2866,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation [anything]",
@@ -2876,9 +2876,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "What is This Stipulation for?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is This Stipulation for?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation as to the Administrative Record",
@@ -2886,9 +2886,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation as to the Partial Administrative Record",
@@ -2896,9 +2896,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
@@ -2906,9 +2906,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation of Settled Issues",
@@ -2916,9 +2916,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation of Settlement",
@@ -2926,9 +2926,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation to Be Bound by [docket #]",
@@ -2936,9 +2936,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Docket Number",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Docket Number",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation to Take Deposition of [Name]",
@@ -2946,9 +2946,9 @@
       "categoryCurrent": "Stipulation",
       "categoryUpdated": "Stipulation",
       "scenario": "Nonstandard B",
-      "label-previous": "",
-      "label-free": "Name",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "Name",
+      "ordinalField": ""
     }
   ],
   "Supplement": [
@@ -2958,9 +2958,9 @@
       "categoryCurrent": "Supplement",
       "categoryUpdated": "Supplement",
       "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This a Supplement to?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "Which Document is This a Supplement to?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
@@ -2968,9 +2968,9 @@
       "categoryCurrent": "Supplement",
       "categoryUpdated": "Supplement",
       "scenario": "Nonstandard F",
-      "label-previous": "Which Document is This Supplemental for?",
-      "label-free": "",
-      "ordinal-field": "What Iteration is This Filing?"
+      "labelPreviousDocument": "Which Document is This Supplemental for?",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "Supplemental Brief",
@@ -2978,9 +2978,9 @@
       "categoryCurrent": "Brief",
       "categoryUpdated": "Supplement",
       "scenario": "Standard",
-      "label-previous": "",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Supporting Document": [
@@ -2990,9 +2990,9 @@
       "categoryCurrent": "Supporting Document",
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard C",
-      "label-previous": "What Document is this Affidavit in Support Of?",
-      "label-free": "Who Signed This?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is this Affidavit in Support Of?",
+      "labelFreeText": "Who Signed This?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Brief in Support of [Document Name]",
@@ -3000,9 +3000,9 @@
       "categoryCurrent": "Supporting Document",
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard A",
-      "label-previous": "What Document is This Brief in Support of?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is This Brief in Support of?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Declaration of [Name] in Support of [Document Name]",
@@ -3010,9 +3010,9 @@
       "categoryCurrent": "Supporting Document",
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard C",
-      "label-previous": "What Document is This Declaration in Support of?",
-      "label-free": "Who Signed This?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is This Declaration in Support of?",
+      "labelFreeText": "Who Signed This?",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Memorandum in Support of [Document Name]",
@@ -3020,9 +3020,9 @@
       "categoryCurrent": "Supporting Document",
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard A",
-      "label-previous": "What Document is this Memorandum in Support of?",
-      "label-free": "",
-      "ordinal-field": ""
+      "labelPreviousDocument": "What Document is this Memorandum in Support of?",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Unsworn Declaration of [Name] under Penalty of Perjury in Support of [Document Name]",
@@ -3030,9 +3030,9 @@
       "categoryCurrent": "Supporting Document",
       "categoryUpdated": "Supporting Document",
       "scenario": "Nonstandard C",
-      "label-previous": "Which Document is This Declaration in Support of?",
-      "label-free": "Who Signed This?",
-      "ordinal-field": ""
+      "labelPreviousDocument": "Which Document is This Declaration in Support of?",
+      "labelFreeText": "Who Signed This?",
+      "ordinalField": ""
     }
   ]
 }
