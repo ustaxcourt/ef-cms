@@ -90,8 +90,8 @@ describe('dynamodbClientService', function() {
   describe('put', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
-        applicationContext,
         Item: MOCK_ITEM,
+        applicationContext,
       });
       expect(result).toEqual(MOCK_ITEM);
     });

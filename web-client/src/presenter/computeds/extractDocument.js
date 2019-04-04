@@ -1,6 +1,6 @@
-import { state } from 'cerebral';
 import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
+import { state } from 'cerebral';
 
 export const extractedDocument = get => {
   const caseDetail = get(state.caseDetail);

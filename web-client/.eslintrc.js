@@ -1,18 +1,19 @@
 module.exports = {
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
     'plugin:prettier/recommended',
+    'plugin:react/recommended',
     'prettier/react',
     'prettier/standard',
   ],
   plugins: [
-    'prettier',
-    'react',
-    'jsx-a11y',
     'cypress',
+    'eslint-plugin-sort-imports-es6-autofix',
     'jest',
     'jsdoc',
+    'jsx-a11y',
+    'prettier',
+    'react',
     'sort-keys-fix',
   ],
   rules: {
@@ -49,19 +50,28 @@ module.exports = {
         allowChildren: false,
       },
     ],
-    'sort-imports': [
-      'warn',
+    // 'sort-imports': [
+    //   'warn',
+    //   {
+    //     ignoreCase: false,
+    //     ignoreDeclarationSort: false,
+    //     ignoreMemberSort: false,
+    //     memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+    //   },
+    // ],
+    'sort-imports-es6-autofix/sort-imports-es6': [
+      2,
       {
         ignoreCase: false,
-        ignoreDeclarationSort: false,
         ignoreMemberSort: false,
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },
     ],
+
     'sort-keys-fix/sort-keys-fix': [
-      'warn',
+      'error',
       'asc',
-      { caseSensitive: false, natural: true },
+      { caseSensitive: true, natural: true },
     ],
   },
   settings: {
@@ -78,7 +88,7 @@ module.exports = {
   },
   parserOptions: {
     ecmaVersion: 9,
-    sourceType: 'module',
     jsx: true,
+    sourceType: 'module',
   },
 };

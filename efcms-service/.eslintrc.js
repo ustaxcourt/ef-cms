@@ -31,9 +31,9 @@ module.exports = {
       },
     ],
     'sort-keys-fix/sort-keys-fix': [
-      'warn',
+      'error',
       'asc',
-      { caseSensitive: false, natural: true },
+      { caseSensitive: true, natural: true },
     ],
   },
   env: {

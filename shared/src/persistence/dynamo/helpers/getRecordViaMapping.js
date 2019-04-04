@@ -8,7 +8,6 @@ exports.getRecordViaMapping = async ({
   isVersioned = false,
 }) => {
   const [mapping] = await client.query({
-    applicationContext,
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -16,6 +15,7 @@ exports.getRecordViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    applicationContext,
   });
 
   if (!mapping) return null;
@@ -23,11 +23,11 @@ exports.getRecordViaMapping = async ({
   const sk = mapping.sk;
 
   const results = await client.get({
-    applicationContext,
     Key: {
       pk: sk,
       sk: isVersioned ? '0' : sk,
     },
+    applicationContext,
   });
 
   return stripInternalKeys(results);
