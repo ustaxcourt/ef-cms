@@ -38,18 +38,18 @@ describe('putWorkItemInOutbox', () => {
       },
     });
     expect(client.put.getCall(0).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
       Item: {
         pk: '1805d1ab-18d0-43ec-bafb-654e83405416|outbox',
         workItemId: '123',
       },
+      applicationContext: { environment: { stage: 'dev' } },
     });
     expect(client.put.getCall(1).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
       Item: {
         pk: 'docket|outbox',
         workItemId: '123',
       },
+      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });

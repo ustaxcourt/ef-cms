@@ -8,7 +8,6 @@ exports.getRecordsViaMapping = async ({
   isVersioned = false,
 }) => {
   const mapping = await client.query({
-    applicationContext,
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -16,6 +15,7 @@ exports.getRecordsViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    applicationContext,
   });
 
   const ids = mapping.map(metadata => metadata.sk);

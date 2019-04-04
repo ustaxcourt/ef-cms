@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { fileRespondentDocumentAction } from '../actions/fileRespondentDocumentAction';

@@ -2,15 +2,15 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearForwardFormAction } from '../actions/ForwardForm/clearForwardFormAction';
 import { forwardWorkItemAction } from '../actions/forwardWorkItemAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
-import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
 import { setForwardMessageValidationErrorsAction } from '../actions/setForwardMessageValidationErrorsAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
 import { startForwardValidationAction } from '../actions/ForwardForm/startForwardValidationAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
+import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
 
 export const submitForwardSequence = [
   setFormSubmittingAction,

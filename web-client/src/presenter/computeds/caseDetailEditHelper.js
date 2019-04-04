@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { showContactsHelper } from '../computeds/showContactsHelper';
+import { state } from 'cerebral';
 
 /**
  * gets the case detail view options based on partyType

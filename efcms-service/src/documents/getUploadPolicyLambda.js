@@ -1,5 +1,5 @@
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
+const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for getting the upload policy which is needed for users to upload directly to S3 via the UI
