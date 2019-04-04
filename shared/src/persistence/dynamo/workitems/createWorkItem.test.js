@@ -1,6 +1,5 @@
-const { createWorkItem } = require('./createWorkItem');
-
 const sinon = require('sinon');
+const { createWorkItem } = require('./createWorkItem');
 
 describe('createWorkItem', () => {
   let applicationContext;

@@ -1,8 +1,10 @@
+const sinon = require('sinon');
 const {
-  sendPetitionToIRSHoldingQueue,
-} = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-
-const { createCase } = require('../useCases/createCaseInteractor');
+  assignWorkItems,
+} = require('../useCases/workitems/assignWorkItemsInteractor');
+const {
+  createTestApplicationContext,
+} = require('./createTestApplicationContext');
 const {
   createWorkItem,
 } = require('../useCases/workitems/createWorkItemInteractor');
@@ -16,20 +18,15 @@ const {
   getWorkItemsBySection,
 } = require('../useCases/workitems/getWorkItemsBySectionInteractor');
 const {
-  assignWorkItems,
-} = require('../useCases/workitems/assignWorkItemsInteractor');
-const {
   getWorkItemsForUser,
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
-
-const sinon = require('sinon');
-const DATE = '2019-03-01T22:54:06.000Z';
-
+const {
+  sendPetitionToIRSHoldingQueue,
+} = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
+const { createCase } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
 
-const {
-  createTestApplicationContext,
-} = require('./createTestApplicationContext');
+const DATE = '2019-03-01T22:54:06.000Z';
 
 describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
   let applicationContext;

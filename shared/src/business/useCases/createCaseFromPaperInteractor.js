@@ -1,13 +1,12 @@
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
-const { WorkItem } = require('../entities/WorkItem');
-
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentWithWorkItemToCase = (
   user,

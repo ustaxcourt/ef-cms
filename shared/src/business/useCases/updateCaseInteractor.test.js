@@ -1,6 +1,6 @@
-const { updateCase } = require('./updateCaseInteractor');
-const { omit } = require('lodash');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+const { omit } = require('lodash');
+const { updateCase } = require('./updateCaseInteractor');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -1,6 +1,6 @@
 const { getCasesByUser } = require('./getCasesByUserInteractor');
-const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { omit } = require('lodash');
 
 describe('Send petition to IRS', () => {
   let applicationContext;

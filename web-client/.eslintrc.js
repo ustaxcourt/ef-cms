@@ -53,7 +53,7 @@ module.exports = {
       'warn',
       {
         ignoreCase: false,
-        ignoreDeclarationSort: true,
+        ignoreDeclarationSort: false,
         ignoreMemberSort: false,
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },

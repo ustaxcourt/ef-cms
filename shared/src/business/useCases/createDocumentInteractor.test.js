@@ -1,8 +1,8 @@
-const { createDocument } = require('./createDocumentInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { User } = require('../entities/User');
+const { createDocument } = require('./createDocumentInteractor');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
+const { User } = require('../entities/User');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

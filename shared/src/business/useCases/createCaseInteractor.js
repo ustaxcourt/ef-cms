@@ -1,16 +1,14 @@
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
-const { WorkItem } = require('../entities/WorkItem');
-
-const { capitalize } = require('lodash');
-
 const {
   isAuthorized,
   PETITION,
 } = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+const { capitalize } = require('lodash');
+const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
+const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   const workItemEntity = new WorkItem({

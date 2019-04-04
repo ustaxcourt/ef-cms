@@ -1,7 +1,6 @@
-const { updateWorkItem } = require('./updateWorkItem');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { updateWorkItem } = require('./updateWorkItem');
 
 describe('updateWorkItem', () => {
   beforeEach(() => {

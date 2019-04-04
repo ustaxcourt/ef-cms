@@ -1,6 +1,6 @@
-const { getWorkItemById } = require('./getWorkItemById');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { getWorkItemById } = require('./getWorkItemById');
 
 describe('getWorkItemById', () => {
   beforeEach(() => {

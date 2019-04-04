@@ -1,10 +1,9 @@
 const assert = require('assert');
-
 const { Case } = require('./Case');
-const { WorkItem } = require('./WorkItem');
 const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
+const { WorkItem } = require('./WorkItem');
 
 describe('Case entity', () => {
   it('creates a trial city docket record if preferredTrialCity is updated and a docket record does not exist', () => {
