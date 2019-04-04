@@ -1,5 +1,5 @@
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
+const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for recalling the case from the irs holding queue

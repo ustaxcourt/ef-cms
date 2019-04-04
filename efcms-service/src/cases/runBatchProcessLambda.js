@@ -1,8 +1,8 @@
+const createApplicationContext = require('../applicationContext');
 const {
   handle,
   getUserFromAuthHeader,
 } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * used for batching documents to send to IRS
