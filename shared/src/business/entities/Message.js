@@ -1,12 +1,12 @@
+const joi = require('joi-browser');
+const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const joi = require('joi-browser');
 
 const uuidVersions = {
   version: ['uuidv4'],
 };
-const uuid = require('uuid');
 
 /**
  * constructor

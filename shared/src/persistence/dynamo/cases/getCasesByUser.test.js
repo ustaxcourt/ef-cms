@@ -1,6 +1,5 @@
-const sinon = require('sinon');
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
-
+const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
 
 const applicationContext = {

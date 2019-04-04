@@ -2,10 +2,10 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
 const { Message } = require('../../entities/Message');
+const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *

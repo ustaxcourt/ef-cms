@@ -1,5 +1,5 @@
-const { filePetition } = require('./filePetitionInteractor');
 const sinon = require('sinon');
+const { filePetition } = require('./filePetitionInteractor');
 
 let uploadDocumentStub;
 let createCaseStub;

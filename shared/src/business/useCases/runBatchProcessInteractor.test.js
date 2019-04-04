@@ -1,9 +1,9 @@
-const { runBatchProcess } = require('./runBatchProcessInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
-const { Case } = require('../entities/Case');
-const { omit } = require('lodash');
 const sinon = require('sinon');
+const { Case } = require('../entities/Case');
+const { MOCK_CASE } = require('../../test/mockCase');
+const { omit } = require('lodash');
+const { runBatchProcess } = require('./runBatchProcessInteractor');
+const { User } = require('../entities/User');
 
 const MOCK_WORK_ITEMS = [
   {

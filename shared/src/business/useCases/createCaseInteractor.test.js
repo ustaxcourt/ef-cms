@@ -1,8 +1,8 @@
-const { createCase } = require('./createCaseInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { User } = require('../entities/User');
+const { createCase } = require('./createCaseInteractor');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
+const { User } = require('../entities/User');
 
 describe('createCase', () => {
   let applicationContext;

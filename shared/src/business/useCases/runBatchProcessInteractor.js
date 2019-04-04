@@ -1,11 +1,10 @@
 const sanitize = require('sanitize-filename');
-const { Case } = require('../entities/Case');
-const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-
+const { Case } = require('../entities/Case');
+const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**

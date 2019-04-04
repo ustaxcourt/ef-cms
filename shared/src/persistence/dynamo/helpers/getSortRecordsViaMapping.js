@@ -1,5 +1,5 @@
-const { stripInternalKeys } = require('./stripInternalKeys');
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('./stripInternalKeys');
 const { uniq } = require('lodash');
 
 exports.getSortRecordsViaMapping = async ({

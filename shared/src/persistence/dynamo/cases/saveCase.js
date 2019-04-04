@@ -1,12 +1,10 @@
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const client = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-
-const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
-
-const client = require('../../dynamodbClientService');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const { syncWorkItems } = require('../../dynamo/workitems/syncWorkItems');
 
 exports.saveVersionedCase = async ({
   existingVersion,
