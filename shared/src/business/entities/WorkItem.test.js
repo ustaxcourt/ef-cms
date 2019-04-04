@@ -1,7 +1,6 @@
 const assert = require('assert');
-
-const { WorkItem } = require('./WorkItem');
 const { Message } = require('./Message');
+const { WorkItem } = require('./WorkItem');
 
 describe('WorkItem', () => {
   describe('isValid', () => {

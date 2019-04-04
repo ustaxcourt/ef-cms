@@ -1,12 +1,10 @@
+const client = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-
 const {
   deleteMappingRecord,
 } = require('../../dynamo/helpers/deleteMappingRecord');
-
-const client = require('../../dynamodbClientService');
 
 const processNewWorkItem = async ({ workItem, applicationContext }) => {
   if (workItem.assigneeId) {

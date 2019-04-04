@@ -1,9 +1,8 @@
-const { Case } = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-
+const { Case } = require('../entities/Case');
 const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
 
 /**

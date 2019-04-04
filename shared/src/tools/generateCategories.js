@@ -1,6 +1,6 @@
+const _ = require('lodash');
 const fs = require('fs');
 const parse = require('csv-parse');
-const _ = require('lodash');
 
 const USAGE = `
 Usage: node generateCategories.js spreadsheet.csv > output.json

@@ -1,7 +1,6 @@
-const sinon = require('sinon');
 const client = require('../../dynamodbClientService');
 const mappings = require('../../dynamo/helpers/createMappingRecord');
-
+const sinon = require('sinon');
 const sync = require('./syncWorkItems');
 const { syncWorkItems } = require('./syncWorkItems');
 

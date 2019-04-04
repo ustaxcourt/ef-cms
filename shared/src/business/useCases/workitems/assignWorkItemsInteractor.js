@@ -2,9 +2,9 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
+const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
-const { Message } = require('../../entities/Message');
 
 /**
  * getWorkItem

@@ -1,7 +1,6 @@
-const { putWorkItemInOutbox } = require('./putWorkItemInOutbox');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { putWorkItemInOutbox } = require('./putWorkItemInOutbox');
 
 describe('putWorkItemInOutbox', () => {
   let getCurrentUserStub;
