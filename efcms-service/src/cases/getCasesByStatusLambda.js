@@ -9,12 +9,20 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, () => {
+  handle(event, async () => {
     const status = (event.pathParameters || {}).status;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().getCasesByStatus({
-      applicationContext,
-      status,
-    });
+    try {
+      const results = applicationContext.getUseCases().getCasesByStatus({
+        applicationContext,
+        status,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });
