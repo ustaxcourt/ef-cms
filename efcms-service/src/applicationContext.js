@@ -1,8 +1,9 @@
+const AWSXRay = require('aws-xray-sdk');
+
 const AWS =
   process.env.NODE_ENV === 'production'
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
-const AWSXRay = require('aws-xray-sdk');
 const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
