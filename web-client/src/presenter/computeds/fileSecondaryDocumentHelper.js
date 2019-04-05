@@ -12,7 +12,6 @@ export const fileSecondaryDocumentHelper = get => {
   const categoryInformation = CATEGORY_MAP[selectedDocumentCategory].find(
     documentType => documentType.documentTitle === selectedDocumentType,
   );
-  console.log(categoryInformation);
 
   let previouslyFiledDocuments = [];
   if (categoryInformation.labelPreviousDocument) {
