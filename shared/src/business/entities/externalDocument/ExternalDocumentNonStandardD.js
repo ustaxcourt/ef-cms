@@ -14,20 +14,20 @@ function ExternalDocumentNonStandardD(rawProps) {
 
 ExternalDocumentNonStandardD.errorToMessageMap = {
   category: 'You must select a category.',
-  date: 'You must provide a service date.',
-  documentName: 'You must select a document.',
   documentType: 'You must select a document type.',
+  previousDocument: 'You must select a document.',
+  serviceDate: 'You must provide a service date.',
 };
 
 ExternalDocumentNonStandardD.schema = joi.object().keys({
   category: joi.string().required(),
-  date: joi
+  documentType: joi.string().required(),
+  previousDocument: joi.string().required(),
+  serviceDate: joi
     .date()
     .iso()
     .max('now')
     .required(),
-  documentName: joi.string().required(),
-  documentType: joi.string().required(),
 });
 
 joiValidationDecorator(
