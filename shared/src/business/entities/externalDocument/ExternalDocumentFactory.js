@@ -53,7 +53,10 @@ ExternalDocumentFactory.get = documentMetadata => {
       case 'nonstandard g':
         return new ExternalDocumentNonStandardG(documentMetadata);
       case 'nonstandard h':
-        return new ExternalDocumentNonStandardH(documentMetadata);
+        return new ExternalDocumentNonStandardH(
+          documentMetadata,
+          ExternalDocumentFactory,
+        );
     }
   }
 
