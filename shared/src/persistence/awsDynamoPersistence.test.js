@@ -1,10 +1,8 @@
 const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
-
 const { getRecordViaMapping } = require('./dynamo/helpers/getRecordViaMapping');
-
-const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
 const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
+const { stripWorkItems } = require('./dynamo/helpers/stripWorkItems');
 
 const applicationContext = {
   environment: {

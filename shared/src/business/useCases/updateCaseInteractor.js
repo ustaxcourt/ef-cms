@@ -1,4 +1,3 @@
-const { Case } = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -7,6 +6,7 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../../errors/errors');
+const { Case } = require('../entities/Case');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {

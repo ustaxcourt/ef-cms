@@ -1,5 +1,4 @@
 const assert = require('assert');
-
 const { User } = require('./User');
 
 describe('User entity', () => {

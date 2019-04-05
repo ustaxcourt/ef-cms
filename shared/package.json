@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Electronic Filing / Case Management System Shared Components ",
   "scripts": {
-    "lint": "eslint ./src && stylelint ./src/**/*.scss;",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",
@@ -41,9 +42,11 @@
   },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "aws-sdk": "^2.432.0",
+    "aws-sdk": "^2.435.0",
     "axios": "^0.18.0",
     "csv-parse": "^4.3.4",
+    "eslint-plugin-jest": "^22.4.1",
+    "eslint-plugin-sort-requires": "^2.1.0",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -55,19 +58,14 @@
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-cypress": "^2.2.1",
-    "eslint-plugin-jsdoc": "^4.7.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-jsdoc": "^4.8.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sort-keys-fix": "^1.0.1",
     "husky": "^1.3.1",
-    "jest": "^24.5.0",
+    "jest": "^24.7.1",
     "prettier": "^1.16.4",
     "proxyquire": "^2.1.0",
-    "sinon": "^7.3.1",
-    "stylelint": "^9.10.1",
-    "stylelint-config-idiomatic-order": "^6.2.0",
-    "stylelint-config-standard": "^18.2.0"
+    "sinon": "^7.3.1"
   }
 }

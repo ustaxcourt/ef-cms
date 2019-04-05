@@ -1,8 +1,7 @@
+const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const joi = require('joi-browser');
-
 const { Case } = require('./Case');
 const { getDocumentTypes } = Case;
 

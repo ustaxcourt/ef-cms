@@ -1,9 +1,10 @@
-import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
+import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
@@ -12,7 +13,6 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
-import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
 
 export const submitPetitionFromPaperSequence = [
   clearAlertsAction,

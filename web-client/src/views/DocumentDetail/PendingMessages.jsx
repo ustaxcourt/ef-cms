@@ -1,28 +1,41 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
-import { If } from '../../ustc-ui/If/If';
 
-class PendingMessagesComponent extends React.Component {
-  render() {
-    const {
-      documentDetailHelper,
-      setWorkItemActionSequence,
-      submitCompleteSequence,
-      submitForwardSequence,
-      updateCompleteFormValueSequence,
-      updateForwardFormValueSequence,
-      openCreateMessageModalSequence,
-      users,
-      validationErrors,
-      form,
-      validateForwardMessageSequence,
-      constants,
-      workItemMetadata,
-      workQueueSectionHelper,
-    } = this.props;
+export const PendingMessages = connect(
+  {
+    constants: state.constants,
+    documentDetailHelper: state.documentDetailHelper,
+    form: state.form,
+    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
+    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
+    submitCompleteSequence: sequences.submitCompleteSequence,
+    submitForwardSequence: sequences.submitForwardSequence,
+    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
+    updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
+    users: state.users,
+    validateForwardMessageSequence: sequences.validateForwardMessageSequence,
+    validationErrors: state.validationErrors,
+    workItemMetadata: state.workItemMetadata,
+    workQueueSectionHelper: state.workQueueSectionHelper,
+  },
+  ({
+    constants,
+    documentDetailHelper,
+    form,
+    openCreateMessageModalSequence,
+    setWorkItemActionSequence,
+    submitCompleteSequence,
+    submitForwardSequence,
+    updateCompleteFormValueSequence,
+    updateForwardFormValueSequence,
+    users,
+    validateForwardMessageSequence,
+    validationErrors,
+    workItemMetadata,
+    workQueueSectionHelper,
+  }) => {
     return (
       <>
         <button
@@ -458,44 +471,5 @@ class PendingMessagesComponent extends React.Component {
           )}
       </>
     );
-  }
-}
-
-PendingMessagesComponent.propTypes = {
-  constants: PropTypes.object,
-  documentDetailHelper: PropTypes.object,
-  form: PropTypes.object,
-  openCreateMessageModalSequence: PropTypes.func,
-  setWorkItemActionSequence: PropTypes.func,
-  submitCompleteSequence: PropTypes.func,
-  submitForwardSequence: PropTypes.func,
-  updateCompleteFormValueSequence: PropTypes.func,
-  updateForwardFormValueSequence: PropTypes.func,
-  users: PropTypes.array,
-  validateForwardMessageSequence: PropTypes.func,
-  validationErrors: PropTypes.object,
-  workItemActions: PropTypes.object,
-  workItemMetadata: PropTypes.object,
-  workQueueSectionHelper: PropTypes.object,
-};
-
-export const PendingMessages = connect(
-  {
-    constants: state.constants,
-    documentDetailHelper: state.documentDetailHelper,
-    form: state.form,
-    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
-    setWorkItemActionSequence: sequences.setWorkItemActionSequence,
-    submitCompleteSequence: sequences.submitCompleteSequence,
-    submitForwardSequence: sequences.submitForwardSequence,
-    updateCompleteFormValueSequence: sequences.updateCompleteFormValueSequence,
-    updateForwardFormValueSequence: sequences.updateForwardFormValueSequence,
-    users: state.users,
-    validateForwardMessageSequence: sequences.validateForwardMessageSequence,
-    validationErrors: state.validationErrors,
-    workItemActions: state.workItemActions,
-    workItemMetadata: state.workItemMetadata,
-    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  PendingMessagesComponent,
 );

@@ -1,5 +1,4 @@
 const { capitalize } = require('lodash');
-
 const { Case } = require('../entities/Case');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');

@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
 /**
  * clear state.form.preferredTrialCity

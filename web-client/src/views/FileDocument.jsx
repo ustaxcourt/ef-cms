@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
@@ -10,15 +9,23 @@ import { ErrorNotification } from './ErrorNotification';
 import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
 import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
 
-class FilePetitionComponent extends React.Component {
-  render() {
-    const caseDetail = this.props.caseDetail;
-    const form = this.props.form;
-    const toggleDocumentCategoryAccordionSequence = this.props
-      .toggleDocumentCategoryAccordionSequence;
-    const updateFormValueSequence = this.props.updateFormValueSequence;
-    const selectDocumentSequence = this.props.selectDocumentSequence;
-
+export const FileDocument = connect(
+  {
+    caseDetail: state.formattedCaseDetail,
+    form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
+    submitting: state.submitting,
+    toggleDocumentCategoryAccordionSequence:
+      sequences.toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+  },
+  ({
+    caseDetail,
+    form,
+    selectDocumentSequence,
+    toggleDocumentCategoryAccordionSequence,
+    updateFormValueSequence,
+  }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -73,13 +80,9 @@ class FilePetitionComponent extends React.Component {
 
           <div className="usa-grid-full">
             <div className="usa-width-one-half">
-              {this.props.form.isDocumentTypeSelected && (
-                <SelectedDocumentType />
-              )}
+              {form.isDocumentTypeSelected && <SelectedDocumentType />}
 
-              {!this.props.form.isDocumentTypeSelected && (
-                <ChooseDocumentType />
-              )}
+              {!form.isDocumentTypeSelected && <ChooseDocumentType />}
             </div>
             <div className="usa-width-one-third push-right">
               <div className="blue-container gray-background">
@@ -88,7 +91,7 @@ class FilePetitionComponent extends React.Component {
                   {[
                     {
                       category: 'Motion',
-                      documentType: 'Motion for Judgment on The Pleadings',
+                      documentType: 'Motion for Judgment on the Pleadings',
                     },
                     {
                       category: 'Application',
@@ -101,11 +104,52 @@ class FilePetitionComponent extends React.Component {
                     {
                       category: 'Motion',
                       documentType:
-                        'Motion for Protective Order Persuant to Rule 103',
+                        'Motion for Protective Order Pursuant to Rule 103',
                     },
                     {
                       category: 'Motion',
                       documentType: 'Motion for Continuance',
+                    },
+                    {
+                      category: 'Request',
+                      documentType: 'Request for Place of Trial [Place]',
+                    },
+                    {
+                      category: 'Notice',
+                      documentType: 'Notice of No Objection to [Document Name[',
+                    },
+                    {
+                      category: 'Stipulation',
+                      documentType: 'Stipulation [anything]',
+                    },
+                    {
+                      category: 'Supporting Document',
+                      documentType:
+                        'Affidavit Of [Name] in Support Of [Document Name]',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType:
+                        'Certificate of Service [Document Name] [Date]',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType:
+                        '[First, Second, etc.] Amended [Document Name]',
+                    },
+                    {
+                      category: 'Request',
+                      documentType:
+                        '[First, Second, etc.] Request for Admissions',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Leave to File [Document Name]',
                     },
                   ].map(document => {
                     return (
@@ -137,30 +181,5 @@ class FilePetitionComponent extends React.Component {
         </section>
       </React.Fragment>
     );
-  }
-}
-
-FilePetitionComponent.propTypes = {
-  caseDetail: PropTypes.object,
-  closeDocumentCategoryAccordionSequence: PropTypes.func,
-  form: PropTypes.object,
-  selectDocumentSequence: PropTypes.func,
-  submitting: PropTypes.bool,
-  toggleDocumentCategoryAccordionSequence: PropTypes.func,
-  updateFormValueSequence: PropTypes.func,
-};
-
-export const FileDocument = connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    closeDocumentCategoryAccordionSequence:
-      sequences.closeDocumentCategoryAccordionSequence,
-    form: state.form,
-    selectDocumentSequence: sequences.selectDocumentSequence,
-    submitting: state.submitting,
-    toggleDocumentCategoryAccordionSequence:
-      sequences.toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  FilePetitionComponent,
 );

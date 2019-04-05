@@ -7,7 +7,11 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { updateCaseAction } from '../actions/updateCaseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+
 export const clickServeToIrsSequence = [
+  setFormSubmittingAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
@@ -15,4 +19,5 @@ export const clickServeToIrsSequence = [
     error: [setValidationAlertErrorsAction],
     success: [updateCaseAction, set(state.showModal, 'ServeToIrsModalDialog')],
   },
+  unsetFormSubmittingAction,
 ];

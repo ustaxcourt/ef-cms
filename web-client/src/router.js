@@ -1,5 +1,5 @@
-import route from 'riot-route';
 import queryString from 'query-string';
+import route from 'riot-route';
 
 route.base('/');
 const pageTitleSuffix = ' | U.S. Tax Court';

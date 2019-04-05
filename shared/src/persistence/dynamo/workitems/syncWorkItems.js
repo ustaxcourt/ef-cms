@@ -1,12 +1,10 @@
+const client = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-
 const {
   deleteMappingRecord,
 } = require('../../dynamo/helpers/deleteMappingRecord');
-
-const client = require('../../dynamodbClientService');
 
 const processNewWorkItem = async ({ workItem, applicationContext }) => {
   if (workItem.assigneeId) {
@@ -26,12 +24,12 @@ const processNewWorkItem = async ({ workItem, applicationContext }) => {
   });
 
   await client.put({
-    applicationContext,
     Item: {
       pk: workItem.workItemId,
       sk: workItem.workItemId,
       ...workItem,
     },
+    applicationContext,
   });
 };
 
@@ -229,11 +227,11 @@ exports.reassignWorkItem = async ({
 
 exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
   await client.put({
-    applicationContext,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    applicationContext,
   });
 };

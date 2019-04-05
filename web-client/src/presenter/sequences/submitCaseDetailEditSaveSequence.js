@@ -7,7 +7,11 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { updateCaseAction } from '../actions/updateCaseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+
 export const submitCaseDetailEditSaveSequence = [
+  setFormSubmittingAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
@@ -20,4 +24,5 @@ export const submitCaseDetailEditSaveSequence = [
       expireFormSaveSuccessAction,
     ],
   },
+  unsetFormSubmittingAction,
 ];

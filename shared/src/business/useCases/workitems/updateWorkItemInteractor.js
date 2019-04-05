@@ -1,5 +1,3 @@
-const { WorkItem } = require('../../entities/WorkItem');
-const { User } = require('../../entities/User');
 const {
   isAuthorized,
   WORKITEM,
@@ -8,6 +6,8 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * updateWorkItem

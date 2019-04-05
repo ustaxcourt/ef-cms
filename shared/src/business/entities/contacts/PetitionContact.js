@@ -158,22 +158,17 @@ exports.getErrorToMessageMap = ({
  */
 const getContactConstructor = ({ partyType, countryType, contactType }) => {
   const {
-    getPetitionerTaxpayerContact,
-  } = require('./PetitionerTaxpayerContact');
-  const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
-  const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const {
     getPetitionerCorporationContact,
   } = require('./PetitionerCorporationContact');
   const {
-    getPetitionerIntermediaryContact,
-  } = require('./PetitionerIntermediaryContact');
+    getPetitionerCustodianContact,
+  } = require('./PetitionerCustodianContact');
   const {
     getPetitionerDeceasedSpouseContact,
   } = require('./PetitionerDeceasedSpouseContact');
-  const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const {
     getPetitionerEstateExecutorContact,
   } = require('./PetitionerEstateExecutorContact');
@@ -184,11 +179,16 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
     getPetitionerGuardianContact,
   } = require('./PetitionerGuardianContact');
   const {
-    getPetitionerCustodianContact,
-  } = require('./PetitionerCustodianContact');
+    getPetitionerIntermediaryContact,
+  } = require('./PetitionerIntermediaryContact');
   const {
     getPetitionerPartnershipRepContact,
   } = require('./PetitionerPartnershipRepContact');
+  const {
+    getPetitionerTaxpayerContact,
+  } = require('./PetitionerTaxpayerContact');
+  const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
+  const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
   const { getPetitionerTrusteeContact } = require('./PetitionerTrusteeContact');
   return {

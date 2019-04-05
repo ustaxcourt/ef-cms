@@ -1,10 +1,10 @@
-const { createCaseFromPaper } = require('./createCaseFromPaperInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { User } = require('../entities/User');
 const {
   PetitionFromPaperWithoutFiles,
 } = require('../entities/PetitionFromPaperWithoutFiles');
+const { createCaseFromPaper } = require('./createCaseFromPaperInteractor');
+const { User } = require('../entities/User');
 
 describe('createCaseFromPaper', () => {
   let applicationContext;

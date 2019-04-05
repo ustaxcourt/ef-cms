@@ -1,8 +1,8 @@
 const {
   validatePetitionFromPaper,
 } = require('./validatePetitionFromPaperInteractor');
-const { PetitionFromPaper } = require('../entities/PetitionFromPaper');
 const { omit } = require('lodash');
+const { PetitionFromPaper } = require('../entities/PetitionFromPaper');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
