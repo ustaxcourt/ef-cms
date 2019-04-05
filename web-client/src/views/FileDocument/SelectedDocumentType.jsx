@@ -42,7 +42,9 @@ export const SelectedDocumentType = connect(
               <p>{form.documentType}</p>
             </div>
           </div>
-          {fileDocumentHelper.showNonstandardForm && <NonstandardForm />}
+          {fileDocumentHelper.primary.showNonstandardForm && (
+            <NonstandardForm level="primary" />
+          )}
         </div>
 
         <div className="ustc-form-group">
