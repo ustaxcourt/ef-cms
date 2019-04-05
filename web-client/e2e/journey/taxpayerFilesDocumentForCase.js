@@ -38,26 +38,26 @@ export default test => {
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 
-    await test.runSequence('editSelectedDocumentSequence');
+    // await test.runSequence('editSelectedDocumentSequence');
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'category',
-      value: 'Statement',
-    });
+    // await test.runSequence('updateFormValueSequence', {
+    //   key: 'category',
+    //   value: 'Statement',
+    // });
 
-    await test.runSequence('selectDocumentSequence');
+    // await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      documentType: 'You must select a document type.',
-    });
+    // expect(test.getState('validationErrors')).toEqual({
+    //   documentType: 'You must select a document type.',
+    // });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'documentType',
-      value: 'Statement [anything]',
-    });
+    // await test.runSequence('updateFormValueSequence', {
+    //   key: 'documentType',
+    //   value: 'Statement [anything]',
+    // });
 
-    await test.runSequence('selectDocumentSequence');
+    // await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    // expect(test.getState('validationErrors')).toEqual({});
   });
 };
