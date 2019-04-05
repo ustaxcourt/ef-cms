@@ -8,18 +8,18 @@ describe('ExternalDocumentNonStandardC', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'You must select a category.',
-        documentName: 'You must select a document.',
         documentType: 'You must select a document type.',
-        name: 'You must provide a name.',
+        freeText: 'You must provide a value.',
+        previousDocument: 'You must select a document.',
       });
     });
 
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentName: 'Petition',
         documentType: 'Affidavit Of [Name] in Support Of [Document Name]',
-        name: 'Lori Loughlin',
+        freeText: 'Lori Loughlin',
+        previousDocument: 'Petition',
         scenario: 'Nonstandard C',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);

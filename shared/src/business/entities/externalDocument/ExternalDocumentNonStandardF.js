@@ -14,16 +14,16 @@ function ExternalDocumentNonStandardF(rawProps) {
 
 ExternalDocumentNonStandardF.errorToMessageMap = {
   category: 'You must select a category.',
-  documentName: 'You must select a document.',
   documentType: 'You must select a document type.',
-  ordinal: 'You must select an iteration.',
+  ordinalValue: 'You must select an iteration.',
+  previousDocument: 'You must select a document.',
 };
 
 ExternalDocumentNonStandardF.schema = joi.object().keys({
   category: joi.string().required(),
-  documentName: joi.string().required(),
   documentType: joi.string().required(),
-  ordinal: joi.string().required(),
+  ordinalValue: joi.string().required(),
+  previousDocument: joi.string().required(),
 });
 
 joiValidationDecorator(
