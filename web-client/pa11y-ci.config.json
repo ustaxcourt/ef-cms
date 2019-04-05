@@ -391,7 +391,7 @@
       "actions": [
         "wait for #button-file-document to be visible",
         "click element #button-file-document",
-        "wait for #file-a-document to be visible"
+        "wait for #file-a-document-header to be visible"
       ]
     },
 
