@@ -3,44 +3,41 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ChooseDocumentType = connect(
+export const ChooseSecondaryDocumentType = connect(
   {
     constants: state.constants,
     form: state.form,
-    selectDocumentSequence: sequences.selectDocumentSequence,
+    selectSecondaryDocumentSequence: sequences.selectSecondaryDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSelectDocumentTypeSequence:
-      sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
     constants,
     form,
-    selectDocumentSequence,
+    selectSecondaryDocumentSequence,
     updateFormValueSequence,
-    validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
     return (
-      <div className="blue-container">
+      <React.Fragment>
+        <h4>Which Document Are You Requesting Leave to File For?</h4>
         <div
           className={`ustc-form-group ${
-            validationErrors.category ? 'usa-input-error' : ''
+            validationErrors.secondaryCategory ? 'usa-input-error' : ''
           }`}
         >
-          <label htmlFor="document-category">Document Category</label>
+          <label htmlFor="document-secondary-category">Document Category</label>
           <select
-            name="category"
-            id="document-category"
-            aria-label="category"
+            name="secondaryCategory"
+            id="document-secondary-category"
+            aria-label="secondaryCategory"
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateSelectDocumentTypeSequence();
             }}
-            value={form.category}
+            value={form.secondaryCategory}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -53,32 +50,31 @@ export const ChooseDocumentType = connect(
           </select>
           <Text
             className="usa-input-error-message"
-            bind="validationErrors.category"
+            bind="validationErrors.secondaryCategory"
           />
         </div>
-        {form.category && (
+        {form.secondaryCategory && (
           <>
             <div
               className={`ustc-form-group only-large-screens ${
-                validationErrors.documentType ? 'usa-input-error' : ''
+                validationErrors.secondaryDocumentType ? 'usa-input-error' : ''
               }`}
             >
-              <label htmlFor="document-type">Document Type</label>
+              <label htmlFor="secondary-document-type">Document Type</label>
               <select
-                id="document-type"
-                name="documentType"
-                className="documentType"
+                id="secondary-document-type"
+                name="secondaryDocumentType"
+                className="secondaryDocumentType"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateSelectDocumentTypeSequence();
                 }}
-                value={form.documentType}
+                value={form.secondaryDocumentType}
               >
                 <option value="">- Select -</option>
-                {(constants.CATEGORY_MAP[form.category] || []).map(
+                {(constants.CATEGORY_MAP[form.secondaryCategory] || []).map(
                   documentType => (
                     <option
                       key={documentType.documentTitle}
@@ -91,13 +87,13 @@ export const ChooseDocumentType = connect(
               </select>
               <Text
                 className="usa-input-error-message"
-                bind="validationErrors.documentType"
+                bind="validationErrors.secondaryDocumentType"
               />
             </div>
             <div className="ustc-form-group only-small-screens">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Document Type</legend>
-                <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
+                <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
                   {(constants.CATEGORY_MAP[form.category] || []).map(
                     (documentType, index) => (
                       <li
@@ -105,19 +101,19 @@ export const ChooseDocumentType = connect(
                         value={documentType.documentTitle}
                       >
                         <input
-                          id={`documentType-${index}`}
+                          id={`secondaryDocumentType-${index}`}
                           type="radio"
-                          name="documentType"
+                          name="secondaryDocumentType"
                           value={documentType.documentTitle}
                           onClick={e => {
                             updateFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
-                            selectDocumentSequence();
+                            selectSecondaryDocumentSequence();
                           }}
                         />
-                        <label htmlFor={`documentType-${index}`}>
+                        <label htmlFor={`secondaryDocumentType-${index}`}>
                           {documentType.documentTitle}
                         </label>
                       </li>
@@ -132,15 +128,15 @@ export const ChooseDocumentType = connect(
           <button
             type="submit"
             className="usa-button"
-            id="select-document"
+            id="select-secondary-document"
             onClick={() => {
-              selectDocumentSequence();
+              selectSecondaryDocumentSequence();
             }}
           >
             Select
           </button>
         </div>
-      </div>
+      </React.Fragment>
     );
   },
 );
