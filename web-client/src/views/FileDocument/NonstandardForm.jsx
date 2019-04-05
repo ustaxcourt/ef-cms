@@ -26,8 +26,7 @@ export const NonstandardForm = connect(
         {fileDocumentHelper[level].showTextInput && (
           <div
             className={`ustc-form-group ${
-              validationErrors[level] &&
-              validationErrors[level].previousDocument
+              validationErrors[level] && validationErrors[level].freeText
                 ? 'usa-input-error'
                 : ''
             }`}
@@ -229,7 +228,7 @@ export const NonstandardForm = connect(
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors[level].previousDocument"
+              bind="validationErrors[level].trialLocation"
             />
           </div>
         )}
