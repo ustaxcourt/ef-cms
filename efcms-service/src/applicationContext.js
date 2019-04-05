@@ -296,5 +296,15 @@ module.exports = (appContextUser = {}) => {
     irsGateway,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
+    logger: {
+      error: value => {
+        // eslint-disable-next-line no-console
+        console.error(JSON.stringify(value));
+      },
+      info: (key, value) => {
+        // eslint-disable-next-line no-console
+        console.info(key, JSON.stringify(value));
+      },
+    },
   };
 };
