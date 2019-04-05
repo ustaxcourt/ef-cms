@@ -1,68 +1,86 @@
 import { state } from 'cerebral';
 
-const getFileDocumentDataForCategory = (caseDetail, categoryInformation) => {
+const getFileDocumentDataForCategory = (
+  caseDetail,
+  trialCitiesHelper,
+  categoryInformation,
+) => {
   let fileDocumentData = {};
 
   switch (categoryInformation.scenario) {
     case 'Standard': {
-      fileDocumentData.showNonstandardForm = false;
+      fileDocumentData = {
+        showNonstandardForm: false,
+      };
       break;
     }
     case 'Nonstandard A': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.previousDocumentSelectLabel =
-        categoryInformation.labelPreviousDocument;
-      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
-        caseDetail,
-      );
+      fileDocumentData = {
+        previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        showNonstandardForm: true,
+      };
       break;
     }
     case 'Nonstandard B': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      fileDocumentData = {
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: categoryInformation.labelFreeText,
+      };
       break;
     }
     case 'Nonstandard C': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.previousDocumentSelectLabel =
-        categoryInformation.labelPreviousDocument;
-      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
-        caseDetail,
-      );
-      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      fileDocumentData = {
+        previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: categoryInformation.labelFreeText,
+      };
       break;
     }
     case 'Nonstandard D': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.previousDocumentSelectLabel =
-        categoryInformation.labelPreviousDocument;
-      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
-        caseDetail,
-      );
-      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      fileDocumentData = {
+        previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        showDateFields: true,
+        showNonstandardForm: true,
+        textInputLabel: categoryInformation.labelFreeText,
+      };
       break;
     }
     case 'Nonstandard E': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.showTrialLocationSelect = true;
+      fileDocumentData = {
+        showNonstandardForm: true,
+        showTrialLocationSelect: true,
+        textInputLabel: categoryInformation.labelFreeText,
+        trialCities: trialCitiesHelper(caseDetail.procedureType)
+          .trialCitiesByState,
+      };
       break;
     }
     case 'Nonstandard F': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.ordinalField = categoryInformation.ordinalField;
-      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
-        caseDetail,
-      );
+      fileDocumentData = {
+        ordinalField: categoryInformation.ordinalField,
+        previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        showNonstandardForm: true,
+      };
       break;
     }
     case 'Nonstandard G': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.ordinalField = categoryInformation.ordinalField;
+      fileDocumentData = {
+        ordinalField: categoryInformation.ordinalField,
+        showNonstandardForm: true,
+      };
       break;
     }
     case 'Nonstandard H': {
-      fileDocumentData.showNonstandardForm = true;
-      fileDocumentData.showSecondaryDocumentSelect = true;
+      fileDocumentData = {
+        showNonstandardForm: true,
+        showSecondaryDocumentSelect: true,
+      };
       break;
     }
   }
@@ -70,15 +88,20 @@ const getFileDocumentDataForCategory = (caseDetail, categoryInformation) => {
   return fileDocumentData;
 };
 
-const getPreviouslyFiledDocuments = get => {
-  const caseDetail = get(state.caseDetail);
-  return caseDetail.documents.map(document => {
-    return document.documentType;
-  });
+const getPreviouslyFiledDocuments = caseDetail => {
+  return caseDetail.documents
+    .filter(
+      document =>
+        document.documentType !== 'Statement of Taxpayer Identification',
+    )
+    .map(document => {
+      return document.documentType;
+    });
 };
 
 export const fileDocumentHelper = get => {
   const caseDetail = get(state.caseDetail);
+  const trialCitiesHelper = get(state.trialCitiesHelper);
 
   let fileDocumentData = {};
 
@@ -92,22 +115,24 @@ export const fileDocumentHelper = get => {
 
   fileDocumentData.primary = getFileDocumentDataForCategory(
     caseDetail,
+    trialCitiesHelper,
     categoryInformation,
   );
 
   const selectedSecondaryDocumentCategory = get(state.form.secondaryCategory);
   if (selectedSecondaryDocumentCategory) {
-    const selectedSecondaryDocumentType = get(state.form.documentType);
+    const selectedSecondaryDocumentType = get(state.form.secondaryDocumentType);
     if (selectedSecondaryDocumentType) {
       const secondaryCategoryInformation = CATEGORY_MAP[
-        selectedDocumentCategory
+        selectedSecondaryDocumentCategory
       ].find(
         documentType =>
           documentType.documentTitle === selectedSecondaryDocumentType,
       );
 
       fileDocumentData.secondary = getFileDocumentDataForCategory(
-        get,
+        caseDetail,
+        trialCitiesHelper,
         secondaryCategoryInformation,
       );
     }
