@@ -23,16 +23,9 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel: '',
-      previouslyFiledDocuments: [],
-      showDateFields: false,
-      showNonstandardForm: false,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: '',
-      trialCities: {},
+      primary: {
+        showNonstandardForm: false,
+      },
     });
   });
 
@@ -45,16 +38,11 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel: 'Which Document Are You Objecting to?',
-      previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: '',
-      trialCities: {},
+      primary: {
+        previousDocumentSelectLabel: 'Which Document Are You Objecting to?',
+        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        showNonstandardForm: true,
+      },
     });
   });
 
@@ -67,16 +55,11 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel: '',
-      previouslyFiledDocuments: [],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: true,
-      showTrialLocationSelect: false,
-      textInputLabel: 'What is This Statement for?',
-      trialCities: {},
+      primary: {
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'What is This Statement for?',
+      },
     });
   });
 
@@ -89,17 +72,14 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel:
-        'What Document is this Affidavit in Support Of?',
-      previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: true,
-      showTrialLocationSelect: false,
-      textInputLabel: 'Who Signed This?',
-      trialCities: {},
+      primary: {
+        previousDocumentSelectLabel:
+          'What Document is this Affidavit in Support Of?',
+        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'Who Signed This?',
+      },
     });
   });
 
@@ -112,17 +92,14 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel:
-        'What Document is this Certificate of Service for?',
-      previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
-      showDateFields: true,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: 'Date of Service',
-      trialCities: {},
+      primary: {
+        previousDocumentSelectLabel:
+          'What Document is this Certificate of Service for?',
+        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        showDateFields: true,
+        showNonstandardForm: true,
+        textInputLabel: 'Date of Service',
+      },
     });
   });
 
@@ -136,17 +113,13 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toMatchObject({
-      ordinalField: '',
-      previousDocumentSelectLabel: '',
-      previouslyFiledDocuments: [],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: true,
-      textInputLabel: 'Requested Place of Submission of Declatory Judgement',
-      trialCities: {
-        Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
+      primary: {
+        showNonstandardForm: true,
+        showTrialLocationSelect: true,
+        textInputLabel: 'Requested Place of Submission of Declatory Judgement',
+        trialCities: {
+          Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
+        },
       },
     });
   });
@@ -160,16 +133,12 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: 'What Iteration is This Filing?',
-      previousDocumentSelectLabel: 'Which Document is This a Supplement to?',
-      previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: '',
-      trialCities: {},
+      primary: {
+        ordinalField: 'What Iteration is This Filing?',
+        previousDocumentSelectLabel: 'Which Document is This a Supplement to?',
+        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        showNonstandardForm: true,
+      },
     });
   });
 
@@ -182,16 +151,10 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: 'What Iteration is This Filing?',
-      previousDocumentSelectLabel: '',
-      previouslyFiledDocuments: [],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: false,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: '',
-      trialCities: {},
+      primary: {
+        ordinalField: 'What Iteration is This Filing?',
+        showNonstandardForm: true,
+      },
     });
   });
 
@@ -204,16 +167,10 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
-      ordinalField: '',
-      previousDocumentSelectLabel: '',
-      previouslyFiledDocuments: [],
-      showDateFields: false,
-      showNonstandardForm: true,
-      showSecondaryDocumentSelect: true,
-      showTextInput: false,
-      showTrialLocationSelect: false,
-      textInputLabel: '',
-      trialCities: {},
+      primary: {
+        showNonstandardForm: true,
+        showSecondaryDocumentSelect: true,
+      },
     });
   });
 });
