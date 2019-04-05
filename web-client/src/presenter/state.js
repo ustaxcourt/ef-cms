@@ -16,7 +16,6 @@ import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
-import { fileSecondaryDocumentHelper } from './computeds/fileSecondaryDocumentHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -53,7 +52,6 @@ export const state = {
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
-  fileSecondaryDocumentHelper,
   filingTypes: [],
   form: {},
   formattedCaseDetail,

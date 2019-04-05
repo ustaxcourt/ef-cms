@@ -1,40 +1,117 @@
 import { state } from 'cerebral';
 
-export const fileDocumentHelper = get => {
+const getFileDocumentDataForCategory = (caseDetail, categoryInformation) => {
+  let fileDocumentData = {};
+
+  switch (categoryInformation.scenario) {
+    case 'Standard': {
+      fileDocumentData.showNonstandardForm = false;
+      break;
+    }
+    case 'Nonstandard A': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.previousDocumentSelectLabel =
+        categoryInformation.labelPreviousDocument;
+      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
+        caseDetail,
+      );
+      break;
+    }
+    case 'Nonstandard B': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      break;
+    }
+    case 'Nonstandard C': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.previousDocumentSelectLabel =
+        categoryInformation.labelPreviousDocument;
+      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
+        caseDetail,
+      );
+      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      break;
+    }
+    case 'Nonstandard D': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.previousDocumentSelectLabel =
+        categoryInformation.labelPreviousDocument;
+      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
+        caseDetail,
+      );
+      fileDocumentData.textInputLabel = categoryInformation.labelFreeText;
+      break;
+    }
+    case 'Nonstandard E': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.showTrialLocationSelect = true;
+      break;
+    }
+    case 'Nonstandard F': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.ordinalField = categoryInformation.ordinalField;
+      fileDocumentData.previouslyFiledDocuments = getPreviouslyFiledDocuments(
+        caseDetail,
+      );
+      break;
+    }
+    case 'Nonstandard G': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.ordinalField = categoryInformation.ordinalField;
+      break;
+    }
+    case 'Nonstandard H': {
+      fileDocumentData.showNonstandardForm = true;
+      fileDocumentData.showSecondaryDocumentSelect = true;
+      break;
+    }
+  }
+
+  return fileDocumentData;
+};
+
+const getPreviouslyFiledDocuments = get => {
   const caseDetail = get(state.caseDetail);
-  const trialCitiesHelper = get(state.trialCitiesHelper);
-  const previouslyFiledDocuments = caseDetail.documents.map(document => {
+  return caseDetail.documents.map(document => {
     return document.documentType;
   });
+};
 
-  const selectedDocumentCategory = get(state.form.category);
-  const selectedDocumentType = get(state.form.documentType);
+export const fileDocumentHelper = get => {
+  const caseDetail = get(state.caseDetail);
+
+  let fileDocumentData = {};
 
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
+  const selectedDocumentCategory = get(state.form.category);
+  const selectedDocumentType = get(state.form.documentType);
   const categoryInformation = CATEGORY_MAP[selectedDocumentCategory].find(
     documentType => documentType.documentTitle === selectedDocumentType,
   );
 
-  const showDateFields = categoryInformation.scenario === 'Nonstandard D';
-  const textInputLabel = categoryInformation.labelFreeText;
-  const showTrialLocationSelect =
-    categoryInformation.scenario === 'Nonstandard E';
+  fileDocumentData.primary = getFileDocumentDataForCategory(
+    caseDetail,
+    categoryInformation,
+  );
 
-  const showTextInput =
-    !showDateFields && !showTrialLocationSelect && textInputLabel;
+  const selectedSecondaryDocumentCategory = get(state.form.secondaryCategory);
+  if (selectedSecondaryDocumentCategory) {
+    const selectedSecondaryDocumentType = get(state.form.documentType);
+    if (selectedSecondaryDocumentType) {
+      const secondaryCategoryInformation = CATEGORY_MAP[
+        selectedDocumentCategory
+      ].find(
+        documentType =>
+          documentType.documentTitle === selectedSecondaryDocumentType,
+      );
 
-  return {
-    ordinalField: categoryInformation.ordinalField,
-    previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-    previouslyFiledDocuments,
-    showDateFields,
-    showNonstandardForm: categoryInformation.scenario !== 'Standard',
-    showSecondaryDocumentSelect:
-      categoryInformation.scenario === 'Nonstandard H',
-    showTextInput,
-    showTrialLocationSelect,
-    textInputLabel,
-    trialCities: trialCitiesHelper(caseDetail.procedureType).trialCitiesByState,
-  };
+      fileDocumentData.secondary = getFileDocumentDataForCategory(
+        get,
+        secondaryCategoryInformation,
+      );
+    }
+  }
+
+  return fileDocumentData;
 };

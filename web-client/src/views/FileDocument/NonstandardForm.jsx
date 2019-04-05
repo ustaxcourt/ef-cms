@@ -16,14 +16,14 @@ export const NonstandardForm = connect(
   ({ fileDocumentHelper, form, updateFormValueSequence, validationErrors }) => {
     return (
       <React.Fragment>
-        {fileDocumentHelper.showTextInput && (
+        {fileDocumentHelper.primary.showTextInput && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="free-text">
-              {fileDocumentHelper.textInputLabel}
+              {fileDocumentHelper.primary.textInputLabel}
             </label>
             <input
               id="free-text"
@@ -44,14 +44,14 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.previousDocumentSelectLabel && (
+        {fileDocumentHelper.primary.previousDocumentSelectLabel && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="responding-to-document">
-              {fileDocumentHelper.previousDocumentSelectLabel}
+              {fileDocumentHelper.primary.previousDocumentSelectLabel}
             </label>
             <select
               name="previousDocument"
@@ -67,7 +67,7 @@ export const NonstandardForm = connect(
               value={form.previousDocument}
             >
               <option value="">- Select -</option>
-              {fileDocumentHelper.previouslyFiledDocuments.map(
+              {fileDocumentHelper.primary.previouslyFiledDocuments.map(
                 documentTitle => {
                   return (
                     <option key={documentTitle} value={documentTitle}>
@@ -84,7 +84,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.showDateFields && (
+        {fileDocumentHelper.primary.showDateFields && (
           <div
             className={
               'ustc-form-group ' +
@@ -179,19 +179,19 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.showTrialLocationSelect && (
+        {fileDocumentHelper.primary.showTrialLocationSelect && (
           <div
             className={`ustc-form-group ${
               validationErrors.trialLocation ? 'usa-input-error' : ''
             }`}
           >
             <TrialCity
-              label={fileDocumentHelper.textInputLabel}
+              label={fileDocumentHelper.primary.textInputLabel}
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
               value={form.trialLocation}
-              trialCitiesByState={fileDocumentHelper.trialCities}
+              trialCitiesByState={fileDocumentHelper.primary.trialCities}
               onChange={e => {
                 updateFormValueSequence({
                   key: 'trialLocation',
@@ -206,7 +206,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.ordinalField && (
+        {fileDocumentHelper.primary.ordinalField && (
           <div
             className={
               'ustc-form-group ' +
@@ -218,7 +218,7 @@ export const NonstandardForm = connect(
               className="usa-fieldset-inputs usa-sans"
             >
               <legend htmlFor="ordinal-field-radios">
-                {fileDocumentHelper.ordinalField}
+                {fileDocumentHelper.primary.ordinalField}
               </legend>
               <ul className="usa-unstyled-list">
                 {['First', 'Second', 'Third'].map((ordinalValue, idx) => (
@@ -250,12 +250,12 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.showSecondaryDocumentSelect &&
+        {fileDocumentHelper.primary.showSecondaryDocumentSelect &&
           form.isSecondaryDocumentTypeSelected && (
             <SelectedSecondaryDocumentType />
           )}
 
-        {fileDocumentHelper.showSecondaryDocumentSelect &&
+        {fileDocumentHelper.primary.showSecondaryDocumentSelect &&
           !form.isSecondaryDocumentTypeSelected && (
             <ChooseSecondaryDocumentType />
           )}

@@ -6,27 +6,22 @@ import React from 'react';
 
 export const SecondaryNonstandardForm = connect(
   {
-    fileSecondaryDocumentHelper: state.fileSecondaryDocumentHelper,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    fileSecondaryDocumentHelper,
-    form,
-    updateFormValueSequence,
-    validationErrors,
-  }) => {
+  ({ fileDocumentHelper, form, updateFormValueSequence, validationErrors }) => {
     return (
       <React.Fragment>
-        {fileSecondaryDocumentHelper.showTextInput && (
+        {fileDocumentHelper.secondary.showTextInput && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="free-text">
-              {fileSecondaryDocumentHelper.textInputLabel}
+              {fileDocumentHelper.secondary.textInputLabel}
             </label>
             <input
               id="free-text"
@@ -47,14 +42,14 @@ export const SecondaryNonstandardForm = connect(
           </div>
         )}
 
-        {fileSecondaryDocumentHelper.previousDocumentSelectLabel && (
+        {fileDocumentHelper.secondary.previousDocumentSelectLabel && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="responding-to-document">
-              {fileSecondaryDocumentHelper.previousDocumentSelectLabel}
+              {fileDocumentHelper.secondary.previousDocumentSelectLabel}
             </label>
             <select
               name="previousDocument"
@@ -70,7 +65,7 @@ export const SecondaryNonstandardForm = connect(
               value={form.previousDocument}
             >
               <option value="">- Select -</option>
-              {fileSecondaryDocumentHelper.previouslyFiledDocuments.map(
+              {fileDocumentHelper.secondary.previouslyFiledDocuments.map(
                 documentTitle => {
                   return (
                     <option key={documentTitle} value={documentTitle}>
@@ -87,7 +82,7 @@ export const SecondaryNonstandardForm = connect(
           </div>
         )}
 
-        {fileSecondaryDocumentHelper.showDateFields && (
+        {fileDocumentHelper.secondary.showDateFields && (
           <div
             className={
               'ustc-form-group ' +
@@ -182,19 +177,19 @@ export const SecondaryNonstandardForm = connect(
           </div>
         )}
 
-        {fileSecondaryDocumentHelper.showTrialLocationSelect && (
+        {fileDocumentHelper.secondary.showTrialLocationSelect && (
           <div
             className={`ustc-form-group ${
               validationErrors.trialLocation ? 'usa-input-error' : ''
             }`}
           >
             <TrialCity
-              label={fileSecondaryDocumentHelper.textInputLabel}
+              label={fileDocumentHelper.secondary.textInputLabel}
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
               value={form.trialLocation}
-              trialCitiesByState={fileSecondaryDocumentHelper.trialCities}
+              trialCitiesByState={fileDocumentHelper.secondary.trialCities}
               onChange={e => {
                 updateFormValueSequence({
                   key: 'trialLocation',
@@ -209,7 +204,7 @@ export const SecondaryNonstandardForm = connect(
           </div>
         )}
 
-        {fileSecondaryDocumentHelper.ordinalField && (
+        {fileDocumentHelper.secondary.ordinalField && (
           <div
             className={
               'ustc-form-group ' +
@@ -221,7 +216,7 @@ export const SecondaryNonstandardForm = connect(
               className="usa-fieldset-inputs usa-sans"
             >
               <legend htmlFor="ordinal-field-radios">
-                {fileSecondaryDocumentHelper.ordinalField}
+                {fileDocumentHelper.secondary.ordinalField}
               </legend>
               <ul className="usa-unstyled-list">
                 {['First', 'Second', 'Third'].map((ordinalValue, idx) => (
