@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SecondaryNonstandardForm } from './SecondaryNonstandardForm';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,12 +10,14 @@ export const SelectedSecondaryDocumentType = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedSecondaryDocumentSequence:
       sequences.editSelectedSecondaryDocumentSequence,
+    fileSecondaryDocumentHelper: state.fileSecondaryDocumentHelper,
     form: state.form,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     form,
     editSelectedSecondaryDocumentSequence,
+    fileSecondaryDocumentHelper,
   }) => {
     return (
       <div className="ustc-form-group">
@@ -37,6 +40,9 @@ export const SelectedSecondaryDocumentType = connect(
         <div>
           <p>{form.secondaryDocumentType}</p>
         </div>
+        {fileSecondaryDocumentHelper.showNonstandardForm && (
+          <SecondaryNonstandardForm />
+        )}
       </div>
     );
   },
