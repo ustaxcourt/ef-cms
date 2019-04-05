@@ -43,7 +43,7 @@ export const SelectedDocumentType = connect(
             </div>
           </div>
           {fileDocumentHelper.primary.showNonstandardForm && (
-            <NonstandardForm />
+            <NonstandardForm level="primary" />
           )}
         </div>
 

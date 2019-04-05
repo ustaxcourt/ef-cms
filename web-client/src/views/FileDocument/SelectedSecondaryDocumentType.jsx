@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SecondaryNonstandardForm } from './SecondaryNonstandardForm';
+import { NonstandardForm } from './NonstandardForm';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -41,7 +41,7 @@ export const SelectedSecondaryDocumentType = connect(
           <p>{form.secondaryDocumentType}</p>
         </div>
         {fileDocumentHelper.secondary.showNonstandardForm && (
-          <SecondaryNonstandardForm />
+          <NonstandardForm level="secondary" />
         )}
       </div>
     );

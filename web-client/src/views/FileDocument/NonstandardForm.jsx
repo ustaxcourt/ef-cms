@@ -3,27 +3,34 @@ import { SelectedSecondaryDocumentType } from './SelectedSecondaryDocumentType';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const NonstandardForm = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    level: props.level,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  ({ fileDocumentHelper, form, updateFormValueSequence, validationErrors }) => {
+  ({
+    fileDocumentHelper,
+    form,
+    level,
+    updateFormValueSequence,
+    validationErrors,
+  }) => {
     return (
       <React.Fragment>
-        {fileDocumentHelper.primary.showTextInput && (
+        {fileDocumentHelper[level].showTextInput && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="free-text">
-              {fileDocumentHelper.primary.textInputLabel}
+              {fileDocumentHelper[level].textInputLabel}
             </label>
             <input
               id="free-text"
@@ -44,14 +51,14 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.primary.previousDocumentSelectLabel && (
+        {fileDocumentHelper[level].previousDocumentSelectLabel && (
           <div
             className={`ustc-form-group ${
               validationErrors.previousDocument ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="responding-to-document">
-              {fileDocumentHelper.primary.previousDocumentSelectLabel}
+              {fileDocumentHelper[level].previousDocumentSelectLabel}
             </label>
             <select
               name="previousDocument"
@@ -62,12 +69,11 @@ export const NonstandardForm = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
-                //validateSelectDocumentTypeSequence();
               }}
               value={form.previousDocument}
             >
               <option value="">- Select -</option>
-              {fileDocumentHelper.primary.previouslyFiledDocuments.map(
+              {fileDocumentHelper[level].previouslyFiledDocuments.map(
                 documentTitle => {
                   return (
                     <option key={documentTitle} value={documentTitle}>
@@ -84,7 +90,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.primary.showDateFields && (
+        {fileDocumentHelper[level].showDateFields && (
           <div
             className={
               'ustc-form-group ' +
@@ -179,19 +185,19 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.primary.showTrialLocationSelect && (
+        {fileDocumentHelper[level].showTrialLocationSelect && (
           <div
             className={`ustc-form-group ${
               validationErrors.trialLocation ? 'usa-input-error' : ''
             }`}
           >
             <TrialCity
-              label={fileDocumentHelper.primary.textInputLabel}
+              label={fileDocumentHelper[level].textInputLabel}
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
               value={form.trialLocation}
-              trialCitiesByState={fileDocumentHelper.primary.trialCities}
+              trialCitiesByState={fileDocumentHelper[level].trialCities}
               onChange={e => {
                 updateFormValueSequence({
                   key: 'trialLocation',
@@ -206,7 +212,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.primary.ordinalField && (
+        {fileDocumentHelper[level].ordinalField && (
           <div
             className={
               'ustc-form-group ' +
@@ -218,7 +224,7 @@ export const NonstandardForm = connect(
               className="usa-fieldset-inputs usa-sans"
             >
               <legend htmlFor="ordinal-field-radios">
-                {fileDocumentHelper.primary.ordinalField}
+                {fileDocumentHelper[level].ordinalField}
               </legend>
               <ul className="usa-unstyled-list">
                 {['First', 'Second', 'Third'].map((ordinalValue, idx) => (
@@ -250,12 +256,12 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {fileDocumentHelper.primary.showSecondaryDocumentSelect &&
+        {fileDocumentHelper[level].showSecondaryDocumentSelect &&
           form.isSecondaryDocumentTypeSelected && (
             <SelectedSecondaryDocumentType />
           )}
 
-        {fileDocumentHelper.primary.showSecondaryDocumentSelect &&
+        {fileDocumentHelper[level].showSecondaryDocumentSelect &&
           !form.isSecondaryDocumentTypeSelected && (
             <ChooseSecondaryDocumentType />
           )}
