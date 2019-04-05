@@ -90,7 +90,12 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Served</span>
-                    <span>{record.status}</span>
+                    {document && document.isStatusServed && (
+                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
+                    )}
+                    {document && helper.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
                   </td>
                 </tr>
               ),

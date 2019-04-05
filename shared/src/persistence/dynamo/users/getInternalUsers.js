@@ -1,10 +1,10 @@
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
-const { getUsersInSection } = require('./getUsersInSection');
 const {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   SENIOR_ATTORNEY_SECTION,
 } = require('../../../business/entities/WorkQueue');
+const { getUsersInSection } = require('./getUsersInSection');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getInternalUsers = async ({ applicationContext }) => {
   const users = [

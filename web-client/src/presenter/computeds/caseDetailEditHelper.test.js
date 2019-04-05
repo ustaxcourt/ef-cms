@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
-import { caseDetailEditHelper } from './caseDetailEditHelper';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { caseDetailEditHelper } from './caseDetailEditHelper';
 
 describe('case detail edit computed', () => {
   it('sets partyTypes from constants ', () => {

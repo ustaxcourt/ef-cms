@@ -1,6 +1,6 @@
-const { getWorkItemsForUser } = require('./getWorkItemsForUser');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { getWorkItemsForUser } = require('./getWorkItemsForUser');
 
 const MOCK_ITEM = {
   docketNumber: '123-19',

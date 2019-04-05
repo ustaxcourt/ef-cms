@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
-import { formattedCaseDetail, formattedCases } from './formattedCaseDetail';
 import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { formattedCaseDetail, formattedCases } from './formattedCaseDetail';
 
 describe('formatted case details computed', () => {
   it('formats the date', () => {

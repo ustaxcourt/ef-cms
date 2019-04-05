@@ -8,11 +8,11 @@ exports.createMappingRecord = async ({
   item = {},
 }) => {
   return client.put({
-    applicationContext,
     Item: {
       pk: `${pkId}|${type}`,
       sk: skId,
       ...item,
     },
+    applicationContext,
   });
 };

@@ -1,5 +1,5 @@
-const { Petition } = require('../Petition');
 const { PARTY_TYPES } = require('./PetitionContact');
+const { Petition } = require('../Petition');
 
 let petition;
 

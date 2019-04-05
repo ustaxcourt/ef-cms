@@ -1,21 +1,20 @@
+const sinon = require('sinon');
 const {
   createCaseFromPaper,
 } = require('../useCases/createCaseFromPaperInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
-
+const {
+  createTestApplicationContext,
+} = require('./createTestApplicationContext');
 const {
   getWorkItemsBySection,
 } = require('../useCases/workitems/getWorkItemsBySectionInteractor');
 const {
   getWorkItemsForUser,
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
-const sinon = require('sinon');
+const { getCase } = require('../useCases/getCaseInteractor');
+
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
-
-const {
-  createTestApplicationContext,
-} = require('./createTestApplicationContext');
 
 describe('createCaseFromPaperInteractor integration test', () => {
   let applicationContext;

@@ -1,10 +1,10 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { clearFormAction } from '../actions/clearFormAction';
 
 const gotoFileDocument = [
   setCurrentPageAction('Interstitial'),

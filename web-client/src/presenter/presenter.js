@@ -1,4 +1,9 @@
 import { ActionError } from './errors/ActionError';
+import { InvalidRequestError } from './errors/InvalidRequestError';
+import { NotFoundError } from './errors/NotFoundError';
+import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
+import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
+import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
@@ -12,9 +17,9 @@ import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
-import { dismissSelectDocumentTypeModalSequence } from './sequences/dismissSelectDocumentTypeModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
+import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -24,18 +29,16 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
-import { InvalidRequestError } from './errors/InvalidRequestError';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
-import { NotFoundError } from './errors/NotFoundError';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
-import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
-import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
+import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
+import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
@@ -45,6 +48,7 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { signOutSequence } from './sequences/signOutSequence';
 import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
 import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
+import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitDocumentSequence } from './sequences/submitDocumentSequence';
@@ -62,8 +66,6 @@ import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
-import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
-import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
@@ -87,7 +89,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-import { state } from './state';
 
 /**
  * Main Cerebral module
@@ -118,8 +119,8 @@ export const presenter = {
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
-    dismissSelectDocumentTypeModalSequence,
     editSelectedDocumentSequence,
+    editSelectedSecondaryDocumentSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -136,6 +137,7 @@ export const presenter = {
     runBatchProcessSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
+    selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
     setFocusedWorkItemSequence,
