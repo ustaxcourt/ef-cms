@@ -10,14 +10,14 @@ export const SelectedSecondaryDocumentType = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedSecondaryDocumentSequence:
       sequences.editSelectedSecondaryDocumentSequence,
-    fileSecondaryDocumentHelper: state.fileSecondaryDocumentHelper,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     form,
     editSelectedSecondaryDocumentSequence,
-    fileSecondaryDocumentHelper,
+    fileDocumentHelper,
   }) => {
     return (
       <div className="ustc-form-group">
@@ -40,7 +40,7 @@ export const SelectedSecondaryDocumentType = connect(
         <div>
           <p>{form.secondaryDocumentType}</p>
         </div>
-        {fileSecondaryDocumentHelper.showNonstandardForm && (
+        {fileDocumentHelper.secondary.showNonstandardForm && (
           <SecondaryNonstandardForm />
         )}
       </div>
