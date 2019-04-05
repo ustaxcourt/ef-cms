@@ -13,13 +13,13 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const caseDetail = await applicationContext.getUseCases().getCase({
+      const results = await applicationContext.getUseCases().getCase({
         applicationContext,
         caseId: event.pathParameters.caseId,
       });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Case', caseDetail);
-      return caseDetail;
+      applicationContext.logger.info('Results', results);
+      return results;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
