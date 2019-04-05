@@ -1,5 +1,8 @@
 const createApplicationContext = require('../applicationContext');
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const {
+  handle,
+  getUserFromAuthHeader,
+} = require('../middleware/apiGatewayHelper');
 
 /**
  * used for recalling the case from the irs holding queue
@@ -8,11 +11,21 @@ const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelpe
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, () => {
+  handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().recallPetitionFromIRSHoldingQueue({
-      applicationContext,
-      caseId: event.pathParameters.caseId,
-    });
+    try {
+      const results = applicationContext
+        .getUseCases()
+        .recallPetitionFromIRSHoldingQueue({
+          applicationContext,
+          caseId: event.pathParameters.caseId,
+        });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });
