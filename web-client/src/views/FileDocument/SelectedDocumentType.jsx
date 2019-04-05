@@ -1,19 +1,22 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NonstandardForm } from './NonstandardForm';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const SelectedDocumentType = connect(
   {
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
     form,
+    fileDocumentHelper,
   }) => {
     return (
       <React.Fragment>
@@ -39,6 +42,7 @@ export const SelectedDocumentType = connect(
               <p>{form.documentType}</p>
             </div>
           </div>
+          {fileDocumentHelper.showNonstandardForm && <NonstandardForm />}
         </div>
 
         <div className="ustc-form-group">
