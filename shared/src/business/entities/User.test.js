@@ -51,4 +51,13 @@ describe('User entity', () => {
     });
     assert.ok(user.isValid());
   });
+  it('Creates a user with default role of petitioner if not provided', () => {
+    const user = new User({
+      firstName: 'firstName',
+      lastName: 'lastName',
+      role: undefined,
+      userId: 'bobbymcgee',
+    });
+    expect(user.role).toBe('petitioner');
+  });
 });
