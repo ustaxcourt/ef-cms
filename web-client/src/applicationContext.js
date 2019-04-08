@@ -179,7 +179,6 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return {
       getDocument,
-      saveCase: updateCase,
       uploadDocument,
       uploadPdf,
     };

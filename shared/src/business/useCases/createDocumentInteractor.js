@@ -56,8 +56,13 @@ exports.createDocument = async ({ applicationContext, caseId, document }) => {
     });
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToSave: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
   });
 };

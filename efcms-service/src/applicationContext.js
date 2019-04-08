@@ -158,9 +158,6 @@ const {
   runBatchProcess,
 } = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
 const {
-  saveCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
-const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
@@ -257,7 +254,6 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
-        saveCase,
         saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,

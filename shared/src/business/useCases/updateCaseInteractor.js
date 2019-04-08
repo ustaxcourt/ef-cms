@@ -55,12 +55,10 @@ exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
     .validate()
     .toRawObject();
 
-  const caseAfterUpdate = await applicationContext
-    .getPersistenceGateway()
-    .saveCase({
-      applicationContext,
-      caseToSave: paidCase,
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: paidCase,
+  });
 
-  return new Case(caseAfterUpdate).validate().toRawObject();
+  return paidCase;
 };
