@@ -63,7 +63,6 @@ import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
-import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
@@ -123,7 +122,6 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   updateCase,
-  updateWorkItem,
   validateCaseDetail,
   validateExternalDocument,
   validateForwardMessage,

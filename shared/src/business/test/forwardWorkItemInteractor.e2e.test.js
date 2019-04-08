@@ -9,9 +9,6 @@ const {
   getSentWorkItemsForUser,
 } = require('../useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
-const {
   getWorkItemsForUser,
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
