@@ -37,7 +37,9 @@ describe('createCase', () => {
       }),
       getPersistenceGateway: () => {
         return {
+          createCase: async () => null,
           saveCase: () => Promise.reject(new Error('problem')),
+          saveWorkItemForNonPaper: async () => null,
         };
       },
       getUseCases: () => ({
