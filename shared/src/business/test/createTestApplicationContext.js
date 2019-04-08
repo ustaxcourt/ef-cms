@@ -84,7 +84,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         deleteWorkItemFromInbox,
         getCaseByCaseId,
         getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
-
         getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
         getUserById: getUserByIdPersistence,
         getWorkItemById: getWorkItemByIdPersistence,
