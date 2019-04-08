@@ -14,16 +14,16 @@ function ExternalDocumentNonStandardC(rawProps) {
 
 ExternalDocumentNonStandardC.errorToMessageMap = {
   category: 'You must select a category.',
-  documentName: 'You must select a document.',
   documentType: 'You must select a document type.',
-  name: 'You must provide a name.',
+  freeText: 'You must provide a value.',
+  previousDocument: 'You must select a document.',
 };
 
 ExternalDocumentNonStandardC.schema = joi.object().keys({
   category: joi.string().required(),
-  documentName: joi.string().required(),
   documentType: joi.string().required(),
-  name: joi.string().required(),
+  freeText: joi.string().required(),
+  previousDocument: joi.string().required(),
 });
 
 joiValidationDecorator(

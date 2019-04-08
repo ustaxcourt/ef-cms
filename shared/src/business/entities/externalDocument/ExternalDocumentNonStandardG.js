@@ -15,13 +15,13 @@ function ExternalDocumentNonStandardG(rawProps) {
 ExternalDocumentNonStandardG.errorToMessageMap = {
   category: 'You must select a category.',
   documentType: 'You must select a document type.',
-  ordinal: 'You must select an iteration.',
+  ordinalValue: 'You must select an iteration.',
 };
 
 ExternalDocumentNonStandardG.schema = joi.object().keys({
   category: joi.string().required(),
   documentType: joi.string().required(),
-  ordinal: joi.string().required(),
+  ordinalValue: joi.string().required(),
 });
 
 joiValidationDecorator(
