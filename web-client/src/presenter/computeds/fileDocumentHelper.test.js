@@ -35,14 +35,14 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard A document scenario', async () => {
     state.form = {
       category: 'Notice',
-      documentType: 'Notice of Objection to [Document Name]',
+      documentType: 'Notice of Objection',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
     });
     expect(result).toEqual({
       primary: {
-        previousDocumentSelectLabel: 'Which Document Are You Objecting to?',
+        previousDocumentSelectLabel: 'Which Document Are You Objecting To?',
         previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
         showNonstandardForm: true,
       },
@@ -52,7 +52,7 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard B document scenario', async () => {
     state.form = {
       category: 'Statement',
-      documentType: 'Statement [anything]',
+      documentType: 'Statement',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
@@ -61,7 +61,7 @@ describe('fileDocumentHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What is This Statement for?',
+        textInputLabel: 'What Is This Statement For?',
       },
     });
   });
@@ -69,7 +69,7 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard C document scenario', async () => {
     state.form = {
       category: 'Supporting Document',
-      documentType: 'Affidavit Of [Name] in Support Of [Document Name]',
+      documentType: 'Affidavit in Support',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
@@ -77,7 +77,7 @@ describe('fileDocumentHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel:
-          'What Document is this Affidavit in Support Of?',
+          'Which Document Is This Affidavit in Support Of?',
         previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
         showNonstandardForm: true,
         showTextInput: true,
@@ -89,7 +89,7 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard D document scenario', async () => {
     state.form = {
       category: 'Miscellaneous',
-      documentType: 'Certificate of Service [Document Name] [Date]',
+      documentType: 'Certificate of Service',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
@@ -97,7 +97,7 @@ describe('fileDocumentHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel:
-          'What Document is this Certificate of Service for?',
+          'Which Document Is This Certificate of Service For?',
         previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
         showDateFields: true,
         showNonstandardForm: true,
@@ -110,7 +110,7 @@ describe('fileDocumentHelper', () => {
     state.form = {
       category: 'Motion',
       documentType:
-        'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+        'Motion to Change Place of Submission of Declaratory Judgment Case',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
@@ -119,7 +119,7 @@ describe('fileDocumentHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTrialLocationSelect: true,
-        textInputLabel: 'Requested Place of Submission of Declatory Judgement',
+        textInputLabel: 'Requested Location',
         trialCities: {
           Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
         },
@@ -130,15 +130,15 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard F document scenario', async () => {
     state.form = {
       category: 'Supplement',
-      documentType: '[First, Second, etc.] Supplement to [Document Name]',
+      documentType: 'Supplement',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration is This Filing?',
-        previousDocumentSelectLabel: 'Which Document is This a Supplement to?',
+        ordinalField: 'What Iteration Is This Filing?',
+        previousDocumentSelectLabel: 'Which Document Is This a Supplement To?',
         previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
         showNonstandardForm: true,
       },
@@ -148,14 +148,14 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard G document scenario', async () => {
     state.form = {
       category: 'Answer (filed by respondent only)',
-      documentType: '[First, Second, etc.] Amendment to Answer',
+      documentType: 'Amendment to Answer',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration is This Filing?',
+        ordinalField: 'What Iteration Is This Filing?',
         showNonstandardForm: true,
       },
     });
@@ -164,7 +164,7 @@ describe('fileDocumentHelper', () => {
   it('should return correct data for Nonstandard H document scenario', async () => {
     state.form = {
       category: 'Motion',
-      documentType: 'Motion for Leave to File [Document Name]',
+      documentType: 'Motion for Leave to File',
     };
     const result = runCompute(fileDocumentHelper, {
       state,
