@@ -11,6 +11,7 @@ export const NonstandardForm = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     level: props.level,
+    namespace: props.namespace,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state[props.validationErrors],
   },
@@ -18,9 +19,11 @@ export const NonstandardForm = connect(
     fileDocumentHelper,
     form,
     level,
+    namespace,
     updateFormValueSequence,
     validationErrors,
   }) => {
+    namespace = namespace ? `${namespace}.` : '';
     return (
       <React.Fragment>
         {fileDocumentHelper[level].showTextInput && (
@@ -31,13 +34,13 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${level}.free-text`}>
+            <label htmlFor={`${namespace}free-text`}>
               {fileDocumentHelper[level].textInputLabel}
             </label>
             <input
-              id={`${level}.free-text`}
+              id={`${namespace}free-text`}
               type="text"
-              name={`${level}.freeText`}
+              name={`${namespace}freeText`}
               autoCapitalize="none"
               onChange={e => {
                 updateFormValueSequence({
@@ -48,7 +51,7 @@ export const NonstandardForm = connect(
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.freeText"
+              bind={`validationErrors.${namespace}freeText`}
             />
           </div>
         )}
@@ -61,12 +64,12 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${level}.previous-document`}>
+            <label htmlFor={`${namespace}previous-document`}>
               {fileDocumentHelper[level].previousDocumentSelectLabel}
             </label>
             <select
-              name={`${level}.previousDocument`}
-              id={`${level}.previous-document`}
+              name={`${namespace}previousDocument`}
+              id={`${namespace}previous-document`}
               aria-label="previousDocument"
               onChange={e => {
                 updateFormValueSequence({
@@ -88,7 +91,7 @@ export const NonstandardForm = connect(
             </select>
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.previousDocument"
+              bind={`validationErrors.${namespace}previousDocument`}
             />
           </div>
         )}
@@ -106,7 +109,7 @@ export const NonstandardForm = connect(
               <legend id="date-of-service-legend">Service Date</legend>
               <div className="usa-date-of-birth">
                 <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor={`${level}.month`} aria-hidden="true">
+                  <label htmlFor={`${namespace}month`} aria-hidden="true">
                     MM
                   </label>
                   <input
@@ -118,10 +121,10 @@ export const NonstandardForm = connect(
                         ? '-error'
                         : '')
                     }
-                    id={`${level}.month`}
+                    id={`${namespace}month`}
                     max="12"
                     min="1"
-                    name={`${level}.month`}
+                    name={`${namespace}month`}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -132,7 +135,7 @@ export const NonstandardForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor={`${level}.day`} aria-hidden="true">
+                  <label htmlFor={`${namespace}day`} aria-hidden="true">
                     DD
                   </label>
                   <input
@@ -144,10 +147,10 @@ export const NonstandardForm = connect(
                         ? '-error'
                         : '')
                     }
-                    id={`${level}.day`}
+                    id={`${namespace}day`}
                     max="31"
                     min="1"
-                    name={`${level}.day`}
+                    name={`${namespace}day`}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -158,7 +161,7 @@ export const NonstandardForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor={`${level}.year`} aria-hidden="true">
+                  <label htmlFor={`${namespace}year`} aria-hidden="true">
                     YYYY
                   </label>
                   <input
@@ -170,10 +173,10 @@ export const NonstandardForm = connect(
                         ? '-error'
                         : '')
                     }
-                    id={`${level}.year`}
+                    id={`${namespace}year`}
                     max="2100"
                     min="1900"
-                    name={`${level}.year`}
+                    name={`${namespace}year`}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -187,7 +190,7 @@ export const NonstandardForm = connect(
             </fieldset>
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.serviceDate"
+              bind={`validationErrors.${namespace}serviceDate`}
             />
           </div>
         )}
@@ -215,7 +218,7 @@ export const NonstandardForm = connect(
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.trialLocation"
+              bind={`validationErrors.${namespace}trialLocation`}
             />
           </div>
         )}
@@ -230,19 +233,19 @@ export const NonstandardForm = connect(
             }
           >
             <fieldset
-              id={`${level}.ordinal-field-radios`}
+              id={`${namespace}ordinal-field-radios`}
               className="usa-fieldset-inputs usa-sans"
             >
-              <legend htmlFor={`${level}.ordinal-field-radios`}>
+              <legend htmlFor={`${namespace}ordinal-field-radios`}>
                 {fileDocumentHelper[level].ordinalField}
               </legend>
               <ul className="usa-unstyled-list">
                 {['First', 'Second', 'Third'].map(ordinalValue => (
                   <li key={ordinalValue}>
                     <input
-                      id={`${level}.${ordinalValue}`}
+                      id={`${namespace}${ordinalValue}`}
                       type="radio"
-                      name={`${level}.ordinalValue`}
+                      name={`${namespace}ordinalValue`}
                       value={ordinalValue}
                       onChange={e => {
                         updateFormValueSequence({
@@ -257,7 +260,7 @@ export const NonstandardForm = connect(
               </ul>
               <Text
                 className="usa-input-error-message"
-                bind="validationErrors.ordinalValue"
+                bind={`validationErrors.${namespace}ordinalValue`}
               />
             </fieldset>
           </div>

@@ -119,7 +119,9 @@ export const fileDocumentHelper = get => {
     categoryInformation,
   );
 
-  const selectedSecondaryDocumentCategory = get(state.form.secondaryCategory);
+  const selectedSecondaryDocumentCategory = get(
+    state.form.secondaryDocument.category,
+  );
   if (selectedSecondaryDocumentCategory) {
     if (categoryInformation.scenario === 'Nonstandard H') {
       fileDocumentData.filteredSecondaryDocumentTypes = CATEGORY_MAP[
@@ -127,7 +129,10 @@ export const fileDocumentHelper = get => {
       ].filter(documentType => documentType.scenario !== 'Nonstandard H');
     }
 
-    const selectedSecondaryDocumentType = get(state.form.secondaryDocumentType);
+    const selectedSecondaryDocumentType = get(
+      state.form.secondaryDocument.documentType,
+    );
+
     if (selectedSecondaryDocumentType) {
       const secondaryCategoryInformation = CATEGORY_MAP[
         selectedSecondaryDocumentCategory
