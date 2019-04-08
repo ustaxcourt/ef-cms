@@ -15,7 +15,7 @@ function ExternalDocumentNonStandardC(rawProps) {
 
 ExternalDocumentNonStandardC.prototype.getDocumentTitle = function() {
   return replaceBracketed(
-    this.documentType,
+    this.documentTitle,
     this.freeText,
     this.previousDocument,
   );
@@ -30,6 +30,7 @@ ExternalDocumentNonStandardC.errorToMessageMap = {
 
 ExternalDocumentNonStandardC.schema = joi.object().keys({
   category: joi.string().required(),
+  documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().required(),
   previousDocument: joi.string().required(),

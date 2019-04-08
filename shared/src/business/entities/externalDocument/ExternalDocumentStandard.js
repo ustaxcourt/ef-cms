@@ -13,7 +13,7 @@ function ExternalDocumentStandard(rawProps) {
 }
 
 ExternalDocumentStandard.prototype.getDocumentTitle = function() {
-  return this.documentType;
+  return this.documentTitle;
 };
 
 ExternalDocumentStandard.errorToMessageMap = {
@@ -23,6 +23,7 @@ ExternalDocumentStandard.errorToMessageMap = {
 
 ExternalDocumentStandard.schema = joi.object().keys({
   category: joi.string().required(),
+  documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
 });
 

@@ -36,9 +36,7 @@ export default test => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('form.documentType')).toEqual(
-      'Answer (filed by respondent only)',
-    );
+    expect(test.getState('form.documentType')).toEqual('Answer');
 
     await test.runSequence('editSelectedDocumentSequence');
 
@@ -55,7 +53,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'documentType',
-      value: 'Motion for Leave to File [Document Name]',
+      value: 'Motion for Leave to File',
     });
 
     await test.runSequence('selectDocumentSequence');
@@ -78,7 +76,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'secondaryDocument.documentType',
-      value: 'Statement [anything]',
+      value: 'Statement',
     });
 
     await test.runSequence('selectDocumentSequence');

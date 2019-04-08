@@ -14,7 +14,7 @@ function ExternalDocumentNonStandardA(rawProps) {
 }
 
 ExternalDocumentNonStandardA.prototype.getDocumentTitle = function() {
-  return replaceBracketed(this.documentType, this.previousDocument);
+  return replaceBracketed(this.documentTitle, this.previousDocument);
 };
 
 ExternalDocumentNonStandardA.errorToMessageMap = {
@@ -25,6 +25,7 @@ ExternalDocumentNonStandardA.errorToMessageMap = {
 
 ExternalDocumentNonStandardA.schema = joi.object().keys({
   category: joi.string().required(),
+  documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   previousDocument: joi.string().required(),
 });
