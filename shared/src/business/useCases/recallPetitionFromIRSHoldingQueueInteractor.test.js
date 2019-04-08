@@ -28,6 +28,16 @@ const MOCK_WORK_ITEMS = [
         createdAt: '2018-12-27T18:06:02.968Z',
         from: 'Petitioner',
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        message: 'Petition batched for IRS',
+        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
+        role: 'petitioner',
+        sentBy: 'Petitioner',
+        to: null,
+      },
+      {
+        createdAt: '2018-12-27T18:06:02.968Z',
+        from: 'Petitioner',
+        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition ready for review',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         role: 'petitioner',
@@ -61,20 +71,13 @@ describe('Recall petition from IRS Holding Queue', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(mockCase),
-          saveCase: ({ caseToSave }) => Promise.resolve(new Case(caseToSave)),
+          updateCase: ({ caseToUpdate }) =>
+            Promise.resolve(new Case(caseToUpdate)),
+          updateWorkItem: async () => null,
         };
       },
       getUseCases: () => ({ getCase }),
     };
-  });
-
-  it('sets the case status to recalled', async () => {
-    const result = await recallPetitionFromIRSHoldingQueue({
-      applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(result.status).toEqual('Recalled');
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
@@ -106,7 +109,8 @@ describe('Recall petition from IRS Holding Queue', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => null,
-          saveCase: () => null,
+          updateCase: () => null,
+          updateWorkItem: async () => null,
         };
       },
       getUseCases: () => ({ getCase }),

@@ -40,38 +40,6 @@ const MOCK_CASE = {
 describe('updateCase', () => {
   let applicationContext;
 
-  it('should throw an error if the persistence layer returns an invalid case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'petitionsclerk',
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          saveCase: () => Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
-        };
-      },
-    };
-    let error;
-    try {
-      await updateCase({
-        applicationContext,
-        caseId: MOCK_CASE.caseId,
-        caseToUpdate: MOCK_CASE,
-        petitioners: [{ name: 'Test Taxpayer' }],
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).not.toBeNull;
-    expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
-    );
-  });
-
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     applicationContext = {
       environment: { stage: 'local' },
@@ -83,7 +51,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };
@@ -115,7 +83,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };
@@ -146,7 +114,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };
@@ -183,7 +151,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };
@@ -210,7 +178,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };
@@ -240,7 +208,7 @@ describe('updateCase', () => {
       },
       getPersistenceGateway: () => {
         return {
-          saveCase: () => Promise.resolve(MOCK_CASE),
+          updateCase: () => Promise.resolve(MOCK_CASE),
         };
       },
     };

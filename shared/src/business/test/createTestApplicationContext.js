@@ -54,7 +54,6 @@ const {
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
-const { saveCase } = require('../../persistence/dynamo/cases/saveCase');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
@@ -93,7 +92,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         getWorkItemsForUser: getWorkItemsForUserPersistence,
         incrementCounter,
         putWorkItemInOutbox,
-        saveCase,
         saveWorkItem: saveWorkItemPersistence,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
