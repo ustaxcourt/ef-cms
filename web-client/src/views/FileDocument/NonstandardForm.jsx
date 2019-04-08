@@ -1,10 +1,11 @@
+import { props, sequences, state } from 'cerebral';
+
 import { ChooseSecondaryDocumentType } from './ChooseSecondaryDocumentType';
+import React from 'react';
 import { SelectedSecondaryDocumentType } from './SelectedSecondaryDocumentType';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
-import React from 'react';
 
 export const NonstandardForm = connect(
   {
@@ -244,6 +245,9 @@ export const NonstandardForm = connect(
                       type="radio"
                       name={`${level}.ordinalValue`}
                       value={ordinalValue}
+                      checked={
+                        form[level] && ordinalValue === form[level].ordinalValue
+                      }
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -251,7 +255,9 @@ export const NonstandardForm = connect(
                         });
                       }}
                     />
-                    <label htmlFor={ordinalValue}>{ordinalValue}</label>
+                    <label htmlFor={`${level}.${ordinalValue}`}>
+                      {ordinalValue}
+                    </label>
                   </li>
                 ))}
               </ul>

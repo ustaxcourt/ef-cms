@@ -1,11 +1,6 @@
-import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
-
 import { BeforeStartingCase } from './BeforeStartingCase';
-import { CaseDetailInternal } from './CaseDetailInternal';
 import { CaseDetail } from './CaseDetail';
+import { CaseDetailInternal } from './CaseDetailInternal';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
@@ -21,10 +16,15 @@ import { Header } from './Header';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { SelectDocumentType } from './SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { UsaBanner } from './UsaBanner';
+import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 
 const pages = {
   BeforeStartingCase,
@@ -43,6 +43,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  SelectDocumentType,
   StartCase,
   StartCaseInternal,
   StyleGuide,
