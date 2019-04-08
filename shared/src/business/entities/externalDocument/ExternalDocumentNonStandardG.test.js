@@ -9,7 +9,7 @@ describe('ExternalDocumentNonStandardG', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'You must select a category.',
         documentType: 'You must select a document type.',
-        ordinal: 'You must select an iteration.',
+        ordinalValue: 'You must select an iteration.',
       });
     });
 
@@ -17,7 +17,7 @@ describe('ExternalDocumentNonStandardG', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Answer',
         documentType: '[First, Second, etc.] Amendment to Answer',
-        ordinal: 'First',
+        ordinalValue: 'First',
         scenario: 'Nonstandard G',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);

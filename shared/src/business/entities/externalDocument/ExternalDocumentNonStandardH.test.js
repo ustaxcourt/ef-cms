@@ -41,8 +41,8 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
           category: 'You must select a category.',
-          documentName: 'You must select a document.',
           documentType: 'You must select a document type.',
+          previousDocument: 'You must select a document.',
         },
       });
     });
@@ -55,8 +55,8 @@ describe('ExternalDocumentNonStandardH', () => {
       scenario: 'Nonstandard H',
       secondaryDocument: {
         category: 'Supporting Document',
-        documentName: 'Petition',
         documentType: 'Brief in Support of [Document Name]',
+        previousDocument: 'Petition',
         scenario: 'Nonstandard A',
       },
     });
