@@ -1,3 +1,4 @@
+import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
@@ -23,30 +24,28 @@ export const FileDocument = connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 className="captioned" tabIndex="-1">
-            Docket Number: {caseDetail.docketNumberWithSuffix}
-          </h1>
-          <p>{caseDetail.caseTitle}</p>
+          <CaseDetailHeader />
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-
           <h2 tabIndex="-1" id="file-a-document-header">
             File a Document
           </h2>
           <p>All fields required unless otherwise noted</p>
-          <h3>Type of Document You’re Filing</h3>
-          <a
-            href={`/case-detail/${
-              caseDetail.docketNumber
-            }/select-document-type`}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </a>
+          <div>
+            <h3 className="type-of-document">Type of Document You’re Filing</h3>
+            <a
+              href={`/case-detail/${
+                caseDetail.docketNumber
+              }/select-document-type`}
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </a>
+          </div>
           <div className="blue-container">
             <FontAwesomeIcon icon={['far', 'file-alt']} />
-            <h4>{form.documentTitle}</h4>
+            <h4 className="file-name">Placeholder {form.documentTitle}</h4>
           </div>
         </section>
       </React.Fragment>
