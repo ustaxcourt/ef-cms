@@ -43,8 +43,15 @@ const {
   saveWorkItem: saveWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
+  saveWorkItemForNonPaper,
+} = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+const {
+  saveWorkItemForPaper,
+} = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
+const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
 const { saveCase } = require('../../persistence/dynamo/cases/saveCase');
@@ -73,11 +80,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        createCase,
         createWorkItem: createWorkItemPersistence,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
-
         getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
+
         getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
         getUserById: getUserByIdPersistence,
         getWorkItemById: getWorkItemByIdPersistence,
@@ -87,6 +95,8 @@ const createTestApplicationContext = ({ user } = {}) => {
         putWorkItemInOutbox,
         saveCase,
         saveWorkItem: saveWorkItemPersistence,
+        saveWorkItemForNonPaper,
+        saveWorkItemForPaper,
         updateCase,
         updateWorkItem,
       };

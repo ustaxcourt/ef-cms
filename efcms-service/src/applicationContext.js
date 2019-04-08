@@ -25,6 +25,9 @@ const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  createCase: createCaseUC,
+} = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
+const {
   createCaseFromPaper,
 } = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
@@ -103,13 +106,6 @@ const {
   getUploadPolicy,
 } = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
 const {
-  saveWorkItemForPaper
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
-
-const {
-  createCase: createCaseUC,
-} = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
-const {
   getUser,
 } = require('ef-cms-shared/src/business/useCases/getUserInteractor');
 const {
@@ -167,6 +163,12 @@ const {
 const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  saveWorkItemForNonPaper
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper')
+const {
+  saveWorkItemForPaper
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
@@ -257,6 +259,7 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInOutbox,
         saveCase,
         saveWorkItem,
+        saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         updateCase,
         updateWorkItem,

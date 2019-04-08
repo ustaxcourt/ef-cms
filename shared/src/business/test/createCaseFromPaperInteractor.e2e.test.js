@@ -34,7 +34,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('should create the expected case into the database', async () => {
+  it('should persist the paper case into the database', async () => {
     const { caseId } = await createCaseFromPaper({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
@@ -131,19 +131,17 @@ describe('createCaseFromPaperInteractor integration test', () => {
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
-          filedBy: 'Bob Jones',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
         messages: [
           {
             from: 'Alex Docketclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones is ready for review.',
+            message: 'Petition filed by Docketclerk is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Alex Docketclerk',
       },
     ]);
 
@@ -161,20 +159,17 @@ describe('createCaseFromPaperInteractor integration test', () => {
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
-          filedBy: 'Bob Jones',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
           {
             from: 'Alex Docketclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones is ready for review.',
+            message: 'Petition filed by Docketclerk is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Alex Docketclerk',
       },
     ]);
   });

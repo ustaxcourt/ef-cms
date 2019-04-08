@@ -137,7 +137,7 @@ exports.createCaseFromPaper = async ({
       documentId: petitionDocumentEntity.documentId,
       documentType: petitionDocumentEntity.documentType,
     },
-    isInitializeCase: false,
+    isInitializeCase: true,
   })
     .assignToUser({
       assigneeId: user.userId,
