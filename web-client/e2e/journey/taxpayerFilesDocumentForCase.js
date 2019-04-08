@@ -17,7 +17,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'category',
-      value: 'Answer',
+      value: 'Answer (filed by respondent only)',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -36,7 +36,9 @@ export default test => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Answer');
+    expect(test.getState('form.documentType')).toEqual(
+      'Answer (filed by respondent only)',
+    );
 
     await test.runSequence('editSelectedDocumentSequence');
 

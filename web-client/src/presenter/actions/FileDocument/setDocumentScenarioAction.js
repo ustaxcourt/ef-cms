@@ -12,7 +12,7 @@ export const setDocumentScenarioAction = ({ store, get }) => {
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
   const categoryInformation = CATEGORY_MAP[category].find(
-    itemDocumentType => itemDocumentType.documentTitle === documentType,
+    itemDocumentType => itemDocumentType.documentType === documentType,
   );
 
   store.set(state.form.scenario, categoryInformation.scenario);

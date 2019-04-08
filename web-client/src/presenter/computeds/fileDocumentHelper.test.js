@@ -18,7 +18,10 @@ const state = {
 
 describe('fileDocumentHelper', () => {
   it('should return correct data for Standard document scenario', async () => {
-    state.form = { category: 'Answer', documentType: 'Answer' };
+    state.form = {
+      category: 'Answer (filed by respondent only)',
+      documentType: 'Answer',
+    };
     const result = runCompute(fileDocumentHelper, {
       state,
     });
@@ -144,7 +147,7 @@ describe('fileDocumentHelper', () => {
 
   it('should return correct data for Nonstandard G document scenario', async () => {
     state.form = {
-      category: 'Answer',
+      category: 'Answer (filed by respondent only)',
       documentType: '[First, Second, etc.] Amendment to Answer',
     };
     const result = runCompute(fileDocumentHelper, {
