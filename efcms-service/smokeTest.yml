@@ -4,6 +4,7 @@ config:
     - duration: 1
       arrivalRate: 1
       name: 'load test everything'
+  processor: './smoke-test-functions.js'
 scenarios:
   - flow:
       - get:
@@ -47,3 +48,4 @@ scenarios:
           url: '/{{$processEnvironment.API_STAGE}}/v1/cases/{{ caseId }}'
           headers:
             Authorization: 'Bearer {{ token }}'
+      - function: 'deleteCase'
