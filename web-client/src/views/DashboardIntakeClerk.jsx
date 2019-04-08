@@ -1,7 +1,6 @@
-import React from 'react';
-
 import { ErrorNotification } from './ErrorNotification';
 import { SuccessNotification } from './SuccessNotification';
+import React from 'react';
 
 export const DashboardIntakeClerk = () => (
   <section className="usa-section usa-grid">
