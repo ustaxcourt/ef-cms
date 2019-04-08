@@ -15,7 +15,7 @@ export const setSecondaryDocumentScenarioAction = ({ store, get }) => {
     const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
     const categoryInformation = CATEGORY_MAP[category].find(
-      itemDocumentType => itemDocumentType.documentTitle === documentType,
+      itemDocumentType => itemDocumentType.documentType === documentType,
     );
 
     store.set(
