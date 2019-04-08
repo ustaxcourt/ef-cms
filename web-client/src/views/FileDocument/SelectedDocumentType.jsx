@@ -1,9 +1,8 @@
-import { sequences, state } from 'cerebral';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonstandardForm } from './NonstandardForm';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const SelectedDocumentType = connect(
   {

@@ -1,11 +1,10 @@
-import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
-import React from 'react';
-
 import { Address } from './Address';
 import { Country } from './Country';
 import { InternationalAddress } from './InternationalAddress';
 import { Text } from '../../ustc-ui/Text/Text';
+import { connect } from '@cerebral/react';
+import { props, sequences, state } from 'cerebral';
+import React from 'react';
 
 export const ContactSecondary = connect(
   {

@@ -1,13 +1,12 @@
-import { sequences, state } from 'cerebral';
-
-import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
+import { ChooseDocumentType } from './ChooseDocumentType';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
-import { ErrorNotification } from './ErrorNotification';
+import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
-import { SuccessNotification } from './SuccessNotification';
+import { SelectedDocumentType } from './SelectedDocumentType';
+import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const SelectDocumentType = connect(
   {

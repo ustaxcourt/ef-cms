@@ -1,11 +1,10 @@
-import { props, sequences, state } from 'cerebral';
-
 import { ChooseSecondaryDocumentType } from './ChooseSecondaryDocumentType';
-import React from 'react';
 import { SelectedSecondaryDocumentType } from './SelectedSecondaryDocumentType';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import { props, sequences, state } from 'cerebral';
+import React from 'react';
 
 export const NonstandardForm = connect(
   {
