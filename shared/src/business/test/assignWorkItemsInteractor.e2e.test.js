@@ -6,9 +6,6 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
-const {
   getWorkItemsForUser,
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');

@@ -179,9 +179,6 @@ const {
   updateWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
-  updateWorkItem: updateWorkItemUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
-const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 const { User } = require('ef-cms-shared/src/business/entities/User');
@@ -300,7 +297,6 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
-        updateWorkItem: updateWorkItemUC,
       };
     },
     irsGateway,
