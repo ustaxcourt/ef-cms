@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { replaceBracketed } = require('../../utilities/getDocumentTitle');
 
 /**
  *
@@ -11,6 +12,10 @@ const {
 function ExternalDocumentNonStandardE(rawProps) {
   Object.assign(this, rawProps);
 }
+
+ExternalDocumentNonStandardE.prototype.getDocumentTitle = function() {
+  return replaceBracketed(this.documentType, this.trialLocation);
+};
 
 ExternalDocumentNonStandardE.errorToMessageMap = {
   category: 'You must select a category.',

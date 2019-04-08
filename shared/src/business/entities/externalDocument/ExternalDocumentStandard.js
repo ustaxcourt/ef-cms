@@ -12,6 +12,10 @@ function ExternalDocumentStandard(rawProps) {
   Object.assign(this, rawProps);
 }
 
+ExternalDocumentStandard.prototype.getDocumentTitle = function() {
+  return this.documentType;
+};
+
 ExternalDocumentStandard.errorToMessageMap = {
   category: 'You must select a category.',
   documentType: 'You must select a document type.',

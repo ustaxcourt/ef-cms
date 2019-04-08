@@ -2,6 +2,8 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { replaceBracketed } = require('../../utilities/getDocumentTitle');
+
 /**
  *
  * @param rawProps
@@ -13,6 +15,13 @@ function ExternalDocumentNonStandardH(rawProps, ExternalDocumentFactory) {
   const { secondaryDocument } = rawProps;
   this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
 }
+
+ExternalDocumentNonStandardH.prototype.getDocumentTitle = function() {
+  return replaceBracketed(
+    this.documentType,
+    this.secondaryDocument.getDocumentTitle(),
+  );
+};
 
 ExternalDocumentNonStandardH.errorToMessageMap = {
   category: 'You must select a category.',
