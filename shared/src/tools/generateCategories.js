@@ -13,16 +13,30 @@ process.argv.forEach((val, index) => {
   }
 });
 
+const exportColumns = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'eventCode',
+  'scenario',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'ordinalField',
+];
+
 const csvOptions = {
   columns: [
     'documentTitle',
-    'eventCode',
+    'documentType',
     'category',
+    'respondent-ignore',
+    'practictioner-ignore',
+    'petitioner-ignore',
+    'eventCode',
     'scenario',
     'labelPreviousDocument',
     'labelFreeText',
     'ordinalField',
-    'extra',
   ],
   delimiter: ',',
   from_line: 2, // assumes first entry is header column containing labels
@@ -101,6 +115,7 @@ const main = () => {
   const gatherRecords = function gatherRecords() {
     let record;
     while ((record = this.read())) {
+      record = _.pick(record, exportColumns);
       Object.keys(record).forEach(key => {
         record[key] = whitespaceCleanup(record[key]);
       });
