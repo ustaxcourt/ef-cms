@@ -13,8 +13,16 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const userId = event.pathParameters.userId;
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().getSentWorkItemsForUser({
-      applicationContext,
-      userId,
-    });
+    try {
+      const results = applicationContext.getUseCases().getSentWorkItemsForUser({
+        applicationContext,
+        userId,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });
