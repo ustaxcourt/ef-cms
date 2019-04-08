@@ -6,6 +6,7 @@ import React from 'react';
 export const ChooseSecondaryDocumentType = connect(
   {
     constants: state.constants,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     selectSecondaryDocumentSequence: sequences.selectSecondaryDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -13,6 +14,7 @@ export const ChooseSecondaryDocumentType = connect(
   },
   ({
     constants,
+    fileDocumentHelper,
     form,
     selectSecondaryDocumentSequence,
     updateFormValueSequence,
@@ -74,7 +76,7 @@ export const ChooseSecondaryDocumentType = connect(
                 value={form.secondaryDocumentType}
               >
                 <option value="">- Select -</option>
-                {(constants.CATEGORY_MAP[form.secondaryCategory] || []).map(
+                {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
                   documentType => (
                     <option
                       key={documentType.documentTitle}
@@ -94,7 +96,7 @@ export const ChooseSecondaryDocumentType = connect(
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
-                  {(constants.CATEGORY_MAP[form.category] || []).map(
+                  {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
                     (documentType, index) => (
                       <li
                         key={documentType.documentTitle}
