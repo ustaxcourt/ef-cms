@@ -135,9 +135,9 @@ exports.createCase = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
