@@ -1,12 +1,14 @@
+const { capitalize } = require('lodash');
+const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
+const { WorkItem } = require('../entities/WorkItem');
+
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
-const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentWithWorkItemToCase = (
   user,
@@ -125,9 +127,46 @@ exports.createCaseFromPaper = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  const newWorkItem = new WorkItem({
+    caseId: caseToAdd.caseId,
+    caseStatus: caseToAdd.status,
+    docketNumber: caseToAdd.docketNumber,
+    docketNumberSuffix: caseToAdd.docketNumberSuffix,
+    document: {
+      createdAt: petitionDocumentEntity.createdAt,
+      documentId: petitionDocumentEntity.documentId,
+      documentType: petitionDocumentEntity.documentType,
+    },
+    isInitializeCase: false,
+  })
+    .assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      role: user.role,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+      sentByUserRole: user.role,
+    })
+    .addMessage(
+      new Message({
+        from: user.name,
+        fromUserId: user.userId,
+        message: `${petitionDocumentEntity.documentType} filed by ${capitalize(
+          user.role,
+        )} is ready for review.`,
+        to: user.name,
+        toUserId: user.userId,
+      }),
+    );
+
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext,
+    workItem: newWorkItem.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();
