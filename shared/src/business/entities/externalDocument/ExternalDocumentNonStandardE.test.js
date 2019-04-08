@@ -24,4 +24,19 @@ describe('ExternalDocumentNonStandardE', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Motion',
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+        scenario: 'Nonstandard E',
+        trialLocation: 'Little Rock, AR',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Motion to Change Place of Submission of Declaratory Judgment Case to Little Rock, AR',
+      );
+    });
+  });
 });

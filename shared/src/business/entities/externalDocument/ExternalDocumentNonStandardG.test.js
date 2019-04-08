@@ -23,4 +23,16 @@ describe('ExternalDocumentNonStandardG', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Answer',
+        documentType: '[First, Second, etc.] Amendment to Answer',
+        ordinalValue: 'First',
+        scenario: 'Nonstandard G',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('First Amendment to Answer');
+    });
+  });
 });
