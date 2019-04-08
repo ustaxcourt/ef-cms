@@ -5,6 +5,7 @@ import {
   faCopy,
   faEdit,
   faEyeSlash,
+  faFileAlt,
   faFilePdf as faFilePdfRegular,
 } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -31,13 +32,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { route, router } from './router';
 
-import App from 'cerebral';
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
+import App from 'cerebral';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -79,6 +80,7 @@ const app = {
       faFilePdfRegular,
       faFlag,
       faLaptop,
+      faFileAlt,
       faListUl,
       faPaperclip,
       faPlusCircle,
