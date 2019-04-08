@@ -71,7 +71,7 @@ export const CaseDetailEdit = connect(
           Save
         </button>
         {form.showSaveSuccess && (
-          <span className="mini-success">
+          <span className="mini-success" aria-live="polite" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.
           </span>

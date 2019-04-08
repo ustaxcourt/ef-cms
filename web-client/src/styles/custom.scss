@@ -436,10 +436,20 @@ select.ustc-input-error {
 }
 
 textarea#case-caption {
-  height: 6rem;
+  height: 6em;
 }
 
 .filed-by {
   display: inline-block;
   padding-top: 20px;
+}
+
+.type-of-document {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.file-name {
+  display: inline-block;
+  margin: 0;
 }
