@@ -11,6 +11,7 @@ import React from 'react';
 export const SelectDocumentType = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
@@ -20,6 +21,7 @@ export const SelectDocumentType = connect(
   },
   ({
     caseDetail,
+    editSelectedDocumentSequence,
     form,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
@@ -157,6 +159,7 @@ export const SelectDocumentType = connect(
                           className="link"
                           type="button"
                           onClick={() => {
+                            editSelectedDocumentSequence();
                             updateFormValueSequence({
                               key: 'category',
                               value: document.category,
@@ -165,7 +168,7 @@ export const SelectDocumentType = connect(
                               key: 'documentType',
                               value: document.documentType,
                             });
-                            selectDocumentSequence({ doNotProceed: true });
+                            selectDocumentSequence();
                           }}
                         >
                           {document.documentType}
