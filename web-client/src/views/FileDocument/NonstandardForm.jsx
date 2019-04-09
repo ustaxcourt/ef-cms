@@ -13,6 +13,7 @@ export const NonstandardForm = connect(
     form: state.form,
     level: props.level,
     namespace: props.namespace,
+    screenMetadata: state.screenMetadata,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state[props.validationErrors],
   },
@@ -21,6 +22,7 @@ export const NonstandardForm = connect(
     form,
     level,
     namespace,
+    screenMetadata,
     updateFormValueSequence,
     validationErrors,
   }) => {
@@ -280,12 +282,12 @@ export const NonstandardForm = connect(
         )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          form.isSecondaryDocumentTypeSelected && (
+          screenMetadata.isSecondaryDocumentTypeSelected && (
             <SelectedSecondaryDocumentType />
           )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          !form.isSecondaryDocumentTypeSelected && (
+          !screenMetadata.isSecondaryDocumentTypeSelected && (
             <ChooseSecondaryDocumentType />
           )}
       </React.Fragment>

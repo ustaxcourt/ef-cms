@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
@@ -26,6 +27,7 @@ export const createWorkItemSequence = [
         success: [stopShowValidationAction, setAlertSuccessAction],
       },
       clearFormAction,
+      clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
