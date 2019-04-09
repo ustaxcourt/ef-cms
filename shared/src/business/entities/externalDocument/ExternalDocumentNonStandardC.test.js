@@ -17,7 +17,8 @@ describe('ExternalDocumentNonStandardC', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentType: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentType: 'Affidavit in Support',
         freeText: 'Lori Loughlin',
         previousDocument: 'Petition',
         scenario: 'Nonstandard C',
@@ -30,7 +31,8 @@ describe('ExternalDocumentNonStandardC', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentType: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentType: 'Affidavit in Support',
         freeText: 'Lori Loughlin',
         previousDocument: 'Petition',
         scenario: 'Nonstandard C',

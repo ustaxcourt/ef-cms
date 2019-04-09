@@ -16,7 +16,8 @@ describe('ExternalDocumentNonStandardG', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Answer',
-        documentType: '[First, Second, etc.] Amendment to Answer',
+        documentTitle: '[First, Second, etc.] Amendment to Answer',
+        documentType: 'Amendment to Answer',
         ordinalValue: 'First',
         scenario: 'Nonstandard G',
       });
@@ -28,7 +29,8 @@ describe('ExternalDocumentNonStandardG', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Answer',
-        documentType: '[First, Second, etc.] Amendment to Answer',
+        documentTitle: '[First, Second, etc.] Amendment to Answer',
+        documentType: 'Amendment to Answer',
         ordinalValue: 'First',
         scenario: 'Nonstandard G',
       });

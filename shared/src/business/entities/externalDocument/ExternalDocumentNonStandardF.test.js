@@ -17,7 +17,8 @@ describe('ExternalDocumentNonStandardF', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Miscellaneous',
-        documentType: '[First, Second, etc.] Amended [Document Name]',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
         ordinalValue: 'First',
         previousDocument: 'Petition',
         scenario: 'Nonstandard F',
@@ -30,7 +31,8 @@ describe('ExternalDocumentNonStandardF', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Miscellaneous',
-        documentType: '[First, Second, etc.] Amended [Document Name]',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
         ordinalValue: 'First',
         previousDocument: 'Petition',
         scenario: 'Nonstandard F',
