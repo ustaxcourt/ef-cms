@@ -119,6 +119,8 @@ export const fileDocumentHelper = get => {
     categoryInformation,
   );
 
+  fileDocumentData.filteredSecondaryDocumentTypes = [];
+
   const selectedSecondaryDocumentCategory = get(
     state.form.secondaryDocument.category,
   );

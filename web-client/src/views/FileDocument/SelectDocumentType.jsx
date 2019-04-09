@@ -165,7 +165,7 @@ export const SelectDocumentType = connect(
                               key: 'documentType',
                               value: document.documentType,
                             });
-                            selectDocumentSequence();
+                            selectDocumentSequence({ doNotProceed: true });
                           }}
                         >
                           {document.documentType}

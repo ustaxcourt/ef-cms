@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -11,7 +10,6 @@ const gotoSelectDocumentType = [
   clearAlertsAction,
   getCaseAction,
   setCaseAction,
-  clearFormAction,
   setCurrentPageAction('SelectDocumentType'),
 ];
 
