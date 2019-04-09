@@ -138,7 +138,7 @@ export const ChooseSecondaryDocumentType = connect(
             className="usa-button"
             id="select-secondary-document"
             onClick={() => {
-              selectDocumentSequence({ doNotProceed: true });
+              selectDocumentSequence();
             }}
           >
             Select

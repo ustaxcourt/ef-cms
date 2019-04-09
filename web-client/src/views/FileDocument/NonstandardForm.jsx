@@ -3,6 +3,7 @@ import { SelectedSecondaryDocumentType } from './SelectedSecondaryDocumentType';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import { get } from 'lodash';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -42,6 +43,7 @@ export const NonstandardForm = connect(
               type="text"
               name={`${namespace}freeText`}
               autoCapitalize="none"
+              value={get(form, `${namespace}freeText`)}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -70,6 +72,7 @@ export const NonstandardForm = connect(
             <select
               name={`${namespace}previousDocument`}
               id={`${namespace}previous-document`}
+              value={get(form, `${namespace}previousDocument`)}
               aria-label="previousDocument"
               onChange={e => {
                 updateFormValueSequence({
@@ -125,6 +128,7 @@ export const NonstandardForm = connect(
                     max="12"
                     min="1"
                     name={`${namespace}month`}
+                    value={get(form, `${namespace}month`)}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -142,7 +146,7 @@ export const NonstandardForm = connect(
                     aria-describedby="date-of-service-legend"
                     aria-label="day, two digits"
                     className={
-                      'usa-input-inline ' +
+                      'usa-input-inline' +
                       (validationErrors && validationErrors.serviceDate
                         ? '-error'
                         : '')
@@ -151,6 +155,7 @@ export const NonstandardForm = connect(
                     max="31"
                     min="1"
                     name={`${namespace}day`}
+                    value={get(form, `${namespace}day`)}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -176,6 +181,7 @@ export const NonstandardForm = connect(
                     id={`${namespace}year`}
                     max="2100"
                     min="1900"
+                    value={get(form, `${namespace}year`)}
                     name={`${namespace}year`}
                     type="number"
                     onChange={e => {
@@ -208,10 +214,11 @@ export const NonstandardForm = connect(
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
+              value={get(form, `${namespace}trialLocation`)}
               trialCitiesByState={fileDocumentHelper[level].trialCities}
               onChange={e => {
                 updateFormValueSequence({
-                  key: 'trialLocation',
+                  key: `${namespace}trialLocation`,
                   value: e.target.value,
                 });
               }}
@@ -248,7 +255,7 @@ export const NonstandardForm = connect(
                       name={`${namespace}ordinalValue`}
                       value={ordinalValue}
                       checked={
-                        form[level] && ordinalValue === form[level].ordinalValue
+                        get(form, `${namespace}ordinalValue`) === ordinalValue
                       }
                       onChange={e => {
                         updateFormValueSequence({
@@ -257,7 +264,7 @@ export const NonstandardForm = connect(
                         });
                       }}
                     />
-                    <label htmlFor={`${level}.${ordinalValue}`}>
+                    <label htmlFor={`${namespace}${ordinalValue}`}>
                       {ordinalValue}
                     </label>
                   </li>
