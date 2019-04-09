@@ -26,7 +26,13 @@ ExternalDocumentNonStandardD.errorToMessageMap = {
   category: 'You must select a category.',
   documentType: 'You must select a document type.',
   previousDocument: 'You must select a document.',
-  serviceDate: 'You must provide a service date.',
+  serviceDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Service date is in the future. Please enter a valid date.',
+    },
+    'You must provide a service date.',
+  ],
 };
 
 ExternalDocumentNonStandardD.schema = joi.object().keys({
