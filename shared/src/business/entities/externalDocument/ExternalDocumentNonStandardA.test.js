@@ -23,4 +23,16 @@ describe('ExternalDocumentNonStandardA', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentType: 'Brief in Support of [Document Name]',
+        previousDocument: 'Petition',
+        scenario: 'Nonstandard A',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('Brief in Support of Petition');
+    });
+  });
 });

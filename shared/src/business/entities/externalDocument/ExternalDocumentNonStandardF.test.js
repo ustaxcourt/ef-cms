@@ -25,4 +25,17 @@ describe('ExternalDocumentNonStandardF', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Miscellaneous',
+        documentType: '[First, Second, etc.] Amended [Document Name]',
+        ordinalValue: 'First',
+        previousDocument: 'Petition',
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('First Amended Petition');
+    });
+  });
 });

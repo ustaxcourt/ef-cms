@@ -62,4 +62,23 @@ describe('ExternalDocumentNonStandardH', () => {
     });
     expect(extDoc.getFormattedValidationErrors()).toEqual(null);
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Motion',
+        documentType: 'Motion for Leave to File [Document Name]',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          category: 'Supporting Document',
+          documentType: 'Brief in Support of [Document Name]',
+          previousDocument: 'Petition',
+          scenario: 'Nonstandard A',
+        },
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Motion for Leave to File Brief in Support of Petition',
+      );
+    });
+  });
 });
