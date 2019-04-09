@@ -11,10 +11,12 @@ export const SelectedDocumentType = connect(
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
+    selectDocumentSequence,
     form,
     fileDocumentHelper,
   }) => {
@@ -51,7 +53,13 @@ export const SelectedDocumentType = connect(
         </div>
 
         <div className="ustc-form-group">
-          <button type="button" className="usa-button" onClick={() => {}}>
+          <button
+            type="button"
+            className="usa-button"
+            onClick={() => {
+              selectDocumentSequence();
+            }}
+          >
             Continue
           </button>
         </div>

@@ -2,6 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -24,6 +25,7 @@ exports.completeWorkItem = async ({
   if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
+
   const originalWorkItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
@@ -39,10 +41,44 @@ exports.completeWorkItem = async ({
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
+  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    createOutboxEntries: true,
-    workItemToSave: completedWorkItem,
+    workItem: completedWorkItem,
+  });
+
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+    applicationContext,
+    workItem: completedWorkItem,
+  });
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: completedWorkItem,
+  });
+
+  const caseObject = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId: completedWorkItem.caseId,
+    });
+
+  const caseToUpdate = new Case(caseObject);
+
+  const workItemEntity = new WorkItem(completedWorkItem);
+
+  caseToUpdate.documents.forEach(
+    document =>
+      (document.workItems = document.workItems.map(item => {
+        return item.workItemId === workItemEntity.workItemId
+          ? workItemEntity
+          : item;
+      })),
+  );
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseToUpdate.validate().toRawObject(),
   });
 
   return completedWorkItem;

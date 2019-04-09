@@ -16,10 +16,17 @@ const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
+  createCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
+const {
+  deleteDocument,
+} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
+
+const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
-  createCase,
+  createCase: createCaseUC,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
 const {
   createCaseFromPaper,
@@ -39,9 +46,6 @@ const {
 const {
   createWorkItem: createWorkItemUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
-const {
-  deleteDocument,
-} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
 const {
   deleteWorkItemFromInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
@@ -155,11 +159,14 @@ const {
   runBatchProcess,
 } = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
 const {
-  saveCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/saveCase');
-const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  saveWorkItemForNonPaper
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper')
+const {
+  saveWorkItemForPaper
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
@@ -172,9 +179,6 @@ const {
 const {
   updateWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
-const {
-  updateWorkItem: updateWorkItemUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/updateWorkItemInteractor');
 const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
@@ -225,6 +229,7 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        createCase,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -247,8 +252,9 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
-        saveCase,
         saveWorkItem,
+        saveWorkItemForNonPaper,
+        saveWorkItemForPaper,
         updateCase,
         updateWorkItem,
         zipDocuments,
@@ -270,7 +276,7 @@ module.exports = (appContextUser = {}) => {
       return {
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
-        createCase,
+        createCase: createCaseUC,
         createCaseFromPaper,
         createDocument,
         createUser: createUserUC,
@@ -292,7 +298,6 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         updateCase: updateCaseUC,
-        updateWorkItem: updateWorkItemUC,
       };
     },
     irsGateway,

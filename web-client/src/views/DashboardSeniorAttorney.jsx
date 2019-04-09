@@ -1,8 +1,7 @@
-import React from 'react';
-
-import { SuccessNotification } from './SuccessNotification';
 import { ErrorNotification } from './ErrorNotification';
+import { SuccessNotification } from './SuccessNotification';
 import { WorkQueue } from './WorkQueue';
+import React from 'react';
 
 export const DashboardSeniorAttorney = () => (
   <section className="usa-section usa-grid">
