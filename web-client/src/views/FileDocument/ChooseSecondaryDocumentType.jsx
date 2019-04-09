@@ -98,7 +98,7 @@ export const ChooseSecondaryDocumentType = connect(
                 <option value="">- Select -</option>
                 {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
                   entry => (
-                    <option key={entry.documentType} value={entry.documentType}>
+                    <option key={entry.eventCode} value={entry.documentType}>
                       {entry.documentType}
                     </option>
                   ),

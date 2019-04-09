@@ -161,7 +161,9 @@ export const SelectDocumentType = connect(
                           className="link"
                           type="button"
                           onClick={() => {
-                            editSelectedDocumentSequence();
+                            clearWizardDataSequence({
+                              key: 'documentType',
+                            });
                             updateFormValueSequence({
                               key: 'category',
                               value: document.category,
@@ -169,9 +171,6 @@ export const SelectDocumentType = connect(
                             updateFormValueSequence({
                               key: 'documentType',
                               value: document.documentType,
-                            });
-                            clearWizardDataSequence({
-                              key: 'documentType',
                             });
                             selectDocumentSequence();
                           }}

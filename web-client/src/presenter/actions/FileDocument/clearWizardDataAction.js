@@ -8,32 +8,30 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object used for clearing scenario
  */
 export const clearWizardDataAction = ({ store, get, props }) => {
-  let document, secondaryDocument;
-  console.log(get(state.form));
+  let pickedDocument;
 
   switch (props.key) {
     case 'category':
-      document = pick(get(state.form), ['category']);
-      store.set(state.form, document);
+      pickedDocument = pick(get(state.form), ['category']);
+      store.set(state.form, pickedDocument);
 
       break;
     case 'documentType':
-      document = pick(get(state.form), ['category', 'documentType']);
-      console.log('document', document);
-      store.set(state.form, document);
+      pickedDocument = pick(get(state.form), ['category', 'documentType']);
+      store.set(state.form, pickedDocument);
 
       break;
     case 'secondaryDocument.category':
-      secondaryDocument = pick(get(state.form.secondaryDocument), ['category']);
-      store.set(state.form.secondaryDocument, secondaryDocument);
+      pickedDocument = pick(get(state.form.secondaryDocument), ['category']);
+      store.set(state.form.secondaryDocument, pickedDocument);
 
       break;
     case 'secondaryDocument.documentType':
-      secondaryDocument = pick(get(state.form.secondaryDocument), [
+      pickedDocument = pick(get(state.form.secondaryDocument), [
         'category',
         'documentType',
       ]);
-      store.set(state.form.secondaryDocument, secondaryDocument);
+      store.set(state.form.secondaryDocument, pickedDocument);
 
       break;
   }

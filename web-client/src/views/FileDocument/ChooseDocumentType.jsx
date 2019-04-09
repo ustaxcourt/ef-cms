@@ -88,7 +88,7 @@ export const ChooseDocumentType = connect(
               >
                 <option value="">- Select -</option>
                 {(constants.CATEGORY_MAP[form.category] || []).map(entry => (
-                  <option key={entry.documentType} value={entry.documentType}>
+                  <option key={entry.eventCode} value={entry.documentType}>
                     {entry.documentType}
                   </option>
                 ))}
