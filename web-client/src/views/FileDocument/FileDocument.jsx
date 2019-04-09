@@ -50,7 +50,7 @@ export const FileDocument = connect(
           </div>
           <div className="blue-container">
             <FontAwesomeIcon icon={['far', 'file-alt']} />
-            <h4 className="file-name">Placeholder {form.documentTitle}</h4>
+            <h4 className="file-name">{form.documentTitle}</h4>
           </div>
         </section>
       </React.Fragment>
