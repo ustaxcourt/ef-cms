@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-xray-sdk": "^2.2.0",
-    "ef-cms-shared": "file:../shared",
     "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "uuid": "^3.3.2"
@@ -35,6 +34,7 @@
     "serverless-domain-manager": "2.6.13",
     "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^4.9.4",
+    "serverless-parcel": "^1.0.4",
     "serverless-plugin-aws-alerts": "^1.2.4",
     "serverless-plugin-bind-deployment-id": "github:ustaxcourt/serverless-plugin-bind-deployment-id#update_lodash",
     "serverless-plugin-git-variables": "^3.3.0",
