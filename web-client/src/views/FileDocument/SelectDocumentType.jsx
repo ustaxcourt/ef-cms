@@ -111,6 +111,47 @@ export const SelectDocumentType = connect(
                       category: 'Motion',
                       documentType: 'Motion for Continuance',
                     },
+                    {
+                      category: 'Notice',
+                      documentType: 'Notice of No Objection',
+                      scenario: 'Nonstandard A',
+                    },
+                    {
+                      category: 'Statement',
+                      documentType: 'Statement',
+                      scenario: 'Nonstandard B',
+                    },
+                    {
+                      category: 'Supporting Document',
+                      documentType: 'Affidavit in Support',
+                      scenario: 'Nonstandard C',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType: 'Certificate of Service',
+                      scenario: 'Nonstandard D',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion to Change Place of Submission of Declaratory Judgment Case',
+                      scenario: 'Nonstandard E',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType: 'Amended',
+                      scenario: 'Nonstandard F',
+                    },
+                    {
+                      category: 'Request',
+                      documentType: 'Request for Admissions',
+                      scenario: 'Nonstandard G',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Leave to File',
+                      scenario: 'Nonstandard H',
+                    },
                   ].map(document => {
                     return (
                       <li key={document.documentType}>
@@ -130,7 +171,8 @@ export const SelectDocumentType = connect(
                             selectDocumentSequence();
                           }}
                         >
-                          {document.documentType}
+                          {document.documentType}{' '}
+                          {document.scenario ? `(${document.scenario})` : ''}
                         </button>
                       </li>
                     );
