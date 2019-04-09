@@ -9,6 +9,12 @@ const {
 } = require('../../errors/errors');
 const { Case } = require('../entities/Case');
 
+const {
+  createMappingRecord,
+} = require('../../persistence/dynamo/helpers/createMappingRecord');
+const {
+  deleteMappingRecord,
+} = require('../../persistence/dynamo/helpers/deleteMappingRecord');
 /**
  *
  * @param caseId
@@ -56,10 +62,52 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       .recallFromIRSHoldingQueue()
       .validateWithError(invalidEntityError);
 
-    return await applicationContext.getPersistenceGateway().saveCase({
+    await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
-      caseToSave: caseEntity.toRawObject(),
+      caseToUpdate: caseEntity.toRawObject(),
     });
+
+    const batchedMessage = initializeCaseWorkItem.messages.find(
+      message => message.message === 'Petition batched for IRS',
+    );
+
+    const fromUserId = batchedMessage.fromUserId;
+    const createdAt = batchedMessage.createdAt;
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: initializeCaseWorkItem.toRawObject(),
+    });
+
+    await deleteMappingRecord({
+      applicationContext,
+      pkId: fromUserId,
+      skId: createdAt,
+      type: 'outbox',
+    });
+
+    await deleteMappingRecord({
+      applicationContext,
+      pkId: 'petitions',
+      skId: createdAt,
+      type: 'outbox',
+    });
+
+    await createMappingRecord({
+      applicationContext,
+      pkId: initializeCaseWorkItem.assigneeId,
+      skId: initializeCaseWorkItem.workItemId,
+      type: 'workItem',
+    });
+
+    await createMappingRecord({
+      applicationContext,
+      pkId: initializeCaseWorkItem.section,
+      skId: initializeCaseWorkItem.workItemId,
+      type: 'workItem',
+    });
+
+    return caseEntity.toRawObject();
   } else {
     throw new NotFoundError(
       `Petition workItem for Case ${caseId} was not found`,
