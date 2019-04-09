@@ -19,7 +19,12 @@ export const FileDocument = connect(
       <React.Fragment>
         <div className="usa-grid breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
-          <a href={`/case-detail/${caseDetail.docketNumber}`} id="queue-nav">
+          <a
+            href={`/case-detail/${
+              caseDetail.docketNumber
+            }/select-a-document-type`}
+            id="queue-nav"
+          >
             Back
           </a>
         </div>
@@ -37,7 +42,7 @@ export const FileDocument = connect(
             <a
               href={`/case-detail/${
                 caseDetail.docketNumber
-              }/select-document-type`}
+              }/select-a-document-type`}
             >
               <FontAwesomeIcon icon="edit" size="sm" />
               Edit
