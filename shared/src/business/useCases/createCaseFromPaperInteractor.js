@@ -1,4 +1,3 @@
-const { capitalize } = require('lodash');
 const { Case } = require('../entities/Case');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
