@@ -25,4 +25,19 @@ describe('ExternalDocumentNonStandardC', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentType: 'Affidavit Of [Name] in Support Of [Document Name]',
+        freeText: 'Lori Loughlin',
+        previousDocument: 'Petition',
+        scenario: 'Nonstandard C',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Affidavit Of Lori Loughlin in Support Of Petition',
+      );
+    });
+  });
 });

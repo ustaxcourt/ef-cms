@@ -26,4 +26,20 @@ describe('ExternalDocumentNonStandardD', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    const serviceDate = new Date().toISOString();
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentType: 'Certificate of Service [Document Name] [Date]',
+        previousDocument: 'Petition',
+        scenario: 'Nonstandard D',
+        serviceDate,
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        `Certificate of Service Petition ${serviceDate}`,
+      );
+    });
+  });
 });

@@ -244,6 +244,9 @@ export const NonstandardForm = connect(
                       type="radio"
                       name={`${level}.ordinalValue`}
                       value={ordinalValue}
+                      checked={
+                        form[level] && ordinalValue === form[level].ordinalValue
+                      }
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -251,7 +254,9 @@ export const NonstandardForm = connect(
                         });
                       }}
                     />
-                    <label htmlFor={ordinalValue}>{ordinalValue}</label>
+                    <label htmlFor={`${level}.${ordinalValue}`}>
+                      {ordinalValue}
+                    </label>
                   </li>
                 ))}
               </ul>
