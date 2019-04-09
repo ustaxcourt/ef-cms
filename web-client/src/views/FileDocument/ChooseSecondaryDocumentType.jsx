@@ -1,7 +1,8 @@
+import { sequences, state } from 'cerebral';
+
+import React from 'react';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
 
 export const ChooseSecondaryDocumentType = connect(
   {
@@ -83,12 +84,9 @@ export const ChooseSecondaryDocumentType = connect(
               >
                 <option value="">- Select -</option>
                 {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
-                  documentType => (
-                    <option
-                      key={documentType.documentTitle}
-                      value={documentType.documentTitle}
-                    >
-                      {documentType.documentTitle}
+                  entry => (
+                    <option key={entry.documentType} value={entry.documentType}>
+                      {entry.documentType}
                     </option>
                   ),
                 )}
@@ -103,16 +101,13 @@ export const ChooseSecondaryDocumentType = connect(
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
                   {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
-                    (documentType, index) => (
-                      <li
-                        key={documentType.documentTitle}
-                        value={documentType.documentTitle}
-                      >
+                    (entry, index) => (
+                      <li key={entry.documentType} value={entry.documentType}>
                         <input
                           id={`secondaryDocumentType-${index}`}
                           type="radio"
-                          name="secondaryDocument.documentType"
-                          value={documentType.documentTitle}
+                          name="secondaryDocumentType"
+                          value={entry.documentType}
                           onClick={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -122,7 +117,7 @@ export const ChooseSecondaryDocumentType = connect(
                           }}
                         />
                         <label htmlFor={`secondaryDocumentType-${index}`}>
-                          {documentType.documentTitle}
+                          {entry.documentType}
                         </label>
                       </li>
                     ),

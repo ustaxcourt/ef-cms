@@ -16,7 +16,8 @@ describe('ExternalDocumentNonStandardB', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Application',
-        documentType: 'Application to Take Deposition of [Name]',
+        documentTitle: 'Application to Take Deposition of [Name]',
+        documentType: 'Application to Take Deposition',
         freeText: 'Petition',
         scenario: 'Nonstandard B',
       });
@@ -28,7 +29,8 @@ describe('ExternalDocumentNonStandardB', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Application',
-        documentType: 'Application to Take Deposition of [Name]',
+        documentTitle: 'Application to Take Deposition of [Name]',
+        documentType: 'Application to Take Deposition',
         freeText: 'Petition',
         scenario: 'Nonstandard B',
       });
