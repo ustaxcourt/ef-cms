@@ -11,6 +11,7 @@ import React from 'react';
 export const SelectDocumentType = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    clearWizardDataSequence: sequences.clearWizardDataSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
@@ -21,6 +22,7 @@ export const SelectDocumentType = connect(
   },
   ({
     caseDetail,
+    clearWizardDataSequence,
     editSelectedDocumentSequence,
     form,
     selectDocumentSequence,
@@ -167,6 +169,9 @@ export const SelectDocumentType = connect(
                             updateFormValueSequence({
                               key: 'documentType',
                               value: document.documentType,
+                            });
+                            clearWizardDataSequence({
+                              key: 'documentType',
                             });
                             selectDocumentSequence();
                           }}

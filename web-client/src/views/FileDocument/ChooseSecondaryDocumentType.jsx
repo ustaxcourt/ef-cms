@@ -1,24 +1,29 @@
 import { sequences, state } from 'cerebral';
 
-import React from 'react';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const ChooseSecondaryDocumentType = connect(
   {
+    clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateSelectDocumentTypeSequence:
+      sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
+    clearWizardDataSequence,
     constants,
     fileDocumentHelper,
     form,
     selectDocumentSequence,
     updateFormValueSequence,
+    validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
     return (
@@ -42,6 +47,10 @@ export const ChooseSecondaryDocumentType = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
+              clearWizardDataSequence({
+                key: e.target.name,
+              });
+              validateSelectDocumentTypeSequence();
             }}
             value={form.secondaryDocument.category}
           >
@@ -79,6 +88,10 @@ export const ChooseSecondaryDocumentType = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  clearWizardDataSequence({
+                    key: e.target.name,
+                  });
+                  validateSelectDocumentTypeSequence();
                 }}
                 value={form.secondaryDocument.documentType}
               >
@@ -112,6 +125,9 @@ export const ChooseSecondaryDocumentType = connect(
                             updateFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
+                            });
+                            clearWizardDataSequence({
+                              key: e.target.name,
                             });
                             selectDocumentSequence();
                           }}
