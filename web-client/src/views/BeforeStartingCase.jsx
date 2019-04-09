@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-
 import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
 import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 

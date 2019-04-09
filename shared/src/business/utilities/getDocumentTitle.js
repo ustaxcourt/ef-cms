@@ -5,6 +5,8 @@ const replaceBracketed = (template, ...values) => {
   }
   return template;
 };
+exports.replaceBracketed = replaceBracketed;
+
 /**
  * a function used for getting the document title of a filing event
  *

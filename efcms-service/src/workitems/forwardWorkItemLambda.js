@@ -14,10 +14,18 @@ exports.handler = event =>
   handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().forwardWorkItem({
-      ...JSON.parse(event.body),
-      workItemId: event.pathParameters.workItemId,
-      workItemToUpdate: JSON.parse(event.body),
-      applicationContext,
-    });
+    try {
+      const results = applicationContext.getUseCases().forwardWorkItem({
+        ...JSON.parse(event.body),
+        workItemId: event.pathParameters.workItemId,
+        workItemToUpdate: JSON.parse(event.body),
+        applicationContext,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

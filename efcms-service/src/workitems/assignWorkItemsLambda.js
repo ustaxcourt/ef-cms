@@ -12,9 +12,17 @@ exports.handler = event =>
   handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const workItems = JSON.parse(event.body);
-    return applicationContext.getUseCases().assignWorkItems({
-      applicationContext,
-      workItems: workItems,
-    });
+    try {
+      const workItems = JSON.parse(event.body);
+      const results = applicationContext.getUseCases().assignWorkItems({
+        applicationContext,
+        workItems: workItems,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

@@ -23,4 +23,18 @@ describe('ExternalDocumentNonStandardB', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
   });
+
+  describe('title generation', () => {
+    it('should generate valid title', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Application',
+        documentType: 'Application to Take Deposition of [Name]',
+        freeText: 'Petition',
+        scenario: 'Nonstandard B',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Application to Take Deposition of Petition',
+      );
+    });
+  });
 });

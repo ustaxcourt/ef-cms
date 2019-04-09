@@ -43,6 +43,7 @@ import { filePetition } from '../../shared/src/business/useCases/filePetitionInt
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
@@ -103,6 +104,7 @@ const allUseCases = {
   filePetitionFromPaper,
   fileRespondentDocument,
   forwardWorkItem,
+  generateDocumentTitle,
   getCase,
   getCaseTypes,
   getCasesByStatus,
