@@ -1,8 +1,7 @@
+import { CaseDetailReadOnlyPartyInformation } from './CaseDetailReadOnlyPartyInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-
-import { CaseDetailReadOnlyPartyInformation } from './CaseDetailReadOnlyPartyInformation';
 
 export const CaseDetailReadOnly = connect(
   {

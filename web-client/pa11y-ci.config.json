@@ -304,13 +304,13 @@
     },
 
     "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19",
-    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/select-a-document-type",
     {
       "notes": [
         "Check accessibility of elements after choosing a document category",
         "Use 'set field' and then 'check field' to trigger the onChange event on the select"
       ],
-      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection",
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/select-a-document-type&info=doctype-selection",
       "actions": [
         "wait for element #document-category to be visible",
         "set field #document-category to Motion",

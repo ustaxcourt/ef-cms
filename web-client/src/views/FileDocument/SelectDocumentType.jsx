@@ -1,15 +1,14 @@
-import { connect } from '@cerebral/react';
+import { ChooseDocumentType } from './ChooseDocumentType';
+import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
+import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SelectedDocumentType } from './SelectedDocumentType';
+import { SuccessNotification } from '../SuccessNotification';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
-import { SuccessNotification } from './SuccessNotification';
-import { ErrorNotification } from './ErrorNotification';
-import { SelectedDocumentType } from './FileDocument/SelectedDocumentType';
-import { ChooseDocumentType } from './FileDocument/ChooseDocumentType';
-
-export const FileDocument = connect(
+export const SelectDocumentType = connect(
   {
     caseDetail: state.formattedCaseDetail,
     form: state.form,
