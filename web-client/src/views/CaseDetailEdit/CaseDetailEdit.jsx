@@ -5,13 +5,13 @@ import { CaseInfo } from './CaseInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from './IRSNotice';
 import { PartyInformation } from './PartyInformation';
-import React from 'react';
 import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
-    form: state.form,
+    screenMetadata: state.screenMetadata,
     showModal: state.showModal,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
@@ -19,7 +19,7 @@ export const CaseDetailEdit = connect(
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
   },
   ({
-    form,
+    screenMetadata,
     showModal,
     submitCaseDetailEditSaveSequence,
     submitting,
@@ -70,7 +70,7 @@ export const CaseDetailEdit = connect(
           {submitting && <div className="spinner" />}
           Save
         </button>
-        {form.showSaveSuccess && (
+        {screenMetadata.showSaveSuccess && (
           <span className="mini-success" aria-live="polite" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.

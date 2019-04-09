@@ -22,6 +22,7 @@ export const SelectDocumentType = connect(
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
     updateFormValueSequence,
+    screenMetadata,
   }) => {
     return (
       <React.Fragment>
