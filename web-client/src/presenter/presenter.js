@@ -11,6 +11,7 @@ import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimp
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
@@ -113,6 +114,7 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
+    clearWizardDataSequence,
     clickServeToIrsSequence,
     closeDocumentCategoryAccordionSequence,
     createWorkItemSequence,
