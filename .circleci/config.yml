@@ -5,4 +5,7 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      - run: cd shared && ./docker-lint.sh
+      - run: docker build -t efcms -f Dockerfile .
+      - run: docker run efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
+      - run: docker run efcms /bin/sh -c 'cd shared && npm run lint'
+      - run: docker run efcms /bin/sh -c 'cd shared && npm run test'
