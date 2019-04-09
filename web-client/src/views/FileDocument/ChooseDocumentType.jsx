@@ -134,7 +134,7 @@ export const ChooseDocumentType = connect(
             className="usa-button"
             id="select-document"
             onClick={() => {
-              selectDocumentSequence();
+              selectDocumentSequence({ doNotProceed: true });
             }}
           >
             Select

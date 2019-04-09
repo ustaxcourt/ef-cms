@@ -10,7 +10,7 @@ import { state } from 'cerebral';
 export const setSecondaryDocumentScenarioAction = ({ store, get }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
-  if (secondaryDocument) {
+  if (secondaryDocument && secondaryDocument.documentType) {
     const { category, documentType } = secondaryDocument;
     const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
