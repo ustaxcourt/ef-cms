@@ -15,6 +15,7 @@ describe('ExternalDocumentStandard', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Application',
+        documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         scenario: 'Standard',
       });
@@ -26,6 +27,7 @@ describe('ExternalDocumentStandard', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Application',
+        documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         scenario: 'Standard',
       });
