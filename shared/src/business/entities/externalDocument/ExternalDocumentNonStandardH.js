@@ -18,7 +18,7 @@ function ExternalDocumentNonStandardH(rawProps, ExternalDocumentFactory) {
 
 ExternalDocumentNonStandardH.prototype.getDocumentTitle = function() {
   return replaceBracketed(
-    this.documentType,
+    this.documentTitle,
     this.secondaryDocument.getDocumentTitle(),
   );
 };
@@ -31,6 +31,7 @@ ExternalDocumentNonStandardH.errorToMessageMap = {
 
 ExternalDocumentNonStandardH.schema = joi.object().keys({
   category: joi.string().required(),
+  documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   secondaryDocument: joi.object().required(),
 });

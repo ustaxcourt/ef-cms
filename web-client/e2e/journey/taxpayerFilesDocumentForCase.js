@@ -17,7 +17,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'category',
-      value: 'Answer',
+      value: 'Answer (filed by respondent only)',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -53,7 +53,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'documentType',
-      value: 'Motion for Leave to File [Document Name]',
+      value: 'Motion for Leave to File',
     });
 
     await test.runSequence('selectDocumentSequence');
@@ -76,7 +76,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'secondaryDocument.documentType',
-      value: 'Statement [anything]',
+      value: 'Statement',
     });
 
     await test.runSequence('selectDocumentSequence');

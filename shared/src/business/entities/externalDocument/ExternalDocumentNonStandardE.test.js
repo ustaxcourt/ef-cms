@@ -16,8 +16,10 @@ describe('ExternalDocumentNonStandardE', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Motion',
-        documentType:
+        documentTitle:
           'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case',
         scenario: 'Nonstandard E',
         trialLocation: 'Little Rock, AR',
       });
@@ -29,8 +31,10 @@ describe('ExternalDocumentNonStandardE', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Motion',
-        documentType:
+        documentTitle:
           'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case',
         scenario: 'Nonstandard E',
         trialLocation: 'Little Rock, AR',
       });

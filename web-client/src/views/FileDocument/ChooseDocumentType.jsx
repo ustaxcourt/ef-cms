@@ -1,7 +1,8 @@
+import { sequences, state } from 'cerebral';
+
+import React from 'react';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
 
 export const ChooseDocumentType = connect(
   {
@@ -78,16 +79,11 @@ export const ChooseDocumentType = connect(
                 value={form.documentType}
               >
                 <option value="">- Select -</option>
-                {(constants.CATEGORY_MAP[form.category] || []).map(
-                  documentType => (
-                    <option
-                      key={documentType.documentTitle}
-                      value={documentType.documentTitle}
-                    >
-                      {documentType.documentTitle}
-                    </option>
-                  ),
-                )}
+                {(constants.CATEGORY_MAP[form.category] || []).map(entry => (
+                  <option key={entry.documentType} value={entry.documentType}>
+                    {entry.documentType}
+                  </option>
+                ))}
               </select>
               <Text
                 className="usa-input-error-message"
@@ -99,16 +95,13 @@ export const ChooseDocumentType = connect(
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
                   {(constants.CATEGORY_MAP[form.category] || []).map(
-                    (documentType, index) => (
-                      <li
-                        key={documentType.documentTitle}
-                        value={documentType.documentTitle}
-                      >
+                    (entry, index) => (
+                      <li key={entry.documentType} value={entry.documentType}>
                         <input
                           id={`documentType-${index}`}
                           type="radio"
-                          name="documentType"
-                          value={documentType.documentTitle}
+                          name="entry"
+                          value={entry.documentType}
                           onClick={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -118,7 +111,7 @@ export const ChooseDocumentType = connect(
                           }}
                         />
                         <label htmlFor={`documentType-${index}`}>
-                          {documentType.documentTitle}
+                          {entry.documentType}
                         </label>
                       </li>
                     ),

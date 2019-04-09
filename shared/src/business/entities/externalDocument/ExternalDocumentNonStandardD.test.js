@@ -18,7 +18,8 @@ describe('ExternalDocumentNonStandardD', () => {
       const serviceDate = new Date().toISOString();
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentType: 'Certificate of Service [Document Name] [Date]',
+        documentTitle: 'Certificate of Service [Document Name] [Date]',
+        documentType: 'Certificate of Service',
         previousDocument: 'Petition',
         scenario: 'Nonstandard D',
         serviceDate,
@@ -32,7 +33,8 @@ describe('ExternalDocumentNonStandardD', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentType: 'Certificate of Service [Document Name] [Date]',
+        documentTitle: 'Certificate of Service [Document Name] [Date]',
+        documentType: 'Certificate of Service',
         previousDocument: 'Petition',
         scenario: 'Nonstandard D',
         serviceDate,

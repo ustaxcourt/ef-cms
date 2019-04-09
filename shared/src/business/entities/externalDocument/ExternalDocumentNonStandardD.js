@@ -16,7 +16,7 @@ function ExternalDocumentNonStandardD(rawProps) {
 
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   return replaceBracketed(
-    this.documentType,
+    this.documentTitle,
     this.previousDocument,
     moment.utc(this.serviceDate).format('MM-DD-YYYY'),
   );
@@ -31,6 +31,7 @@ ExternalDocumentNonStandardD.errorToMessageMap = {
 
 ExternalDocumentNonStandardD.schema = joi.object().keys({
   category: joi.string().required(),
+  documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   previousDocument: joi.string().required(),
   serviceDate: joi
