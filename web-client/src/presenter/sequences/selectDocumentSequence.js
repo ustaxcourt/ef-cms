@@ -16,7 +16,6 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 
 export const selectDocumentSequence = [
   set(state.showValidation, true),
-  primeDoNotProceedPropAction,
   computeFormDateAction,
   computeSecondaryFormDateAction,
   defaultSecondaryDocumentAction,
@@ -26,9 +25,10 @@ export const selectDocumentSequence = [
     success: [
       clearAlertsAction,
       set(state.showValidation, false),
+      setDocumentScenarioAction,
+      primeDoNotProceedPropAction,
       set(state.form.isDocumentTypeSelected, true),
       set(state.form.isSecondaryDocumentTypeSelected, false),
-      setDocumentScenarioAction,
       validateSelectDocumentTypeAction,
       {
         error: [],
