@@ -170,6 +170,7 @@ describe('fileDocumentHelper', () => {
       state,
     });
     expect(result).toEqual({
+      filteredSecondaryDocumentTypes: [],
       primary: {
         showNonstandardForm: true,
         showSecondaryDocumentSelect: true,

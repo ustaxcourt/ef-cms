@@ -9,7 +9,7 @@ export const ChooseSecondaryDocumentType = connect(
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    selectSecondaryDocumentSequence: sequences.selectSecondaryDocumentSequence,
+    selectDocumentSequence: sequences.selectDocumentSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -17,7 +17,7 @@ export const ChooseSecondaryDocumentType = connect(
     constants,
     fileDocumentHelper,
     form,
-    selectSecondaryDocumentSequence,
+    selectDocumentSequence,
     updateFormValueSequence,
     validationErrors,
   }) => {
@@ -26,12 +26,15 @@ export const ChooseSecondaryDocumentType = connect(
         <h4>Which Document Are You Requesting Leave to File For?</h4>
         <div
           className={`ustc-form-group ${
-            validationErrors.secondaryCategory ? 'usa-input-error' : ''
+            validationErrors.secondaryDocument &&
+            validationErrors.secondaryDocument.category
+              ? 'usa-input-error'
+              : ''
           }`}
         >
           <label htmlFor="document-secondary-category">Document Category</label>
           <select
-            name="secondaryCategory"
+            name="secondaryDocument.category"
             id="document-secondary-category"
             aria-label="secondaryCategory"
             onChange={e => {
@@ -40,7 +43,7 @@ export const ChooseSecondaryDocumentType = connect(
                 value: e.target.value,
               });
             }}
-            value={form.secondaryCategory}
+            value={form.secondaryDocument.category}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -53,20 +56,23 @@ export const ChooseSecondaryDocumentType = connect(
           </select>
           <Text
             className="usa-input-error-message"
-            bind="validationErrors.secondaryCategory"
+            bind="validationErrors.secondaryDocument.category"
           />
         </div>
-        {form.secondaryCategory && (
+        {form.secondaryDocument && (
           <>
             <div
               className={`ustc-form-group only-large-screens ${
-                validationErrors.secondaryDocumentType ? 'usa-input-error' : ''
+                validationErrors.secondaryDocument &&
+                validationErrors.secondaryDocument.documentType
+                  ? 'usa-input-error'
+                  : ''
               }`}
             >
               <label htmlFor="secondary-document-type">Document Type</label>
               <select
                 id="secondary-document-type"
-                name="secondaryDocumentType"
+                name="secondaryDocument.documentType"
                 className="secondaryDocumentType"
                 onChange={e => {
                   updateFormValueSequence({
@@ -74,7 +80,7 @@ export const ChooseSecondaryDocumentType = connect(
                     value: e.target.value,
                   });
                 }}
-                value={form.secondaryDocumentType}
+                value={form.secondaryDocument.documentType}
               >
                 <option value="">- Select -</option>
                 {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
@@ -87,7 +93,7 @@ export const ChooseSecondaryDocumentType = connect(
               </select>
               <Text
                 className="usa-input-error-message"
-                bind="validationErrors.secondaryDocumentType"
+                bind="validationErrors.secondaryDocument.documentType"
               />
             </div>
             <div className="ustc-form-group only-small-screens">
@@ -107,7 +113,7 @@ export const ChooseSecondaryDocumentType = connect(
                               key: e.target.name,
                               value: e.target.value,
                             });
-                            selectSecondaryDocumentSequence();
+                            selectDocumentSequence();
                           }}
                         />
                         <label htmlFor={`secondaryDocumentType-${index}`}>
@@ -127,7 +133,7 @@ export const ChooseSecondaryDocumentType = connect(
             className="usa-button"
             id="select-secondary-document"
             onClick={() => {
-              selectSecondaryDocumentSequence();
+              selectDocumentSequence();
             }}
           >
             Select
