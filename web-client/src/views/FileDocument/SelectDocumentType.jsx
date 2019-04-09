@@ -112,45 +112,45 @@ export const SelectDocumentType = connect(
                       documentType: 'Motion for Continuance',
                     },
                     {
-                      category: 'Request',
-                      documentType: 'Request for Place of Trial [Place]',
-                    },
-                    {
                       category: 'Notice',
-                      documentType: 'Notice of No Objection to [Document Name[',
+                      documentType: 'Notice of No Objection',
+                      scenario: 'Nonstandard A',
                     },
                     {
-                      category: 'Stipulation',
-                      documentType: 'Stipulation [anything]',
+                      category: 'Statement',
+                      documentType: 'Statement',
+                      scenario: 'Nonstandard B',
                     },
                     {
                       category: 'Supporting Document',
-                      documentType:
-                        'Affidavit Of [Name] in Support Of [Document Name]',
+                      documentType: 'Affidavit in Support',
+                      scenario: 'Nonstandard C',
                     },
                     {
                       category: 'Miscellaneous',
-                      documentType:
-                        'Certificate of Service [Document Name] [Date]',
+                      documentType: 'Certificate of Service',
+                      scenario: 'Nonstandard D',
                     },
                     {
                       category: 'Motion',
                       documentType:
-                        'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
+                        'Motion to Change Place of Submission of Declaratory Judgment Case',
+                      scenario: 'Nonstandard E',
                     },
                     {
                       category: 'Miscellaneous',
-                      documentType:
-                        '[First, Second, etc.] Amended [Document Name]',
+                      documentType: 'Amended',
+                      scenario: 'Nonstandard F',
                     },
                     {
                       category: 'Request',
-                      documentType:
-                        '[First, Second, etc.] Request for Admissions',
+                      documentType: 'Request for Admissions',
+                      scenario: 'Nonstandard G',
                     },
                     {
                       category: 'Motion',
-                      documentType: 'Motion for Leave to File [Document Name]',
+                      documentType: 'Motion for Leave to File',
+                      scenario: 'Nonstandard H',
                     },
                   ].map(document => {
                     return (
@@ -171,7 +171,8 @@ export const SelectDocumentType = connect(
                             selectDocumentSequence();
                           }}
                         >
-                          {document.documentType}
+                          {document.documentType}{' '}
+                          {document.scenario ? `(${document.scenario})` : ''}
                         </button>
                       </li>
                     );
