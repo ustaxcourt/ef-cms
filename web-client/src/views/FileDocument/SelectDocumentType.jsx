@@ -9,7 +9,7 @@ import React from 'react';
 export const SelectDocumentType = connect(
   {
     clearWizardDataSequence: sequences.clearWizardDataSequence,
-    form: state.form,
+    screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
@@ -18,7 +18,6 @@ export const SelectDocumentType = connect(
   },
   ({
     clearWizardDataSequence,
-    form,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
     updateFormValueSequence,
@@ -38,14 +37,14 @@ export const SelectDocumentType = connect(
           <button
             type="button"
             className="usa-accordion-button document-category-accordion"
-            aria-expanded={!!form.showDocumentCategoryAccordion}
+            aria-expanded={!!screenMetadata.showDocumentCategoryAccordion}
             aria-controls="document-category-accordion-container"
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
             <span className="usa-banner-button-text">
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help determining what document category to select?
-              {form.showDocumentCategoryAccordion ? (
+              {screenMetadata.showDocumentCategoryAccordion ? (
                 <FontAwesomeIcon icon="caret-up" />
               ) : (
                 <FontAwesomeIcon icon="caret-down" />
@@ -55,7 +54,7 @@ export const SelectDocumentType = connect(
           <div
             id="document-category-accordion-container"
             className="usa-accordion-content"
-            aria-hidden={!form.showDocumentCategoryAccordion}
+            aria-hidden={!screenMetadata.showDocumentCategoryAccordion}
           >
             <DocumentCategoryAccordion />
           </div>
@@ -63,9 +62,9 @@ export const SelectDocumentType = connect(
 
         <div className="usa-grid-full">
           <div className="usa-width-one-half">
-            {form.isDocumentTypeSelected && <SelectedDocumentType />}
+            {screenMetadata.isDocumentTypeSelected && <SelectedDocumentType />}
 
-            {!form.isDocumentTypeSelected && <ChooseDocumentType />}
+            {!screenMetadata.isDocumentTypeSelected && <ChooseDocumentType />}
           </div>
           <div className="usa-width-one-third push-right">
             <div className="blue-container gray-background">
