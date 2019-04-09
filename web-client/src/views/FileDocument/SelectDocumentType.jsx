@@ -111,47 +111,6 @@ export const SelectDocumentType = connect(
                       category: 'Motion',
                       documentType: 'Motion for Continuance',
                     },
-                    {
-                      category: 'Request',
-                      documentType: 'Request for Place of Trial [Place]',
-                    },
-                    {
-                      category: 'Notice',
-                      documentType: 'Notice of No Objection to [Document Name[',
-                    },
-                    {
-                      category: 'Stipulation',
-                      documentType: 'Stipulation [anything]',
-                    },
-                    {
-                      category: 'Supporting Document',
-                      documentType:
-                        'Affidavit Of [Name] in Support Of [Document Name]',
-                    },
-                    {
-                      category: 'Miscellaneous',
-                      documentType:
-                        'Certificate of Service [Document Name] [Date]',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType:
-                        'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
-                    },
-                    {
-                      category: 'Miscellaneous',
-                      documentType:
-                        '[First, Second, etc.] Amended [Document Name]',
-                    },
-                    {
-                      category: 'Request',
-                      documentType:
-                        '[First, Second, etc.] Request for Admissions',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType: 'Motion for Leave to File [Document Name]',
-                    },
                   ].map(document => {
                     return (
                       <li key={document.documentType}>
