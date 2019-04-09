@@ -4,5 +4,4 @@ jobs:
    machine: true
    steps:
      - checkout
-     - run: cd shared
-     - run: ./docker-lint.sh
+     - run: cd shared && ./docker-lint.sh
