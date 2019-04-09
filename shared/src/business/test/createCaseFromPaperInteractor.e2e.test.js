@@ -94,7 +94,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
                 },
               ],
               section: 'docket',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Alex Docketclerk',
+              sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
         },
@@ -137,7 +138,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Docketclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Docketclerk is ready for review.',
+            message: 'Petition filed by Bob Jones is ready for review.',
           },
         ],
         section: 'docket',
@@ -165,7 +166,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Docketclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Docketclerk is ready for review.',
+            message: 'Petition filed by Bob Jones is ready for review.',
           },
         ],
         section: 'docket',
