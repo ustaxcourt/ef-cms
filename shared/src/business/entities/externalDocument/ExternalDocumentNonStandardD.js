@@ -18,7 +18,7 @@ ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentType,
     this.previousDocument,
-    moment.utc(this.serviceDate).format('L'),
+    moment.utc(this.serviceDate).format('MM-DD-YYYY'),
   );
 };
 
