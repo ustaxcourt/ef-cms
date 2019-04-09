@@ -42,13 +42,6 @@ const router = {
       }),
     );
     route(
-      '/case-detail/*/select-a-document-type',
-      checkLoggedIn(docketNumber => {
-        document.title = `Select a document type ${pageTitleSuffix}`;
-        app.getSequence('gotoSelectDocumentTypeSequence')({ docketNumber });
-      }),
-    );
-    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
