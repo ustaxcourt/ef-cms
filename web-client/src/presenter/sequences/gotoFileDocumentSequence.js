@@ -10,7 +10,7 @@ const gotoFileDocument = [
   clearAlertsAction,
   getCaseAction,
   setCaseAction,
-  setCurrentPageAction('FileDocument'),
+  setCurrentPageAction('FileDocumentWizard'),
 ];
 
 export const gotoFileDocumentSequence = [
