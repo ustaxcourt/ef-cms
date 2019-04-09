@@ -28,7 +28,7 @@ describe('ExternalDocumentNonStandardD', () => {
   });
 
   describe('title generation', () => {
-    const serviceDate = new Date().toISOString();
+    const serviceDate = '04/10/2012';
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
@@ -38,7 +38,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Certificate of Service Petition ${serviceDate}`,
+        `Certificate of Service Petition 04-10-2012`,
       );
     });
   });

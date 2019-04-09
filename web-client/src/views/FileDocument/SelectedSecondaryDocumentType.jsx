@@ -38,11 +38,12 @@ export const SelectedSecondaryDocumentType = connect(
           </button>
         </div>
         <div>
-          <p>{form.secondaryDocumentType}</p>
+          <p>{form.secondaryDocument.documentType}</p>
         </div>
         {fileDocumentHelper.secondary.showNonstandardForm && (
           <NonstandardForm
             level="secondary"
+            namespace="secondaryDocument"
             validationErrors="validationErrors.secondaryDocument"
           />
         )}

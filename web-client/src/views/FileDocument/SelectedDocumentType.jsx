@@ -6,17 +6,17 @@ import React from 'react';
 
 export const SelectedDocumentType = connect(
   {
-    caseDetail: state.caseDetail,
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    selectDocumentSequence: sequences.selectDocumentSequence,
   },
   ({
-    caseDetail,
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
+    selectDocumentSequence,
     form,
     fileDocumentHelper,
   }) => {
@@ -53,12 +53,15 @@ export const SelectedDocumentType = connect(
         </div>
 
         <div className="ustc-form-group">
-          <a
-            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+          <button
+            type="button"
             className="usa-button"
+            onClick={() => {
+              selectDocumentSequence();
+            }}
           >
             Continue
-          </a>
+          </button>
         </div>
       </React.Fragment>
     );
