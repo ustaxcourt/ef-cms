@@ -10,7 +10,7 @@ export const selectSecondaryDocumentSequence = [
     error: [setValidationErrorsAction],
     success: [
       set(state.showValidation, false),
-      set(state.form.isSecondaryDocumentTypeSelected, true),
+      set(state.screenMetadata.isSecondaryDocumentTypeSelected, true),
     ],
   },
 ];

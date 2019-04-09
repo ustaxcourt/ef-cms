@@ -69,6 +69,7 @@ export const state = {
   },
   petition: {},
   procedureTypes: [],
+  screenMetadata: {},
   searchTerm: '',
   selectedWorkItems: [],
   showModal: '',
