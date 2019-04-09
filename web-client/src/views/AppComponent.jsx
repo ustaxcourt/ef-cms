@@ -10,7 +10,7 @@ import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
-import { FileDocument } from './FileDocument/FileDocument';
+import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Interstitial } from './Interstitial';
@@ -39,7 +39,7 @@ const pages = {
   DashboardSeniorAttorney,
   DocumentDetail,
   Error,
-  FileDocument,
+  FileDocumentWizard,
   Interstitial,
   Loading,
   LogIn,

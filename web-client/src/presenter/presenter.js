@@ -8,6 +8,7 @@ import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequ
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
@@ -111,6 +112,7 @@ export const presenter = {
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
     cerebralBindSimpleSetStateSequence,
+    chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
