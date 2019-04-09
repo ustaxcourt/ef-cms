@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -9,8 +9,8 @@ import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
-import { TrialCity } from './StartCase/TrialCity';
 import { Text } from '../ustc-ui/Text/Text';
+import { TrialCity } from './StartCase/TrialCity';
 
 export const StartCase = connect(
   {
@@ -19,6 +19,7 @@ export const StartCase = connect(
     constants: state.constants,
     filingTypes: state.filingTypes,
     form: state.form,
+    screenMetadata: state.screenMetadata,
     showModal: state.showModal,
     startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
@@ -35,23 +36,24 @@ export const StartCase = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    caseTypeDescriptionHelper,
+    clearPreferredTrialCitySequence,
+    constants,
     filingTypes,
     form,
-    constants,
+    screenMetadata,
     showModal,
-    clearPreferredTrialCitySequence,
     startACaseToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
-    caseTypeDescriptionHelper,
-    trialCitiesHelper,
     toggleCaseDifferenceSequence,
+    trialCitiesHelper,
     updateFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
-    updateHasIrsNoticeFormValueSequence,
-    validationErrors,
     validateStartCaseSequence,
+    validationErrors,
   }) => {
     return (
       <section className="usa-section usa-grid">
@@ -718,7 +720,7 @@ export const StartCase = connect(
             <button
               type="button"
               className="usa-accordion-button case-difference"
-              aria-expanded={!!form.showCaseDifference}
+              aria-expanded={!!screenMetadata.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
             >
@@ -726,7 +728,7 @@ export const StartCase = connect(
                 <FontAwesomeIcon icon="question-circle" size="sm" />
                 How is a small case different than a regular case, and do I
                 qualify?
-                {form.showCaseDifference ? (
+                {screenMetadata.showCaseDifference ? (
                   <FontAwesomeIcon icon="caret-up" />
                 ) : (
                   <FontAwesomeIcon icon="caret-down" />
@@ -736,7 +738,7 @@ export const StartCase = connect(
             <div
               id="case-difference-container"
               className="usa-accordion-content"
-              aria-hidden={!form.showCaseDifference}
+              aria-hidden={!screenMetadata.showCaseDifference}
             >
               <CaseDifferenceExplained />
             </div>
