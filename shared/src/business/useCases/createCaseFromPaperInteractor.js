@@ -32,7 +32,9 @@ const addPetitionDocumentWithWorkItemToCase = (
     },
     isInitializeCase: documentEntity.isPetitionDocument(),
     section: user.section,
-    sentBy: user.userId,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
   });
 
   workItemEntity.addMessage(
@@ -45,6 +47,8 @@ const addPetitionDocumentWithWorkItemToCase = (
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
+
+  return workItemEntity;
 };
 
 /**
@@ -99,7 +103,7 @@ exports.createCaseFromPaper = async ({
     filedBy: caseCaptionNames,
     userId: user.userId,
   });
-  addPetitionDocumentWithWorkItemToCase(
+  const newWorkItem = addPetitionDocumentWithWorkItemToCase(
     user,
     caseToAdd,
     petitionDocumentEntity,
@@ -126,38 +130,6 @@ exports.createCaseFromPaper = async ({
     });
     caseToAdd.addDocument(odsDocumentEntity);
   }
-
-  const newWorkItem = new WorkItem({
-    caseId: caseToAdd.caseId,
-    caseStatus: caseToAdd.status,
-    docketNumber: caseToAdd.docketNumber,
-    docketNumberSuffix: caseToAdd.docketNumberSuffix,
-    document: {
-      createdAt: petitionDocumentEntity.createdAt,
-      documentId: petitionDocumentEntity.documentId,
-      documentType: petitionDocumentEntity.documentType,
-    },
-    isInitializeCase: true,
-  })
-    .assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      role: user.role,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-      sentByUserRole: user.role,
-    })
-    .addMessage(
-      new Message({
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${petitionDocumentEntity.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-        to: user.name,
-        toUserId: user.userId,
-      }),
-    );
 
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
