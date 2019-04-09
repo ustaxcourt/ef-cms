@@ -389,18 +389,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateWorkItem:
-    handler: src/workitems/updateWorkItemLambda.handler
-    events:
-      - http:
-          path: v1/workitems/{workItemId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   completeWorkItem:
     handler: src/workitems/completeWorkItemLambda.handler
     events:

@@ -2,6 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/Case');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -33,37 +34,70 @@ exports.forwardWorkItem = async ({
       .getUserById({ applicationContext, userId: assigneeId }),
   );
 
-  const workItemToForward = await applicationContext
+  const fullWorkItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
       applicationContext,
       workItemId: workItemId,
+    });
+
+  const workItemToForward = new WorkItem(fullWorkItem)
+    .assignToUser({
+      assigneeId: userToForwardTo.userId,
+      assigneeName: userToForwardTo.name,
+      role: userToForwardTo.role,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+      sentByUserRole: user.role,
     })
-    .then(fullWorkItem =>
-      new WorkItem(fullWorkItem)
-        .assignToUser({
-          assigneeId: userToForwardTo.userId,
-          assigneeName: userToForwardTo.name,
-          role: userToForwardTo.role,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-          sentByUserRole: user.role,
-        })
-        .addMessage(
-          new Message({
-            createdAt: new Date().toISOString(),
-            from: user.name,
-            fromUserId: user.userId,
-            message,
-            to: userToForwardTo.name,
-            toUserId: userToForwardTo.userId,
-          }),
-        ),
+    .addMessage(
+      new Message({
+        createdAt: new Date().toISOString(),
+        from: user.name,
+        fromUserId: user.userId,
+        message,
+        to: userToForwardTo.name,
+        toUserId: userToForwardTo.userId,
+      }),
     );
 
-  return applicationContext.getPersistenceGateway().saveWorkItem({
+  const caseObject = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId: workItemToForward.caseId,
+    });
+
+  const caseToUpdate = new Case(caseObject);
+
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
-    createOutboxEntries: true,
-    workItemToSave: workItemToForward.validate().toRawObject(),
+    workItem: fullWorkItem,
   });
+
+  caseToUpdate.documents.forEach(
+    document =>
+      (document.workItems = document.workItems.map(item => {
+        return item.workItemId === workItemToForward.workItemId
+          ? workItemToForward
+          : item;
+      })),
+  );
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseToUpdate.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext,
+    workItem: workItemToForward.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    applicationContext,
+    workItem: workItemToForward.validate().toRawObject(),
+  });
+
+  return workItemToForward.toRawObject();
 };

@@ -50,6 +50,8 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
+
+  return workItemEntity;
 };
 
 /**
@@ -109,7 +111,11 @@ exports.createCase = async ({
     filedBy: user.name,
     userId: user.userId,
   });
-  addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
+  const newWorkItem = addDocumentToCase(
+    user,
+    caseToAdd,
+    petitionDocumentEntity,
+  );
 
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
@@ -129,9 +135,14 @@ exports.createCase = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    applicationContext,
+    workItem: newWorkItem.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();

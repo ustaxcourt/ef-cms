@@ -1,12 +1,13 @@
+const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
+const { WorkItem } = require('../entities/WorkItem');
+
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
-const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentWithWorkItemToCase = (
   user,
@@ -30,7 +31,9 @@ const addPetitionDocumentWithWorkItemToCase = (
     },
     isInitializeCase: documentEntity.isPetitionDocument(),
     section: user.section,
-    sentBy: user.userId,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
   });
 
   workItemEntity.addMessage(
@@ -43,6 +46,8 @@ const addPetitionDocumentWithWorkItemToCase = (
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
+
+  return workItemEntity;
 };
 
 /**
@@ -97,7 +102,7 @@ exports.createCaseFromPaper = async ({
     filedBy: caseCaptionNames,
     userId: user.userId,
   });
-  addPetitionDocumentWithWorkItemToCase(
+  const newWorkItem = addPetitionDocumentWithWorkItemToCase(
     user,
     caseToAdd,
     petitionDocumentEntity,
@@ -125,9 +130,14 @@ exports.createCaseFromPaper = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext,
+    workItem: newWorkItem.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();

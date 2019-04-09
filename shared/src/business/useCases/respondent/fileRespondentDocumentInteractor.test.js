@@ -40,7 +40,6 @@ describe('fileRespondentDocument', () => {
         };
       },
       getPersistenceGateway: () => ({
-        saveCase: async () => null,
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
@@ -73,7 +72,6 @@ describe('fileRespondentDocument', () => {
           };
         },
         getPersistenceGateway: () => ({
-          saveCase: async () => null,
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
