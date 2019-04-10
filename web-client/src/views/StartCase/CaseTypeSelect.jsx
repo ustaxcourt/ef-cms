@@ -14,13 +14,13 @@ export const CaseTypeSelect = connect(
     value: props.value,
   },
   ({
+    allowDefaultOption,
     caseTypes,
     legend,
-    value,
-    allowDefaultOption,
     onChange,
     validation,
     validationErrors,
+    value,
   }) => {
     return (
       <div className="subsection">
