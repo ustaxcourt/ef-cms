@@ -5,44 +5,46 @@ import React from 'react';
 
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetailInternal } from './CaseDetailInternal';
-import { CaseDetailPetitioner } from './CaseDetailPetitioner';
-import { CaseDetailPublic } from './CaseDetailPublic';
-import { CaseDetailRespondent } from './CaseDetailRespondent';
+import { CaseDetail } from './CaseDetail';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
+import { DashboardPractitioner } from './DashboardPractitioner';
 import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
+import { FileDocument } from './FileDocument';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { StartCase } from './StartCase';
+import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { UsaBanner } from './UsaBanner';
 
 const pages = {
   BeforeStartingCase,
+  CaseDetail,
   CaseDetailInternal,
-  CaseDetailPetitioner,
-  CaseDetailPublic,
-  CaseDetailRespondent,
   DashboardDocketClerk,
   DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
+  DashboardPractitioner,
   DashboardRespondent,
   DashboardSeniorAttorney,
   DocumentDetail,
   Error,
+  FileDocument,
   Interstitial,
   Loading,
   LogIn,
   StartCase,
+  StartCaseInternal,
   StyleGuide,
 };
 

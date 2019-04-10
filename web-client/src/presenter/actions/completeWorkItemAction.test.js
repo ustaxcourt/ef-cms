@@ -1,6 +1,6 @@
 import { runAction } from 'cerebral/test';
 
-import presenter from '..';
+import { presenter } from '../presenter';
 
 import { completeWorkItemAction } from './completeWorkItemAction';
 

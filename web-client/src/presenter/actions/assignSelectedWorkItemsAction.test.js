@@ -1,5 +1,5 @@
 import { assignSelectedWorkItemsAction } from './assignSelectedWorkItemsAction';
-import presenter from '..';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {

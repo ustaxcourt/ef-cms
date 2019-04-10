@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import caseDetailHelper from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 
 export default test => {
   return it('Petitions clerk views case detail', async () => {
@@ -20,6 +20,5 @@ export default test => {
     expect(helper.showIrsServedDate).toEqual(false);
     expect(helper.showPayGovIdInput).toEqual(false);
     expect(helper.showPaymentOptions).toEqual(true);
-    expect(helper.showActionRequired).toEqual(true);
   });
 };

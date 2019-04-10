@@ -3,6 +3,7 @@ const {
   GET_CASE,
   UPDATE_CASE,
   WORKITEM,
+  PETITION,
   isAuthorized,
 } = require('./authorizationClientService');
 
@@ -55,6 +56,15 @@ describe('Authorization client service', () => {
       isAuthorized(
         { role: 'petitionsclerk', userId: 'petitionsclerk' },
         WORKITEM,
+      ),
+    ).toBeTruthy();
+  });
+
+  it('should authorize a petitions clerk for petition creation', () => {
+    expect(
+      isAuthorized(
+        { role: 'petitionsclerk', userId: 'petitionsclerk' },
+        PETITION,
       ),
     ).toBeTruthy();
   });

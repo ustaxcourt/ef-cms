@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const InternationalAddress = connect(
   {
@@ -21,7 +22,7 @@ export const InternationalAddress = connect(
       <React.Fragment>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].address1
@@ -46,13 +47,12 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].address1}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.address1`}
+          />
         </div>
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor={`${type}.address2`}>
             Address Line 2 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -73,7 +73,7 @@ export const InternationalAddress = connect(
             }}
           />
         </div>
-        <div className="usa-form-group">
+        <div className="ustc-form-group">
           <label htmlFor={`${type}.address3`}>
             Address Line 3 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -96,7 +96,7 @@ export const InternationalAddress = connect(
         </div>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].state
@@ -124,15 +124,14 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].state}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.state`}
+          />
         </div>
         <div
           className={
-            'usa-form-group ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].city
@@ -157,15 +156,14 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].city}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.city`}
+          />
         </div>
         <div
           className={
-            'usa-form-group clear-both ' +
+            'ustc-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode
@@ -192,11 +190,10 @@ export const InternationalAddress = connect(
               validateStartCaseSequence();
             }}
           />
-          {validationErrors && validationErrors[type] && (
-            <div className="usa-input-error-message">
-              {validationErrors[type].postalCode}
-            </div>
-          )}
+          <Text
+            className="usa-input-error-message"
+            bind={`validationErrors.${type}.postalCode`}
+          />
         </div>
       </React.Fragment>
     );

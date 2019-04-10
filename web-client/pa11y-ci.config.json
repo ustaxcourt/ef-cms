@@ -3,7 +3,8 @@
     "When developing new views or URLs, please add a check for accessibility as seen below.",
     "If further actions are required at a given URL, use the 'actions' array to carry out the necessary steps.",
     "If tests fail due to timeouts, try walking through tests manually.",
-    "See info on actions here: https://github.com/pa11y/pa11y#actions"
+    "See info on actions here: https://github.com/pa11y/pa11y#actions",
+    "To fire onChange when altering a select menu, use 'set field' followed by 'check field'."
   ],
   "EXAMPLE": [
     "http://example.com/simple-url-with-no-actions-to-set-up",
@@ -72,7 +73,10 @@
       ]
     },
     {
-      "notes": "expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses",
+      "notes": [
+        "expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses",
+        "Use 'set field' and then 'check field' to trigger the onChange event on the select"
+      ],
       "url": "http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international",
       "actions": [
         "wait for label#filing-type-1 to be visible",
@@ -81,8 +85,11 @@
         "click element label#is-spouse-deceased-0",
         "wait for .contactPrimary-country-type to be visible",
         "set field .contactPrimary-country-type to international",
-        "wait for .contactSecondary-country-type to be visible",
-        "set field .contactSecondary-country-type to international"
+        "check field .contactPrimary-country-type",
+        "wait for .contactPrimary-country to be visible",
+        "set field .contactSecondary-country-type to international",
+        "check field .contactSecondary-country-type",
+        "wait for .contactSecondary-country to be visible"
       ]
     },
     {
@@ -297,15 +304,30 @@
     },
 
     "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19",
+    "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document",
+    {
+      "notes": [
+        "Check accessibility of elements after choosing a document category",
+        "Use 'set field' and then 'check field' to trigger the onChange event on the select"
+      ],
+      "url": "http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection",
+      "actions": [
+        "wait for element #document-category to be visible",
+        "set field #document-category to Motion",
+        "check field #document-category",
+        "wait for element #document-type to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/",
+    "http://localhost:1234/mock-login?token=petitionsclerk&path=/start-a-case",
     "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19",
     {
       "notes": "checks a11y of case information tab panel",
       "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=tab-case-info",
       "actions": [
-        "wait for #case-info-tab to be visible",
-        "click element #case-info-tab"
+        "wait for #tab-case-info to be visible",
+        "click element #tab-case-info"
       ]
     },
     {
@@ -403,6 +425,11 @@
     "http://localhost:1234/mock-login?token=seniorattorney&path=/",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+
+    "http://localhost:1234/mock-login?token=practitioner&path=/",
+    "http://localhost:1234/mock-login?token=practitioner&path=/case-detail/105-19",
+    "http://localhost:1234/mock-login?token=practitioner&path=/start-a-case",
+
     "http://localhost:1234/request-for-page-that-doesnt-exist"
   ]
 }

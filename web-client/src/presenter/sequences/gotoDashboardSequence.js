@@ -37,6 +37,11 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitionsClerk'),
       ...chooseWorkQueueSequence,
     ],
+    practitioner: [
+      getCasesByUserAction,
+      setCasesAction,
+      setCurrentPageAction('DashboardPractitioner'),
+    ],
     respondent: [
       clearAlertsAction,
       getCasesForRespondentAction,

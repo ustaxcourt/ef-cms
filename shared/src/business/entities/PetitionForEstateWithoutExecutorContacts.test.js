@@ -1,4 +1,4 @@
-const Petition = require('./Petition');
+const { Petition } = require('./Petition');
 
 describe('Petition', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {

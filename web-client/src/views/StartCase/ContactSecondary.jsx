@@ -5,6 +5,7 @@ import React from 'react';
 import { Address } from './Address';
 import { Country } from './Country';
 import { InternationalAddress } from './InternationalAddress';
+import { Text } from '../../ustc-ui/Text/Text';
 
 export const ContactSecondary = connect(
   {
@@ -32,13 +33,13 @@ export const ContactSecondary = connect(
     contactsHelper,
   }) => {
     return (
-      <div className="usa-form-group contact-group">
-        {parentView === 'CaseDetail' ? (
-          <h4>{contactsHelper.contactSecondary.header}</h4>
+      <>
+        {parentView === 'StartCase' ? (
+          <h2>{contactsHelper.contactSecondary.header}</h2>
         ) : (
-          <h3>{contactsHelper.contactSecondary.header}</h3>
+          <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
-        <div className="blue-container">
+        <div className="blue-container contact-group">
           <Country
             type="contactSecondary"
             bind={bind}
@@ -47,7 +48,7 @@ export const ContactSecondary = connect(
           />
           <div
             className={
-              'usa-form-group ' +
+              'ustc-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
                 ? 'usa-input-error'
@@ -73,13 +74,21 @@ export const ContactSecondary = connect(
                 onBlurSequence();
               }}
             />
-            <div className="usa-input-error-message">
-              {validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.name}
-            </div>
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.contactSecondary.name"
+            />
           </div>
           {contactsHelper.contactSecondary.displayInCareOf && (
-            <div className="usa-form-group">
+            <div
+              className={
+                'ustc-form-group ' +
+                (validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.inCareOf
+                  ? 'usa-input-error'
+                  : '')
+              }
+            >
               <label htmlFor="secondaryInCareOf">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
                   <span>
@@ -112,11 +121,10 @@ export const ContactSecondary = connect(
                   onBlurSequence();
                 }}
               />
-              {validationErrors.contactSecondary && (
-                <div className="usa-input-error-message">
-                  {validationErrors.contactSecondary.inCareOf}
-                </div>
-              )}
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactSecondary.inCareOf"
+              />
             </div>
           )}
           {data.contactSecondary.countryType ===
@@ -140,7 +148,7 @@ export const ContactSecondary = connect(
           {contactsHelper.contactSecondary.displayPhone && (
             <div
               className={
-                'usa-form-group ' +
+                'ustc-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
                   ? 'usa-input-error'
@@ -165,14 +173,14 @@ export const ContactSecondary = connect(
                   onBlurSequence();
                 }}
               />
-              <div className="usa-input-error-message">
-                {validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.phone}
-              </div>
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.contactSecondary.phone"
+              />
             </div>
           )}
         </div>
-      </div>
+      </>
     );
   },
 );

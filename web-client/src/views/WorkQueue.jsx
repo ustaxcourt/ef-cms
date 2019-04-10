@@ -3,6 +3,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { If } from '../ustc-ui/If/If';
 import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
 
@@ -10,9 +11,8 @@ export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     runBatchProcessSequence: sequences.runBatchProcessSequence,
-    workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, runBatchProcessSequence, workQueueHelper }) => {
+  ({ chooseWorkQueueSequence, runBatchProcessSequence }) => {
     return (
       <React.Fragment>
         <h1 tabIndex="-1">Work Queue</h1>
@@ -36,15 +36,26 @@ export const WorkQueue = connect(
               <SectionWorkQueue />
             </div>
           </Tab>
+          <If bind="workQueueHelper.showStartCaseButton">
+            <div className="fix-top-right">
+              <a
+                className="usa-button new-case"
+                href="/start-a-case"
+                id="init-file-petition"
+              >
+                Create a Case
+              </a>
+            </div>
+          </If>
         </Tabs>
-        {workQueueHelper.showRunBatchIRSProcessButton && (
+        <If bind="workQueueHelper.showRunBatchIRSProcessButton">
           <button
             className="usa-button-secondary"
             onClick={() => runBatchProcessSequence()}
           >
             Run IRS Batch Process
           </button>
-        )}
+        </If>
       </React.Fragment>
     );
   },

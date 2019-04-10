@@ -50,12 +50,14 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     const fileNames = caseToBatch.documents.map(
       document => `${document.documentType}.pdf`,
     );
-    const zipName = sanitize(
-      `${caseToBatch.docketNumber}_${caseToBatch.contactPrimary.name.replace(
-        /\s/g,
-        '_',
-      )}.zip`,
-    );
+    let zipName = sanitize(`${caseToBatch.docketNumber}`);
+
+    if (caseToBatch.contactPrimary && caseToBatch.contactPrimary.name) {
+      zipName += sanitize(
+        `_${caseToBatch.contactPrimary.name.replace(/\s/g, '_')}`,
+      );
+    }
+    zipName += '.zip';
 
     await applicationContext.getPersistenceGateway().zipDocuments({
       applicationContext,
@@ -64,22 +66,39 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       zipName,
     });
 
-    const stinId = caseToBatch.documents.find(
+    const stinDocument = caseToBatch.documents.find(
       document => document.documentType === Case.documentTypes.stin,
-    ).documentId;
+    );
 
-    await applicationContext.getPersistenceGateway().deleteDocument({
-      applicationContext,
-      key: stinId,
-    });
+    if (stinDocument) {
+      await applicationContext.getPersistenceGateway().deleteDocument({
+        applicationContext,
+        key: stinDocument.documentId,
+      });
+    }
 
     const caseEntity = new Case(caseToBatch).markAsSentToIRS(
       new Date().toISOString(),
     );
 
+    const petitionDocument = caseEntity.documents.find(
+      document => document.documentType === Case.documentTypes.petitionFile,
+    );
+    const initializeCaseWorkItem = petitionDocument.workItems.find(
+      workItem => workItem.isInitializeCase,
+    );
+
+    //set the work item as completed
+    initializeCaseWorkItem.setAsSentToIRS();
+
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: initializeCaseWorkItem,
     });
 
     zips = zips.concat({

@@ -85,4 +85,4 @@ joiValidationDecorator(
   Petition.errorToMessageMap,
 );
 
-module.exports = Petition;
+module.exports = { Petition };

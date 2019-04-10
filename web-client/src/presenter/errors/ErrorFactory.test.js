@@ -1,4 +1,4 @@
-import ErrorFactory from './ErrorFactory';
+import { ErrorFactory } from './ErrorFactory';
 
 describe('ErrorFactory', () => {
   it('creates UnidentifiedUserError errors for status code 401', () => {

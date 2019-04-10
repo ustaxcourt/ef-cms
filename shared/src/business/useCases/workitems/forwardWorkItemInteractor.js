@@ -3,9 +3,9 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const WorkItem = require('../../entities/WorkItem');
-const Message = require('../../entities/Message');
-const User = require('../../entities/User');
+const { WorkItem } = require('../../entities/WorkItem');
+const { Message } = require('../../entities/Message');
+const { User } = require('../../entities/User');
 
 /**
  *
@@ -47,6 +47,7 @@ exports.forwardWorkItem = async ({
           role: userToForwardTo.role,
           sentBy: user.name,
           sentByUserId: user.userId,
+          sentByUserRole: user.role,
         })
         .addMessage(
           new Message({

@@ -29,7 +29,7 @@ export const DashboardRespondent = connect(
             <thead>
               <tr>
                 <th>Docket Number</th>
-                <th>Petitioner Name</th>
+                <th>Case Name</th>
                 <th>Date Filed</th>
               </tr>
             </thead>
@@ -43,8 +43,8 @@ export const DashboardRespondent = connect(
                     </a>
                   </td>
                   <td>
-                    <span className="responsive-label">Petitioner Name</span>
-                    {item.petitionerName}
+                    <span className="responsive-label">Case Name</span>
+                    {item.caseName}
                   </td>
                   <td>
                     <span className="responsive-label">Date Filed</span>
