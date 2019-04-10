@@ -1,4 +1,4 @@
-const client = require('../../../shared/src/persistence/dynamodbClientService');
+const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const { getRecordViaMapping } = require('./dynamo/helpers/getRecordViaMapping');
 const { incrementCounter } = require('./dynamo/helpers/incrementCounter');

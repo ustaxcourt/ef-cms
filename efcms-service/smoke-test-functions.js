@@ -1,5 +1,5 @@
 const applicationContext = require('./src/applicationContext')();
-const client = require('../shared/src/persistence/dynamodbClientService');
+const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
 
 module.exports = {
   deleteCase,
