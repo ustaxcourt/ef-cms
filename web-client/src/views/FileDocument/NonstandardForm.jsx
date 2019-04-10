@@ -15,6 +15,8 @@ export const NonstandardForm = connect(
     namespace: props.namespace,
     screenMetadata: state.screenMetadata,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateSelectDocumentTypeSequence:
+      sequences.validateSelectDocumentTypeSequence,
     validationErrors: state[props.validationErrors],
   },
   ({
@@ -25,6 +27,7 @@ export const NonstandardForm = connect(
     screenMetadata,
     updateFormValueSequence,
     validationErrors,
+    validateSelectDocumentTypeSequence,
   }) => {
     namespace = namespace ? `${namespace}.` : '';
     return (
@@ -51,6 +54,9 @@ export const NonstandardForm = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+              }}
+              onBlur={() => {
+                validateSelectDocumentTypeSequence();
               }}
             />
             <Text
@@ -81,6 +87,7 @@ export const NonstandardForm = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateSelectDocumentTypeSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -138,6 +145,9 @@ export const NonstandardForm = connect(
                         value: e.target.value,
                       });
                     }}
+                    onBlur={() => {
+                      validateSelectDocumentTypeSequence();
+                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-day">
@@ -165,6 +175,9 @@ export const NonstandardForm = connect(
                         value: e.target.value,
                       });
                     }}
+                    onBlur={() => {
+                      validateSelectDocumentTypeSequence();
+                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group-year">
@@ -191,6 +204,9 @@ export const NonstandardForm = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                    }}
+                    onBlur={() => {
+                      validateSelectDocumentTypeSequence();
                     }}
                   />
                 </div>
@@ -223,6 +239,7 @@ export const NonstandardForm = connect(
                   key: `${namespace}trialLocation`,
                   value: e.target.value,
                 });
+                validateSelectDocumentTypeSequence();
               }}
             />
             <Text
@@ -265,6 +282,7 @@ export const NonstandardForm = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
+                        validateSelectDocumentTypeSequence();
                       }}
                     />
                     <label htmlFor={`${namespace}${ordinalValue}`}>
