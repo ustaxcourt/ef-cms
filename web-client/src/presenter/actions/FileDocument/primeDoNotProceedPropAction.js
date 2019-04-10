@@ -9,11 +9,10 @@ import { state } from 'cerebral';
  * @returns {Object} the docketNumber prop
  */
 export const primeDoNotProceedPropAction = ({ get }) => {
-  const {
-    isDocumentTypeSelected,
-    scenario,
-    isSecondaryDocumentTypeSelected,
-  } = get(state.form);
+  const { scenario } = get(state.form);
+  const { isDocumentTypeSelected, isSecondaryDocumentTypeSelected } = get(
+    state.screenMetadata,
+  );
 
   const isSecondaryDocumentNeeded = scenario === 'Nonstandard H';
   return {

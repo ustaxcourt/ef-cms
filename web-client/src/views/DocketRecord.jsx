@@ -1,8 +1,8 @@
 import { sequences, state } from 'cerebral';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const DocketRecord = connect(
   {
@@ -33,9 +33,7 @@ export const DocketRecord = connect(
         {helper.showFileDocumentButton && (
           <a
             className="usa-button"
-            href={`/case-detail/${
-              caseDetail.docketNumber
-            }/select-a-document-type`}
+            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
             id="button-file-document"
           >
             <FontAwesomeIcon icon="cloud-upload-alt" /> File Document

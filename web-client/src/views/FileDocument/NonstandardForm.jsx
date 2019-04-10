@@ -13,6 +13,7 @@ export const NonstandardForm = connect(
     form: state.form,
     level: props.level,
     namespace: props.namespace,
+    screenMetadata: state.screenMetadata,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state[props.validationErrors],
   },
@@ -21,6 +22,7 @@ export const NonstandardForm = connect(
     form,
     level,
     namespace,
+    screenMetadata,
     updateFormValueSequence,
     validationErrors,
   }) => {
@@ -43,7 +45,7 @@ export const NonstandardForm = connect(
               type="text"
               name={`${namespace}freeText`}
               autoCapitalize="none"
-              value={get(form, `${namespace}freeText`)}
+              value={get(form, `${namespace}freeText`, '')}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
@@ -72,7 +74,7 @@ export const NonstandardForm = connect(
             <select
               name={`${namespace}previousDocument`}
               id={`${namespace}previous-document`}
-              value={get(form, `${namespace}previousDocument`)}
+              value={get(form, `${namespace}previousDocument`, '')}
               aria-label="previousDocument"
               onChange={e => {
                 updateFormValueSequence({
@@ -128,7 +130,7 @@ export const NonstandardForm = connect(
                     max="12"
                     min="1"
                     name={`${namespace}month`}
-                    value={get(form, `${namespace}month`)}
+                    value={get(form, `${namespace}month`, '')}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -155,7 +157,7 @@ export const NonstandardForm = connect(
                     max="31"
                     min="1"
                     name={`${namespace}day`}
-                    value={get(form, `${namespace}day`)}
+                    value={get(form, `${namespace}day`, '')}
                     type="number"
                     onChange={e => {
                       updateFormValueSequence({
@@ -181,7 +183,7 @@ export const NonstandardForm = connect(
                     id={`${namespace}year`}
                     max="2100"
                     min="1900"
-                    value={get(form, `${namespace}year`)}
+                    value={get(form, `${namespace}year`, '')}
                     name={`${namespace}year`}
                     type="number"
                     onChange={e => {
@@ -214,7 +216,7 @@ export const NonstandardForm = connect(
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
-              value={get(form, `${namespace}trialLocation`)}
+              value={get(form, `${namespace}trialLocation`, '')}
               trialCitiesByState={fileDocumentHelper[level].trialCities}
               onChange={e => {
                 updateFormValueSequence({
@@ -255,7 +257,8 @@ export const NonstandardForm = connect(
                       name={`${namespace}ordinalValue`}
                       value={ordinalValue}
                       checked={
-                        get(form, `${namespace}ordinalValue`) === ordinalValue
+                        get(form, `${namespace}ordinalValue`, '') ===
+                        ordinalValue
                       }
                       onChange={e => {
                         updateFormValueSequence({
@@ -279,12 +282,12 @@ export const NonstandardForm = connect(
         )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          form.isSecondaryDocumentTypeSelected && (
+          screenMetadata.isSecondaryDocumentTypeSelected && (
             <SelectedSecondaryDocumentType />
           )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          !form.isSecondaryDocumentTypeSelected && (
+          !screenMetadata.isSecondaryDocumentTypeSelected && (
             <ChooseSecondaryDocumentType />
           )}
       </React.Fragment>

@@ -27,13 +27,13 @@ export const selectDocumentSequence = [
       set(state.showValidation, false),
       setDocumentScenarioAction,
       primeDoNotProceedPropAction,
-      set(state.form.isDocumentTypeSelected, true),
-      set(state.form.isSecondaryDocumentTypeSelected, false),
+      set(state.screenMetadata.isDocumentTypeSelected, true),
+      set(state.screenMetadata.isSecondaryDocumentTypeSelected, false),
       validateSelectDocumentTypeAction,
       {
         error: [],
         success: [
-          set(state.form.isSecondaryDocumentTypeSelected, true),
+          set(state.screenMetadata.isSecondaryDocumentTypeSelected, true),
           setSecondaryDocumentScenarioAction,
           validateSelectDocumentTypeAction,
           {
