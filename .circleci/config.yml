@@ -6,9 +6,7 @@ jobs:
 
     steps:
       - checkout
-
       - run: echo "hello world"
-
       # - run: docker build -t efcms -f Dockerfile .
 
       # - run: docker run --rm efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
@@ -36,7 +34,7 @@ jobs:
         - echo "export ENV='$(./get-env.sh ${CIRCLE_BRANCH})'" >> "$BASH_ENV"
       docker_layer_caching: true
     steps:
-      # - checkout
+      - checkout
       - run: echo "${ENV}"
       # - run: docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh ${ENV}"
       # - run: "CONTAINER_NAME=ui-dist-${BUILD_NUMBER} ./docker-build.sh ${env}"
@@ -54,8 +52,6 @@ jobs:
   #     - run: ./docker-cognito-customize.sh ${branchMap[env.branch_name]}
   #     - run: ./docker-cognito-users.sh ${branchMap[env.branch_name]}
   #     - run: ./docker-smoketests.sh ${slsStage} ${region}
-
-
 
 workflows:
   version: 2
