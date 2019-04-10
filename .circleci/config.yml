@@ -58,7 +58,7 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - deploy #build
+      - build
       # - deploy:
       #     requires:
       #       - build
