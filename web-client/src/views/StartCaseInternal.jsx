@@ -1,11 +1,10 @@
-import React from 'react';
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sequences, state } from 'cerebral';
-
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const StartCaseInternal = connect(
   {
