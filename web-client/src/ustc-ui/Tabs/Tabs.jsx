@@ -71,7 +71,8 @@ export function TabsComponent({
   function renderTabContent(child) {
     const { children, tabName } = child.props;
     const isActiveTab = tabName === activeKey;
-    const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
+    const tabContentId = `tabContent-${camelCase(tabName)}`;
+
     let contentProps = {
       className: 'tabcontent',
       id: tabContentId,
@@ -125,6 +126,7 @@ export function TabsComponent({
 }
 
 TabsComponent.propTypes = {
+  asSwitch: PropTypes.string,
   bind: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
