@@ -1,5 +1,5 @@
-import FocusLock from 'react-focus-lock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
