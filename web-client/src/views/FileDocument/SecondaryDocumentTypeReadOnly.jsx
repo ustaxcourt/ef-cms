@@ -10,14 +10,14 @@ export const SecondaryDocumentTypeReadOnly = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedSecondaryDocumentSequence:
       sequences.editSelectedSecondaryDocumentSequence,
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    selectDocumentTypeHelper: state.selectDocumentTypeHelper,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     form,
     editSelectedSecondaryDocumentSequence,
-    fileDocumentHelper,
+    selectDocumentTypeHelper,
   }) => {
     return (
       <div className="ustc-form-group">
@@ -40,7 +40,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
         <div>
           <p>{form.secondaryDocument.documentType}</p>
         </div>
-        {fileDocumentHelper.secondary.showNonstandardForm && (
+        {selectDocumentTypeHelper.secondary.showNonstandardForm && (
           <NonstandardForm
             level="secondary"
             namespace="secondaryDocument"

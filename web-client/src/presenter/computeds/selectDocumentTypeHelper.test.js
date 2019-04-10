@@ -1,9 +1,9 @@
 import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
-import { fileDocumentHelper } from './fileDocumentHelper';
 import { getTrialCityName } from './formattedTrialCity';
 import { runCompute } from 'cerebral/test';
+import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
 import { trialCitiesHelper } from './trialCitiesHelper';
 
 const state = {
@@ -16,13 +16,13 @@ const state = {
   trialCitiesHelper,
 };
 
-describe('fileDocumentHelper', () => {
+describe('selectDocumentTypeHelper', () => {
   it('should return correct data for Standard document scenario', async () => {
     state.form = {
       category: 'Answer (filed by respondent only)',
       documentType: 'Answer',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -37,7 +37,7 @@ describe('fileDocumentHelper', () => {
       category: 'Notice',
       documentType: 'Notice of Objection',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -54,7 +54,7 @@ describe('fileDocumentHelper', () => {
       category: 'Statement',
       documentType: 'Statement',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -71,7 +71,7 @@ describe('fileDocumentHelper', () => {
       category: 'Supporting Document',
       documentType: 'Affidavit in Support',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -91,7 +91,7 @@ describe('fileDocumentHelper', () => {
       category: 'Miscellaneous',
       documentType: 'Certificate of Service',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -112,7 +112,7 @@ describe('fileDocumentHelper', () => {
       documentType:
         'Motion to Change Place of Submission of Declaratory Judgment Case',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toMatchObject({
@@ -132,7 +132,7 @@ describe('fileDocumentHelper', () => {
       category: 'Supplement',
       documentType: 'Supplement',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -150,7 +150,7 @@ describe('fileDocumentHelper', () => {
       category: 'Answer (filed by respondent only)',
       documentType: 'Amendment to Answer',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
@@ -166,7 +166,7 @@ describe('fileDocumentHelper', () => {
       category: 'Motion',
       documentType: 'Motion for Leave to File',
     };
-    const result = runCompute(fileDocumentHelper, {
+    const result = runCompute(selectDocumentTypeHelper, {
       state,
     });
     expect(result).toEqual({
