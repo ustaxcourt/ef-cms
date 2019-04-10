@@ -20,6 +20,15 @@ option:first-child {
   color: $color-gray;
   font-size: 15px;
   font-weight: $font-regular;
+  &.ustc-form-hint-with-svg {
+    position: relative;
+    padding-left: 3rem;
+    svg {
+      position: absolute;
+      top: 2px;
+      left: 0;
+    }
+  }
 }
 
 .usa-header .usa-nav-secondary .usa-search {
