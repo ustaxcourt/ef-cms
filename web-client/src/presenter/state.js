@@ -18,6 +18,7 @@ import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendi
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
+import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -71,6 +72,7 @@ export const state = {
   procedureTypes: [],
   screenMetadata: {},
   searchTerm: '',
+  selectDocumentTypeHelper,
   selectedWorkItems: [],
   showModal: '',
   showValidation: false,

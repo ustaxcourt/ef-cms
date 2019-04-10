@@ -9,16 +9,16 @@ export const DocumentTypeReadOnly = connect(
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
+    selectDocumentTypeHelper: state.selectDocumentTypeHelper,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
     selectDocumentSequence,
     form,
-    fileDocumentHelper,
+    selectDocumentTypeHelper,
   }) => {
     return (
       <React.Fragment>
@@ -44,7 +44,7 @@ export const DocumentTypeReadOnly = connect(
               <p>{form.documentType}</p>
             </div>
           </div>
-          {fileDocumentHelper.primary.showNonstandardForm && (
+          {selectDocumentTypeHelper.primary.showNonstandardForm && (
             <NonstandardForm
               level="primary"
               validationErrors="validationErrors"
