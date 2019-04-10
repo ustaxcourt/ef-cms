@@ -7,9 +7,9 @@ export const SecondaryDocumentType = connect(
   {
     clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
+    selectDocumentTypeHelper: state.selectDocumentTypeHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
@@ -18,7 +18,7 @@ export const SecondaryDocumentType = connect(
   ({
     clearWizardDataSequence,
     constants,
-    fileDocumentHelper,
+    selectDocumentTypeHelper,
     form,
     selectDocumentSequence,
     updateFormValueSequence,
@@ -95,7 +95,7 @@ export const SecondaryDocumentType = connect(
                 value={form.secondaryDocument.documentType}
               >
                 <option value="">- Select -</option>
-                {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
+                {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
                   entry => (
                     <option key={entry.eventCode} value={entry.documentType}>
                       {entry.documentType}
@@ -112,7 +112,7 @@ export const SecondaryDocumentType = connect(
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
-                  {fileDocumentHelper.filteredSecondaryDocumentTypes.map(
+                  {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
                     (entry, index) => (
                       <li key={entry.documentType} value={entry.documentType}>
                         <input
