@@ -46,23 +46,19 @@ const csvOptions = {
 };
 
 const whitespaceCleanup = str => {
-  str = str.replace(/\[\s+/g, '[');
-  str = str.replace(/\s+\]/g, ']');
   str = str.replace(/[\r\n\t\s]+/g, ' ');
   str = str.trim();
   return str;
 };
 
 const sortableTitle = title => {
-  let sortable = title.replace(/\[.*?\]/g, '').toLowerCase();
-  sortable = whitespaceCleanup(sortable);
-  return sortable;
+  return whitespaceCleanup(title.toLowerCase());
 };
 
-const documentTitleSort = (a, b) => {
+const documentTypeSort = (a, b) => {
   const [first, second] = [
-    sortableTitle(a.documentTitle),
-    sortableTitle(b.documentTitle),
+    sortableTitle(a.documentType),
+    sortableTitle(b.documentType),
   ];
   const result = first.localeCompare(second, {
     ignorePunctuation: true,
@@ -71,31 +67,36 @@ const documentTitleSort = (a, b) => {
   return result;
 };
 
-const sortMotions = presortedMotions => {
-  let sortedMotions = [];
-  const firstEntries = [
+const presorted = {
+  Motion: [
     'Motion for Continuance',
     'Motion for Extension of Time',
     'Motion to Dismiss for Lack of Jurisdiction',
     'Motion to Dismiss for Lack of Prosecution',
     'Motion for Summary Judgment',
     'Motion to Change or Correct Caption',
-  ];
+  ],
+};
 
-  sortedMotions = firstEntries.map(title => {
-    const [foundObj] = _.remove(presortedMotions, m => {
+const presortCategory = (sortedCategory, categoryName) => {
+  let firstEntries = presorted[categoryName];
+  if (!firstEntries) {
+    return sortedCategory;
+  }
+  let resortedEntries = [];
+
+  resortedEntries = firstEntries.map(title => {
+    const [foundObj] = _.remove(sortedCategory, m => {
       return m.documentTitle.toLowerCase() === title.toLowerCase();
     });
     return foundObj;
   });
 
-  if (sortedMotions.length !== firstEntries.length) {
-    throw new Error(
-      'Common motions list could not be extracted from full list of motions.',
-    );
+  if (resortedEntries.length !== firstEntries.length) {
+    throw new Error('Pre-sorted items could not be extracted.');
   }
 
-  return [...sortedMotions, ...presortedMotions];
+  return [...resortedEntries, ...sortedCategory];
 };
 
 /* eslint no-console: "off"*/
@@ -137,9 +138,12 @@ const main = () => {
       .sort()
       .forEach(category => {
         let values = result[category];
-        sortedResult[category] = values.sort(documentTitleSort);
+        sortedResult[category] = presortCategory(
+          values.sort(documentTypeSort),
+          category,
+        );
       });
-    sortedResult['Motion'] = sortMotions(sortedResult['Motion']);
+
     console.log(JSON.stringify(sortedResult, null, 2));
   });
 };
