@@ -18,7 +18,7 @@ export const FileDocumentWizard = connect(
     return (
       <>
         <div className="usa-grid breadcrumb">
-          <Tabs bind="wizardStep">
+          <Tabs asSwitch bind="wizardStep">
             <Tab tabName="SelectDocumentType">
               <FontAwesomeIcon icon="caret-left" />
               <a
@@ -32,6 +32,7 @@ export const FileDocumentWizard = connect(
               <FontAwesomeIcon icon="caret-left" />
               <button
                 className="link"
+                id="queue-nav"
                 type="button"
                 onClick={() =>
                   chooseWizardStepSequence({ value: 'SelectDocumentType' })
@@ -47,7 +48,11 @@ export const FileDocumentWizard = connect(
           <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs defaultActiveTab="SelectDocumentType" bind="wizardStep">
+          <Tabs
+            asSwitch
+            defaultActiveTab="SelectDocumentType"
+            bind="wizardStep"
+          >
             <Tab tabName="SelectDocumentType">
               <SelectDocumentType />
             </Tab>
