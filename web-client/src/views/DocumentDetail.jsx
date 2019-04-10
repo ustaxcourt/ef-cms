@@ -1,7 +1,3 @@
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
@@ -14,6 +10,9 @@ import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const DocumentDetail = connect(
   {
