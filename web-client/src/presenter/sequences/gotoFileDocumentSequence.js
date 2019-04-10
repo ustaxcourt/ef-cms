@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 
 const gotoFileDocument = [
   setCurrentPageAction('Interstitial'),
+  set(state.showValidation, false),
   clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,

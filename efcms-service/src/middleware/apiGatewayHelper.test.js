@@ -7,7 +7,7 @@ const {
 const {
   UnauthorizedError,
   NotFoundError,
-} = require('ef-cms-shared/src/errors/errors');
+} = require('../../../shared/src/errors/errors');
 
 const EXPECTED_HEADERS = {
   'Access-Control-Allow-Origin': '*',

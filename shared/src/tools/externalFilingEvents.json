@@ -2981,16 +2981,6 @@
   ],
   "Stipulation": [
     {
-      "documentTitle": "[First, Second, etc.] Stipulation of Facts",
-      "documentType": "Stipulation of Facts",
-      "category": "Stipulation",
-      "eventCode": "STIP",
-      "scenario": "Nonstandard G",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
-    },
-    {
       "documentTitle": "Settlement Stipulation",
       "documentType": "Settlement Stipulation",
       "category": "Stipulation",
@@ -3029,6 +3019,16 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Stipulation of Facts",
+      "documentType": "Stipulation of Facts",
+      "category": "Stipulation",
+      "eventCode": "STIP",
+      "scenario": "Nonstandard G",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": "What Iteration Is This Filing?"
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
