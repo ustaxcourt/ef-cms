@@ -1,16 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-
 import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const StartCase = connect(
   {
