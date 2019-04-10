@@ -40,11 +40,11 @@ export const FileDocument = connect(
           <div className="usa-grid-full">
             <div className="usa-width-seven-twelfths push-right">
               <div id="document-upload-hint" className="alert-gold">
-                <span className="usa-form-hint">
+                <span className="usa-form-hint ustc-form-hint-with-svg">
                   <FontAwesomeIcon
                     icon={['far', 'arrow-alt-circle-left']}
                     className="fa-icon-gold"
-                    size="sm"
+                    size="lg"
                   />
                   Remember to remove or redact all personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
@@ -328,11 +328,11 @@ export const FileDocument = connect(
           <div className="usa-grid-full">
             <div className="usa-width-seven-twelfths push-right">
               <div id="document-upload-hint" className="alert-gold">
-                <span className="usa-form-hint">
+                <span className="usa-form-hint ustc-form-hint-with-svg">
                   <FontAwesomeIcon
                     icon={['far', 'arrow-alt-circle-left']}
                     className="fa-icon-gold"
-                    size="sm"
+                    size="lg"
                   />
                   Remember to remove or redact all personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
