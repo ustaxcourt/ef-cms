@@ -1,9 +1,22 @@
 import { state } from 'cerebral';
 
 export const fileDocumentHelper = get => {
-  const { PARTY_TYPES } = get(state.constants);
+  const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const showSecondaryParty =
+    caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
+    caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+
+  const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
+    entry => {
+      entry.documentTypeDisplay = entry.documentType.replace(
+        /\sin\sSupport$/i,
+        '',
+      );
+      return entry;
+    },
+  );
 
   const supportingDocumentFreeTextTypes = [
     'Memorandum in Support',
@@ -15,31 +28,41 @@ export const fileDocumentHelper = get => {
     'Unsworn Declaration under Penalty of Perjury in Support',
   ];
 
-  const showSupportingDocumentFreeText =
-    form.hasSupportingDocuments &&
-    supportingDocumentFreeTextTypes.includes(form.supportingDocument);
+  let exported = { showSecondaryParty, supportingDocumentTypeList };
 
-  const showSupportingSecondaryDocumentFreeText =
-    form.hasSupportingSecondaryDocuments &&
-    supportingDocumentFreeTextTypes.includes(form.supportingSecondaryDocument);
+  if (form.hasSupportingDocuments) {
+    const showSupportingDocumentFreeText =
+      form.hasSupportingDocuments &&
+      supportingDocumentFreeTextTypes.includes(form.supportingDocument);
 
-  const showSupportingDocumentUpload =
-    form.hasSupportingDocuments &&
-    supportingDocumentUploadTypes.includes(form.supportingDocument);
+    const showSupportingDocumentUpload =
+      form.hasSupportingDocuments &&
+      supportingDocumentUploadTypes.includes(form.supportingDocument);
 
-  const showSupportingSecondaryDocumentUpload =
-    form.hasSupportingSecondaryDocuments &&
-    supportingDocumentUploadTypes.includes(form.supportingSecondaryDocument);
+    exported = {
+      ...exported,
+      showSupportingDocumentFreeText,
+      showSupportingDocumentUpload,
+    };
+  }
 
-  const showSecondaryParty =
-    caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
-    caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+  if (form.hasSupportingSecondaryDocuments) {
+    const showSupportingSecondaryDocumentFreeText =
+      form.hasSupportingSecondaryDocuments &&
+      supportingDocumentFreeTextTypes.includes(
+        form.supportingSecondaryDocument,
+      );
 
-  return {
-    showSecondaryParty,
-    showSupportingDocumentFreeText,
-    showSupportingDocumentUpload,
-    showSupportingSecondaryDocumentFreeText,
-    showSupportingSecondaryDocumentUpload,
-  };
+    const showSupportingSecondaryDocumentUpload =
+      form.hasSupportingSecondaryDocuments &&
+      supportingDocumentUploadTypes.includes(form.supportingSecondaryDocument);
+
+    exported = {
+      ...exported,
+      showSupportingSecondaryDocumentFreeText,
+      showSupportingSecondaryDocumentUpload,
+    };
+  }
+
+  return exported;
 };
