@@ -20,7 +20,7 @@ export const Email = connect(
               id="change-email-hint"
               className="alert-gold add-bottom-margin"
             >
-              <span className="usa-form-hint">
+              <span className="usa-form-hint ustc-form-hint-with-svg">
                 <FontAwesomeIcon
                   icon={['far', 'arrow-alt-circle-left']}
                   className="fa-icon-gold"
