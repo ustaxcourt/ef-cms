@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const {
   UnauthorizedError,
   NotFoundError,
-} = require('../../../shared/src/errors/errors');
+} = require('ef-cms-shared/src/errors/errors');
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
