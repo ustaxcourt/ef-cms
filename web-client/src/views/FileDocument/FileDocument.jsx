@@ -242,7 +242,7 @@ export const FileDocument = connect(
                         <input
                           id={`supporting-documents-${option}`}
                           type="radio"
-                          name="supportingDocuments"
+                          name="hasSupportingDocuments"
                           value={option}
                           onChange={e => {
                             updateFormValueSequence({
@@ -260,7 +260,7 @@ export const FileDocument = connect(
                 </fieldset>
               </div>
 
-              {form.supportingDocuments && (
+              {form.hasSupportingDocuments && (
                 <div className="ustc-form-group">
                   <label htmlFor="supporting-document">
                     Select Supporting Document
@@ -397,7 +397,7 @@ export const FileDocument = connect(
                             <input
                               id={`secondary-supporting-documents-${option}`}
                               type="radio"
-                              name="secondarySupportingDocuments"
+                              name="hasSecondarySupportingDocuments"
                               value={option}
                               onChange={e => {
                                 updateFormValueSequence({
@@ -417,7 +417,7 @@ export const FileDocument = connect(
                     </fieldset>
                   </div>
 
-                  {form.secondarySupportingDocuments && (
+                  {form.hasSecondarySupportingDocuments && (
                     <div className="ustc-form-group">
                       <label htmlFor="secondary-supporting-document">
                         Select Supporting Document
