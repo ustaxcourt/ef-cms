@@ -1,6 +1,3 @@
-import axios from 'axios';
-import uuidv4 from 'uuid/v4';
-
 import {
   BUSINESS_TYPES,
   COUNTRY_TYPES,
@@ -12,12 +9,13 @@ import {
   CASE_CAPTION_POSTFIX,
   Case,
 } from '../../shared/src/business/entities/Case';
+import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 
 import {
   CATEGORIES,
   CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import {
@@ -70,7 +68,6 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
-
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
