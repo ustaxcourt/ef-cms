@@ -39,6 +39,7 @@ jobs:
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh develop)" >> $BASH_ENV # $CIRCLE_BRANCH
+      - run: echo $ENV
       - run: 
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
