@@ -1,10 +1,9 @@
+import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
+import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-
-import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
-import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 
 export const SectionWorkQueue = connect(
   {
