@@ -77,11 +77,11 @@ export const StartCase = connect(
             <div className="usa-grid-full">
               <div className="usa-width-seven-twelfths push-right">
                 <div id="petition-upload-hint" className="alert-gold">
-                  <span className="usa-form-hint">
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
-                      size="sm"
+                      size="lg"
                     />
                     This should include your Petition form and any IRS notice
                     <span aria-hidden="true">(s)</span> you received.
@@ -104,7 +104,7 @@ export const StartCase = connect(
                   >
                     Upload Your Petition{' '}
                     <span className="success-message">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      <FontAwesomeIcon icon="check-circle" size="lg" />
                     </span>
                   </label>
                   <span className="usa-form-hint">
@@ -149,7 +149,7 @@ export const StartCase = connect(
               >
                 Upload Your Statement of Taxpayer Identification
                 <span className="success-message">
-                  <FontAwesomeIcon icon="check-circle" size="sm" />
+                  <FontAwesomeIcon icon="check-circle" size="lg" />
                 </span>
               </label>
               <span className="usa-form-hint">
@@ -183,11 +183,11 @@ export const StartCase = connect(
                   id="petition-hint"
                   className="alert-gold add-bottom-margin"
                 >
-                  <span className="usa-form-hint">
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
-                      size="sm"
+                      size="lg"
                     />
                     To file a case on behalf of another taxpayer, you must be
                     authorized to litigate in this Court as provided by the Tax
@@ -523,7 +523,7 @@ export const StartCase = connect(
                 >
                   Upload your Ownership Disclosure Statement
                   <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                    <FontAwesomeIcon icon="check-circle" size="lg" />
                   </span>
                 </label>
                 <span className="usa-form-hint">
@@ -724,7 +724,7 @@ export const StartCase = connect(
               onClick={() => toggleCaseDifferenceSequence()}
             >
               <span className="usa-banner-button-text">
-                <FontAwesomeIcon icon="question-circle" size="sm" />
+                <FontAwesomeIcon icon="question-circle" size="lg" />
                 How is a small case different than a regular case, and do I
                 qualify?
                 {screenMetadata.showCaseDifference ? (
