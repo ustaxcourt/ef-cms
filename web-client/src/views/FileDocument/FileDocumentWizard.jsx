@@ -6,21 +6,41 @@ import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const FileDocumentWizard = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    chooseWizardStepSequence: sequences.chooseWizardStepSequence,
   },
-  ({ caseDetail }) => {
+  ({ caseDetail, chooseWizardStepSequence }) => {
     return (
       <>
         <div className="usa-grid breadcrumb">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href={`/case-detail/${caseDetail.docketNumber}`} id="queue-nav">
-            Back
-          </a>
+          <Tabs bind="wizardStep">
+            <Tab tabName="SelectDocumentType">
+              <FontAwesomeIcon icon="caret-left" />
+              <a
+                href={`/case-detail/${caseDetail.docketNumber}`}
+                id="queue-nav"
+              >
+                Back
+              </a>
+            </Tab>
+            <Tab tabName="FileDocument">
+              <FontAwesomeIcon icon="caret-left" />
+              <button
+                className="link"
+                type="button"
+                onClick={() =>
+                  chooseWizardStepSequence({ value: 'SelectDocumentType' })
+                }
+              >
+                Back
+              </button>
+            </Tab>
+          </Tabs>
         </div>
         <section className="usa-section usa-grid">
           <CaseDetailHeader />
