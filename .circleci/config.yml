@@ -35,7 +35,7 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      - run: echo "${ENV}"
+      - run: echo $ENV
       #
       # - run: docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh ${ENV}"
       # - run: "CONTAINER_NAME=ui-dist-${BUILD_NUMBER} ./docker-build.sh ${env}"
