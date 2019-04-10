@@ -33,9 +33,9 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      # - run: 
-      #   name: Build Docker Image
-      #   command: docker build -t efcms -f Dockerfile .
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo 'export ENV=$(./get-env.sh develop)' >> $BASH_ENV # $CIRCLE_BRANCH
