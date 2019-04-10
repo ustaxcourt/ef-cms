@@ -278,14 +278,14 @@ export const FileDocument = connect(
                     value={form.supportingDocument}
                   >
                     <option value="">- Select -</option>
-                    {constants.CATEGORY_MAP['Supporting Document'].map(
+                    {fileDocumentHelper.supportingDocumentTypeList.map(
                       entry => {
                         return (
                           <option
                             key={entry.documentType}
                             value={entry.documentType}
                           >
-                            {entry.documentType}
+                            {entry.documentTypeDisplay}
                           </option>
                         );
                       },
@@ -435,14 +435,14 @@ export const FileDocument = connect(
                         value={form.secondarySupportingDocument}
                       >
                         <option value="">- Select -</option>
-                        {constants.CATEGORY_MAP['Supporting Document'].map(
+                        {fileDocumentHelper.supportingDocumentTypeList.map(
                           entry => {
                             return (
                               <option
                                 key={entry.documentType}
                                 value={entry.documentType}
                               >
-                                {entry.documentType}
+                                {entry.documentTypeDisplay}
                               </option>
                             );
                           },
@@ -512,7 +512,7 @@ export const FileDocument = connect(
                   type="checkbox"
                   name="partyPrimary"
                   value="Myself"
-                  checked="checked"
+                  defaultChecked={true}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
