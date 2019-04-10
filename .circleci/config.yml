@@ -30,12 +30,10 @@ jobs:
 
   deploy:
     machine:
-      pre:
-        - echo $CIRCLE_BRANCH
-        - echo "export ENV='$(./get-env.sh $CIRCLE_BRANCH)'" >> "$BASH_ENV"
       docker_layer_caching: true
     steps:
       - checkout
+      - run: echo "export ENV='$(./get-env.sh $CIRCLE_BRANCH)'" >> "$BASH_ENV"
       - run: echo $ENV
       - run: echo $CIRCLE_BRANCH
       #
@@ -60,10 +58,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      - deploy #build
+      # - deploy:
+      #     requires:
+      #       - build
           # filters:
           #   branches:
           #     only: 
