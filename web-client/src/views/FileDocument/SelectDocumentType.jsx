@@ -1,7 +1,7 @@
-import { ChooseDocumentType } from './ChooseDocumentType';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
+import { DocumentType } from './DocumentType';
+import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SelectedDocumentType } from './SelectedDocumentType';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -62,9 +62,9 @@ export const SelectDocumentType = connect(
 
         <div className="usa-grid-full">
           <div className="usa-width-one-half">
-            {screenMetadata.isDocumentTypeSelected && <SelectedDocumentType />}
+            {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
 
-            {!screenMetadata.isDocumentTypeSelected && <ChooseDocumentType />}
+            {screenMetadata.isDocumentTypeSelected && <DocumentTypeReadOnly />}
           </div>
           <div className="usa-width-one-third push-right">
             <div className="blue-container gray-background">

@@ -1,5 +1,5 @@
-import { ChooseSecondaryDocumentType } from './ChooseSecondaryDocumentType';
-import { SelectedSecondaryDocumentType } from './SelectedSecondaryDocumentType';
+import { SecondaryDocumentType } from './SecondaryDocumentType';
+import { SecondaryDocumentTypeReadOnly } from './SecondaryDocumentTypeReadOnly';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
@@ -282,13 +282,13 @@ export const NonstandardForm = connect(
         )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          screenMetadata.isSecondaryDocumentTypeSelected && (
-            <SelectedSecondaryDocumentType />
+          !screenMetadata.isSecondaryDocumentTypeSelected && (
+            <SecondaryDocumentType />
           )}
 
         {fileDocumentHelper[level].showSecondaryDocumentSelect &&
-          !screenMetadata.isSecondaryDocumentTypeSelected && (
-            <ChooseSecondaryDocumentType />
+          screenMetadata.isSecondaryDocumentTypeSelected && (
+            <SecondaryDocumentTypeReadOnly />
           )}
       </React.Fragment>
     );

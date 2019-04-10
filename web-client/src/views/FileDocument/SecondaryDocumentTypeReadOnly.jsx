@@ -4,7 +4,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const SelectedSecondaryDocumentType = connect(
+export const SecondaryDocumentTypeReadOnly = connect(
   {
     closeDocumentCategoryAccordionSequence:
       sequences.closeDocumentCategoryAccordionSequence,
