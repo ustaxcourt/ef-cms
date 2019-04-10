@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { connect } from '@cerebral/react';
-import { getDefaultAttribute, map } from '../utils/ElementChildren';
-import classNames from 'classnames';
 import { camelCase } from 'lodash';
+import { connect } from '@cerebral/react';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
+import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import { useCerebralStateFactory } from '../utils/useCerebralState';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import classNames from 'classnames';
 
 export function Tab() {}
 
 export function TabsComponent({
   id,
+  asSwitch,
   bind,
   value,
   simpleSetter,
@@ -40,7 +41,7 @@ export function TabsComponent({
     const { title, tabName, id } = child.props;
 
     const isActiveTab = tabName === activeKey;
-    const tabContentId = `tabContent-${camelCase(tabName)}`;
+    const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
 
     var liClass = classNames({
       active: isActiveTab,
@@ -72,12 +73,18 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
+    let contentProps = {
+      className: 'tabcontent',
+      id: tabContentId,
+      role: 'tabpanel',
+    };
+
+    if (asSwitch) {
+      contentProps = {};
+    }
+
     if (tabName && isActiveTab && children) {
-      return (
-        <div className="tabcontent" role="tabpanel" id={tabContentId}>
-          {children}
-        </div>
-      );
+      return <div {...contentProps}>{children}</div>;
     }
 
     return null;
@@ -96,8 +103,17 @@ export function TabsComponent({
   const navItems = map(children, child => child.props.title && child);
   const hasNav = !!(navItems && navItems.length);
 
+  let baseProps = {
+    className: tabsClass,
+    id,
+  };
+
+  if (asSwitch) {
+    baseProps = {};
+  }
+
   return (
-    <div id={id} className={tabsClass}>
+    <div {...baseProps}>
       {hasNav && (
         <nav>
           <ul role="tablist">{map(children, renderTab)}</ul>
@@ -110,6 +126,7 @@ export function TabsComponent({
 }
 
 TabsComponent.propTypes = {
+  asSwitch: PropTypes.string,
   bind: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
