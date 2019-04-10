@@ -6,6 +6,7 @@ body.no-scroll {
 }
 
 hr {
+  z-index: 1;
   display: block;
   height: 1px;
   padding: 0;
@@ -452,4 +453,14 @@ textarea#case-caption {
 .file-name {
   display: inline-block;
   margin: 0;
+}
+
+.beta {
+  padding: 20px;
+  background-color: $color-red;
+  color: $color-white;
+  font-weight: $font-bold;
+  a {
+    color: $color-white;
+  }
 }
