@@ -22,5 +22,5 @@ export const submitDocumentSequence = [
   setCaseAction,
   setAlertSuccessAction,
   unsetFormSubmittingAction,
-  set(state.currentTab, 'Docket Record'),
+  set(state.showFileDocumentForm, false),
 ];

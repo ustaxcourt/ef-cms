@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const User = require('./User');
+const { User } = require('./User');
 
 describe('User entity', () => {
   it('Creates a valid taxpayer user', () => {

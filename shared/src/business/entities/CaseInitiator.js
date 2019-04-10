@@ -19,4 +19,4 @@ joiValidationDecorator(
   }),
 );
 
-module.exports = CaseInitiator;
+module.exports = { CaseInitiator };

@@ -31,6 +31,14 @@ exports.userMap = {
     section: 'petitions',
     userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
   },
+  practitioner: {
+    'custom:role': 'practitioner',
+    email: 'taxpayer@example.com',
+    name: 'Test Practitioner',
+    role: 'practitioner',
+    section: 'practitioner',
+    userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+  },
   respondent: {
     'custom:role': 'respondent',
     email: 'respondent@example.com',

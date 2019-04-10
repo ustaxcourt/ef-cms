@@ -1,4 +1,4 @@
-import presenter from '..';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setValidationAlertErrorsAction } from './setValidationAlertErrorsAction';
 

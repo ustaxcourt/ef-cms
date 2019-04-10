@@ -1,12 +1,12 @@
 const { assignWorkItems } = require('./assignWorkItemsInteractor');
 const _ = require('lodash');
-const User = require('../../entities/User');
+const { User } = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,
   assigneeName: 'bob',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: 'General',
+  caseStatus: 'General Docket',
   createdAt: '2018-12-27T18:06:02.971Z',
   docketNumber: '101-18',
   docketNumberSuffix: 'S',

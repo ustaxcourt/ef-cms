@@ -53,6 +53,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           payGovDay: '01',
           payGovMonth: '01',
           payGovYear: '2009',
+          receivedAtDay: '03',
+          receivedAtMonth: '03',
+          receivedAtYear: '2009',
         },
       },
     });
@@ -60,6 +63,8 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2009-01-01T00:00:00.000Z',
         payGovDate: '2009-01-01T00:00:00.000Z',
+        payGovId: undefined,
+        receivedAt: '2009-03-03T00:00:00.000Z',
         yearAmounts: [
           {
             amount: '1',
@@ -107,6 +112,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           payGovDay: '01',
           payGovMonth: '01',
           payGovYear: 'x',
+          receivedAtDay: '01',
+          receivedAtMonth: '01',
+          receivedAtYear: 'x',
         },
       },
     });
@@ -114,6 +122,8 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       combinedCaseDetailWithForm: {
         irsNoticeDate: '-1',
         payGovDate: '-1',
+        payGovId: undefined,
+        receivedAt: '-1',
         yearAmounts: [
           {
             amount: '1',
@@ -138,6 +148,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
+          receivedAt: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -150,6 +161,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           payGovDay: '24',
           payGovMonth: '12',
           payGovYear: '',
+          receivedAtDay: '24',
+          receivedAtMonth: '12',
+          receivedAtYear: '',
         },
       },
     });
@@ -158,6 +172,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         irsNoticeDate: '2018-12-24T00:00:00.000Z',
         payGovDate: '2018-12-24T00:00:00.000Z',
         payGovId: undefined,
+        receivedAt: '2018-12-24T00:00:00.000Z',
         yearAmounts: [],
       },
     });
@@ -168,6 +183,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         caseDetail: {
           irsNoticeDate: null,
           payGovDate: '2018-12-24T00:00:00.000Z',
+          receivedAt: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -178,8 +194,11 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsMonth: '',
           irsYear: '',
           payGovDay: '24',
-          payGovMonth: '12',
+          payGovMonth: '',
           payGovYear: '',
+          receivedAtDay: '24',
+          receivedAtMonth: '',
+          receivedAtYear: '',
         },
       },
     });
@@ -188,17 +207,19 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         irsNoticeDate: null,
         payGovDate: '2018-12-24T00:00:00.000Z',
         payGovId: undefined,
+        receivedAt: '2018-12-24T00:00:00.000Z',
         yearAmounts: [],
       },
     });
   });
 
-  it('clears the irsNoticeDate and payGovDate to null if it was once defined and the user clears the fields', async () => {
+  it('clears the irsNoticeDate and payGovDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       state: {
         caseDetail: {
           irsNoticeDate: '2018-12-24T00:00:00.000Z',
           payGovDate: '2018-12-24T00:00:00.000Z',
+          receivedAt: '2018-12-24T00:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -211,6 +232,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           payGovDay: '',
           payGovMonth: '',
           payGovYear: '',
+          receivedAtDay: '',
+          receivedAtMonth: '',
+          receivedAtYear: '',
         },
       },
     });
@@ -218,6 +242,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       null,
     );
     expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
+    expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
   });
 
   it('delets the payGovDate if the user cleared the form', async () => {

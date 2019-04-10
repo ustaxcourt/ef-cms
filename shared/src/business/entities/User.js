@@ -33,4 +33,4 @@ User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
 };
 
-module.exports = User;
+module.exports = { User };

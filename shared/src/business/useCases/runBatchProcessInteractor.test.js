@@ -1,7 +1,8 @@
 const { runBatchProcess } = require('./runBatchProcessInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const User = require('../entities/User');
+const { User } = require('../entities/User');
 const { Case } = require('../entities/Case');
+const { omit } = require('lodash');
 const sinon = require('sinon');
 
 const MOCK_WORK_ITEMS = [
@@ -41,6 +42,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   const zipDocumentsStub = sinon.stub().resolves(null);
   const deleteDocumentStub = sinon.stub().resolves(null);
   const updateCaseStub = sinon.stub().resolves(null);
+  const updateWorkItemStub = sinon.stub().resolves(null);
 
   let applicationContext;
   let mockCase;
@@ -64,6 +66,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
           updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
           zipDocuments: zipDocumentsStub,
         };
       },
@@ -116,7 +119,112 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General',
+        status: 'General Docket',
+      },
+    });
+  });
+
+  it('runs batch process for case in IRS queue without contact primary name', async () => {
+    mockCase = omit(MOCK_CASE, ['contactPrimary']);
+    mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: 'petitionsclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+    };
+    await runBatchProcess({
+      applicationContext,
+    });
+    expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
+      section: 'irsBatchSection',
+      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+    });
+    expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
+      fileNames: [
+        'Petition.pdf',
+        'Statement of Taxpayer Identification.pdf',
+        'Answer.pdf',
+        'Stipulated Decision.pdf',
+      ],
+      s3Ids: [
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ],
+      zipName: '101-18.zip',
+    });
+    expect(deleteDocumentStub.getCall(1).args[0]).toMatchObject({
+      key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
+      caseToUpdate: {
+        status: 'General Docket',
+      },
+    });
+  });
+
+  it('runs batch process for case in IRS queue without STIN', async () => {
+    mockCase = MOCK_CASE;
+    mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
+    mockCase.documents.splice(1, 1); //remove STIN document
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: 'petitionsclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+    };
+    await runBatchProcess({
+      applicationContext,
+    });
+    expect(deleteWorkItemFromSectionStub.getCall(2).args[0]).toMatchObject({
+      section: 'irsBatchSection',
+      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+    });
+    expect(zipDocumentsStub.getCall(2).args[0]).toMatchObject({
+      fileNames: ['Petition.pdf', 'Answer.pdf', 'Stipulated Decision.pdf'],
+      s3Ids: [
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ],
+      zipName: '101-18_Test_Taxpayer.zip',
+    });
+    expect(deleteDocumentStub.getCall(2)).toEqual(null);
+    expect(updateCaseStub.getCall(2).args[0]).toMatchObject({
+      caseToUpdate: {
+        status: 'General Docket',
       },
     });
   });
