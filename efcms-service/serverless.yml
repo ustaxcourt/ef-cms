@@ -9,7 +9,6 @@ plugins:
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
-  - serverless-parcel
 
 custom:
   prune:
