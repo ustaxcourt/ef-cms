@@ -30,8 +30,8 @@ jobs:
 
   deploy:
     machine:
-      pre:
-        - echo "export ENV='$(./get-env.sh ${CIRCLE_BRANCH})'" >> "$BASH_ENV"
+      # pre:
+      #   - echo "export ENV='$(./get-env.sh ${CIRCLE_BRANCH})'" >> "$BASH_ENV"
       docker_layer_caching: true
     steps:
       - checkout
