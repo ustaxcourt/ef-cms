@@ -42,7 +42,7 @@ jobs:
       - run: echo $ENV
       - run: 
           name: 'Deploy - Web Client - Terraform'
-          command: docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       #
       # - run: docker run -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh ${ENV}"
       # - run: "CONTAINER_NAME=ui-dist-${BUILD_NUMBER} ./docker-build.sh ${env}"
