@@ -13,7 +13,6 @@ export const StyleGuide = () => (
     <Buttons />
     <Tables />
     <Forms />
-
     <SelectMulti />
     <Cards />
     <Tabs />
