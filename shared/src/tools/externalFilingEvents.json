@@ -1202,7 +1202,7 @@
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
-      "documentType": "Motion to Dismiss for Lack of Jurisdiction",
+      "documentType": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "category": "Motion",
       "eventCode": "M126",
       "scenario": "Nonstandard B",
