@@ -3,7 +3,7 @@ const {
   validateExternalDocumentInformation,
 } = require('./validateExternalDocumentInformationInteractor');
 
-describe('validateExternalDocument', () => {
+describe('validateExternalDocumentInformation', () => {
   let ExternalDocumentInformationFactory;
   let spy;
 
