@@ -7,182 +7,182 @@ const AWS =
 
 const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
-const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const irsGateway = require('ef-cms-shared/src/external/irsGateway');
+const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
+const irsGateway = require('../../shared/src/external/irsGateway');
 const {
   addWorkItemToSectionInbox,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
+} = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
   assignWorkItems: assignWorkItemsUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
+} = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
   createCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
+} = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
   deleteDocument,
-} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
+} = require('../../shared/src/persistence/s3/deleteDocument');
 
 const {
   completeWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
+} = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   createCase: createCaseUC,
-} = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
+} = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
   createCaseFromPaper,
-} = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
+} = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
   createDocument,
-} = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
+} = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
   createUser,
-} = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
+} = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
   createUser: createUserUC,
-} = require('ef-cms-shared/src/business/useCases/users/createUserInteractor');
+} = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
   createWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/createWorkItem');
+} = require('../../shared/src/persistence/dynamo/workitems/createWorkItem');
 const {
   createWorkItem: createWorkItemUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
+} = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   deleteWorkItemFromInbox,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
+} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
   deleteWorkItemFromSection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
   forwardWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
+} = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
   getCase,
-} = require('ef-cms-shared/src/business/useCases/getCaseInteractor');
+} = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseByCaseId,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByCaseId');
+} = require('../../shared/src/persistence/dynamo/cases/getCaseByCaseId');
 const {
   getCaseByDocketNumber,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+} = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
   getCasesByStatus,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByStatus');
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByStatus');
 const {
   getCasesByStatus: getCasesByStatusUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByStatusInteractor');
+} = require('../../shared/src/business/useCases/getCasesByStatusInteractor');
 const {
   getCasesByUser,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesByUser');
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
   getCasesByUser: getCasesByUserUC,
-} = require('ef-cms-shared/src/business/useCases/getCasesByUserInteractor');
+} = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
   getCasesForRespondent,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/getCasesForRespondent');
+} = require('../../shared/src/persistence/dynamo/cases/getCasesForRespondent');
 const {
   getCasesForRespondent: getCasesForRespondentUC,
-} = require('ef-cms-shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
+} = require('../../shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
 const {
   getDownloadPolicyUrl,
-} = require('ef-cms-shared/src/persistence/s3/getDownloadPolicyUrl');
+} = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
   getInternalUsers,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getInternalUsers');
+} = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
   getInternalUsers: getInternalUsersUC,
-} = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
+} = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
   getSentWorkItemsForSection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
+} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
+} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
 const {
   getSentWorkItemsForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
+} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
   getUploadPolicy,
-} = require('ef-cms-shared/src/persistence/s3/getUploadPolicy');
+} = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
   getUser,
-} = require('ef-cms-shared/src/business/useCases/getUserInteractor');
+} = require('../../shared/src/business/useCases/getUserInteractor');
 const {
   getUserById,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getUserById');
+} = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
   getUsersInSection,
-} = require('ef-cms-shared/src/persistence/dynamo/users/getUsersInSection');
+} = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
 const {
   getUsersInSection: getUsersInSectionUC,
-} = require('ef-cms-shared/src/business/useCases/users/getUsersInSectionInteractor');
+} = require('../../shared/src/business/useCases/users/getUsersInSectionInteractor');
 const {
   getWorkItem,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemInteractor');
+} = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
   getWorkItemById,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemById');
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
 const {
   getWorkItemsBySection,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
 const {
   getWorkItemsBySection: getWorkItemsBySectionUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
+} = require('../../shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
 const {
   getWorkItemsForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
 const {
   getWorkItemsForUser: getWorkItemsForUserUC,
-} = require('ef-cms-shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
+} = require('../../shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
 const {
   incrementCounter,
-} = require('ef-cms-shared/src/persistence/dynamo/helpers/incrementCounter');
+} = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
   isAuthorized,
   WORKITEM,
-} = require('ef-cms-shared/src/authorization/authorizationClientService');
+} = require('../../shared/src/authorization/authorizationClientService');
 const {
   PetitionFromPaperWithoutFiles,
-} = require('ef-cms-shared/src/business/entities/PetitionFromPaperWithoutFiles');
+} = require('../../shared/src/business/entities/PetitionFromPaperWithoutFiles');
 const {
   PetitionWithoutFiles,
-} = require('ef-cms-shared/src/business/entities/PetitionWithoutFiles');
+} = require('../../shared/src/business/entities/PetitionWithoutFiles');
 const {
   putWorkItemInOutbox,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
+} = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
   recallPetitionFromIRSHoldingQueue,
-} = require('ef-cms-shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
+} = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
   runBatchProcess,
-} = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
+} = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
   saveWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
   saveWorkItemForNonPaper
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper')
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper')
 const {
   saveWorkItemForPaper
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
 const {
   sendPetitionToIRSHoldingQueue,
-} = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
+} = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   updateCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
+} = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
   updateCase: updateCaseUC,
-} = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
+} = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
   updateWorkItem,
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
   zipDocuments,
-} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
-const { User } = require('ef-cms-shared/src/business/entities/User');
+} = require('../../shared/src/persistence/s3/zipDocuments');
+const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
