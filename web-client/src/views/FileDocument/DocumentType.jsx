@@ -4,7 +4,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
-export const ChooseDocumentType = connect(
+export const DocumentType = connect(
   {
     clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
