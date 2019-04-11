@@ -15,7 +15,9 @@ function ExternalDocumentInformationFactory() {}
  * @param documentMetadata
  */
 ExternalDocumentInformationFactory.get = documentMetadata => {
-  let entityConstructor = function() {};
+  let entityConstructor = function(rawProps) {
+    Object.assign(this, rawProps);
+  };
   let schema = {};
   let errorToMessageMap = {};
   let customValidate;
@@ -118,13 +120,24 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   if (
-    get(documentMetadata, 'secondaryDocument.scenario')
+    get(documentMetadata, 'secondaryDocument.scenario', '')
       .toLowerCase()
       .trim() === 'nonstandard h'
   ) {
-    addProperty('secondaryDocumentFile', joi.object().required(), [
-      'A file was not selected.',
-    ]);
+    if (
+      includes(
+        documentMetadata.secondaryDocument.documentType,
+        'Motion for Leave to File Out of Time',
+      )
+    ) {
+      addProperty('secondaryDocumentFile', joi.object().required(), [
+        'A file was not selected.',
+      ]);
+    } else {
+      addProperty('secondaryDocumentFile', joi.object().optional(), [
+        'A file was not selected.',
+      ]);
+    }
 
     addProperty('hasSecondarySupportingDocuments', joi.boolean().required(), [
       'Has Secondary Supporting Documents is required.',
