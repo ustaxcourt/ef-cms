@@ -152,10 +152,12 @@ export const FileDocument = connect(
               {form.certificateOfService && (
                 <div
                   className={`ustc-form-group ${
-                    validationErrors.serviceDate ? 'usa-input-error' : ''
+                    validationErrors.certificateOfServiceDate
+                      ? 'usa-input-error'
+                      : ''
                   }`}
                 >
-                  <fieldset>
+                  <fieldset className="service-date">
                     <legend>Service Date</legend>
                     <div className="usa-date-of-birth">
                       <div className="usa-form-group usa-form-group-month">
@@ -222,7 +224,7 @@ export const FileDocument = connect(
                   </fieldset>
                   <Text
                     className="usa-input-error-message"
-                    bind="validationErrors.serviceDate"
+                    bind="validationErrors.certificateOfServiceDate"
                   />
                 </div>
               )}
@@ -459,7 +461,9 @@ export const FileDocument = connect(
               {fileDocumentHelper.showSupportingDocumentUpload && (
                 <div
                   className={`ustc-form-group ${
-                    validationErrors.supportingDocument ? 'usa-input-error' : ''
+                    validationErrors.supportingDocumentFile
+                      ? 'usa-input-error'
+                      : ''
                   }`}
                 >
                   <label
@@ -473,7 +477,7 @@ export const FileDocument = connect(
                     type="file"
                     accept=".pdf"
                     aria-describedby="petition-hint"
-                    name="supportingDocument"
+                    name="supportingDocumentFile"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -484,7 +488,7 @@ export const FileDocument = connect(
                   />
                   <Text
                     className="usa-input-error-message"
-                    bind="validationErrors.supportingDocument"
+                    bind="validationErrors.supportingDocumentFile"
                   />
                 </div>
               )}
@@ -498,7 +502,10 @@ export const FileDocument = connect(
             <div className="blue-container">
               <div className="usa-grid-full">
                 <div className="usa-width-seven-twelfths push-right">
-                  <div id="document-upload-hint" className="alert-gold">
+                  <div
+                    id="document-secondary-upload-hint"
+                    className="alert-gold"
+                  >
                     <span className="usa-form-hint ustc-form-hint-with-svg">
                       <FontAwesomeIcon
                         icon={['far', 'arrow-alt-circle-left']}
@@ -682,7 +689,7 @@ export const FileDocument = connect(
                   {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
                     <div
                       className={`ustc-form-group ${
-                        validationErrors.secondarySupportingDocument
+                        validationErrors.secondarySupportingDocumentFile
                           ? 'usa-input-error'
                           : ''
                       }`}
@@ -697,7 +704,7 @@ export const FileDocument = connect(
                         id="secondary-supporting-document"
                         type="file"
                         accept=".pdf"
-                        name="secondarySupportingDocument"
+                        name="secondarySupportingDocumentFile"
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -708,7 +715,7 @@ export const FileDocument = connect(
                       />
                       <Text
                         className="usa-input-error-message"
-                        bind="validationErrors.secondarySupportingDocument"
+                        bind="validationErrors.secondarySupportingDocumentFile"
                       />
                     </div>
                   )}
