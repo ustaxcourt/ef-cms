@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 
 describe('ExternalDocumentNonStandardD', () => {
@@ -15,7 +16,9 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should have error message for future date', () => {
-      const serviceDate = '2050-12-12';
+      const serviceDate = moment()
+        .add(1, 'days')
+        .format();
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
@@ -31,7 +34,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const serviceDate = new Date().toISOString();
+      const serviceDate = moment().format();
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
@@ -45,7 +48,7 @@ describe('ExternalDocumentNonStandardD', () => {
   });
 
   describe('title generation', () => {
-    const serviceDate = '04/10/2012';
+    const serviceDate = moment('2012-04-10').format();
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
