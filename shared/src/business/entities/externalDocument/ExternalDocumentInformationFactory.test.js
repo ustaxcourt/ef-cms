@@ -158,7 +158,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       describe('Brief Supporting Document', () => {
         beforeEach(() => {
-          baseDoc.supportingDocument = 'Brief';
+          baseDoc.supportingDocument = 'Brief in Support';
         });
 
         it('should require supporting document file to be selected', () => {
@@ -178,7 +178,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       describe('Affidavit Supporting Document', () => {
         beforeEach(() => {
-          baseDoc.supportingDocument = 'Affidavit';
+          baseDoc.supportingDocument = 'Affidavit in Support';
         });
 
         it('should require supporting document file to be selected', () => {
@@ -288,7 +288,7 @@ describe('ExternalDocumentInformationFactory', () => {
               ).getFormattedValidationErrors().secondarySupportingDocument,
             ).toEqual('Secondary supporting document type is required.');
             baseDoc.secondarySupportingDocument =
-              'Unsworn Declaration under Penalty of Perjury';
+              'Unsworn Declaration under Penalty of Perjury in Support';
             expect(
               ExternalDocumentInformationFactory.get(
                 baseDoc,
@@ -298,7 +298,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           describe('Memorandum Supporting Secondary Document', () => {
             beforeEach(() => {
-              baseDoc.secondarySupportingDocument = 'Memorandum';
+              baseDoc.secondarySupportingDocument = 'Memorandum in Support';
             });
 
             it('should require supporting secondary document file to be added', () => {
@@ -320,7 +320,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           describe('Declaration Supporting Secondary Document', () => {
             beforeEach(() => {
-              baseDoc.secondarySupportingDocument = 'Declaration';
+              baseDoc.secondarySupportingDocument = 'Declaration in Support';
             });
 
             it('should require supporting secondary document file to be selected', () => {

@@ -30,16 +30,16 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   const supportingDocumentFreeTextCategories = [
-    'Affidavit',
-    'Declaration',
-    'Unsworn Declaration under Penalty of Perjury',
+    'Affidavit in Support',
+    'Declaration in Support',
+    'Unsworn Declaration under Penalty of Perjury in Support',
   ];
   const supportingDocumentFileCategories = [
-    'Memorandum',
-    'Brief',
-    'Affidavit',
-    'Declaration',
-    'Unsworn Declaration under Penalty of Perjury',
+    'Memorandum in Support',
+    'Brief in Support',
+    'Affidavit in Support',
+    'Declaration in Support',
+    'Unsworn Declaration under Penalty of Perjury in Support',
   ];
 
   addProperty('primaryDocument', joi.object().required(), [
