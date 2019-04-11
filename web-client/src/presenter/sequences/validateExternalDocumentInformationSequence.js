@@ -1,15 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
 
 export const validateExternalDocumentInformationSequence = [
-  startShowValidationAction,
   shouldValidateAction,
   {
     ignore: [],
     validate: [
+      computeCertificateOfServiceFormDateAction,
       validateExternalDocumentInformationAction,
       {
         error: [setValidationErrorsAction],
