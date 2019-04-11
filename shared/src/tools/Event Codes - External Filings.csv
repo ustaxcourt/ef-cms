@@ -2,7 +2,7 @@ Document Name (Concatenation Mapping),Document Type (Option),Document Type Categ
 Motion to Withdraw as Counsel,Motion to Withdraw as Counsel,Appearance and Representation,TRUE,TRUE,FALSE,M112,Standard,,,
 "[First, Second, etc.] Amended [Document Name]",Amended,Miscellaneous,TRUE,TRUE,TRUE,ADED,Nonstandard F,Which Document Are You Amending?,,What Iteration Is This Filing?
 Agreed Computation for Entry of Decision,Agreed Computation for Entry of Decision,Decision,TRUE,TRUE,TRUE,ACED,Standard,,,
-Amended Certificate of Service of [Document Name],Amended Certificate of Service,Miscellaneous,TRUE,TRUE,TRUE,AMDC,Nonstandard A,Which Document Is This Certificate of Service For?,,
+Amended Certificate of Service of [Document Name],Amended Certificate of Service,Miscellaneous,TRUE,TRUE,TRUE,AMDC,Nonstandard D,Which Document Is This Certificate of Service For?,,
 "[First, Second, etc.] Amendment to [Document Name]",Amendment,Miscellaneous,TRUE,TRUE,TRUE,AMNT,Nonstandard F,Which Document Are You Amending?,,What Iteration Is This Filing?
 "[First, Second, etc.] Amendment to Answer",Amendment to Answer,Answer (filed by respondent only),TRUE,FALSE,FALSE,ATAN,Nonstandard G,,,What Iteration Is This Filing?
 "[First, Second, etc.] Request for Admissions",Request for Admissions,Request,TRUE,TRUE,TRUE,REQA,Nonstandard G,,,What Iteration Is This Filing?
@@ -198,7 +198,7 @@ Motion to Take Judicial Notice,Motion to Take Judicial Notice,Motion,TRUE,TRUE,T
 Motion to Vacate,Motion to Vacate,Motion,TRUE,TRUE,TRUE,M120,Standard,,,
 Motion to Vacate or Revise Pursuant to Rule 162,Motion to Vacate or Revise Pursuant to Rule 162,Motion,TRUE,TRUE,TRUE,M110,Standard,,,
 Motion to Withdraw,Motion to Withdraw,Motion,TRUE,TRUE,TRUE,M111,Standard,,,
-Motion to Withdraw Counsel (filed by petitioner),Motion to Withdraw Counsel (filed by petitioner) ,Appearance and Representation,FALSE,TRUE,TRUE,M116,Standard,,,
+Motion to Withdraw Counsel,Motion to Withdraw Counsel (filed by petitioner) ,Appearance and Representation,FALSE,TRUE,TRUE,M116,Standard,,,
 Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f),Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f),Motion,TRUE,TRUE,TRUE,M113,Standard,,,
 No Objection to [Document Name],No Objection,"Response, Opposition or Objection",TRUE,TRUE,TRUE,NOB,Nonstandard A,Which Document Are You Not Objecting To?,,
 Notice of Abatement of Jeopardy Assessment,Notice of Abatement of Jeopardy Assessment,Notice,TRUE,TRUE,TRUE,NAJA,Standard,,,
