@@ -119,11 +119,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  if (
-    get(documentMetadata, 'secondaryDocument.scenario', '')
-      .toLowerCase()
-      .trim() === 'nonstandard h'
-  ) {
+  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
     if (
       includes(
         documentMetadata.secondaryDocument.documentType,
@@ -151,7 +147,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       if (
         includes(
           supportingDocumentFreeTextCategories,
-          documentMetadata.supportingDocument,
+          documentMetadata.secondarySupportingDocument,
         )
       ) {
         addProperty(
