@@ -29,7 +29,11 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   };
 
-  const supportingDocumentFreeTextCategories = ['Memorandum', 'Brief'];
+  const supportingDocumentFreeTextCategories = [
+    'Affidavit',
+    'Declaration',
+    'Unsworn Declaration under Penalty of Perjury',
+  ];
   const supportingDocumentFileCategories = [
     'Memorandum',
     'Brief',
@@ -119,10 +123,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
+  if (
+    (documentMetadata.scenario || '').toLowerCase().trim() === 'nonstandard h'
+  ) {
     if (
       includes(
-        documentMetadata.secondaryDocument.documentType,
+        documentMetadata.documentType,
         'Motion for Leave to File Out of Time',
       )
     ) {
@@ -141,7 +147,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
     if (documentMetadata.hasSecondarySupportingDocuments === true) {
       addProperty('secondarySupportingDocument', joi.string().required(), [
-        'Has Secondary Supporting Documents is required.',
+        'Secondary supporting document type is required.',
       ]);
 
       if (
@@ -160,7 +166,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       if (
         includes(
           supportingDocumentFileCategories,
-          documentMetadata.supportingDocument,
+          documentMetadata.secondarySupportingDocument,
         )
       ) {
         addProperty(
