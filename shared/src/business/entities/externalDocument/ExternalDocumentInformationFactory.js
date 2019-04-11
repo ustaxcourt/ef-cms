@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { includes, get } = require('lodash');
+const { includes } = require('lodash');
 
 /**
  *
