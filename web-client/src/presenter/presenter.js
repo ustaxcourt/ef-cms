@@ -55,6 +55,7 @@ import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitDocumentSequence } from './sequences/submitDocumentSequence';
+import { submitExternalDocumentInformationSequence } from './sequences/submitExternalDocumentInformationSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
@@ -157,6 +158,7 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
     submitDocumentSequence,
+    submitExternalDocumentInformationSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
