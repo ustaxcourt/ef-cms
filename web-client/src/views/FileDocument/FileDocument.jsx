@@ -10,6 +10,8 @@ export const FileDocument = connect(
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    submitExternalDocumentInformationSequence:
+      sequences.submitExternalDocumentInformationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
@@ -21,6 +23,7 @@ export const FileDocument = connect(
     form,
     updateFormValueSequence,
     fileDocumentHelper,
+    submitExternalDocumentInformationSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
@@ -784,8 +787,7 @@ export const FileDocument = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
-              // Note: this should be a submit sequence.
-              validateExternalDocumentInformationSequence();
+              submitExternalDocumentInformationSequence();
             }}
           >
             Review Filing
