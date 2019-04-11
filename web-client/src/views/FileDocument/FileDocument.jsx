@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,18 +8,21 @@ export const FileDocument = connect(
   {
     caseDetail: state.formattedCaseDetail,
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
-    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateExternalDocumentInformationSequence:
+      sequences.validateExternalDocumentInformationSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     caseDetail,
     chooseWizardStepSequence,
-    constants,
     form,
     updateFormValueSequence,
     fileDocumentHelper,
+    validateExternalDocumentInformationSequence,
+    validationErrors,
   }) => {
     return (
       <React.Fragment>
@@ -63,16 +67,30 @@ export const FileDocument = connect(
             </div>
 
             <div className="usa-width-five-twelfths">
-              <div className="ustc-form-group">
-                <label htmlFor="primary-document" className="inline-block mr-1">
-                  Upload Your Document
+              <div
+                className={`ustc-form-group ${
+                  validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
+                }`}
+              >
+                <label
+                  htmlFor="primary-document"
+                  className={
+                    'ustc-upload ' +
+                    (fileDocumentHelper.showPrimaryDocumentValid
+                      ? 'validated'
+                      : '')
+                  }
+                >
+                  Upload Your Document{' '}
+                  <span className="success-message">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
                 </label>
                 <input
                   id="primary-document"
                   type="file"
                   accept=".pdf"
-                  aria-describedby="petition-hint"
-                  name="primaryDocument"
+                  name="primaryDocumentFile"
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -80,10 +98,21 @@ export const FileDocument = connect(
                     });
                   }}
                 />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.primaryDocumentFile"
+                />
               </div>
 
               <div className="ustc-form-group">
-                <fieldset className="usa-fieldset-inputs usa-sans">
+                <fieldset
+                  className={
+                    'usa-fieldset-inputs usa-sans ' +
+                    (validationErrors.certificateOfService
+                      ? 'usa-input-error'
+                      : '')
+                  }
+                >
                   <legend>
                     Does Your Filing Include A Certificate of Service?
                   </legend>
@@ -109,10 +138,18 @@ export const FileDocument = connect(
                     ))}
                   </ul>
                 </fieldset>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.certificateOfService"
+                />
               </div>
 
               {form.certificateOfService && (
-                <div className="ustc-form-group">
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.serviceDate ? 'usa-input-error' : ''
+                  }`}
+                >
                   <fieldset>
                     <legend>Service Date</legend>
                     <div className="usa-date-of-birth">
@@ -151,11 +188,20 @@ export const FileDocument = connect(
                       </div>
                     </div>
                   </fieldset>
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.serviceDate"
+                  />
                 </div>
               )}
 
               <div className="ustc-form-group">
-                <fieldset className="usa-fieldset-inputs usa-sans">
+                <fieldset
+                  className={
+                    'usa-fieldset-inputs usa-sans ' +
+                    (validationErrors.exhibits ? 'usa-input-error' : '')
+                  }
+                >
                   <legend>Does Your Filing Include Exhibits?</legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
@@ -177,10 +223,19 @@ export const FileDocument = connect(
                     ))}
                   </ul>
                 </fieldset>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.exhibits"
+                />
               </div>
 
               <div className="ustc-form-group">
-                <fieldset className="usa-fieldset-inputs usa-sans">
+                <fieldset
+                  className={
+                    'usa-fieldset-inputs usa-sans ' +
+                    (validationErrors.attachments ? 'usa-input-error' : '')
+                  }
+                >
                   <legend>Does Your Filing Include Attachments?</legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
@@ -204,35 +259,59 @@ export const FileDocument = connect(
                     ))}
                   </ul>
                 </fieldset>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.attachments"
+                />
               </div>
 
-              <div className="ustc-form-group">
-                <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>Are There Any Objections to This Document?</legend>
-                  <ul className="usa-unstyled-list">
-                    {['Yes', 'No', 'Unknown'].map(option => (
-                      <li key={option}>
-                        <input
-                          id={`objections-${option}`}
-                          type="radio"
-                          name="objections"
-                          value={option}
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'Yes',
-                            });
-                          }}
-                        />
-                        <label htmlFor={`objections-${option}`}>{option}</label>
-                      </li>
-                    ))}
-                  </ul>
-                </fieldset>
-              </div>
+              {fileDocumentHelper.showObjection && (
+                <div className="ustc-form-group">
+                  <fieldset
+                    className={
+                      'usa-fieldset-inputs usa-sans ' +
+                      (validationErrors.objections ? 'usa-input-error' : '')
+                    }
+                  >
+                    <legend>Are There Any Objections to This Document?</legend>
+                    <ul className="usa-unstyled-list">
+                      {['Yes', 'No', 'Unknown'].map(option => (
+                        <li key={option}>
+                          <input
+                            id={`objections-${option}`}
+                            type="radio"
+                            name="objections"
+                            value={option}
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value === 'Yes',
+                              });
+                            }}
+                          />
+                          <label htmlFor={`objections-${option}`}>
+                            {option}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </fieldset>
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.objections"
+                  />
+                </div>
+              )}
 
               <div className="ustc-form-group">
-                <fieldset className="usa-fieldset-inputs usa-sans">
+                <fieldset
+                  className={
+                    'usa-fieldset-inputs usa-sans ' +
+                    (validationErrors.hasSupportingDocuments
+                      ? 'usa-input-error'
+                      : '')
+                  }
+                >
                   <legend>
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
@@ -258,10 +337,18 @@ export const FileDocument = connect(
                     ))}
                   </ul>
                 </fieldset>
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.hasSupportingDocuments"
+                />
               </div>
 
               {form.hasSupportingDocuments && (
-                <div className="ustc-form-group">
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.supportingDocument ? 'usa-input-error' : ''
+                  }`}
+                >
                   <label htmlFor="supporting-document">
                     Select Supporting Document
                   </label>
@@ -291,11 +378,21 @@ export const FileDocument = connect(
                       },
                     )}
                   </select>
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.supportingDocument"
+                  />
                 </div>
               )}
 
               {fileDocumentHelper.showSupportingDocumentFreeText && (
-                <div className="ustc-form-group">
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.supportingDocumentFreeText
+                      ? 'usa-input-error'
+                      : ''
+                  }`}
+                >
                   <label htmlFor="supporting-document-free-text">
                     Supporting Document Signed By
                   </label>
@@ -312,11 +409,19 @@ export const FileDocument = connect(
                       });
                     }}
                   />
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.supportingDocumentFreeText"
+                  />
                 </div>
               )}
 
               {fileDocumentHelper.showSupportingDocumentUpload && (
-                <div className="ustc-form-group">
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.supportingDocument ? 'usa-input-error' : ''
+                  }`}
+                >
                   <label
                     htmlFor="supporting-document"
                     className="inline-block mr-1"
@@ -335,6 +440,10 @@ export const FileDocument = connect(
                         value: e.target.value,
                       });
                     }}
+                  />
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.supportingDocument"
                   />
                 </div>
               )}
@@ -364,19 +473,35 @@ export const FileDocument = connect(
                 </div>
 
                 <div className="usa-width-five-twelfths">
-                  <div className="ustc-form-group">
+                  <div
+                    className={`ustc-form-group ${
+                      validationErrors.secondaryDocumentFile
+                        ? 'usa-input-error'
+                        : ''
+                    }`}
+                  >
                     <label
-                      htmlFor="primary-document"
-                      className="inline-block mr-1"
+                      htmlFor="secondary-document"
+                      className={
+                        'ustc-upload ' +
+                        (fileDocumentHelper.showSecondaryDocumentValid
+                          ? 'validated'
+                          : '')
+                      }
                     >
-                      Upload Your Document
+                      Upload Your Document{' '}
+                      <span className="success-message">
+                        <FontAwesomeIcon icon="check-circle" size="sm" />
+                      </span>{' '}
+                      {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
+                        <span className="usa-form-hint">(optional)</span>
+                      )}
                     </label>
                     <input
                       id="secondary-document"
                       type="file"
                       accept=".pdf"
-                      aria-describedby="petition-hint"
-                      name="secondaryDocument"
+                      name="secondaryDocumentFile"
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -384,10 +509,21 @@ export const FileDocument = connect(
                         });
                       }}
                     />
+                    <Text
+                      className="usa-input-error-message"
+                      bind="validationErrors.secondaryDocumentFile"
+                    />
                   </div>
 
                   <div className="ustc-form-group">
-                    <fieldset className="usa-fieldset-inputs usa-sans">
+                    <fieldset
+                      className={
+                        'usa-fieldset-inputs usa-sans ' +
+                        (validationErrors.hasSecondarySupportingDocuments
+                          ? 'usa-input-error'
+                          : '')
+                      }
+                    >
                       <legend>
                         Do You Have Any Supporting Documents for This Filing?
                       </legend>
@@ -415,10 +551,20 @@ export const FileDocument = connect(
                         ))}
                       </ul>
                     </fieldset>
+                    <Text
+                      className="usa-input-error-message"
+                      bind="validationErrors.hasSecondarySupportingDocuments"
+                    />
                   </div>
 
                   {form.hasSecondarySupportingDocuments && (
-                    <div className="ustc-form-group">
+                    <div
+                      className={`ustc-form-group ${
+                        validationErrors.secondarySupportingDocument
+                          ? 'usa-input-error'
+                          : ''
+                      }`}
+                    >
                       <label htmlFor="secondary-supporting-document">
                         Select Supporting Document
                       </label>
@@ -448,11 +594,21 @@ export const FileDocument = connect(
                           },
                         )}
                       </select>
+                      <Text
+                        className="usa-input-error-message"
+                        bind="validationErrors.secondarySupportingDocument"
+                      />
                     </div>
                   )}
 
                   {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
-                    <div className="ustc-form-group">
+                    <div
+                      className={`ustc-form-group ${
+                        validationErrors.secondarySupportingDocumentFreeText
+                          ? 'usa-input-error'
+                          : ''
+                      }`}
+                    >
                       <label htmlFor="secondary-supporting-document-free-text">
                         Supporting Document Signed By
                       </label>
@@ -469,11 +625,21 @@ export const FileDocument = connect(
                           });
                         }}
                       />
+                      <Text
+                        className="usa-input-error-message"
+                        bind="validationErrors.secondarySupportingDocumentFreeText"
+                      />
                     </div>
                   )}
 
                   {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
-                    <div className="ustc-form-group">
+                    <div
+                      className={`ustc-form-group ${
+                        validationErrors.secondarySupportingDocument
+                          ? 'usa-input-error'
+                          : ''
+                      }`}
+                    >
                       <label
                         htmlFor="secondary-supporting-document"
                         className="inline-block mr-1"
@@ -492,6 +658,10 @@ export const FileDocument = connect(
                           });
                         }}
                       />
+                      <Text
+                        className="usa-input-error-message"
+                        bind="validationErrors.secondarySupportingDocument"
+                      />
                     </div>
                   )}
                 </div>
@@ -503,8 +673,8 @@ export const FileDocument = connect(
         <h3>Tell Us About the Parties Filing This Document</h3>
         <div className="blue-container">
           <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Who Is Filing This Document?</legend>
-            <p>Check all that apply.</p>
+            <legend className="with-hint">Who Is Filing This Document?</legend>
+            <span className="usa-form-hint">Check all that apply.</span>
             <ul className="ustc-vertical-option-list">
               <li>
                 <input
@@ -555,7 +725,14 @@ export const FileDocument = connect(
         </div>
 
         <div className="button-box-container">
-          <button id="submit-document" type="submit" className="usa-button">
+          <button
+            id="submit-document"
+            type="submit"
+            className="usa-button"
+            onClick={() => {
+              validateExternalDocumentInformationSequence();
+            }}
+          >
             Review Filing
           </button>
           <button

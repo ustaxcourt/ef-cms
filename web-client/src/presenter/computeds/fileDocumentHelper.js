@@ -19,48 +19,59 @@ export const fileDocumentHelper = get => {
   );
 
   const supportingDocumentFreeTextTypes = [
-    'Memorandum in Support',
-    'Brief in Support',
-  ];
-  const supportingDocumentUploadTypes = [
     'Affidavit in Support',
     'Declaration in Support',
     'Unsworn Declaration under Penalty of Perjury in Support',
   ];
+  const objectionDocumentTypes = [
+    ...CATEGORY_MAP['Motion'].map(entry => {
+      return entry.documentType;
+    }),
+    'Motion to Withdraw Counsel',
+    'Motion to Withdraw as Counsel',
+    'Application to Take Deposition',
+  ];
 
-  let exported = { showSecondaryParty, supportingDocumentTypeList };
+  let exported = {
+    isSecondaryDocumentUploadOptional:
+      form.documentType === 'Motion for Leave to File',
+    showObjection: objectionDocumentTypes.includes(form.documentType),
+    showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showSecondaryDocumentValid: !!form.secondaryDocumentFile,
+    showSecondaryParty,
+    supportingDocumentTypeList,
+  };
 
   if (form.hasSupportingDocuments) {
     const showSupportingDocumentFreeText =
       form.hasSupportingDocuments &&
       supportingDocumentFreeTextTypes.includes(form.supportingDocument);
 
-    const showSupportingDocumentUpload =
-      form.hasSupportingDocuments &&
-      supportingDocumentUploadTypes.includes(form.supportingDocument);
+    const supportingDocumentTypeIsSelected =
+      form.supportingDocument && form.supportingDocument !== '';
 
     exported = {
       ...exported,
       showSupportingDocumentFreeText,
-      showSupportingDocumentUpload,
+      showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
     };
   }
 
-  if (form.hasSupportingSecondaryDocuments) {
-    const showSupportingSecondaryDocumentFreeText =
-      form.hasSupportingSecondaryDocuments &&
+  if (form.hasSecondarySupportingDocuments) {
+    const showSecondarySupportingDocumentFreeText =
+      form.hasSecondarySupportingDocuments &&
       supportingDocumentFreeTextTypes.includes(
-        form.supportingSecondaryDocument,
+        form.secondarySupportingDocument,
       );
 
-    const showSupportingSecondaryDocumentUpload =
-      form.hasSupportingSecondaryDocuments &&
-      supportingDocumentUploadTypes.includes(form.supportingSecondaryDocument);
+    const secondarySupportingDocumentTypeIsSelected =
+      form.secondarySupportingDocument &&
+      form.secondarySupportingDocument !== '';
 
     exported = {
       ...exported,
-      showSupportingSecondaryDocumentFreeText,
-      showSupportingSecondaryDocumentUpload,
+      showSecondarySupportingDocumentFreeText,
+      showSecondarySupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
     };
   }
 
