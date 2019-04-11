@@ -56,6 +56,7 @@ export const DocumentTypeReadOnly = connect(
           <button
             type="button"
             className="usa-button"
+            id="continue-button"
             onClick={() => {
               selectDocumentSequence();
             }}
