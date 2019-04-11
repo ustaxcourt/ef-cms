@@ -20,13 +20,13 @@ describe('ExternalDocumentInformationFactory', () => {
       expect(
         ExternalDocumentInformationFactory.get(
           baseDoc,
-        ).getFormattedValidationErrors().primaryDocument,
+        ).getFormattedValidationErrors().primaryDocumentFile,
       ).toEqual('A file was not selected.');
-      baseDoc.primaryDocument = {};
+      baseDoc.primaryDocumentFile = {};
       expect(
         ExternalDocumentInformationFactory.get(
           baseDoc,
-        ).getFormattedValidationErrors().primaryDocument,
+        ).getFormattedValidationErrors().primaryDocumentFile,
       ).toEqual(undefined);
     });
 

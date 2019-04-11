@@ -42,7 +42,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     'Unsworn Declaration under Penalty of Perjury in Support',
   ];
 
-  addProperty('primaryDocument', joi.object().required(), [
+  addProperty('primaryDocumentFile', joi.object().required(), [
     'A file was not selected.',
   ]);
 
