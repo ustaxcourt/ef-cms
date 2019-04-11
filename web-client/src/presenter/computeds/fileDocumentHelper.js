@@ -36,8 +36,8 @@ export const fileDocumentHelper = get => {
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     showObjection: objectionDocumentTypes.includes(form.documentType),
-    showPrimaryDocumentValid: form.primaryDocumentFile,
-    showSecondaryDocumentValid: form.secondaryDocumentFile,
+    showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     supportingDocumentTypeList,
   };
