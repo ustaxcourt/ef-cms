@@ -143,7 +143,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Withdraw Counsel (filed by petitioner)",
+      "documentTitle": "Motion to Withdraw Counsel",
       "documentType": "Motion to Withdraw Counsel (filed by petitioner)",
       "category": "Appearance and Representation",
       "eventCode": "M116",
@@ -253,7 +253,7 @@
       "documentType": "Amended Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "AMDC",
-      "scenario": "Nonstandard A",
+      "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
       "labelFreeText": "",
       "ordinalField": ""
