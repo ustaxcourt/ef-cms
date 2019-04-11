@@ -242,7 +242,7 @@ export const FileDocument = connect(
                         <input
                           id={`supporting-documents-${option}`}
                           type="radio"
-                          name="supportingDocuments"
+                          name="hasSupportingDocuments"
                           value={option}
                           onChange={e => {
                             updateFormValueSequence({
@@ -260,7 +260,7 @@ export const FileDocument = connect(
                 </fieldset>
               </div>
 
-              {form.supportingDocuments && (
+              {form.hasSupportingDocuments && (
                 <div className="ustc-form-group">
                   <label htmlFor="supporting-document">
                     Select Supporting Document
@@ -278,14 +278,14 @@ export const FileDocument = connect(
                     value={form.supportingDocument}
                   >
                     <option value="">- Select -</option>
-                    {constants.CATEGORY_MAP['Supporting Document'].map(
+                    {fileDocumentHelper.supportingDocumentTypeList.map(
                       entry => {
                         return (
                           <option
                             key={entry.documentType}
                             value={entry.documentType}
                           >
-                            {entry.documentType}
+                            {entry.documentTypeDisplay}
                           </option>
                         );
                       },
@@ -397,7 +397,7 @@ export const FileDocument = connect(
                             <input
                               id={`secondary-supporting-documents-${option}`}
                               type="radio"
-                              name="secondarySupportingDocuments"
+                              name="hasSecondarySupportingDocuments"
                               value={option}
                               onChange={e => {
                                 updateFormValueSequence({
@@ -417,7 +417,7 @@ export const FileDocument = connect(
                     </fieldset>
                   </div>
 
-                  {form.secondarySupportingDocuments && (
+                  {form.hasSecondarySupportingDocuments && (
                     <div className="ustc-form-group">
                       <label htmlFor="secondary-supporting-document">
                         Select Supporting Document
@@ -435,14 +435,14 @@ export const FileDocument = connect(
                         value={form.secondarySupportingDocument}
                       >
                         <option value="">- Select -</option>
-                        {constants.CATEGORY_MAP['Supporting Document'].map(
+                        {fileDocumentHelper.supportingDocumentTypeList.map(
                           entry => {
                             return (
                               <option
                                 key={entry.documentType}
                                 value={entry.documentType}
                               >
-                                {entry.documentType}
+                                {entry.documentTypeDisplay}
                               </option>
                             );
                           },
@@ -512,7 +512,7 @@ export const FileDocument = connect(
                   type="checkbox"
                   name="partyPrimary"
                   value="Myself"
-                  checked="checked"
+                  defaultChecked={true}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
