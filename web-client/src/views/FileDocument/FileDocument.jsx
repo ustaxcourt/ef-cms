@@ -96,6 +96,7 @@ export const FileDocument = connect(
                       key: e.target.name,
                       value: e.target.files[0],
                     });
+                    validateExternalDocumentInformationSequence();
                   }}
                 />
                 <Text
@@ -129,6 +130,7 @@ export const FileDocument = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
+                            validateExternalDocumentInformationSequence();
                           }}
                         />
                         <label htmlFor={`certificate-${option}`}>
@@ -158,10 +160,19 @@ export const FileDocument = connect(
                         <input
                           className="usa-input-inline"
                           id="service-date-month"
-                          name="month"
+                          name="certificateOfServiceMonth"
                           type="number"
                           min="1"
                           max="12"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                          onBlur={() => {
+                            validateExternalDocumentInformationSequence();
+                          }}
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-day">
@@ -169,10 +180,19 @@ export const FileDocument = connect(
                         <input
                           className="usa-input-inline"
                           id="service-date-day"
-                          name="day"
+                          name="certificateOfServiceDay"
                           type="number"
                           min="1"
                           max="31"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                          onBlur={() => {
+                            validateExternalDocumentInformationSequence();
+                          }}
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-year">
@@ -180,10 +200,19 @@ export const FileDocument = connect(
                         <input
                           className="usa-input-inline"
                           id="service-date-year"
-                          name="year"
+                          name="certificateOfServiceYear"
                           type="number"
                           min="1900"
                           max="2000"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                          onBlur={() => {
+                            validateExternalDocumentInformationSequence();
+                          }}
                         />
                       </div>
                     </div>
@@ -216,6 +245,7 @@ export const FileDocument = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
+                            validateExternalDocumentInformationSequence();
                           }}
                         />
                         <label htmlFor={`exhibits-${option}`}>{option}</label>
@@ -250,6 +280,7 @@ export const FileDocument = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
+                            validateExternalDocumentInformationSequence();
                           }}
                         />
                         <label htmlFor={`attachments-${option}`}>
@@ -285,8 +316,9 @@ export const FileDocument = connect(
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
-                                value: e.target.value === 'Yes',
+                                value: e.target.value,
                               });
+                              validateExternalDocumentInformationSequence();
                             }}
                           />
                           <label htmlFor={`objections-${option}`}>
@@ -328,6 +360,7 @@ export const FileDocument = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
+                            validateExternalDocumentInformationSequence();
                           }}
                         />
                         <label htmlFor={`supporting-documents-${option}`}>
@@ -361,6 +394,7 @@ export const FileDocument = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                      validateExternalDocumentInformationSequence();
                     }}
                     value={form.supportingDocument}
                   >
@@ -408,6 +442,9 @@ export const FileDocument = connect(
                         value: e.target.value,
                       });
                     }}
+                    onBlur={() => {
+                      validateExternalDocumentInformationSequence();
+                    }}
                   />
                   <Text
                     className="usa-input-error-message"
@@ -439,6 +476,7 @@ export const FileDocument = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
                   <Text
@@ -507,6 +545,7 @@ export const FileDocument = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
+                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <Text
@@ -540,6 +579,7 @@ export const FileDocument = connect(
                                   key: e.target.name,
                                   value: e.target.value === 'Yes',
                                 });
+                                validateExternalDocumentInformationSequence();
                               }}
                             />
                             <label
@@ -577,6 +617,7 @@ export const FileDocument = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateExternalDocumentInformationSequence();
                         }}
                         value={form.secondarySupportingDocument}
                       >
@@ -624,6 +665,9 @@ export const FileDocument = connect(
                             value: e.target.value,
                           });
                         }}
+                        onBlur={() => {
+                          validateExternalDocumentInformationSequence();
+                        }}
                       />
                       <Text
                         className="usa-input-error-message"
@@ -656,6 +700,7 @@ export const FileDocument = connect(
                             key: e.target.name,
                             value: e.target.files[0],
                           });
+                          validateExternalDocumentInformationSequence();
                         }}
                       />
                       <Text
@@ -688,6 +733,7 @@ export const FileDocument = connect(
                       key: e.target.name,
                       value: e.target.value,
                     });
+                    validateExternalDocumentInformationSequence();
                   }}
                 />
                 <label htmlFor="party-primary">Myself</label>
@@ -704,6 +750,7 @@ export const FileDocument = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
                   <label htmlFor="party-secondary">
@@ -717,6 +764,13 @@ export const FileDocument = connect(
                   type="checkbox"
                   name="partyRespondent"
                   value="Respondent"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
                 />
                 <label htmlFor="party-respondent">Respondent</label>
               </li>
@@ -730,6 +784,7 @@ export const FileDocument = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
+              // Note: this should be a submit sequence.
               validateExternalDocumentInformationSequence();
             }}
           >
