@@ -25,6 +25,7 @@ import {
 } from '../../shared/src/business/entities/WorkQueue';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { Petition } from '../../shared/src/business/entities/Petition';
@@ -64,6 +65,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
+import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
@@ -123,6 +125,7 @@ const allUseCases = {
   updateCase,
   validateCaseDetail,
   validateExternalDocument,
+  validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
   validatePetition,
@@ -164,6 +167,7 @@ const applicationContext = {
   getCurrentUserToken,
   getEntityConstructors: () => ({
     ExternalDocumentFactory,
+    ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
     Petition,
