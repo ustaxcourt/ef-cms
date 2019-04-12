@@ -26,7 +26,10 @@ export const PrimaryDocumentForm = connect(
         <div className="blue-container">
           <div className="usa-grid-full">
             <div className="usa-width-seven-twelfths push-right">
-              <div id="document-upload-hint" className="alert-gold">
+              <div
+                id="document-upload-hint"
+                className="alert-gold add-bottom-margin"
+              >
                 <span className="usa-form-hint ustc-form-hint-with-svg">
                   <FontAwesomeIcon
                     icon={['far', 'arrow-alt-circle-left']}
@@ -176,7 +179,7 @@ export const PrimaryDocumentForm = connect(
                           name="certificateOfServiceYear"
                           type="number"
                           min="1900"
-                          max="2000"
+                          max="2100"
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
