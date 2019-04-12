@@ -123,9 +123,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  if (
-    (documentMetadata.scenario || '').toLowerCase().trim() === 'nonstandard h'
-  ) {
+  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
     if (
       includes(
         documentMetadata.documentType,
@@ -178,9 +176,40 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  addProperty('partyPrimary', joi.boolean().optional());
-  addProperty('partySecondary', joi.boolean().optional());
-  addProperty('partyRespondent', joi.boolean().optional());
+  if (
+    documentMetadata.partyPrimary === true ||
+    documentMetadata.partySecondary === true ||
+    documentMetadata.partyRespondent === true
+  ) {
+    addProperty('partyPrimary', joi.boolean().optional());
+    addProperty('partySecondary', joi.boolean().optional());
+    addProperty('partyRespondent', joi.boolean().optional());
+  } else {
+    addProperty(
+      'partyPrimary',
+      joi
+        .boolean()
+        .invalid(false)
+        .required(),
+      ['You must select a party.'],
+    );
+    addProperty(
+      'partySecondary',
+      joi
+        .boolean()
+        .invalid(false)
+        .required(),
+      ['You must select a party.'],
+    );
+    addProperty(
+      'partyRespondent',
+      joi
+        .boolean()
+        .invalid(false)
+        .required(),
+      ['You must select a party.'],
+    );
+  }
 
   joiValidationDecorator(
     entityConstructor,

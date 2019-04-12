@@ -357,5 +357,23 @@ describe('ExternalDocumentInformationFactory', () => {
         });
       });
     });
+
+    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
+      expect(
+        ExternalDocumentInformationFactory.get(
+          baseDoc,
+        ).getFormattedValidationErrors(),
+      ).toMatchObject({
+        partyPrimary: 'You must select a party.',
+        partyRespondent: 'You must select a party.',
+        partySecondary: 'You must select a party.',
+      });
+      baseDoc.partyPrimary = true;
+      expect(
+        ExternalDocumentInformationFactory.get(
+          baseDoc,
+        ).getFormattedValidationErrors().partyPrimary,
+      ).toEqual(undefined);
+    });
   });
 });
