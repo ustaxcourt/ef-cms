@@ -7,13 +7,14 @@ const focusableChildren =
 // first child of Focus component matching above selector will receive focus
 class FocusComponent extends React.Component {
   componentDidMount() {
-    this.setFocus();
+    this.focused || this.setFocus();
   }
 
   setFocus(e) {
     e && e.preventDefault();
     const focusEl = this.node.querySelector(focusableChildren);
     if (focusEl && focusEl.focus) focusEl.focus();
+    this.focused = true;
     return false;
   }
 
