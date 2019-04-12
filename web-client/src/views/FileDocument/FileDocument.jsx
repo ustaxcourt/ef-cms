@@ -158,13 +158,17 @@ export const FileDocument = connect(
                   }`}
                 >
                   <fieldset className="service-date">
-                    <legend>Service Date</legend>
+                    <legend id="service-date-legend">Service Date</legend>
                     <div className="usa-date-of-birth">
                       <div className="usa-form-group usa-form-group-month">
-                        <label htmlFor="service-date-month">MM</label>
+                        <label htmlFor="service-date-month" aria-hidden="true">
+                          MM
+                        </label>
                         <input
                           className="usa-input-inline"
                           id="service-date-month"
+                          aria-label="month, two digits"
+                          aria-describedby="service-date-legend"
                           name="certificateOfServiceMonth"
                           type="number"
                           min="1"
@@ -181,9 +185,13 @@ export const FileDocument = connect(
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-day">
-                        <label htmlFor="service-date-day">DD</label>
+                        <label htmlFor="service-date-day" aria-hidden="true">
+                          DD
+                        </label>
                         <input
                           className="usa-input-inline"
+                          aria-label="day, two digits"
+                          aria-describedby="service-date-legend"
                           id="service-date-day"
                           name="certificateOfServiceDay"
                           type="number"
@@ -201,9 +209,13 @@ export const FileDocument = connect(
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-year">
-                        <label htmlFor="service-date-year">YYYY</label>
+                        <label htmlFor="service-date-year" aria-hidden="true">
+                          YYYY
+                        </label>
                         <input
                           className="usa-input-inline"
+                          aria-label="year, four digits"
+                          aria-describedby="service-date-legend"
                           id="service-date-year"
                           name="certificateOfServiceYear"
                           type="number"
@@ -383,13 +395,16 @@ export const FileDocument = connect(
                     validationErrors.supportingDocument ? 'usa-input-error' : ''
                   }`}
                 >
-                  <label htmlFor="supporting-document">
+                  <label
+                    htmlFor="supporting-document"
+                    id="supporting-document-label"
+                  >
                     Select Supporting Document
                   </label>
                   <select
                     name="supportingDocument"
                     id="supporting-document"
-                    aria-label="category"
+                    aria-describedby="supporting-document-label"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -428,12 +443,16 @@ export const FileDocument = connect(
                       : ''
                   }`}
                 >
-                  <label htmlFor="supporting-document-free-text">
+                  <label
+                    htmlFor="supporting-document-free-text"
+                    id="supporting-document-free-text-label"
+                  >
                     Supporting Document Signed By
                   </label>
                   <input
                     id="supporting-document-free-text"
                     type="text"
+                    aria-describedby="supporting-document-free-text-label"
                     name="supportingDocumentFreeText"
                     autoCapitalize="none"
                     value={form.supportingDocumentFreeText}
@@ -464,6 +483,7 @@ export const FileDocument = connect(
                 >
                   <label
                     htmlFor="supporting-document-file"
+                    id="supporting-document-file-label"
                     className={
                       'ustc-upload ' +
                       (fileDocumentHelper.showSupportingDocumentValid
@@ -480,7 +500,7 @@ export const FileDocument = connect(
                     id="supporting-document-file"
                     type="file"
                     accept=".pdf"
-                    aria-describedby="petition-hint"
+                    aria-describedby="supporting-document-file-label"
                     name="supportingDocumentFile"
                     onChange={e => {
                       updateFormValueSequence({
@@ -534,6 +554,7 @@ export const FileDocument = connect(
                   >
                     <label
                       htmlFor="secondary-document"
+                      id="secondary-document-label"
                       className={
                         'ustc-upload ' +
                         (fileDocumentHelper.showSecondaryDocumentValid
@@ -551,6 +572,7 @@ export const FileDocument = connect(
                     </label>
                     <input
                       id="secondary-document"
+                      aria-describedby="secondary-document-label"
                       type="file"
                       accept=".pdf"
                       name="secondaryDocumentFile"
@@ -618,13 +640,16 @@ export const FileDocument = connect(
                           : ''
                       }`}
                     >
-                      <label htmlFor="secondary-supporting-document">
+                      <label
+                        htmlFor="secondary-supporting-document"
+                        id="secondary-supporting-document-label"
+                      >
                         Select Supporting Document
                       </label>
                       <select
                         name="secondarySupportingDocument"
                         id="secondary-supporting-document"
-                        aria-label="category"
+                        aria-describedby="secondary-supporting-document-label"
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -663,12 +688,16 @@ export const FileDocument = connect(
                           : ''
                       }`}
                     >
-                      <label htmlFor="secondary-supporting-document-free-text">
+                      <label
+                        htmlFor="secondary-supporting-document-free-text"
+                        id="secondary-supporting-document-free-text-label"
+                      >
                         Supporting Document Signed By
                       </label>
                       <input
                         id="secondary-supporting-document-free-text"
                         type="text"
+                        aria-describedby="secondary-supporting-document-free-text-label"
                         name="secondarySupportingDocumentFreeText"
                         autoCapitalize="none"
                         value={form.secondarySupportingDocumentFreeText}
@@ -699,6 +728,7 @@ export const FileDocument = connect(
                     >
                       <label
                         htmlFor="secondary-supporting-document-file"
+                        id="secondary-supporting-document-file-label"
                         className={
                           'ustc-upload ' +
                           (fileDocumentHelper.showSecondarySupportingDocumentValid
@@ -714,6 +744,7 @@ export const FileDocument = connect(
                       <input
                         id="secondary-supporting-document-file"
                         type="file"
+                        aria-describedby="secondary-supporting-document-file-label"
                         accept=".pdf"
                         name="secondarySupportingDocumentFile"
                         onChange={e => {
@@ -744,7 +775,7 @@ export const FileDocument = connect(
             }`}
           >
             <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend className="with-hint">
+              <legend className="with-hint" id="who-legend">
                 Who Is Filing This Document?
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
@@ -754,6 +785,7 @@ export const FileDocument = connect(
                     id="party-primary"
                     type="checkbox"
                     name="partyPrimary"
+                    aria-describedby="who-legend"
                     checked={form.partyPrimary || false}
                     onChange={e => {
                       updateFormValueSequence({
@@ -771,6 +803,7 @@ export const FileDocument = connect(
                       id="party-secondary"
                       type="checkbox"
                       name="partySecondary"
+                      aria-describedby="who-legend"
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -789,6 +822,7 @@ export const FileDocument = connect(
                     id="party-respondent"
                     type="checkbox"
                     name="partyRespondent"
+                    aria-describedby="who-legend"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
