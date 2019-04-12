@@ -9,8 +9,8 @@ import React from 'react';
 export const StartCaseInternal = connect(
   {
     constants: state.constants,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    startACaseToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
