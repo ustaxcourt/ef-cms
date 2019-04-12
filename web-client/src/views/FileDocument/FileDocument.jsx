@@ -108,15 +108,12 @@ export const FileDocument = connect(
                 />
               </div>
 
-              <div className="ustc-form-group">
-                <fieldset
-                  className={
-                    'usa-fieldset-inputs usa-sans ' +
-                    (validationErrors.certificateOfService
-                      ? 'usa-input-error'
-                      : '')
-                  }
-                >
+              <div
+                className={`ustc-form-group ${
+                  validationErrors.certificateOfService ? 'usa-input-error' : ''
+                }`}
+              >
+                <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>
                     Does Your Filing Include A Certificate of Service?
                   </legend>
@@ -229,13 +226,12 @@ export const FileDocument = connect(
                 </div>
               )}
 
-              <div className="ustc-form-group">
-                <fieldset
-                  className={
-                    'usa-fieldset-inputs usa-sans ' +
-                    (validationErrors.exhibits ? 'usa-input-error' : '')
-                  }
-                >
+              <div
+                className={`ustc-form-group ${
+                  validationErrors.exhibits ? 'usa-input-error' : ''
+                }`}
+              >
+                <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Does Your Filing Include Exhibits?</legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
@@ -264,13 +260,12 @@ export const FileDocument = connect(
                 />
               </div>
 
-              <div className="ustc-form-group">
-                <fieldset
-                  className={
-                    'usa-fieldset-inputs usa-sans ' +
-                    (validationErrors.attachments ? 'usa-input-error' : '')
-                  }
-                >
+              <div
+                className={`ustc-form-group ${
+                  validationErrors.attachments ? 'usa-input-error' : ''
+                }`}
+              >
+                <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Does Your Filing Include Attachments?</legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
@@ -302,13 +297,12 @@ export const FileDocument = connect(
               </div>
 
               {fileDocumentHelper.showObjection && (
-                <div className="ustc-form-group">
-                  <fieldset
-                    className={
-                      'usa-fieldset-inputs usa-sans ' +
-                      (validationErrors.objections ? 'usa-input-error' : '')
-                    }
-                  >
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.objections ? 'usa-input-error' : ''
+                  }`}
+                >
+                  <fieldset className="usa-fieldset-inputs usa-sans">
                     <legend>Are There Any Objections to This Document?</legend>
                     <ul className="usa-unstyled-list">
                       {['Yes', 'No', 'Unknown'].map(option => (
@@ -340,15 +334,14 @@ export const FileDocument = connect(
                 </div>
               )}
 
-              <div className="ustc-form-group">
-                <fieldset
-                  className={
-                    'usa-fieldset-inputs usa-sans ' +
-                    (validationErrors.hasSupportingDocuments
-                      ? 'usa-input-error'
-                      : '')
-                  }
-                >
+              <div
+                className={`ustc-form-group ${
+                  validationErrors.hasSupportingDocuments
+                    ? 'usa-input-error'
+                    : ''
+                }`}
+              >
+                <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
@@ -467,13 +460,21 @@ export const FileDocument = connect(
                   }`}
                 >
                   <label
-                    htmlFor="supporting-document"
-                    className="inline-block mr-1"
+                    htmlFor="supporting-document-file"
+                    className={
+                      'ustc-upload ' +
+                      (fileDocumentHelper.showSupportingDocumentValid
+                        ? 'validated'
+                        : '')
+                    }
                   >
-                    Upload Your Supporting Document
+                    Upload Your Supporting Document{' '}
+                    <span className="success-message">
+                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    </span>
                   </label>
                   <input
-                    id="supporting-document"
+                    id="supporting-document-file"
                     type="file"
                     accept=".pdf"
                     aria-describedby="petition-hint"
@@ -481,7 +482,7 @@ export const FileDocument = connect(
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.files[0],
                       });
                       validateExternalDocumentInformationSequence();
                     }}
@@ -553,7 +554,7 @@ export const FileDocument = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: e.target.files[0],
                         });
                         validateExternalDocumentInformationSequence();
                       }}
@@ -564,15 +565,14 @@ export const FileDocument = connect(
                     />
                   </div>
 
-                  <div className="ustc-form-group">
-                    <fieldset
-                      className={
-                        'usa-fieldset-inputs usa-sans ' +
-                        (validationErrors.hasSecondarySupportingDocuments
-                          ? 'usa-input-error'
-                          : '')
-                      }
-                    >
+                  <div
+                    className={`ustc-form-group ${
+                      validationErrors.hasSecondarySupportingDocuments
+                        ? 'usa-input-error'
+                        : ''
+                    }`}
+                  >
+                    <fieldset className="usa-fieldset-inputs usa-sans">
                       <legend>
                         Do You Have Any Supporting Documents for This Filing?
                       </legend>
@@ -695,13 +695,21 @@ export const FileDocument = connect(
                       }`}
                     >
                       <label
-                        htmlFor="secondary-supporting-document"
-                        className="inline-block mr-1"
+                        htmlFor="secondary-supporting-document-file"
+                        className={
+                          'ustc-upload ' +
+                          (fileDocumentHelper.showSecondarySupportingDocumentValid
+                            ? 'validated'
+                            : '')
+                        }
                       >
-                        Upload Your Supporting Document
+                        Upload Your Supporting Document{' '}
+                        <span className="success-message">
+                          <FontAwesomeIcon icon="check-circle" size="sm" />
+                        </span>
                       </label>
                       <input
-                        id="secondary-supporting-document"
+                        id="secondary-supporting-document-file"
                         type="file"
                         accept=".pdf"
                         name="secondarySupportingDocumentFile"
