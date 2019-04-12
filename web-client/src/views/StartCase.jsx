@@ -76,7 +76,10 @@ export const StartCase = connect(
           <div className="blue-container">
             <div className="usa-grid-full">
               <div className="usa-width-seven-twelfths push-right">
-                <div id="petition-upload-hint" className="alert-gold">
+                <div
+                  id="petition-upload-hint"
+                  className="alert-gold add-bottom-margin"
+                >
                   <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
