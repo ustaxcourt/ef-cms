@@ -19,7 +19,7 @@ class UpdateCaseCancelModalDialogComponent extends ModalDialog {
 export const UpdateCaseCancelModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.startACaseConfirmCancelSequence,
+    confirmSequence: sequences.closeModalAndReturnToDashboardSequence,
   },
   UpdateCaseCancelModalDialogComponent,
 );
