@@ -735,65 +735,75 @@ export const FileDocument = connect(
 
         <h3>Tell Us About the Parties Filing This Document</h3>
         <div className="blue-container">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend className="with-hint">Who Is Filing This Document?</legend>
-            <span className="usa-form-hint">Check all that apply.</span>
-            <ul className="ustc-vertical-option-list">
-              <li>
-                <input
-                  id="party-primary"
-                  type="checkbox"
-                  name="partyPrimary"
-                  value="Myself"
-                  defaultChecked={true}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
-                />
-                <label htmlFor="party-primary">Myself</label>
-              </li>
-              {fileDocumentHelper.showSecondaryParty && (
+          <div
+            className={`ustc-form-group ${
+              fileDocumentHelper.partyValidationError ? 'usa-input-error' : ''
+            }`}
+          >
+            <fieldset className="usa-fieldset-inputs usa-sans">
+              <legend className="with-hint">
+                Who Is Filing This Document?
+              </legend>
+              <span className="usa-form-hint">Check all that apply.</span>
+              <ul className="ustc-vertical-option-list">
                 <li>
                   <input
-                    id="party-secondary"
+                    id="party-primary"
                     type="checkbox"
-                    name="partySecondary"
-                    value={caseDetail.contactSecondary.name}
+                    name="partyPrimary"
+                    checked={form.partyPrimary || false}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.checked,
                       });
                       validateExternalDocumentInformationSequence();
                     }}
                   />
-                  <label htmlFor="party-secondary">
-                    {caseDetail.contactSecondary.name}
-                  </label>
+                  <label htmlFor="party-primary">Myself</label>
                 </li>
-              )}
-              <li>
-                <input
-                  id="party-respondent"
-                  type="checkbox"
-                  name="partyRespondent"
-                  value="Respondent"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
-                />
-                <label htmlFor="party-respondent">Respondent</label>
-              </li>
-            </ul>
-          </fieldset>
+                {fileDocumentHelper.showSecondaryParty && (
+                  <li>
+                    <input
+                      id="party-secondary"
+                      type="checkbox"
+                      name="partySecondary"
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor="party-secondary">
+                      {caseDetail.contactSecondary.name}
+                    </label>
+                  </li>
+                )}
+                <li>
+                  <input
+                    id="party-respondent"
+                    type="checkbox"
+                    name="partyRespondent"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
+                  <label htmlFor="party-respondent">Respondent</label>
+                </li>
+              </ul>
+            </fieldset>
+            {fileDocumentHelper.partyValidationError && (
+              <span className="usa-input-error-message">
+                {fileDocumentHelper.partyValidationError}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="button-box-container">
