@@ -126,7 +126,7 @@ export function TabsComponent({
 }
 
 TabsComponent.propTypes = {
-  asSwitch: PropTypes.boolean,
+  asSwitch: PropTypes.bool,
   bind: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
