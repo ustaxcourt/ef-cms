@@ -28,7 +28,7 @@ export const PartiesFiling = connect(
             }`}
           >
             <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend className="with-hint">
+              <legend className="with-hint" id="who-legend">
                 Who Is Filing This Document?
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
@@ -38,6 +38,7 @@ export const PartiesFiling = connect(
                     id="party-primary"
                     type="checkbox"
                     name="partyPrimary"
+                    aria-describedby="who-legend"
                     checked={form.partyPrimary || false}
                     onChange={e => {
                       updateFormValueSequence({
@@ -54,6 +55,7 @@ export const PartiesFiling = connect(
                     <input
                       id="party-secondary"
                       type="checkbox"
+                      aria-describedby="who-legend"
                       name="partySecondary"
                       onChange={e => {
                         updateFormValueSequence({
@@ -72,6 +74,7 @@ export const PartiesFiling = connect(
                   <input
                     id="party-respondent"
                     type="checkbox"
+                    aria-describedby="who-legend"
                     name="partyRespondent"
                     onChange={e => {
                       updateFormValueSequence({
