@@ -15,6 +15,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
+import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
@@ -22,6 +23,7 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
+import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -49,8 +51,6 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { signOutSequence } from './sequences/signOutSequence';
-import { startACaseConfirmCancelSequence } from './sequences/startACaseConfirmCancelSequence';
-import { startACaseToggleCancelSequence } from './sequences/startACaseToggleCancelSequence';
 import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
@@ -121,6 +121,7 @@ export const presenter = {
     clearWizardDataSequence,
     clickServeToIrsSequence,
     closeDocumentCategoryAccordionSequence,
+    closeModalAndReturnToDashboardSequence,
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
@@ -128,6 +129,7 @@ export const presenter = {
     dismissModalSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
+    formCancelToggleCancelSequence,
     getUsersInSectionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
@@ -153,8 +155,6 @@ export const presenter = {
     setModalDialogNameSequence,
     setWorkItemActionSequence,
     signOutSequence,
-    startACaseConfirmCancelSequence,
-    startACaseToggleCancelSequence,
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
     submitDocumentSequence,

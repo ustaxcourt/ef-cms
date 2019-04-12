@@ -1,6 +1,6 @@
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -10,7 +10,7 @@ export const StartCaseInternal = connect(
   {
     constants: state.constants,
     showModal: state.showModal,
-    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
+    startACaseToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -22,7 +22,7 @@ export const StartCaseInternal = connect(
   ({
     constants,
     showModal,
-    startACaseToggleCancelSequence,
+    formCancelToggleCancelSequence,
     startCaseHelper,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
@@ -44,7 +44,7 @@ export const StartCaseInternal = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Upload Documents to Create a Case
           </h1>
-          {showModal && <StartCaseCancelModalDialog />}
+          {showModal && <FormCancelModalDialog />}
           <ErrorNotification />
           <h2>Petition Documents</h2>
 
@@ -285,7 +285,7 @@ export const StartCaseInternal = connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseToggleCancelSequence();
+              formCancelToggleCancelSequence();
               return false;
             }}
           >
