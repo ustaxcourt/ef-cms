@@ -1,3 +1,4 @@
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -29,9 +30,11 @@ export const FileDocument = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2 tabIndex="-1" id="file-a-document-header">
-          File a Document
-        </h2>
+        <Focus>
+          <h2 tabIndex="-1" id="file-a-document-header">
+            File a Document
+          </h2>
+        </Focus>
         <p>All fields required unless otherwise noted</p>
         <div>
           <h3 className="type-of-document">Type of Document You’re Filing</h3>
