@@ -39,6 +39,8 @@ export const fileDocumentHelper = get => {
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
+    showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
+    showSupportingDocumentValid: !!form.supportingDocumentFile,
     supportingDocumentTypeList,
   };
 
