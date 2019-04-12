@@ -11,6 +11,7 @@ const state = {
     PARTY_TYPES,
   },
   form: {},
+  validationErrors: {},
 };
 
 import { fileDocumentHelper } from './fileDocumentHelper';
@@ -74,6 +75,17 @@ describe('fileDocumentHelper', () => {
     state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
+  });
+
+  it('does not show party validation error if none of the party validation errors exists', async () => {
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyValidationError).toBeUndefined();
+  });
+
+  it('shows party validation error if any one of the party validation errors exists', async () => {
+    state.validationErrors = { partyPrimary: 'You did something bad.' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
   describe('supporting document', () => {
