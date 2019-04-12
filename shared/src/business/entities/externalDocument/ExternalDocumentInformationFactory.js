@@ -18,14 +18,72 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
     Object.assign(this, rawProps);
   };
-  let schema = {};
-  let errorToMessageMap = {};
+
+  let schema = {
+    attachments: joi.boolean().required(),
+    certificateOfService: joi.boolean().required(),
+    certificateOfServiceDate: joi
+      .date()
+      .iso()
+      .max('now'),
+    exhibits: joi.boolean().required(),
+    hasSecondarySupportingDocuments: joi.boolean(),
+    hasSupportingDocuments: joi.boolean().required(),
+    objections: joi.string(),
+    partyPrimary: joi.boolean(),
+    partyRespondent: joi.boolean(),
+    partySecondary: joi.boolean(),
+    primaryDocumentFile: joi.object().required(),
+    secondaryDocumentFile: joi.object(),
+    secondarySupportingDocument: joi.string(),
+    secondarySupportingDocumentFile: joi.object(),
+    secondarySupportingDocumentFreeText: joi.string(),
+    supportingDocument: joi.string(),
+    supportingDocumentFile: joi.object(),
+    supportingDocumentFreeText: joi.string(),
+  };
+
+  let errorToMessageMap = {
+    attachments: 'Attachments is required.',
+    certificateOfService: 'Certificate Of Service is required.',
+    certificateOfServiceDate: [
+      {
+        contains: 'must be less than or equal to',
+        message: 'Service date is in the future. Please enter a valid date.',
+      },
+      'You must provide a service date.',
+    ],
+    exhibits: 'Exhibits is required.',
+    hasSecondarySupportingDocuments:
+      'Has Secondary Supporting Documents is required.',
+    hasSupportingDocuments: 'Has Supporting Documents is required.',
+    objections: 'Objections is required.',
+    partyPrimary: 'You must select a party.',
+    partyRespondent: 'You must select a party.',
+    partySecondary: 'You must select a party.',
+    primaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFile: 'A file was not selected.',
+    secondarySupportingDocument:
+      'Secondary supporting document type is required.',
+    secondarySupportingDocumentFile: 'A file was not selected.',
+    secondarySupportingDocumentFreeText: 'Please provide a value.',
+    supportingDocument: 'You must select a supporting document type.',
+    supportingDocumentFile: 'A file was not selected.',
+    supportingDocumentFreeText: 'Please provide a value.',
+  };
+
   let customValidate;
 
   const addProperty = (itemName, itemSchema, itemErrorMessage) => {
     schema[itemName] = itemSchema;
     if (itemErrorMessage) {
       errorToMessageMap[itemName] = itemErrorMessage;
+    }
+  };
+
+  const makeRequired = itemName => {
+    if (schema[itemName]) {
+      schema[itemName] = schema[itemName].required();
     }
   };
 
@@ -42,37 +100,9 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     'Unsworn Declaration under Penalty of Perjury in Support',
   ];
 
-  addProperty('primaryDocumentFile', joi.object().required(), [
-    'A file was not selected.',
-  ]);
-
-  addProperty('certificateOfService', joi.boolean().required(), [
-    'Certificate Of Service is required.',
-  ]);
-
   if (documentMetadata.certificateOfService === true) {
-    addProperty(
-      'certificateOfServiceDate',
-      joi
-        .date()
-        .iso()
-        .max('now')
-        .required(),
-      [
-        {
-          contains: 'must be less than or equal to',
-          message: 'Service date is in the future. Please enter a valid date.',
-        },
-        'You must provide a service date.',
-      ],
-    );
+    makeRequired('certificateOfServiceDate');
   }
-
-  addProperty('exhibits', joi.boolean().required(), ['Exhibits is required.']);
-
-  addProperty('attachments', joi.boolean().required(), [
-    'Attachments is required.',
-  ]);
 
   if (
     documentMetadata.category === 'Motion' ||
@@ -85,20 +115,11 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       documentMetadata.documentType,
     )
   ) {
-    // NOTE: objections isn't a boolean
-    addProperty('objections', joi.string().required(), [
-      'Objections is required.',
-    ]);
+    makeRequired('objections');
   }
 
-  addProperty('hasSupportingDocuments', joi.boolean().required(), [
-    'Has Supporting Documents is required.',
-  ]);
-
   if (documentMetadata.hasSupportingDocuments === true) {
-    addProperty('supportingDocument', joi.string().required(), [
-      'You must select a supporting document type.',
-    ]);
+    makeRequired('supportingDocument');
 
     if (
       includes(
@@ -106,9 +127,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         documentMetadata.supportingDocument,
       )
     ) {
-      addProperty('supportingDocumentFreeText', joi.string().required(), [
-        'Please provide a value.',
-      ]);
+      makeRequired('supportingDocumentFreeText');
     }
 
     if (
@@ -117,9 +136,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         documentMetadata.supportingDocument,
       )
     ) {
-      addProperty('supportingDocumentFile', joi.object().required(), [
-        'A file was not selected.',
-      ]);
+      makeRequired('supportingDocumentFile');
     }
   }
 
@@ -130,23 +147,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         'Motion for Leave to File Out of Time',
       )
     ) {
-      addProperty('secondaryDocumentFile', joi.object().required(), [
-        'A file was not selected.',
-      ]);
-    } else {
-      addProperty('secondaryDocumentFile', joi.object().optional(), [
-        'A file was not selected.',
-      ]);
+      makeRequired('secondaryDocumentFile');
     }
 
-    addProperty('hasSecondarySupportingDocuments', joi.boolean().required(), [
-      'Has Secondary Supporting Documents is required.',
-    ]);
+    makeRequired('hasSecondarySupportingDocuments');
 
     if (documentMetadata.hasSecondarySupportingDocuments === true) {
-      addProperty('secondarySupportingDocument', joi.string().required(), [
-        'Secondary supporting document type is required.',
-      ]);
+      makeRequired('secondarySupportingDocument');
 
       if (
         includes(
@@ -154,11 +161,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
           documentMetadata.secondarySupportingDocument,
         )
       ) {
-        addProperty(
-          'secondarySupportingDocumentFreeText',
-          joi.string().required(),
-          ['Please provide a value.'],
-        );
+        makeRequired('secondarySupportingDocumentFreeText');
       }
 
       if (
@@ -167,31 +170,22 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
           documentMetadata.secondarySupportingDocument,
         )
       ) {
-        addProperty(
-          'secondarySupportingDocumentFile',
-          joi.object().required(),
-          ['A file was not selected.'],
-        );
+        makeRequired('secondarySupportingDocumentFile');
       }
     }
   }
 
   if (
-    documentMetadata.partyPrimary === true ||
-    documentMetadata.partySecondary === true ||
-    documentMetadata.partyRespondent === true
+    documentMetadata.partyPrimary !== true &&
+    documentMetadata.partySecondary !== true &&
+    documentMetadata.partyRespondent !== true
   ) {
-    addProperty('partyPrimary', joi.boolean().optional());
-    addProperty('partySecondary', joi.boolean().optional());
-    addProperty('partyRespondent', joi.boolean().optional());
-  } else {
     addProperty(
       'partyPrimary',
       joi
         .boolean()
         .invalid(false)
         .required(),
-      ['You must select a party.'],
     );
     addProperty(
       'partySecondary',
@@ -199,7 +193,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         .boolean()
         .invalid(false)
         .required(),
-      ['You must select a party.'],
     );
     addProperty(
       'partyRespondent',
@@ -207,7 +200,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         .boolean()
         .invalid(false)
         .required(),
-      ['You must select a party.'],
     );
   }
 
