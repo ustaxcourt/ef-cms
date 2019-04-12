@@ -4,6 +4,7 @@ export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
@@ -32,9 +33,15 @@ export const fileDocumentHelper = get => {
     'Application to Take Deposition',
   ];
 
+  const partyValidationError =
+    validationErrors.partyPrimary ||
+    validationErrors.partySecondary ||
+    validationErrors.partyRespondent;
+
   let exported = {
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
+    partyValidationError,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,

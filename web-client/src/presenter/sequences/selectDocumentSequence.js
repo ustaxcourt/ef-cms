@@ -45,6 +45,7 @@ export const selectDocumentSequence = [
                 proceed: [
                   generateTitleAction,
                   setDocketNumberPropAction,
+                  set(state.form.partyPrimary, true),
                   navigateToFileADocumentAction,
                 ],
               },
