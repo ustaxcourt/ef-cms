@@ -50,6 +50,7 @@ export const SecondaryDocumentForm = connect(
               >
                 <label
                   htmlFor="secondary-document"
+                  id="secondary-document-label"
                   className={
                     'ustc-upload ' +
                     (fileDocumentHelper.showSecondaryDocumentValid
@@ -69,6 +70,7 @@ export const SecondaryDocumentForm = connect(
                   id="secondary-document"
                   type="file"
                   accept=".pdf"
+                  aria-describedby="secondary-document-label"
                   name="secondaryDocumentFile"
                   onChange={e => {
                     updateFormValueSequence({
@@ -92,7 +94,7 @@ export const SecondaryDocumentForm = connect(
                 }`}
               >
                 <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>
+                  <legend id="secondary-support-docs">
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
                   <ul className="usa-unstyled-list">
@@ -101,6 +103,7 @@ export const SecondaryDocumentForm = connect(
                         <input
                           id={`secondary-supporting-documents-${option}`}
                           type="radio"
+                          aria-describedby="secondary-support-docs"
                           name="hasSecondarySupportingDocuments"
                           value={option}
                           onChange={e => {
@@ -134,13 +137,16 @@ export const SecondaryDocumentForm = connect(
                       : ''
                   }`}
                 >
-                  <label htmlFor="secondary-supporting-document">
+                  <label
+                    htmlFor="secondary-supporting-document"
+                    id="secondary-supporting-document-label"
+                  >
                     Select Supporting Document
                   </label>
                   <select
                     name="secondarySupportingDocument"
                     id="secondary-supporting-document"
-                    aria-label="category"
+                    aria-describedby="secondary-supporting-document-label"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -179,13 +185,17 @@ export const SecondaryDocumentForm = connect(
                       : ''
                   }`}
                 >
-                  <label htmlFor="secondary-supporting-document-free-text">
+                  <label
+                    htmlFor="secondary-supporting-document-free-text"
+                    id="secondary-supporting-document-free-text-label"
+                  >
                     Supporting Document Signed By
                   </label>
                   <input
                     id="secondary-supporting-document-free-text"
                     type="text"
                     name="secondarySupportingDocumentFreeText"
+                    aria-describedby="secondary-supporting-document-free-text-label"
                     autoCapitalize="none"
                     value={form.secondarySupportingDocumentFreeText}
                     onChange={e => {
@@ -215,6 +225,7 @@ export const SecondaryDocumentForm = connect(
                 >
                   <label
                     htmlFor="secondary-supporting-document-file"
+                    id="secondary-supporting-document-file-label"
                     className={
                       'ustc-upload ' +
                       (fileDocumentHelper.showSecondarySupportingDocumentValid
@@ -231,6 +242,7 @@ export const SecondaryDocumentForm = connect(
                     id="secondary-supporting-document-file"
                     type="file"
                     accept=".pdf"
+                    aria-describedby="secondary-supporting-document-file-label"
                     name="secondarySupportingDocumentFile"
                     onChange={e => {
                       updateFormValueSequence({

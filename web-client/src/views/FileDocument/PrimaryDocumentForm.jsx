@@ -129,13 +129,17 @@ export const PrimaryDocumentForm = connect(
                   }`}
                 >
                   <fieldset className="service-date">
-                    <legend>Service Date</legend>
+                    <legend id="service-date-legend">Service Date</legend>
                     <div className="usa-date-of-birth">
                       <div className="usa-form-group usa-form-group-month">
-                        <label htmlFor="service-date-month">MM</label>
+                        <label htmlFor="service-date-month" aria-hidden="true">
+                          MM
+                        </label>
                         <input
                           className="usa-input-inline"
                           id="service-date-month"
+                          aria-label="month, two digits"
+                          aria-describedby="service-date-legend"
                           name="certificateOfServiceMonth"
                           type="number"
                           min="1"
@@ -152,11 +156,15 @@ export const PrimaryDocumentForm = connect(
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-day">
-                        <label htmlFor="service-date-day">DD</label>
+                        <label htmlFor="service-date-day" aria-hidden="true">
+                          DD
+                        </label>
                         <input
                           className="usa-input-inline"
                           id="service-date-day"
                           name="certificateOfServiceDay"
+                          aria-label="day, two digits"
+                          aria-describedby="service-date-legend"
                           type="number"
                           min="1"
                           max="31"
@@ -172,10 +180,14 @@ export const PrimaryDocumentForm = connect(
                         />
                       </div>
                       <div className="usa-form-group usa-form-group-year">
-                        <label htmlFor="service-date-year">YYYY</label>
+                        <label htmlFor="service-date-year" aria-hidden="true">
+                          YYYY
+                        </label>
                         <input
                           className="usa-input-inline"
                           id="service-date-year"
+                          aria-label="year, four digits"
+                          aria-describedby="service-date-legend"
                           name="certificateOfServiceYear"
                           type="number"
                           min="1900"
@@ -206,7 +218,9 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>Does Your Filing Include Exhibits?</legend>
+                  <legend id="exhibits-legend">
+                    Does Your Filing Include Exhibits?
+                  </legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
                       <li key={option}>
@@ -214,6 +228,7 @@ export const PrimaryDocumentForm = connect(
                           id={`exhibits-${option}`}
                           type="radio"
                           name="exhibits"
+                          aria-describedby="exhibits-legend"
                           value={option}
                           onChange={e => {
                             updateFormValueSequence({
@@ -240,7 +255,9 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>Does Your Filing Include Attachments?</legend>
+                  <legend id="attachments-legend">
+                    Does Your Filing Include Attachments?
+                  </legend>
                   <ul className="usa-unstyled-list">
                     {['Yes', 'No'].map(option => (
                       <li key={option}>
@@ -248,6 +265,7 @@ export const PrimaryDocumentForm = connect(
                           id={`attachments-${option}`}
                           type="radio"
                           name="attachments"
+                          aria-describedby="attachments-legend"
                           value={option}
                           onChange={e => {
                             updateFormValueSequence({
@@ -277,13 +295,16 @@ export const PrimaryDocumentForm = connect(
                   }`}
                 >
                   <fieldset className="usa-fieldset-inputs usa-sans">
-                    <legend>Are There Any Objections to This Document?</legend>
+                    <legend id="objections-legend">
+                      Are There Any Objections to This Document?
+                    </legend>
                     <ul className="usa-unstyled-list">
                       {['Yes', 'No', 'Unknown'].map(option => (
                         <li key={option}>
                           <input
                             id={`objections-${option}`}
                             type="radio"
+                            aria-describedby="objections-legend"
                             name="objections"
                             value={option}
                             onChange={e => {
@@ -316,7 +337,7 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>
+                  <legend id="support-docs-legend">
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
                   <ul className="usa-unstyled-list">
@@ -326,6 +347,7 @@ export const PrimaryDocumentForm = connect(
                           id={`supporting-documents-${option}`}
                           type="radio"
                           name="hasSupportingDocuments"
+                          aria-describedby="support-docs-legend"
                           value={option}
                           onChange={e => {
                             updateFormValueSequence({
@@ -354,13 +376,16 @@ export const PrimaryDocumentForm = connect(
                     validationErrors.supportingDocument ? 'usa-input-error' : ''
                   }`}
                 >
-                  <label htmlFor="supporting-document">
+                  <label
+                    htmlFor="supporting-document"
+                    id="supporting-document-label"
+                  >
                     Select Supporting Document
                   </label>
                   <select
                     name="supportingDocument"
                     id="supporting-document"
-                    aria-label="category"
+                    aria-describedby="supporting-document-label"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -399,12 +424,16 @@ export const PrimaryDocumentForm = connect(
                       : ''
                   }`}
                 >
-                  <label htmlFor="supporting-document-free-text">
+                  <label
+                    htmlFor="supporting-document-free-text"
+                    id="supporting-document-free-text-label"
+                  >
                     Supporting Document Signed By
                   </label>
                   <input
                     id="supporting-document-free-text"
                     type="text"
+                    aria-describedby="supporting-document-free-text-label"
                     name="supportingDocumentFreeText"
                     autoCapitalize="none"
                     value={form.supportingDocumentFreeText}
@@ -435,6 +464,7 @@ export const PrimaryDocumentForm = connect(
                 >
                   <label
                     htmlFor="supporting-document-file"
+                    id="supporting-document-file-label"
                     className={
                       'ustc-upload ' +
                       (fileDocumentHelper.showSupportingDocumentValid
@@ -451,7 +481,7 @@ export const PrimaryDocumentForm = connect(
                     id="supporting-document-file"
                     type="file"
                     accept=".pdf"
-                    aria-describedby="petition-hint"
+                    aria-describedby="supporting-document-file-label"
                     name="supportingDocumentFile"
                     onChange={e => {
                       updateFormValueSequence({
