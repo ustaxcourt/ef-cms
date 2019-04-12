@@ -11,12 +11,14 @@ export const FileDocument = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     submitExternalDocumentInformationSequence:
       sequences.submitExternalDocumentInformationSequence,
   },
   ({
     chooseWizardStepSequence,
     form,
+    formCancelToggleCancelSequence,
     submitExternalDocumentInformationSequence,
   }) => {
     return (
@@ -65,7 +67,10 @@ export const FileDocument = connect(
           <button
             type="button"
             className="usa-button-secondary"
-            onClick={() => {}}
+            onClick={() => {
+              formCancelToggleCancelSequence();
+              return false;
+            }}
           >
             Cancel
           </button>
