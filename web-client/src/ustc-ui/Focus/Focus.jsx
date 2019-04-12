@@ -10,10 +10,6 @@ class FocusComponent extends React.Component {
     this.setFocus();
   }
 
-  componentDidUpdate() {
-    this.setFocus();
-  }
-
   setFocus(e) {
     e && e.preventDefault();
     const focusEl = this.node.querySelector(focusableChildren);
