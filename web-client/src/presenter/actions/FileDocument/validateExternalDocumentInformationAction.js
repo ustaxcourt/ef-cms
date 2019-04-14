@@ -27,10 +27,32 @@ export const validateExternalDocumentInformationAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayOrder = [
+      'primaryDocumentFile',
+      'certificateOfService',
+      'certificateOfServiceDate',
+      'exhibits',
+      'attachments',
+      'objections',
+      'hasSupportingDocuments',
+      'supportingDocument',
+      'supportingDocumentFreeText',
+      'supportingDocumentFile',
+      'secondaryDocumentFile',
+      'hasSecondarySupportingDocuments',
+      'secondarySupportingDocument',
+      'secondarySupportingDocumentFreeText',
+      'secondarySupportingDocumentFile',
+      'partyPrimary',
+      'partySecondary',
+      'partyRespondent',
+    ];
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder,
       errors,
     });
   }
