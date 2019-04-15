@@ -4,6 +4,7 @@
  * @param {Object} providers the providers object
  * @param {Object} providers.path the next object in the path
  * @param {Object} providers.props the cerebral props that contain the props.doNotProceed
+ * @returns {Object} the results of the executed path
  */
 export const shouldProceedAction = ({ path, props }) => {
   if (props.doNotProceed) return path.ignore();
