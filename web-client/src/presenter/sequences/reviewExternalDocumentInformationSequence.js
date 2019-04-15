@@ -6,7 +6,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { state } from 'cerebral';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
 
-export const submitExternalDocumentInformationSequence = [
+export const reviewExternalDocumentInformationSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
   validateExternalDocumentInformationAction,
