@@ -106,7 +106,9 @@ export const SecondaryDocumentForm = connect(
                           aria-describedby="secondary-support-docs"
                           name="hasSecondarySupportingDocuments"
                           value={option}
-                          checked={form.hasSecondarySupportingDocuments}
+                          checked={
+                            form.hasSecondarySupportingDocuments === (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
