@@ -10,3 +10,4 @@ web-client/reports
 web-client/tests_output/
 gen.conf
 aws.json
+policy.json
