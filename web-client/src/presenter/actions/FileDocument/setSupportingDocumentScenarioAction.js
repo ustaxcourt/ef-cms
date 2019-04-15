@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object
  * @param {Object} providers.get the cerebral get function
+ * @returns {undefined}
  */
 export const setSupportingDocumentScenarioAction = ({ store, get }) => {
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
