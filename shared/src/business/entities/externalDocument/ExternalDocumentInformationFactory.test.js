@@ -29,7 +29,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
     it('should require certificate of service radio be selected', () => {
       expect(errors().certificateOfService).toEqual(
-        'Certificate Of Service is required.',
+        'Enter selection for Certificate of Service.',
       );
       baseDoc.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
@@ -42,7 +42,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require certificate of service date be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          'You must provide a service date.',
+          'Enter a Certificate of Service Date.',
         );
         baseDoc.certificateOfServiceDate = moment().format();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -53,19 +53,19 @@ describe('ExternalDocumentInformationFactory', () => {
           .add(1, 'days')
           .format();
         expect(errors().certificateOfServiceDate).toEqual(
-          'Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date is in the future. Please enter a valid date.',
         );
       });
     });
 
     it('should require exhibits radio be selected', () => {
-      expect(errors().exhibits).toEqual('Exhibits is required.');
+      expect(errors().exhibits).toEqual('Enter selection for Exhibits.');
       baseDoc.exhibits = false;
       expect(errors().exhibits).toEqual(undefined);
     });
 
     it('should require attachments radio be selected', () => {
-      expect(errors().attachments).toEqual('Attachments is required.');
+      expect(errors().attachments).toEqual('Enter selection for Attachments.');
       baseDoc.attachments = false;
       expect(errors().attachments).toEqual(undefined);
     });
@@ -76,7 +76,7 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require objections radio be selected', () => {
-        expect(errors().objections).toEqual('Objections is required.');
+        expect(errors().objections).toEqual('Enter selection for Objections.');
         baseDoc.objections = 'Yes';
         expect(errors().objections).toEqual(undefined);
       });
@@ -84,7 +84,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
     it('should require has supporting documents radio be selected', () => {
       expect(errors().hasSupportingDocuments).toEqual(
-        'Has Supporting Documents is required.',
+        'Enter selection for Supporting Documents.',
       );
       baseDoc.hasSupportingDocuments = false;
       expect(errors().hasSupportingDocuments).toEqual(undefined);
@@ -155,7 +155,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
         it('should require has supporting secondary documents radio be selected', () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(
-            'Has Secondary Supporting Documents is required.',
+            'Enter selection for Secondary Supporting Documents.',
           );
           baseDoc.hasSecondarySupportingDocuments = false;
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
@@ -177,7 +177,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
         it('should require has supporting secondary documents radio be selected', () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(
-            'Has Secondary Supporting Documents is required.',
+            'Enter selection for Secondary Supporting Documents.',
           );
           baseDoc.hasSecondarySupportingDocuments = false;
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
@@ -190,7 +190,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it('should require supporting secondary document type be entered', () => {
             expect(errors().secondarySupportingDocument).toEqual(
-              'Secondary supporting document type is required.',
+              'Enter selection for Secondary Supporting Document Type.',
             );
             baseDoc.secondarySupportingDocument =
               'Unsworn Declaration under Penalty of Perjury in Support';
