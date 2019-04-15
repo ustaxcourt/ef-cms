@@ -3,8 +3,8 @@ import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
-import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
@@ -18,9 +18,9 @@ export const StartCase = connect(
     constants: state.constants,
     filingTypes: state.filingTypes,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.showModal,
-    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
@@ -42,7 +42,7 @@ export const StartCase = connect(
     form,
     screenMetadata,
     showModal,
-    startACaseToggleCancelSequence,
+    formCancelToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
     toggleCaseDifferenceSequence,
@@ -68,7 +68,7 @@ export const StartCase = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <StartCaseCancelModalDialog />}
+          {showModal && <FormCancelModalDialog />}
           <ErrorNotification />
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
@@ -852,7 +852,7 @@ export const StartCase = connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseToggleCancelSequence();
+              formCancelToggleCancelSequence();
               return false;
             }}
           >
