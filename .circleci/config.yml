@@ -79,27 +79,27 @@ jobs:
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh develop)" >> $BASH_ENV
-    #   - run: 
-    #       name: 'Deploy - Web Client - Terraform'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
-    #   - run:
-    #       name: 'Deploy - Web Client - S3'
-    #       command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
-    #   - run: 
-    #       name: 'Deploy - API - Terraform'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service/terraform/main && ../bin/deploy-app.sh ${ENV}"
-    #   - run: 
-    #       name: 'Deploy - API - Serverless - us-east-1'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-east-1"
-    #   - run: 
-    #       name: 'Deploy - API - Serverless - us-west-1'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-west-1"
-    #   - run: 
-    #       name: 'Deploy - API - Route53'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-regional-route53.sh ${ENV}"
-    #   - run:
-    #       name: 'Deploy - API - S3 Replication'
-    #       command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-s3-replication.sh ${ENV}"
+      - run: 
+          name: 'Deploy - Web Client - Terraform'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+      - run:
+          name: 'Deploy - Web Client - S3'
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+      - run: 
+          name: 'Deploy - API - Terraform'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service/terraform/main && ../bin/deploy-app.sh ${ENV}"
+      - run: 
+          name: 'Deploy - API - Serverless - us-east-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-east-1"
+      - run: 
+          name: 'Deploy - API - Serverless - us-west-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-west-1"
+      - run: 
+          name: 'Deploy - API - Route53'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-regional-route53.sh ${ENV}"
+      - run:
+          name: 'Deploy - API - S3 Replication'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-s3-replication.sh ${ENV}"
       - run:
           name: 'Deploy - API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd efcms-service && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
@@ -120,11 +120,11 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - deploy
-    #   - deploy:
-    #       requires:
-    #         - build
-    #       filters:
-    #         branches:
-    #           only: 
-    #             - develop
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - develop
