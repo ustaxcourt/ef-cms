@@ -1,7 +1,6 @@
 exports.CASE_METADATA = 'caseMetadata';
-exports.FILE_ANSWER = 'fileAnswer';
+exports.FILE_EXTERNAL_DOCUMENT = 'fileExternalDocument';
 exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
-exports.FILE_STIPULATED_DECISION = 'fileStipulatedDecision';
 exports.GET_CASE = 'getCase';
 exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
@@ -32,7 +31,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
   ],
-  petitioner: [exports.PETITION],
+  petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
     exports.CASE_METADATA,
     exports.GET_CASE,
@@ -44,13 +43,12 @@ const AUTHORIZATION_MAP = {
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
   ],
-  practitioner: [exports.PETITION],
+  practitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   respondent: [
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
-    exports.FILE_ANSWER,
     exports.FILE_RESPONDENT_DOCUMENT,
-    exports.FILE_STIPULATED_DECISION,
+    exports.FILE_EXTERNAL_DOCUMENT,
     exports.UPDATE_CASE,
   ],
   seniorattorney: [
