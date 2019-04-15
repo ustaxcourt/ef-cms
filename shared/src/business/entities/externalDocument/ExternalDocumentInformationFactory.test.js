@@ -97,7 +97,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require supporting document type be entered', () => {
         expect(errors().supportingDocument).toEqual(
-          'You must select a supporting document type.',
+          'Enter selection for Supporting Document.',
         );
         baseDoc.supportingDocument = 'Brief';
         expect(errors().supportingDocument).toEqual(undefined);
@@ -190,7 +190,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it('should require supporting secondary document type be entered', () => {
             expect(errors().secondarySupportingDocument).toEqual(
-              'Enter selection for Secondary Supporting Document Type.',
+              'Enter selection for Secondary Supporting Document.',
             );
             baseDoc.secondarySupportingDocument =
               'Unsworn Declaration under Penalty of Perjury in Support';
@@ -242,12 +242,8 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors()).toMatchObject({
-        partyPrimary: 'You must select a party.',
-        partyRespondent: 'You must select a party.',
-        partySecondary: 'You must select a party.',
-      });
-      baseDoc.partyPrimary = true;
+      expect(errors().partyPrimary).toEqual('Select a party.');
+      baseDoc.partyRespondent = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
   });
