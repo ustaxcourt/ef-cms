@@ -28,7 +28,7 @@ export const fileDocumentHelper = get => {
     ...CATEGORY_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
-    'Motion to Withdraw Counsel',
+    'Motion to Withdraw Counsel (filed by petitioner)',
     'Motion to Withdraw as Counsel',
     'Application to Take Deposition',
   ];
