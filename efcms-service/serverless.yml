@@ -143,10 +143,10 @@ provider:
 
 package:
   exclude:
-    - ./storage
-    - ./coverage
-    - ./terraform
-    - ./cognito
+    - storage/**
+    - coverage/**
+    - terraform/**
+    - cognito/**
 
   excludeDevDependencies: true
 

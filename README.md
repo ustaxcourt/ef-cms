@@ -187,7 +187,11 @@ Follow these steps for creating the end of sprint PRs for the court.
 
 ## Prerequisites
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
-- In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a `CircleCI` user with administrator privileges (e.g. attach the `AdministratorAccess` policy).  Keep track of the access key and secret access key; you will need to add these to the CircleCI environment variables.
+- In [AWS Identity and Access Management](https://console.aws.amazon.com/iam/), create a `CircleCI` user:
+     - Run the `generate-policy.sh YOUR_ACCOUNT_ID_AS_ARG_1` to generated the policy.json.
+     - Create a IAM policy called CircleCIPolicy with that generated policy.json
+     - Create the CircleCI user and attach the policy
+     - keep track of the access key and secret access key; it is needed for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Put the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`.  This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
