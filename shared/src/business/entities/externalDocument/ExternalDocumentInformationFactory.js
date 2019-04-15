@@ -65,10 +65,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     primaryDocumentFile: 'A file was not selected.',
     secondaryDocumentFile: 'A file was not selected.',
     secondarySupportingDocument:
-      'Enter selection for Secondary Supporting Document Type.',
+      'Enter selection for Secondary Supporting Document.',
     secondarySupportingDocumentFile: 'A file was not selected.',
     secondarySupportingDocumentFreeText: 'Please provide a value.',
-    supportingDocument: 'You must select a supporting document type.',
+    supportingDocument: 'Enter selection for Supporting Document.',
     supportingDocumentFile: 'A file was not selected.',
     supportingDocumentFreeText: 'Please provide a value.',
   };
