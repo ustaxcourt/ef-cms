@@ -59,16 +59,16 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'You must select a party.',
-    partyRespondent: 'You must select a party.',
-    partySecondary: 'You must select a party.',
+    partyPrimary: 'Select a party.',
+    partyRespondent: 'Select a party.',
+    partySecondary: 'Select a party.',
     primaryDocumentFile: 'A file was not selected.',
     secondaryDocumentFile: 'A file was not selected.',
     secondarySupportingDocument:
-      'Enter selection for Secondary Supporting Document Type.',
+      'Enter selection for Secondary Supporting Document.',
     secondarySupportingDocumentFile: 'A file was not selected.',
     secondarySupportingDocumentFreeText: 'Please provide a value.',
-    supportingDocument: 'You must select a supporting document type.',
+    supportingDocument: 'Enter selection for Supporting Document.',
     supportingDocumentFile: 'A file was not selected.',
     supportingDocumentFreeText: 'Please provide a value.',
   };
@@ -183,20 +183,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   ) {
     addProperty(
       'partyPrimary',
-      joi
-        .boolean()
-        .invalid(false)
-        .required(),
-    );
-    addProperty(
-      'partySecondary',
-      joi
-        .boolean()
-        .invalid(false)
-        .required(),
-    );
-    addProperty(
-      'partyRespondent',
       joi
         .boolean()
         .invalid(false)
