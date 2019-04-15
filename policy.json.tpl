@@ -103,6 +103,8 @@
         "dynamodb:CreateTable",
         "dynamodb:DescribeTable",
         "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:BatchGet",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable"
       ],
