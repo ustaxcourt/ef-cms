@@ -63,19 +63,40 @@ export const PrimaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <input
-                  id="primary-document"
-                  type="file"
-                  accept=".pdf"
-                  name="primaryDocumentFile"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
-                />
+                {!form.primaryDocumentFile && (
+                  <input
+                    id="primary-document"
+                    type="file"
+                    accept=".pdf"
+                    name="primaryDocumentFile"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
+                )}
+
+                {form.primaryDocumentFile && (
+                  <div>
+                    <span className="mr-1">
+                      {form.primaryDocumentFile.name}
+                    </span>
+                    <button
+                      className="link"
+                      onClick={() => {
+                        updateFormValueSequence({
+                          key: 'primaryDocumentFile',
+                          value: null,
+                        });
+                      }}
+                    >
+                      Change
+                    </button>
+                  </div>
+                )}
                 <Text
                   className="usa-input-error-message"
                   bind="validationErrors.primaryDocumentFile"
@@ -315,7 +336,7 @@ export const PrimaryDocumentForm = connect(
                             aria-describedby="objections-legend"
                             name="objections"
                             value={option}
-                            checked={form.objections === (option === 'Yes')}
+                            checked={form.objections === option}
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -501,20 +522,40 @@ export const PrimaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <input
-                    id="supporting-document-file"
-                    type="file"
-                    accept=".pdf"
-                    aria-describedby="supporting-document-file-label"
-                    name="supportingDocumentFile"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
+                  {!form.supportingDocumentFile && (
+                    <input
+                      id="supporting-document-file"
+                      type="file"
+                      accept=".pdf"
+                      aria-describedby="supporting-document-file-label"
+                      name="supportingDocumentFile"
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.files[0],
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                  )}
+                  {form.supportingDocumentFile && (
+                    <div>
+                      <span className="mr-1">
+                        {form.supportingDocumentFile.name}
+                      </span>
+                      <button
+                        className="link"
+                        onClick={() => {
+                          updateFormValueSequence({
+                            key: 'supportingDocumentFile',
+                            value: null,
+                          });
+                        }}
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
                   <Text
                     className="usa-input-error-message"
                     bind="validationErrors.supportingDocumentFile"
