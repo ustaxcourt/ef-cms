@@ -44,27 +44,28 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   let errorToMessageMap = {
-    attachments: 'Attachments is required.',
-    certificateOfService: 'Certificate Of Service is required.',
+    attachments: 'Enter selection for Attachments.',
+    certificateOfService: 'Enter selection for Certificate of Service.',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
-        message: 'Service date is in the future. Please enter a valid date.',
+        message:
+          'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'You must provide a service date.',
+      'Enter a Certificate of Service Date.',
     ],
-    exhibits: 'Exhibits is required.',
+    exhibits: 'Enter selection for Exhibits.',
     hasSecondarySupportingDocuments:
-      'Has Secondary Supporting Documents is required.',
-    hasSupportingDocuments: 'Has Supporting Documents is required.',
-    objections: 'Objections is required.',
+      'Enter selection for Secondary Supporting Documents.',
+    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+    objections: 'Enter selection for Objections.',
     partyPrimary: 'You must select a party.',
     partyRespondent: 'You must select a party.',
     partySecondary: 'You must select a party.',
     primaryDocumentFile: 'A file was not selected.',
     secondaryDocumentFile: 'A file was not selected.',
     secondarySupportingDocument:
-      'Secondary supporting document type is required.',
+      'Enter selection for Secondary Supporting Document Type.',
     secondarySupportingDocumentFile: 'A file was not selected.',
     secondarySupportingDocumentFreeText: 'Please provide a value.',
     supportingDocument: 'You must select a supporting document type.',

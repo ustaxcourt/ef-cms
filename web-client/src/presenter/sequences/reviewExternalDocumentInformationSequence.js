@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -9,6 +10,7 @@ import { validateExternalDocumentInformationAction } from '../actions/FileDocume
 export const reviewExternalDocumentInformationSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
+  computeCertificateOfServiceFormDateAction,
   validateExternalDocumentInformationAction,
   {
     error: [
