@@ -771,7 +771,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption equivalent to the initial title', () => {
+    it('should not add to the docket record when the caption is equivalent to the initial title', () => {
       const caseToVerify = new Case({
         caseCaption: 'Caption',
         initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',

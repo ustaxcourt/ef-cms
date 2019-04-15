@@ -248,7 +248,7 @@ describe('formatYearAmounts', () => {
     );
   });
 
-  it('sorts the docet record in the expected order', async () => {
+  it('sorts the docket record in the expected order', async () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
