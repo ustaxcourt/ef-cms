@@ -1,6 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
+import { FileDocumentReview } from './FileDocumentReview';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
@@ -61,6 +62,9 @@ export const FileDocumentWizard = connect(
             </Tab>
             <Tab tabName="FileDocument">
               <FileDocument />
+            </Tab>
+            <Tab tabName="FileDocumentReview">
+              <FileDocumentReview />
             </Tab>
           </Tabs>
         </section>
