@@ -11,6 +11,7 @@ export const FileDocument = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
   },
@@ -18,6 +19,7 @@ export const FileDocument = connect(
     chooseWizardStepSequence,
     form,
     reviewExternalDocumentInformationSequence,
+    formCancelToggleCancelSequence,
   }) => {
     return (
       <React.Fragment>
@@ -67,7 +69,10 @@ export const FileDocument = connect(
           <button
             type="button"
             className="usa-button-secondary"
-            onClick={() => {}}
+            onClick={() => {
+              formCancelToggleCancelSequence();
+              return false;
+            }}
           >
             Cancel
           </button>

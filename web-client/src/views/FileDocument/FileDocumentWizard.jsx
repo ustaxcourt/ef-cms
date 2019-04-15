@@ -3,6 +3,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
 import { FileDocumentReview } from './FileDocumentReview';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -14,8 +15,9 @@ export const FileDocumentWizard = connect(
   {
     caseDetail: state.formattedCaseDetail,
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
+    showModal: state.showModal,
   },
-  ({ caseDetail, chooseWizardStepSequence }) => {
+  ({ caseDetail, chooseWizardStepSequence, showModal }) => {
     return (
       <>
         <div className="usa-grid breadcrumb">
@@ -47,6 +49,7 @@ export const FileDocumentWizard = connect(
         <section className="usa-section usa-grid">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
+          {showModal && <FormCancelModalDialog />}
           <SuccessNotification />
           <ErrorNotification />
           <Tabs
