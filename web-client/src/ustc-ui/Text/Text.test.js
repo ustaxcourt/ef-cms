@@ -90,7 +90,7 @@ describe('Text Component', () => {
   });
 
   describe('type display', () => {
-    it('should show number as text text if binded value is available', () => {
+    it('should show number as text if binded value is available', () => {
       const testModule = {
         state: {
           text: 123421342,
