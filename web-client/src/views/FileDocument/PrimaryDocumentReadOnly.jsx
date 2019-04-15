@@ -25,15 +25,17 @@ export const PrimaryDocumentReadOnly = connect(
 
         <div className="blue-container">
           <div className="ustc-form-group">
-            <label htmlFor="primary-filing">Primary Filing</label>
+            <label htmlFor="primary-filing">{form.documentTitle}</label>
+            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             {form.primaryDocumentFile.name}
           </div>
 
           {form.supportingDocumentFile && (
             <div className="ustc-form-group">
               <label htmlFor="supporting-documents">
-                Supporting Documents for {form.documentTitle}
+                {form.supportingDocumentMetadata.documentTitle}
               </label>
+              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               {form.supportingDocumentFile.name}
             </div>
           )}

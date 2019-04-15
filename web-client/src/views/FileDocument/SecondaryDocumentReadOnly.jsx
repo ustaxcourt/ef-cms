@@ -27,15 +27,19 @@ export const SecondaryDocumentReadOnly = connect(
 
         <div className="blue-container">
           <div className="ustc-form-group">
-            <label htmlFor="secondary-filing">Secondary Filing</label>
+            <label htmlFor="secondary-filing">
+              {form.secondaryDocument.documentTitle}
+            </label>
+            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             {form.secondaryDocumentFile.name}
           </div>
 
           {form.secondarySupportingDocumentFile && (
             <div className="ustc-form-group">
               <label htmlFor="secondary-supporting-documents">
-                Supporting Documents for {form.secondaryDocument.documentTitle}
+                {form.secondarySupportingDocumentMetadata.documentTitle}
               </label>
+              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               {form.secondarySupportingDocumentFile.name}
             </div>
           )}

@@ -388,6 +388,18 @@ export const PrimaryDocumentForm = connect(
                     aria-describedby="supporting-document-label"
                     onChange={e => {
                       updateFormValueSequence({
+                        key: 'supportingDocumentMetadata.category',
+                        value: 'Supporting Document',
+                      });
+                      updateFormValueSequence({
+                        key: 'supportingDocumentMetadata.documentType',
+                        value: e.target.value,
+                      });
+                      updateFormValueSequence({
+                        key: 'supportingDocumentMetadata.previousDocument',
+                        value: form.documentTitle,
+                      });
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });

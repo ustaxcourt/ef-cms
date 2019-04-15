@@ -149,6 +149,19 @@ export const SecondaryDocumentForm = connect(
                     aria-describedby="secondary-supporting-document-label"
                     onChange={e => {
                       updateFormValueSequence({
+                        key: 'secondarySupportingDocumentMetadata.category',
+                        value: 'Supporting Document',
+                      });
+                      updateFormValueSequence({
+                        key: 'secondarySupportingDocumentMetadata.documentType',
+                        value: e.target.value,
+                      });
+                      updateFormValueSequence({
+                        key:
+                          'secondarySupportingDocumentMetadata.previousDocument',
+                        value: form.secondaryDocument.documentTitle,
+                      });
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });

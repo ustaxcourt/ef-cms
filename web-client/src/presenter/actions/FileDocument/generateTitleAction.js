@@ -23,4 +23,26 @@ export const generateTitleAction = ({ store, get, applicationContext }) => {
     });
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
+
+  if (documentMetadata.supportingDocumentMetadata) {
+    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
+      applicationContext,
+      documentMetadata: documentMetadata.supportingDocumentMetadata,
+    });
+    store.set(
+      state.form.supportingDocumentMetadata.documentTitle,
+      documentTitle,
+    );
+  }
+
+  if (documentMetadata.secondarySupportingDocumentMetadata) {
+    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
+      applicationContext,
+      documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
+    });
+    store.set(
+      state.form.secondarySupportingDocumentMetadata.documentTitle,
+      documentTitle,
+    );
+  }
 };
