@@ -38,6 +38,7 @@ import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPape
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
+import { fileExternalDocument } from '../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
@@ -99,6 +100,7 @@ const allUseCases = {
   createDocument,
   createWorkItem,
   downloadDocumentFile,
+  fileExternalDocument,
   filePetition,
   filePetitionFromPaper,
   fileRespondentDocument,
