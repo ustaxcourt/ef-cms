@@ -242,12 +242,8 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors()).toMatchObject({
-        partyPrimary: 'You must select a party.',
-        partyRespondent: 'You must select a party.',
-        partySecondary: 'You must select a party.',
-      });
-      baseDoc.partyPrimary = true;
+      expect(errors().partyPrimary).toEqual('Select a party.');
+      baseDoc.partyRespondent = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
   });
