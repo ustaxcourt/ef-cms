@@ -99,6 +99,7 @@ export const PrimaryDocumentForm = connect(
                           type="radio"
                           name="certificateOfService"
                           value={option}
+                          checked={form.certificateOfService}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -141,6 +142,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="month, two digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceMonth"
+                          value={form.certificateOfServiceMonth}
                           type="number"
                           min="1"
                           max="12"
@@ -163,6 +165,7 @@ export const PrimaryDocumentForm = connect(
                           className="usa-input-inline"
                           id="service-date-day"
                           name="certificateOfServiceDay"
+                          value={form.certificateOfServiceDay}
                           aria-label="day, two digits"
                           aria-describedby="service-date-legend"
                           type="number"
@@ -189,6 +192,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="year, four digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceYear"
+                          value={form.certificateOfServiceYear}
                           type="number"
                           min="1900"
                           max="2100"
@@ -230,6 +234,7 @@ export const PrimaryDocumentForm = connect(
                           name="exhibits"
                           aria-describedby="exhibits-legend"
                           value={option}
+                          checked={form.exhibits}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -267,6 +272,7 @@ export const PrimaryDocumentForm = connect(
                           name="attachments"
                           aria-describedby="attachments-legend"
                           value={option}
+                          checked={form.attachments}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -307,6 +313,7 @@ export const PrimaryDocumentForm = connect(
                             aria-describedby="objections-legend"
                             name="objections"
                             value={option}
+                            checked={form.objections}
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -349,6 +356,7 @@ export const PrimaryDocumentForm = connect(
                           name="hasSupportingDocuments"
                           aria-describedby="support-docs-legend"
                           value={option}
+                          checked={form.hasSupportingDocuments}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
