@@ -99,7 +99,9 @@ export const PrimaryDocumentForm = connect(
                           type="radio"
                           name="certificateOfService"
                           value={option}
-                          checked={form.certificateOfService}
+                          checked={
+                            form.certificateOfService === (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -234,7 +236,7 @@ export const PrimaryDocumentForm = connect(
                           name="exhibits"
                           aria-describedby="exhibits-legend"
                           value={option}
-                          checked={form.exhibits}
+                          checked={form.exhibits === (option === 'Yes')}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -272,7 +274,7 @@ export const PrimaryDocumentForm = connect(
                           name="attachments"
                           aria-describedby="attachments-legend"
                           value={option}
-                          checked={form.attachments}
+                          checked={form.attachments === (option === 'Yes')}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -313,7 +315,7 @@ export const PrimaryDocumentForm = connect(
                             aria-describedby="objections-legend"
                             name="objections"
                             value={option}
-                            checked={form.objections}
+                            checked={form.objections === (option === 'Yes')}
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -356,7 +358,9 @@ export const PrimaryDocumentForm = connect(
                           name="hasSupportingDocuments"
                           aria-describedby="support-docs-legend"
                           value={option}
-                          checked={form.hasSupportingDocuments}
+                          checked={
+                            form.hasSupportingDocuments === (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
