@@ -37,6 +37,7 @@
         "cognito-idp:AdminInitiateAuth",
         "cognito-idp:SignUp",
         "cognito-idp:ListUserPools",
+        "cognito-idp:ListUserPoolClients",
         "cognito-idp:CreateUserPoolClient",
         "cognito-idp:DescribeUserPoolDomain"
       ],
