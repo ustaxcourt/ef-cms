@@ -92,7 +92,7 @@
     "nock": "^10.0.6",
     "pa11y-ci": "^2.1.1",
     "parcel-bundler": "^1.12.3",
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
     "query-string": "5.1.0",
@@ -106,7 +106,7 @@
     "sinon": "^7.3.1",
     "stylelint": "^9.10.1",
     "stylelint-config-idiomatic-order": "^6.2.0",
-    "stylelint-config-standard": "^18.2.0",
+    "stylelint-config-standard": "^18.3.0",
     "uswds": "^1.6.12",
     "webdriver-manager": "^13.0.0",
     "wicg-inert": "^2.1.0"
