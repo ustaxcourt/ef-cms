@@ -39,7 +39,8 @@
         "cognito-idp:ListUserPools",
         "cognito-idp:ListUserPoolClients",
         "cognito-idp:CreateUserPoolClient",
-        "cognito-idp:DescribeUserPoolDomain"
+        "cognito-idp:DescribeUserPoolDomain",
+        "cognito-idp:SetUICustomization"
       ],
       "Resource": "*"
     },
