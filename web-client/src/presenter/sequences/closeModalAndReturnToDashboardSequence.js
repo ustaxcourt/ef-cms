@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 
-export const startACaseConfirmCancelSequence = [
+export const closeModalAndReturnToDashboardSequence = [
   clearModalAction,
   navigateToDashboardAction,
 ];

@@ -5,14 +5,12 @@ import { CaseInfo } from './CaseInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from './IRSNotice';
 import { PartyInformation } from './PartyInformation';
-import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
     screenMetadata: state.screenMetadata,
-    showModal: state.showModal,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
     submitting: state.submitting,
@@ -20,7 +18,6 @@ export const CaseDetailEdit = connect(
   },
   ({
     screenMetadata,
-    showModal,
     submitCaseDetailEditSaveSequence,
     submitting,
     unsetFormSaveSuccessSequence,
@@ -38,10 +35,6 @@ export const CaseDetailEdit = connect(
           unsetFormSaveSuccessSequence();
         }}
       >
-        {showModal === 'UpdateCaseCancelModalDialog' && (
-          <UpdateCaseCancelModalDialog />
-        )}
-
         <Tabs
           className="container-tabs"
           id="case-detail-tabs"
