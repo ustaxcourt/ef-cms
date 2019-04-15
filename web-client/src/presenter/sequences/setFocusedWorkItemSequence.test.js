@@ -27,7 +27,7 @@ describe('setFocusedWorkItemSequence', () => {
     ]);
   });
 
-  it('should collapse the alaready expanded work item of uiKey of a', async () => {
+  it('should collapse the already expanded work item of uiKey of a', async () => {
     test.setState('workQueue', [
       {
         isFocused: true,
