@@ -11,13 +11,13 @@ export const FileDocument = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     form: state.form,
-    submitExternalDocumentInformationSequence:
-      sequences.submitExternalDocumentInformationSequence,
+    reviewExternalDocumentInformationSequence:
+      sequences.reviewExternalDocumentInformationSequence,
   },
   ({
     chooseWizardStepSequence,
     form,
-    submitExternalDocumentInformationSequence,
+    reviewExternalDocumentInformationSequence,
   }) => {
     return (
       <React.Fragment>
@@ -28,7 +28,9 @@ export const FileDocument = connect(
         </Focus>
         <p>All fields required unless otherwise noted</p>
         <div>
-          <h3 className="type-of-document">Type of Document You’re Filing</h3>
+          <h3 className="header-with-link-button">
+            Type of Document You’re Filing
+          </h3>
           <button
             className="link"
             type="button"
@@ -57,7 +59,7 @@ export const FileDocument = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
-              submitExternalDocumentInformationSequence();
+              reviewExternalDocumentInformationSequence();
             }}
           >
             Review Filing
