@@ -77,6 +77,17 @@ describe('fileDocumentHelper', () => {
     expect(result.showSecondaryParty).toBeTruthy();
   });
 
+  it('generates correctly formatted service date', async () => {
+    state.form.certificateOfServiceDate = '2012-05-31';
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/2012');
+  });
+
+  it('does not generate a formatted service date if a service date is not entered on the form', async () => {
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.certificateOfServiceDateFormatted).toBeUndefined();
+  });
+
   it('does not show party validation error if none of the party validation errors exists', async () => {
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toBeUndefined();
