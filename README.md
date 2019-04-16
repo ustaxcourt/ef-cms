@@ -1,11 +1,7 @@
 # Electronic Filing / Case Management System
 
-| Project | Status |
-| ------------- |-------------|
-| UI      | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-ui)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-ui) |
-| API     | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-api) |
-| Shared  | [![Build Status](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)](https://jenkins-efcms-ops.ustc-case-mgmt.flexion.us/jenkins/buildStatus/icon?job=ef-cms-shared)      |
-
+### Build Status
+[![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
 
 API | Front-End | Shared Code
 --- | --------- | -----------
