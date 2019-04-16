@@ -451,6 +451,10 @@ export const PrimaryDocumentForm = connect(
                     value={form.supportingDocumentFreeText}
                     onChange={e => {
                       updateFormValueSequence({
+                        key: 'supportingDocumentMetadata.freeText',
+                        value: e.target.value,
+                      });
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
