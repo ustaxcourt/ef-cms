@@ -9,10 +9,9 @@ import React from 'react';
 export const FileDocumentReview = connect(
   {
     form: state.form,
-    submitExternalDocumentInformationSequence:
-      sequences.submitExternalDocumentInformationSequence,
+    submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
-  ({ form, submitExternalDocumentInformationSequence }) => {
+  ({ form, submitExternalDocumentSequence }) => {
     return (
       <React.Fragment>
         <Focus>
@@ -51,7 +50,7 @@ export const FileDocumentReview = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
-              submitExternalDocumentInformationSequence();
+              submitExternalDocumentSequence();
             }}
           >
             Submit Your Filing

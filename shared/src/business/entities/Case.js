@@ -1,3 +1,4 @@
+const documentMap = require('../../tools/externalFilingEvents.json');
 const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
@@ -7,7 +8,7 @@ const {
 const { DocketRecord } = require('./DocketRecord');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy } = require('lodash');
+const { uniqBy, reduce } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -681,7 +682,17 @@ Case.areYearsUnique = yearAmounts => {
  * @returns {*[]}
  */
 Case.getDocumentTypes = () => {
-  return Object.keys(Case.documentTypes).map(key => Case.documentTypes[key]);
+  return Object.keys(Case.documentTypes)
+    .map(key => Case.documentTypes[key])
+    .concat(
+      reduce(
+        documentMap,
+        (acc, section) => {
+          return acc.concat(section.map(item => item.documentType));
+        },
+        [],
+      ),
+    );
 };
 
 /**
