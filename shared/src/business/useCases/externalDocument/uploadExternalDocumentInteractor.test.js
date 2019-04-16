@@ -43,7 +43,7 @@ describe('uploadExternalDocument', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        createDocument: () => null,
+        fileExternalDocument: () => {},
       }),
     };
     let error;
@@ -74,7 +74,7 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          createDocument: () => null,
+          fileExternalDocument: () => {},
         }),
       };
       await uploadExternalDocument({
@@ -103,7 +103,7 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          createDocument: () => null,
+          fileExternalDocument: () => {},
         }),
       };
       await uploadExternalDocument({
