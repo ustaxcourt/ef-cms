@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -51,6 +52,7 @@ export const PrimaryDocumentForm = connect(
               >
                 <label
                   htmlFor="primary-document"
+                  id="primary-document-label"
                   className={
                     'ustc-upload ' +
                     (fileDocumentHelper.showPrimaryDocumentValid
@@ -63,18 +65,10 @@ export const PrimaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <input
+                <StateDrivenFileInput
                   id="primary-document"
-                  type="file"
-                  accept=".pdf"
                   name="primaryDocumentFile"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
+                  aria-describedby="primary-document-label"
                 />
                 <Text
                   className="usa-input-error-message"
@@ -99,6 +93,9 @@ export const PrimaryDocumentForm = connect(
                           type="radio"
                           name="certificateOfService"
                           value={option}
+                          checked={
+                            form.certificateOfService === (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -141,6 +138,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="month, two digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceMonth"
+                          value={form.certificateOfServiceMonth}
                           type="number"
                           min="1"
                           max="12"
@@ -163,6 +161,7 @@ export const PrimaryDocumentForm = connect(
                           className="usa-input-inline"
                           id="service-date-day"
                           name="certificateOfServiceDay"
+                          value={form.certificateOfServiceDay}
                           aria-label="day, two digits"
                           aria-describedby="service-date-legend"
                           type="number"
@@ -189,6 +188,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="year, four digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceYear"
+                          value={form.certificateOfServiceYear}
                           type="number"
                           min="1900"
                           max="2100"
@@ -230,6 +230,7 @@ export const PrimaryDocumentForm = connect(
                           name="exhibits"
                           aria-describedby="exhibits-legend"
                           value={option}
+                          checked={form.exhibits === (option === 'Yes')}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -267,6 +268,7 @@ export const PrimaryDocumentForm = connect(
                           name="attachments"
                           aria-describedby="attachments-legend"
                           value={option}
+                          checked={form.attachments === (option === 'Yes')}
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -307,6 +309,7 @@ export const PrimaryDocumentForm = connect(
                             aria-describedby="objections-legend"
                             name="objections"
                             value={option}
+                            checked={form.objections === option}
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
@@ -349,6 +352,9 @@ export const PrimaryDocumentForm = connect(
                           name="hasSupportingDocuments"
                           aria-describedby="support-docs-legend"
                           value={option}
+                          checked={
+                            form.hasSupportingDocuments === (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -493,19 +499,11 @@ export const PrimaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <input
+
+                  <StateDrivenFileInput
                     id="supporting-document-file"
-                    type="file"
-                    accept=".pdf"
-                    aria-describedby="supporting-document-file-label"
                     name="supportingDocumentFile"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
+                    aria-describedby="supporting-document-file-label"
                   />
                   <Text
                     className="usa-input-error-message"

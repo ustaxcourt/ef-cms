@@ -1,3 +1,5 @@
+import { StateDrivenFileInput } from './StateDrivenFileInput';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -66,20 +68,13 @@ export const SecondaryDocumentForm = connect(
                     <span className="usa-form-hint">(optional)</span>
                   )}
                 </label>
-                <input
+
+                <StateDrivenFileInput
                   id="secondary-document"
-                  type="file"
-                  accept=".pdf"
-                  aria-describedby="secondary-document-label"
                   name="secondaryDocumentFile"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
+                  aria-describedby="secondary-document-label"
                 />
+
                 <Text
                   className="usa-input-error-message"
                   bind="validationErrors.secondaryDocumentFile"
@@ -106,6 +101,10 @@ export const SecondaryDocumentForm = connect(
                           aria-describedby="secondary-support-docs"
                           name="hasSecondarySupportingDocuments"
                           value={option}
+                          checked={
+                            form.hasSecondarySupportingDocuments ===
+                            (option === 'Yes')
+                          }
                           onChange={e => {
                             updateFormValueSequence({
                               key: e.target.name,
@@ -255,20 +254,13 @@ export const SecondaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <input
+
+                  <StateDrivenFileInput
                     id="secondary-supporting-document-file"
-                    type="file"
-                    accept=".pdf"
-                    aria-describedby="secondary-supporting-document-file-label"
                     name="secondarySupportingDocumentFile"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
+                    aria-describedby="secondary-supporting-document-file-label"
                   />
+
                   <Text
                     className="usa-input-error-message"
                     bind="validationErrors.secondarySupportingDocumentFile"
