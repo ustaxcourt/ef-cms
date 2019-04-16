@@ -50,6 +50,7 @@
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "pdf-lib": "^0.6.1",
     "s3-zip": "^2.0.4",
     "sanitize-filename": "^1.6.1",
     "uuid": "^3.3.2"
