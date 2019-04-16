@@ -65,7 +65,7 @@ export const DocketRecord = connect(
                       helper.showDirectDownloadLink &&
                       renderDocumentLink(
                         document.documentId,
-                        document.documentType,
+                        record.description,
                       )}
                     {document && helper.showDocumentDetailLink && (
                       <a
@@ -76,7 +76,7 @@ export const DocketRecord = connect(
                         aria-label="View PDF"
                       >
                         <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                        {document.documentType}
+                        {record.description}
                       </a>
                     )}
                     {!document &&

@@ -1,3 +1,4 @@
+const sinon = require('sinon');
 const { fileExternalDocument } = require('./fileExternalDocumentInteractor');
 
 describe('fileExternalDocument', () => {
@@ -27,49 +28,22 @@ describe('fileExternalDocument', () => {
     role: 'petitioner',
     userId: 'taxpayer',
   };
-
-  it('throws an error when an unauthorized user tries to access the use case', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'petitionsclerk',
-          userId: 'petitionsclerk',
-        };
-      },
-      getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
-      }),
-      getUseCases: () => ({
-        createDocument: () => null,
-      }),
-    };
-    let error;
-    try {
-      await fileExternalDocument({
-        applicationContext,
-        documentMetadata: {},
-        primaryDocumentFile: 'something',
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
-  });
-
-  it('runs successfully with no errors with minimum data and valid user', async () => {
+  it('should throw if not authorized', async () => {
     let error;
     try {
       applicationContext = {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'respondent',
-            userId: 'respondent',
+            name: 'Olivia Jade',
+            role: 'seniorattorney',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          getCaseByCaseId: async () => caseRecord,
+          saveWorkItemForNonPaper: async () => caseRecord,
+          updateCase: async () => caseRecord,
         }),
         getUseCases: () => ({
           createDocument: () => null,
@@ -77,28 +51,37 @@ describe('fileExternalDocument', () => {
       };
       await fileExternalDocument({
         applicationContext,
-        documentMetadata: {},
-        primaryDocumentFile: 'something',
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentType: 'Memorandum in Support',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
     }
-    expect(error).toBeUndefined();
+    expect(error.message).toContain('Unauthorized');
   });
 
-  it('runs successfully with no errors with all data and valid user', async () => {
+  it('add documents and workitems', async () => {
     let error;
+    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    let saveWorkItemForNonPaperSpy = sinon.spy();
+    let updateCaseSpy = sinon.spy();
     try {
       applicationContext = {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
+            name: 'Olivia Jade',
             role: 'respondent',
-            userId: 'respondent',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+          updateCase: updateCaseSpy,
         }),
         getUseCases: () => ({
           createDocument: () => null,
@@ -106,15 +89,18 @@ describe('fileExternalDocument', () => {
       };
       await fileExternalDocument({
         applicationContext,
-        documentMetadata: {},
-        primaryDocumentFile: 'something',
-        secondaryDocumentFile: 'something2',
-        secondarySupportingDocumentFile: 'something3',
-        supportingDocumentFile: 'something4',
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentType: 'Memorandum in Support',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
     }
     expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(saveWorkItemForNonPaperSpy.called).toEqual(true);
+    expect(updateCaseSpy.called).toEqual(true);
   });
 });
