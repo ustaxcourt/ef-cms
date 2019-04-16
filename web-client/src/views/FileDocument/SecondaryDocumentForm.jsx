@@ -213,6 +213,10 @@ export const SecondaryDocumentForm = connect(
                     value={form.secondarySupportingDocumentFreeText}
                     onChange={e => {
                       updateFormValueSequence({
+                        key: 'secondarySupportingDocumentMetadata.freeText',
+                        value: e.target.value,
+                      });
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
