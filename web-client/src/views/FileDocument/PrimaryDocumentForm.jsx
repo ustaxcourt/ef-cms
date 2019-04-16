@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -20,6 +20,9 @@ export const PrimaryDocumentForm = connect(
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
+    let primaryDocumentFileRef;
+    let supportingDocumentFileRef;
+
     return (
       <React.Fragment>
         <h3>Tell Us About the {form.documentTitle}</h3>
@@ -63,21 +66,26 @@ export const PrimaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                {!form.primaryDocumentFile && (
-                  <input
-                    id="primary-document"
-                    type="file"
-                    accept=".pdf"
-                    name="primaryDocumentFile"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                )}
+                <input
+                  id="primary-document"
+                  type="file"
+                  accept=".pdf"
+                  style={{
+                    display: form.primaryDocumentFile ? 'none' : 'block',
+                  }}
+                  ref={ref => (primaryDocumentFileRef = ref)}
+                  name="primaryDocumentFile"
+                  onClick={e => {
+                    if (form.primaryDocumentFile) e.preventDefault();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
 
                 {form.primaryDocumentFile && (
                   <div>
@@ -91,6 +99,8 @@ export const PrimaryDocumentForm = connect(
                           key: 'primaryDocumentFile',
                           value: null,
                         });
+                        primaryDocumentFileRef.value = null;
+                        primaryDocumentFileRef.click();
                       }}
                     >
                       Change
@@ -522,22 +532,27 @@ export const PrimaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  {!form.supportingDocumentFile && (
-                    <input
-                      id="supporting-document-file"
-                      type="file"
-                      accept=".pdf"
-                      aria-describedby="supporting-document-file-label"
-                      name="supportingDocumentFile"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.files[0],
-                        });
-                        validateExternalDocumentInformationSequence();
-                      }}
-                    />
-                  )}
+                  <input
+                    id="supporting-document-file"
+                    type="file"
+                    accept=".pdf"
+                    ref={ref => (supportingDocumentFileRef = ref)}
+                    style={{
+                      display: form.supportingDocumentFile ? 'none' : 'block',
+                    }}
+                    onClick={e => {
+                      if (form.supportingDocumentFile) e.preventDefault();
+                    }}
+                    aria-describedby="supporting-document-file-label"
+                    name="supportingDocumentFile"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
                   {form.supportingDocumentFile && (
                     <div>
                       <span className="mr-1">
@@ -550,6 +565,8 @@ export const PrimaryDocumentForm = connect(
                             key: 'supportingDocumentFile',
                             value: null,
                           });
+                          supportingDocumentFileRef.value = null;
+                          supportingDocumentFileRef.click();
                         }}
                       >
                         Change
