@@ -2,7 +2,6 @@ const {
   PDFDocumentFactory,
   PDFDocumentWriter,
   drawLinesOfText,
-  StandardFonts
 } = require('pdf-lib');
 
 /**
