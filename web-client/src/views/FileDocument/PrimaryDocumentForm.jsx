@@ -52,6 +52,7 @@ export const PrimaryDocumentForm = connect(
               >
                 <label
                   htmlFor="primary-document"
+                  id="primary-document-label"
                   className={
                     'ustc-upload ' +
                     (fileDocumentHelper.showPrimaryDocumentValid
@@ -67,6 +68,7 @@ export const PrimaryDocumentForm = connect(
                 <StateDrivenFileInput
                   id="primary-document"
                   name="primaryDocumentFile"
+                  aria-describedby="primary-document-label"
                 />
                 <Text
                   className="usa-input-error-message"
@@ -497,6 +499,7 @@ export const PrimaryDocumentForm = connect(
                   <StateDrivenFileInput
                     id="supporting-document-file"
                     name="supportingDocumentFile"
+                    aria-describedby="supporting-document-file-label"
                   />
                   <Text
                     className="usa-input-error-message"
