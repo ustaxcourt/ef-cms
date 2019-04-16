@@ -20,6 +20,7 @@ async function deleteCase(context, events, done) {
   });
 
   for (let caseRecord of caseRecords) {
+    console.log('deleting case:', caseRecord.pk, caseRecord.sk);
     await client.delete({
       applicationContext,
       key: {
@@ -35,6 +36,7 @@ async function deleteCase(context, events, done) {
   );
 
   for (let workItem of workItems) {
+    console.log('deleting workItem:', workItem.workItemId);
     await client.delete({
       applicationContext,
       key: {
@@ -42,6 +44,8 @@ async function deleteCase(context, events, done) {
         sk: workItem.workItemId,
       },
     });
+
+    console.log('deleting petitions|workItem', workItem.workItemId);
 
     await client.delete({
       applicationContext,
@@ -66,6 +70,7 @@ async function deleteCase(context, events, done) {
   });
 
   for (let petitionerDashboardRecord of petitionerDashboardRecords) {
+    console.log('deleting petitions dashboard mapping record:', petitionerDashboardRecord.pk);
     await client.delete({
       applicationContext,
       key: {
@@ -75,6 +80,7 @@ async function deleteCase(context, events, done) {
     });
   }
 
+  console.log('deleting docket number mapping record:', caseRecords[0].docketNumber)
   await client.delete({
     applicationContext,
     key: {

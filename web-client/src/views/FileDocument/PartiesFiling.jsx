@@ -39,7 +39,7 @@ export const PartiesFiling = connect(
                     type="checkbox"
                     name="partyPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary || false}
+                    checked={form.partyPrimary}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -57,6 +57,7 @@ export const PartiesFiling = connect(
                       type="checkbox"
                       aria-describedby="who-legend"
                       name="partySecondary"
+                      checked={form.partySecondary}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -76,6 +77,7 @@ export const PartiesFiling = connect(
                     type="checkbox"
                     aria-describedby="who-legend"
                     name="partyRespondent"
+                    checked={form.partyRespondent}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
