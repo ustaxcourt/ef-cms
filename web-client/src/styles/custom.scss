@@ -459,4 +459,7 @@ textarea#case-caption {
   padding: 20px;
   background-color: $color-gold-lighter;
   font-weight: $font-bold;
+  a {
+    color: $color-black;
+  }
 }
