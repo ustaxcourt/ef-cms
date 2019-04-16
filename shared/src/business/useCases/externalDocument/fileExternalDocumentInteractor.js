@@ -1,11 +1,15 @@
 const { Case } = require('../../entities/Case');
+const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
+const { Message } = require('../../entities/Message');
+const { WorkItem } = require('../../entities/WorkItem');
 
 const {
   isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
+const { capitalize } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -41,6 +45,7 @@ exports.fileExternalDocument = async ({
     });
 
   const caseEntity = new Case(caseToUpdate);
+  const workItems = [];
 
   [
     [primaryDocumentFileId, documentMetadata],
@@ -53,11 +58,37 @@ exports.fileExternalDocument = async ({
   ].forEach(([documentId, metadata]) => {
     if (documentId) {
       const documentEntity = new Document({
+        ...metadata,
         documentId: documentId,
         documentType: metadata.documentType,
         userId: user.userId,
       });
 
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        caseId: caseId,
+        caseStatus: caseToUpdate.status,
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+        document: {
+          ...documentEntity.toRawObject(),
+          createdAt: documentEntity.createdAt,
+        },
+        section: DOCKET_SECTION,
+        sentBy: user.userId,
+      });
+
+      const message = new Message({
+        from: user.name,
+        fromUserId: user.userId,
+        message: `${documentEntity.documentType} filed by ${capitalize(
+          user.role,
+        )} is ready for review.`,
+      });
+
+      workItem.addMessage(message);
+      documentEntity.addWorkItem(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
       caseEntity.addDocketRecord(
@@ -67,6 +98,8 @@ exports.fileExternalDocument = async ({
           filingDate: documentEntity.createdAt,
         }),
       );
+
+      workItems.push(workItem);
     }
   });
 
@@ -74,6 +107,13 @@ exports.fileExternalDocument = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  for (let i = 0; i < workItems.length; i++) {
+    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+      applicationContext,
+      workItem: workItems[i].validate().toRawObject(),
+    });
+  }
 
   return caseEntity.toRawObject();
 };
