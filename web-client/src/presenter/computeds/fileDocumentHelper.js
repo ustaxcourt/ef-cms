@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import moment from 'moment';
 
 export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
@@ -38,7 +39,16 @@ export const fileDocumentHelper = get => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
+  const certificateOfServiceDate = get(state.form.certificateOfServiceDate);
+  let certificateOfServiceDateFormatted;
+  if (certificateOfServiceDate) {
+    certificateOfServiceDateFormatted = moment
+      .utc(certificateOfServiceDate)
+      .format('L');
+  }
+
   let exported = {
+    certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
