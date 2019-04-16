@@ -20,6 +20,8 @@ export const SecondaryDocumentForm = connect(
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
+    let secondaryDocumentFileRef;
+    let secondarySupportingDocumentFileRef;
     return (
       <React.Fragment>
         <h3>Tell Us About the {form.secondaryDocument.documentTitle}</h3>
@@ -66,22 +68,27 @@ export const SecondaryDocumentForm = connect(
                     <span className="usa-form-hint">(optional)</span>
                   )}
                 </label>
-                {!form.secondaryDocumentFile && (
-                  <input
-                    id="secondary-document"
-                    type="file"
-                    accept=".pdf"
-                    aria-describedby="secondary-document-label"
-                    name="secondaryDocumentFile"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                )}
+                <input
+                  id="secondary-document"
+                  type="file"
+                  accept=".pdf"
+                  aria-describedby="secondary-document-label"
+                  name="secondaryDocumentFile"
+                  onClick={e => {
+                    if (form.secondaryDocumentFile) e.preventDefault();
+                  }}
+                  style={{
+                    display: form.secondaryDocumentFile ? 'none' : 'block',
+                  }}
+                  ref={ref => (secondaryDocumentFileRef = ref)}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
                 {form.secondaryDocumentFile && (
                   <div>
                     <span className="mr-1">
@@ -94,6 +101,8 @@ export const SecondaryDocumentForm = connect(
                           key: 'secondaryDocumentFile',
                           value: null,
                         });
+                        secondaryDocumentFileRef.value = null;
+                        secondaryDocumentFileRef.click();
                       }}
                     >
                       Change
@@ -275,22 +284,30 @@ export const SecondaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  {!form.secondarySupportingDocumentFile && (
-                    <input
-                      id="secondary-supporting-document-file"
-                      type="file"
-                      accept=".pdf"
-                      aria-describedby="secondary-supporting-document-file-label"
-                      name="secondarySupportingDocumentFile"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.files[0],
-                        });
-                        validateExternalDocumentInformationSequence();
-                      }}
-                    />
-                  )}
+                  <input
+                    id="secondary-supporting-document-file"
+                    type="file"
+                    accept=".pdf"
+                    style={{
+                      display: form.secondarySupportingDocumentFile
+                        ? 'none'
+                        : 'block',
+                    }}
+                    onClick={e => {
+                      if (form.secondarySupportingDocumentFile)
+                        e.preventDefault();
+                    }}
+                    ref={ref => (secondarySupportingDocumentFileRef = ref)}
+                    aria-describedby="secondary-supporting-document-file-label"
+                    name="secondarySupportingDocumentFile"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
 
                   {form.secondarySupportingDocumentFile && (
                     <div>
@@ -304,6 +321,8 @@ export const SecondaryDocumentForm = connect(
                             key: 'secondarySupportingDocumentFile',
                             value: null,
                           });
+                          secondarySupportingDocumentFileRef.value = null;
+                          secondarySupportingDocumentFileRef.click();
                         }}
                       >
                         Change
