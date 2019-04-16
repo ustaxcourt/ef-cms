@@ -23,12 +23,19 @@ export const fileExternalDocumentAction = async ({
 
   documentMetadata = { ...documentMetadata, docketNumber, caseId };
 
-  await applicationContext.getUseCases().uploadExternalDocument({
-    applicationContext,
-    documentMetadata,
-    primaryDocumentFile,
-    secondaryDocumentFile,
-    secondarySupportingDocumentFile,
-    supportingDocumentFile,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .uploadExternalDocument({
+      applicationContext,
+      documentMetadata,
+      primaryDocumentFile,
+      secondaryDocumentFile,
+      secondarySupportingDocumentFile,
+      supportingDocumentFile,
+    });
+
+  return {
+    caseDetail,
+    caseId: docketNumber,
+  };
 };
