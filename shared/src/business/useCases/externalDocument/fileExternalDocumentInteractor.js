@@ -47,16 +47,20 @@ exports.fileExternalDocument = async ({
   const caseEntity = new Case(caseToUpdate);
   const workItems = [];
 
+  const {
+    supportingDocumentMetadata,
+    secondaryDocument,
+    secondarySupportingDocumentMetadata,
+    ...primaryDocumentMetadata
+  } = documentMetadata;
+
   [
-    [primaryDocumentFileId, documentMetadata],
-    [supportingDocumentFileId, documentMetadata.supportingDocumentMetadata],
-    [secondaryDocumentFileId, documentMetadata.secondaryDocument],
-    [
-      secondarySupportingDocumentFileId,
-      documentMetadata.secondarySupportingDocumentMetadata,
-    ],
+    [primaryDocumentFileId, primaryDocumentMetadata],
+    [supportingDocumentFileId, supportingDocumentMetadata],
+    [secondaryDocumentFileId, secondaryDocument],
+    [secondarySupportingDocumentFileId, secondarySupportingDocumentMetadata],
   ].forEach(([documentId, metadata]) => {
-    if (documentId) {
+    if (documentId && metadata) {
       const documentEntity = new Document({
         ...metadata,
         documentId: documentId,
