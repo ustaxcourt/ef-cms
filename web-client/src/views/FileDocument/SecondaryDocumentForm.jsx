@@ -72,6 +72,7 @@ export const SecondaryDocumentForm = connect(
                 <StateDrivenFileInput
                   id="secondary-document"
                   name="secondaryDocumentFile"
+                  aria-describedby="secondary-document-label"
                 />
 
                 <Text
@@ -253,6 +254,7 @@ export const SecondaryDocumentForm = connect(
                   <StateDrivenFileInput
                     id="secondary-supporting-document-file"
                     name="secondarySupportingDocumentFile"
+                    aria-describedby="secondary-supporting-document-file-label"
                   />
 
                   <Text

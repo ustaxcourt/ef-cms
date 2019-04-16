@@ -4,6 +4,7 @@ import React from 'react';
 
 export const StateDrivenFileInput = connect(
   {
+    ariaDescribedBy: props.ariaDescribedBy,
     form: state.form,
     id: props.id,
     name: props.name,
@@ -12,6 +13,7 @@ export const StateDrivenFileInput = connect(
       sequences.validateExternalDocumentInformationSequence,
   },
   ({
+    ariaDescribedBy,
     form,
     id,
     name,
@@ -31,6 +33,7 @@ export const StateDrivenFileInput = connect(
           }}
           ref={ref => (inputRef = ref)}
           name={name}
+          aria-describedby={ariaDescribedBy}
           onClick={e => {
             if (form[name]) e.preventDefault();
           }}
