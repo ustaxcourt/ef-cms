@@ -72,7 +72,7 @@ custom:
 
 provider:
   name: aws
-  tracing: true 
+  tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs8.10
@@ -99,12 +99,12 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "xray:PutTraceSegments"
-        - "xray:PutTelemetryRecords"
+        - 'xray:PutTraceSegments'
+        - 'xray:PutTelemetryRecords'
       Resource:
-        - "*"
+        - '*'
     - Effect: 'Allow'
       Action:
         - 'lambda:InvokeFunction'
@@ -270,6 +270,18 @@ functions:
     events:
       - http:
           path: v1/cases/paper
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocument:
+    handler: src/cases/fileExternalDocumentToCaseLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/external-document
           method: post
           cors: true
           authorizer:

@@ -53,6 +53,9 @@ const {
   deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  fileExternalDocument,
+} = require('ef-cms-shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
+const {
   forwardWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -162,11 +165,11 @@ const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
-  saveWorkItemForNonPaper
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper')
+  saveWorkItemForNonPaper,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
-  saveWorkItemForPaper
-} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper')
+  saveWorkItemForPaper,
+} = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
@@ -281,6 +284,7 @@ module.exports = (appContextUser = {}) => {
         createDocument,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
+        fileExternalDocument,
         forwardWorkItem,
         getCase,
         getCasesByStatus: getCasesByStatusUC,
