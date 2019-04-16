@@ -6,9 +6,10 @@ import React from 'react';
 export const PrimaryDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ chooseWizardStepSequence, form }) => {
+  ({ chooseWizardStepSequence, form, fileDocumentHelper }) => {
     return (
       <React.Fragment>
         <div>
@@ -43,7 +44,7 @@ export const PrimaryDocumentReadOnly = connect(
           {form.certificateOfServiceDate && (
             <div className="ustc-form-group">
               <label htmlFor="service-date">Certificate of Service Date</label>
-              {form.certificateOfServiceDate}
+              {fileDocumentHelper.certificateOfServiceDateFormatted}
             </div>
           )}
 
