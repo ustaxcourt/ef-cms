@@ -19,9 +19,9 @@ export const Header = connect(
       <>
         <div className="beta">
           <div className="usa-grid">
-            This is a test version of the US Tax Courts application. For the
-            current public version, please visit the{' '}
-            <a href="https://www.ustaxcourt.gov/">US Tax Courts site</a>.
+            This is a testing site for the U.S. Tax Court and not intended for
+            public use. To learn more about starting a case, visit the{' '}
+            <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
           </div>
         </div>
         <header className="usa-header usa-header-extended" role="banner">
