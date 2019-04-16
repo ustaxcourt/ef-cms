@@ -38,7 +38,7 @@ import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPape
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
-import { fileExternalDocument } from '../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor';
+import { fileExternalDocument } from '../../shared/src/proxies/fileExternalDocumentProxy';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
@@ -64,6 +64,7 @@ import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -125,6 +126,7 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   updateCase,
+  uploadExternalDocument,
   validateCaseDetail,
   validateExternalDocument,
   validateExternalDocumentInformation,
