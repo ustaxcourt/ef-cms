@@ -71,7 +71,6 @@ export const FileDocument = connect(
             className="usa-button-secondary"
             onClick={() => {
               formCancelToggleCancelSequence();
-              return false;
             }}
           >
             Cancel
