@@ -47,7 +47,7 @@ export const SecondaryDocumentType = connect(
               });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.secondaryDocument.category}
+            value={form.secondaryDocument.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -85,7 +85,7 @@ export const SecondaryDocumentType = connect(
                   });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.secondaryDocument.documentType}
+                value={form.secondaryDocument.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
@@ -107,12 +107,12 @@ export const SecondaryDocumentType = connect(
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
                   {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
                     (entry, index) => (
-                      <li key={entry.documentType} value={entry.documentType}>
+                      <li key={entry.documentType}>
                         <input
                           id={`secondaryDocumentType-${index}`}
                           type="radio"
                           name="secondaryDocumentType"
-                          value={entry.documentType}
+                          value={entry.documentType || ''}
                           onClick={e => {
                             updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,

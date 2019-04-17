@@ -167,7 +167,7 @@ export const SecondaryDocumentForm = connect(
                       });
                       validateExternalDocumentInformationSequence();
                     }}
-                    value={form.secondarySupportingDocument}
+                    value={form.secondarySupportingDocument || ''}
                   >
                     <option value="">- Select -</option>
                     {fileDocumentHelper.supportingDocumentTypeList.map(
@@ -210,7 +210,7 @@ export const SecondaryDocumentForm = connect(
                     name="secondarySupportingDocumentFreeText"
                     aria-describedby="secondary-supporting-document-free-text-label"
                     autoCapitalize="none"
-                    value={form.secondarySupportingDocumentFreeText}
+                    value={form.secondarySupportingDocumentFreeText || ''}
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: 'secondarySupportingDocumentMetadata.freeText',
