@@ -5,21 +5,20 @@ import React from 'react';
 
 export const DocumentType = connect(
   {
-    clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    clearWizardDataSequence,
     constants,
     form,
     selectDocumentSequence,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
@@ -36,12 +35,9 @@ export const DocumentType = connect(
             id="document-category"
             aria-label="category"
             onChange={e => {
-              updateFormValueSequence({
+              updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
-              });
-              clearWizardDataSequence({
-                key: e.target.name,
               });
               validateSelectDocumentTypeSequence();
             }}
@@ -74,12 +70,9 @@ export const DocumentType = connect(
                 name="documentType"
                 className="documentType"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  });
-                  clearWizardDataSequence({
-                    key: e.target.name,
                   });
                   validateSelectDocumentTypeSequence();
                 }}
@@ -110,12 +103,9 @@ export const DocumentType = connect(
                           name="entry"
                           value={entry.documentType}
                           onClick={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
-                            });
-                            clearWizardDataSequence({
-                              key: e.target.name,
                             });
                             selectDocumentSequence();
                           }}
