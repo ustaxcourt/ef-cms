@@ -2,6 +2,7 @@ const {
   PDFDocumentFactory,
   PDFDocumentWriter,
   drawLinesOfText,
+  drawRectangle,
 } = require('pdf-lib');
 
 /**
@@ -13,9 +14,25 @@ const {
 
 exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // Dimensions of cover page - 8.5"x11" @ 300dpi
-  const coverPageDimensions = [2550, 3300];
+  const dimensionsX = 2550;
+  const dimensionsY = 3300;
+  const coverPageDimensions = [dimensionsX, dimensionsY];
+  const horizontalMargin = 425; // left and right margins
+  const verticalMargin = 400; // top and bottom margins
+  const fontSize = 20;
 
-  const contents = Object.keys(coverSheetData).map(key => {
+  // create pdfDoc object from file data
+  const pdfDoc = PDFDocumentFactory.load(pdfData);
+
+  // Embed font to use for cover page generation
+  const [timesRomanFont] = pdfDoc.embedStandardFont('Times-Roman');
+
+  // Generate cover page
+  const coverPage = pdfDoc
+    .createPage(coverPageDimensions)
+    .addFontDictionary('Times-Roman', timesRomanFont);
+
+  function getContentByKey(key) {
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
@@ -33,28 +50,182 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
       default:
         return coverSheetDatumValue.toString();
     }
-  });
+  }
+  // Point of origin is bottom left, this flips the y-axis
+  // coord to a traditional top left value
+  function translateY(yPos, screenToPrintDpi) {
+    const newY = dimensionsY - yPos;
+    if (screenToPrintDpi) {
+      return (300 / 72) * newY;
+    } else {
+      return newY;
+    }
+  }
 
-  // create pdfDoc object from file data
-  const pdfDoc = PDFDocumentFactory.load(pdfData);
+  // returns content block
+  function contentBlock(content, coords) {
+    return {
+      content,
+      xPos: coords[0],
+      yPos: coords[1],
+    };
+  }
 
-  // Embed font to use for cover page generation
-  const [timesRomanFont] = pdfDoc.embedStandardFont('Times-Roman');
+  function getYOffsetFromPreviousContentArea(previousContentArea, font, fontSize, offsetMargin = 0) {
+    let totalContentHeight;
+    const textHeight = font.heightOfFontAtSize(fontSize);
+    if (Array.isArray(previousContentArea.content)) {
+      // Multiple lines of text
+      totalContentHeight = previousContentArea.content.length * textHeight
+    } else {
+      // Single line of text
+      totalContentHeight = textHeight;
+    }
+    // we subtract here because coords start at bottom left;
+    return previousContentArea.y - totalContentHeight - offsetMargin;
+  }
 
-  // Generate cover page
-  const coverPage = pdfDoc
-    .createPage(coverPageDimensions)
-    .addFontDictionary('Times-Roman', timesRomanFont);
+  function wrapText(text, widthConstraint, font, fontSize) {
+    const textWidth = font.widthOfTextAtSize(text, fontSize);
+    if (textWidth <= widthConstraint) {
+      return text;
+    } else {
+      // break the text up and test its width
+      const textArry = text.split(' ');
+
+      // This doesn't feel super effecient, so maybe come back to this
+      const textLines = textArry.reduce(function(acc, cur) {
+        const lastIndex = acc.length - 1;
+        const proposedLine = `${acc[lastIndex]} ${cur}`;
+        const proposedLineWidth = font.widthOfTextAtSize(
+          proposedLine,
+          fontSize,
+        );
+
+        if (proposedLineWidth <= widthConstraint) {
+          acc[lastIndex] = proposedLine;
+        } else {
+          acc.push(cur);
+        }
+        return acc;
+      }, []);
+    }
+  }
+
+  // Content areas
+  const contentStamp = contentBlock('[ STAMP ]', [
+    horizontalMargin,
+    translateY(verticalMargin),
+  ]);
+  const contentDateReceived = contentBlock(
+    ['Received', getContentByKey('dateReceived')],
+    [510, 3036],
+  );
+  const contentDateLodgedLabel = contentBlock(
+    ['Lodged', getContentByKey('dateLodged')],
+    [1369, 3036],
+  );
+  const contentDateFiled = contentBlock(
+    ['Filed', getContentByKey('dateFiled')],
+    [2033, 3036],
+  );
+  const contentCaseCaptionPet = contentBlock(
+    wrapText(
+      getContentByKey('caseCaptionPetitioner'),
+      1042,
+      timesRomanFont,
+      fontSize,
+    ),
+    [horizontalMargin, 2534],
+  );
+  const contentPetitionerLabel = contentBlock('Petitioner', [
+    531,
+    getYOffsetFromPreviousContentArea(
+      contentCaseCaptionPet,
+      timesRomanFont,
+      fontSize,
+      timesRomanFont.heightOfFontAtSize(fontSize),
+    ),
+  ]);
+  const contentVLabel = contentBlock('V.', [
+    531,
+    getYOffsetFromPreviousContentArea(
+      contentPetitionerLabel,
+      timesRomanFont,
+      fontSize,
+      timesRomanFont.heightOfFontAtSize(fontSize),
+    ),
+  ]);
+  const contentCaseCaptionResp = contentBlock(
+    wrapText(
+      getContentByKey('caseCaptionRespondent'),
+      1042,
+      timesRomanFont,
+      fontSize,
+    ),
+    [horizontalMargin, 2534],
+  );
+  const contentRespondentLabel = contentBlock('Respondent', [
+    531,
+    getYOffsetFromPreviousContentArea(
+      contentCaseCaptionResp,
+      timesRomanFont,
+      fontSize,
+      timesRomanFont.heightOfFontAtSize(fontSize),
+    ),
+  ]);
+  const contentElectronicallyFiled = contentBlock(
+    getContentByKey('originallyFiledElectronically'),
+    [1530, contentPetitionerLabel.yPos],
+  );
+  const contentDocketNumber = contentBlock(getContentByKey('docketNumber'), [
+    1530,
+    contentVLabel.yPos,
+  ]);
+  const contentDocumentTitle = contentBlock(
+    wrapText(getContentByKey('documentTitle'), 1683, timesRomanFont, fontSize),
+    [
+      2117,
+      getYOffsetFromPreviousContentArea(
+        contentRespondentLabel,
+        timesRomanFont,
+        fontSize,
+        timesRomanFont.heightOfFontAtSize(fontSize) * 5,
+      ),
+    ],
+  );
+  const contentCertificateOfService = contentBlock(
+    getContentByKey('includesCertificateOfService'),
+    [
+      horizontalMargin,
+      getYOffsetFromPreviousContentArea(
+        contentDocumentTitle,
+        timesRomanFont,
+        fontSize,
+        timesRomanFont.heightOfFontAtSize(fontSize) * 5,
+      ),
+    ],
+  );
 
   // This is where the magic happens. The content stream and its coords will need to be
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
-    drawLinesOfText(contents, {
-      colorRgb: [0, 0, 0],
-      font: 'Times-Roman',
-      size: 38,
-      x: 20,
-      y: 20,
+    // Header Content Goes Here
+    // drawLinesOfText(contents, {
+    //   colorRgb: [0, 0, 0],
+    //   font: 'Times-Roman',
+    //   size: 38,
+    //   x: 20,
+    //   y: 20,
+    // }),
+    // HR in header
+    drawRectangle({
+      borderColorRgb: [200, 200, 200],
+      borderWidth: 0.5,
+      height: 2,
+      width: dimensionsX,
+      x: 0,
+      y: 2824,
     }),
   );
 
