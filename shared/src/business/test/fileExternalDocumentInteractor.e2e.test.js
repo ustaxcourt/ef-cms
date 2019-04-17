@@ -150,7 +150,6 @@ describe('fileExternalDocument integration test', () => {
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
-                createdAt: '2019-03-01T22:54:06.000Z',
                 documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
                 documentType: 'Petition',
                 filedBy: 'Rick Petitioner',
@@ -201,7 +200,6 @@ describe('fileExternalDocument integration test', () => {
               assigneeName: null,
               caseId,
               caseStatus: 'New',
-              createdAt: '2019-03-01T22:54:06.000Z',
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -250,12 +248,10 @@ describe('fileExternalDocument integration test', () => {
               assigneeName: null,
               caseId,
               caseStatus: 'New',
-              createdAt: '2019-03-01T22:54:06.000Z',
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
                 category: 'Supporting Document',
-                createdAt: '2019-03-01T22:54:06.000Z',
                 documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle: 'Brief in Support of Amended Answer',
                 documentType: 'Brief in Support',
@@ -266,7 +262,6 @@ describe('fileExternalDocument integration test', () => {
               },
               messages: [
                 {
-                  createdAt: '2019-03-01T22:54:06.000Z',
                   from: 'Rick Petitioner',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
@@ -300,5 +295,84 @@ describe('fileExternalDocument integration test', () => {
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       yearAmounts: [],
     });
+
+    applicationContext.getCurrentUser = () => {
+      return new User({
+        name: 'bob',
+        role: 'docketclerk',
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      });
+    };
+
+    const workItems = await getWorkItemsBySection({
+      applicationContext,
+      section: 'docket',
+    });
+
+    expect(workItems).toMatchObject([
+      {
+        assigneeId: null,
+        assigneeName: null,
+        caseId,
+        caseStatus: 'New',
+        docketNumber: '101-19',
+        docketNumberSuffix: 'S',
+        document: {
+          attachments: false,
+          caseId,
+          category: 'Answer (filed by respondent only)',
+          certificateOfService: false,
+          docketNumber: '201-19',
+          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle: 'Amended Answer',
+          documentType: 'Amended Answer',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          partyPrimary: true,
+          scenario: 'Standard',
+          serviceDate: 'undefined-undefined-undefined',
+          supportingDocument: 'Brief in Support',
+          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
+        messages: [
+          {
+            from: 'Rick Petitioner',
+            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            message: 'Amended Answer filed by Petitioner is ready for review.',
+          },
+        ],
+        section: 'docket',
+        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        assigneeId: null,
+        assigneeName: null,
+        caseId,
+        caseStatus: 'New',
+        docketNumber: '101-19',
+        docketNumberSuffix: 'S',
+        document: {
+          category: 'Supporting Document',
+          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle: 'Brief in Support of Amended Answer',
+          documentType: 'Brief in Support',
+          previousDocument: 'Amended Answer',
+          scenario: 'Nonstandard A',
+          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
+        messages: [
+          {
+            from: 'Rick Petitioner',
+            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            message:
+              'Brief in Support filed by Petitioner is ready for review.',
+          },
+        ],
+        section: 'docket',
+        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    ]);
   });
 });
