@@ -6,6 +6,7 @@ body.no-scroll {
 }
 
 hr {
+  z-index: 1;
   display: block;
   height: 1px;
   padding: 0;
@@ -436,10 +437,29 @@ select.ustc-input-error {
 }
 
 textarea#case-caption {
-  height: 6rem;
+  height: 6em;
 }
 
 .filed-by {
   display: inline-block;
   padding-top: 20px;
+}
+
+.header-with-link-button {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.file-name {
+  display: inline-block;
+  margin: 0;
+}
+
+.beta {
+  padding: 20px;
+  background-color: $color-gold-lighter;
+  font-weight: $font-bold;
+  a {
+    color: $color-black;
+  }
 }

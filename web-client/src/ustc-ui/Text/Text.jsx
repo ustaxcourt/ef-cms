@@ -1,6 +1,6 @@
-import React from 'react';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
+import React from 'react';
 
 export const Text = connect(props => {
   const { get, bind, className } = props;

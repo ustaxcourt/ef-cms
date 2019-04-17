@@ -1,5 +1,5 @@
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 const client = require('../../dynamodbClientService');
 /**
@@ -10,11 +10,11 @@ const client = require('../../dynamodbClientService');
  */
 exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
   const results = await client.get({
-    applicationContext,
     Key: {
       pk: caseId,
       sk: '0',
     },
+    applicationContext,
   });
 
   return stripWorkItems(

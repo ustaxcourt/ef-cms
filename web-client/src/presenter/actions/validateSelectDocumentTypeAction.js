@@ -10,16 +10,19 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object
  * @returns {Object} the next path based on if validation was successful or error
  */
-export const validateSelectDocumentTypeAction = ({ path, get }) => {
-  const form = get(state.form);
+export const validateSelectDocumentTypeAction = ({
+  applicationContext,
+  path,
+  get,
+}) => {
+  const documentMetadata = get(state.form);
 
-  const errors = {};
+  const errors = applicationContext.getUseCases().validateExternalDocument({
+    applicationContext,
+    documentMetadata,
+  });
 
-  if (!form.category) errors.category = 'You must select a category.';
-  if (!form.documentType)
-    errors.documentType = 'You must select a document type.';
-
-  if (Object.keys(errors).length === 0) {
+  if (!errors) {
     return path.success();
   } else {
     return path.error({

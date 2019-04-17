@@ -1,0 +1,130 @@
+version: 2
+jobs:
+  build:
+    machine:
+      docker_layer_caching: true
+
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
+
+      - run: 
+          name: Shared - Shellcheck
+          command: docker run --rm efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
+      - run: 
+          name: Shared - Lint
+          command: docker run --rm efcms /bin/sh -c 'cd shared && npm run lint'
+      - run: 
+          name: Shared - Audit
+          command: docker run --rm efcms /bin/sh -c 'cd shared && npm audit'
+      - run: 
+          name: Shared - Test
+          command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'cd shared && npm run test'
+      - run: 
+          name: Shared - SonarQube
+          command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd shared && ./verify-sonarqube-passed.sh'
+
+      - run: 
+          name: Service - Shellcheck
+          command: docker run --rm efcms /bin/sh -c 'cd efcms-service && ./run-shellcheck.sh'
+      - run: 
+          name: Service - Lint
+          command: docker run --rm efcms /bin/sh -c 'cd efcms-service && npm run lint'
+      - run: 
+          name: Service - Audit
+          command: docker run --rm efcms /bin/sh -c 'cd efcms-service && ./run-audit.sh'
+      - run: 
+          name: Service - Test
+          command: docker run -v $(pwd)/efcms-service/coverage:/home/app/efcms-service/coverage --rm efcms /bin/sh -c 'cd efcms-service && npm run test'
+      - run: 
+          name: Service - SonarQube
+          command: docker run -v $(pwd)/efcms-service/coverage:/home/app/efcms-service/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd efcms-service && ./verify-sonarqube-passed.sh'
+
+      - run: 
+          name: UI - Shellcheck
+          command: docker run --rm efcms /bin/sh -c 'cd web-client && ./run-shellcheck.sh'
+      - run: 
+          name: UI - Lint
+          command: docker run --rm efcms /bin/sh -c 'cd web-client && npm run lint'
+      - run: 
+          name: UI - Audit
+          command: docker run --rm efcms /bin/sh -c 'cd web-client && ./run-audit.sh'
+      - run: 
+          name: UI - Test
+          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm efcms /bin/sh -c 'cd web-client && npm run test:unit'
+      - run: 
+          name: UI - SonarQube
+          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
+
+      - run: 
+          name: Pa11y
+          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev &) && ../wait-until.sh http://localhost:1234 && npm run test:pa11y'
+      - run: 
+          name: Cerebral
+          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && npm run test"
+      - run: 
+          name: Cypress
+          command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'
+
+  deploy:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: 
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh develop)" >> $BASH_ENV
+      - run: 
+          name: 'Deploy - Web Client - Terraform'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+      - run:
+          name: 'Deploy - Web Client - S3'
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+      - run: 
+          name: 'Deploy - API - Terraform'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service/terraform/main && ../bin/deploy-app.sh ${ENV}"
+      - run: 
+          name: 'Deploy - API - Serverless - us-east-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-east-1"
+      - run: 
+          name: 'Deploy - API - Serverless - us-west-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd shared && rm -rf node_modules && npm i --only=production && cd ../efcms-service && ./run-serverless.sh ${ENV} us-west-1"
+      - run: 
+          name: 'Deploy - API - Route53'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-regional-route53.sh ${ENV}"
+      - run:
+          name: 'Deploy - API - S3 Replication'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-s3-replication.sh ${ENV}"
+      - run:
+          name: 'Deploy - API - Global Tables'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd efcms-service && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
+      - run:
+          name: 'Deploy - API - Cognito Customize'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-cognito-ui.sh ${ENV}"
+      - run:
+          name: 'Deploy - API - Cognito Create Users'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd efcms-service && ./setup-cognito-users.sh ${ENV}"
+      - run:
+          name: 'Deploy - API - Smoke Tests - us-east-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd efcms-service && ./run-smoketests.sh ${ENV} us-east-1"
+      - run:
+          name: 'Deploy - API - Smoke Tests - us-west-1'
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd efcms-service && ./run-smoketests.sh ${ENV} us-west-1"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - develop

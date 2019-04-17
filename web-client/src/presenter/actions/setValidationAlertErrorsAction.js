@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { flattenDeep } from 'lodash';
+import { state } from 'cerebral';
 
 /**
  * runs through the props.errors and sets the state.alertError based on which fields failed validation which is used for
@@ -11,9 +11,15 @@ import { flattenDeep } from 'lodash';
  * @returns {undefined} doesn't return anything
  */
 export const setValidationAlertErrorsAction = ({ props, store }) => {
+  let errorKeys = Object.keys(props.errors);
+  if (props.errorDisplayOrder) {
+    errorKeys = props.errorDisplayOrder.filter(
+      key => props.errors[key] !== undefined,
+    );
+  }
   const alertError = {
     messages: flattenDeep(
-      Object.keys(props.errors).map(key => {
+      errorKeys.map(key => {
         const error = props.errors[key];
         if (Array.isArray(error)) {
           return error.map(subError => {

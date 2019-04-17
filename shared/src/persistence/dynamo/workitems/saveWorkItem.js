@@ -1,12 +1,12 @@
 const client = require('../../dynamodbClientService');
-const { getWorkItemById } = require('./getWorkItemById');
-const { reassignWorkItem } = require('./syncWorkItems');
-const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
-const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
-const { saveVersionedCase } = require('../cases/saveCase');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { getWorkItemById } = require('./getWorkItemById');
+const { reassignWorkItem } = require('./syncWorkItems');
+const { saveVersionedCase } = require('../cases/saveCase');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.saveWorkItem = async ({
   workItemToSave,
@@ -71,12 +71,12 @@ exports.saveWorkItem = async ({
   }
 
   const workItem = await client.put({
-    applicationContext,
     Item: {
       pk: workItemToSave.workItemId,
       sk: workItemToSave.workItemId,
       ...workItemToSave,
     },
+    applicationContext,
   });
 
   return stripInternalKeys(workItem);

@@ -1,11 +1,6 @@
-import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
-
 import { BeforeStartingCase } from './BeforeStartingCase';
-import { CaseDetailInternal } from './CaseDetailInternal';
 import { CaseDetail } from './CaseDetail';
+import { CaseDetailInternal } from './CaseDetailInternal';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
@@ -15,16 +10,21 @@ import { DashboardRespondent } from './DashboardRespondent';
 import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
-import { FileDocument } from './FileDocument';
+import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { UsaBanner } from './UsaBanner';
+import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const pages = {
   BeforeStartingCase,
@@ -39,10 +39,11 @@ const pages = {
   DashboardSeniorAttorney,
   DocumentDetail,
   Error,
-  FileDocument,
+  FileDocumentWizard,
   Interstitial,
   Loading,
   LogIn,
+  SelectDocumentType,
   StartCase,
   StartCaseInternal,
   StyleGuide,

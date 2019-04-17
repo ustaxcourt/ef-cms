@@ -1,11 +1,10 @@
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { If } from '../ustc-ui/If/If';
 import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
+import React from 'react';
 
 export const WorkQueue = connect(
   {

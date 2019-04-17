@@ -1,6 +1,3 @@
-import axios from 'axios';
-import uuidv4 from 'uuid/v4';
-
 import {
   BUSINESS_TYPES,
   COUNTRY_TYPES,
@@ -12,14 +9,28 @@ import {
   CASE_CAPTION_POSTFIX,
   Case,
 } from '../../shared/src/business/entities/Case';
+import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 
 import {
   CATEGORIES,
   CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
+import {
+  CHAMBERS_SECTION,
+  CHAMBERS_SECTIONS,
+  SECTIONS,
+} from '../../shared/src/business/entities/WorkQueue';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
+import { Petition } from '../../shared/src/business/entities/Petition';
+import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
+import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
@@ -27,17 +38,17 @@ import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPape
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import { fileExternalDocument } from '../../shared/src/proxies/fileExternalDocumentProxy';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { fileRespondentDocument } from '../../shared/src/business/useCases/respondent/fileRespondentDocumentInteractor';
-import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
+import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
-import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
@@ -48,27 +59,19 @@ import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSect
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
-import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { Petition } from '../../shared/src/business/entities/Petition';
-import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
-import {
-  CHAMBERS_SECTION,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} from '../../shared/src/business/entities/WorkQueue';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
-import { updateWorkItem } from '../../shared/src/proxies/workitems/updateWorkItemProxy';
+import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
+import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
-
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -98,15 +101,17 @@ const allUseCases = {
   createDocument,
   createWorkItem,
   downloadDocumentFile,
+  fileExternalDocument,
   filePetition,
   filePetitionFromPaper,
   fileRespondentDocument,
   forwardWorkItem,
+  generateDocumentTitle,
   getCase,
+  getCaseTypes,
   getCasesByStatus,
   getCasesByUser,
   getCasesForRespondent,
-  getCaseTypes,
   getFilingTypes,
   getInternalUsers,
   getProcedureTypes,
@@ -121,8 +126,10 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   updateCase,
-  updateWorkItem,
+  uploadExternalDocument,
   validateCaseDetail,
+  validateExternalDocument,
+  validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
   validatePetition,
@@ -163,6 +170,8 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    ExternalDocumentFactory,
+    ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
     Petition,
@@ -175,7 +184,6 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return {
       getDocument,
-      saveCase: updateCase,
       uploadDocument,
       uploadPdf,
     };

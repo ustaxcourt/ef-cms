@@ -1,16 +1,14 @@
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
-const { WorkItem } = require('../entities/WorkItem');
-
-const { capitalize } = require('lodash');
-
 const {
   isAuthorized,
   PETITION,
 } = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+const { capitalize } = require('lodash');
+const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
+const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   const workItemEntity = new WorkItem({
@@ -52,6 +50,8 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
+
+  return workItemEntity;
 };
 
 /**
@@ -111,7 +111,11 @@ exports.createCase = async ({
     filedBy: user.name,
     userId: user.userId,
   });
-  addDocumentToCase(user, caseToAdd, petitionDocumentEntity);
+  const newWorkItem = addDocumentToCase(
+    user,
+    caseToAdd,
+    petitionDocumentEntity,
+  );
 
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
@@ -131,9 +135,14 @@ exports.createCase = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    applicationContext,
+    workItem: newWorkItem.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();

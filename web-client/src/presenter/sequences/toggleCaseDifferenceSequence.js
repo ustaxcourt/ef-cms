@@ -1,6 +1,6 @@
-import { toggle } from 'cerebral/factories';
 import { state } from 'cerebral';
+import { toggle } from 'cerebral/factories';
 
 export const toggleCaseDifferenceSequence = [
-  toggle(state.form.showCaseDifference),
+  toggle(state.screenMetadata.showCaseDifference),
 ];

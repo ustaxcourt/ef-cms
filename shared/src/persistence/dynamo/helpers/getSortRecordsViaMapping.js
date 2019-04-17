@@ -1,5 +1,5 @@
-const { stripInternalKeys } = require('./stripInternalKeys');
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('./stripInternalKeys');
 const { uniq } = require('lodash');
 
 exports.getSortRecordsViaMapping = async ({
@@ -11,7 +11,6 @@ exports.getSortRecordsViaMapping = async ({
   isVersioned = false,
 }) => {
   const mapping = await client.query({
-    applicationContext,
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -21,6 +20,7 @@ exports.getSortRecordsViaMapping = async ({
       ':pk': `${key}|${type}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+    applicationContext,
   });
 
   const ids = uniq(mapping.map(metadata => metadata[foreignKey]));

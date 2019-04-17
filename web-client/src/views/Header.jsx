@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -16,33 +16,41 @@ export const Header = connect(
   },
   ({ user, mobileMenu, toggleMobileMenuSequence, signOutSequence }) => {
     return (
-      <header className="usa-header usa-header-extended" role="banner">
-        <div className="usa-navbar">
-          <div className="usa-logo" id="extended-logo">
-            <em className="usa-logo-text">
-              <a href="/">United States Tax Court</a>
-            </em>
+      <>
+        <div className="beta">
+          <div className="usa-grid">
+            This is a testing site for the U.S. Tax Court and not intended for
+            public use. To learn more about starting a case, visit the{' '}
+            <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
           </div>
-          <button
-            className="usa-menu-btn"
-            onClick={() => toggleMobileMenuSequence()}
-          >
-            Menu
-          </button>
         </div>
-
-        <nav
-          role="navigation"
-          className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
-        >
-          <div className="usa-nav-inner">
+        <header className="usa-header usa-header-extended" role="banner">
+          <div className="usa-navbar">
+            <div className="usa-logo" id="extended-logo">
+              <em className="usa-logo-text">
+                <a href="/">United States Tax Court</a>
+              </em>
+            </div>
             <button
-              className="usa-nav-close"
+              className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}
             >
-              <img src={close} alt="close" />
+              Menu
             </button>
-            {/* <ul className="usa-nav-primary usa-accordion">
+          </div>
+
+          <nav
+            role="navigation"
+            className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
+          >
+            <div className="usa-nav-inner">
+              <button
+                className="usa-nav-close"
+                onClick={() => toggleMobileMenuSequence()}
+              >
+                <img src={close} alt="close" />
+              </button>
+              {/* <ul className="usa-nav-primary usa-accordion">
               <li>
                 <button
                   className="usa-accordion-button usa-nav-link"
@@ -97,31 +105,32 @@ export const Header = connect(
                 </a>
               </li>
             </ul> */}
-            {user && (
-              <div className="usa-nav-secondary">
-                <ul className="usa-unstyled-list usa-nav-secondary-links">
-                  <li role="search" className="usa-search">
-                    <SearchBox />
-                  </li>
-                  {user.userId && (
-                    <li>
-                      Hello, {user.name}
-                      <button
-                        type="button"
-                        className="usa-button-secondary sign-out"
-                        aria-label="logout"
-                        onClick={() => signOutSequence()}
-                      >
-                        <FontAwesomeIcon icon="sign-out-alt" />
-                      </button>{' '}
+              {user && (
+                <div className="usa-nav-secondary">
+                  <ul className="usa-unstyled-list usa-nav-secondary-links">
+                    <li role="search" className="usa-search">
+                      <SearchBox />
                     </li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-        </nav>
-      </header>
+                    {user.userId && (
+                      <li>
+                        Hello, {user.name}
+                        <button
+                          type="button"
+                          className="usa-button-secondary sign-out"
+                          aria-label="logout"
+                          onClick={() => signOutSequence()}
+                        >
+                          <FontAwesomeIcon icon="sign-out-alt" />
+                        </button>{' '}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </nav>
+        </header>
+      </>
     );
   },
 );
