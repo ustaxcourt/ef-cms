@@ -1,5 +1,5 @@
 export default (test, fakeFile) => {
-  return it('Respondent adds a stipulated decision', async () => {
+  return it('Respondent adds stipulated decision', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
     });
@@ -65,6 +65,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
   });
 };
