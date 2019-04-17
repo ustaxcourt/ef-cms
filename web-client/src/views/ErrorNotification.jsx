@@ -1,3 +1,4 @@
+import { Focus } from '../ustc-ui/Focus/Focus';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -31,7 +32,9 @@ class ErrorNotificationComponent extends React.Component {
             ref={this.notificationRef}
           >
             <div className="usa-alert-body">
-              <h3 className="usa-alert-heading">{alertError.title}</h3>
+              <Focus>
+                <h3 className="usa-alert-heading">{alertError.title}</h3>
+              </Focus>
               {alertHelper.showSingleMessage && (
                 <p className="usa-alert-text">{alertError.message}</p>
               )}
