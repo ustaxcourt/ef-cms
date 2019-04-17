@@ -1,6 +1,6 @@
 import { extractedPendingMessagesFromCaseDetail } from '../../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
-import { runCompute } from 'cerebral/test';
 import { orderBy } from 'lodash';
+import { runCompute } from 'cerebral/test';
 
 export default test => {
   return it('Docketclerk views case detail', async () => {
@@ -24,13 +24,6 @@ export default test => {
             assigneeId: null,
             from: 'Test Respondent',
             fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Stipulated Decision filed by Respondent is ready for review.',
-          },
-          {
-            assigneeId: null,
-            from: 'Test Respondent',
-            fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Answer filed by Respondent is ready for review.',
           },
           {
@@ -38,7 +31,21 @@ export default test => {
             from: 'Test Respondent',
             fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
             message:
-              'Stipulated Decision filed by Respondent is ready for review.',
+              'Brief in Support filed by Respondent is ready for review.',
+          },
+          {
+            assigneeId: null,
+            from: 'Test Respondent',
+            fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            message:
+              'Motion for Continuance filed by Respondent is ready for review.',
+          },
+          {
+            assigneeId: null,
+            from: 'Test Respondent',
+            fromUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            message:
+              'Proposed Stipulated Decision filed by Respondent is ready for review.',
           },
         ],
         'message',
