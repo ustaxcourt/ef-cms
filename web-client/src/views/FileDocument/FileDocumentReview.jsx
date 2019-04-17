@@ -9,9 +9,14 @@ import React from 'react';
 export const FileDocumentReview = connect(
   {
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
-  ({ form, submitExternalDocumentSequence }) => {
+  ({
+    form,
+    formCancelToggleCancelSequence,
+    submitExternalDocumentSequence,
+  }) => {
     return (
       <React.Fragment>
         <Focus>
@@ -58,7 +63,9 @@ export const FileDocumentReview = connect(
           <button
             type="button"
             className="usa-button-secondary"
-            onClick={() => {}}
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
           >
             Cancel
           </button>
