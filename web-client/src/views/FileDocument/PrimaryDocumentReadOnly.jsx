@@ -70,12 +70,14 @@ export const PrimaryDocumentReadOnly = connect(
             </div>
           )}
 
-          <div className="ustc-form-group">
-            <label htmlFor="objections">
-              Are There Any Objections to This Document?
-            </label>
-            {form.objections}
-          </div>
+          {fileDocumentHelper.showObjection && (
+            <div className="ustc-form-group">
+              <label htmlFor="objections">
+                Are There Any Objections to This Document?
+              </label>
+              {form.objections}
+            </div>
+          )}
         </div>
       </React.Fragment>
     );
