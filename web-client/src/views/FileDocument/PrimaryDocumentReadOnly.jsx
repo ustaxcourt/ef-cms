@@ -41,19 +41,31 @@ export const PrimaryDocumentReadOnly = connect(
             </div>
           )}
 
-          {form.certificateOfServiceDate && (
-            <div className="ustc-form-group">
-              <label htmlFor="service-date">Certificate of Service Date</label>
-              {fileDocumentHelper.certificateOfServiceDateFormatted}
-            </div>
-          )}
-
-          {(form.exhibits || form.attachments) && (
+          {fileDocumentHelper.showFilingIncludes && (
             <div className="ustc-form-group">
               <label htmlFor="filing-includes">Filing Includes</label>
               <ul className="ustc-unstyled-list without-margins">
+                {form.certificateOfServiceDate && (
+                  <li>
+                    Certificate of Service{' '}
+                    {fileDocumentHelper.certificateOfServiceDateFormatted}
+                  </li>
+                )}
                 {form.exhibits && <li>Exhibit(s)</li>}
                 {form.attachments && <li>Attachment(s)</li>}
+              </ul>
+            </div>
+          )}
+
+          {fileDocumentHelper.showFilingNotIncludes && (
+            <div className="ustc-form-group">
+              <label htmlFor="filing-not-includes">
+                Filing Does Not Include
+              </label>
+              <ul className="ustc-unstyled-list without-margins">
+                {!form.certificateOfService && <li>Certificate of Service</li>}
+                {!form.exhibits && <li>Exhibit(s)</li>}
+                {!form.attachments && <li>Attachment(s)</li>}
               </ul>
             </div>
           )}
