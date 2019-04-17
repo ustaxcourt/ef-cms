@@ -1,17 +1,16 @@
-import React from 'react';
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sequences, state } from 'cerebral';
-
 import { ErrorNotification } from './ErrorNotification';
-import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const StartCaseInternal = connect(
   {
     constants: state.constants,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -23,7 +22,7 @@ export const StartCaseInternal = connect(
   ({
     constants,
     showModal,
-    startACaseToggleCancelSequence,
+    formCancelToggleCancelSequence,
     startCaseHelper,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
@@ -45,7 +44,7 @@ export const StartCaseInternal = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Upload Documents to Create a Case
           </h1>
-          {showModal && <StartCaseCancelModalDialog />}
+          {showModal && <FormCancelModalDialog />}
           <ErrorNotification />
           <h2>Petition Documents</h2>
 
@@ -286,7 +285,7 @@ export const StartCaseInternal = connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseToggleCancelSequence();
+              formCancelToggleCancelSequence();
               return false;
             }}
           >

@@ -1,6 +1,6 @@
+const createApplicationContext = require('../applicationContext');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * used for fetching a single case
@@ -10,18 +10,18 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.handler = event =>
   handle(event, async () => {
+    const user = getUserFromAuthHeader(event);
+    const applicationContext = createApplicationContext(user);
     try {
-      const user = getUserFromAuthHeader(event);
-      const applicationContext = createApplicationContext(user);
-      const caseDetail = await applicationContext.getUseCases().getCase({
+      const results = await applicationContext.getUseCases().getCase({
         applicationContext,
         caseId: event.pathParameters.caseId,
       });
-      console.log('user', JSON.stringify(user));
-      console.log('case', JSON.stringify(caseDetail));
-      return caseDetail;
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
     } catch (e) {
-      console.error('error', JSON.stringify(e));
+      applicationContext.logger.error(e);
       throw e;
     }
   });

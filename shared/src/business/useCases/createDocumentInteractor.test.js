@@ -1,8 +1,8 @@
-const { createDocument } = require('./createDocumentInteractor');
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { User } = require('../entities/User');
+const { createDocument } = require('./createDocumentInteractor');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
+const { User } = require('../entities/User');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -36,7 +36,9 @@ describe('createDocument', () => {
   });
 
   it('should create a document', async () => {
-    const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
+    const updateCaseStub = sinon
+      .stub()
+      .callsFake(({ caseToUpdate }) => caseToUpdate);
     applicationContext = {
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
@@ -55,7 +57,8 @@ describe('createDocument', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => MOCK_CASE,
-          saveCase: saveCaseStub,
+          saveWorkItemForNonPaper: async () => null,
+          updateCase: updateCaseStub,
         };
       },
     };
@@ -68,8 +71,8 @@ describe('createDocument', () => {
         documentType: 'Answer',
       },
     });
-    const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
-      .caseToSave;
+    const caseRecordSentToPersistence = updateCaseStub.getCall(0).args[0]
+      .caseToUpdate;
     expect(caseRecordSentToPersistence).toMatchObject({
       ...MOCK_CASE,
       documents: [
@@ -111,7 +114,9 @@ describe('createDocument', () => {
   });
 
   it('should create a document when a user is not a respondent', async () => {
-    const saveCaseStub = sinon.stub().callsFake(({ caseToSave }) => caseToSave);
+    const updateCaseStub = sinon
+      .stub()
+      .callsFake(({ caseToUpdate }) => caseToUpdate);
     applicationContext = {
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve(MOCK_DOCKET_NUMBER),
@@ -130,7 +135,8 @@ describe('createDocument', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => MOCK_CASE,
-          saveCase: saveCaseStub,
+          saveWorkItemForNonPaper: async () => null,
+          updateCase: updateCaseStub,
         };
       },
     };
@@ -143,8 +149,8 @@ describe('createDocument', () => {
         documentType: 'Answer',
       },
     });
-    const caseRecordSentToPersistence = saveCaseStub.getCall(0).args[0]
-      .caseToSave;
+    const caseRecordSentToPersistence = updateCaseStub.getCall(0).args[0]
+      .caseToUpdate;
     expect(caseRecordSentToPersistence).toMatchObject({
       ...MOCK_CASE,
       documents: [

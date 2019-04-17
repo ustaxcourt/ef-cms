@@ -1,11 +1,11 @@
 import { Buttons } from './Buttons';
 import { Cards } from './Cards';
 import { Forms } from './Forms';
-import React from 'react';
 import { SelectMulti } from './SelectMulti';
 import { Tables } from './Tables';
 import { TabsSection as Tabs } from './Tabs';
 import { Typography } from './Typography';
+import React from 'react';
 
 export const StyleGuide = () => (
   <React.Fragment>
@@ -13,7 +13,6 @@ export const StyleGuide = () => (
     <Buttons />
     <Tables />
     <Forms />
-
     <SelectMulti />
     <Cards />
     <Tabs />

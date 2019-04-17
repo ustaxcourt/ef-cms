@@ -9,6 +9,7 @@ describe('PetitionFromPaper entity', () => {
         receivedAt: new Date().toISOString(),
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(petition.isValid()).toEqual(true);
     });
     it('fails validation if date is in the future', () => {
       const petition = new PetitionFromPaper({

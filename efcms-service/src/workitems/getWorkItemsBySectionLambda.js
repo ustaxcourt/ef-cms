@@ -1,6 +1,6 @@
+const createApplicationContext = require('../applicationContext');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * returns all work items in a particular section
@@ -13,8 +13,16 @@ exports.handler = event =>
     const section = event.pathParameters.section;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().getWorkItemsBySection({
-      applicationContext,
-      section,
-    });
+    try {
+      const results = applicationContext.getUseCases().getWorkItemsBySection({
+        applicationContext,
+        section,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

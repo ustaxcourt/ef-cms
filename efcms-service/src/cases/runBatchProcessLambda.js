@@ -1,8 +1,8 @@
+const createApplicationContext = require('../applicationContext');
 const {
   handle,
   getUserFromAuthHeader,
 } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * used for batching documents to send to IRS
@@ -10,12 +10,19 @@ const createApplicationContext = require('../applicationContext');
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event => {
-  return handle(event, () => {
+exports.handler = event =>
+  handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().runBatchProcess({
-      applicationContext,
-    });
+    try {
+      const results = applicationContext.getUseCases().runBatchProcess({
+        applicationContext,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });
-};

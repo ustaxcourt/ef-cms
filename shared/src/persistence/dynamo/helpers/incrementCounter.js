@@ -9,7 +9,6 @@ exports.incrementCounter = ({ applicationContext, key }) => {
   const year = new Date().getFullYear().toString();
 
   return client.updateConsistent({
-    applicationContext,
     ExpressionAttributeNames: {
       '#a': 'id',
     },
@@ -22,5 +21,6 @@ exports.incrementCounter = ({ applicationContext, key }) => {
     },
     ReturnValues: 'UPDATED_NEW',
     UpdateExpression: 'ADD #a :x',
+    applicationContext,
   });
 };

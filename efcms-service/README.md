@@ -24,16 +24,6 @@ This will host a local service at http://localhost:3000.
 
 Sometimes you may get errors when doing npm install.  To fix, removce the package-lock.json file and re-run npm install.
 
-## Usage
-
-See the `Jenkinsfile`.
-
-In general:
-```sh
-$cd stageDir && terraform init && terraform apply
-$serverless deploy --stage myStageName
-```
-
 ## Sandbox Deploys to AWS
 
 Run `EFCMS_DOMAIN=ustc-case-mgmt.example.gov ENVIRONMENT=<yourname> REGION=us-east-1 ./deploy-sandbox.sh`, substituting your domain for `ustc-case-mgmt.example.gov`.

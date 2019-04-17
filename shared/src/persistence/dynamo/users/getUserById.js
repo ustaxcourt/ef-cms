@@ -74,10 +74,10 @@ const client = require('../../dynamodbClientService');
  */
 exports.getUserById = async ({ applicationContext, userId }) => {
   return client.get({
-    applicationContext,
     Key: {
       pk: userId,
       sk: userId,
     },
+    applicationContext,
   });
 };

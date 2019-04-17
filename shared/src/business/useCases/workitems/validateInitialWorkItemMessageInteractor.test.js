@@ -1,9 +1,9 @@
 const {
-  validateInitialWorkItemMessage,
-} = require('./validateInitialWorkItemMessageInteractor');
-const {
   InitialWorkItemMessage,
 } = require('../../entities/InitialWorkItemMessage');
+const {
+  validateInitialWorkItemMessage,
+} = require('./validateInitialWorkItemMessageInteractor');
 
 describe('validateInitialWorkItemMessage', () => {
   it('returns the expected errors object on an empty message', () => {

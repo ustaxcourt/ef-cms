@@ -1,6 +1,5 @@
-const { assignWorkItems } = require('./assignWorkItemsInteractor');
 const _ = require('lodash');
-const { User } = require('../../entities/User');
+const { assignWorkItems } = require('./assignWorkItemsInteractor');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,
@@ -78,31 +77,5 @@ describe('assignWorkItems', () => {
       error = err;
     }
     expect(error).toBeDefined();
-  });
-
-  it('be successful when all validation passed', async () => {
-    const applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return new User({
-          name: 'Test Docketclerk',
-          role: 'docketclerk',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
-      },
-      getPersistenceGateway: () => {
-        return {
-          getWorkItemById: async () => MOCK_WORK_ITEM,
-          saveWorkItem: async () => ({
-            abc: 123,
-          }),
-        };
-      },
-    };
-    await assignWorkItems({
-      applicationContext,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      workItems: [MOCK_WORK_ITEM],
-    });
   });
 });

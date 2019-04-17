@@ -1,9 +1,9 @@
 import { runCompute } from 'cerebral/test';
 
-import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
-import { startCaseHelper } from './startCaseHelper';
 import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
+import { getTrialCityName } from '../computeds/formattedTrialCity';
+import { startCaseHelper } from './startCaseHelper';
 
 describe('start a case computed', () => {
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {

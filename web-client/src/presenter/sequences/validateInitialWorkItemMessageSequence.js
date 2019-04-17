@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
+import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const validateInitialWorkItemMessageSequence = [
   shouldValidateAction,
