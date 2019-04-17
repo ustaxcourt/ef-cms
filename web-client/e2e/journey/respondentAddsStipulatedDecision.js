@@ -1,5 +1,5 @@
 export default (test, fakeFile) => {
-  return it('Respondent adds an answer', async () => {
+  return it('Respondent adds stipulated decision', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
     });
@@ -13,7 +13,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'category',
-      value: 'Answer (filed by respondent only)',
+      value: 'Decision',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -23,7 +23,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'documentType',
-      value: 'Answer',
+      value: 'Proposed Stipulated Decision',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -32,7 +32,9 @@ export default (test, fakeFile) => {
 
     await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Answer');
+    expect(test.getState('form.documentType')).toEqual(
+      'Proposed Stipulated Decision',
+    );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -63,6 +65,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
   });
 };

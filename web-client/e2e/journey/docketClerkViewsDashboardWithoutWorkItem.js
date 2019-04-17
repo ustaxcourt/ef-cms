@@ -17,18 +17,18 @@ export default test => {
     const sectionWorkItems = test
       .getState('workQueue')
       .filter(item => item.docketNumber === test.docketNumber);
-    expect(sectionWorkItems.length).toEqual(3);
+    expect(sectionWorkItems.length).toEqual(4);
     test.answerDocumentId = sectionWorkItems.find(
       item => item.document.documentType === 'Answer',
     ).document.documentId;
     test.stipulatedDecisionDocumentId = sectionWorkItems.find(
-      item => item.document.documentType === 'Stipulated Decision',
+      item => item.document.documentType === 'Proposed Stipulated Decision',
     ).document.documentId;
     test.answerWorkItemId = sectionWorkItems.find(
       item => item.document.documentType === 'Answer',
     ).workItemId;
     test.stipulatedDecisionWorkItemId = sectionWorkItems.find(
-      item => item.document.documentType === 'Stipulated Decision',
+      item => item.document.documentType === 'Proposed Stipulated Decision',
     ).workItemId;
   });
 };
