@@ -9,6 +9,7 @@ export default test => {
 
     expect(workItem).toBeDefined();
     test.documentId = workItem.document.documentId;
+    test.selectedWorkItem = workItem;
     test.workItemId = workItem.workItemId;
     expect(workItem).toMatchObject({
       assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -16,10 +17,8 @@ export default test => {
     });
     expect(workItem.messages).toMatchObject([
       {
-        message: 'Stipulated Decision filed by Respondent is ready for review.',
-      },
-      {
-        message: 'Stipulated Decision filed by Respondent is ready for review.',
+        message:
+          'Proposed Stipulated Decision filed by Respondent is ready for review.',
       },
       {
         message: 'hello world',
