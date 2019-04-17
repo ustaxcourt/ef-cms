@@ -109,14 +109,16 @@
         "dynamodb:DescribeGlobalTable"
       ],
       "Resource": [
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-terraform-lock",
+        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-dev",
+        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-prod",
+        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-stg",
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-dev",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-dev",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-stg",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-stg",
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-prod",
+        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-stg",
+        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-terraform-lock",
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-dev",
         "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-prod",
-        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-dev"
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-stg"
       ]
     },
     {
@@ -132,18 +134,18 @@
         "iam:GetRolePolicy"
       ],
       "Resource": [
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_dev",
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_stg",
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_prod",
         "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_dev",
-        "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_stg",
         "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_prod",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-prod-us-east-1-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-stg-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_stg",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-dev-us-east-1-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-dev-us-west-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-prod-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-prod-us-west-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-stg-us-east-1-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-stg-us-west-1-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-prod-us-west-1-lambdaRole"
+        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_dev",
+        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_prod",
+        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_stg"
       ]
     }
   ]
