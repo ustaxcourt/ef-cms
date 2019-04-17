@@ -1,5 +1,5 @@
 export default (test, fakeFile) => {
-  return it('Respondent adds an answer', async () => {
+  return it('Respondent adds Motion with supporting Brief', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
     });
@@ -13,7 +13,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'category',
-      value: 'Answer (filed by respondent only)',
+      value: 'Motion',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -23,7 +23,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'documentType',
-      value: 'Answer',
+      value: 'Motion for Continuance',
     });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
@@ -31,8 +31,11 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('selectDocumentSequence');
+    await test.runSequence('selectDocumentSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Answer');
+    expect(test.getState('form.documentType')).toEqual(
+      'Motion for Continuance',
+    );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -56,13 +59,50 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'hasSupportingDocuments',
-      value: false,
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'supportingDocument',
+      value: 'Brief in Support',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'supportingDocumentMetadata.category',
+      value: 'Supporting Document',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'supportingDocumentMetadata.documentType',
+      value: 'Brief in Support',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'supportingDocumentMetadata.previousDocument',
+      value: 'Motion for Continuance',
+    });
+
+    await test.runSequence('reviewExternalDocumentInformationSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      objections: 'Enter selection for Objections.',
+      supportingDocumentFile: 'A file was not selected.',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'objections',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'supportingDocumentFile',
+      value: fakeFile,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(6);
   });
 };

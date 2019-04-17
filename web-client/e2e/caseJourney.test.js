@@ -39,7 +39,8 @@ import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDeta
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
-import respondentAddsStipulatedDecisions from './journey/respondentAddsStipulatedDecisions';
+import respondentAddsMotion from './journey/respondentAddsMotion';
+import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -140,7 +141,8 @@ describe('Case journey', () => {
   respondentViewsDashboard(test);
   respondentViewsCaseDetail(test);
   respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecisions(test, fakeFile);
+  respondentAddsStipulatedDecision(test, fakeFile);
+  respondentAddsMotion(test, fakeFile);
 
   docketClerkLogIn(test);
   docketClerkViewsDashboardWithoutWorkItem(test);
