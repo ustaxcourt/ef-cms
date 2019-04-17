@@ -5,23 +5,22 @@ import React from 'react';
 
 export const SecondaryDocumentType = connect(
   {
-    clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
     selectDocumentTypeHelper: state.selectDocumentTypeHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    clearWizardDataSequence,
     constants,
     selectDocumentTypeHelper,
     form,
     selectDocumentSequence,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
@@ -42,12 +41,9 @@ export const SecondaryDocumentType = connect(
             id="document-secondary-category"
             aria-label="secondaryCategory"
             onChange={e => {
-              updateFormValueSequence({
+              updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
-              });
-              clearWizardDataSequence({
-                key: e.target.name,
               });
               validateSelectDocumentTypeSequence();
             }}
@@ -83,12 +79,9 @@ export const SecondaryDocumentType = connect(
                 name="secondaryDocument.documentType"
                 className="secondaryDocumentType"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  });
-                  clearWizardDataSequence({
-                    key: e.target.name,
                   });
                   validateSelectDocumentTypeSequence();
                 }}
@@ -121,12 +114,9 @@ export const SecondaryDocumentType = connect(
                           name="secondaryDocumentType"
                           value={entry.documentType}
                           onClick={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
-                            });
-                            clearWizardDataSequence({
-                              key: e.target.name,
                             });
                             selectDocumentSequence();
                           }}
