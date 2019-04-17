@@ -18,8 +18,8 @@ export const FileDocument = connect(
   ({
     chooseWizardStepSequence,
     form,
-    reviewExternalDocumentInformationSequence,
     formCancelToggleCancelSequence,
+    reviewExternalDocumentInformationSequence,
   }) => {
     return (
       <React.Fragment>
