@@ -39,7 +39,7 @@ export const fileDocumentHelper = get => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
-  const certificateOfServiceDate = get(state.form.certificateOfServiceDate);
+  const certificateOfServiceDate = form.certificateOfServiceDate;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = moment
@@ -47,11 +47,19 @@ export const fileDocumentHelper = get => {
       .format('L');
   }
 
+  const showFilingIncludes =
+    form.certificateOfService || form.exhibits || form.attachments;
+
+  const showFilingNotIncludes =
+    !form.certificateOfService || !form.exhibits || !form.attachments;
+
   let exported = {
     certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
+    showFilingIncludes,
+    showFilingNotIncludes,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
