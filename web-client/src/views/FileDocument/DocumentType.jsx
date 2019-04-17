@@ -41,7 +41,7 @@ export const DocumentType = connect(
               });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.category}
+            value={form.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -76,7 +76,7 @@ export const DocumentType = connect(
                   });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.documentType}
+                value={form.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {(constants.CATEGORY_MAP[form.category] || []).map(entry => (
@@ -96,11 +96,11 @@ export const DocumentType = connect(
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
                   {(constants.CATEGORY_MAP[form.category] || []).map(
                     (entry, index) => (
-                      <li key={entry.documentType} value={entry.documentType}>
+                      <li key={entry.documentType}>
                         <input
                           id={`documentType-${index}`}
                           type="radio"
-                          name="entry"
+                          name="documentType"
                           value={entry.documentType}
                           onClick={e => {
                             updateFileDocumentWizardFormValueSequence({
