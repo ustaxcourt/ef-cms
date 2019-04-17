@@ -7,7 +7,8 @@ export const PartiesFiling = connect(
     caseDetail: state.formattedCaseDetail,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
   },
@@ -15,7 +16,7 @@ export const PartiesFiling = connect(
     caseDetail,
     fileDocumentHelper,
     form,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
   }) => {
     return (
@@ -41,7 +42,7 @@ export const PartiesFiling = connect(
                     aria-describedby="who-legend"
                     checked={form.partyPrimary}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -59,7 +60,7 @@ export const PartiesFiling = connect(
                       name="partySecondary"
                       checked={form.partySecondary}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
@@ -79,7 +80,7 @@ export const PartiesFiling = connect(
                     name="partyRespondent"
                     checked={form.partyRespondent}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });

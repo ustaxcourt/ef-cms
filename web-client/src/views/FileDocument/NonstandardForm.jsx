@@ -14,7 +14,8 @@ export const NonstandardForm = connect(
     namespace: props.namespace,
     screenMetadata: state.screenMetadata,
     selectDocumentTypeHelper: state.selectDocumentTypeHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state[props.validationErrors],
@@ -25,7 +26,7 @@ export const NonstandardForm = connect(
     level,
     namespace,
     screenMetadata,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validationErrors,
     validateSelectDocumentTypeSequence,
   }) => {
@@ -50,7 +51,7 @@ export const NonstandardForm = connect(
               autoCapitalize="none"
               value={get(form, `${namespace}freeText`, '')}
               onChange={e => {
-                updateFormValueSequence({
+                updateFileDocumentWizardFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -83,7 +84,7 @@ export const NonstandardForm = connect(
               value={get(form, `${namespace}previousDocument`, '')}
               aria-label="previousDocument"
               onChange={e => {
-                updateFormValueSequence({
+                updateFileDocumentWizardFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -140,7 +141,7 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}month`, '')}
                     type="number"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -170,7 +171,7 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}day`, '')}
                     type="number"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -200,7 +201,7 @@ export const NonstandardForm = connect(
                     name={`${namespace}year`}
                     type="number"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -235,7 +236,7 @@ export const NonstandardForm = connect(
               value={get(form, `${namespace}trialLocation`, '')}
               trialCitiesByState={selectDocumentTypeHelper[level].trialCities}
               onChange={e => {
-                updateFormValueSequence({
+                updateFileDocumentWizardFormValueSequence({
                   key: `${namespace}trialLocation`,
                   value: e.target.value,
                 });
@@ -278,7 +279,7 @@ export const NonstandardForm = connect(
                         ordinalValue
                       }
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });

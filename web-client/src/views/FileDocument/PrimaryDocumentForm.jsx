@@ -9,7 +9,8 @@ export const PrimaryDocumentForm = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
     validationErrors: state.validationErrors,
@@ -17,7 +18,7 @@ export const PrimaryDocumentForm = connect(
   ({
     fileDocumentHelper,
     form,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
@@ -97,7 +98,7 @@ export const PrimaryDocumentForm = connect(
                             form.certificateOfService === (option === 'Yes')
                           }
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -143,7 +144,7 @@ export const PrimaryDocumentForm = connect(
                           min="1"
                           max="12"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -168,7 +169,7 @@ export const PrimaryDocumentForm = connect(
                           min="1"
                           max="31"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -193,7 +194,7 @@ export const PrimaryDocumentForm = connect(
                           min="1900"
                           max="2100"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -232,7 +233,7 @@ export const PrimaryDocumentForm = connect(
                           value={option}
                           checked={form.exhibits === (option === 'Yes')}
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -270,7 +271,7 @@ export const PrimaryDocumentForm = connect(
                           value={option}
                           checked={form.attachments === (option === 'Yes')}
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -311,7 +312,7 @@ export const PrimaryDocumentForm = connect(
                             value={option}
                             checked={form.objections === option}
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateFileDocumentWizardFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -356,7 +357,7 @@ export const PrimaryDocumentForm = connect(
                             form.hasSupportingDocuments === (option === 'Yes')
                           }
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -393,25 +394,25 @@ export const PrimaryDocumentForm = connect(
                     id="supporting-document"
                     aria-describedby="supporting-document-label"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'supportingDocumentMetadata.category',
                         value: 'Supporting Document',
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'supportingDocumentMetadata.documentType',
                         value: e.target.value,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'supportingDocumentMetadata.previousDocument',
                         value: form.documentTitle,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                       validateExternalDocumentInformationSequence();
                     }}
-                    value={form.supportingDocument}
+                    value={form.supportingDocument || ''}
                   >
                     <option value="">- Select -</option>
                     {fileDocumentHelper.supportingDocumentTypeList.map(
@@ -454,13 +455,13 @@ export const PrimaryDocumentForm = connect(
                     aria-describedby="supporting-document-free-text-label"
                     name="supportingDocumentFreeText"
                     autoCapitalize="none"
-                    value={form.supportingDocumentFreeText}
+                    value={form.supportingDocumentFreeText || ''}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'supportingDocumentMetadata.freeText',
                         value: e.target.value,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });

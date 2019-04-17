@@ -8,19 +8,18 @@ import React from 'react';
 
 export const SelectDocumentType = connect(
   {
-    clearWizardDataSequence: sequences.clearWizardDataSequence,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
   },
   ({
-    clearWizardDataSequence,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     screenMetadata,
   }) => {
     return (
@@ -140,14 +139,11 @@ export const SelectDocumentType = connect(
                         className="link"
                         type="button"
                         onClick={() => {
-                          clearWizardDataSequence({
-                            key: 'documentType',
-                          });
-                          updateFormValueSequence({
+                          updateFileDocumentWizardFormValueSequence({
                             key: 'category',
                             value: document.category,
                           });
-                          updateFormValueSequence({
+                          updateFileDocumentWizardFormValueSequence({
                             key: 'documentType',
                             value: document.documentType,
                           });

@@ -22,18 +22,21 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
+    exhibits: joi.boolean().required(),
+    hasSupportingDocuments: joi.boolean().required(),
+    primaryDocumentFile: joi.object().required(),
+  };
+
+  let schemaOptionalItems = {
     certificateOfServiceDate: joi
       .date()
       .iso()
       .max('now'),
-    exhibits: joi.boolean().required(),
     hasSecondarySupportingDocuments: joi.boolean(),
-    hasSupportingDocuments: joi.boolean().required(),
     objections: joi.string(),
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
-    primaryDocumentFile: joi.object().required(),
     secondaryDocumentFile: joi.object(),
     secondarySupportingDocument: joi.string(),
     secondarySupportingDocumentFile: joi.object(),
@@ -83,8 +86,8 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   const makeRequired = itemName => {
-    if (schema[itemName]) {
-      schema[itemName] = schema[itemName].required();
+    if (schemaOptionalItems[itemName]) {
+      schema[itemName] = schemaOptionalItems[itemName].required();
     }
   };
 
