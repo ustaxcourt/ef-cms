@@ -88,6 +88,35 @@ describe('fileDocumentHelper', () => {
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
   });
 
+  it('shows Filing Includes on review page if certificateOfService is true', async () => {
+    state.form.certificateOfService = true;
+    state.form.certificateOfServiceDate = '2018-01-01';
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showFilingIncludes).toEqual(true);
+  });
+
+  it('does not show Filing Includes if certOfService, exhibits, and attachments are all false', async () => {
+    state.form.certificateOfService = false;
+    state.form.attachments = false;
+    state.form.exhibits = false;
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showFilingIncludes).toEqual(false);
+  });
+
+  it('shows Filing Does Not Include if exhibits is false', async () => {
+    state.form.exhibits = false;
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(true);
+  });
+
+  it('does not show Filing Does Not Include if certOfService, exhibits, and attachments are all true', async () => {
+    state.form.certificateOfService = true;
+    state.form.attachments = true;
+    state.form.exhibits = true;
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(false);
+  });
+
   it('does not show party validation error if none of the party validation errors exists', async () => {
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toBeUndefined();
