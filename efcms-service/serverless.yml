@@ -229,6 +229,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  addCoversheet:
+    handler: src/documents/addCoversheetLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/coversheet
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   updateCase:
     handler: src/cases/updateCaseLambda.handler
     events:
