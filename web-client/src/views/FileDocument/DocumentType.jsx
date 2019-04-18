@@ -5,21 +5,20 @@ import React from 'react';
 
 export const DocumentType = connect(
   {
-    clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    clearWizardDataSequence,
     constants,
     form,
     selectDocumentSequence,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
@@ -36,16 +35,13 @@ export const DocumentType = connect(
             id="document-category"
             aria-label="category"
             onChange={e => {
-              updateFormValueSequence({
+              updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              clearWizardDataSequence({
-                key: e.target.name,
-              });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.category}
+            value={form.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -74,16 +70,13 @@ export const DocumentType = connect(
                 name="documentType"
                 className="documentType"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  clearWizardDataSequence({
-                    key: e.target.name,
-                  });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.documentType}
+                value={form.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {(constants.CATEGORY_MAP[form.category] || []).map(entry => (
@@ -103,19 +96,16 @@ export const DocumentType = connect(
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
                   {(constants.CATEGORY_MAP[form.category] || []).map(
                     (entry, index) => (
-                      <li key={entry.documentType} value={entry.documentType}>
+                      <li key={entry.documentType}>
                         <input
                           id={`documentType-${index}`}
                           type="radio"
-                          name="entry"
+                          name="documentType"
                           value={entry.documentType}
                           onClick={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
-                            });
-                            clearWizardDataSequence({
-                              key: e.target.name,
                             });
                             selectDocumentSequence();
                           }}

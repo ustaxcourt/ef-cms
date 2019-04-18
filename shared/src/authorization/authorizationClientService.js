@@ -1,6 +1,5 @@
 exports.CASE_METADATA = 'caseMetadata';
 exports.FILE_EXTERNAL_DOCUMENT = 'fileExternalDocument';
-exports.FILE_RESPONDENT_DOCUMENT = 'fileRespondentDocument';
 exports.GET_CASE = 'getCase';
 exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
@@ -47,7 +46,6 @@ const AUTHORIZATION_MAP = {
   respondent: [
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
-    exports.FILE_RESPONDENT_DOCUMENT,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.UPDATE_CASE,
   ],

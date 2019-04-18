@@ -15,7 +15,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Answer (filed by respondent only)',
     });
@@ -25,7 +25,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
       value: 'Answer',
     });
@@ -40,7 +40,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('editSelectedDocumentSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Motion',
     });
@@ -55,7 +55,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
       value: 'Motion for Leave to File Out of Time',
     });
@@ -73,12 +73,12 @@ export default (test, fakeFile) => {
       },
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocument.category',
       value: 'Statement',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocument.documentType',
       value: 'Statement',
     });
@@ -95,7 +95,7 @@ export default (test, fakeFile) => {
       },
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocument.freeText',
       value: 'Anything',
     });
@@ -122,17 +122,17 @@ export default (test, fakeFile) => {
       secondaryDocumentFile: 'A file was not selected.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
       value: true,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSupportingDocuments',
       value: true,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSecondarySupportingDocuments',
       value: true,
     });
@@ -150,15 +150,15 @@ export default (test, fakeFile) => {
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'attachments',
       value: false,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'exhibits',
       value: false,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
       value: 'no',
     });
@@ -173,15 +173,15 @@ export default (test, fakeFile) => {
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceDay',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceYear',
       value: '5000',
     });
@@ -197,7 +197,7 @@ export default (test, fakeFile) => {
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfServiceYear',
       value: '2000',
     });
@@ -211,11 +211,11 @@ export default (test, fakeFile) => {
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocument',
       value: 'Declaration in Support',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocument',
       value: 'Affidavit in Support',
     });
@@ -230,11 +230,11 @@ export default (test, fakeFile) => {
       supportingDocumentFreeText: 'Please provide a value.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocumentFreeText',
       value: 'Declaration in Support',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocumentFreeText',
       value: 'Affidavit in Support',
     });
@@ -247,19 +247,19 @@ export default (test, fakeFile) => {
       supportingDocumentFile: 'A file was not selected.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondaryDocumentFile',
       value: fakeFile,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocumentFile',
       value: fakeFile,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocumentFile',
       value: fakeFile,
     });

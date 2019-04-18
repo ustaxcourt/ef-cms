@@ -10,7 +10,8 @@ export const SecondaryDocumentForm = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
     validationErrors: state.validationErrors,
@@ -18,7 +19,7 @@ export const SecondaryDocumentForm = connect(
   ({
     fileDocumentHelper,
     form,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
@@ -106,7 +107,7 @@ export const SecondaryDocumentForm = connect(
                             (option === 'Yes')
                           }
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -147,26 +148,26 @@ export const SecondaryDocumentForm = connect(
                     id="secondary-supporting-document"
                     aria-describedby="secondary-supporting-document-label"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'secondarySupportingDocumentMetadata.category',
                         value: 'Supporting Document',
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'secondarySupportingDocumentMetadata.documentType',
                         value: e.target.value,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key:
                           'secondarySupportingDocumentMetadata.previousDocument',
                         value: form.secondaryDocument.documentTitle,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                       validateExternalDocumentInformationSequence();
                     }}
-                    value={form.secondarySupportingDocument}
+                    value={form.secondarySupportingDocument || ''}
                   >
                     <option value="">- Select -</option>
                     {fileDocumentHelper.supportingDocumentTypeList.map(
@@ -209,13 +210,13 @@ export const SecondaryDocumentForm = connect(
                     name="secondarySupportingDocumentFreeText"
                     aria-describedby="secondary-supporting-document-free-text-label"
                     autoCapitalize="none"
-                    value={form.secondarySupportingDocumentFreeText}
+                    value={form.secondarySupportingDocumentFreeText || ''}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: 'secondarySupportingDocumentMetadata.freeText',
                         value: e.target.value,
                       });
-                      updateFormValueSequence({
+                      updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
