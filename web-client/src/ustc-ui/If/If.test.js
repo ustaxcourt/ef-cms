@@ -1,8 +1,8 @@
-import React from 'react';
 import { Container } from '@cerebral/react';
-import App from 'cerebral';
-import TestRenderer from 'react-test-renderer';
 import { If } from './If';
+import App from 'cerebral';
+import React from 'react';
+import TestRenderer from 'react-test-renderer';
 
 describe('If Component', () => {
   it('should not show the content if no binded property is available', () => {

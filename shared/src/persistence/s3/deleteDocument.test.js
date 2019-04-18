@@ -1,5 +1,5 @@
-const { deleteDocument } = require('./deleteDocument');
 const sinon = require('sinon');
+const { deleteDocument } = require('./deleteDocument');
 
 describe('deleteDocument', () => {
   const deleteObjectStub = sinon.stub().returns({

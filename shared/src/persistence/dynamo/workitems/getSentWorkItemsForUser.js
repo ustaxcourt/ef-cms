@@ -1,7 +1,7 @@
+const moment = require('moment');
 const {
   getSortRecordsViaMapping,
 } = require('../../dynamo/helpers/getSortRecordsViaMapping');
-const moment = require('moment');
 const {
   updateWorkItemsUsingCases,
 } = require('../../dynamo/helpers/updateWorkItemsUsingCases');

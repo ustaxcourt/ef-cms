@@ -1,7 +1,6 @@
-const { getSentWorkItemsForUser } = require('./getSentWorkItemsForUser');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { getSentWorkItemsForUser } = require('./getSentWorkItemsForUser');
 
 const MOCK_ITEM = {
   docketNumber: '123-19',
@@ -66,13 +65,13 @@ describe('getSentWorkItemsForUser', () => {
       userId: 'docketclerk',
     });
     expect(client.query.getCall(0).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
         ':pk': 'docketclerk|outbox',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
+      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });

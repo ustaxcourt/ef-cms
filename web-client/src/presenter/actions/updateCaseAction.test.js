@@ -1,7 +1,7 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 import { updateCaseAction } from './updateCaseAction';
+import sinon from 'sinon';
 
 const updateCaseStub = sinon.stub().returns({});
 

@@ -1,8 +1,8 @@
-import React from 'react';
-import { sequences, state } from 'cerebral';
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const CaseDetailHeader = connect(
   {

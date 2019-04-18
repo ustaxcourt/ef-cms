@@ -1,9 +1,8 @@
+import { ContactPrimary } from './ContactPrimary';
+import { ContactSecondary } from './ContactSecondary';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
 import React from 'react';
-
-import { ContactPrimary } from './ContactPrimary';
-import { ContactSecondary } from './ContactSecondary';
 
 export const Contacts = connect(
   {

@@ -1,17 +1,18 @@
-import { createWorkItemAction } from '../actions/createWorkItemAction';
-import { clearModalAction } from '../actions/clearModalAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
+import { clearModalAction } from '../actions/clearModalAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { clearUsersAction } from '../actions/clearUsersAction';
+import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { clearFormAction } from '../actions/clearFormAction';
-import { clearUsersAction } from '../actions/clearUsersAction';
-import { clearModalStateAction } from '../actions/clearModalStateAction';
 
 export const createWorkItemSequence = [
   clearAlertsAction,
@@ -26,6 +27,7 @@ export const createWorkItemSequence = [
         success: [stopShowValidationAction, setAlertSuccessAction],
       },
       clearFormAction,
+      clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,

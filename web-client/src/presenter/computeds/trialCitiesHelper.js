@@ -1,3 +1,4 @@
+import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,8 +10,9 @@ import { state } from 'cerebral';
  */
 export const trialCitiesHelper = get => procedureType => {
   const { TRIAL_CITIES } = get(state.constants);
-  const trialCities =
+  let trialCities =
     procedureType === 'Small' ? TRIAL_CITIES.SMALL : TRIAL_CITIES.REGULAR;
+  trialCities = sortBy(trialCities, ['state', 'city']);
   const getTrialCityName = get(state.getTrialCityName);
   const states = {};
   trialCities.forEach(

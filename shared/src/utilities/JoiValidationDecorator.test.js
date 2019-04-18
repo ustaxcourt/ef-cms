@@ -1,5 +1,5 @@
-const { joiValidationDecorator } = require('./JoiValidationDecorator');
 const joi = require('joi-browser');
+const { joiValidationDecorator } = require('./JoiValidationDecorator');
 
 function MockEntity1(raw) {
   Object.assign(this, raw);
