@@ -100,7 +100,7 @@ export const DocumentType = connect(
                         <input
                           id={`documentType-${index}`}
                           type="radio"
-                          name="entry"
+                          name="documentType"
                           value={entry.documentType}
                           onClick={e => {
                             updateFileDocumentWizardFormValueSequence({
