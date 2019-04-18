@@ -1,8 +1,15 @@
+const fs = require('fs');
+const path = require('path');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
   drawLinesOfText,
 } = require('pdf-lib');
+const testAssetsPath = path.join(__dirname, '../../../test-assets/');
+
+function getTestPDF() {
+  return fs.readFileSync(testAssetsPath + 'sample.pdf');
+}
 
 /**
  * addCoverToPDFDocument
@@ -10,8 +17,18 @@ const {
  * @param pdfData // Uint8Array
  * @param coverSheetData
  */
+exports.addCoverToPDFDocument = async ({ documentId, applicationContext }) => {
+  // todo: load in case
+  const coverSheetData = {};
 
-exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const coverPageDimensions = [2550, 3300];
 
