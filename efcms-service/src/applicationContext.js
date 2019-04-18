@@ -46,6 +46,10 @@ const {
 const {
   deleteWorkItemFromInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
+
+const {
+  addCoverToPDFDocument,
+} = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
@@ -274,6 +278,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
+        addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
         createCase: createCaseUC,
