@@ -14,10 +14,12 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext.getUseCases().getCasesForRespondent({
-        applicationContext,
-        respondentId,
-      });
+      const results = await applicationContext
+        .getUseCases()
+        .getCasesForRespondent({
+          applicationContext,
+          respondentId,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
       return results;
