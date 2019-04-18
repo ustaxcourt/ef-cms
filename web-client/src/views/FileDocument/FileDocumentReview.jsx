@@ -29,10 +29,7 @@ export const FileDocumentReview = connect(
           information appears the way you want it to.
         </p>
 
-        <div
-          id="file-document-hint"
-          className="usa-alert usa-alert-warning usa-alert-paragraph"
-        >
+        <div id="file-document-hint" className="usa-alert usa-alert-warning">
           <div className="usa-alert-body">
             <h3 className="usa-alert-heading">Before You Submit...</h3>
             <p className="usa-alert-text">
