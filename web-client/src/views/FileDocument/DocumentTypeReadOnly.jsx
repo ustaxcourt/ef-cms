@@ -25,7 +25,7 @@ export const DocumentTypeReadOnly = connect(
         <div className="blue-container" role="alert" aria-live="polite">
           <div className="ustc-form-group">
             <div>
-              <label htmlFor="category" className="inline-block mr-1">
+              <label htmlFor="category" className="header-with-link-button">
                 Selected Document Type
               </label>
               <button
