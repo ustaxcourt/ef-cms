@@ -1,7 +1,7 @@
-const { post } = require('./requests');
+const { post } = require('../requests');
 
 /**
- * createCaseProxy
+ * fileExternalDocumentProxy
  *
  * @param documents
  * @param applicationContext
