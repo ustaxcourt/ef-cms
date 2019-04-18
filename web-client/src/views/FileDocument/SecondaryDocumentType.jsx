@@ -1,3 +1,4 @@
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -26,7 +27,11 @@ export const SecondaryDocumentType = connect(
   }) => {
     return (
       <React.Fragment>
-        <h4>Which Document Are You Requesting Leave to File For?</h4>
+        <Focus>
+          <h4 className="focusable" tabIndex="-1">
+            Which Document Are You Requesting Leave to File For?
+          </h4>
+        </Focus>
         <div
           className={`ustc-form-group ${
             validationErrors.secondaryDocument &&
