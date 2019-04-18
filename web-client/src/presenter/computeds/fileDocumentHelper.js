@@ -56,7 +56,8 @@ export const fileDocumentHelper = get => {
     !form.attachments ||
     !form.hasSupportingDocuments;
 
-  const showSecondaryFilingNotIncludes = !form.hasSecondarySupportingDocuments;
+  const showSecondaryFilingNotIncludes =
+    form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
 
   let exported = {
     certificateOfServiceDateFormatted,
