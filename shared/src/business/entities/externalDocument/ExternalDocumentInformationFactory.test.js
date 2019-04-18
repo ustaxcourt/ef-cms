@@ -153,12 +153,23 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should not require secondary document file be added', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
-        it('should require has supporting secondary documents radio be selected', () => {
-          expect(errors().hasSecondarySupportingDocuments).toEqual(
-            'Enter selection for Secondary Supporting Documents.',
-          );
-          baseDoc.hasSecondarySupportingDocuments = false;
+
+        it(`should not require 'has supporting secondary documents' radio be selected`, () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
+        });
+
+        describe('Secondary document file added', () => {
+          beforeEach(() => {
+            baseDoc.secondaryDocumentFile = {};
+          });
+
+          it(`should require 'has supporting secondary documents' radio be selected`, () => {
+            expect(errors().hasSecondarySupportingDocuments).toEqual(
+              'Enter selection for Secondary Supporting Documents.',
+            );
+            baseDoc.hasSecondarySupportingDocuments = false;
+            expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
+          });
         });
       });
 
@@ -175,12 +186,23 @@ describe('ExternalDocumentInformationFactory', () => {
           baseDoc.secondaryDocumentFile = {};
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
-        it('should require has supporting secondary documents radio be selected', () => {
-          expect(errors().hasSecondarySupportingDocuments).toEqual(
-            'Enter selection for Secondary Supporting Documents.',
-          );
-          baseDoc.hasSecondarySupportingDocuments = false;
+
+        it(`should not require 'has supporting secondary documents' radio be selected`, () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
+        });
+
+        describe('Secondary document file added', () => {
+          beforeEach(() => {
+            baseDoc.secondaryDocumentFile = {};
+          });
+
+          it(`should require 'has supporting secondary documents' radio be selected`, () => {
+            expect(errors().hasSecondarySupportingDocuments).toEqual(
+              'Enter selection for Secondary Supporting Documents.',
+            );
+            baseDoc.hasSecondarySupportingDocuments = false;
+            expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
+          });
         });
 
         describe('Has Supporting Secondary Documents', () => {
