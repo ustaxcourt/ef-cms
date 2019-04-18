@@ -15,8 +15,55 @@ const {
  * @param pdfData // Uint8Array
  * @param coverSheetData
  */
+exports.addCoverToPDFDocument = async ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
 
-exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
+  const coverSheetData = {
+    caseCaptionPetitioner: 'John Doe',
+    caseCaptionRespondent: 'Jane Doe',
+    dateFiled: new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }),
+    dateLodged: new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }),
+    dateReceived: `${new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })} ${new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    })}`,
+    docketNumber: caseRecord.docketNumber,
+    documentTitle:
+      'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
+    includesCertificateOfService: true,
+    originallyFiledElectronically: true,
+  };
+
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
   const dimensionsY = 3300;
@@ -321,6 +368,10 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocument({ applicationContext, document: newPdfData, documentId });
 
   return newPdfData;
 };
