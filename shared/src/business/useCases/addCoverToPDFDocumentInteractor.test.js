@@ -21,8 +21,8 @@ describe('addCoverToPDFDocument', () => {
   it('adds a cover page to a pdf document', () => {
     const testDate = new Date();
     const coverSheetData = {
-      caseCaptionPetitioner: 'Petitioner',
-      caseCaptionRespondent: 'Respondent',
+      caseCaptionPetitioner: 'John Doe',
+      caseCaptionRespondent: 'Jane Doe',
       dateFiled: `${testDate.toDateString()} ${testDate.toTimeString()}`,
       dateLodged: `${testDate.toDateString()} ${testDate.toTimeString()}`,
       dateReceived: `${testDate.toDateString()} ${testDate.toTimeString()}`,

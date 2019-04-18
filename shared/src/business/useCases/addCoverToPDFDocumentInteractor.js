@@ -1,6 +1,7 @@
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
+  drawText,
   drawLinesOfText,
   drawRectangle,
 } = require('pdf-lib');
@@ -25,12 +26,14 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   const pdfDoc = PDFDocumentFactory.load(pdfData);
 
   // Embed font to use for cover page generation
-  const [timesRomanFont] = pdfDoc.embedStandardFont('Times-Roman');
+  const [timesRomanRef, timesRomanFont] = pdfDoc.embedStandardFont(
+    'Times-Roman',
+  );
 
   // Generate cover page
   const coverPage = pdfDoc
     .createPage(coverPageDimensions)
-    .addFontDictionary('Times-Roman', timesRomanFont);
+    .addFontDictionary('Times-Roman', timesRomanRef);
 
   function getContentByKey(key) {
     const coverSheetDatumValue = coverSheetData[key];
@@ -71,20 +74,29 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
     };
   }
 
-  function getYOffsetFromPreviousContentArea(previousContentArea, font, fontSize, offsetMargin = 0) {
+  function getYOffsetFromPreviousContentArea(
+    previousContentArea,
+    font,
+    fontSize,
+    offsetMargin = 0,
+  ) {
     let totalContentHeight;
     const textHeight = font.heightOfFontAtSize(fontSize);
     if (Array.isArray(previousContentArea.content)) {
       // Multiple lines of text
-      totalContentHeight = previousContentArea.content.length * textHeight
+      totalContentHeight = previousContentArea.content.length * textHeight;
     } else {
       // Single line of text
       totalContentHeight = textHeight;
     }
     // we subtract here because coords start at bottom left;
-    return previousContentArea.y - totalContentHeight - offsetMargin;
+    return Math.round(
+      previousContentArea.yPos - totalContentHeight - offsetMargin,
+    );
   }
 
+  // Measures text width against given widthConstraint to
+  // break into multiple lines (expressed as an array)
   function wrapText(text, widthConstraint, font, fontSize) {
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     if (textWidth <= widthConstraint) {
@@ -109,6 +121,7 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
         }
         return acc;
       }, []);
+      return textLines;
     }
   }
 
@@ -121,7 +134,7 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
     ['Received', getContentByKey('dateReceived')],
     [510, 3036],
   );
-  const contentDateLodgedLabel = contentBlock(
+  const contentDateLodged = contentBlock(
     ['Lodged', getContentByKey('dateLodged')],
     [1369, 3036],
   );
@@ -207,26 +220,54 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
     ],
   );
 
+  function drawContent(contentArea) {
+    const { content, xPos, yPos } = contentArea;
+    const params = {
+      colorRgb: [0, 0, 0],
+      font: 'Times-Roman',
+      size: fontSize,
+      x: xPos,
+      y: yPos,
+    };
+
+    if (Array.isArray(content)) {
+      return drawLinesOfText(content, params);
+    } else {
+      return drawText(content, params);
+    }
+  }
+
   // This is where the magic happens. The content stream and its coords will need to be
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
-    // Header Content Goes Here
-    // drawLinesOfText(contents, {
-    //   colorRgb: [0, 0, 0],
-    //   font: 'Times-Roman',
-    //   size: 38,
-    //   x: 20,
-    //   y: 20,
-    // }),
+    // Header Content
+    ...[
+      contentStamp,
+      contentDateReceived,
+      contentDateLodged,
+      contentDateFiled,
+    ].map(cont => drawContent(cont)),
     // HR in header
     drawRectangle({
-      borderColorRgb: [200, 200, 200],
-      borderWidth: 0.5,
+      borderColorRgb: [0.3, 0.3, 0.3],
+      borderWidth: 0,
       height: 2,
       width: dimensionsX,
       x: 0,
       y: 2824,
     }),
+    // Body Content
+    ...[
+      contentCaseCaptionPet,
+      contentPetitionerLabel,
+      contentVLabel,
+      contentCaseCaptionResp,
+      contentRespondentLabel,
+      contentElectronicallyFiled,
+      contentDocketNumber,
+      contentDocumentTitle,
+      contentCertificateOfService,
+    ].map(cont => drawContent(cont)),
   );
 
   // Add the content stream to our newly created page
