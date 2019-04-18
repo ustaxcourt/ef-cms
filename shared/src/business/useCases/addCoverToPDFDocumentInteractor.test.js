@@ -21,14 +21,23 @@ describe('addCoverToPDFDocument', () => {
 
   it('adds a cover page to a pdf document', async () => {
     const getCaseByCaseIdStub = sinon.stub().resolves({
-      caseId: '123',
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
+      documents: [
+        {
+          documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documentType: 'Answer',
+          processingStatus: 'pending',
+          userId: 'petitionsclerk',
+        },
+      ],
     });
     const saveDocumentStub = sinon
       .stub()
       .callsFake(({ document: newPdfData }) => {
         fs.writeFile(testOutputPath + 'addCoverToPDFDocument.pdf', newPdfData);
       });
+    const updateCaseStub = sinon.stub().resolves(null);
     const getObjectStub = sinon.stub().returns({
       promise: async () => ({
         Body: testPdfDoc,
@@ -41,13 +50,14 @@ describe('addCoverToPDFDocument', () => {
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocument: saveDocumentStub,
+          updateCase: updateCaseStub,
         }),
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
       },
-      caseId: 'abc',
-      documentId: '123',
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     const newPdfData = await addCoverToPDFDocument(params);
