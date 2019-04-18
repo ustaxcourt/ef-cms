@@ -37,7 +37,7 @@ import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
-import { fileExternalDocument } from '../../shared/src/proxies/fileExternalDocumentProxy';
+import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
