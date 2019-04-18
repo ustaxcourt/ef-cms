@@ -45,9 +45,6 @@ describe('fileExternalDocument', () => {
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
-        getUseCases: () => ({
-          createDocument: () => null,
-        }),
       };
       await fileExternalDocument({
         applicationContext,
@@ -82,9 +79,6 @@ describe('fileExternalDocument', () => {
           getCaseByCaseId: getCaseByCaseIdSpy,
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
-        }),
-        getUseCases: () => ({
-          createDocument: () => null,
         }),
       };
       await fileExternalDocument({

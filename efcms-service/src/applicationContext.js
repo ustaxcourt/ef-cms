@@ -32,9 +32,6 @@ const {
   createCaseFromPaper,
 } = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
-  createDocument,
-} = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
-const {
   createUser,
 } = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
@@ -281,7 +278,6 @@ module.exports = (appContextUser = {}) => {
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
-        createDocument,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
