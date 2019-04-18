@@ -8,6 +8,7 @@ exports.saveDocument = ({
     .putObject({
       Body: Buffer.from(body),
       Bucket: applicationContext.environment.documentsBucketName,
+      ContentType: 'application/pdf',
       Key: key,
     })
     .promise();
