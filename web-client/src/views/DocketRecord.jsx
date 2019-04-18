@@ -45,22 +45,33 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th>Date filed</th>
-              <th>Title</th>
+              <th>No.</th>
+              <th>Date</th>
+              <th>Event</th>
+              <th>Filings and Proceedings</th>
               <th>Filed by</th>
+              <th>Action</th>
               <th>Served</th>
+              <th>Parties</th>
             </tr>
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }) => (
+              ({ record, document }, index) => (
                 <tr key={index}>
-                  <td className="responsive-title">
-                    <span className="responsive-label">Activity date</span>
+                  <td className="responsive-title">{index + 1}</td>
+                  <td>
+                    <span className="responsive-label">Date</span>
                     {record.createdAtFormatted}
                   </td>
                   <td>
-                    <span className="responsive-label">Title</span>
+                    <span className="responsive-label">Event</span>
+                    CODE
+                  </td>
+                  <td>
+                    <span className="responsive-label">
+                      Filings and Proceedings
+                    </span>
                     {document &&
                       helper.showDirectDownloadLink &&
                       renderDocumentLink(
@@ -89,13 +100,20 @@ export const DocketRecord = connect(
                     {record.filedBy}
                   </td>
                   <td>
+                    <span className="responsive-label">Action</span>
+                    {record.action}
+                  </td>
+                  <td>
                     <span className="responsive-label">Served</span>
                     {document && document.isStatusServed && (
                       <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
                     {document && helper.showDocumentStatus && (
-                      <span>{document.status}</span>
+                      <span>{record.status}</span>
                     )}
+                  </td>
+                  <td>
+                    <span className="responsive-label">Parties</span>
                   </td>
                 </tr>
               ),

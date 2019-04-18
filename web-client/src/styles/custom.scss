@@ -474,3 +474,12 @@ textarea#case-caption {
     color: $color-black;
   }
 }
+
+#docket-record {
+  display: block;
+
+  tbody {
+    max-height: 500px;
+    overflow-x: scroll;
+  }
+}
