@@ -234,7 +234,7 @@ export const NonstandardForm = connect(
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
               value={get(form, `${namespace}trialLocation`, '')}
-              trialCitiesByState={selectDocumentTypeHelper[level].trialCities}
+              trialCitiesByState={selectDocumentTypeHelper.trialCities}
               onChange={e => {
                 updateFileDocumentWizardFormValueSequence({
                   key: `${namespace}trialLocation`,

@@ -1,10 +1,7 @@
+import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
-const getOptionsForCategory = (
-  caseDetail,
-  trialCitiesHelper,
-  categoryInformation,
-) => {
+const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
 
   switch (categoryInformation.scenario) {
@@ -55,8 +52,6 @@ const getOptionsForCategory = (
         showNonstandardForm: true,
         showTrialLocationSelect: true,
         textInputLabel: categoryInformation.labelFreeText,
-        trialCities: trialCitiesHelper(caseDetail.procedureType)
-          .trialCitiesByState,
       };
       break;
     }
@@ -101,31 +96,25 @@ const getPreviouslyFiledDocuments = caseDetail => {
 
 export const selectDocumentTypeHelper = get => {
   const caseDetail = get(state.caseDetail);
-  const trialCitiesHelper = get(state.trialCitiesHelper);
+  const form = get(state.form);
 
   let returnData = {};
 
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
-  const selectedDocumentCategory = get(state.form.category);
-  const selectedDocumentType = get(state.form.documentType);
+  const selectedDocumentCategory = form.category;
+  const selectedDocumentType = form.documentType;
   const categoryInformation = CATEGORY_MAP[selectedDocumentCategory].find(
     entry => entry.documentType === selectedDocumentType,
   );
 
-  returnData.primary = getOptionsForCategory(
-    caseDetail,
-    trialCitiesHelper,
-    categoryInformation,
-  );
+  returnData.primary = getOptionsForCategory(caseDetail, categoryInformation);
 
   if (returnData.primary.showSecondaryDocumentSelect) {
     returnData.filteredSecondaryDocumentTypes = [];
   }
 
-  const selectedSecondaryDocumentCategory = get(
-    state.form.secondaryDocument.category,
-  );
+  const selectedSecondaryDocumentCategory = form.secondaryDocument.category;
   if (selectedSecondaryDocumentCategory) {
     if (categoryInformation.scenario === 'Nonstandard H') {
       returnData.filteredSecondaryDocumentTypes = CATEGORY_MAP[
@@ -133,10 +122,7 @@ export const selectDocumentTypeHelper = get => {
       ].filter(entry => entry.scenario !== 'Nonstandard H');
     }
 
-    const selectedSecondaryDocumentType = get(
-      state.form.secondaryDocument.documentType,
-    );
-
+    const selectedSecondaryDocumentType = form.secondaryDocument.documentType;
     if (selectedSecondaryDocumentType) {
       const secondaryCategoryInformation = CATEGORY_MAP[
         selectedSecondaryDocumentCategory
@@ -144,10 +130,31 @@ export const selectDocumentTypeHelper = get => {
 
       returnData.secondary = getOptionsForCategory(
         caseDetail,
-        trialCitiesHelper,
         secondaryCategoryInformation,
       );
     }
+  }
+
+  if (
+    returnData.primary.showTrialLocationSelect ||
+    (returnData.secondary && returnData.secondary.showTrialLocationSelect)
+  ) {
+    const { TRIAL_CITIES } = get(state.constants);
+    let trialCities =
+      caseDetail.procedureType === 'Small'
+        ? TRIAL_CITIES.SMALL
+        : TRIAL_CITIES.REGULAR;
+    trialCities = sortBy(trialCities, ['state', 'city']);
+    const getTrialCityName = get(state.getTrialCityName);
+    const states = {};
+    trialCities.forEach(
+      trialCity =>
+        (states[trialCity.state] = [
+          ...(states[trialCity.state] || []),
+          getTrialCityName(trialCity),
+        ]),
+    );
+    returnData.trialCities = states;
   }
 
   return returnData;
