@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext.getUseCases().runBatchProcess({
+      const results = await applicationContext.getUseCases().runBatchProcess({
         applicationContext,
       });
       applicationContext.logger.info('User', user);
