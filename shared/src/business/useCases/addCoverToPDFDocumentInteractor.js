@@ -20,8 +20,41 @@ exports.addCoverToPDFDocument = async ({
   caseId,
   documentId,
 }) => {
-  // todo: load in case
-  const coverSheetData = {};
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
+
+  const coverSheetData = {
+    caseCaptionPetitioner: 'John Doe',
+    caseCaptionRespondent: 'Jane Doe',
+    dateFiled: new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }),
+    dateLodged: new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }),
+    dateReceived: `${new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })} ${new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    })}`,
+    docketNumber: caseRecord.docketNumber,
+    documentTitle:
+      'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
+    includesCertificateOfService: true,
+    originallyFiledElectronically: true,
+  };
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -335,6 +368,10 @@ exports.addCoverToPDFDocument = async ({
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocument({ applicationContext, document: newPdfData, documentId });
 
   return newPdfData;
 };
