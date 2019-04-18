@@ -233,7 +233,7 @@ functions:
     handler: src/documents/addCoversheetLambda.handler
     events:
       - http:
-          path: v1/documents/{documentId}/coversheet
+          path: v1/cases/{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
           authorizer:

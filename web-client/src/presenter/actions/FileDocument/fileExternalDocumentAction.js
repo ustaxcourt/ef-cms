@@ -38,6 +38,7 @@ export const fileExternalDocumentAction = async ({
     if (document.status === 'pending') {
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
+        caseId: caseDetail.caseId,
         documentId: document.documentId,
       });
     }
