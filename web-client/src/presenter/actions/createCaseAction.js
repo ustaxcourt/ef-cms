@@ -30,6 +30,13 @@ export const createCaseAction = async ({ applicationContext, get }) => {
     stinFile,
   });
 
+  for (let document of caseDetail.documents) {
+    await applicationContext.getUseCases().createCoverSheet({
+      applicationContext,
+      documentId: document.documentId,
+    });
+  }
+
   return {
     caseDetail,
   };
