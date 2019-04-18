@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 
 const focusableChildren =
   'h1[tabindex], h2[tabindex], h3[tabindex], .focusable[tabindex]';
@@ -19,8 +20,9 @@ class FocusComponent extends React.Component {
   }
 
   render() {
+    const className = classNames('focus-component', this.props.className);
     const child = (
-      <div className="focus-component" ref={el => (this.node = el)}>
+      <div className={className} ref={el => (this.node = el)}>
         {this.props.children}
       </div>
     );
@@ -30,6 +32,7 @@ class FocusComponent extends React.Component {
 
 FocusComponent.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 export const Focus = FocusComponent;
