@@ -21,7 +21,6 @@ export const DocketRecord = connect(
           rel="noreferrer noopener"
           aria-label={`View PDF: ${description}`}
         >
-          <FontAwesomeIcon icon={['far', 'file-pdf']} />
           {description}
         </a>
       );
@@ -48,6 +47,7 @@ export const DocketRecord = connect(
               <th>No.</th>
               <th>Date</th>
               <th>Event</th>
+              <th />
               <th>Filings and Proceedings</th>
               <th>Filed by</th>
               <th>Action</th>
@@ -69,6 +69,9 @@ export const DocketRecord = connect(
                     CODE
                   </td>
                   <td>
+                    <FontAwesomeIcon icon={['far', 'file-pdf']} />
+                  </td>
+                  <td>
                     <span className="responsive-label">
                       Filings and Proceedings
                     </span>
@@ -86,7 +89,6 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
-                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
                         {record.description}
                       </a>
                     )}
@@ -97,7 +99,7 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>
-                    {record.filedBy}
+                    {document && document.filedBy}
                   </td>
                   <td>
                     <span className="responsive-label">Action</span>
