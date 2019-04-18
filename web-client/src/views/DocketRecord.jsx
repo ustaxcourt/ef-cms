@@ -122,7 +122,7 @@ export const DocketRecord = connect(
                       <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
                     {document && helper.showDocumentStatus && (
-                      <span>{record.status}</span>
+                      <span>{document.status}</span>
                     )}
                   </td>
                   <td className="center-column">
