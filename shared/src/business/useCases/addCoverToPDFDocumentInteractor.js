@@ -33,7 +33,7 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // USTC Seal (png) to embed in header
   const staticImgPath = path.join(__dirname, '../../../static/images/');
   const ustcSealBytes = fs.readFileSync(staticImgPath + 'ustc_seal.png');
-  const [pngSeal, pngDimensions] = pdfDoc.embedPNG(ustcSealBytes);
+  const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
 
   // Embed font to use for cover page generation
   const [timesRomanRef, timesRomanFont] = pdfDoc.embedStandardFont(
@@ -281,10 +281,10 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   const coverPageContentStream = pdfDoc.createContentStream(
     // Header Content
     drawImage('USTCSeal', {
-      height: 200,
-      width: 200,
+      height: pngSealDimensions.height / 2,
+      width: pngSealDimensions.width / 2,
       x: horizontalMargin,
-      y: 2920,
+      y: translateY(verticalMargin + pngSealDimensions.height / 2),
     }),
     ...[contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
       drawContent(cont),
