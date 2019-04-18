@@ -1,15 +1,8 @@
-const fs = require('fs');
-const path = require('path');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
   drawLinesOfText,
 } = require('pdf-lib');
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-
-function getTestPDF() {
-  return fs.readFileSync(testAssetsPath + 'sample.pdf');
-}
 
 /**
  * addCoverToPDFDocument
