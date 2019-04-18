@@ -26,12 +26,8 @@ export const DocumentTypeReadOnly = connect(
         <div className="blue-container" role="alert" aria-live="polite">
           <div className="ustc-form-group">
             <div>
-              <Focus>
-                <label
-                  htmlFor="category"
-                  tabIndex="-1"
-                  className="focusable inline-block mr-1"
-                >
+              <Focus className="header-with-link-button">
+                <label htmlFor="category" tabIndex="-1" className="focusable ">
                   Selected Document Type
                 </label>
               </Focus>
