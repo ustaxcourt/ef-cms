@@ -16,21 +16,20 @@ const {
   assignWorkItems: assignWorkItemsUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
-  createCase,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
-const {
-  deleteDocument,
-} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
-
-const {
   completeWorkItem,
 } = require('ef-cms-shared/src/business/useCases/workitems/completeWorkItemInteractor');
+const {
+  createCase,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/createCase');
 const {
   createCase: createCaseUC,
 } = require('ef-cms-shared/src/business/useCases/createCaseInteractor');
 const {
   createCaseFromPaper,
 } = require('ef-cms-shared/src/business/useCases/createCaseFromPaperInteractor');
+const {
+  createDocument,
+} = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
 const {
   createUser,
 } = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
@@ -43,6 +42,9 @@ const {
 const {
   createWorkItem: createWorkItemUC,
 } = require('ef-cms-shared/src/business/useCases/workitems/createWorkItemInteractor');
+const {
+  deleteDocument,
+} = require('ef-cms-shared/src/persistence/s3/deleteDocument');
 const {
   deleteWorkItemFromInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
@@ -230,6 +232,7 @@ module.exports = (appContextUser = {}) => {
       return {
         addWorkItemToSectionInbox,
         createCase,
+        createDocument,
         createUser,
         createWorkItem,
         deleteDocument,
