@@ -104,7 +104,8 @@
         "dynamodb:DescribeTable",
         "dynamodb:GetItem",
         "dynamodb:Query",
-        "dynamodb:BatchGet",
+        "dynamodb:BatchGetItem",
+        "dynamodb:UpdateTable",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable"
       ],

@@ -37,6 +37,12 @@ option:first-child {
 
 .usa-alert {
   margin-bottom: 2rem;
+  &.usa-alert-paragraph {
+    width: unset;
+    @media only screen and (min-width: $medium-screen) {
+      max-width: 66ch;
+    }
+  }
 }
 
 .usa-nav-secondary-links li:not(:last-child)::after {
@@ -94,7 +100,8 @@ option:first-child {
 }
 
 .usa-alert-error,
-.usa-alert-success {
+.usa-alert-success,
+.usa-alert-warning {
   max-width: 700px;
   min-height: 75px;
 

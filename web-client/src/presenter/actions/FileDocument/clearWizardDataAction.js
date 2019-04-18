@@ -16,9 +16,37 @@ export const clearWizardDataAction = ({ store, get, props }) => {
       store.set(state.form, pickedDocument);
 
       break;
+    case 'certificateOfService':
+      store.set(state.form.certificateOfServiceDate, null);
+
+      break;
     case 'documentType':
       pickedDocument = pick(get(state.form), ['category', 'documentType']);
       store.set(state.form, pickedDocument);
+
+      break;
+    case 'hasSupportingDocuments':
+      store.set(state.form.supportingDocument, null);
+      store.set(state.form.supportingDocumentFreeText, null);
+      store.set(state.form.supportingDocumentFile, null);
+      store.set(state.form.supportingDocumentMetadata, null);
+
+      break;
+    case 'supportingDocument':
+      store.set(state.form.supportingDocumentFreeText, null);
+      store.set(state.form.supportingDocumentFile, null);
+
+      break;
+    case 'hasSecondarySupportingDocuments':
+      store.set(state.form.secondarySupportingDocument, null);
+      store.set(state.form.secondarySupportingDocumentFreeText, null);
+      store.set(state.form.secondarySupportingDocumentFile, null);
+      store.set(state.form.secondarySupportingDocumentMetadata, null);
+
+      break;
+    case 'secondarySupportingDocument':
+      store.set(state.form.secondarySupportingDocumentFreeText, null);
+      store.set(state.form.secondarySupportingDocumentFile, null);
 
       break;
     case 'secondaryDocument.category':

@@ -1,3 +1,4 @@
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonstandardForm } from './NonstandardForm';
 import { connect } from '@cerebral/react';
@@ -25,9 +26,15 @@ export const DocumentTypeReadOnly = connect(
         <div className="blue-container" role="alert" aria-live="polite">
           <div className="ustc-form-group">
             <div>
-              <label htmlFor="category" className="inline-block mr-1">
-                Selected Document Type
-              </label>
+              <Focus>
+                <label
+                  htmlFor="category"
+                  tabIndex="-1"
+                  className="focusable inline-block mr-1"
+                >
+                  Selected Document Type
+                </label>
+              </Focus>
               <button
                 className="link"
                 id="edit-selected-document-type"

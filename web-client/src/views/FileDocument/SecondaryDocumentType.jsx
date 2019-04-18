@@ -1,3 +1,4 @@
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -5,29 +6,32 @@ import React from 'react';
 
 export const SecondaryDocumentType = connect(
   {
-    clearWizardDataSequence: sequences.clearWizardDataSequence,
     constants: state.constants,
     form: state.form,
     selectDocumentSequence: sequences.selectDocumentSequence,
     selectDocumentTypeHelper: state.selectDocumentTypeHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    clearWizardDataSequence,
     constants,
     selectDocumentTypeHelper,
     form,
     selectDocumentSequence,
-    updateFormValueSequence,
+    updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
   }) => {
     return (
       <React.Fragment>
-        <h4>Which Document Are You Requesting Leave to File For?</h4>
+        <Focus>
+          <h4 className="focusable" tabIndex="-1">
+            Which Document Are You Requesting Leave to File For?
+          </h4>
+        </Focus>
         <div
           className={`ustc-form-group ${
             validationErrors.secondaryDocument &&
@@ -42,16 +46,13 @@ export const SecondaryDocumentType = connect(
             id="document-secondary-category"
             aria-label="secondaryCategory"
             onChange={e => {
-              updateFormValueSequence({
+              updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              clearWizardDataSequence({
-                key: e.target.name,
-              });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.secondaryDocument.category}
+            value={form.secondaryDocument.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -83,16 +84,13 @@ export const SecondaryDocumentType = connect(
                 name="secondaryDocument.documentType"
                 className="secondaryDocumentType"
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  clearWizardDataSequence({
-                    key: e.target.name,
-                  });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.secondaryDocument.documentType}
+                value={form.secondaryDocument.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
@@ -114,19 +112,16 @@ export const SecondaryDocumentType = connect(
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
                   {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
                     (entry, index) => (
-                      <li key={entry.documentType} value={entry.documentType}>
+                      <li key={entry.documentType}>
                         <input
                           id={`secondaryDocumentType-${index}`}
                           type="radio"
-                          name="secondaryDocumentType"
-                          value={entry.documentType}
+                          name="secondaryDocument.documentType"
+                          value={entry.documentType || ''}
                           onClick={e => {
-                            updateFormValueSequence({
+                            updateFileDocumentWizardFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
-                            });
-                            clearWizardDataSequence({
-                              key: e.target.name,
                             });
                             selectDocumentSequence();
                           }}

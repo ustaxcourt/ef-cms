@@ -185,18 +185,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createDocument:
-    handler: src/documents/createDocumentLambda.handler
-    events:
-      - http:
-          path: v1/cases/{caseId}/documents
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getUploadPolicy:
     handler: src/documents/getUploadPolicyLambda.handler
     events:

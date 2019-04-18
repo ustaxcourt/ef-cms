@@ -1,3 +1,4 @@
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonstandardForm } from './NonstandardForm';
 import { connect } from '@cerebral/react';
@@ -22,9 +23,15 @@ export const SecondaryDocumentTypeReadOnly = connect(
     return (
       <div className="ustc-form-group">
         <div>
-          <label htmlFor="category" className="inline-block mr-1">
-            Selected Secondary Document Type
-          </label>
+          <Focus>
+            <label
+              htmlFor="category"
+              tabIndex="-1"
+              className="focusable inline-block mr-1"
+            >
+              Selected Secondary Document Type
+            </label>
+          </Focus>
           <button
             className="link"
             id="edit-selected-secondary-document-type"
