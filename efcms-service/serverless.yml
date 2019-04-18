@@ -72,7 +72,7 @@ custom:
 
 provider:
   name: aws
-  tracing: true 
+  tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs8.10
@@ -99,12 +99,12 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "xray:PutTraceSegments"
-        - "xray:PutTelemetryRecords"
+        - 'xray:PutTraceSegments'
+        - 'xray:PutTelemetryRecords'
       Resource:
-        - "*"
+        - '*'
     - Effect: 'Allow'
       Action:
         - 'lambda:InvokeFunction'
@@ -143,10 +143,10 @@ provider:
 
 package:
   exclude:
-    - ./storage
-    - ./coverage
-    - ./terraform
-    - ./cognito
+    - storage/**
+    - coverage/**
+    - terraform/**
+    - cognito/**
 
   excludeDevDependencies: true
 
@@ -277,6 +277,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  fileExternalDocument:
+    handler: src/cases/fileExternalDocumentToCaseLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCasesByUser:
     handler: src/cases/getCasesByUserLambda.handler
     events:
@@ -382,18 +394,6 @@ functions:
     events:
       - http:
           path: v1/workitems/{workItemId}/assignee
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateWorkItem:
-    handler: src/workitems/updateWorkItemLambda.handler
-    events:
-      - http:
-          path: v1/workitems/{workItemId}
           method: put
           cors: true
           authorizer:

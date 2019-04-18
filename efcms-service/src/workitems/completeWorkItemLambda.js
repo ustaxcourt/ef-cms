@@ -1,8 +1,8 @@
+const createApplicationContext = require('../applicationContext');
 const {
   handle,
   getUserFromAuthHeader,
 } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * updates a work item
@@ -14,9 +14,17 @@ exports.handler = event =>
   handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().completeWorkItem({
-      applicationContext,
-      completedMessage: JSON.parse(event.body).completedMessage,
-      workItemId: event.pathParameters.workItemId,
-    });
+    try {
+      const results = applicationContext.getUseCases().completeWorkItem({
+        applicationContext,
+        completedMessage: JSON.parse(event.body).completedMessage,
+        workItemId: event.pathParameters.workItemId,
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

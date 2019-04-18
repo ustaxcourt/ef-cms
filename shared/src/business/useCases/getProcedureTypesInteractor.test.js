@@ -1,5 +1,5 @@
-const { getProcedureTypes } = require('./getProcedureTypesInteractor');
 const { Case } = require('../entities/Case');
+const { getProcedureTypes } = require('./getProcedureTypesInteractor');
 
 const validateProcedureTypes = procedureTypes => {
   procedureTypes.forEach(procedureType => {

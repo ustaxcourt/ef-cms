@@ -15,8 +15,10 @@ import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
+import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
+import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -31,9 +33,9 @@ export const state = {
   caseDetailEditHelper,
   caseDetailErrors: {},
   caseDetailHelper,
-  cases: [],
   caseTypeDescriptionHelper,
   caseTypes: [],
+  cases: [],
   cognitoLoginUrl: null,
   completeForm: {},
   contactsHelper,
@@ -50,6 +52,7 @@ export const state = {
   documentId: null,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
+  fileDocumentHelper,
   filingTypes: [],
   form: {},
   formattedCaseDetail,
@@ -67,7 +70,9 @@ export const state = {
   },
   petition: {},
   procedureTypes: [],
+  screenMetadata: {},
   searchTerm: '',
+  selectDocumentTypeHelper,
   selectedWorkItems: [],
   showModal: '',
   showValidation: false,

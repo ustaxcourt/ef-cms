@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -65,7 +65,7 @@ export const DocketRecord = connect(
                       helper.showDirectDownloadLink &&
                       renderDocumentLink(
                         document.documentId,
-                        document.documentType,
+                        record.description,
                       )}
                     {document && helper.showDocumentDetailLink && (
                       <a
@@ -76,7 +76,7 @@ export const DocketRecord = connect(
                         aria-label="View PDF"
                       >
                         <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                        {document.documentType}
+                        {record.description}
                       </a>
                     )}
                     {!document &&
@@ -90,7 +90,12 @@ export const DocketRecord = connect(
                   </td>
                   <td>
                     <span className="responsive-label">Served</span>
-                    <span>{record.status}</span>
+                    {document && document.isStatusServed && (
+                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
+                    )}
+                    {document && helper.showDocumentStatus && (
+                      <span>{document.status}</span>
+                    )}
                   </td>
                 </tr>
               ),

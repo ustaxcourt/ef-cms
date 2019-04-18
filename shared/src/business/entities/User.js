@@ -1,9 +1,8 @@
-const { getSectionForRole } = require('./WorkQueue');
-
+const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const joi = require('joi-browser');
+const { getSectionForRole } = require('./WorkQueue');
 
 joiValidationDecorator(
   User,

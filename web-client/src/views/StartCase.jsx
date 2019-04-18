@@ -1,16 +1,15 @@
-import { connect } from '@cerebral/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-
 import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
-import { StartCaseCancelModalDialog } from './StartCaseCancelModalDialog';
-import { TrialCity } from './StartCase/TrialCity';
 import { Text } from '../ustc-ui/Text/Text';
+import { TrialCity } from './StartCase/TrialCity';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const StartCase = connect(
   {
@@ -19,8 +18,9 @@ export const StartCase = connect(
     constants: state.constants,
     filingTypes: state.filingTypes,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    screenMetadata: state.screenMetadata,
     showModal: state.showModal,
-    startACaseToggleCancelSequence: sequences.startACaseToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
@@ -35,23 +35,24 @@ export const StartCase = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    caseTypeDescriptionHelper,
+    clearPreferredTrialCitySequence,
+    constants,
     filingTypes,
     form,
-    constants,
+    screenMetadata,
     showModal,
-    clearPreferredTrialCitySequence,
-    startACaseToggleCancelSequence,
+    formCancelToggleCancelSequence,
     startCaseHelper,
     submitFilePetitionSequence,
-    caseTypeDescriptionHelper,
-    trialCitiesHelper,
     toggleCaseDifferenceSequence,
+    trialCitiesHelper,
     updateFormValueSequence,
+    updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
-    updateHasIrsNoticeFormValueSequence,
-    validationErrors,
     validateStartCaseSequence,
+    validationErrors,
   }) => {
     return (
       <section className="usa-section usa-grid">
@@ -67,7 +68,7 @@ export const StartCase = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <StartCaseCancelModalDialog />}
+          {showModal && <FormCancelModalDialog />}
           <ErrorNotification />
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
@@ -75,12 +76,15 @@ export const StartCase = connect(
           <div className="blue-container">
             <div className="usa-grid-full">
               <div className="usa-width-seven-twelfths push-right">
-                <div id="petition-upload-hint" className="alert-gold">
-                  <span className="usa-form-hint">
+                <div
+                  id="petition-upload-hint"
+                  className="alert-gold add-bottom-margin"
+                >
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
-                      size="sm"
+                      size="lg"
                     />
                     This should include your Petition form and any IRS notice
                     <span aria-hidden="true">(s)</span> you received.
@@ -182,11 +186,11 @@ export const StartCase = connect(
                   id="petition-hint"
                   className="alert-gold add-bottom-margin"
                 >
-                  <span className="usa-form-hint">
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
-                      size="sm"
+                      size="lg"
                     />
                     To file a case on behalf of another taxpayer, you must be
                     authorized to litigate in this Court as provided by the Tax
@@ -718,15 +722,15 @@ export const StartCase = connect(
             <button
               type="button"
               className="usa-accordion-button case-difference"
-              aria-expanded={!!form.showCaseDifference}
+              aria-expanded={!!screenMetadata.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
             >
               <span className="usa-banner-button-text">
-                <FontAwesomeIcon icon="question-circle" size="sm" />
+                <FontAwesomeIcon icon="question-circle" size="lg" />
                 How is a small case different than a regular case, and do I
                 qualify?
-                {form.showCaseDifference ? (
+                {screenMetadata.showCaseDifference ? (
                   <FontAwesomeIcon icon="caret-up" />
                 ) : (
                   <FontAwesomeIcon icon="caret-down" />
@@ -736,7 +740,7 @@ export const StartCase = connect(
             <div
               id="case-difference-container"
               className="usa-accordion-content"
-              aria-hidden={!form.showCaseDifference}
+              aria-hidden={!screenMetadata.showCaseDifference}
             >
               <CaseDifferenceExplained />
             </div>
@@ -848,8 +852,7 @@ export const StartCase = connect(
             type="button"
             className="usa-button-secondary"
             onClick={() => {
-              startACaseToggleCancelSequence();
-              return false;
+              formCancelToggleCancelSequence();
             }}
           >
             Cancel

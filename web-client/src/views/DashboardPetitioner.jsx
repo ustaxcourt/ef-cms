@@ -1,14 +1,12 @@
+import { CaseListPetitioner } from './CaseListPetitioner';
+import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SuccessNotification } from './SuccessNotification';
+import { WhatToExpect } from './WhatToExpect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-
 import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf';
-
-import { CaseListPetitioner } from './CaseListPetitioner';
-import { WhatToExpect } from './WhatToExpect';
-import { ErrorNotification } from './ErrorNotification';
-import { SuccessNotification } from './SuccessNotification';
 
 export const DashboardPetitioner = connect(
   { helper: state.dashboardPetitionerHelper, user: state.user },

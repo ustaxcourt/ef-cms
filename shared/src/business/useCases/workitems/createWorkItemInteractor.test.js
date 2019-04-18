@@ -1,6 +1,6 @@
+const sinon = require('sinon');
 const { createWorkItem } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const sinon = require('sinon');
 
 describe('createWorkItem', () => {
   let createWorkItemStub;

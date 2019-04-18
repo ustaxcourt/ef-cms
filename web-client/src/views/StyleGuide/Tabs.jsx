@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import React from 'react';
 
 export const TabsSection = () => (
   <section className="usa-section usa-grid">

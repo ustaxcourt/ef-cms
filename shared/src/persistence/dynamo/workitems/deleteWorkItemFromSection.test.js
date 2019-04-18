@@ -1,7 +1,6 @@
-const { deleteWorkItemFromSection } = require('./deleteWorkItemFromSection');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { deleteWorkItemFromSection } = require('./deleteWorkItemFromSection');
 
 describe('deleteWorkItemFromSection', () => {
   beforeEach(() => {

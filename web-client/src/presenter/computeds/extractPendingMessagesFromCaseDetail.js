@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
+import _ from 'lodash';
 
 export const extractedPendingMessagesFromCaseDetail = get => {
   const documents = get(state.caseDetail).documents || [];

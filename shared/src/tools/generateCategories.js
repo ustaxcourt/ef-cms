@@ -1,6 +1,6 @@
+const _ = require('lodash');
 const fs = require('fs');
 const parse = require('csv-parse');
-const _ = require('lodash');
 
 const USAGE = `
 Usage: node generateCategories.js spreadsheet.csv > output.json
@@ -13,17 +13,30 @@ process.argv.forEach((val, index) => {
   }
 });
 
+const exportColumns = [
+  'documentTitle',
+  'documentType',
+  'category',
+  'eventCode',
+  'scenario',
+  'labelPreviousDocument',
+  'labelFreeText',
+  'ordinalField',
+];
+
 const csvOptions = {
   columns: [
     'documentTitle',
+    'documentType',
+    'category',
+    'respondent-ignore',
+    'practictioner-ignore',
+    'petitioner-ignore',
     'eventCode',
-    'categoryCurrent',
-    'categoryUpdated',
     'scenario',
-    'label-previous',
-    'label-free',
-    'ordinal-field',
-    'extra',
+    'labelPreviousDocument',
+    'labelFreeText',
+    'ordinalField',
   ],
   delimiter: ',',
   from_line: 2, // assumes first entry is header column containing labels
@@ -32,35 +45,60 @@ const csvOptions = {
   trim: true,
 };
 
-const sortMotions = presortedMotions => {
-  let sortedMotions = [];
-  const firstEntries = [
+const whitespaceCleanup = str => {
+  str = str.replace(/[\r\n\t\s]+/g, ' ');
+  str = str.trim();
+  return str;
+};
+
+const sortableTitle = title => {
+  return whitespaceCleanup(title.toLowerCase());
+};
+
+const documentTypeSort = (a, b) => {
+  const [first, second] = [
+    sortableTitle(a.documentType),
+    sortableTitle(b.documentType),
+  ];
+  const result = first.localeCompare(second, {
+    ignorePunctuation: true,
+    sensitivity: 'base',
+  });
+  return result;
+};
+
+const presorted = {
+  Motion: [
     'Motion for Continuance',
     'Motion for Extension of Time',
     'Motion to Dismiss for Lack of Jurisdiction',
     'Motion to Dismiss for Lack of Prosecution',
     'Motion for Summary Judgment',
     'Motion to Change or Correct Caption',
-  ];
+  ],
+};
 
-  sortedMotions = firstEntries.map(title => {
-    const [foundObj] = _.remove(
-      presortedMotions,
-      m => m.documentTitle.toLowerCase() === title.toLowerCase(),
-    );
+const presortCategory = (sortedCategory, categoryName) => {
+  let firstEntries = presorted[categoryName];
+  if (!firstEntries) {
+    return sortedCategory;
+  }
+  let resortedEntries = [];
+
+  resortedEntries = firstEntries.map(title => {
+    const [foundObj] = _.remove(sortedCategory, m => {
+      return m.documentTitle.toLowerCase() === title.toLowerCase();
+    });
     return foundObj;
   });
-  return [...sortedMotions, ...presortedMotions];
+
+  if (resortedEntries.length !== firstEntries.length) {
+    throw new Error('Pre-sorted items could not be extracted.');
+  }
+
+  return [...resortedEntries, ...sortedCategory];
 };
 
-const whitespaceCleanup = str => {
-  str = str.replace(/\[\s+/g, '[');
-  str = str.replace(/\s+\]/g, ']');
-  str = str.replace(/[\r\n\t]/g, ' ');
-  str = str.replace(/\s+/g, ' ');
-  str = str.trim();
-  return str;
-};
 /* eslint no-console: "off"*/
 const main = () => {
   if (files.length < 1) {
@@ -78,6 +116,7 @@ const main = () => {
   const gatherRecords = function gatherRecords() {
     let record;
     while ((record = this.read())) {
+      record = _.pick(record, exportColumns);
       Object.keys(record).forEach(key => {
         record[key] = whitespaceCleanup(record[key]);
       });
@@ -87,26 +126,24 @@ const main = () => {
   stream.on('readable', gatherRecords);
   stream.on('end', () => {
     output.forEach(el => {
-      if (el.categoryUpdated.length === 0) {
+      if (el.category.length === 0) {
         return;
       }
-      if (!result[el.categoryUpdated]) {
-        result[el.categoryUpdated] = [];
+      if (!result[el.category]) {
+        result[el.category] = [];
       }
-      result[el.categoryUpdated].push(el);
+      result[el.category].push(el);
     });
     Object.keys(result)
       .sort()
       .forEach(category => {
         let values = result[category];
-        sortedResult[category] = values.sort((a, b) => {
-          return a.documentTitle.localeCompare(b.documentTitle, {
-            ignorePunctuation: true,
-            sensitivity: 'base',
-          });
-        });
+        sortedResult[category] = presortCategory(
+          values.sort(documentTypeSort),
+          category,
+        );
       });
-    sortedResult['Motion'] = sortMotions(sortedResult['Motion']);
+
     console.log(JSON.stringify(sortedResult, null, 2));
   });
 };

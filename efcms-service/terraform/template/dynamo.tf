@@ -2,8 +2,8 @@
 resource "aws_dynamodb_table" "efcms-east" {
   provider       = "aws.us-east-1"
   name           = "efcms-${var.environment}"
-  read_capacity  = "1"
-  write_capacity = "1"
+  read_capacity  = "10"
+  write_capacity = "10"
 
   hash_key = "pk"
   range_key = "sk"
@@ -34,8 +34,8 @@ resource "aws_dynamodb_table" "efcms-east" {
 resource "aws_dynamodb_table" "efcms-west" {
   provider       = "aws.us-west-1"
   name           = "efcms-${var.environment}"
-  read_capacity  = "1"
-  write_capacity = "1"
+  read_capacity  = "10"
+  write_capacity = "10"
 
   hash_key = "pk"
   range_key = "sk"

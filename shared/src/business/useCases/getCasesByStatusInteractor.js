@@ -2,8 +2,8 @@ const {
   isAuthorized,
   GET_CASES_BY_STATUS,
 } = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
 const { Case } = require('../entities/Case');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * getCasesByStatus

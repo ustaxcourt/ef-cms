@@ -1,7 +1,7 @@
-const { put } = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { put } = require('../../dynamodbClientService');
 
 /**
  * createWorkItem
@@ -17,12 +17,12 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
 
   // create the work item
   await put({
-    applicationContext,
     Item: {
       pk: workItem.workItemId,
       sk: workItem.workItemId,
       ...workItem,
     },
+    applicationContext,
   });
 
   // individual inbox
