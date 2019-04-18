@@ -11,7 +11,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Answer (filed by respondent only)',
     });
@@ -21,7 +21,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
       value: 'Answer',
     });
@@ -34,27 +34,27 @@ export default (test, fakeFile) => {
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'exhibits',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'attachments',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSupportingDocuments',
       value: false,
     });
