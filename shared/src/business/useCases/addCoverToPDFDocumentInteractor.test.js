@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const sinon = require('sinon');
 const {
   addCoverToPDFDocument,
 } = require('./addCoverToPDFDocumentInteractor.js');
-
 const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
@@ -19,48 +19,42 @@ describe('addCoverToPDFDocument', () => {
     testPdfDoc = testPdfDocBytes();
   });
 
-  it('adds a cover page to a pdf document', () => {
-    const testDate = new Date();
-    const coverSheetData = {
-      caseCaptionPetitioner: 'John Doe',
-      caseCaptionRespondent: 'Jane Doe',
-      dateFiled: testDate.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
+  it('adds a cover page to a pdf document', async () => {
+    const getCaseByCaseIdStub = sinon.stub().resolves({
+      caseId: '123',
+      docketNumber: '101-19',
+    });
+    const saveDocumentStub = sinon
+      .stub()
+      .callsFake(({ document: newPdfData }) => {
+        fs.writeFile(testOutputPath + 'addCoverToPDFDocument.pdf', newPdfData);
+      });
+    const getObjectStub = sinon.stub().returns({
+      promise: async () => ({
+        Body: testPdfDoc,
       }),
-      dateLodged: testDate.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }),
-      dateReceived: `${testDate.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      })} ${testDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        timeZone: 'America/New_York',
-      })}`,
-      docketNumber: '12345-67',
-      documentTitle:
-        'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
-      includesCertificateOfService: true,
-      originallyFiledElectronically: true,
-    };
+    });
 
     const params = {
-      coverSheetData,
-      pdfData: testPdfDoc,
+      applicationContext: {
+        environment: { documentsBucketName: 'documents' },
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdStub,
+          saveDocument: saveDocumentStub,
+        }),
+        getStorageClient: () => ({
+          getObject: getObjectStub,
+        }),
+      },
+      caseId: 'abc',
+      documentId: '123',
     };
 
-    const newPdfData = addCoverToPDFDocument(params);
+    const newPdfData = await addCoverToPDFDocument(params);
 
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
+    expect(saveDocumentStub.calledOnce).toBeTruthy();
     expect(newPdfDocPages.length).toEqual(2);
-
-    fs.writeFile(testOutputPath + 'addCoverToPDFDocument.pdf', newPdfData);
   });
 });
