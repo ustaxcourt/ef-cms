@@ -14,7 +14,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext.getUseCases().getCasesByStatus({
+      const results = await applicationContext.getUseCases().getCasesByStatus({
         applicationContext,
         status,
       });
