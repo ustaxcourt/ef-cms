@@ -35,6 +35,7 @@ import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkIt
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
+import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
@@ -96,6 +97,7 @@ const allUseCases = {
   completeWorkItem,
   createCase,
   createCaseFromPaper,
+  createCoverSheet,
   createWorkItem,
   downloadDocumentFile,
   fileExternalDocument,
