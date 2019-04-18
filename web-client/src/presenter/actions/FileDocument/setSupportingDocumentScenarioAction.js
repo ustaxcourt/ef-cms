@@ -27,6 +27,10 @@ export const setSupportingDocumentScenarioAction = ({ store, get }) => {
       state.form.supportingDocumentMetadata.documentTitle,
       categoryInformation.documentTitle,
     );
+    store.set(
+      state.form.supportingDocumentMetadata.eventCode,
+      categoryInformation.eventCode,
+    );
   }
 
   const secondarySupportingDocumentMetadata = get(
@@ -46,6 +50,10 @@ export const setSupportingDocumentScenarioAction = ({ store, get }) => {
     store.set(
       state.form.secondarySupportingDocumentMetadata.documentTitle,
       secondaryCategoryInformation.documentTitle,
+    );
+    store.set(
+      state.form.secondarySupportingDocumentMetadata.eventCode,
+      secondaryCategoryInformation.eventCode,
     );
   }
 };

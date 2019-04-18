@@ -54,6 +54,13 @@ exports.fileExternalDocument = async ({
     ...primaryDocumentMetadata
   } = documentMetadata;
 
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+  }
+  if (secondarySupportingDocumentMetadata) {
+    secondarySupportingDocumentMetadata.lodged = true;
+  }
+
   [
     [primaryDocumentFileId, primaryDocumentMetadata],
     [supportingDocumentFileId, supportingDocumentMetadata],
@@ -62,6 +69,7 @@ exports.fileExternalDocument = async ({
   ].forEach(([documentId, metadata]) => {
     if (documentId && metadata) {
       const documentEntity = new Document({
+        ...primaryDocumentMetadata,
         ...metadata,
         documentId: documentId,
         documentType: metadata.documentType,
