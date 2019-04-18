@@ -154,7 +154,9 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       makeRequired('secondaryDocumentFile');
     }
 
-    makeRequired('hasSecondarySupportingDocuments');
+    if (documentMetadata.secondaryDocumentFile) {
+      makeRequired('hasSecondarySupportingDocuments');
+    }
 
     if (documentMetadata.hasSecondarySupportingDocuments === true) {
       makeRequired('secondarySupportingDocument');

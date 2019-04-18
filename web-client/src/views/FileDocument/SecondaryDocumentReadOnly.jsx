@@ -26,13 +26,15 @@ export const SecondaryDocumentReadOnly = connect(
         </div>
 
         <div className="blue-container">
-          <div className="ustc-form-group">
-            <label htmlFor="secondary-filing">
-              {form.secondaryDocument.documentTitle}
-            </label>
-            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            {form.secondaryDocumentFile.name}
-          </div>
+          {form.secondaryDocumentFile && (
+            <div className="ustc-form-group">
+              <label htmlFor="secondary-filing">
+                {form.secondaryDocument.documentTitle}
+              </label>
+              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+              {form.secondaryDocumentFile.name}
+            </div>
+          )}
 
           {form.secondarySupportingDocumentFile && (
             <div className="ustc-form-group">
@@ -43,6 +45,10 @@ export const SecondaryDocumentReadOnly = connect(
               {form.secondarySupportingDocumentFile.name}
             </div>
           )}
+
+          {!form.secondaryDocumentFile &&
+            !form.secondarySupportingDocumentFile &&
+            'No file attached'}
         </div>
       </React.Fragment>
     );
