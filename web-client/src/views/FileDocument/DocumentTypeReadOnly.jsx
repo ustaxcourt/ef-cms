@@ -27,7 +27,7 @@ export const DocumentTypeReadOnly = connect(
           <div className="ustc-form-group">
             <div>
               <Focus className="header-with-link-button">
-                <label htmlFor="category" tabIndex="-1" className="focusable ">
+                <label htmlFor="category" tabIndex="-1" className="focusable">
                   Selected Document Type
                 </label>
               </Focus>
