@@ -17,6 +17,7 @@ exports.handler = event =>
         .getUseCases()
         .addCoverToPDFDocument({
           applicationContext,
+          caseId: event.pathParameters.caseId,
           documentId: event.pathParameters.documentId,
         });
       applicationContext.logger.info('User', user);

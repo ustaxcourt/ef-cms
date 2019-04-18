@@ -10,7 +10,11 @@ const {
  * @param pdfData // Uint8Array
  * @param coverSheetData
  */
-exports.addCoverToPDFDocument = async ({ documentId, applicationContext }) => {
+exports.addCoverToPDFDocument = async ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
   // todo: load in case
   const coverSheetData = {};
 
