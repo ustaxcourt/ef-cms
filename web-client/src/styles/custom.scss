@@ -448,6 +448,17 @@ textarea#case-caption {
 .header-with-link-button {
   display: inline-block;
   margin-right: 20px;
+
+  + .link {
+    width: auto;
+  }
+}
+
+/* little screens */
+@media only screen and (max-width: $medium-screen - 1px) {
+  .header-with-link-button {
+    max-width: 80%;
+  }
 }
 
 .file-name {
