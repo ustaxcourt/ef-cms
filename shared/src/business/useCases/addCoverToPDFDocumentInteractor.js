@@ -18,9 +18,11 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   const dimensionsX = 2550;
   const dimensionsY = 3300;
   const coverPageDimensions = [dimensionsX, dimensionsY];
-  const horizontalMargin = 425; // left and right margins
-  const verticalMargin = 400; // top and bottom margins
-  const fontSize = 20;
+  const horizontalMargin = 215; // left and right margins
+  const verticalMargin = 190; // top and bottom margins
+  const defaultFontSize = 40;
+  const fontSizeCaption = 50;
+  const fontSizeTitle = 60;
 
   // create pdfDoc object from file data
   const pdfDoc = PDFDocumentFactory.load(pdfData);
@@ -66,9 +68,10 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   }
 
   // returns content block
-  function contentBlock(content, coords) {
+  function contentBlock(content, coords, fontSize) {
     return {
       content,
+      fontSize,
       xPos: coords[0],
       yPos: coords[1],
     };
@@ -107,14 +110,15 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
 
       // This doesn't feel super effecient, so maybe come back to this
       const textLines = textArry.reduce(function(acc, cur) {
-        const lastIndex = acc.length - 1;
-        const proposedLine = `${acc[lastIndex]} ${cur}`;
+        const accLength = acc.length;
+        const lastIndex = accLength > 0 ? acc.length - 1 : 0;
+        const proposedLine = accLength > 0 ? `${acc[lastIndex]} ${cur}` : cur;
         const proposedLineWidth = font.widthOfTextAtSize(
           proposedLine,
           fontSize,
         );
 
-        if (proposedLineWidth <= widthConstraint) {
+        if (acc.length && proposedLineWidth <= widthConstraint) {
           acc[lastIndex] = proposedLine;
         } else {
           acc.push(cur);
@@ -147,65 +151,95 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
       getContentByKey('caseCaptionPetitioner'),
       1042,
       timesRomanFont,
-      fontSize,
+      fontSizeCaption,
     ),
     [horizontalMargin, 2534],
+    fontSizeCaption,
   );
-  const contentPetitionerLabel = contentBlock('Petitioner', [
-    531,
-    getYOffsetFromPreviousContentArea(
-      contentCaseCaptionPet,
-      timesRomanFont,
-      fontSize,
-      timesRomanFont.heightOfFontAtSize(fontSize),
-    ),
-  ]);
-  const contentVLabel = contentBlock('V.', [
-    531,
-    getYOffsetFromPreviousContentArea(
-      contentPetitionerLabel,
-      timesRomanFont,
-      fontSize,
-      timesRomanFont.heightOfFontAtSize(fontSize),
-    ),
-  ]);
+  const contentPetitionerLabel = contentBlock(
+    'Petitioner',
+    [
+      531,
+      getYOffsetFromPreviousContentArea(
+        contentCaseCaptionPet,
+        timesRomanFont,
+        fontSizeCaption,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
+      ),
+    ],
+    fontSizeCaption,
+  );
+  const contentVLabel = contentBlock(
+    'V.',
+    [
+      531,
+      getYOffsetFromPreviousContentArea(
+        contentPetitionerLabel,
+        timesRomanFont,
+        fontSizeCaption,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
+      ),
+    ],
+    fontSizeCaption,
+  );
   const contentCaseCaptionResp = contentBlock(
     wrapText(
       getContentByKey('caseCaptionRespondent'),
       1042,
       timesRomanFont,
-      fontSize,
+      fontSizeCaption,
     ),
-    [horizontalMargin, 2534],
+    [
+      horizontalMargin,
+      getYOffsetFromPreviousContentArea(
+        contentVLabel,
+        timesRomanFont,
+        fontSizeCaption,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
+      ),
+    ],
+    fontSizeCaption,
   );
-  const contentRespondentLabel = contentBlock('Respondent', [
-    531,
-    getYOffsetFromPreviousContentArea(
-      contentCaseCaptionResp,
-      timesRomanFont,
-      fontSize,
-      timesRomanFont.heightOfFontAtSize(fontSize),
-    ),
-  ]);
+  const contentRespondentLabel = contentBlock(
+    'Respondent',
+    [
+      531,
+      getYOffsetFromPreviousContentArea(
+        contentCaseCaptionResp,
+        timesRomanFont,
+        fontSizeCaption,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
+      ),
+    ],
+    fontSizeCaption,
+  );
   const contentElectronicallyFiled = contentBlock(
     getContentByKey('originallyFiledElectronically'),
     [1530, contentPetitionerLabel.yPos],
+    fontSizeCaption,
   );
-  const contentDocketNumber = contentBlock(getContentByKey('docketNumber'), [
-    1530,
-    contentVLabel.yPos,
-  ]);
+  const contentDocketNumber = contentBlock(
+    `Docket Number: ${getContentByKey('docketNumber')}`,
+    [1530, contentVLabel.yPos],
+    fontSizeCaption,
+  );
   const contentDocumentTitle = contentBlock(
-    wrapText(getContentByKey('documentTitle'), 1683, timesRomanFont, fontSize),
+    wrapText(
+      getContentByKey('documentTitle'),
+      1488,
+      timesRomanFont,
+      fontSizeTitle,
+    ),
     [
-      2117,
+      531,
       getYOffsetFromPreviousContentArea(
         contentRespondentLabel,
         timesRomanFont,
-        fontSize,
-        timesRomanFont.heightOfFontAtSize(fontSize) * 5,
+        fontSizeCaption,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption) * 5,
       ),
     ],
+    fontSizeTitle,
   );
   const contentCertificateOfService = contentBlock(
     getContentByKey('includesCertificateOfService'),
@@ -214,18 +248,18 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
       getYOffsetFromPreviousContentArea(
         contentDocumentTitle,
         timesRomanFont,
-        fontSize,
-        timesRomanFont.heightOfFontAtSize(fontSize) * 5,
+        fontSizeTitle,
+        timesRomanFont.heightOfFontAtSize(fontSizeCaption) * 5,
       ),
     ],
   );
 
   function drawContent(contentArea) {
-    const { content, xPos, yPos } = contentArea;
+    const { content, xPos, yPos, fontSize } = contentArea;
     const params = {
       colorRgb: [0, 0, 0],
       font: 'Times-Roman',
-      size: fontSize,
+      size: fontSize || defaultFontSize,
       x: xPos,
       y: yPos,
     };
@@ -249,8 +283,7 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
     ].map(cont => drawContent(cont)),
     // HR in header
     drawRectangle({
-      borderColorRgb: [0.3, 0.3, 0.3],
-      borderWidth: 0,
+      colorRgb: [0.3, 0.3, 0.3],
       height: 2,
       width: dimensionsX,
       x: 0,

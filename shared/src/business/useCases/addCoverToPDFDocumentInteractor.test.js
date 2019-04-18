@@ -24,12 +24,29 @@ describe('addCoverToPDFDocument', () => {
     const coverSheetData = {
       caseCaptionPetitioner: 'John Doe',
       caseCaptionRespondent: 'Jane Doe',
-      dateFiled: `${testDate.toDateString()} ${testDate.toTimeString()}`,
-      dateLodged: `${testDate.toDateString()} ${testDate.toTimeString()}`,
-      dateReceived: `${testDate.toDateString()} ${testDate.toTimeString()}`,
-      docketNumber: '123456',
-      documentTitle: 'Title',
-      includesCertificateOfService: false,
+      dateFiled: testDate.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }),
+      dateLodged: testDate.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }),
+      dateReceived: `${testDate.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })} ${testDate.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'America/New_York',
+      })}`,
+      docketNumber: '12345-67',
+      documentTitle:
+        'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
+      includesCertificateOfService: true,
       originallyFiledElectronically: true,
     };
 
