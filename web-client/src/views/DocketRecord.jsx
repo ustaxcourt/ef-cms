@@ -21,6 +21,9 @@ export const DocketRecord = connect(
           rel="noreferrer noopener"
           aria-label={`View PDF: ${description}`}
         >
+          <span className="filing-type-icon-mobile">
+            <FontAwesomeIcon icon={['far', 'file-pdf']} />
+          </span>
           {description}
         </a>
       );
@@ -44,31 +47,36 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th>No.</th>
+              <th className="center-column">No.</th>
               <th>Date</th>
-              <th>Event</th>
+              <th className="center-column">Event</th>
               <th />
               <th>Filings and Proceedings</th>
               <th>Filed by</th>
               <th>Action</th>
               <th>Served</th>
-              <th>Parties</th>
+              <th className="center-column">Parties</th>
             </tr>
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
               ({ record, document }, index) => (
                 <tr key={index}>
-                  <td className="responsive-title">{index + 1}</td>
-                  <td>
+                  <td className="responsive-title center-column">
+                    {index + 1}
+                    <span className="responsive-label push-right">
+                      {record.createdAtFormatted}
+                    </span>
+                  </td>
+                  <td className="hide-on-mobile">
                     <span className="responsive-label">Date</span>
                     {record.createdAtFormatted}
                   </td>
-                  <td>
+                  <td className="center-column">
                     <span className="responsive-label">Event</span>
                     CODE
                   </td>
-                  <td>
+                  <td className="filing-type-icon hide-on-mobile">
                     <FontAwesomeIcon icon={['far', 'file-pdf']} />
                   </td>
                   <td>
@@ -89,6 +97,9 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
+                        <span className="filing-type-icon-mobile">
+                          <FontAwesomeIcon icon={['far', 'file-pdf']} />
+                        </span>
                         {record.description}
                       </a>
                     )}
@@ -114,7 +125,7 @@ export const DocketRecord = connect(
                       <span>{record.status}</span>
                     )}
                   </td>
-                  <td>
+                  <td className="center-column">
                     <span className="responsive-label">Parties</span>
                   </td>
                 </tr>
