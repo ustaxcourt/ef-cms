@@ -120,9 +120,9 @@ describe('selectDocumentTypeHelper', () => {
         showNonstandardForm: true,
         showTrialLocationSelect: true,
         textInputLabel: 'Requested Location',
-        trialCities: {
-          Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
-        },
+      },
+      trialCities: {
+        Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
       },
     });
   });
