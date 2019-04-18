@@ -1,7 +1,10 @@
+const fs = require('fs');
+const path = require('path');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
   drawText,
+  drawImage,
   drawLinesOfText,
   drawRectangle,
 } = require('pdf-lib');
@@ -27,6 +30,11 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // create pdfDoc object from file data
   const pdfDoc = PDFDocumentFactory.load(pdfData);
 
+  // USTC Seal (png) to embed in header
+  const staticImgPath = path.join(__dirname, '../../../static/images/');
+  const ustcSealBytes = fs.readFileSync(staticImgPath + 'ustc_seal.png');
+  const [pngSeal, pngDimensions] = pdfDoc.embedPNG(ustcSealBytes);
+
   // Embed font to use for cover page generation
   const [timesRomanRef, timesRomanFont] = pdfDoc.embedStandardFont(
     'Times-Roman',
@@ -35,6 +43,7 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // Generate cover page
   const coverPage = pdfDoc
     .createPage(coverPageDimensions)
+    .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Times-Roman', timesRomanRef);
 
   function getContentByKey(key) {
@@ -130,10 +139,6 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   }
 
   // Content areas
-  const contentStamp = contentBlock('[ STAMP ]', [
-    horizontalMargin,
-    translateY(verticalMargin),
-  ]);
   const contentDateReceived = contentBlock(
     ['Received', getContentByKey('dateReceived')],
     [510, 3036],
@@ -275,12 +280,15 @@ exports.addCoverToPDFDocument = ({ pdfData, coverSheetData }) => {
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
     // Header Content
-    ...[
-      contentStamp,
-      contentDateReceived,
-      contentDateLodged,
-      contentDateFiled,
-    ].map(cont => drawContent(cont)),
+    drawImage('USTCSeal', {
+      height: 200,
+      width: 200,
+      x: horizontalMargin,
+      y: 2920,
+    }),
+    ...[contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
+      drawContent(cont),
+    ),
     // HR in header
     drawRectangle({
       colorRgb: [0.3, 0.3, 0.3],
