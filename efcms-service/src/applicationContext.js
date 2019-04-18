@@ -10,6 +10,9 @@ const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
+  addCoverToPDFDocument,
+} = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
+const {
   addWorkItemToSectionInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -48,10 +51,6 @@ const {
 const {
   deleteWorkItemFromInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
-
-const {
-  addCoverToPDFDocument,
-} = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   deleteWorkItemFromSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
