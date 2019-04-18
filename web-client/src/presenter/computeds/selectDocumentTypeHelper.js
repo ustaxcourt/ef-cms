@@ -114,24 +114,26 @@ export const selectDocumentTypeHelper = get => {
     returnData.filteredSecondaryDocumentTypes = [];
   }
 
-  const selectedSecondaryDocumentCategory = form.secondaryDocument.category;
-  if (selectedSecondaryDocumentCategory) {
-    if (categoryInformation.scenario === 'Nonstandard H') {
-      returnData.filteredSecondaryDocumentTypes = CATEGORY_MAP[
-        selectedSecondaryDocumentCategory
-      ].filter(entry => entry.scenario !== 'Nonstandard H');
-    }
+  if (form.secondaryDocument) {
+    const selectedSecondaryDocumentCategory = form.secondaryDocument.category;
+    if (selectedSecondaryDocumentCategory) {
+      if (categoryInformation.scenario === 'Nonstandard H') {
+        returnData.filteredSecondaryDocumentTypes = CATEGORY_MAP[
+          selectedSecondaryDocumentCategory
+        ].filter(entry => entry.scenario !== 'Nonstandard H');
+      }
 
-    const selectedSecondaryDocumentType = form.secondaryDocument.documentType;
-    if (selectedSecondaryDocumentType) {
-      const secondaryCategoryInformation = CATEGORY_MAP[
-        selectedSecondaryDocumentCategory
-      ].find(entry => entry.documentType === selectedSecondaryDocumentType);
+      const selectedSecondaryDocumentType = form.secondaryDocument.documentType;
+      if (selectedSecondaryDocumentType) {
+        const secondaryCategoryInformation = CATEGORY_MAP[
+          selectedSecondaryDocumentCategory
+        ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
-      returnData.secondary = getOptionsForCategory(
-        caseDetail,
-        secondaryCategoryInformation,
-      );
+        returnData.secondary = getOptionsForCategory(
+          caseDetail,
+          secondaryCategoryInformation,
+        );
+      }
     }
   }
 
