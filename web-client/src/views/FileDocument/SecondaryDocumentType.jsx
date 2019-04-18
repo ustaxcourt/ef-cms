@@ -116,7 +116,7 @@ export const SecondaryDocumentType = connect(
                         <input
                           id={`secondaryDocumentType-${index}`}
                           type="radio"
-                          name="secondaryDocumentType"
+                          name="secondaryDocument.documentType"
                           value={entry.documentType || ''}
                           onClick={e => {
                             updateFileDocumentWizardFormValueSequence({

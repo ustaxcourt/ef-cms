@@ -11,7 +11,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Decision',
     });
@@ -21,7 +21,7 @@ export default (test, fakeFile) => {
       documentType: 'You must select a document type.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'documentType',
       value: 'Proposed Stipulated Decision',
     });
@@ -36,27 +36,27 @@ export default (test, fakeFile) => {
       'Proposed Stipulated Decision',
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'exhibits',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'attachments',
       value: false,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSupportingDocuments',
       value: false,
     });
