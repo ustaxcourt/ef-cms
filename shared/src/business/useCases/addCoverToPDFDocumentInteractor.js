@@ -8,6 +8,7 @@ const {
   drawLinesOfText,
   drawRectangle,
 } = require('pdf-lib');
+const { Case } = require('../entities/Case');
 
 /**
  * addCoverToPDFDocument
@@ -26,6 +27,12 @@ exports.addCoverToPDFDocument = async ({
       applicationContext,
       caseId,
     });
+
+  const caseEntity = new Case(caseRecord);
+
+  const documentEntity = caseEntity.documents.find(
+    document => document.documentId === documentId,
+  );
 
   const coverSheetData = {
     caseCaptionPetitioner: 'John Doe',
@@ -368,6 +375,13 @@ exports.addCoverToPDFDocument = async ({
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+
+  documentEntity.processingStatus = 'complete';
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   await applicationContext
     .getPersistenceGateway()
