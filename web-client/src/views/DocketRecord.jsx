@@ -110,6 +110,9 @@ export const DocketRecord = connect(
                       )}
                   </td>
                   <td>
+                    <span className="responsive-label">
+                      Filings and Proceedings
+                    </span>
                     {document &&
                       helper.showDirectDownloadLink &&
                       document.processingStatus === 'complete' &&
