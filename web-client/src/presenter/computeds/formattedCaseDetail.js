@@ -83,7 +83,11 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   }
 };
 
-const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
+const formatDocketRecordWithDocument = (
+  docketRecords = [],
+  documents = [],
+  caseDetail,
+) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
     return acc;
@@ -123,7 +127,35 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
       record.filingsAndProceedings = filingsAndProceedingsArray
         .filter(item => item !== '')
         .join(' ');
+
+      if (!document.filedBy) {
+        let filedByString = '';
+        if (document.partyRespondent) {
+          filedByString = 'Resp.';
+          if (document.partyPrimary || document.partySecondary) {
+            filedByString += ' & ';
+          }
+        }
+        if (
+          document.partyPrimary &&
+          !document.partySecondary &&
+          caseDetail.contactPrimary
+        ) {
+          filedByString += `Petr. ${caseDetail.contactPrimary.name}`;
+        } else if (
+          document.partyPrimary &&
+          document.partySecondary &&
+          caseDetail.contactPrimary &&
+          caseDetail.contactSecondary
+        ) {
+          filedByString += `Petrs. ${caseDetail.contactPrimary.name} & ${
+            caseDetail.contactSecondary.name
+          }`;
+        }
+        document.filedBy = filedByString;
+      }
     }
+
     return { document, index, record };
   });
 };
@@ -138,6 +170,7 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
       result.docketRecord,
       result.documents,
+      caseDetail,
     );
   }
 
