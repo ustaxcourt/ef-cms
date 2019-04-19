@@ -13,7 +13,7 @@ export const DocketRecord = connect(
     token: state.token,
   },
   ({ baseUrl, caseDetail, documentHelper, helper, token }) => {
-    function renderDocumentLink(documentId, description) {
+    function renderDocumentLink(documentId, description, isPaper) {
       return (
         <a
           href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
@@ -21,9 +21,9 @@ export const DocketRecord = connect(
           rel="noreferrer noopener"
           aria-label={`View PDF: ${description}`}
         >
-          {description === 'Petition' && (
+          {isPaper && (
             <span className="filing-type-icon-mobile">
-              <FontAwesomeIcon icon={['far', 'file-alt']} />
+              <FontAwesomeIcon icon={['fas', 'file-alt']} />
             </span>
           )}
           {description}
@@ -54,7 +54,7 @@ export const DocketRecord = connect(
               <th className="center-column">Event</th>
               <th />
               <th>Filings and Proceedings</th>
-              <th>Filed by</th>
+              <th>Filed By</th>
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
@@ -76,11 +76,11 @@ export const DocketRecord = connect(
                   </td>
                   <td className="center-column">
                     <span className="responsive-label">Event</span>
-                    CODE
+                    {document && document.eventCode}
                   </td>
                   <td className="filing-type-icon hide-on-mobile">
-                    {record.description === 'Petition' && (
-                      <FontAwesomeIcon icon={['far', 'file-alt']} />
+                    {document && document.isPaper && (
+                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
                     )}
                   </td>
                   <td>
@@ -92,6 +92,7 @@ export const DocketRecord = connect(
                       renderDocumentLink(
                         document.documentId,
                         record.description,
+                        document.isPaper,
                       )}
                     {document && helper.showDocumentDetailLink && (
                       <a
@@ -101,9 +102,9 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
-                        {record.description === 'Petition' && (
+                        {document && document.isPaper && (
                           <span className="filing-type-icon-mobile">
-                            <FontAwesomeIcon icon={['far', 'file-alt']} />
+                            <FontAwesomeIcon icon={['fas', 'file-alt']} />
                           </span>
                         )}
                         {record.description}
@@ -135,6 +136,7 @@ export const DocketRecord = connect(
                   </td>
                   <td className="center-column">
                     <span className="responsive-label">Parties</span>
+                    {record.servedParties}
                   </td>
                 </tr>
               ),
