@@ -597,6 +597,12 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
  * @param docketRecordEntity
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
+  const nextIndex =
+    this.docketRecord.reduce(
+      (maxIndex, docketRecord) => Math.max(docketRecord.index || 0, maxIndex),
+      0,
+    ) + 1;
+  docketRecordEntity.index = nextIndex;
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
