@@ -12,6 +12,7 @@ describe('appendNewYearAmountSequence', () => {
     test.setState('caseDetail', {
       yearAmounts: [],
     });
+
     await test.runSequence('appendNewYearAmountSequence');
     expect(test.getState('caseDetail')).toEqual({
       yearAmounts: [{ amount: '', year: '' }],
