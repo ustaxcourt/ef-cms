@@ -54,8 +54,11 @@ exports.addCoverToPDFDocument = async ({
     year: 'numeric',
   });
 
+  const caseCaption = Case.getCaseCaption(caseRecord);
+  const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
+
   const coverSheetData = {
-    caseCaptionPetitioner: caseEntity.contactPrimary.name,
+    caseCaptionPetitioner: caseCaptionNames,
     caseCaptionRespondent: 'Commissioner of Internal Revenue',
     dateFiled: dateFiled ? dateFiledFormatted : '',
     dateLodged: dateLodged ? dateLodgedFormatted : '',
@@ -224,7 +227,7 @@ exports.addCoverToPDFDocument = async ({
     fontSizeCaption,
   );
   const contentPetitionerLabel = contentBlock(
-    'Petitioner',
+    'Petitioner(s)',
     [
       531,
       getYOffsetFromPreviousContentArea(
