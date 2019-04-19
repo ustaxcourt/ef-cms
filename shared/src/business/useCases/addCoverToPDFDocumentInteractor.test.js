@@ -32,7 +32,8 @@ describe('addCoverToPDFDocument', () => {
           certificateOfService: true,
           createdAt: '2019-04-19T14:45:15.595Z',
           documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Answer',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           isPaper: false,
           processingStatus: 'pending',
           userId: 'petitionsclerk',

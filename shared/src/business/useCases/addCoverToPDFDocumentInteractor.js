@@ -9,6 +9,7 @@ const {
   drawRectangle,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
+const { flattenDeep } = require('lodash');
 
 /**
  * addCoverToPDFDocument
@@ -134,8 +135,9 @@ exports.addCoverToPDFDocument = async ({
   }
 
   // returns content block
-  function contentBlock(content, coords, fontSize) {
+  function contentBlock(content, coords, fontSize, centerTextAt) {
     return {
+      centerTextAt,
       content,
       fontSize,
       xPos: coords[0],
@@ -305,6 +307,11 @@ exports.addCoverToPDFDocument = async ({
       ),
     ],
     fontSizeTitle,
+    {
+      centerXOffset: 531, // same x offset as above
+      centerXWidth: 1488, // same width as wrap text method above
+      fontObj: timesRomanFont,
+    },
   );
   const contentCertificateOfService = contentBlock(
     getContentByKey('includesCertificateOfService'),
@@ -320,7 +327,7 @@ exports.addCoverToPDFDocument = async ({
   );
 
   function drawContent(contentArea) {
-    const { content, xPos, yPos, fontSize } = contentArea;
+    const { centerTextAt, content, xPos, yPos, fontSize } = contentArea;
     const params = {
       colorRgb: [0, 0, 0],
       font: 'Times-Roman',
@@ -329,10 +336,40 @@ exports.addCoverToPDFDocument = async ({
       y: yPos,
     };
 
+    const centeringText = !!(
+      centerTextAt && Object.keys(centerTextAt).length === 3
+    );
+
+    function setCenterPos(content, params) {
+      if (centeringText === false) {
+        return params;
+      }
+
+      const { centerXOffset, centerXWidth, fontObj } = centerTextAt;
+      const textWidth = fontObj.widthOfTextAtSize(content, params.size);
+      const newXOffset = (centerXWidth - textWidth) / 2 + centerXOffset;
+      return {
+        ...params,
+        x: newXOffset,
+      };
+    }
+
     if (Array.isArray(content)) {
-      return drawLinesOfText(content, params);
+      if (centeringText === true) {
+        // We do this because we need to insert the lines individually
+        const contentLines = content.map((cont, idx) => {
+          const newParams = setCenterPos(cont, params);
+          newParams.y =
+            params.y +
+            centerTextAt.fontObj.heightOfFontAtSize(newParams.size) * idx;
+          return drawText(cont, newParams);
+        });
+        return contentLines;
+      } else {
+        return drawLinesOfText(content, params);
+      }
     } else {
-      return drawText(content, params);
+      return drawText(content, setCenterPos(content, params));
     }
   }
 
@@ -346,8 +383,10 @@ exports.addCoverToPDFDocument = async ({
       x: horizontalMargin,
       y: translateY(verticalMargin + pngSealDimensions.height / 2),
     }),
-    ...[contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
-      drawContent(cont),
+    ...flattenDeep(
+      [contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
+        drawContent(cont),
+      ),
     ),
     // HR in header
     drawRectangle({
@@ -358,17 +397,19 @@ exports.addCoverToPDFDocument = async ({
       y: 2824,
     }),
     // Body Content
-    ...[
-      contentCaseCaptionPet,
-      contentPetitionerLabel,
-      contentVLabel,
-      contentCaseCaptionResp,
-      contentRespondentLabel,
-      contentElectronicallyFiled,
-      contentDocketNumber,
-      contentDocumentTitle,
-      contentCertificateOfService,
-    ].map(cont => drawContent(cont)),
+    ...flattenDeep(
+      [
+        contentCaseCaptionPet,
+        contentPetitionerLabel,
+        contentVLabel,
+        contentCaseCaptionResp,
+        contentRespondentLabel,
+        contentElectronicallyFiled,
+        contentDocketNumber,
+        contentDocumentTitle,
+        contentCertificateOfService,
+      ].map(cont => drawContent(cont)),
+    ),
   );
 
   // Add the content stream to our newly created page
