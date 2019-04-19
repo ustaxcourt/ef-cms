@@ -109,10 +109,11 @@ describe('fileDocumentHelper', () => {
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
-  it('does not show Filing Does Not Include if certOfService, exhibits, and attachments are all true', async () => {
+  it('does not show Filing Does Not Include if certOfService, exhibits, attachments, and hasSupportingDocuments are all true', async () => {
     state.form.certificateOfService = true;
     state.form.attachments = true;
     state.form.exhibits = true;
+    state.form.hasSupportingDocuments = true;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
   });
