@@ -10,6 +10,9 @@ const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
 const {
+  addCoverToPDFDocument,
+} = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
+const {
   addWorkItemToSectionInbox,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -161,6 +164,9 @@ const {
   runBatchProcess,
 } = require('ef-cms-shared/src/business/useCases/runBatchProcessInteractor');
 const {
+  saveDocument,
+} = require('ef-cms-shared/src/persistence/s3/saveDocument');
+const {
   saveWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
@@ -255,6 +261,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
+        saveDocument,
         saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
@@ -277,6 +284,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
+        addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
         createCase: createCaseUC,

@@ -141,21 +141,18 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
     );
   }
 
-  // sort to make petition first, place of trial second, and everything else in cronological order
+  // sort to make petition first and everything else in cronological order
   const getScore = entry => {
     const documentType = (entry.document || {}).documentType;
-    const description = entry.record.description || '';
     if (documentType === documentTypesMap.petitionFile) return 1;
-    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
-    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
-    else return 4;
+    else return 2;
   };
 
   result.docketRecordWithDocument.sort((a, b) => {
     const aScore = getScore(a);
     const bScore = getScore(b);
     if (aScore === bScore) {
-      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
+      return;
     } else {
       return aScore - bScore;
     }

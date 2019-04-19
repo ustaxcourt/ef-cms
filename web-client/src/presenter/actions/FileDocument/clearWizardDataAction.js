@@ -37,6 +37,13 @@ export const clearWizardDataAction = ({ store, get, props }) => {
       store.set(state.form.supportingDocumentFile, null);
 
       break;
+    case 'secondaryDocumentFile':
+      store.set(state.form.hasSecondarySupportingDocuments, null);
+      store.set(state.form.secondarySupportingDocument, null);
+      store.set(state.form.secondarySupportingDocumentFreeText, null);
+      store.set(state.form.secondarySupportingDocumentFile, null);
+      store.set(state.form.secondarySupportingDocumentMetadata, null);
+      break;
     case 'hasSecondarySupportingDocuments':
       store.set(state.form.secondarySupportingDocument, null);
       store.set(state.form.secondarySupportingDocumentFreeText, null);
