@@ -22,11 +22,18 @@ describe('addCoverToPDFDocument', () => {
   it('adds a cover page to a pdf document', async () => {
     const getCaseByCaseIdStub = sinon.stub().resolves({
       caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      contactPrimary: {
+        name: 'Johnny Taxpayer',
+      },
+      createdAt: '2019-04-19T14:45:15.595Z',
       docketNumber: '101-19',
       documents: [
         {
+          certificateOfService: true,
+          createdAt: '2019-04-19T14:45:15.595Z',
           documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentType: 'Answer',
+          isPaper: false,
           processingStatus: 'pending',
           userId: 'petitionsclerk',
         },

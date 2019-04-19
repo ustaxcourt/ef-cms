@@ -34,33 +34,36 @@ exports.addCoverToPDFDocument = async ({
     document => document.documentId === documentId,
   );
 
+  const dateReceived = new Date(documentEntity.createdAt);
+  const dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })} ${dateReceived.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/New_York',
+  })}`;
+  const dateLodged = null; // need to establish how to determine this
+  const dateLodgedFormatted = dateLodged;
+  const dateFiled = new Date(caseEntity.createdAt);
+  const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
   const coverSheetData = {
-    caseCaptionPetitioner: 'John Doe',
-    caseCaptionRespondent: 'Jane Doe',
-    dateFiled: new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }),
-    dateLodged: new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }),
-    dateReceived: `${new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })} ${new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'America/New_York',
-    })}`,
-    docketNumber: caseRecord.docketNumber,
-    documentTitle:
-      'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
-    includesCertificateOfService: true,
-    originallyFiledElectronically: true,
+    caseCaptionPetitioner: caseEntity.contactPrimary.name,
+    caseCaptionRespondent: 'Commissioner of Internal Revenue',
+    dateFiled: dateFiled ? dateFiledFormatted : '',
+    dateLodged: dateLodged ? dateLodgedFormatted : '',
+    dateReceived: dateReceivedFormatted,
+    docketNumber: caseEntity.docketNumber,
+    documentTitle: documentEntity.documentType,
+    includesCertificateOfService:
+      documentEntity.certificateOfService === true ? true : false,
+    originallyFiledElectronically: !caseEntity.isPaper,
   };
 
   const { Body: pdfData } = await applicationContext
@@ -192,17 +195,20 @@ exports.addCoverToPDFDocument = async ({
     }
   }
 
+  const dateLodgedLabel = dateLodged ? 'Lodged' : '';
+  const dateFiledLabel = dateFiled ? 'Filed' : '';
+
   // Content areas
   const contentDateReceived = contentBlock(
     ['Received', getContentByKey('dateReceived')],
     [510, 3036],
   );
   const contentDateLodged = contentBlock(
-    ['Lodged', getContentByKey('dateLodged')],
+    [dateLodgedLabel, getContentByKey('dateLodged')],
     [1369, 3036],
   );
   const contentDateFiled = contentBlock(
-    ['Filed', getContentByKey('dateFiled')],
+    [dateFiledLabel, getContentByKey('dateFiled')],
     [2033, 3036],
   );
   const contentCaseCaptionPet = contentBlock(
