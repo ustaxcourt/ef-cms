@@ -14,8 +14,8 @@ export const DocketRecord = connect(
     token: state.token,
   },
   ({
-    refreshCaseSequence,
     baseUrl,
+    refreshCaseSequence,
     caseDetail,
     documentHelper,
     helper,
@@ -31,7 +31,7 @@ export const DocketRecord = connect(
       };
     }, []);
 
-    function renderDocumentLink(documentId, description) {
+    function renderDocumentLink(documentId, description, isPaper) {
       return (
         <a
           href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
@@ -39,7 +39,11 @@ export const DocketRecord = connect(
           rel="noreferrer noopener"
           aria-label={`View PDF: ${description}`}
         >
-          <FontAwesomeIcon icon={['far', 'file-pdf']} />
+          {isPaper && (
+            <span className="filing-type-icon-mobile">
+              <FontAwesomeIcon icon={['fas', 'file-alt']} />
+            </span>
+          )}
           {description}
         </a>
       );
@@ -63,22 +67,39 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th>Date filed</th>
+              <th className="center-column">No.</th>
+              <th>Date</th>
+              <th className="center-column">Event</th>
               <th className="icon-column" />
-              <th>Title</th>
-              <th>Filed by</th>
+              <th>Filings and Proceedings</th>
+              <th>Filed By</th>
+              <th>Action</th>
               <th>Served</th>
+              <th className="center-column">Parties</th>
             </tr>
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }) => (
+              ({ record, document }, index) => (
                 <tr key={index}>
-                  <td className="responsive-title">
-                    <span className="responsive-label">Activity date</span>
+                  <td className="responsive-title center-column">
+                    {index + 1}
+                    <span className="responsive-label push-right">
+                      {record.createdAtFormatted}
+                    </span>
+                  </td>
+                  <td className="hide-on-mobile">
+                    <span className="responsive-label">Date</span>
                     {record.createdAtFormatted}
                   </td>
-                  <td>
+                  <td className="center-column">
+                    <span className="responsive-label">Event</span>
+                    {document && document.eventCode}
+                  </td>
+                  <td className="filing-type-icon hide-on-mobile">
+                    {document && document.isPaper && (
+                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                    )}
                     {document &&
                       helper.showDirectDownloadLink &&
                       document.processingStatus !== 'complete' && (
@@ -89,13 +110,13 @@ export const DocketRecord = connect(
                       )}
                   </td>
                   <td>
-                    <span className="responsive-label">Title</span>
                     {document &&
                       helper.showDirectDownloadLink &&
                       document.processingStatus === 'complete' &&
                       renderDocumentLink(
                         document.documentId,
                         record.description,
+                        document.isPaper,
                       )}
                     {document &&
                       helper.showDirectDownloadLink &&
@@ -118,7 +139,11 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
-                        <FontAwesomeIcon icon={['far', 'file-pdf']} />
+                        {document && document.isPaper && (
+                          <span className="filing-type-icon-mobile">
+                            <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                          </span>
+                        )}
                         {record.description}
                       </a>
                     )}
@@ -126,10 +151,16 @@ export const DocketRecord = connect(
                       record.documentId &&
                       renderDocumentLink(record.documentId, record.description)}
                     {!document && !record.documentId && record.description}
+                    {record.filingsAndProceedings &&
+                      ` ${record.filingsAndProceedings}`}
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>
-                    {record.filedBy}
+                    {document && document.filedBy}
+                  </td>
+                  <td>
+                    <span className="responsive-label">Action</span>
+                    {record.action}
                   </td>
                   <td>
                     <span className="responsive-label">Served</span>
@@ -139,6 +170,10 @@ export const DocketRecord = connect(
                     {document && helper.showDocumentStatus && (
                       <span>{document.status}</span>
                     )}
+                  </td>
+                  <td className="center-column">
+                    <span className="responsive-label">Parties</span>
+                    {record.servedParties}
                   </td>
                 </tr>
               ),

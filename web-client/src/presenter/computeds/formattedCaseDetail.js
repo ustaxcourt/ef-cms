@@ -15,6 +15,7 @@ export const formatDocument = document => {
 export const formatDocketRecord = docketRecord => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = moment.utc(result.filingDate).format('L');
+
   return result;
 };
 
@@ -82,7 +83,11 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   }
 };
 
-const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
+const formatDocketRecordWithDocument = (
+  docketRecords = [],
+  documents = [],
+  caseDetail,
+) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
     return acc;
@@ -93,7 +98,64 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
 
     if (record.documentId) {
       document = documentMap[record.documentId];
+
+      if (document.certificateOfServiceDate) {
+        document.certificateOfServiceDateFormatted = moment
+          .utc(document.certificateOfServiceDate)
+          .format('L');
+      }
+
+      //filings and proceedings string
+      //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+      const filingsAndProceedingsArray = [
+        `${
+          document.certificateOfService
+            ? `(C/S ${document.certificateOfServiceDateFormatted})`
+            : ''
+        }`,
+        `${document.exhibits ? '(Exhibit(s))' : ''}`,
+        `${document.attachments ? '(Attachment(s))' : ''}`,
+        `${
+          document.objections === 'Yes'
+            ? '(Objection)'
+            : document.objections === 'No'
+            ? '(No Objection)'
+            : ''
+        }`,
+        `${document.lodged ? '(Lodged)' : ''}`,
+      ];
+      record.filingsAndProceedings = filingsAndProceedingsArray
+        .filter(item => item !== '')
+        .join(' ');
+
+      if (!document.filedBy) {
+        let filedByString = '';
+        if (document.partyRespondent) {
+          filedByString = 'Resp.';
+          if (document.partyPrimary || document.partySecondary) {
+            filedByString += ' & ';
+          }
+        }
+        if (
+          document.partyPrimary &&
+          !document.partySecondary &&
+          caseDetail.contactPrimary
+        ) {
+          filedByString += `Petr. ${caseDetail.contactPrimary.name}`;
+        } else if (
+          document.partyPrimary &&
+          document.partySecondary &&
+          caseDetail.contactPrimary &&
+          caseDetail.contactSecondary
+        ) {
+          filedByString += `Petrs. ${caseDetail.contactPrimary.name} & ${
+            caseDetail.contactSecondary.name
+          }`;
+        }
+        document.filedBy = filedByString;
+      }
     }
+
     return { document, index, record };
   });
 };
@@ -108,24 +170,22 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
       result.docketRecord,
       result.documents,
+      caseDetail,
     );
   }
 
-  // sort to make petition first, place of trial second, and everything else in cronological order
+  // sort to make petition first and everything else in cronological order
   const getScore = entry => {
     const documentType = (entry.document || {}).documentType;
-    const description = entry.record.description || '';
     if (documentType === documentTypesMap.petitionFile) return 1;
-    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
-    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
-    else return 4;
+    else return 2;
   };
 
   result.docketRecordWithDocument.sort((a, b) => {
     const aScore = getScore(a);
     const bScore = getScore(b);
     if (aScore === bScore) {
-      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
+      return;
     } else {
       return aScore - bScore;
     }
