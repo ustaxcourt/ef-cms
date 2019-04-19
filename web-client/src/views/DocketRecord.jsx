@@ -21,9 +21,11 @@ export const DocketRecord = connect(
           rel="noreferrer noopener"
           aria-label={`View PDF: ${description}`}
         >
-          <span className="filing-type-icon-mobile">
-            <FontAwesomeIcon icon={['far', 'file-pdf']} />
-          </span>
+          {description === 'Petition' && (
+            <span className="filing-type-icon-mobile">
+              <FontAwesomeIcon icon={['far', 'file-alt']} />
+            </span>
+          )}
           {description}
         </a>
       );
@@ -77,7 +79,9 @@ export const DocketRecord = connect(
                     CODE
                   </td>
                   <td className="filing-type-icon hide-on-mobile">
-                    <FontAwesomeIcon icon={['far', 'file-pdf']} />
+                    {record.description === 'Petition' && (
+                      <FontAwesomeIcon icon={['far', 'file-alt']} />
+                    )}
                   </td>
                   <td>
                     <span className="responsive-label">
@@ -97,9 +101,11 @@ export const DocketRecord = connect(
                         })}
                         aria-label="View PDF"
                       >
-                        <span className="filing-type-icon-mobile">
-                          <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                        </span>
+                        {record.description === 'Petition' && (
+                          <span className="filing-type-icon-mobile">
+                            <FontAwesomeIcon icon={['far', 'file-alt']} />
+                          </span>
+                        )}
                         {record.description}
                       </a>
                     )}
@@ -107,6 +113,8 @@ export const DocketRecord = connect(
                       record.documentId &&
                       renderDocumentLink(record.documentId, record.description)}
                     {!document && !record.documentId && record.description}
+                    {record.filingsAndProceedings &&
+                      ` ${record.filingsAndProceedings}`}
                   </td>
                   <td>
                     <span className="responsive-label">Filed by</span>

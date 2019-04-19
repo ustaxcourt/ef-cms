@@ -15,6 +15,7 @@ export const formatDocument = document => {
 export const formatDocketRecord = docketRecord => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = moment.utc(result.filingDate).format('L');
+
   return result;
 };
 
@@ -93,6 +94,35 @@ const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
 
     if (record.documentId) {
       document = documentMap[record.documentId];
+
+      if (document.certificateOfServiceDate) {
+        document.certificateOfServiceDateFormatted = moment
+          .utc(document.certificateOfServiceDate)
+          .format('L');
+      }
+
+      //filings and proceedings string
+      //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+      const filingsAndProceedingsArray = [
+        `${
+          document.certificateOfService
+            ? `(C/S ${document.certificateOfServiceDateFormatted})`
+            : ''
+        }`,
+        `${document.exhibits ? '(Exhibit(s))' : ''}`,
+        `${document.attachments ? '(Attachment(s))' : ''}`,
+        `${
+          document.objections === 'Yes'
+            ? '(Objection)'
+            : document.objections === 'No'
+            ? '(No Objection)'
+            : ''
+        }`,
+        `${document.lodged ? '(Lodged)' : ''}`,
+      ];
+      record.filingsAndProceedings = filingsAndProceedingsArray
+        .filter(item => item !== '')
+        .join(' ');
     }
     return { document, index, record };
   });
