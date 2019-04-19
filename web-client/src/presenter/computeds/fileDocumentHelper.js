@@ -51,7 +51,13 @@ export const fileDocumentHelper = get => {
     form.certificateOfService || form.exhibits || form.attachments;
 
   const showFilingNotIncludes =
-    !form.certificateOfService || !form.exhibits || !form.attachments;
+    !form.certificateOfService ||
+    !form.exhibits ||
+    !form.attachments ||
+    !form.hasSupportingDocuments;
+
+  const showSecondaryFilingNotIncludes =
+    form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
 
   let exported = {
     certificateOfServiceDateFormatted,
@@ -63,6 +69,7 @@ export const fileDocumentHelper = get => {
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
+    showSecondaryFilingNotIncludes,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
     showSupportingDocumentValid: !!form.supportingDocumentFile,

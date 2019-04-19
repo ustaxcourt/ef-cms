@@ -29,7 +29,7 @@ export const PartiesFilingReadOnly = connect(
             <ul className="ustc-unstyled-list without-margins">
               {form.partyPrimary && <li>Myself</li>}
               {form.partySecondary && (
-                <li>${caseDetail.contactSecondary.name}</li>
+                <li>{caseDetail.contactSecondary.name}</li>
               )}
               {form.partyRespondent && <li>Respondent</li>}
             </ul>
