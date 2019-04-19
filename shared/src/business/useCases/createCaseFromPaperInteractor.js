@@ -100,6 +100,7 @@ exports.createCaseFromPaper = async ({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
     filedBy: caseCaptionNames,
+    isPaper: true,
     userId: user.userId,
   });
   const newWorkItem = addPetitionDocumentWithWorkItemToCase(
@@ -114,6 +115,7 @@ exports.createCaseFromPaper = async ({
       documentId: stinFileId,
       documentType: Case.documentTypes.stin,
       filedBy: caseCaptionNames,
+      isPaper: true,
       userId: user.userId,
     });
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
@@ -125,6 +127,7 @@ exports.createCaseFromPaper = async ({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
+      isPaper: true,
       userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);
