@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const DocketRecord = connect(
   {
@@ -10,9 +10,27 @@ export const DocketRecord = connect(
     clearDocumentSequence: sequences.clearDocumentSequence,
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
+    refreshCaseSequence: sequences.refreshCaseSequence,
     token: state.token,
   },
-  ({ baseUrl, caseDetail, documentHelper, helper, token }) => {
+  ({
+    refreshCaseSequence,
+    baseUrl,
+    caseDetail,
+    documentHelper,
+    helper,
+    token,
+  }) => {
+    useEffect(() => {
+      const interval = setInterval(() => {
+        refreshCaseSequence();
+      }, 30 * 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, []);
+
     function renderDocumentLink(documentId, description) {
       return (
         <a
@@ -46,6 +64,7 @@ export const DocketRecord = connect(
           <thead>
             <tr>
               <th>Date filed</th>
+              <th className="icon-column" />
               <th>Title</th>
               <th>Filed by</th>
               <th>Served</th>
@@ -60,12 +79,36 @@ export const DocketRecord = connect(
                     {record.createdAtFormatted}
                   </td>
                   <td>
+                    {document &&
+                      helper.showDirectDownloadLink &&
+                      document.processingStatus !== 'complete' && (
+                        <FontAwesomeIcon
+                          icon="spinner"
+                          className="fa-spin spinner"
+                        />
+                      )}
+                  </td>
+                  <td>
                     <span className="responsive-label">Title</span>
                     {document &&
                       helper.showDirectDownloadLink &&
+                      document.processingStatus === 'complete' &&
                       renderDocumentLink(
                         document.documentId,
                         record.description,
+                      )}
+                    {document &&
+                      helper.showDirectDownloadLink &&
+                      document.processingStatus !== 'complete' && (
+                        <React.Fragment>
+                          <span
+                            className="usa-label-uploading"
+                            aria-label="document uploading marker"
+                          >
+                            <span aria-hidden="true">Uploading</span>
+                          </span>
+                          {record.description}
+                        </React.Fragment>
                       )}
                     {document && helper.showDocumentDetailLink && (
                       <a

@@ -27,6 +27,7 @@ import {
   faShareSquare,
   faSignOutAlt,
   faSlash,
+  faSpinner,
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -65,6 +66,7 @@ const app = {
       faArrowAltCircleLeft,
       faCaretDown,
       faCaretLeft,
+      faSpinner,
       faCaretUp,
       faCheckCircle,
       faCheckCircleRegular,
