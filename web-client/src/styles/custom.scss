@@ -309,6 +309,24 @@ select[disabled] {
   }
 }
 
+.usa-label-uploading {
+  padding: 0.3rem 0.7rem;
+  margin-right: 0.5rem;
+  background-color: #5b616b;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.fa-spinner {
+  color: #5b616b
+}
+
+.icon-column {
+  width: 40px;
+}
+
 .mini-success {
   color: $color-green;
 

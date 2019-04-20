@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const DocketRecord = connect(
   {
@@ -10,9 +10,27 @@ export const DocketRecord = connect(
     clearDocumentSequence: sequences.clearDocumentSequence,
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
+    refreshCaseSequence: sequences.refreshCaseSequence,
     token: state.token,
   },
-  ({ baseUrl, caseDetail, documentHelper, helper, token }) => {
+  ({
+    baseUrl,
+    refreshCaseSequence,
+    caseDetail,
+    documentHelper,
+    helper,
+    token,
+  }) => {
+    useEffect(() => {
+      const interval = setInterval(() => {
+        refreshCaseSequence();
+      }, 30 * 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, []);
+
     function renderDocumentLink(documentId, description, isPaper) {
       return (
         <a
@@ -53,7 +71,7 @@ export const DocketRecord = connect(
                 <th className="center-column">No.</th>
                 <th>Date</th>
                 <th className="center-column">Event</th>
-                <th />
+                <th className="icon-column" />
                 <th>Filings and Proceedings</th>
                 <th>Filed By</th>
                 <th>Action</th>
@@ -83,6 +101,14 @@ export const DocketRecord = connect(
                       {document && document.isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus !== 'complete' && (
+                          <FontAwesomeIcon
+                            icon="spinner"
+                            className="fa-spin spinner"
+                          />
+                        )}
                     </td>
                     <td>
                       <span className="responsive-label">
@@ -90,10 +116,24 @@ export const DocketRecord = connect(
                       </span>
                       {document &&
                         helper.showDirectDownloadLink &&
+                        document.processingStatus === 'complete' &&
                         renderDocumentLink(
                           document.documentId,
                           record.description,
                           document.isPaper,
+                        )}
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus !== 'complete' && (
+                          <React.Fragment>
+                            <span
+                              className="usa-label-uploading"
+                              aria-label="document uploading marker"
+                            >
+                              <span aria-hidden="true">Uploading</span>
+                            </span>
+                            {record.description}
+                          </React.Fragment>
                         )}
                       {document && helper.showDocumentDetailLink && (
                         <a
