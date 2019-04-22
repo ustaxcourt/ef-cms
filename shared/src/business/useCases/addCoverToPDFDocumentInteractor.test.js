@@ -52,8 +52,10 @@ describe('addCoverToPDFDocument', () => {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+        lodged: true,
       },
     ],
+    irsSendDate: '2019-04-19T14:45:15.595Z',
     partyType: 'Petitioner & Spouse',
   };
 
