@@ -12,13 +12,14 @@ exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
+    applicationContext.logger.info('Event', event);
     try {
       await applicationContext
         .getUseCases()
         .addCoverToPDFDocument({
           applicationContext,
-          caseId: event.pathParameters.caseId,
-          documentId: event.pathParameters.documentId,
+          caseId: (event.pathParameters || event.path).caseId,
+          documentId: (event.pathParameters || event.path).documentId,
         });
       applicationContext.logger.info('User', user);
     } catch (e) {
