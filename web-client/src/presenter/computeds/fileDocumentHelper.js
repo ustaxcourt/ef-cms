@@ -5,6 +5,7 @@ export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const userRole = get(state.user.role);
   const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
@@ -59,14 +60,21 @@ export const fileDocumentHelper = get => {
   const showSecondaryFilingNotIncludes =
     form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
 
+  let partyPrimaryLabel = 'Myself';
+  if (userRole === 'practitioner') {
+    partyPrimaryLabel = caseDetail.contactPrimary.name;
+  }
+
   let exported = {
     certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
+    partyPrimaryLabel,
     partyValidationError,
     showFilingIncludes,
     showFilingNotIncludes,
     showObjection: objectionDocumentTypes.includes(form.documentType),
+    showPractitionerParty: userRole === 'practitioner',
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingNotIncludes,
