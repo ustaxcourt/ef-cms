@@ -129,18 +129,21 @@
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "docketRecord": [
       {
-        "description": "Request for Place of Trial at Mobile, Alabama",
-        "filingDate": "2019-03-01T22:53:50.097Z"
-      },
-      {
         "description": "Petition",
         "filingDate": "2019-03-01T22:53:50.098Z",
-        "filedBy": "Test Petitioner"
+        "filedBy": "Test Petitioner",
+        "index": 1
+      },
+      {
+        "description": "Request for Place of Trial at Mobile, Alabama",
+        "filingDate": "2019-03-01T22:53:50.097Z",
+        "index": 2
       },
       {
         "description": "Answer",
         "filingDate": "2019-03-01T22:54:05.993Z",
-        "filedBy": "Test Respondent"
+        "filedBy": "Test Respondent",
+        "index": 3
       }
     ],
     "sk": "0",
