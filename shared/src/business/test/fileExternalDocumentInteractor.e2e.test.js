@@ -133,12 +133,12 @@ describe('fileExternalDocument integration test', () => {
       docketNumberSuffix: 'S',
       docketRecord: [
         {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
-        },
-        {
           description: 'Petition',
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           filedBy: 'Rick Petitioner',
+        },
+        {
+          description: 'Request for Place of Trial at Aberdeen, South Dakota',
         },
         {
           description: 'Motion for Leave to File Brief in Support of Petition',

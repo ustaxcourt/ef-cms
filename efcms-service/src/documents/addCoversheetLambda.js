@@ -13,7 +13,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      applicationContext
+      await applicationContext
         .getUseCases()
         .addCoverToPDFDocument({
           applicationContext,
