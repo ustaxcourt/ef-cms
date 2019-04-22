@@ -58,7 +58,10 @@ joiValidationDecorator(
       .string()
       .valid(getDocumentTypes())
       .required(),
+    eventCode: joi.string().optional(),
     filedBy: joi.string().optional(),
+    isPaper: joi.boolean().optional(),
+    lodged: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
     reviewDate: joi
       .date()
