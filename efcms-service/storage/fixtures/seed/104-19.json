@@ -119,17 +119,20 @@
         "description": "Petition",
         "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
         "filingDate": "2019-03-05T17:34:13.490Z",
-        "filedBy": "Test Petitioner"
+        "filedBy": "Test Petitioner",
+        "index": 1
       },
       {
         "description": "Request for Place of Trial at Birmingham, Alabama",
-        "filingDate": "2019-03-05T17:34:13.490Z"
+        "filingDate": "2019-03-05T17:34:13.490Z",
+        "index": 2
       },
       {
         "description": "Ownership Disclosure Statement",
         "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
         "filingDate": "2019-03-05T17:34:13.491Z",
-        "filedBy": "Test Petitioner"
+        "filedBy": "Test Petitioner",
+        "index": 3
       }
     ],
     "orderForAmendedPetitionAndFilingFee": true,
