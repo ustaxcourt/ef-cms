@@ -243,6 +243,5 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  const { DOCUMENT_TYPES_MAP } = get(state.constants);
-  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
+  return formatCase(caseDetail, caseDetailErrors);
 };
