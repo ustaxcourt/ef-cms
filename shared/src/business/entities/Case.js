@@ -611,10 +611,11 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
   const nextIndex =
     this.docketRecord.reduce(
-      (maxIndex, docketRecord) => Math.max(docketRecord.index || 0, maxIndex),
+      (maxIndex, docketRecord, currentIndex) =>
+        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
       0,
     ) + 1;
-  docketRecordEntity.index = nextIndex;
+  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
