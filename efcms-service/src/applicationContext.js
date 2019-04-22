@@ -185,6 +185,9 @@ const {
   updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateDocumentProcessingStatus
+} = require('ef-cms-shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+const {
   updateWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -266,6 +269,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         updateCase,
+        updateDocumentProcessingStatus,
         updateWorkItem,
         zipDocuments,
       };

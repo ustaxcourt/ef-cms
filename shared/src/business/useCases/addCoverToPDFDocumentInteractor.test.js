@@ -48,7 +48,7 @@ describe('addCoverToPDFDocument', () => {
           newPdfData,
         );
       });
-    const updateCaseStub = sinon.stub().resolves(null);
+    const updateDocumentProcessingStatusStub = sinon.stub().resolves(null);
     const getObjectStub = sinon.stub().returns({
       promise: async () => ({
         Body: testPdfDoc,
@@ -61,7 +61,7 @@ describe('addCoverToPDFDocument', () => {
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocument: saveDocumentStub,
-          updateCase: updateCaseStub,
+          updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
         }),
         getStorageClient: () => ({
           getObject: getObjectStub,
@@ -112,7 +112,7 @@ describe('addCoverToPDFDocument', () => {
           newPdfData,
         );
       });
-    const updateCaseStub = sinon.stub().resolves(null);
+    const updateDocumentProcessingStatusStub = sinon.stub().resolves(null);
     const getObjectStub = sinon.stub().returns({
       promise: async () => ({
         Body: testPdfDoc,
@@ -125,7 +125,7 @@ describe('addCoverToPDFDocument', () => {
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
           saveDocument: saveDocumentStub,
-          updateCase: updateCaseStub,
+          updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
         }),
         getStorageClient: () => ({
           getObject: getObjectStub,

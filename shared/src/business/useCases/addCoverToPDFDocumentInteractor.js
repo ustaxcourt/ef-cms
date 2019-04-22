@@ -35,6 +35,10 @@ exports.addCoverToPDFDocument = async ({
     document => document.documentId === documentId,
   );
 
+  const documentIndex = caseEntity.documents.findIndex(
+    document => document.documentId === documentId,
+  );
+
   const dateReceived = new Date(documentEntity.createdAt);
   const dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -428,10 +432,13 @@ exports.addCoverToPDFDocument = async ({
 
   documentEntity.processingStatus = 'complete';
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocumentProcessingStatus({
+      applicationContext,
+      caseId,
+      documentIndex,
+    });
 
   await applicationContext
     .getPersistenceGateway()
