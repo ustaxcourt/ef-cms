@@ -12,11 +12,6 @@ const applicationContext = {
   isAuthorizedForWorkItems: () => true,
 };
 
-const user = {
-  role: 'petitioner',
-  userId: 'taxpayer',
-};
-
 describe('updateDocumentProcessingStatus', () => {
   beforeEach(() => {
     sinon.stub(client, 'update').resolves({
