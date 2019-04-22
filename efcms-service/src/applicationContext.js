@@ -9,6 +9,7 @@ const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('ef-cms-shared/src/external/irsGateway');
+
 const {
   addCoverToPDFDocument,
 } = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
@@ -97,6 +98,9 @@ const {
   getInternalUsers: getInternalUsersUC,
 } = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
+  getReadMessageForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/messages/getReadMessageForUser');
+const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -179,6 +183,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('ef-cms-shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setMessageAsRead,
+} = require('ef-cms-shared/src/persistence/dynamo/messages/setMessageAsRead');
+const {
   updateCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -193,6 +200,13 @@ const {
 const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
+const { 
+  setMessageAsRead: setMessageAsReadUC
+} = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
+
+const { 
+  getReadMessageForUser: getReadMessageForUserUC
+} = require('ef-cms-shared/src/business/useCases/messages/getReadMessagesForUserInteractor');
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
@@ -254,6 +268,7 @@ module.exports = (appContextUser = {}) => {
         getCasesForRespondent,
         getDownloadPolicyUrl,
         getInternalUsers,
+        getReadMessageForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
@@ -268,6 +283,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        setMessageAsRead,
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
@@ -302,6 +318,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
+        getReadMessageForUser: getReadMessageForUserUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getUser,
@@ -312,6 +329,7 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
+        setMessageAsRead: setMessageAsReadUC,
         updateCase: updateCaseUC,
       };
     },

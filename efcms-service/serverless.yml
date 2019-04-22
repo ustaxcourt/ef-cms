@@ -217,6 +217,22 @@ functions:
           method: get
           cors: true
 
+  getReadMessagesForUser:
+    handler: src/messages/getReadMessagesForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/messages/read
+          method: get
+          cors: true
+
+  setMessageAsRead:
+    handler: src/messages/setMessageAsReadLambda.handler
+    events:
+      - http:
+          path: v1/messages/{messageId}/read
+          method: post
+          cors: true
+
   getDownloadPolicyUrl:
     handler: src/documents/downloadPolicyUrlLambda.handler
     events:
