@@ -9,6 +9,7 @@ const {
   drawRectangle,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
+const { flattenDeep } = require('lodash');
 
 /**
  * addCoverToPDFDocument
@@ -34,33 +35,39 @@ exports.addCoverToPDFDocument = async ({
     document => document.documentId === documentId,
   );
 
+  const dateReceived = new Date(documentEntity.createdAt);
+  const dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })} ${dateReceived.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/New_York',
+  })}`;
+  const dateLodged = null; // need to establish how to determine this
+  const dateLodgedFormatted = dateLodged;
+  const dateFiled = new Date(caseEntity.createdAt);
+  const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  const caseCaption = Case.getCaseCaption(caseRecord);
+  const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
+
   const coverSheetData = {
-    caseCaptionPetitioner: 'John Doe',
-    caseCaptionRespondent: 'Jane Doe',
-    dateFiled: new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }),
-    dateLodged: new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }),
-    dateReceived: `${new Date().toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })} ${new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'America/New_York',
-    })}`,
-    docketNumber: caseRecord.docketNumber,
-    documentTitle:
-      'Notice of Filing of Petition and Right to Intervene on Jonathan Buck',
-    includesCertificateOfService: true,
-    originallyFiledElectronically: true,
+    caseCaptionPetitioner: caseCaptionNames,
+    caseCaptionRespondent: 'Commissioner of Internal Revenue',
+    dateFiled: dateFiled ? dateFiledFormatted : '',
+    dateLodged: dateLodged ? dateLodgedFormatted : '',
+    dateReceived: dateReceivedFormatted,
+    docketNumber: caseEntity.docketNumber,
+    documentTitle: documentEntity.documentType,
+    includesCertificateOfService:
+      documentEntity.certificateOfService === true ? true : false,
+    originallyFiledElectronically: !caseEntity.isPaper,
   };
 
   const { Body: pdfData } = await applicationContext
@@ -131,8 +138,9 @@ exports.addCoverToPDFDocument = async ({
   }
 
   // returns content block
-  function contentBlock(content, coords, fontSize) {
+  function contentBlock(content, coords, fontSize, centerTextAt) {
     return {
+      centerTextAt,
       content,
       fontSize,
       xPos: coords[0],
@@ -192,17 +200,20 @@ exports.addCoverToPDFDocument = async ({
     }
   }
 
+  const dateLodgedLabel = dateLodged ? 'Lodged' : '';
+  const dateFiledLabel = dateFiled ? 'Filed' : '';
+
   // Content areas
   const contentDateReceived = contentBlock(
     ['Received', getContentByKey('dateReceived')],
     [510, 3036],
   );
   const contentDateLodged = contentBlock(
-    ['Lodged', getContentByKey('dateLodged')],
+    [dateLodgedLabel, getContentByKey('dateLodged')],
     [1369, 3036],
   );
   const contentDateFiled = contentBlock(
-    ['Filed', getContentByKey('dateFiled')],
+    [dateFiledLabel, getContentByKey('dateFiled')],
     [2033, 3036],
   );
   const contentCaseCaptionPet = contentBlock(
@@ -216,7 +227,7 @@ exports.addCoverToPDFDocument = async ({
     fontSizeCaption,
   );
   const contentPetitionerLabel = contentBlock(
-    'Petitioner',
+    'Petitioner(s)',
     [
       531,
       getYOffsetFromPreviousContentArea(
@@ -299,6 +310,11 @@ exports.addCoverToPDFDocument = async ({
       ),
     ],
     fontSizeTitle,
+    {
+      centerXOffset: 531, // same x offset as above
+      centerXWidth: 1488, // same width as wrap text method above
+      fontObj: timesRomanFont,
+    },
   );
   const contentCertificateOfService = contentBlock(
     getContentByKey('includesCertificateOfService'),
@@ -314,7 +330,7 @@ exports.addCoverToPDFDocument = async ({
   );
 
   function drawContent(contentArea) {
-    const { content, xPos, yPos, fontSize } = contentArea;
+    const { centerTextAt, content, xPos, yPos, fontSize } = contentArea;
     const params = {
       colorRgb: [0, 0, 0],
       font: 'Times-Roman',
@@ -323,10 +339,40 @@ exports.addCoverToPDFDocument = async ({
       y: yPos,
     };
 
+    const centeringText = !!(
+      centerTextAt && Object.keys(centerTextAt).length === 3
+    );
+
+    function setCenterPos(content, params) {
+      if (centeringText === false) {
+        return params;
+      }
+
+      const { centerXOffset, centerXWidth, fontObj } = centerTextAt;
+      const textWidth = fontObj.widthOfTextAtSize(content, params.size);
+      const newXOffset = (centerXWidth - textWidth) / 2 + centerXOffset;
+      return {
+        ...params,
+        x: newXOffset,
+      };
+    }
+
     if (Array.isArray(content)) {
-      return drawLinesOfText(content, params);
+      if (centeringText === true) {
+        // We do this because we need to insert the lines individually
+        const contentLines = content.map((cont, idx) => {
+          const newParams = setCenterPos(cont, params);
+          newParams.y =
+            params.y +
+            centerTextAt.fontObj.heightOfFontAtSize(newParams.size) * idx;
+          return drawText(cont, newParams);
+        });
+        return contentLines;
+      } else {
+        return drawLinesOfText(content, params);
+      }
     } else {
-      return drawText(content, params);
+      return drawText(content, setCenterPos(content, params));
     }
   }
 
@@ -340,8 +386,10 @@ exports.addCoverToPDFDocument = async ({
       x: horizontalMargin,
       y: translateY(verticalMargin + pngSealDimensions.height / 2),
     }),
-    ...[contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
-      drawContent(cont),
+    ...flattenDeep(
+      [contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
+        drawContent(cont),
+      ),
     ),
     // HR in header
     drawRectangle({
@@ -352,17 +400,19 @@ exports.addCoverToPDFDocument = async ({
       y: 2824,
     }),
     // Body Content
-    ...[
-      contentCaseCaptionPet,
-      contentPetitionerLabel,
-      contentVLabel,
-      contentCaseCaptionResp,
-      contentRespondentLabel,
-      contentElectronicallyFiled,
-      contentDocketNumber,
-      contentDocumentTitle,
-      contentCertificateOfService,
-    ].map(cont => drawContent(cont)),
+    ...flattenDeep(
+      [
+        contentCaseCaptionPet,
+        contentPetitionerLabel,
+        contentVLabel,
+        contentCaseCaptionResp,
+        contentRespondentLabel,
+        contentElectronicallyFiled,
+        contentDocketNumber,
+        contentDocumentTitle,
+        contentCertificateOfService,
+      ].map(cont => drawContent(cont)),
+    ),
   );
 
   // Add the content stream to our newly created page
