@@ -83,7 +83,7 @@ export const DocketRecord = connect(
                 ({ record, document, index }) => (
                   <tr key={index}>
                     <td className="responsive-title center-column">
-                      {index + 1}
+                      {index}
                       <span className="responsive-label push-right">
                         {record.createdAtFormatted}
                       </span>
@@ -210,7 +210,7 @@ export const DocketRecord = connect(
               {caseDetail.docketRecordWithDocument.map(
                 ({ record, document, index }) => (
                   <tr key={index}>
-                    <td className="center-column">{index + 1}</td>
+                    <td className="center-column">{index}</td>
                     <td>{record.createdAtFormatted}</td>
                     <td className="center-column">
                       {document && document.eventCode}

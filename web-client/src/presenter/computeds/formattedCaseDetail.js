@@ -93,8 +93,10 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
-  return docketRecords.map((record, index) => {
+  return docketRecords.map(record => {
     let document;
+
+    const index = record.index;
 
     if (record.documentId) {
       document = documentMap[record.documentId];
