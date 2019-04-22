@@ -81,7 +81,7 @@ export const DocketRecord = connect(
             </thead>
             <tbody>
               {caseDetail.docketRecordWithDocument.map(
-                ({ record, document }, index) => (
+                ({ record, document, index }) => (
                   <tr key={index}>
                     <td className="responsive-title center-column">
                       {index + 1}
