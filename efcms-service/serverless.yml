@@ -236,6 +236,7 @@ functions:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
+          async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
