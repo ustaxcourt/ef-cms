@@ -568,10 +568,21 @@ describe('Case entity', () => {
         new DocketRecord({
           description: 'test',
           filingDate: new Date().toISOString(),
+          index: 5,
         }),
       );
       expect(caseRecord.docketRecord).toHaveLength(2);
       expect(caseRecord.docketRecord[1].description).toEqual('test');
+      expect(caseRecord.docketRecord[1].index).toEqual(5);
+
+      caseRecord.addDocketRecord(
+        new DocketRecord({
+          description: 'sdfs',
+          filingDate: new Date().toISOString(),
+        }),
+      );
+
+      expect(caseRecord.docketRecord[2].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
