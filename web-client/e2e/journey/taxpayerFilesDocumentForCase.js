@@ -108,6 +108,8 @@ export default (test, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
+    expect(test.getState('form.partyPrimary')).toEqual(true);
+
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
