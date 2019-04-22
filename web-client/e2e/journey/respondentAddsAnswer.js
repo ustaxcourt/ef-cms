@@ -34,6 +34,8 @@ export default (test, fakeFile) => {
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 
+    expect(test.getState('form.partyPrimary')).toBeUndefined();
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
@@ -57,6 +59,11 @@ export default (test, fakeFile) => {
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSupportingDocuments',
       value: false,
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'partyPrimary',
+      value: true,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');

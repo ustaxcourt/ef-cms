@@ -6,6 +6,7 @@ import { generateTitleAction } from '../actions/FileDocument/generateTitleAction
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { primeDoNotProceedPropAction } from '../actions/FileDocument/primeDoNotProceedPropAction';
 import { set } from 'cerebral/factories';
+import { setDefaultPartySelectionAction } from '../actions/FileDocument/setDefaultPartySelectionAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setDocumentScenarioAction } from '../actions/FileDocument/setDocumentScenarioAction';
 import { setSecondaryDocumentScenarioAction } from '../actions/FileDocument/setSecondaryDocumentScenarioAction';
@@ -45,7 +46,7 @@ export const selectDocumentSequence = [
                 proceed: [
                   generateTitleAction,
                   setDocketNumberPropAction,
-                  set(state.form.partyPrimary, true),
+                  setDefaultPartySelectionAction,
                   navigateToFileADocumentAction,
                 ],
               },
