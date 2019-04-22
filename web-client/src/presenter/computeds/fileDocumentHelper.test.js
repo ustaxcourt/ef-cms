@@ -129,6 +129,30 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
+  it('shows practitioner option under Parties Filing for user role practitioner', async () => {
+    state.user = { role: 'practitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeTruthy();
+  });
+
+  it('does not show practitioner option under Parties Filing for user role petitioner', async () => {
+    state.user = { role: 'petitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+  });
+
+  it('shows Myself as party primary label for user role petitioner', async () => {
+    state.user = { role: 'petitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyPrimaryLabel).toEqual('Myself');
+  });
+
+  it('shows primary contact name as party primary label for user role practitioner', async () => {
+    state.user = { role: 'practitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
+  });
+
   describe('supporting document', () => {
     beforeEach(() => {
       state.form.hasSupportingDocuments = true;

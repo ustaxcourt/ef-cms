@@ -34,6 +34,27 @@ export const PartiesFiling = connect(
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
               <ul className="ustc-vertical-option-list">
+                {fileDocumentHelper.showPractitionerParty && (
+                  <li>
+                    <input
+                      id="party-practitioner"
+                      type="checkbox"
+                      name="partyPractitioner"
+                      aria-describedby="who-legend"
+                      checked={form.partyPractitioner}
+                      onChange={e => {
+                        updateFileDocumentWizardFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor="party-practitioner">
+                      Myself as Petitioner’s Counsel
+                    </label>
+                  </li>
+                )}
                 <li>
                   <input
                     id="party-primary"
@@ -49,7 +70,9 @@ export const PartiesFiling = connect(
                       validateExternalDocumentInformationSequence();
                     }}
                   />
-                  <label htmlFor="party-primary">Myself</label>
+                  <label htmlFor="party-primary">
+                    {fileDocumentHelper.partyPrimaryLabel}
+                  </label>
                 </li>
                 {fileDocumentHelper.showSecondaryParty && (
                   <li>
