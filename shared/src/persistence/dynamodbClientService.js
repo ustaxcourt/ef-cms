@@ -35,6 +35,26 @@ exports.put = params => {
     .then(() => params.Item);
 };
 
+
+
+/**
+ *
+ * @param params
+ * @returns {*}
+ */
+exports.update = params => {
+  return params.applicationContext
+    .getDocumentClient()
+    .update({
+      TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
+    .promise()
+    .then(() => params.Item);
+};
+
 /**
  * updateConsistent
  * @param params
