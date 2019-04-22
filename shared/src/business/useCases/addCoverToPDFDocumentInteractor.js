@@ -6,7 +6,6 @@ const {
   drawText,
   drawImage,
   drawLinesOfText,
-  drawRectangle,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
 const { flattenDeep } = require('lodash');
@@ -39,6 +38,16 @@ exports.addCoverToPDFDocument = async ({
     document => document.documentId === documentId,
   );
 
+  let dateServedFormatted = '';
+  if (caseEntity.irsSendDate) {
+    const dateServed = new Date(caseEntity.irsSendDate);
+    dateServedFormatted = `SERVED ${dateServed.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })}`;
+  }
+
   const dateReceived = new Date(documentEntity.createdAt);
   const dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -49,14 +58,13 @@ exports.addCoverToPDFDocument = async ({
     minute: '2-digit',
     timeZone: 'America/New_York',
   })}`;
-  const dateLodged = null; // need to establish how to determine this
-  const dateLodgedFormatted = dateLodged;
   const dateFiled = new Date(caseEntity.createdAt);
   const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
   });
+  const isLodged = documentEntity.lodged;
 
   const caseCaption = Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
@@ -64,10 +72,12 @@ exports.addCoverToPDFDocument = async ({
   const coverSheetData = {
     caseCaptionPetitioner: caseCaptionNames,
     caseCaptionRespondent: 'Commissioner of Internal Revenue',
-    dateFiled: dateFiled ? dateFiledFormatted : '',
-    dateLodged: dateLodged ? dateLodgedFormatted : '',
+    dateFiled: isLodged ? '' : dateFiledFormatted,
+    dateLodged: isLodged ? dateFiledFormatted : '',
     dateReceived: dateReceivedFormatted,
-    docketNumber: caseEntity.docketNumber,
+    dateServed: dateServedFormatted,
+    docketNumber:
+      caseEntity.docketNumber + (caseEntity.docketNumberSuffix || ''),
     documentTitle: documentEntity.documentType,
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
@@ -88,9 +98,10 @@ exports.addCoverToPDFDocument = async ({
   const coverPageDimensions = [dimensionsX, dimensionsY];
   const horizontalMargin = 215; // left and right margins
   const verticalMargin = 190; // top and bottom margins
-  const defaultFontSize = 40;
-  const fontSizeCaption = 50;
-  const fontSizeTitle = 60;
+  const defaultFontName = 'Helvetica';
+  const defaultFontSize = 48;
+  const fontSizeCaption = 64;
+  const fontSizeTitle = 80;
 
   // create pdfDoc object from file data
   const pdfDoc = PDFDocumentFactory.load(pdfData);
@@ -101,28 +112,34 @@ exports.addCoverToPDFDocument = async ({
   const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
 
   // Embed font to use for cover page generation
-  const [timesRomanRef, timesRomanFont] = pdfDoc.embedStandardFont(
-    'Times-Roman',
+  const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
+  const [helveticaBoldRef, helveticaBoldFont] = pdfDoc.embedStandardFont(
+    'Helvetica-Bold',
   );
 
   // Generate cover page
   const coverPage = pdfDoc
     .createPage(coverPageDimensions)
     .addImageObject('USTCSeal', pngSeal)
-    .addFontDictionary('Times-Roman', timesRomanRef);
+    .addFontDictionary('Helvetica', helveticaRef)
+    .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
+
+  function paddedLineHeight(fontSize = defaultFontSize) {
+    return fontSize * 0.25 + fontSize;
+  }
 
   function getContentByKey(key) {
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
         if (coverSheetDatumValue === true) {
-          return 'CERTIFICATE OF SERVICE';
+          return 'Certificate of Service';
         } else {
           return '';
         }
       case 'originallyFiledElectronically':
         if (coverSheetDatumValue === true) {
-          return 'ELECTRONICALLY FILED';
+          return 'Electronically Filed';
         } else {
           return '';
         }
@@ -139,17 +156,6 @@ exports.addCoverToPDFDocument = async ({
     } else {
       return newY;
     }
-  }
-
-  // returns content block
-  function contentBlock(content, coords, fontSize, centerTextAt) {
-    return {
-      centerTextAt,
-      content,
-      fontSize,
-      xPos: coords[0],
-      yPos: coords[1],
-    };
   }
 
   function getYOffsetFromPreviousContentArea(
@@ -204,140 +210,203 @@ exports.addCoverToPDFDocument = async ({
     }
   }
 
-  const dateLodgedLabel = dateLodged ? 'Lodged' : '';
-  const dateFiledLabel = dateFiled ? 'Filed' : '';
+  const dateFiledLabel = isLodged ? '' : 'Filed';
+  const dateLodgedLabel = isLodged ? 'Lodged' : '';
 
   // Content areas
-  const contentDateReceived = contentBlock(
-    ['Received', getContentByKey('dateReceived')],
-    [510, 3036],
-  );
-  const contentDateLodged = contentBlock(
-    [dateLodgedLabel, getContentByKey('dateLodged')],
-    [1369, 3036],
-  );
-  const contentDateFiled = contentBlock(
-    [dateFiledLabel, getContentByKey('dateFiled')],
-    [2033, 3036],
-  );
-  const contentCaseCaptionPet = contentBlock(
-    wrapText(
+  const contentDateReceivedLabel = {
+    content: 'Received',
+    fontName: 'Helvetica-Bold',
+    xPos: 900,
+    yPos: 3036,
+  };
+
+  const contentDateReceived = {
+    content: getContentByKey('dateReceived'),
+    xPos: 800,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentDateReceivedLabel,
+      helveticaBoldFont,
+      defaultFontSize,
+      helveticaFont.heightOfFontAtSize(defaultFontSize),
+    ),
+  };
+
+  const contentDateLodgedLabel = {
+    content: dateLodgedLabel,
+    fontName: 'Helvetica-Bold',
+    xPos: 1440,
+    yPos: 3036,
+  };
+
+  const contentDateLodged = {
+    content: getContentByKey('dateLodged'),
+    xPos: 1415,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentDateLodgedLabel,
+      helveticaBoldFont,
+      defaultFontSize,
+      helveticaFont.heightOfFontAtSize(defaultFontSize),
+    ),
+  };
+
+  const contentDateFiledLabel = {
+    content: dateFiledLabel,
+    fontName: 'Helvetica-Bold',
+    xPos: 1938,
+    yPos: 3036,
+  };
+
+  const contentDateFiled = {
+    content: getContentByKey('dateFiled'),
+    xPos: 1883,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentDateFiledLabel,
+      helveticaBoldFont,
+      defaultFontSize,
+      helveticaFont.heightOfFontAtSize(defaultFontSize),
+    ),
+  };
+
+  const contentCaseCaptionPet = {
+    content: wrapText(
       getContentByKey('caseCaptionPetitioner'),
       1042,
-      timesRomanFont,
+      helveticaFont,
       fontSizeCaption,
     ),
-    [horizontalMargin, 2534],
-    fontSizeCaption,
-  );
-  const contentPetitionerLabel = contentBlock(
-    'Petitioner(s)',
-    [
-      531,
-      getYOffsetFromPreviousContentArea(
-        contentCaseCaptionPet,
-        timesRomanFont,
-        fontSizeCaption,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
-      ),
-    ],
-    fontSizeCaption,
-  );
-  const contentVLabel = contentBlock(
-    'V.',
-    [
-      531,
-      getYOffsetFromPreviousContentArea(
-        contentPetitionerLabel,
-        timesRomanFont,
-        fontSizeCaption,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
-      ),
-    ],
-    fontSizeCaption,
-  );
-  const contentCaseCaptionResp = contentBlock(
-    wrapText(
+    fontSize: fontSizeCaption,
+    xPos: horizontalMargin,
+    yPos: 2534,
+  };
+
+  const contentPetitionerLabel = {
+    content: 'Petitioner(s)',
+    fontSize: fontSizeCaption,
+    xPos: 531,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentCaseCaptionPet,
+      helveticaFont,
+      fontSizeCaption,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+    ),
+  };
+
+  const contentVLabel = {
+    content: 'v.',
+    fontSize: fontSizeCaption,
+    xPos: 531,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentPetitionerLabel,
+      helveticaFont,
+      fontSizeCaption,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+    ),
+  };
+
+  const contentCaseCaptionResp = {
+    content: wrapText(
       getContentByKey('caseCaptionRespondent'),
       1042,
-      timesRomanFont,
+      helveticaFont,
       fontSizeCaption,
     ),
-    [
-      horizontalMargin,
-      getYOffsetFromPreviousContentArea(
-        contentVLabel,
-        timesRomanFont,
-        fontSizeCaption,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
-      ),
-    ],
-    fontSizeCaption,
-  );
-  const contentRespondentLabel = contentBlock(
-    'Respondent',
-    [
-      531,
-      getYOffsetFromPreviousContentArea(
-        contentCaseCaptionResp,
-        timesRomanFont,
-        fontSizeCaption,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption),
-      ),
-    ],
-    fontSizeCaption,
-  );
-  const contentElectronicallyFiled = contentBlock(
-    getContentByKey('originallyFiledElectronically'),
-    [1530, contentPetitionerLabel.yPos],
-    fontSizeCaption,
-  );
-  const contentDocketNumber = contentBlock(
-    `Docket Number: ${getContentByKey('docketNumber')}`,
-    [1530, contentVLabel.yPos],
-    fontSizeCaption,
-  );
-  const contentDocumentTitle = contentBlock(
-    wrapText(
+    fontSize: fontSizeCaption,
+    xPos: horizontalMargin,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentVLabel,
+      helveticaFont,
+      fontSizeCaption,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+    ),
+  };
+
+  const contentRespondentLabel = {
+    content: 'Respondent(s)',
+    fontSize: fontSizeCaption,
+    xPos: 531,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentCaseCaptionResp,
+      helveticaFont,
+      fontSizeCaption,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+    ),
+  };
+
+  const contentElectronicallyFiled = {
+    content: getContentByKey('originallyFiledElectronically'),
+    fontSize: fontSizeCaption,
+    xPos: 1530,
+    yPos: contentPetitionerLabel.yPos,
+  };
+
+  const contentDocketNumber = {
+    content: `Docket Number: ${getContentByKey('docketNumber')}`,
+    fontSize: fontSizeCaption,
+    xPos: 1530,
+    yPos: contentVLabel.yPos,
+  };
+
+  const contentDocumentTitle = {
+    centerTextAt: {
+      centerXOffset: 531, // same x offset as xpos
+      centerXWidth: 1488, // same width as wrap text method
+      fontObj: helveticaFont,
+    },
+    content: wrapText(
       getContentByKey('documentTitle'),
       1488,
-      timesRomanFont,
+      helveticaFont,
       fontSizeTitle,
     ),
-    [
-      531,
-      getYOffsetFromPreviousContentArea(
-        contentRespondentLabel,
-        timesRomanFont,
-        fontSizeCaption,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption) * 5,
-      ),
-    ],
-    fontSizeTitle,
-    {
-      centerXOffset: 531, // same x offset as above
-      centerXWidth: 1488, // same width as wrap text method above
-      fontObj: timesRomanFont,
+    fontSize: fontSizeTitle,
+    xPos: 531,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentRespondentLabel,
+      helveticaFont,
+      fontSizeCaption,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 8,
+    ),
+  };
+
+  const contentCertificateOfService = {
+    content: getContentByKey('includesCertificateOfService'),
+    xPos: horizontalMargin,
+    yPos: getYOffsetFromPreviousContentArea(
+      contentDocumentTitle,
+      helveticaFont,
+      fontSizeTitle,
+      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 10,
+    ),
+  };
+
+  const contentDateServed = {
+    centerTextAt: {
+      centerXOffset: 531, // same x offset as xpos
+      centerXWidth: 1488, // same width as wrap text method
+      fontObj: helveticaFont,
     },
-  );
-  const contentCertificateOfService = contentBlock(
-    getContentByKey('includesCertificateOfService'),
-    [
-      horizontalMargin,
-      getYOffsetFromPreviousContentArea(
-        contentDocumentTitle,
-        timesRomanFont,
-        fontSizeTitle,
-        timesRomanFont.heightOfFontAtSize(fontSizeCaption) * 5,
-      ),
-    ],
-  );
+    content: getContentByKey('dateServed'),
+    fontName: 'Helvetica-Bold',
+    fontSize: fontSizeTitle,
+    xPos: 531,
+    yPos: 231,
+  };
 
   function drawContent(contentArea) {
-    const { centerTextAt, content, xPos, yPos, fontSize } = contentArea;
+    const {
+      centerTextAt,
+      content,
+      xPos,
+      yPos,
+      fontSize,
+      fontName,
+    } = contentArea;
+
     const params = {
       colorRgb: [0, 0, 0],
-      font: 'Times-Roman',
+      font: fontName || defaultFontName,
+      lineHeight: paddedLineHeight(fontSize),
       size: fontSize || defaultFontSize,
       x: xPos,
       y: yPos,
@@ -366,9 +435,7 @@ exports.addCoverToPDFDocument = async ({
         // We do this because we need to insert the lines individually
         const contentLines = content.map((cont, idx) => {
           const newParams = setCenterPos(cont, params);
-          newParams.y =
-            params.y +
-            centerTextAt.fontObj.heightOfFontAtSize(newParams.size) * idx;
+          newParams.y = params.y - params.lineHeight * idx;
           return drawText(cont, newParams);
         });
         return contentLines;
@@ -383,7 +450,6 @@ exports.addCoverToPDFDocument = async ({
   // This is where the magic happens. The content stream and its coords will need to be
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
-    // Header Content
     drawImage('USTCSeal', {
       height: pngSealDimensions.height / 2,
       width: pngSealDimensions.width / 2,
@@ -391,21 +457,13 @@ exports.addCoverToPDFDocument = async ({
       y: translateY(verticalMargin + pngSealDimensions.height / 2),
     }),
     ...flattenDeep(
-      [contentDateReceived, contentDateLodged, contentDateFiled].map(cont =>
-        drawContent(cont),
-      ),
-    ),
-    // HR in header
-    drawRectangle({
-      colorRgb: [0.3, 0.3, 0.3],
-      height: 2,
-      width: dimensionsX,
-      x: 0,
-      y: 2824,
-    }),
-    // Body Content
-    ...flattenDeep(
       [
+        contentDateReceivedLabel,
+        contentDateReceived,
+        contentDateLodgedLabel,
+        contentDateLodged,
+        contentDateFiledLabel,
+        contentDateFiled,
         contentCaseCaptionPet,
         contentPetitionerLabel,
         contentVLabel,
@@ -415,6 +473,7 @@ exports.addCoverToPDFDocument = async ({
         contentDocketNumber,
         contentDocumentTitle,
         contentCertificateOfService,
+        contentDateServed,
       ].map(cont => drawContent(cont)),
     ),
   );
