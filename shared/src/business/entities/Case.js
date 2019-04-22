@@ -127,23 +127,6 @@ function Case(rawCase) {
   this.orderForOds = this.orderForOds || false;
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
-
-  const trialRecord = this.docketRecord.find(
-    record => record.description.indexOf('Request for Place of Trial') !== -1,
-  );
-
-  if (this.preferredTrialCity) {
-    if (!trialRecord) {
-      this.addDocketRecord(
-        new DocketRecord({
-          description: `Request for Place of Trial at ${
-            this.preferredTrialCity
-          }`,
-          filingDate: this.receivedAt || this.createdAt,
-        }),
-      );
-    }
-  }
 }
 
 Case.name = 'Case';
@@ -588,6 +571,35 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
     this.addDocketRecord(new DocketRecord(newDocketItem));
   } else if (payGovDate && found && !datesMatch) {
     this.updateDocketRecord(docketRecordIndex, new DocketRecord(newDocketItem));
+  }
+  return this;
+};
+
+/**
+ *
+ * @param {string} preferredTrialCity
+ * @returns {Case}
+ */
+Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
+  this.preferredTrialCity = preferredTrialCity;
+
+  let found;
+  let docketRecordIndex;
+
+  this.docketRecord.forEach((docketRecord, index) => {
+    found =
+      found ||
+      docketRecord.description.indexOf('Request for Place of Trial') !== -1;
+    docketRecordIndex = found ? index : docketRecordIndex;
+  });
+
+  if (preferredTrialCity && !found) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+        filingDate: this.receivedAt || this.createdAt,
+      }),
+    );
   }
   return this;
 };

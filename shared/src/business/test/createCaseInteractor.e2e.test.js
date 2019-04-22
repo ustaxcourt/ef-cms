@@ -71,12 +71,12 @@ describe('createCase integration test', () => {
       docketNumberSuffix: 'S',
       docketRecord: [
         {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
-        },
-        {
           description: 'Petition',
           filedBy: 'Rick Petitioner',
           status: undefined,
+        },
+        {
+          description: 'Request for Place of Trial at Aberdeen, South Dakota',
         },
       ],
       documents: [

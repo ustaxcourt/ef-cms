@@ -6,17 +6,6 @@ const { PARTY_TYPES } = require('./contacts/PetitionContact');
 const { WorkItem } = require('./WorkItem');
 
 describe('Case entity', () => {
-  it('creates a trial city docket record if preferredTrialCity is updated and a docket record does not exist', () => {
-    const myCase = new Case(MOCK_CASE);
-    expect(myCase).toMatchObject({
-      docketRecord: [
-        {
-          description: 'Request for Place of Trial at Washington, D.C.',
-        },
-      ],
-    });
-  });
-
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE);
     expect(myCase).toMatchObject({
@@ -561,6 +550,28 @@ describe('Case entity', () => {
     });
   });
 
+  describe('setRequestForTrialDocketRecord', () => {
+    it('sets request for trial docket record when it does not already exist', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const preferredTrialCity = 'Mobile, Alabama';
+      const initialDocketLength =
+        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
+      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
+      const docketLength = caseRecord.docketRecord.length;
+      expect(docketLength).toEqual(initialDocketLength + 1);
+    });
+
+    it('should only set docket record once for request for trial', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const preferredTrialCity = 'Mobile, Alabama';
+      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
+      const docketLength = caseRecord.docketRecord.length;
+      caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama');
+      caseRecord.setRequestForTrialDocketRecord('Somecity, USA');
+      expect(docketLength).toEqual(caseRecord.docketRecord.length);
+    });
+  });
+
   describe('addDocketRecord', () => {
     it('adds a new docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
@@ -570,8 +581,8 @@ describe('Case entity', () => {
           filingDate: new Date().toISOString(),
         }),
       );
-      expect(caseRecord.docketRecord).toHaveLength(2);
-      expect(caseRecord.docketRecord[1].description).toEqual('test');
+      expect(caseRecord.docketRecord).toHaveLength(1);
+      expect(caseRecord.docketRecord[0].description).toEqual('test');
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
