@@ -111,12 +111,14 @@
     "docketRecord": [
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Request for Place of Trial at Boise, Idaho"
+        "description": "Petition",
+        "filedBy": "Test Petitioner",
+        "index": 1
       },
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Petition",
-        "filedBy": "Test Petitioner"
+        "description": "Request for Place of Trial at Boise, Idaho",
+        "index": 2
       }
     ],
     "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
