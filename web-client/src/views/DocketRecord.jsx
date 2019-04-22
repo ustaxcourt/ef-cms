@@ -68,10 +68,12 @@ export const DocketRecord = connect(
           >
             <thead>
               <tr>
-                <th className="center-column">No.</th>
+                <th className="center-column" aria-label="Number">
+                  No.
+                </th>
                 <th>Date</th>
                 <th className="center-column">Event</th>
-                <th className="icon-column" />
+                <th className="icon-column" aria-hidden="true" />
                 <th>Filings and Proceedings</th>
                 <th>Filed By</th>
                 <th>Action</th>
@@ -97,7 +99,10 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Event</span>
                       {document && document.eventCode}
                     </td>
-                    <td className="filing-type-icon hide-on-mobile">
+                    <td
+                      className="filing-type-icon hide-on-mobile"
+                      aria-hidden="true"
+                    >
                       {document && document.isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
