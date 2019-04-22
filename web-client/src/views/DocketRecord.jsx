@@ -62,8 +62,7 @@ export const DocketRecord = connect(
         )}
         <div className="scrollable-table-container">
           <table
-            className="responsive-table row-border-only"
-            id="docket-record"
+            className="docket-record responsive-table row-border-only"
             aria-label="docket record"
           >
             <thead>
@@ -83,7 +82,7 @@ export const DocketRecord = connect(
             </thead>
             <tbody>
               {caseDetail.docketRecordWithDocument.map(
-                ({ record, document }, index) => (
+                ({ record, document, index }) => (
                   <tr key={index}>
                     <td className="responsive-title center-column">
                       {index + 1}
@@ -187,6 +186,107 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {record.servedParties}
                     </td>
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="scrollable-table-container-mobile">
+          <table
+            className="docket-record mobile-only-extra-table row-border-only"
+            aria-label="docket record"
+          >
+            <thead>
+              <tr>
+                <th className="center-column">No.</th>
+                <th>Date</th>
+                <th className="center-column">Event</th>
+                <th className="icon-column" />
+                <th>Filings and Proceedings</th>
+                <th>Filed By</th>
+                <th>Action</th>
+                <th>Served</th>
+                <th className="center-column">Parties</th>
+              </tr>
+            </thead>
+            <tbody>
+              {caseDetail.docketRecordWithDocument.map(
+                ({ record, document, index }) => (
+                  <tr key={index}>
+                    <td className="center-column">{index + 1}</td>
+                    <td>{record.createdAtFormatted}</td>
+                    <td className="center-column">
+                      {document && document.eventCode}
+                    </td>
+                    <td className="filing-type-icon">
+                      {document && document.isPaper && (
+                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                      )}
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus !== 'complete' && (
+                          <FontAwesomeIcon
+                            icon="spinner"
+                            className="fa-spin spinner"
+                          />
+                        )}
+                    </td>
+                    <td>
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus === 'complete' &&
+                        renderDocumentLink(
+                          document.documentId,
+                          record.description,
+                          document.isPaper,
+                        )}
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus !== 'complete' && (
+                          <React.Fragment>
+                            <span
+                              className="usa-label-uploading"
+                              aria-label="document uploading marker"
+                            >
+                              <span aria-hidden="true">Uploading</span>
+                            </span>
+                            {record.description}
+                          </React.Fragment>
+                        )}
+                      {document && helper.showDocumentDetailLink && (
+                        <a
+                          href={documentHelper({
+                            docketNumber: caseDetail.docketNumber,
+                            documentId: document.documentId,
+                          })}
+                          aria-label="View PDF"
+                        >
+                          {record.description}
+                        </a>
+                      )}
+                      {!document &&
+                        record.documentId &&
+                        renderDocumentLink(
+                          record.documentId,
+                          record.description,
+                        )}
+                      {!document && !record.documentId && record.description}
+                      {record.filingsAndProceedings &&
+                        ` ${record.filingsAndProceedings}`}
+                    </td>
+                    <td>{document && document.filedBy}</td>
+                    <td>{record.action}</td>
+                    <td>
+                      {document && document.isStatusServed && (
+                        <span>{caseDetail.datePetitionSentToIrsMessage}</span>
+                      )}
+                      {document && helper.showDocumentStatus && (
+                        <span>{document.status}</span>
+                      )}
+                    </td>
+                    <td className="center-column">{record.servedParties}</td>
                   </tr>
                 ),
               )}

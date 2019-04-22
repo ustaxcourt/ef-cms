@@ -160,7 +160,7 @@ const formatDocketRecordWithDocument = (
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
+const formatCase = (caseDetail, caseDetailErrors) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -174,21 +174,8 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
     );
   }
 
-  // sort to make petition first and everything else in cronological order
-  const getScore = entry => {
-    const documentType = (entry.document || {}).documentType;
-    if (documentType === documentTypesMap.petitionFile) return 1;
-    else return 2;
-  };
-
   result.docketRecordWithDocument.sort((a, b) => {
-    const aScore = getScore(a);
-    const bScore = getScore(b);
-    if (aScore === bScore) {
-      return;
-    } else {
-      return aScore - bScore;
-    }
+    return a.index - b.index;
   });
 
   if (result.respondent)

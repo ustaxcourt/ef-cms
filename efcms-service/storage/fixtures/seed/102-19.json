@@ -15,6 +15,7 @@
     },
     "documents": [
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-01T21:42:29.073Z",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
@@ -56,6 +57,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",

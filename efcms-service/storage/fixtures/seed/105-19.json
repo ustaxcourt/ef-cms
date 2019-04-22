@@ -7,6 +7,7 @@
         "createdAt": "2019-03-27T21:53:00.297Z",
         "documentType": "Petition",
         "filedBy": "Test Practitioner",
+        "processingStatus": "complete",
         "workItems": [
           {
             "docketNumberSuffix": null,
@@ -45,6 +46,7 @@
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-27T21:53:00.298Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Practitioner",
