@@ -22,7 +22,6 @@ exports.addCoverToPDFDocument = async ({
   caseId,
   documentId,
 }) => {
-
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -433,12 +432,13 @@ exports.addCoverToPDFDocument = async ({
 
   documentEntity.processingStatus = 'complete';
 
-
-  await applicationContext.getPersistenceGateway().updateDocumentProcessingStatus({
-    applicationContext,
-    documentIndex,
-    caseId,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocumentProcessingStatus({
+      applicationContext,
+      caseId,
+      documentIndex,
+    });
 
   await applicationContext
     .getPersistenceGateway()
