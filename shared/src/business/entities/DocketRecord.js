@@ -32,6 +32,10 @@ joiValidationDecorator(
       .max('now')
       .iso()
       .required(),
+    index: joi
+      .number()
+      .integer()
+      .optional(),
     status: joi
       .string()
       .allow(null)
