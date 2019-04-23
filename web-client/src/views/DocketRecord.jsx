@@ -83,18 +83,9 @@ export const DocketRecord = connect(
             {caseDetail.docketRecordWithDocument.map(
               ({ record, document, index }) => (
                 <tr key={index}>
-                  <td className="responsive-title center-column">
-                    {index}
-                    <span className="responsive-label push-right">
-                      {record.createdAtFormatted}
-                    </span>
-                  </td>
-                  <td className="hide-on-mobile">
-                    <span className="responsive-label">Date</span>
-                    {record.createdAtFormatted}
-                  </td>
-                  <td className="center-column">
-                    <span className="responsive-label">Event</span>
+                  <td className="center-column hide-on-mobile">{index}</td>
+                  <td>{record.createdAtFormatted}</td>
+                  <td className="center-column hide-on-mobile">
                     {document && document.eventCode}
                   </td>
                   <td
@@ -114,9 +105,6 @@ export const DocketRecord = connect(
                       )}
                   </td>
                   <td>
-                    <span className="responsive-label">
-                      Filings and Proceedings
-                    </span>
                     {document &&
                       helper.showDirectDownloadLink &&
                       document.processingStatus === 'complete' &&
@@ -158,19 +146,20 @@ export const DocketRecord = connect(
                       record.documentId &&
                       renderDocumentLink(record.documentId, record.description)}
                     {!document && !record.documentId && record.description}
-                    {record.filingsAndProceedings &&
-                      ` ${record.filingsAndProceedings}`}
+                    {record.filingsAndProceedings && (
+                      <>
+                        {' '}
+                        <span className="filings-and-proceedings">
+                          {record.filingsAndProceedings}
+                        </span>
+                      </>
+                    )}
                   </td>
-                  <td>
-                    <span className="responsive-label">Filed by</span>
+                  <td className="hide-on-mobile">
                     {document && document.filedBy}
                   </td>
+                  <td className="hide-on-mobile">{record.action}</td>
                   <td>
-                    <span className="responsive-label">Action</span>
-                    {record.action}
-                  </td>
-                  <td>
-                    <span className="responsive-label">Served</span>
                     {document && document.isStatusServed && (
                       <span>{caseDetail.datePetitionSentToIrsMessage}</span>
                     )}
@@ -178,7 +167,7 @@ export const DocketRecord = connect(
                       <span>{document.status}</span>
                     )}
                   </td>
-                  <td className="center-column">
+                  <td className="center-column hide-on-mobile">
                     <span className="responsive-label">Parties</span>
                     {record.servedParties}
                   </td>
@@ -187,109 +176,6 @@ export const DocketRecord = connect(
             )}
           </tbody>
         </table>
-
-        <div className="scrollable-table-container-mobile">
-          <table
-            className="docket-record mobile-only-extra-table row-border-only"
-            aria-label="docket record"
-          >
-            <thead>
-              <tr>
-                <th className="center-column" aria-label="Number">
-                  No.
-                </th>
-                <th>Date</th>
-                <th className="center-column">Event</th>
-                <th className="icon-column" aria-hidden="true" />
-                <th>Filings and Proceedings</th>
-                <th>Filed By</th>
-                <th>Action</th>
-                <th>Served</th>
-                <th className="center-column">Parties</th>
-              </tr>
-            </thead>
-            <tbody>
-              {caseDetail.docketRecordWithDocument.map(
-                ({ record, document, index }) => (
-                  <tr key={index}>
-                    <td className="center-column">{index}</td>
-                    <td>{record.createdAtFormatted}</td>
-                    <td className="center-column">
-                      {document && document.eventCode}
-                    </td>
-                    <td className="filing-type-icon" aria-hidden="true">
-                      {document && document.isPaper && (
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                      )}
-                      {document &&
-                        helper.showDirectDownloadLink &&
-                        document.processingStatus !== 'complete' && (
-                          <FontAwesomeIcon
-                            icon="spinner"
-                            className="fa-spin spinner"
-                          />
-                        )}
-                    </td>
-                    <td>
-                      {document &&
-                        helper.showDirectDownloadLink &&
-                        document.processingStatus === 'complete' &&
-                        renderDocumentLink(
-                          document.documentId,
-                          record.description,
-                          document.isPaper,
-                        )}
-                      {document &&
-                        helper.showDirectDownloadLink &&
-                        document.processingStatus !== 'complete' && (
-                          <React.Fragment>
-                            <span
-                              className="usa-label-uploading"
-                              aria-label="document uploading marker"
-                            >
-                              <span aria-hidden="true">Uploading</span>
-                            </span>
-                            {record.description}
-                          </React.Fragment>
-                        )}
-                      {document && helper.showDocumentDetailLink && (
-                        <a
-                          href={documentHelper({
-                            docketNumber: caseDetail.docketNumber,
-                            documentId: document.documentId,
-                          })}
-                          aria-label="View PDF"
-                        >
-                          {record.description}
-                        </a>
-                      )}
-                      {!document &&
-                        record.documentId &&
-                        renderDocumentLink(
-                          record.documentId,
-                          record.description,
-                        )}
-                      {!document && !record.documentId && record.description}
-                      {record.filingsAndProceedings &&
-                        ` ${record.filingsAndProceedings}`}
-                    </td>
-                    <td>{document && document.filedBy}</td>
-                    <td>{record.action}</td>
-                    <td>
-                      {document && document.isStatusServed && (
-                        <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                      )}
-                      {document && helper.showDocumentStatus && (
-                        <span>{document.status}</span>
-                      )}
-                    </td>
-                    <td className="center-column">{record.servedParties}</td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </table>
-        </div>
       </React.Fragment>
     );
   },
