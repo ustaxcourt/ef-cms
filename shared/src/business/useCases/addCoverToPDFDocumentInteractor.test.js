@@ -93,6 +93,10 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        logger: {
+          time: () => null,
+          timeEnd: () => null,
+        },
       },
       caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -129,6 +133,11 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+
+        logger: {
+          time: () => null,
+          timeEnd: () => null,
+        },
       },
       caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
