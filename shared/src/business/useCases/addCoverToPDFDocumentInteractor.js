@@ -80,7 +80,7 @@ exports.addCoverToPDFDocument = async ({
     dateServed: dateServedFormatted,
     docketNumber:
       caseEntity.docketNumber + (caseEntity.docketNumberSuffix || ''),
-    documentTitle: documentEntity.documentType,
+    documentTitle: documentEntity.documentTitle || documentEntity.documentType,
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
     originallyFiledElectronically: !caseEntity.isPaper,
