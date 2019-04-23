@@ -84,9 +84,9 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
 };
 
 const formatDocketRecordWithDocument = (
+  caseDetail,
   docketRecords = [],
   documents = [],
-  caseDetail,
 ) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
@@ -172,9 +172,9 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   if (result.docketRecord) {
     result.docketRecord = result.docketRecord.map(formatDocketRecord);
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
+      caseDetail,
       result.docketRecord,
       result.documents,
-      caseDetail,
     );
   }
 
