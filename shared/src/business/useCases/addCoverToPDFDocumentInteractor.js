@@ -87,7 +87,7 @@ exports.addCoverToPDFDocument = async ({
   };
 
   applicationContext.logger.time('Fetching S3 File');
-  const { Body: pdfData } = await applicationContext
+  let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -111,6 +111,9 @@ exports.addCoverToPDFDocument = async ({
   applicationContext.logger.time('Loading the PDF');
   const pdfDoc = PDFDocumentFactory.load(pdfData);
   applicationContext.logger.time('Loading the PDF');
+
+  // allow GC to clear original loaded pdf data
+  pdfData = null;
 
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
@@ -516,6 +519,7 @@ exports.addCoverToPDFDocument = async ({
   applicationContext.logger.timeEnd('Updating Document Status');
 
   applicationContext.logger.time('Saving S3 Document');
+
   await applicationContext
     .getPersistenceGateway()
     .saveDocument({ applicationContext, document: newPdfData, documentId });
