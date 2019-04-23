@@ -29,7 +29,10 @@ export const SecondaryDocumentForm = connect(
         <div className="blue-container">
           <div className="usa-grid-full">
             <div className="usa-width-seven-twelfths push-right">
-              <div id="document-secondary-upload-hint" className="alert-gold">
+              <div
+                id="document-secondary-upload-hint"
+                className="alert-gold add-bottom-margin"
+              >
                 <span className="usa-form-hint ustc-form-hint-with-svg">
                   <FontAwesomeIcon
                     icon={['far', 'arrow-alt-circle-left']}
