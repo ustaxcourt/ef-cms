@@ -28,7 +28,7 @@ describe('fileExternalDocument', () => {
     role: 'petitioner',
     userId: 'taxpayer',
   };
-  it('should throw if not authorized', async () => {
+  it('should throw an error if not authorized', async () => {
     let error;
     try {
       applicationContext = {
