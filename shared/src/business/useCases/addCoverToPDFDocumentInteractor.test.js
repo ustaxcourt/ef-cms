@@ -8,6 +8,7 @@ const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
 function testPdfDocBytes() {
+  // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 }
 
