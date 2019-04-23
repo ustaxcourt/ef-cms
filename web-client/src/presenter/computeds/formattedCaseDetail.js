@@ -163,6 +163,9 @@ const formatDocketRecordWithDocument = (
 };
 
 const formatCase = (caseDetail, caseDetailErrors) => {
+  if (_.isEmpty(caseDetail)) {
+    return {};
+  }
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
