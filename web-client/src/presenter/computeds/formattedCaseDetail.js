@@ -131,30 +131,32 @@ const formatDocketRecordWithDocument = (
         .join(' ');
 
       if (!document.filedBy) {
-        let filedByString = '';
+        let filedByArray = [];
         if (document.partyRespondent) {
-          filedByString = 'Resp.';
-          if (document.partyPrimary || document.partySecondary) {
-            filedByString += ' & ';
-          }
+          filedByArray.push('Resp.');
+        }
+        if (document.partyPractitioner) {
+          filedByArray.push(`Counsel ${caseDetail.practitioner.name}`);
         }
         if (
           document.partyPrimary &&
           !document.partySecondary &&
           caseDetail.contactPrimary
         ) {
-          filedByString += `Petr. ${caseDetail.contactPrimary.name}`;
+          filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
         } else if (
           document.partyPrimary &&
           document.partySecondary &&
           caseDetail.contactPrimary &&
           caseDetail.contactSecondary
         ) {
-          filedByString += `Petrs. ${caseDetail.contactPrimary.name} & ${
-            caseDetail.contactSecondary.name
-          }`;
+          filedByArray.push(
+            `Petrs. ${caseDetail.contactPrimary.name} & ${
+              caseDetail.contactSecondary.name
+            }`,
+          );
         }
-        document.filedBy = filedByString;
+        document.filedBy = filedByArray.join(' & ');
       }
     }
 
@@ -221,12 +223,6 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
-
-  // const postfixs = [', Petitioner', ', Petitioners', ', Petitioner(s)'];
-  result.caseName = (result.caseCaption || '').replace(
-    /\s*,\s*Petitioner(s|\(s\))?\s*$/,
-    '',
-  );
 
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',

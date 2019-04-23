@@ -95,23 +95,25 @@ export const PartiesFiling = connect(
                     </label>
                   </li>
                 )}
-                <li>
-                  <input
-                    id="party-respondent"
-                    type="checkbox"
-                    aria-describedby="who-legend"
-                    name="partyRespondent"
-                    checked={form.partyRespondent}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label htmlFor="party-respondent">Respondent</label>
-                </li>
+                {fileDocumentHelper.showRespondentParty && (
+                  <li>
+                    <input
+                      id="party-respondent"
+                      type="checkbox"
+                      aria-describedby="who-legend"
+                      name="partyRespondent"
+                      checked={form.partyRespondent}
+                      onChange={e => {
+                        updateFileDocumentWizardFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor="party-respondent">Respondent</label>
+                  </li>
+                )}
               </ul>
             </fieldset>
             {fileDocumentHelper.partyValidationError && (
