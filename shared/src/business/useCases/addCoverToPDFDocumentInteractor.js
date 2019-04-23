@@ -129,7 +129,7 @@ exports.addCoverToPDFDocument = async ({
 
   // Generate cover page
   const coverPage = pdfDoc
-    .createPage(coverPageDimensions)
+    .createPage(coverPageDimensions.map(dim => pageScaler(dim)))
     .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Helvetica', helveticaRef)
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
@@ -447,10 +447,10 @@ exports.addCoverToPDFDocument = async ({
     const params = {
       colorRgb: [0, 0, 0],
       font: fontName || defaultFontName,
-      lineHeight: paddedLineHeight(fontSize),
-      size: fontSize || defaultFontSize,
-      x: xPos,
-      y: yPos,
+      lineHeight: pageScaler(paddedLineHeight(fontSize)),
+      size: pageScaler(fontSize || defaultFontSize),
+      x: pageScaler(xPos),
+      y: pageScaler(yPos),
     };
 
     const centeringText = !!(
@@ -464,7 +464,8 @@ exports.addCoverToPDFDocument = async ({
 
       const { centerXOffset, centerXWidth, fontObj } = centerTextAt;
       const textWidth = fontObj.widthOfTextAtSize(content, params.size);
-      const newXOffset = (centerXWidth - textWidth) / 2 + centerXOffset;
+      const newXOffset =
+        (pageScaler(centerXWidth) - textWidth) / 2 + pageScaler(centerXOffset);
       return {
         ...params,
         x: newXOffset,
@@ -492,10 +493,10 @@ exports.addCoverToPDFDocument = async ({
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
     drawImage('USTCSeal', {
-      height: pngSealDimensions.height / 2,
-      width: pngSealDimensions.width / 2,
-      x: horizontalMargin,
-      y: translateY(verticalMargin + pngSealDimensions.height / 2),
+      height: pageScaler(pngSealDimensions.height / 2),
+      width: pageScaler(pngSealDimensions.width / 2),
+      x: pageScaler(horizontalMargin),
+      y: pageScaler(translateY(verticalMargin + pngSealDimensions.height / 2)),
     }),
     ...flattenDeep(
       [
