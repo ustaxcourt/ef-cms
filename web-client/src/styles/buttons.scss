@@ -60,6 +60,11 @@ button.text-style {
     background: inherit;
     color: inherit;
   }
+  &.heading-1 {
+    color: $color-black;
+    font-weight: $font-bold;
+  }
+
 }
 
 .recall-button-box {
