@@ -87,7 +87,7 @@ exports.addCoverToPDFDocument = async ({
   };
 
   applicationContext.logger.time('Fetching S3 File');
-  const { Body: pdfData } = await applicationContext
+  let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -112,6 +112,9 @@ exports.addCoverToPDFDocument = async ({
   applicationContext.logger.time('Loading the PDF');
   const pdfDoc = PDFDocumentFactory.load(pdfData);
   applicationContext.logger.time('Loading the PDF');
+
+  // allow GC to clear original loaded pdf data
+  pdfData = null;
 
   const pages = pdfDoc.getPages();
   const originalPageDimensions = getPageDimensions(pages[0]);

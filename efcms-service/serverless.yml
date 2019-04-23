@@ -231,6 +231,8 @@ functions:
 
   addCoversheet:
     handler: src/documents/addCoversheetLambda.handler
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
