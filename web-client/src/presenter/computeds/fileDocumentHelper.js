@@ -76,7 +76,7 @@ export const fileDocumentHelper = get => {
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPractitionerParty: userRole === 'practitioner',
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showRespondentParty: caseDetail.respondent,
+    showRespondentParty: !!caseDetail.respondent,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingNotIncludes,
     showSecondaryParty,
