@@ -132,11 +132,11 @@ const formatDocketRecordWithDocument = (
 
       if (!document.filedBy) {
         let filedByArray = [];
-        if (document.partyPractitioner) {
-          filedByArray.push(`Counsel ${caseDetail.practitioner.name}`);
-        }
         if (document.partyRespondent) {
           filedByArray.push('Resp.');
+        }
+        if (document.partyPractitioner) {
+          filedByArray.push(`Counsel ${caseDetail.practitioner.name}`);
         }
         if (
           document.partyPrimary &&

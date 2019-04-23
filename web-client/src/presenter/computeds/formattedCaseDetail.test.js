@@ -343,6 +343,7 @@ describe('formatYearAmounts', () => {
           hasSupportingDocuments: true,
           objections: 'Yes',
           partyPrimary: true,
+          partySecondary: true,
           relationship: 'primaryDocument',
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
@@ -362,8 +363,7 @@ describe('formatYearAmounts', () => {
           freeText: 'Test',
           lodged: true,
           partyPractitioner: true,
-          partyPrimary: true,
-          partySecondary: true,
+          partyRespondent: true,
           previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
@@ -394,13 +394,13 @@ describe('formatYearAmounts', () => {
       result.docketRecordWithDocument[1].record.filingsAndProceedings,
     ).toEqual('(Exhibit(s))');
     expect(result.docketRecordWithDocument[2].document.filedBy).toEqual(
-      'Petr. Bob',
+      'Petrs. Bob & Bill',
     );
     expect(
       result.docketRecordWithDocument[2].record.filingsAndProceedings,
     ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
     expect(result.docketRecordWithDocument[3].document.filedBy).toEqual(
-      'Counsel Test Practitioner & Petrs. Bob & Bill',
+      'Resp. & Counsel Test Practitioner',
     );
     expect(
       result.docketRecordWithDocument[3].record.filingsAndProceedings,
