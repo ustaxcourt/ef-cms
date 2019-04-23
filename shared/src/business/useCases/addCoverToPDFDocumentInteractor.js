@@ -21,12 +21,14 @@ exports.addCoverToPDFDocument = async ({
   caseId,
   documentId,
 }) => {
+  applicationContext.logger.time('Fetching the Case');
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
       caseId,
     });
+  applicationContext.logger.timeEnd('Fetching the Case');
 
   const caseEntity = new Case(caseRecord);
 
@@ -84,6 +86,7 @@ exports.addCoverToPDFDocument = async ({
     originallyFiledElectronically: !caseEntity.isPaper,
   };
 
+  applicationContext.logger.time('Fetching S3 File');
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -91,6 +94,7 @@ exports.addCoverToPDFDocument = async ({
       Key: documentId,
     })
     .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
 
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
@@ -104,25 +108,33 @@ exports.addCoverToPDFDocument = async ({
   const fontSizeTitle = 80;
 
   // create pdfDoc object from file data
+  applicationContext.logger.time('Loading the PDF');
   const pdfDoc = PDFDocumentFactory.load(pdfData);
+  applicationContext.logger.time('Loading the PDF');
 
   // USTC Seal (png) to embed in header
+  applicationContext.logger.time('Embed PNG');
   const staticImgPath = path.join(__dirname, '../../../static/images/');
   const ustcSealBytes = fs.readFileSync(staticImgPath + 'ustc_seal.png');
   const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
+  applicationContext.logger.timeEnd('Embed PNG');
 
   // Embed font to use for cover page generation
+  applicationContext.logger.time('Embed Font');
   const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
   const [helveticaBoldRef, helveticaBoldFont] = pdfDoc.embedStandardFont(
     'Helvetica-Bold',
   );
+  applicationContext.logger.timeEnd('Embed Font');
 
   // Generate cover page
+  applicationContext.logger.time('Generate Cover Page');
   const coverPage = pdfDoc
     .createPage(coverPageDimensions)
     .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Helvetica', helveticaRef)
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
+  applicationContext.logger.timeEnd('Generate Cover Page');
 
   function paddedLineHeight(fontSize = defaultFontSize) {
     return fontSize * 0.25 + fontSize;
@@ -487,10 +499,13 @@ exports.addCoverToPDFDocument = async ({
 
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
+  applicationContext.logger.time('Saving Bytes');
   const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+  applicationContext.logger.timeEnd('Saving Bytes');
 
   documentEntity.processingStatus = 'complete';
 
+  applicationContext.logger.time('Updating Document Status');
   await applicationContext
     .getPersistenceGateway()
     .updateDocumentProcessingStatus({
@@ -498,10 +513,13 @@ exports.addCoverToPDFDocument = async ({
       caseId,
       documentIndex,
     });
+  applicationContext.logger.timeEnd('Updating Document Status');
 
+  applicationContext.logger.time('Saving S3 Document');
   await applicationContext
     .getPersistenceGateway()
     .saveDocument({ applicationContext, document: newPdfData, documentId });
+  applicationContext.logger.timeEnd('Saving S3 Document');
 
   return newPdfData;
 };
