@@ -3,6 +3,8 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 
+import { DocketRecordOverlay } from './DocketRecordOverlay';
+
 export const DocketRecord = connect(
   {
     baseUrl: state.baseUrl,
@@ -11,6 +13,8 @@ export const DocketRecord = connect(
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     refreshCaseSequence: sequences.refreshCaseSequence,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
+    showModal: state.showModal,
     token: state.token,
   },
   ({
@@ -19,6 +23,8 @@ export const DocketRecord = connect(
     caseDetail,
     documentHelper,
     helper,
+    setModalDialogNameSequence,
+    showModal,
     token,
   }) => {
     useEffect(() => {
@@ -81,7 +87,7 @@ export const DocketRecord = connect(
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }) => (
+              ({ record, document, index }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
                   <td>{record.createdAtFormatted}</td>
@@ -153,6 +159,20 @@ export const DocketRecord = connect(
                           {record.filingsAndProceedings}
                         </span>
                       </>
+                    )}
+                    <button
+                      className="show-on-mobile"
+                      onClick={() =>
+                        // setDocketIndex(arrayIndex);
+                        setModalDialogNameSequence({
+                          showModal: 'DocketRecordOverlay',
+                        })
+                      }
+                    >
+                      Details {arrayIndex}
+                    </button>
+                    {showModal == 'DocketRecordOverlay' && (
+                      <DocketRecordOverlay />
                     )}
                   </td>
                   <td className="hide-on-mobile">
