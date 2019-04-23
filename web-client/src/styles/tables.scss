@@ -178,6 +178,22 @@ table.work-queue {
   }
 }
 
+table.row-border-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
+  td {
+    border: none;
+  }
+
+  thead tr,
+  tbody tr {
+    border: 1px solid $color-gray-lighter;
+  }
+}
+
 table.docket-record {
   thead th {
     font-weight: $font-semibold;
@@ -221,22 +237,20 @@ table.docket-record {
     .hide-on-mobile {
       display: none;
     }
-  }
-}
 
-table.row-border-only {
-  th {
-    background-color: inherit;
-  }
+    td {
+      display: table-cell;
+    }
 
-  th,
-  td {
-    border: none;
-  }
+    .filings-and-proceedings {
+      display: block;
+    }
 
-  thead tr,
-  tbody tr {
-    border: 1px solid $color-gray-lighter;
+    tbody tr {
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
   }
 }
 
