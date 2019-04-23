@@ -327,6 +327,14 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.info(key, JSON.stringify(value));
       },
+      time: key => {
+        // eslint-disable-next-line no-console
+        console.time(key);
+      }, 
+      timeEnd: key => {
+        // eslint-disable-next-line no-console
+        console.timeEnd(key);
+      }
     },
   };
 };
