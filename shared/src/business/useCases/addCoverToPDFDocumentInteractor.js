@@ -95,6 +95,7 @@ exports.addCoverToPDFDocument = async ({
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
   const dimensionsY = 3300;
+  const minimumAcceptableWidth = 600;
   const coverPageDimensions = [dimensionsX, dimensionsY];
   const horizontalMargin = 215; // left and right margins
   const verticalMargin = 190; // top and bottom margins
@@ -105,6 +106,15 @@ exports.addCoverToPDFDocument = async ({
 
   // create pdfDoc object from file data
   const pdfDoc = PDFDocumentFactory.load(pdfData);
+
+  const pages = pdfDoc.getPages();
+  const originalPageDimensions = getPageDimensions(pages[0]);
+  const originalPageWidth = originalPageDimensions.width;
+
+  const scaleToPageWidth =
+    originalPageWidth >= minimumAcceptableWidth
+      ? originalPageWidth
+      : minimumAcceptableWidth;
 
   // USTC Seal (png) to embed in header
   const staticImgPath = path.join(__dirname, '../../../static/images/');
@@ -123,6 +133,37 @@ exports.addCoverToPDFDocument = async ({
     .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Helvetica', helveticaRef)
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
+
+  function getPageDimensions(page) {
+    let mediaBox;
+
+    // Check for MediaBox on the page itself
+    const hasMediaBox = !!page.getMaybe('MediaBox');
+    if (hasMediaBox) {
+      mediaBox = page.index.lookup(page.get('MediaBox'));
+    }
+
+    // Check for MediaBox on each parent node
+    page.Parent.ascend(parent => {
+      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
+      if (!mediaBox && parentHasMediaBox) {
+        mediaBox = parent.index.lookup(parent.get('MediaBox'));
+      }
+    }, true);
+
+    // This should never happen in valid PDF files
+    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
+
+    // Extract and return the width and height
+    return {
+      height: mediaBox.array[3].number,
+      width: mediaBox.array[2].number,
+    };
+  }
+
+  function pageScaler(value) {
+    return Math.round(value * (scaleToPageWidth / dimensionsX));
+  }
 
   function paddedLineHeight(fontSize = defaultFontSize) {
     return fontSize * 0.25 + fontSize;
