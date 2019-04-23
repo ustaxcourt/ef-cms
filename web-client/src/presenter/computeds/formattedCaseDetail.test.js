@@ -294,6 +294,7 @@ describe('formatYearAmounts', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
+          objections: 'No',
           partyPrimary: true,
           relationship: 'primaryDocument',
           scenario: 'Standard',
@@ -342,6 +343,7 @@ describe('formatYearAmounts', () => {
           hasSupportingDocuments: true,
           objections: 'Yes',
           partyPrimary: true,
+          partySecondary: true,
           relationship: 'primaryDocument',
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
@@ -359,8 +361,9 @@ describe('formatYearAmounts', () => {
             'Unsworn Declaration under Penalty of Perjury in Support',
           eventCode: 'USDL',
           freeText: 'Test',
-          partyPrimary: true,
-          partySecondary: true,
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
           previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
@@ -369,6 +372,7 @@ describe('formatYearAmounts', () => {
       hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
+      practitioner: { name: 'Test Practitioner' },
     };
     const result = await runCompute(formattedCaseDetail, {
       state: {
@@ -382,7 +386,7 @@ describe('formatYearAmounts', () => {
     );
     expect(
       result.docketRecordWithDocument[0].record.filingsAndProceedings,
-    ).toEqual('');
+    ).toEqual('(No Objection)');
     expect(result.docketRecordWithDocument[1].document.filedBy).toEqual(
       'Resp. & Petr. Bob',
     );
@@ -390,17 +394,17 @@ describe('formatYearAmounts', () => {
       result.docketRecordWithDocument[1].record.filingsAndProceedings,
     ).toEqual('(Exhibit(s))');
     expect(result.docketRecordWithDocument[2].document.filedBy).toEqual(
-      'Petr. Bob',
+      'Petrs. Bob & Bill',
     );
     expect(
       result.docketRecordWithDocument[2].record.filingsAndProceedings,
     ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
     expect(result.docketRecordWithDocument[3].document.filedBy).toEqual(
-      'Petrs. Bob & Bill',
+      'Resp. & Counsel Test Practitioner',
     );
     expect(
       result.docketRecordWithDocument[3].record.filingsAndProceedings,
-    ).toEqual('');
+    ).toEqual('(Lodged)');
   });
 
   it('sorts the docket record in the expected order', async () => {
@@ -489,6 +493,20 @@ describe('formatYearAmounts', () => {
   });
 
   describe('case name mapping', () => {
+    it('should not error if caseCaption does not exist', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.caseName).toEqual('');
+    });
+
     it("should remove ', Petitioner' from caseCaption", async () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
