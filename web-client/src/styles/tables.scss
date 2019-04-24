@@ -301,7 +301,7 @@ table.case-list tbody tr:nth-child(even) td {
   }
 }
 
-@media only screen and (max-width: $small-screen) {
+@media only screen and (max-width: $small-screen - 1px) {
   .responsive-table {
     thead {
       display: none;
