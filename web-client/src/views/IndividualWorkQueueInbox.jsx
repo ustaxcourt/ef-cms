@@ -72,7 +72,7 @@ export const IndividualWorkQueueInbox = connect(
                 </td>
                 <td>
                   <button
-                    className={item.readAt ? 'link' : 'case-link-bold'}
+                    className={item.readAt ? 'link' : 'link case-link-bold'}
                     onClick={() => {
                       workQueueClickedSequence({
                         docketNumber: item.docketNumber,
