@@ -43,6 +43,7 @@ export const state = {
   currentTab: '',
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
+  docketRecordIndex: 0,
   document: {},
   documentDetail: {
     tab: '',
