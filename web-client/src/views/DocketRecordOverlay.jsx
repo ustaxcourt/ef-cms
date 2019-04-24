@@ -66,6 +66,7 @@ class DocketRecordOverlayComponent extends React.Component {
     const { record, document } = this.props.caseDetail.docketRecordWithDocument[
       this.props.docketRecordIndex
     ];
+    const { baseUrl, token } = this.props;
     return (
       <FocusLock>
         <dialog open className="modal-screen overlay">
@@ -84,10 +85,18 @@ class DocketRecordOverlayComponent extends React.Component {
             </button>
             <hr />
             <h2 tabIndex="-1">{record.description}</h2>
-            <button>
+            <a
+              className="usa-button"
+              href={`${baseUrl}/documents/${
+                document.documentId
+              }/documentDownloadUrl?token=${token}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={'View PDF'}
+            >
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               View PDF
-            </button>
+            </a>
             <p className="semi-bold label">Date</p>
             <p>{document.createdAtFormatted}</p>
             <p className="semi-bold label">Filed By</p>
@@ -115,19 +124,23 @@ class DocketRecordOverlayComponent extends React.Component {
 }
 
 DocketRecordOverlayComponent.propTypes = {
+  baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   dismissModalSequence: PropTypes.func,
   docketRecordIndex: PropTypes.number,
   helper: PropTypes.object,
+  token: PropTypes.string,
 };
 
 export const DocketRecordOverlay = connect(
   {
+    baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
     helper: state.caseDetailHelper,
+    token: state.token,
   },
   DocketRecordOverlayComponent,
 );
