@@ -13,7 +13,8 @@ export const DocketRecord = connect(
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     refreshCaseSequence: sequences.refreshCaseSequence,
-    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
+    showDocketRecordDetailModalSequence:
+      sequences.showDocketRecordDetailModalSequence,
     showModal: state.showModal,
     token: state.token,
   },
@@ -23,7 +24,7 @@ export const DocketRecord = connect(
     caseDetail,
     documentHelper,
     helper,
-    setModalDialogNameSequence,
+    showDocketRecordDetailModalSequence,
     showModal,
     token,
   }) => {
@@ -37,21 +38,40 @@ export const DocketRecord = connect(
       };
     }, []);
 
-    function renderDocumentLink(documentId, description, isPaper) {
+    function renderDocumentLink(
+      documentId,
+      description,
+      isPaper,
+      docketRecordIndex = 0,
+    ) {
       return (
-        <a
-          href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
-          target="_blank"
-          rel="noreferrer noopener"
-          aria-label={`View PDF: ${description}`}
-        >
-          {isPaper && (
-            <span className="filing-type-icon-mobile">
-              <FontAwesomeIcon icon={['fas', 'file-alt']} />
-            </span>
-          )}
-          {description}
-        </a>
+        <React.Fragment>
+          <a
+            className="hide-on-mobile"
+            href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={`View PDF: ${description}`}
+          >
+            {isPaper && (
+              <span className="filing-type-icon-mobile">
+                <FontAwesomeIcon icon={['fas', 'file-alt']} />
+              </span>
+            )}
+            {description}
+          </a>
+          <button
+            className="show-on-mobile link"
+            onClick={() => {
+              showDocketRecordDetailModalSequence({
+                docketRecordIndex,
+                showModal: 'DocketRecordOverlay',
+              });
+            }}
+          >
+            {description}
+          </button>
+        </React.Fragment>
       );
     }
 
@@ -118,6 +138,7 @@ export const DocketRecord = connect(
                         document.documentId,
                         record.description,
                         document.isPaper,
+                        arrayIndex,
                       )}
                     {document &&
                       helper.showDirectDownloadLink &&
@@ -150,7 +171,12 @@ export const DocketRecord = connect(
                     )}
                     {!document &&
                       record.documentId &&
-                      renderDocumentLink(record.documentId, record.description)}
+                      renderDocumentLink(
+                        record.documentId,
+                        record.description,
+                        false,
+                        arrayIndex,
+                      )}
                     {!document && !record.documentId && record.description}
                     {record.filingsAndProceedings && (
                       <>
@@ -159,20 +185,6 @@ export const DocketRecord = connect(
                           {record.filingsAndProceedings}
                         </span>
                       </>
-                    )}
-                    <button
-                      className="show-on-mobile"
-                      onClick={() =>
-                        // setDocketIndex(arrayIndex);
-                        setModalDialogNameSequence({
-                          showModal: 'DocketRecordOverlay',
-                        })
-                      }
-                    >
-                      Details {arrayIndex}
-                    </button>
-                    {showModal == 'DocketRecordOverlay' && (
-                      <DocketRecordOverlay />
                     )}
                   </td>
                   <td className="hide-on-mobile">
@@ -196,6 +208,7 @@ export const DocketRecord = connect(
             )}
           </tbody>
         </table>
+        {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
       </React.Fragment>
     );
   },

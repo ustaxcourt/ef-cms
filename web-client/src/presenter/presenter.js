@@ -52,6 +52,7 @@ import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequen
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
+import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
@@ -158,6 +159,7 @@ export const presenter = {
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
+    showDocketRecordDetailModalSequence,
     signOutSequence,
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,

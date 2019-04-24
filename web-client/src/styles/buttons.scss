@@ -61,8 +61,12 @@ button.text-style {
     color: inherit;
   }
   &.heading-1 {
+    svg {
+      margin-right: 12px;
+    }
     color: $color-black;
     font-weight: $font-bold;
+    text-align: left;
   }
 
 }
