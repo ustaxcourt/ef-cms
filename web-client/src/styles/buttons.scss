@@ -60,6 +60,15 @@ button.text-style {
     background: inherit;
     color: inherit;
   }
+  &.heading-1 {
+    svg {
+      margin-right: 12px;
+    }
+    color: $color-black;
+    font-weight: $font-bold;
+    text-align: left;
+  }
+
 }
 
 .recall-button-box {
