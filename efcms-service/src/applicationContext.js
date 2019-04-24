@@ -98,6 +98,9 @@ const {
   getInternalUsers: getInternalUsersUC,
 } = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
+  getNotifications,
+} = require('ef-cms-shared/src/business/useCases/getNotificationsInteractor');
+const {
   getReadMessagesForUser,
 } = require('ef-cms-shared/src/persistence/dynamo/messages/getReadMessagesForUser');
 const {
@@ -186,13 +189,16 @@ const {
   setMessageAsRead,
 } = require('ef-cms-shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
+  setMessageAsRead: setMessageAsReadUC,
+} = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
   updateCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const {
   updateCase: updateCaseUC,
 } = require('ef-cms-shared/src/business/useCases/updateCaseInteractor');
 const {
-  updateDocumentProcessingStatus
+  updateDocumentProcessingStatus,
 } = require('ef-cms-shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
   updateWorkItem,
@@ -200,9 +206,6 @@ const {
 const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
-const { 
-  setMessageAsRead: setMessageAsReadUC
-} = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
@@ -315,6 +318,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
+        getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getUser,
@@ -344,11 +348,11 @@ module.exports = (appContextUser = {}) => {
       time: key => {
         // eslint-disable-next-line no-console
         console.time(key);
-      }, 
+      },
       timeEnd: key => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
-      }
+      },
     },
   };
 };

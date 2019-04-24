@@ -10,11 +10,18 @@ import close from '../../node_modules/uswds/dist/img/close.svg';
 export const Header = connect(
   {
     mobileMenu: state.mobileMenu,
+    notifications: state.notifications.unreadCount,
     signOutSequence: sequences.signOutSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({ user, mobileMenu, toggleMobileMenuSequence, signOutSequence }) => {
+  ({
+    user,
+    mobileMenu,
+    toggleMobileMenuSequence,
+    signOutSequence,
+    notifications,
+  }) => {
     return (
       <>
         <div className="beta">
@@ -108,6 +115,7 @@ export const Header = connect(
               {user && (
                 <div className="usa-nav-secondary">
                   <ul className="usa-unstyled-list usa-nav-secondary-links">
+                    <li>{notifications} unread</li>
                     <li role="search" className="usa-search">
                       <SearchBox />
                     </li>
