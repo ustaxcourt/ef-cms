@@ -35,15 +35,13 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
 
   workItems.forEach(workItem => {
     const message = new WorkItem(workItem).getLatestMessageEntity();
-    let isRead = false;
-    if (
-      readMessages.find(
-        readMessage => readMessage.messageId === message.messageId,
-      )
-    ) {
-      isRead = true;
+    const readMessage = readMessages.find(
+      readMessage => readMessage.messageId === message.messageId,
+    );
+
+    if (readMessage) {
+      workItem.readAt = readMessage.readAt;
     }
-    workItem.isRead = isRead;
   });
 
   return workItems;
