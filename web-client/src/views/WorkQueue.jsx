@@ -38,7 +38,7 @@ export const WorkQueue = connect(
           <If bind="workQueueHelper.showStartCaseButton">
             <div className="fix-top-right">
               <a
-                className="usa-button new-case"
+                className="usa-button align-right"
                 href="/start-a-case"
                 id="init-file-petition"
               >

@@ -5,13 +5,14 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    documentHelper: state.documentHelper,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
+    workQueueClickedSequence: sequences.workQueueClickedSequence,
   },
-  ({ documentHelper, setFocusedWorkItem, workQueue }) => {
+  ({ setFocusedWorkItem, workQueue, workQueueClickedSequence }) => {
     return (
       <React.Fragment>
+        <p>{workQueue.unreadCount} Unread Work Items.</p>
         <table
           className="work-queue subsection"
           id="my-work-queue"
@@ -61,18 +62,18 @@ export const IndividualWorkQueueInbox = connect(
                 <td>{item.docketNumberWithSuffix}</td>
                 <td>{item.currentMessage.createdAtFormatted}</td>
                 <td>
-                  <a
-                    onClick={e => {
-                      e.stopPropagation();
+                  <button
+                    className="link"
+                    onClick={() => {
+                      workQueueClickedSequence({
+                        docketNumber: item.docketNumber,
+                        documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
+                      });
                     }}
-                    href={documentHelper({
-                      docketNumber: item.docketNumber,
-                      documentId: item.document.documentId,
-                    })}
-                    className="case-link"
                   >
                     {item.document.documentType}
-                  </a>
+                  </button>
                 </td>
                 <td>{item.caseStatus}</td>
                 <td className="from">{item.currentMessage.from}</td>

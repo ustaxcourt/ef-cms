@@ -20,18 +20,18 @@ export const CaseListPractitioner = connect(
         <tbody>
           {caseList.map(item => (
             <tr key={item.docketNumber}>
-              <td className="responsive-title">
-                <span className="responsive-label">Docket Number</span>
+              <td className="hide-on-mobile">
                 <a href={'/case-detail/' + item.docketNumber}>
                   {item.docketNumberWithSuffix}
                 </a>
               </td>
+              <td>{item.createdAtFormatted}</td>
               <td>
-                <span className="responsive-label">Date Filed</span>
-                {item.createdAtFormatted}
-              </td>
-              <td>
-                <span className="responsive-label">Case Name</span>
+                <div className="show-on-mobile">
+                  <a href={'/case-detail/' + item.docketNumber}>
+                    {item.docketNumberWithSuffix}
+                  </a>
+                </div>
                 {item.caseName}
               </td>
             </tr>
@@ -63,10 +63,13 @@ export const CaseListPractitioner = connect(
     const renderNonEmptyState = () => (
       <React.Fragment>
         <div className="usa-grid-full case-list-header">
-          <div className="usa-width-one-half">
+          <div className="usa-width-one-half hide-on-mobile">
             <h2>Your Cases</h2>
           </div>
           <div className="usa-width-one-half">{renderStartButton()}</div>
+        </div>
+        <div className="show-on-mobile">
+          <h2>Your Cases</h2>
         </div>
         {renderTable()}
       </React.Fragment>

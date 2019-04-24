@@ -91,7 +91,7 @@ const getPreviouslyFiledDocuments = caseDetail => {
         document.documentType !== 'Statement of Taxpayer Identification',
     )
     .map(document => {
-      return document.documentType;
+      return document.documentTitle || document.documentType;
     });
 };
 
