@@ -30,6 +30,7 @@ exports.addCoverToPDFDocument = async ({
     });
   applicationContext.logger.timeEnd('Fetching the Case');
 
+  console.log('caseRecord', caseRecord);
   const caseEntity = new Case(caseRecord);
 
   const documentEntity = caseEntity.documents.find(
@@ -69,6 +70,7 @@ exports.addCoverToPDFDocument = async ({
   const isLodged = documentEntity.lodged;
 
   const caseCaption = Case.getCaseCaption(caseRecord);
+  console.log('caseCaption', caseCaption);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   const coverSheetData = {
