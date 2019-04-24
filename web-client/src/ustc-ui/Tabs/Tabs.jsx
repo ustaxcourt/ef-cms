@@ -35,8 +35,6 @@ export function TabsComponent({
 
   setTab = decorateWithPostCallback(setTab, onSelect);
 
-  const tabsClass = classNames('ustc-ui-tabs', className || '');
-
   function renderTab(child) {
     const { title, tabName, id } = child.props;
 
@@ -102,6 +100,12 @@ export function TabsComponent({
 
   const navItems = map(children, child => child.props.title && child);
   const hasNav = !!(navItems && navItems.length);
+
+  const tabsClass = classNames(
+    'ustc-ui-tabs',
+    className || '',
+    hasNav && `ustc-num-tabs-${navItems.length}`,
+  );
 
   let baseProps = {
     className: tabsClass,
