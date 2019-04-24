@@ -4,6 +4,9 @@ import { state } from 'cerebral';
 
 const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
+  if (!categoryInformation) {
+    return {}; // debugger-safe
+  }
 
   switch (categoryInformation.scenario) {
     case 'Standard': {
