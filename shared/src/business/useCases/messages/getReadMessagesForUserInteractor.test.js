@@ -4,7 +4,7 @@ const {
 } = require('./getReadMessagesForUserInteractor');
 
 describe('getReadMessagesForUser', () => {
-  it('unauthorized user tries to assign a work item', async () => {
+  it('unauthorized user tries to invoke this interactor', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
@@ -22,7 +22,7 @@ describe('getReadMessagesForUser', () => {
     expect(error).toBeDefined();
   });
 
-  it('fail on validation if the work items provided are invalid', async () => {
+  it('returns the expected results', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
