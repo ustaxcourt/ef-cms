@@ -3,6 +3,7 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getWorkItems
@@ -18,16 +19,34 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let workItems = await applicationContext
+  const workItems = await applicationContext
     .getPersistenceGateway()
     .getWorkItemsForUser({
       applicationContext,
       userId: user.userId,
     });
 
-  if (!workItems) {
-    workItems = [];
-  }
+  const readMessages = await applicationContext
+    .getPersistenceGateway()
+    .getReadMessagesForUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  console.log('readMessages', JSON.stringify(readMessages, null, 2));
+
+  workItems.forEach(workItem => {
+    const message = new WorkItem(workItem).getLatestMessageEntity();
+    let isRead = false;
+    if (
+      readMessages.find(
+        readMessage => readMessage.messageId === message.messageId,
+      )
+    ) {
+      isRead = true;
+    }
+    workItem.isRead = isRead;
+  });
 
   return workItems;
 };

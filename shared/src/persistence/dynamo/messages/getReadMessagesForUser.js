@@ -1,7 +1,8 @@
 const client = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getReadMessagesForUser = async ({ userId, applicationContext }) => {
-  return client.query({
+  const readMessage = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -11,4 +12,6 @@ exports.getReadMessagesForUser = async ({ userId, applicationContext }) => {
     KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
+
+  return stripInternalKeys(readMessage);
 };
