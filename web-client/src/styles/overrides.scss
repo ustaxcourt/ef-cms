@@ -159,7 +159,7 @@ option:first-child {
 
 @media only screen and (min-width: $medium-screen) {
   .show-on-mobile {
-    display: block;
+    display: none;
   }
 }
 
