@@ -98,8 +98,8 @@ const {
   getInternalUsers: getInternalUsersUC,
 } = require('ef-cms-shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
-  getReadMessageForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/messages/getReadMessageForUser');
+  getReadMessagesForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/messages/getReadMessagesForUser');
 const {
   getSentWorkItemsForSection,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -205,7 +205,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 
 const { 
-  getReadMessageForUser: getReadMessageForUserUC
+  getReadMessagesForUser: getReadMessagesForUserUC
 } = require('ef-cms-shared/src/business/useCases/messages/getReadMessagesForUserInteractor');
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
@@ -268,7 +268,7 @@ module.exports = (appContextUser = {}) => {
         getCasesForRespondent,
         getDownloadPolicyUrl,
         getInternalUsers,
-        getReadMessageForUser,
+        getReadMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
@@ -318,7 +318,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
-        getReadMessageForUser: getReadMessageForUserUC,
+        getReadMessagesForUser: getReadMessagesForUserUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getUser,

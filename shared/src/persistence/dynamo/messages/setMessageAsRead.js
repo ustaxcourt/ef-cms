@@ -7,8 +7,10 @@ exports.setMessageAsRead = async ({
 }) => {
   await client.put({
     Item: {
+      messageId,
       pk: `${userId}|read-messages`,
       sk: messageId,
+      userId,
     },
     applicationContext,
   });

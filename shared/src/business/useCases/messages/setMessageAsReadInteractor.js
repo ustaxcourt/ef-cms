@@ -1,8 +1,8 @@
 const {
   isAuthorized,
   GET_READ_MESSAGES,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * setMessageAsRead
