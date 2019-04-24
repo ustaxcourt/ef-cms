@@ -75,6 +75,10 @@ iframe {
   border: 1px solid $color-gray-lightest;
 }
 
+.link.case-link-bold {
+  font-weight: $font-bold;
+}
+
 .case-list-header {
   margin-bottom: 20px;
 }
