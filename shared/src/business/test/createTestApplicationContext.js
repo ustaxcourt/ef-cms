@@ -13,6 +13,9 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getReadMessagesForUser,
+} = require('../../persistence/dynamo/messages/getReadMessagesForUser');
+const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -83,6 +86,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         createWorkItem: createWorkItemPersistence,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
+        getReadMessagesForUser,
         getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
         getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
         getUserById: getUserByIdPersistence,
