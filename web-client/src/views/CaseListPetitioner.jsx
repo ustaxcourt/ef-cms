@@ -10,7 +10,7 @@ export const CaseListPetitioner = connect(
     return (
       <>
         <div className="usa-grid-full subsection">
-          <div className="usa-width-one-half">
+          <div className="usa-width-one-half hide-on-mobile">
             <h2>Your Cases</h2>
           </div>
           <div className="usa-width-one-half">
@@ -22,6 +22,10 @@ export const CaseListPetitioner = connect(
               Start a New Case
             </a>
           </div>
+        </div>
+
+        <div className="show-on-mobile">
+          <h2>Your Cases</h2>
         </div>
         <table className="responsive-table dashboard" id="case-list">
           <thead>
