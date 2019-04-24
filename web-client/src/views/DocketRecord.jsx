@@ -3,6 +3,8 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 
+import { DocketRecordOverlay } from './DocketRecordOverlay';
+
 export const DocketRecord = connect(
   {
     baseUrl: state.baseUrl,
@@ -11,6 +13,9 @@ export const DocketRecord = connect(
     documentHelper: state.documentHelper,
     helper: state.caseDetailHelper,
     refreshCaseSequence: sequences.refreshCaseSequence,
+    showDocketRecordDetailModalSequence:
+      sequences.showDocketRecordDetailModalSequence,
+    showModal: state.showModal,
     token: state.token,
   },
   ({
@@ -19,6 +24,8 @@ export const DocketRecord = connect(
     caseDetail,
     documentHelper,
     helper,
+    showDocketRecordDetailModalSequence,
+    showModal,
     token,
   }) => {
     useEffect(() => {
@@ -31,21 +38,40 @@ export const DocketRecord = connect(
       };
     }, []);
 
-    function renderDocumentLink(documentId, description, isPaper) {
+    function renderDocumentLink(
+      documentId,
+      description,
+      isPaper,
+      docketRecordIndex = 0,
+    ) {
       return (
-        <a
-          href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
-          target="_blank"
-          rel="noreferrer noopener"
-          aria-label={`View PDF: ${description}`}
-        >
-          {isPaper && (
-            <span className="filing-type-icon-mobile">
-              <FontAwesomeIcon icon={['fas', 'file-alt']} />
-            </span>
-          )}
-          {description}
-        </a>
+        <React.Fragment>
+          <a
+            className="hide-on-mobile"
+            href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label={`View PDF: ${description}`}
+          >
+            {isPaper && (
+              <span className="filing-type-icon-mobile">
+                <FontAwesomeIcon icon={['fas', 'file-alt']} />
+              </span>
+            )}
+            {description}
+          </a>
+          <button
+            className="show-on-mobile link"
+            onClick={() => {
+              showDocketRecordDetailModalSequence({
+                docketRecordIndex,
+                showModal: 'DocketRecordOverlay',
+              });
+            }}
+          >
+            {description}
+          </button>
+        </React.Fragment>
       );
     }
 
@@ -81,7 +107,7 @@ export const DocketRecord = connect(
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }) => (
+              ({ record, document, index }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
                   <td>{record.createdAtFormatted}</td>
@@ -112,6 +138,7 @@ export const DocketRecord = connect(
                         document.documentId,
                         record.description,
                         document.isPaper,
+                        arrayIndex,
                       )}
                     {document &&
                       helper.showDirectDownloadLink &&
@@ -144,7 +171,12 @@ export const DocketRecord = connect(
                     )}
                     {!document &&
                       record.documentId &&
-                      renderDocumentLink(record.documentId, record.description)}
+                      renderDocumentLink(
+                        record.documentId,
+                        record.description,
+                        false,
+                        arrayIndex,
+                      )}
                     {!document && !record.documentId && record.description}
                     {record.filingsAndProceedings && (
                       <>
@@ -176,6 +208,7 @@ export const DocketRecord = connect(
             )}
           </tbody>
         </table>
+        {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
       </React.Fragment>
     );
   },
