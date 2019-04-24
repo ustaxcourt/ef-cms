@@ -63,10 +63,13 @@ export const CaseListPractitioner = connect(
     const renderNonEmptyState = () => (
       <React.Fragment>
         <div className="usa-grid-full case-list-header">
-          <div className="usa-width-one-half">
+          <div className="usa-width-one-half hide-on-mobile">
             <h2>Your Cases</h2>
           </div>
           <div className="usa-width-one-half">{renderStartButton()}</div>
+        </div>
+        <div className="show-on-mobile">
+          <h2>Your Cases</h2>
         </div>
         {renderTable()}
       </React.Fragment>
