@@ -34,18 +34,18 @@ export const CaseListPetitioner = connect(
           <tbody>
             {caseList.map(item => (
               <tr key={item.docketNumber}>
-                <td className="responsive-title">
-                  <span className="responsive-label">Docket Number</span>
+                <td className="hide-on-mobile">
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
+                <td>{item.createdAtFormatted}</td>
                 <td>
-                  <span className="responsive-label">Date Filed</span>
-                  {item.createdAtFormatted}
-                </td>
-                <td>
-                  <span className="responsive-label">Case Name</span>
+                  <div className="show-on-mobile">
+                    <a href={'/case-detail/' + item.docketNumber}>
+                      {item.docketNumberWithSuffix}
+                    </a>
+                  </div>
                   {item.caseName}
                 </td>
               </tr>
