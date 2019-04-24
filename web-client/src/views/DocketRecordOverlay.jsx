@@ -86,7 +86,7 @@ class DocketRecordOverlayComponent extends React.Component {
             <hr />
             <h2 tabIndex="-1">{record.description}</h2>
             <a
-              className="usa-button"
+              className="usa-button view-pdf-button"
               href={`${baseUrl}/documents/${
                 document.documentId
               }/documentDownloadUrl?token=${token}`}
