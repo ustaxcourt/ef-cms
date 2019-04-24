@@ -204,9 +204,6 @@ const {
   setMessageAsRead: setMessageAsReadUC
 } = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 
-const { 
-  getReadMessagesForUser: getReadMessagesForUserUC
-} = require('ef-cms-shared/src/business/useCases/messages/getReadMessagesForUserInteractor');
 const { User } = require('ef-cms-shared/src/business/entities/User');
 
 const environment = {
@@ -318,7 +315,6 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
-        getReadMessagesForUser: getReadMessagesForUserUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getUser,
