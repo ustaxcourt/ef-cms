@@ -75,8 +75,8 @@ iframe {
   border: 1px solid $color-gray-lightest;
 }
 
-.case-link-bold {
-  font-weight: bold !important;
+.link.case-link-bold {
+  font-weight: $font-bold;
 }
 
 .case-list-header {
