@@ -39,6 +39,25 @@ describe('WorkItem', () => {
       assert.ok(workItem.isValid());
     });
 
+    it('Update a valid workitem with a readAt', () => {
+      const workItem = new WorkItem({
+        assigneeId: 'bob',
+        assigneeName: 'bob',
+        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        caseStatus: 'new',
+        caseTitle: 'testing',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: {},
+        messages: [],
+        readAt: new Date(Date.parse('2018-01-31')).toISOString(),
+        section: 'docket',
+        sentBy: 'bob',
+        workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      });
+      assert.ok(workItem.isValid());
+    });
+
     it('Create a valid workitem without messages', () => {
       const workItem = new WorkItem({
         assigneeId: 'bob',
