@@ -92,22 +92,24 @@ nav.horizontal-tabs,
         display: inline-block;
         margin: 0;
 
-        button {
-          padding-bottom: 10px;
-          margin: 0 45px 0 0;
-          border-radius: 0;
-          cursor: pointer;
-
-          &:hover {
-            background-color: transparent;
-            color: $color-primary-darkest;
-          }
-        }
-
-        &.active {
+        @media only screen and (min-width: $small-screen) {
           button {
-            cursor: default;
-            font-weight: $font-bold;
+            padding-bottom: 10px;
+            margin: 0 45px 0 0;
+            border-radius: 0;
+            cursor: pointer;
+
+            &:hover {
+              background-color: transparent;
+              color: $color-primary-darkest;
+            }
+          }
+
+          &.active {
+            button {
+              cursor: default;
+              font-weight: $font-bold;
+            }
           }
         }
       }
@@ -116,28 +118,43 @@ nav.horizontal-tabs,
 
   &.classic-horizontal,
   &.classic-horizontal-header3 {
-    > nav {
-      ul {
-        li {
-          &.active {
+    > nav > ul > li {
+      display: inline-block;
+      width: 100%;
+      @media only screen and (min-width: $small-screen) {
+        width: unset;
+      }
+    }
+
+    &.ustc-num-tabs-2 > nav > ul > li {
+      width: 50%;
+      @media only screen and (min-width: $small-screen) {
+        width: unset;
+      }
+    }
+
+    /* small screens */
+    @media only screen and (max-width: $small-screen - 1px) {
+      > nav {
+        ul {
+          li {
             button {
-              border-bottom: 3px $color-blue solid;
+              min-height: 60px;
+              border: 1px solid $color-gray-lighter;
+              background-color: transparent;
+              border-radius: 5px;
+              color: $color-blue;
+              font-family: Noto Serif JP, $georgia, serif;
+              font-style: normal;
+              &:hover {
+                border: 1px solid $color-gray-lighter;
+              }
             }
-          }
-
-          button {
-            padding-bottom: 10px;
-            border-bottom: 3px $color-white solid;
-            margin: 0 45px 0 0;
-            border-radius: 0;
-            font-family: $font-serif;
-            font-size: 24px;
-            font-weight: $font-medium;
-            line-height: 1.3em;
-
-            &:hover {
-              border-bottom: 3px $color-primary-darkest solid;
-              color: $color-primary-darkest;
+            &.active {
+              button {
+                background-color: $color-blue-darker;
+                color: $color-white;
+              }
             }
           }
         }
@@ -145,13 +162,46 @@ nav.horizontal-tabs,
     }
   }
 
-  &.classic-horizontal-header3 {
-    > nav {
-      ul {
-        li {
-          &.active {
+  @media only screen and (min-width: $small-screen) {
+    &.classic-horizontal,
+    &.classic-horizontal-header3 {
+      > nav {
+        ul {
+          li {
+            &.active {
+              button {
+                border-bottom: 3px $color-blue solid;
+              }
+            }
+
             button {
-              font-weight: $font-bold;
+              padding-bottom: 10px;
+              border-bottom: 3px $color-white solid;
+              margin: 0 45px 0 0;
+              border-radius: 0;
+              font-family: $font-serif;
+              font-size: 24px;
+              font-weight: $font-medium;
+              line-height: 1.3em;
+
+              &:hover {
+                border-bottom: 3px $color-primary-darkest solid;
+                color: $color-primary-darkest;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.classic-horizontal-header3 {
+      > nav {
+        ul {
+          li {
+            &.active {
+              button {
+                font-weight: $font-bold;
+              }
             }
           }
         }
