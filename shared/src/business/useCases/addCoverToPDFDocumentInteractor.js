@@ -378,7 +378,7 @@ exports.addCoverToPDFDocument = async ({
   };
 
   const contentRespondentLabel = {
-    content: 'Respondent(s)',
+    content: 'Respondent',
     fontSize: fontSizeCaption,
     xPos: 531,
     yPos: getYOffsetFromPreviousContentArea(
