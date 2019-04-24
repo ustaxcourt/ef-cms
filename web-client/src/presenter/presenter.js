@@ -97,6 +97,7 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
+import { workQueueClickedSequence } from './sequences/workQueueClickedSequence';
 
 /**
  * Main Cerebral module
@@ -203,6 +204,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
+    workQueueClickedSequence,
   },
   state,
 };
