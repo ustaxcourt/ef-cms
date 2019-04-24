@@ -62,10 +62,9 @@ class DocketRecordOverlayComponent extends React.Component {
   }
 
   renderModalContent() {
-    this.index = 0; // TODO get this from state.docketRecordIndex
     const closeFunc = this.props.dismissModalSequence;
     const { record, document } = this.props.caseDetail.docketRecordWithDocument[
-      this.index
+      this.props.docketRecordIndex
     ];
     return (
       <FocusLock>
@@ -118,6 +117,7 @@ class DocketRecordOverlayComponent extends React.Component {
 DocketRecordOverlayComponent.propTypes = {
   caseDetail: PropTypes.object,
   dismissModalSequence: PropTypes.func,
+  docketRecordIndex: PropTypes.number,
   helper: PropTypes.object,
 };
 
@@ -126,6 +126,7 @@ export const DocketRecordOverlay = connect(
     caseDetail: state.formattedCaseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
+    docketRecordIndex: state.docketRecordIndex,
     helper: state.caseDetailHelper,
   },
   DocketRecordOverlayComponent,
