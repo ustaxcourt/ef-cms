@@ -68,7 +68,7 @@ exports.addCoverToPDFDocument = async ({
   });
   const isLodged = documentEntity.lodged;
 
-  const caseCaption = Case.getCaseCaption(caseRecord);
+  const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   const coverSheetData = {
