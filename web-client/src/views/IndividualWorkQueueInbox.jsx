@@ -23,7 +23,7 @@ export const IndividualWorkQueueInbox = connect(
               <th aria-hidden="true">&nbsp;</th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
-              <th>&nbsp;</th>
+              <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
               <th>Status</th>
               <th>From</th>
@@ -63,8 +63,7 @@ export const IndividualWorkQueueInbox = connect(
                   {!item.readAt && !item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['fas', 'envelope']}
-                      color="#0071BC"
-                      className={item.statusIcon}
+                      className={`${item.statusIcon} iconStatusUnread`}
                       aria-hidden="true"
                       size="lg"
                     />
@@ -77,7 +76,6 @@ export const IndividualWorkQueueInbox = connect(
                       workQueueClickedSequence({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
                       });
                     }}
                   >
