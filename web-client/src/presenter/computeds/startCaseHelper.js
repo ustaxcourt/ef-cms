@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { showContactsHelper } from './showContactsHelper';
+import { state } from 'cerebral';
 
 export const startCaseHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
@@ -35,10 +35,10 @@ export const startCaseHelper = get => {
     showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
     showOwnershipDisclosureValid: petition && petition.ownershipDisclosureFile,
 
+    showPetitionFileValid: petition && petition.petitionFile,
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse' ||
       form.filingType === 'Petitioner and spouse',
-    showPetitionFileValid: petition && petition.petitionFile,
     showPrimaryContact: showContacts.contactPrimary,
     showRegularTrialCitiesHint: form.procedureType === 'Regular',
     showSecondaryContact: showContacts.contactSecondary,

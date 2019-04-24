@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-
 const { createContactFactory } = require('./PetitionContact');
 
 /**

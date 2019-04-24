@@ -1,4 +1,3 @@
-const { Case } = require('../entities/Case');
 const {
   isAuthorized,
   UPDATE_CASE,
@@ -7,6 +6,7 @@ const {
   UnprocessableEntityError,
   UnauthorizedError,
 } = require('../../errors/errors');
+const { Case } = require('../entities/Case');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {
@@ -55,12 +55,10 @@ exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
     .validate()
     .toRawObject();
 
-  const caseAfterUpdate = await applicationContext
-    .getPersistenceGateway()
-    .saveCase({
-      applicationContext,
-      caseToSave: paidCase,
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: paidCase,
+  });
 
-  return new Case(caseAfterUpdate).validate().toRawObject();
+  return paidCase;
 };

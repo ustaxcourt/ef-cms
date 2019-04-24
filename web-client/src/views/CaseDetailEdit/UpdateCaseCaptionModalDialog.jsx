@@ -1,8 +1,8 @@
 import { sequences, state } from 'cerebral';
 
 import { ModalDialog } from '../ModalDialog';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
   constructor(props) {

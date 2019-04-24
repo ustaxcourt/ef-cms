@@ -1,6 +1,6 @@
-const { saveWorkItem } = require('./saveWorkItem');
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { saveWorkItem } = require('./saveWorkItem');
 
 describe('saveWorkItem', () => {
   beforeEach(() => {

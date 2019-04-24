@@ -10,7 +10,7 @@ export default test => {
     let stipulatedDecisionWorkItem = myOutboxWorkQueue.find(
       workItem => workItem.workItemId === test.workItemId,
     );
-    expect(stipulatedDecisionWorkItem.messages[2]).toMatchObject({
+    expect(stipulatedDecisionWorkItem.messages[1]).toMatchObject({
       message: 'hello world',
     });
     await test.runSequence('chooseWorkQueueSequence', {

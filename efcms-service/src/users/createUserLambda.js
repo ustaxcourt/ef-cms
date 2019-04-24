@@ -1,8 +1,8 @@
+const createApplicationContext = require('../applicationContext');
 const {
   handle,
   getUserFromAuthHeader,
 } = require('../middleware/apiGatewayHelper');
-const createApplicationContext = require('../applicationContext');
 
 /**
  * creates a new document and attaches it to a case.  It also creates a work item on the docket section.
@@ -14,8 +14,16 @@ exports.handler = event =>
   handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getUseCases().createUser({
-      applicationContext,
-      user: JSON.parse(event.body),
-    });
+    try {
+      const results = applicationContext.getUseCases().createUser({
+        applicationContext,
+        user: JSON.parse(event.body),
+      });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

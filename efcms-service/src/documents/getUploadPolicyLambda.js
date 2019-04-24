@@ -1,5 +1,8 @@
-const { handle, getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const createApplicationContext = require('../applicationContext');
+const {
+  handle,
+  getUserFromAuthHeader,
+} = require('../middleware/apiGatewayHelper');
 
 /**
  * used for getting the upload policy which is needed for users to upload directly to S3 via the UI
@@ -11,7 +14,17 @@ exports.handler = event =>
   handle(event, () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    return applicationContext.getPersistenceGateway().getUploadPolicy({
-      applicationContext,
-    });
+    try {
+      const results = applicationContext
+        .getPersistenceGateway()
+        .getUploadPolicy({
+          applicationContext,
+        });
+      applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Results', results);
+      return results;
+    } catch (e) {
+      applicationContext.logger.error(e);
+      throw e;
+    }
   });

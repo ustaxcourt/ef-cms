@@ -8,6 +8,7 @@ import _ from 'lodash';
  * @param {Object} providers.applicationContext the applicationContext used for the getUniqueId method
  * @param {Object} providers.store the cerebral store used for setting state.workQueue
  * @param {Object} providers.props the cerebral props object used for getting the props.workItems
+ * @returns {undefined}
  */
 export const setWorkItemsAction = ({ applicationContext, store, props }) => {
   const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc').map(

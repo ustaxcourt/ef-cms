@@ -1,6 +1,6 @@
 const assert = require('assert');
-const { getCase } = require('./getCaseInteractor');
 const sinon = require('sinon');
+const { getCase } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 const documents = MOCK_CASE.documents;
