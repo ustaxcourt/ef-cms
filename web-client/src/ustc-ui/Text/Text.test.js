@@ -1,8 +1,8 @@
-import React from 'react';
 import { Container } from '@cerebral/react';
-import App from 'cerebral';
-import TestRenderer from 'react-test-renderer';
 import { Text } from './Text';
+import App from 'cerebral';
+import React from 'react';
+import TestRenderer from 'react-test-renderer';
 
 describe('Text Component', () => {
   it('should not show the text if no binded property is available', () => {

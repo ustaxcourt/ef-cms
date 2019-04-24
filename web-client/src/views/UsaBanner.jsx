@@ -1,7 +1,6 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
 import iconDotGov from '../../node_modules/uswds/dist/img/icon-dot-gov.svg';
 import iconHttps from '../../node_modules/uswds/dist/img/icon-https.svg';
 import usFlag from '../../node_modules/uswds/dist/img/favicons/favicon-57.png';

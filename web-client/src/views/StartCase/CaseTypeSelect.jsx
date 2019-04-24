@@ -1,7 +1,7 @@
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-import { Text } from '../../ustc-ui/Text/Text';
 
 export const CaseTypeSelect = connect(
   {
@@ -14,13 +14,13 @@ export const CaseTypeSelect = connect(
     value: props.value,
   },
   ({
+    allowDefaultOption,
     caseTypes,
     legend,
-    value,
-    allowDefaultOption,
     onChange,
     validation,
     validationErrors,
+    value,
   }) => {
     return (
       <div className="subsection">

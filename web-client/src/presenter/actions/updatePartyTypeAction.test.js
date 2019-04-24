@@ -5,8 +5,8 @@ import {
 
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
+import sinon from 'sinon';
 
 const updateCaseStub = sinon.stub().returns({});
 

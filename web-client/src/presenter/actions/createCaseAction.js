@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
 import { omit } from 'lodash';
+import { state } from 'cerebral';
 
 /**
  * invokes the filePetition useCase.

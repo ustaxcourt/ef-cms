@@ -2,6 +2,10 @@ import { CerebralTest } from 'cerebral/test';
 import FormData from 'form-data';
 
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import {
+  CATEGORIES,
+  CATEGORY_MAP,
+} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
@@ -35,7 +39,8 @@ import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDeta
 import petitionsClerkViewsDashboard from './journey/petitionsClerkViewsDashboard';
 import petitionsClerkViewsDashboardAfterReassign from './journey/petitionsClerkViewsDashboardAfterReassign';
 import respondentAddsAnswer from './journey/respondentAddsAnswer';
-import respondentAddsStipulatedDecisions from './journey/respondentAddsStipulatedDecisions';
+import respondentAddsMotion from './journey/respondentAddsMotion';
+import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
@@ -46,13 +51,13 @@ import seniorAttorneyViewsCaseDetailAfterComplete from './journey/seniorAttorney
 import seniorAttorneyViewsDashboard from './journey/seniorAttorneyViewsDashboard';
 import seniorAttorneyViewsDashboardAfterComplete from './journey/seniorAttorneyViewsDashboardAfterComplete';
 import seniorAttorneyViewsDocumentDetail from './journey/seniorAttorneyViewsDocumentDetail';
+import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
@@ -100,6 +105,8 @@ describe('Case journey', () => {
 
     test.setState('constants', {
       CASE_CAPTION_POSTFIX,
+      CATEGORIES,
+      CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Case.documentTypes,
       PARTY_TYPES,
@@ -134,7 +141,8 @@ describe('Case journey', () => {
   respondentViewsDashboard(test);
   respondentViewsCaseDetail(test);
   respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecisions(test, fakeFile);
+  respondentAddsStipulatedDecision(test, fakeFile);
+  respondentAddsMotion(test, fakeFile);
 
   docketClerkLogIn(test);
   docketClerkViewsDashboardWithoutWorkItem(test);

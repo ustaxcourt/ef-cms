@@ -1,5 +1,5 @@
-const { uploadPdf } = require('./uploadPdf');
 const sinon = require('sinon');
+const { uploadPdf } = require('./uploadPdf');
 
 describe('uploadPdf', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {

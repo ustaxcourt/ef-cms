@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
-const { getSectionForRole } = require('../../../business/entities/WorkQueue');
 const client = require('../../dynamodbClientService');
+const { getSectionForRole } = require('../../../business/entities/WorkQueue');
 
 exports.createUser = async ({ user, applicationContext }) => {
   const cognito = new AWS.CognitoIdentityServiceProvider({
@@ -31,37 +31,37 @@ exports.createUser = async ({ user, applicationContext }) => {
             Value: user.name,
           },
         ],
-        Username: user.email,
         UserPoolId: process.env.USER_POOL_ID,
+        Username: user.email,
       })
       .promise();
     userId = response.User.Username;
   } catch (err) {
     const response = await cognito
       .adminGetUser({
-        Username: user.email,
         UserPoolId: process.env.USER_POOL_ID,
+        Username: user.email,
       })
       .promise();
     userId = response.Username;
   }
 
   await client.put({
-    applicationContext,
     Item: {
       pk: `${getSectionForRole(user.role)}|user`,
       sk: userId,
     },
+    applicationContext,
   });
 
   await client.put({
-    applicationContext,
     Item: {
       pk: userId,
       sk: userId,
       ...user,
       userId,
     },
+    applicationContext,
   });
 
   return {

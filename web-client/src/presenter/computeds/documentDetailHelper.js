@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
+import _ from 'lodash';
 
 export const documentDetailHelper = get => {
   const caseDetail = get(state.caseDetail);

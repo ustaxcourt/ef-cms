@@ -29,9 +29,11 @@ const addPetitionDocumentWithWorkItemToCase = (
       ...documentEntity.toRawObject(),
       createdAt: documentEntity.createdAt,
     },
-    isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+    isInitializeCase: documentEntity.isPetitionDocument(),
     section: user.section,
-    sentBy: user.userId,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
   });
 
   workItemEntity.addMessage(
@@ -44,6 +46,8 @@ const addPetitionDocumentWithWorkItemToCase = (
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
+
+  return workItemEntity;
 };
 
 /**
@@ -66,7 +70,6 @@ exports.createCaseFromPaper = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO: I'm pretty sure this needs to be PetitionFromPaperWithoutFiles, and we need to create that entity
   const Petition = applicationContext.getEntityConstructors().PetitionFromPaper;
   const petitionEntity = new Petition({
     ...petitionMetadata,
@@ -99,7 +102,7 @@ exports.createCaseFromPaper = async ({
     filedBy: caseCaptionNames,
     userId: user.userId,
   });
-  addPetitionDocumentWithWorkItemToCase(
+  const newWorkItem = addPetitionDocumentWithWorkItemToCase(
     user,
     caseToAdd,
     petitionDocumentEntity,
@@ -127,9 +130,14 @@ exports.createCaseFromPaper = async ({
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
-  await applicationContext.getPersistenceGateway().saveCase({
+  await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToSave: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext,
+    workItem: newWorkItem.validate().toRawObject(),
   });
 
   return new Case(caseToAdd).toRawObject();

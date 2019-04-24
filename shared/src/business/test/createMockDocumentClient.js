@@ -9,6 +9,15 @@ const createMockDocumentClient = () => {
       sk: '1805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
+    ['3805d1ab-18d0-43ec-bafb-654e83405416 3805d1ab-18d0-43ec-bafb-654e83405416']: {
+      email: 'pettitionsclerk',
+      name: 'Test Petitionsclerk',
+      pk: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      role: 'petitionsclerk',
+      section: 'petitions',
+      sk: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+    },
   };
 
   return {

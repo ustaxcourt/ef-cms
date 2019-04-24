@@ -1,7 +1,6 @@
-const { updateWorkItem } = require('./updateWorkItem');
-
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
+const { updateWorkItem } = require('./updateWorkItem');
 
 describe('updateWorkItem', () => {
   beforeEach(() => {
@@ -32,13 +31,13 @@ describe('updateWorkItem', () => {
       },
     });
     expect(client.put.getCall(0).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
       Item: {
         assigneeId: 'bob',
         pk: '123',
         sk: '123',
         workItemId: '123',
       },
+      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });

@@ -9,7 +9,8 @@ label {
   }
 }
 
-label.with-hint {
+label.with-hint,
+legend.with-hint {
   margin-bottom: 2px;
 }
 
@@ -280,7 +281,8 @@ label.validated::after {
 
 label.ustc-upload-petition,
 label.ustc-upload-stin,
-label.ustc-upload-ods {
+label.ustc-upload-ods,
+label.ustc-upload {
   .success-message {
     display: none;
     color: $color-green;

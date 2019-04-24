@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
 import { state } from 'cerebral';
+import jwt from 'jsonwebtoken';
 
 import { userMap } from '../../../../shared/src/persistence/dynamo/users/getUserById';
 

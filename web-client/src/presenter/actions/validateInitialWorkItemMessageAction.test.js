@@ -1,7 +1,7 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 import { validateInitialWorkItemMessageAction } from './validateInitialWorkItemMessageAction';
+import sinon from 'sinon';
 
 describe('validateInitialWorkItemMessage', () => {
   let validateInitialWorkItemMessageStub;

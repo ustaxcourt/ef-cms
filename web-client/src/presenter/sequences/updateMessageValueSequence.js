@@ -1,10 +1,10 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { set } from 'cerebral/factories';
+import { clearUsersAction } from '../actions/clearUsersAction';
+import { getUsersInSectionSequence } from './getUsersInSectionSequence';
+import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
-import { clearUsersAction } from '../actions/clearUsersAction';
-import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathAction';
-import { getUsersInSectionSequence } from './getUsersInSectionSequence';
+import { set } from 'cerebral/factories';
 
 export const updateMessageValueSequence = [
   runKeyPathAction,

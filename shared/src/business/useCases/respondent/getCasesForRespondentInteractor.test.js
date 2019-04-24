@@ -1,6 +1,6 @@
 const { getCasesForRespondent } = require('./getCasesForRespondentInteractor');
-const { omit } = require('lodash');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { omit } = require('lodash');
 
 describe('Get cases for respondent', () => {
   let applicationContext;

@@ -1,9 +1,8 @@
+const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { instantiateContacts } = require('./contacts/PetitionContact');
-
-const joi = require('joi-browser');
 
 /**
  *

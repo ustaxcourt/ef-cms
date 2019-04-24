@@ -5,22 +5,19 @@ import { CaseInfo } from './CaseInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from './IRSNotice';
 import { PartyInformation } from './PartyInformation';
-import React from 'react';
-import { UpdateCaseCancelModalDialog } from './UpdateCaseCancelModalDialog';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
-    form: state.form,
-    showModal: state.showModal,
+    screenMetadata: state.screenMetadata,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
     submitting: state.submitting,
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
   },
   ({
-    form,
-    showModal,
+    screenMetadata,
     submitCaseDetailEditSaveSequence,
     submitting,
     unsetFormSaveSuccessSequence,
@@ -38,10 +35,6 @@ export const CaseDetailEdit = connect(
           unsetFormSaveSuccessSequence();
         }}
       >
-        {showModal === 'UpdateCaseCancelModalDialog' && (
-          <UpdateCaseCancelModalDialog />
-        )}
-
         <Tabs
           className="container-tabs"
           id="case-detail-tabs"
@@ -70,8 +63,8 @@ export const CaseDetailEdit = connect(
           {submitting && <div className="spinner" />}
           Save
         </button>
-        {form.showSaveSuccess && (
-          <span className="mini-success">
+        {screenMetadata.showSaveSuccess && (
+          <span className="mini-success" aria-live="polite" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.
           </span>

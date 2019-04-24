@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -9,8 +9,8 @@ export const SectionWorkQueueInbox = connect(
     documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
-    selectedWorkItems: state.selectedWorkItems,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
+    selectedWorkItems: state.selectedWorkItems,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,

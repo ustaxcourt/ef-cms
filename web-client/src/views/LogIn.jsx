@@ -1,8 +1,7 @@
+import { ErrorNotification } from './ErrorNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { ErrorNotification } from './ErrorNotification';
 
 export const LogIn = connect(
   {

@@ -10,13 +10,13 @@ export default test => {
     });
     expect(test.getState('form.preferredTrialCity')).toEqual('Chattanooga, TN');
 
-    await test.runSequence('startACaseToggleCancelSequence'); // someone clicks cancel
+    await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
     expect(test.getState('showModal')).toBeTruthy();
-    await test.runSequence('startACaseToggleCancelSequence'); // someone aborts cancellation
+    await test.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
     expect(test.getState('currentPage')).toEqual('StartCase');
 
-    await test.runSequence('startACaseToggleCancelSequence');
-    await test.runSequence('startACaseConfirmCancelSequence');
+    await test.runSequence('formCancelToggleCancelSequence');
+    await test.runSequence('closeModalAndReturnToDashboardSequence');
     expect(test.getState('showModal')).toBeFalsy();
     expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
   });

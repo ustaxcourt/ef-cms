@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPetitionAction } from '../actions/clearPetitionAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getFilingTypesAction } from '../actions/getFilingTypesAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
@@ -17,6 +18,7 @@ export const gotoStartCaseSequence = [
   clearAlertsAction,
   clearPetitionAction,
   clearFormAction,
+  clearScreenMetadataAction,
   prepareFormAction,
   set(state.showValidation, false),
   getUserRoleAction,
