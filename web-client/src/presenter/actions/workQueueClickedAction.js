@@ -3,7 +3,6 @@ export const workQueueClickedAction = async ({
   router,
   props,
 }) => {
-  console.log('props', props);
   await applicationContext.getUseCases().setMessageAsRead({
     applicationContext,
     messageId: props.messageId,
