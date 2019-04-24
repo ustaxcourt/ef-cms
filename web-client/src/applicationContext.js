@@ -62,6 +62,7 @@ import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkI
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -125,6 +126,7 @@ const allUseCases = {
   recallPetitionFromIRSHoldingQueue,
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
+  setMessageAsRead,
   updateCase,
   uploadExternalDocument,
   validateCaseDetail,

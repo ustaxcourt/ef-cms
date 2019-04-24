@@ -25,7 +25,6 @@ table.small-case-qualifications-table {
 }
 
 table.dashboard {
-  border: 1px solid $color-gray-lighter;
   thead {
     border-bottom: 2px solid $color-gray-lighter;
     th {
@@ -40,11 +39,25 @@ table.dashboard {
   }
 
   td {
+    display: table-cell;
     border: none;
     font-size: 14px;
 
     label {
       margin: 0;
+    }
+  }
+
+  /* only medium up */
+  @media only screen and (min-width: $small-screen) {
+    border: 1px solid $color-gray-lighter;
+  }
+
+  /* small only */
+  @media only screen and (max-width: $small-screen - 1px) {
+    margin-bottom: 20px;
+    td {
+      padding-bottom: 0.5rem;
     }
   }
 }
@@ -178,6 +191,22 @@ table.work-queue {
   }
 }
 
+table.row-border-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
+  td {
+    border: none;
+  }
+
+  thead tr,
+  tbody tr {
+    border: 1px solid $color-gray-lighter;
+  }
+}
+
 table.docket-record {
   thead th {
     font-weight: $font-semibold;
@@ -221,22 +250,20 @@ table.docket-record {
     .hide-on-mobile {
       display: none;
     }
-  }
-}
 
-table.row-border-only {
-  th {
-    background-color: inherit;
-  }
+    td {
+      display: table-cell;
+    }
 
-  th,
-  td {
-    border: none;
-  }
+    .filings-and-proceedings {
+      display: block;
+    }
 
-  thead tr,
-  tbody tr {
-    border: 1px solid $color-gray-lighter;
+    tbody tr {
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
   }
 }
 
@@ -259,6 +286,18 @@ table.case-list tbody tr:nth-child(even) td {
 
   .responsive-label {
     display: none;
+  }
+
+  @media only screen and (min-width: $small-screen) {
+    .show-on-mobile {
+      display: none;
+    }
+  }
+
+  @media only screen and (max-width: $small-screen - 1px) {
+    .hide-on-mobile {
+      display: none;
+    }
   }
 }
 

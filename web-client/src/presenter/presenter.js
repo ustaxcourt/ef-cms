@@ -52,6 +52,7 @@ import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequen
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
+import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
@@ -96,6 +97,7 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
+import { workQueueClickedSequence } from './sequences/workQueueClickedSequence';
 
 /**
  * Main Cerebral module
@@ -158,6 +160,7 @@ export const presenter = {
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
+    showDocketRecordDetailModalSequence,
     signOutSequence,
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
@@ -201,6 +204,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
+    workQueueClickedSequence,
   },
   state,
 };

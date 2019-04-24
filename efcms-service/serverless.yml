@@ -217,6 +217,14 @@ functions:
           method: get
           cors: true
 
+  setMessageAsRead:
+    handler: src/messages/setMessageAsReadLambda.handler
+    events:
+      - http:
+          path: v1/messages/{messageId}/read
+          method: post
+          cors: true
+
   getDownloadPolicyUrl:
     handler: src/documents/downloadPolicyUrlLambda.handler
     events:
@@ -231,6 +239,8 @@ functions:
 
   addCoversheet:
     handler: src/documents/addCoversheetLambda.handler
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet

@@ -35,20 +35,15 @@ export const DashboardRespondent = connect(
             <tbody>
               {caseList.map(item => (
                 <tr key={item.docketNumber}>
-                  <td className="responsive-title">
-                    <span className="responsive-label">Docket Number</span>
+                  <td className="show-on-mobile">{item.createdAtFormatted}</td>
+                  <td>
                     <a href={'/case-detail/' + item.docketNumber}>
                       {item.docketNumberWithSuffix}
                     </a>
+                    <div className="show-on-mobile">{item.caseName}</div>
                   </td>
-                  <td>
-                    <span className="responsive-label">Case Name</span>
-                    {item.caseName}
-                  </td>
-                  <td>
-                    <span className="responsive-label">Date Filed</span>
-                    {item.createdAtFormatted}
-                  </td>
+                  <td className="hide-on-mobile">{item.caseName}</td>
+                  <td className="hide-on-mobile">{item.createdAtFormatted}</td>
                 </tr>
               ))}
             </tbody>

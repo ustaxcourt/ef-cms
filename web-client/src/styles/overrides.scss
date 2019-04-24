@@ -156,3 +156,15 @@ option:first-child {
 .full-width {
   max-width: 100%;
 }
+
+@media only screen and (min-width: $medium-screen) {
+  .show-on-mobile {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $medium-screen - 1px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}

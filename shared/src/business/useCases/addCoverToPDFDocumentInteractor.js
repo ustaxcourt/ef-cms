@@ -68,7 +68,7 @@ exports.addCoverToPDFDocument = async ({
   });
   const isLodged = documentEntity.lodged;
 
-  const caseCaption = Case.getCaseCaption(caseRecord);
+  const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   const coverSheetData = {
@@ -80,14 +80,14 @@ exports.addCoverToPDFDocument = async ({
     dateServed: dateServedFormatted,
     docketNumber:
       caseEntity.docketNumber + (caseEntity.docketNumberSuffix || ''),
-    documentTitle: documentEntity.documentType,
+    documentTitle: documentEntity.documentTitle || documentEntity.documentType,
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
     originallyFiledElectronically: !caseEntity.isPaper,
   };
 
   applicationContext.logger.time('Fetching S3 File');
-  const { Body: pdfData } = await applicationContext
+  let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -99,6 +99,7 @@ exports.addCoverToPDFDocument = async ({
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
   const dimensionsY = 3300;
+  const minimumAcceptableWidth = 600;
   const coverPageDimensions = [dimensionsX, dimensionsY];
   const horizontalMargin = 215; // left and right margins
   const verticalMargin = 190; // top and bottom margins
@@ -111,6 +112,18 @@ exports.addCoverToPDFDocument = async ({
   applicationContext.logger.time('Loading the PDF');
   const pdfDoc = PDFDocumentFactory.load(pdfData);
   applicationContext.logger.time('Loading the PDF');
+
+  // allow GC to clear original loaded pdf data
+  pdfData = null;
+
+  const pages = pdfDoc.getPages();
+  const originalPageDimensions = getPageDimensions(pages[0]);
+  const originalPageWidth = originalPageDimensions.width;
+
+  const scaleToPageWidth =
+    originalPageWidth >= minimumAcceptableWidth
+      ? originalPageWidth
+      : minimumAcceptableWidth;
 
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
@@ -130,11 +143,42 @@ exports.addCoverToPDFDocument = async ({
   // Generate cover page
   applicationContext.logger.time('Generate Cover Page');
   const coverPage = pdfDoc
-    .createPage(coverPageDimensions)
+    .createPage(coverPageDimensions.map(dim => pageScaler(dim)))
     .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Helvetica', helveticaRef)
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
   applicationContext.logger.timeEnd('Generate Cover Page');
+
+  function getPageDimensions(page) {
+    let mediaBox;
+
+    // Check for MediaBox on the page itself
+    const hasMediaBox = !!page.getMaybe('MediaBox');
+    if (hasMediaBox) {
+      mediaBox = page.index.lookup(page.get('MediaBox'));
+    }
+
+    // Check for MediaBox on each parent node
+    page.Parent.ascend(parent => {
+      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
+      if (!mediaBox && parentHasMediaBox) {
+        mediaBox = parent.index.lookup(parent.get('MediaBox'));
+      }
+    }, true);
+
+    // This should never happen in valid PDF files
+    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
+
+    // Extract and return the width and height
+    return {
+      height: mediaBox.array[3].number,
+      width: mediaBox.array[2].number,
+    };
+  }
+
+  function pageScaler(value) {
+    return Math.round(value * (scaleToPageWidth / dimensionsX));
+  }
 
   function paddedLineHeight(fontSize = defaultFontSize) {
     return fontSize * 0.25 + fontSize;
@@ -334,7 +378,7 @@ exports.addCoverToPDFDocument = async ({
   };
 
   const contentRespondentLabel = {
-    content: 'Respondent(s)',
+    content: 'Respondent',
     fontSize: fontSizeCaption,
     xPos: 531,
     yPos: getYOffsetFromPreviousContentArea(
@@ -418,10 +462,10 @@ exports.addCoverToPDFDocument = async ({
     const params = {
       colorRgb: [0, 0, 0],
       font: fontName || defaultFontName,
-      lineHeight: paddedLineHeight(fontSize),
-      size: fontSize || defaultFontSize,
-      x: xPos,
-      y: yPos,
+      lineHeight: pageScaler(paddedLineHeight(fontSize)),
+      size: pageScaler(fontSize || defaultFontSize),
+      x: pageScaler(xPos),
+      y: pageScaler(yPos),
     };
 
     const centeringText = !!(
@@ -435,7 +479,8 @@ exports.addCoverToPDFDocument = async ({
 
       const { centerXOffset, centerXWidth, fontObj } = centerTextAt;
       const textWidth = fontObj.widthOfTextAtSize(content, params.size);
-      const newXOffset = (centerXWidth - textWidth) / 2 + centerXOffset;
+      const newXOffset =
+        (pageScaler(centerXWidth) - textWidth) / 2 + pageScaler(centerXOffset);
       return {
         ...params,
         x: newXOffset,
@@ -463,10 +508,10 @@ exports.addCoverToPDFDocument = async ({
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
     drawImage('USTCSeal', {
-      height: pngSealDimensions.height / 2,
-      width: pngSealDimensions.width / 2,
-      x: horizontalMargin,
-      y: translateY(verticalMargin + pngSealDimensions.height / 2),
+      height: pageScaler(pngSealDimensions.height / 2),
+      width: pageScaler(pngSealDimensions.width / 2),
+      x: pageScaler(horizontalMargin),
+      y: pageScaler(translateY(verticalMargin + pngSealDimensions.height / 2)),
     }),
     ...flattenDeep(
       [
