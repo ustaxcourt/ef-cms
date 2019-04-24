@@ -9,6 +9,7 @@ exports.setMessageAsRead = async ({
     Item: {
       messageId,
       pk: `${userId}|read-messages`,
+      readAt: new Date().toISOString(),
       sk: messageId,
       userId,
     },

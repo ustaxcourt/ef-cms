@@ -33,8 +33,6 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
       userId: user.userId,
     });
 
-  console.log('readMessages', JSON.stringify(readMessages, null, 2));
-
   workItems.forEach(workItem => {
     const message = new WorkItem(workItem).getLatestMessageEntity();
     let isRead = false;
