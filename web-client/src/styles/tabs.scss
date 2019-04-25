@@ -92,7 +92,7 @@ nav.horizontal-tabs,
         display: inline-block;
         margin: 0;
 
-        @media only screen and (min-width: $small-screen) {
+        @media only screen and (min-width: $medium-screen) {
           button {
             padding-bottom: 10px;
             margin: 0 45px 0 0;
@@ -121,24 +121,25 @@ nav.horizontal-tabs,
     > nav > ul > li {
       display: inline-block;
       width: 100%;
-      @media only screen and (min-width: $small-screen) {
+      @media only screen and (min-width: $medium-screen) {
         width: unset;
       }
     }
 
     &.ustc-num-tabs-2 > nav > ul > li {
       width: 50%;
-      @media only screen and (min-width: $small-screen) {
+      @media only screen and (min-width: $medium-screen) {
         width: unset;
       }
     }
 
     /* small screens */
-    @media only screen and (max-width: $small-screen - 1px) {
+    @media only screen and (max-width: $medium-screen - 1px) {
       > nav {
         ul {
           li {
             button {
+              width: 100%;
               min-height: 40px;
               border: 1px solid $color-gray-lighter;
               background-color: transparent;
@@ -162,7 +163,7 @@ nav.horizontal-tabs,
     }
   }
 
-  @media only screen and (min-width: $small-screen) {
+  @media only screen and (min-width: $medium-screen) {
     &.classic-horizontal,
     &.classic-horizontal-header3 {
       > nav {
@@ -284,7 +285,7 @@ nav.horizontal-tabs,
   }
 
   > .fix-top-right {
-    @media only screen and (min-width: $small-screen) {
+    @media only screen and (min-width: $medium-screen) {
       position: absolute;
       top: 4px;
       right: 0px;
