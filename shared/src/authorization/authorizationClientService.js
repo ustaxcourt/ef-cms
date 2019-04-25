@@ -47,7 +47,11 @@ const AUTHORIZATION_MAP = {
     exports.GET_READ_MESSAGES,
   ],
 
-  practitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
+  practitioner: [
+    exports.GET_CASE,
+    exports.PETITION,
+    exports.FILE_EXTERNAL_DOCUMENT,
+  ],
   respondent: [
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
