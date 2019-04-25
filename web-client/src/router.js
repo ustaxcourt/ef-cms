@@ -42,10 +42,10 @@ const router = {
       }),
     );
     route(
-      '/case-detail/*/documents/*/message/*',
-      checkLoggedIn((docketNumber, documentId) => {
+      '/case-detail/*/documents/*/messages/*',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
         document.title = `Document details ${pageTitleSuffix}`;
-        app.getSequence('gotoDocumentDetailSequence')({
+        app.getSequence('gotoDocumentDetailMessageSequence')({
           docketNumber,
           documentId,
           messageId,
