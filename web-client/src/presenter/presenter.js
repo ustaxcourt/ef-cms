@@ -28,6 +28,7 @@ import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
+import { gotoDocumentDetailMessageSequence } from './sequences/gotoDocumentDetailMessageSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
@@ -97,7 +98,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-import { workQueueClickedSequence } from './sequences/workQueueClickedSequence';
 
 /**
  * Main Cerebral module
@@ -138,6 +138,7 @@ export const presenter = {
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
+    gotoDocumentDetailMessageSequence,
     gotoDocumentDetailSequence,
     gotoFileDocumentSequence,
     gotoLoginSequence,
@@ -204,7 +205,6 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
-    workQueueClickedSequence,
   },
   state,
 };

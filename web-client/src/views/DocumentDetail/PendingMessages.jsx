@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -8,6 +8,7 @@ export const PendingMessages = connect(
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
     form: state.form,
+    messageId: state.messageId,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     setWorkItemActionSequence: sequences.setWorkItemActionSequence,
     submitCompleteSequence: sequences.submitCompleteSequence,
@@ -24,6 +25,7 @@ export const PendingMessages = connect(
     constants,
     documentDetailHelper,
     form,
+    messageId,
     openCreateMessageModalSequence,
     setWorkItemActionSequence,
     submitCompleteSequence,
@@ -59,7 +61,11 @@ export const PendingMessages = connect(
           documentDetailHelper.formattedDocument.workItems.map(
             (workItem, idx) => (
               <div
-                className="card"
+                className={`card ${
+                  workItem.currentMessage.messageId === messageId
+                    ? 'highlight'
+                    : ''
+                }`}
                 aria-labelledby="tab-pending-messages"
                 key={idx}
               >
