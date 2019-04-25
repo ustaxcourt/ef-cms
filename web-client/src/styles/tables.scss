@@ -49,12 +49,12 @@ table.dashboard {
   }
 
   /* only medium up */
-  @media only screen and (min-width: $small-screen) {
+  @media only screen and (min-width: $medium-screen) {
     border: 1px solid $color-gray-lighter;
   }
 
   /* small only */
-  @media only screen and (max-width: $small-screen - 1px) {
+  @media only screen and (max-width: $medium-screen - 1px) {
     margin-bottom: 20px;
     td {
       padding-bottom: 0.5rem;
@@ -288,20 +288,20 @@ table.case-list tbody tr:nth-child(even) td {
     display: none;
   }
 
-  @media only screen and (min-width: $small-screen) {
+  @media only screen and (min-width: $medium-screen) {
     .show-on-mobile {
       display: none;
     }
   }
 
-  @media only screen and (max-width: $small-screen - 1px) {
+  @media only screen and (max-width: $medium-screen - 1px) {
     .hide-on-mobile {
       display: none;
     }
   }
 }
 
-@media only screen and (max-width: $small-screen) {
+@media only screen and (max-width: $medium-screen - 1px) {
   .responsive-table {
     thead {
       display: none;

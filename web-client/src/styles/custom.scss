@@ -75,6 +75,10 @@ iframe {
   border: 1px solid $color-gray-lightest;
 }
 
+.link.case-link-bold {
+  font-weight: $font-bold;
+}
+
 .case-list-header {
   margin-bottom: 20px;
 }
@@ -495,4 +499,8 @@ textarea#case-caption {
 
 .align-right {
   margin-right: 0;
+}
+
+.view-pdf-button svg {
+  color: $color-white;
 }
