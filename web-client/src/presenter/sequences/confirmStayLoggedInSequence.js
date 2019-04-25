@@ -1,7 +1,7 @@
-import { cancelAutoLogoutAction } from '../actions/cancelAutoLogoutAction';
+import { cancelDelayedLogoutAction } from '../actions/cancelDelayedLogoutAction';
 import { clearModalAction } from '../actions/clearModalAction';
 
 export const confirmStayLoggedInSequence = [
-  cancelAutoLogoutAction,
+  cancelDelayedLogoutAction,
   clearModalAction,
 ];

@@ -37,6 +37,7 @@ import { route, router } from './router';
 
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
+import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import App from 'cerebral';
@@ -105,6 +106,7 @@ const app = {
     router.initialize(cerebralApp);
     ReactDOM.render(
       <Container app={cerebralApp}>
+        <IdleActivityMonitor />
         <AppComponent />
       </Container>,
       document.querySelector('#app'),
