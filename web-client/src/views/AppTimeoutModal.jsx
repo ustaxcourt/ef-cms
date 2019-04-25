@@ -20,7 +20,6 @@ class AppTimeoutModalComponent extends ModalDialog {
 
 export const AppTimeoutModal = connect(
   {
-    cancelSequence: null,
     confirmSequence: sequences.confirmStayLoggedInSequence,
   },
   AppTimeoutModalComponent,
