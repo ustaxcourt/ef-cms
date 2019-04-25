@@ -5,8 +5,8 @@ import React from 'react';
 export const PartiesRepresenting = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    requestAccessHelper: state.requestAccessHelper,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
@@ -14,18 +14,18 @@ export const PartiesRepresenting = connect(
   },
   ({
     caseDetail,
-    fileDocumentHelper,
+    requestAccessHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About the Parties You‘re Representing</h3>
+        <h3>Tell Us About the Parties You’re Representing</h3>
         <div className="blue-container">
           <div
             className={`ustc-form-group ${
-              fileDocumentHelper.partyValidationError ? 'usa-input-error' : ''
+              requestAccessHelper.partyValidationError ? 'usa-input-error' : ''
             }`}
           >
             <fieldset className="usa-fieldset-inputs usa-sans">
@@ -50,10 +50,10 @@ export const PartiesRepresenting = connect(
                     }}
                   />
                   <label htmlFor="party-primary">
-                    {fileDocumentHelper.partyPrimaryLabel}
+                    {caseDetail.contactPrimary.name}
                   </label>
                 </li>
-                {fileDocumentHelper.showSecondaryParty && (
+                {requestAccessHelper.showSecondaryParty && (
                   <li>
                     <input
                       id="party-secondary"
@@ -76,9 +76,9 @@ export const PartiesRepresenting = connect(
                 )}
               </ul>
             </fieldset>
-            {fileDocumentHelper.partyValidationError && (
+            {requestAccessHelper.partyValidationError && (
               <span className="usa-input-error-message">
-                {fileDocumentHelper.partyValidationError}
+                {requestAccessHelper.partyValidationError}
               </span>
             )}
           </div>
