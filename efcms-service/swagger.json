@@ -777,6 +777,50 @@
         }
       }
     },
+    "/v1/notifications": {
+      "get": {
+        "tags": ["workitems"],
+        "summary": "gets notifications such as unread item counts",
+        "description": "Get notifications.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/notifications"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/users": {
       "post": {
         "tags": ["user"],
@@ -1418,6 +1462,16 @@
         }
       },
       "description": "a policy url response"
+    },
+    "notifications": {
+      "type": "object",
+      "properties": {
+        "unreadCount": {
+          "type": "number",
+          "description": "unread work items"
+        }
+      },
+      "description": "a user object"
     },
     "user": {
       "type": "object",
