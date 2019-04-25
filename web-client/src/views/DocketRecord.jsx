@@ -79,7 +79,7 @@ export const DocketRecord = connect(
       <React.Fragment>
         {helper.showFileDocumentButton && (
           <a
-            className="usa-button"
+            className="usa-button tablet-full-width"
             href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
             id="button-file-document"
           >
