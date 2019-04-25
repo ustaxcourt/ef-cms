@@ -12,7 +12,6 @@ export const IndividualWorkQueueInbox = connect(
   ({ setFocusedWorkItem, workQueue, workQueueClickedSequence }) => {
     return (
       <React.Fragment>
-        <p>{workQueue.unreadCount} Unread Work Items.</p>
         <table
           className="work-queue subsection"
           id="my-work-queue"
