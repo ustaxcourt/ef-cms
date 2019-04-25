@@ -84,7 +84,5 @@ export const formattedWorkQueue = get => {
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 
-  workQueue.unreadCount = workQueue.filter(item => !item.readAt).length;
-
   return workQueue;
 };
