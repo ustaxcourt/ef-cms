@@ -6,21 +6,26 @@ export const CaseSearchBox = connect(
   {
     form: state.form,
     searchTerm: state.searchTerm,
-    submitSearchSequence: sequences.submitSearchSequence,
+    submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ form, searchTerm, submitSearchSequence, updateSearchTermSequence }) => {
+  ({
+    form,
+    searchTerm,
+    submitCaseSearchSequence,
+    updateSearchTermSequence,
+  }) => {
     return (
       <div className="one-third-searchbox">
         <form
           onSubmit={e => {
             e.preventDefault();
-            submitSearchSequence();
+            submitCaseSearchSequence();
           }}
         >
           <p className="lead bold">Search For a Case</p>
           <p>To file an Entry of Appearance, Substitution of Counsel, etc.</p>
-          <fieldset className={form.searchError && 'usa-input-error'}>
+          <fieldset className={form.searchError ? 'usa-input-error' : ''}>
             <label htmlFor="docket-search-field">Docket Number</label>
             <input
               id="docket-search-field"
