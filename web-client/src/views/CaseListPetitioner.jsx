@@ -15,7 +15,7 @@ export const CaseListPetitioner = connect(
           </div>
           <div className="usa-width-one-half">
             <a
-              className="usa-button new-case"
+              className="usa-button new-case tablet-full-width"
               href="/before-starting-a-case"
               id="init-file-petition"
             >
