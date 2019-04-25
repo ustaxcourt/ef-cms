@@ -44,7 +44,10 @@ export const CaseListPractitioner = connect(
 
     const renderStartButton = () => (
       <a
-        className={'usa-button ' + (helper.showCaseList ? 'new-case' : '')}
+        className={
+          'usa-button tablet-full-width ' +
+          (helper.showCaseList ? 'new-case' : '')
+        }
         href="/start-a-case"
         id="init-file-petition"
       >
