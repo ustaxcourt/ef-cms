@@ -42,6 +42,17 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/message/*',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+          messageId,
+        });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
