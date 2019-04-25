@@ -1,10 +1,27 @@
 import { sequences, state } from 'cerebral';
 
-import { ModalDialog } from '../ModalDialog';
-import React from 'react';
+import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
-const appRoot = document.getElementById('app');
-const modalRoot = document.getElementById('modal-root');
+class AppTimeoutModalComponent extends ModalDialog {
+  constructor(props) {
+    super(props);
+    this.modal = {
+      classNames: 'app-timeout-modal',
+      confirmLabel: 'Yes!',
+    };
+  }
 
-class CreateMessageModalDialogComponent extends ModalDialog {}
+  renderBody() {
+    return <div>Are you still there?</div>;
+  }
+}
+
+export const AppTimeoutModal = connect(
+  {
+    cancelSequence: null,
+    confirmSequence: sequences.confirmStayLoggedInSequence,
+  },
+  AppTimeoutModalComponent,
+);
