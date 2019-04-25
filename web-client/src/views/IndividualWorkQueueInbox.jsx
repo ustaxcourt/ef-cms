@@ -76,6 +76,7 @@ export const IndividualWorkQueueInbox = connect(
                       workQueueClickedSequence({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
                       });
                     }}
                   >
