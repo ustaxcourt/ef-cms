@@ -84,7 +84,10 @@ iframe {
 }
 
 .petitions-details {
-  margin-bottom: 120px;
+  margin-bottom: 15px;
+  @media only screen and (min-width: $medium-screen) {
+    margin-bottom: 120px;
+  }
 }
 
 .party-information p {
