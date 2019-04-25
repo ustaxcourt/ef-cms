@@ -8,9 +8,7 @@ export const workQueueClickedAction = async ({
     messageId: props.messageId,
   });
 
-  let path = `/case-detail/${props.docketNumber}/documents/${props.documentId}`;
-  if (props.messageId) {
-    path = `${path}/message/${props.messageId}`;
-  }
-  await router.route(path);
+  await router.route(
+    `/case-detail/${props.docketNumber}/documents/${props.documentId}`,
+  );
 };
