@@ -16,6 +16,7 @@ import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
@@ -126,6 +127,7 @@ export const presenter = {
     clickServeToIrsSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
+    confirmStayLoggedInSequence,
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
