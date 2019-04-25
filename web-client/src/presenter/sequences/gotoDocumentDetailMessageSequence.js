@@ -10,7 +10,6 @@ import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';

@@ -3,5 +3,10 @@ export const documentHelper = () => ({
   documentId,
   messageId,
 }) => {
-  return `/case-detail/${docketNumber}/documents/${documentId}/messages/${messageId}`;
+  const baseUri = `/case-detail/${docketNumber}/documents/${documentId}`;
+  if (messageId) {
+    return `${baseUri}/messages/${messageId}`;
+  } else {
+    return baseUri;
+  }
 };
