@@ -90,8 +90,17 @@ iframe {
   }
 }
 
-.party-information p {
-  margin-bottom: 0.7rem;
+.party-information {
+  p {
+    margin-bottom: 0.7rem;
+  }
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .usa-width-one-sixth + .usa-width-one-sixth {
+      .label {
+        margin-top: 20px;
+      }
+    }
+  }
 }
 
 .address-line {

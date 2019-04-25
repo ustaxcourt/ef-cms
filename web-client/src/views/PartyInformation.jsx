@@ -56,6 +56,7 @@ export const PartyInformation = connect(
               </React.Fragment>
             )}{' '}
           </div>
+
           <div className="usa-width-one-sixth">
             {caseDetail.contactSecondary &&
               caseDetail.contactSecondary.name && (
@@ -72,6 +73,7 @@ export const PartyInformation = connect(
                 </React.Fragment>
               )}{' '}
           </div>
+
           <div className="usa-width-one-sixth">
             {caseDetail.practitioner && (
               <React.Fragment>
@@ -91,6 +93,7 @@ export const PartyInformation = connect(
               </React.Fragment>
             )}{' '}
           </div>
+
           <div className="usa-width-one-sixth">
             {caseDetail.respondent && (
               <React.Fragment>
