@@ -1,22 +1,16 @@
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { PartiesFilingReadOnly } from '../FileDocument/PartiesFilingReadOnly';
-import { PrimaryDocumentReadOnly } from '../FileDocument/PrimaryDocumentReadOnly';
-import { SecondaryDocumentReadOnly } from '../FileDocument/SecondaryDocumentReadOnly';
+import { PartiesRepresentingReadOnly } from './PartiesRepresentingReadOnly';
+import { RequestAccessDocumentReadOnly } from './RequestAccessDocumentReadOnly';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const RequestAccessReview = connect(
   {
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
-  ({
-    form,
-    formCancelToggleCancelSequence,
-    submitExternalDocumentSequence,
-  }) => {
+  ({ formCancelToggleCancelSequence, submitExternalDocumentSequence }) => {
     return (
       <React.Fragment>
         <Focus>
@@ -40,11 +34,9 @@ export const RequestAccessReview = connect(
           </div>
         </div>
 
-        <PrimaryDocumentReadOnly />
+        <RequestAccessDocumentReadOnly />
 
-        {form.secondaryDocument.documentTitle && <SecondaryDocumentReadOnly />}
-
-        <PartiesFilingReadOnly />
+        <PartiesRepresentingReadOnly />
 
         <div className="button-box-container">
           <button

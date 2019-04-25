@@ -7,8 +7,8 @@ import React from 'react';
 
 export const RequestAccessDocumentForm = connect(
   {
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    requestAccessHelper: state.requestAccessHelper,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
@@ -16,7 +16,7 @@ export const RequestAccessDocumentForm = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    fileDocumentHelper,
+    requestAccessHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -56,7 +56,7 @@ export const RequestAccessDocumentForm = connect(
                   id="primary-document-label"
                   className={
                     'ustc-upload ' +
-                    (fileDocumentHelper.showPrimaryDocumentValid
+                    (requestAccessHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
                   }

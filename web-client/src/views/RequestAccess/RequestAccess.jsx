@@ -10,8 +10,8 @@ export const RequestAccess = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    reviewExternalDocumentInformationSequence:
-      sequences.reviewExternalDocumentInformationSequence,
+    reviewRequestAccessInformationSequence:
+      sequences.reviewRequestAccessInformationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
@@ -20,7 +20,7 @@ export const RequestAccess = connect(
   ({
     form,
     formCancelToggleCancelSequence,
-    reviewExternalDocumentInformationSequence,
+    reviewRequestAccessInformationSequence,
     validationErrors,
     updateFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -47,34 +47,57 @@ export const RequestAccess = connect(
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Document Type</legend>
               <ul className="ustc-vertical-option-list">
-                {['Entry of Appearance', 'Substitution of Counsel'].map(
-                  option => (
-                    <li key={option}>
-                      <input
-                        id={`document-type-${option}`}
-                        type="radio"
-                        name="documentType"
-                        value={option}
-                        checked={form.documentType === option}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value === 'Yes',
-                          });
-                          validateExternalDocumentInformationSequence();
-                        }}
-                      />
-                      <label htmlFor={`document-type-${option}`}>
-                        {option}
-                      </label>
-                    </li>
-                  ),
-                )}
+                {[
+                  {
+                    documentTitle: 'Entry of Appearance',
+                    documentType: 'Entry of Appearance',
+                    eventCode: '123',
+                    scenario: 'Standard',
+                  },
+                  {
+                    documentTitle: 'Substitution of Counsel',
+                    documentType: 'Substitution of Counsel',
+                    eventCode: '345',
+                    scenario: 'Standard',
+                  },
+                ].map(option => (
+                  <li key={option.documentType}>
+                    <input
+                      id={`document-type-${option.documentType}`}
+                      type="radio"
+                      name="documentType"
+                      value={option.documentType}
+                      checked={form.documentType === option.documentType}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        updateFormValueSequence({
+                          key: 'documentTitle',
+                          value: e.target.value,
+                        });
+                        updateFormValueSequence({
+                          key: 'eventCode',
+                          value: option.eventCode,
+                        });
+                        updateFormValueSequence({
+                          key: 'scenario',
+                          value: option.scenario,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor={`document-type-${option.documentType}`}>
+                      {option.documentType}
+                    </label>
+                  </li>
+                ))}
               </ul>
             </fieldset>
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.certificateOfService"
+              bind="validationErrors.documentType"
             />
           </div>
         </div>
@@ -89,7 +112,7 @@ export const RequestAccess = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
-              reviewExternalDocumentInformationSequence();
+              reviewRequestAccessInformationSequence();
             }}
           >
             Review Filing
