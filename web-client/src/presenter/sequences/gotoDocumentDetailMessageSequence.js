@@ -14,6 +14,7 @@ import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocument
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
+import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageIdFromUrlAction } from '../actions/setMessageIdFromUrlAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { state } from 'cerebral';
@@ -23,17 +24,16 @@ export const gotoDocumentDetailMessageSequence = [
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
-  set(state.documentDetail.tab, 'partyInfo'),
-  set(state.currentTab, 'Messages'),
   setMessageIdFromUrlAction,
   setDocumentIdAction,
+  setMessageAsReadAction,
   getCaseAction,
   setCaseAction,
   setFormForCaseAction,
   setBaseUrlAction,
   getInternalUsersAction,
   setInternalUsersAction,
-  setDefaultDocumentDetailTabAction,
+  set(state.currentTab, 'Messages'),
   getProcedureTypesAction,
   setProcedureTypesAction,
   getCaseTypesAction,

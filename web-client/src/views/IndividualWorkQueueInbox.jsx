@@ -5,12 +5,11 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    gotoDocumentDetailMessageSequence:
-      sequences.gotoDocumentDetailMessageSequence,
+    documentHelper: state.documentHelper,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
-  ({ setFocusedWorkItem, workQueue, gotoDocumentDetailMessageSequence }) => {
+  ({ setFocusedWorkItem, workQueue, documentHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -70,18 +69,21 @@ export const IndividualWorkQueueInbox = connect(
                   )}
                 </td>
                 <td>
-                  <button
-                    className={item.readAt ? 'link' : 'link case-link-bold'}
-                    onClick={() => {
-                      gotoDocumentDetailMessageSequence({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                      });
+                  <a
+                    onClick={e => {
+                      e.stopPropagation();
                     }}
+                    href={documentHelper({
+                      docketNumber: item.docketNumber,
+                      documentId: item.document.documentId,
+                      messageId: item.currentMessage.messageId,
+                    })}
+                    className={
+                      item.readAt ? 'case-link' : 'link case-link-bold'
+                    }
                   >
                     {item.document.documentType}
-                  </button>
+                  </a>
                 </td>
                 <td>{item.caseStatus}</td>
                 <td className="from">{item.currentMessage.from}</td>

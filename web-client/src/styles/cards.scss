@@ -3,6 +3,10 @@
   margin-bottom: 20px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
+  &.highlight {
+    border: 3px solid #0071BC;
+  }
+
   p {
     margin-bottom: 5px;
   }

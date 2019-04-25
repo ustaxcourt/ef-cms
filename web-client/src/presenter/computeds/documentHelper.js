@@ -1,3 +1,7 @@
-export const documentHelper = () => ({ docketNumber, documentId }) => {
-  return `/case-detail/${docketNumber}/documents/${documentId}`;
+export const documentHelper = () => ({
+  docketNumber,
+  documentId,
+  messageId,
+}) => {
+  return `/case-detail/${docketNumber}/documents/${documentId}/messages/${messageId}`;
 };
