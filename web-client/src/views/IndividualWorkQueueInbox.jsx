@@ -5,11 +5,12 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
+    gotoDocumentDetailMessageSequence:
+      sequences.gotoDocumentDetailMessageSequence,
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
-    workQueueClickedSequence: sequences.workQueueClickedSequence,
   },
-  ({ setFocusedWorkItem, workQueue, workQueueClickedSequence }) => {
+  ({ setFocusedWorkItem, workQueue, gotoDocumentDetailMessageSequence }) => {
     return (
       <React.Fragment>
         <table
@@ -72,7 +73,7 @@ export const IndividualWorkQueueInbox = connect(
                   <button
                     className={item.readAt ? 'link' : 'link case-link-bold'}
                     onClick={() => {
-                      workQueueClickedSequence({
+                      gotoDocumentDetailMessageSequence({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,

@@ -7,8 +7,4 @@ export const workQueueClickedAction = async ({
     applicationContext,
     messageId: props.messageId,
   });
-
-  await router.route(
-    `/case-detail/${props.docketNumber}/documents/${props.documentId}`,
-  );
 };
