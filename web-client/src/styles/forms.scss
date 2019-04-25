@@ -298,3 +298,33 @@ label.ustc-upload {
     }
   }
 }
+
+.one-third-searchbox {
+  padding: 14px;
+  margin-left: 50px;
+  background-color: $color-gray-lightest;
+
+  .usa-input-error-message {
+    display: none;
+  }
+
+  fieldset {
+    margin-bottom: 10px;
+    &.usa-input-error {
+      padding-left: 9px;
+      margin-left: 6px;
+      .usa-input-error-message {
+        display: block;
+      }
+    }
+  }
+
+  #docket-search-field {
+    display: block;
+    width: 150px;
+  }
+  button {
+    min-width: 130px;
+    margin-bottom: 5px;
+  }
+}
