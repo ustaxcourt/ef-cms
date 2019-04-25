@@ -52,6 +52,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  setMessageAsRead,
+} = require('../../persistence/dynamo/messages/setMessageAsRead');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -98,6 +101,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         saveWorkItem: saveWorkItemPersistence,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        setMessageAsRead,
         updateCase,
         updateWorkItem,
       };
