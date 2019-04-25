@@ -3,18 +3,24 @@ import { IndividualWorkQueue } from './IndividualWorkQueue';
 import { SectionWorkQueue } from './SectionWorkQueue';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     runBatchProcessSequence: sequences.runBatchProcessSequence,
+    unreadCount: state.notifications.unreadCount,
   },
-  ({ chooseWorkQueueSequence, runBatchProcessSequence }) => {
+  ({ chooseWorkQueueSequence, unreadCount, runBatchProcessSequence }) => {
     return (
       <React.Fragment>
-        <h1 tabIndex="-1">Work Queue</h1>
+        <div>
+          <h1 tabIndex="-1" id="work-queue-title">
+            Work Queue
+          </h1>
+          <span className="unread">{unreadCount}</span>
+        </div>
         <Tabs
           className="classic-horizontal"
           defaultActiveTab="my"

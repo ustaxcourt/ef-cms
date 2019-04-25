@@ -11,9 +11,6 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUsersAction } from '../actions/setUsersAction';
 
-import { getNotificationsAction } from '../actions/getNotificationsAction';
-import { setNotificationsAction } from '../actions/setNotificationsAction';
-
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
@@ -22,8 +19,6 @@ const goToDashboard = [
     docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
-      getNotificationsAction,
-      setNotificationsAction,
       setCurrentPageAction('DashboardDocketClerk'),
       ...chooseWorkQueueSequence,
     ],
@@ -39,8 +34,6 @@ const goToDashboard = [
     petitionsclerk: [
       getUsersInSectionAction({ section: 'petitions' }),
       setUsersAction,
-      getNotificationsAction,
-      setNotificationsAction,
       setCurrentPageAction('DashboardPetitionsClerk'),
       ...chooseWorkQueueSequence,
     ],
