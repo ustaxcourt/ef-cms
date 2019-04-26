@@ -68,6 +68,7 @@ import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAs
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
+import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
@@ -133,6 +134,7 @@ const allUseCases = {
   setMessageAsRead,
   updateCase,
   uploadExternalDocument,
+  uploadExternalDocuments,
   validateCaseAssociationRequest,
   validateCaseDetail,
   validateExternalDocument,
