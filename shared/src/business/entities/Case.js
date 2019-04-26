@@ -688,6 +688,14 @@ Case.documentTypes = {
 };
 
 /**
+ * 531 doc type used when associating a user
+ */
+const practitionerAssociationDocumentType = [
+  'Entry of Appearance',
+  'Substitution of Counsel',
+];
+
+/**
  *
  * @param yearAmounts
  * @returns {boolean}
@@ -709,7 +717,7 @@ Case.getDocumentTypes = () => {
         (acc, section) => {
           return acc.concat(section.map(item => item.documentType));
         },
-        [],
+        practitionerAssociationDocumentType,
       ),
     );
 };
