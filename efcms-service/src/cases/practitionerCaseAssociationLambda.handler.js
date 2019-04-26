@@ -3,7 +3,7 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * lambda which is used for adding an external document to a case
+ * lambda which is used for associating a user to a case
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
