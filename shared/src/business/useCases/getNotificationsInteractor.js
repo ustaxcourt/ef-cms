@@ -10,7 +10,9 @@ exports.getNotifications = async ({ applicationContext }) => {
     .getUseCases()
     .getWorkItemsForUser({ applicationContext });
 
-  const unreadCount = workItems.filter(item => !item.readAt).length;
+  const unreadCount = workItems.filter(
+    item => !item.readAt && !item.completedAt,
+  ).length;
 
   return { unreadCount };
 };
