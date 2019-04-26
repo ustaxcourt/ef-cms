@@ -27,11 +27,17 @@ export const submitCaseAssociationRequestAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .submitCaseAssociationRequest({
+    .fileExternalDocument({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
     });
+
+  await applicationContext.getUseCases().submitCaseAssociationRequest({
+    applicationContext,
+    caseId,
+    docketNumber,
+  });
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
