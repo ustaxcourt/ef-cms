@@ -38,6 +38,18 @@ describe('CaseAssociationRequest', () => {
       expect(errors().documentTitle).toEqual(undefined);
     });
 
+    it('should require event code', () => {
+      expect(errors().eventCode).toEqual('Select a document.');
+      rawEntity.eventCode = '345';
+      expect(errors().eventCode).toEqual(undefined);
+    });
+
+    it('should require scenario title', () => {
+      expect(errors().scenario).toEqual('Select a document.');
+      rawEntity.scenario = 'Standard';
+      expect(errors().scenario).toEqual(undefined);
+    });
+
     describe('Has Certificate of Service', () => {
       beforeEach(() => {
         rawEntity.certificateOfService = true;
