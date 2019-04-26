@@ -65,6 +65,7 @@ import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/reca
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
+import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -132,6 +133,7 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   setMessageAsRead,
+  submitCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
   uploadExternalDocuments,

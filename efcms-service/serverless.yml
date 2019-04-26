@@ -312,6 +312,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  practitionerCaseAssociation:
+    handler: src/cases/practitionerCaseAssociationLambda.handler
+    events:
+      - http:
+          path: v1/cases/{caseId}/practitioner-association
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCasesByUser:
     handler: src/cases/getCasesByUserLambda.handler
     events:
