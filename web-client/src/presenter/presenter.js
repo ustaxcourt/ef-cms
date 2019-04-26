@@ -32,6 +32,7 @@ import { gotoDocumentDetailMessageSequence } from './sequences/gotoDocumentDetai
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
+import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
@@ -42,6 +43,7 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
+import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
@@ -142,6 +144,7 @@ export const presenter = {
     gotoDocumentDetailSequence,
     gotoFileDocumentSequence,
     gotoLoginSequence,
+    gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
@@ -151,6 +154,7 @@ export const presenter = {
     refreshCaseSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
+    reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
