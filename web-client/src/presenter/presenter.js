@@ -28,9 +28,11 @@ import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
+import { gotoDocumentDetailMessageSequence } from './sequences/gotoDocumentDetailMessageSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
+import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
@@ -41,6 +43,7 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
+import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
@@ -90,6 +93,7 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
+import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
@@ -98,7 +102,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
-import { workQueueClickedSequence } from './sequences/workQueueClickedSequence';
 
 /**
  * Main Cerebral module
@@ -139,9 +142,11 @@ export const presenter = {
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
+    gotoDocumentDetailMessageSequence,
     gotoDocumentDetailSequence,
     gotoFileDocumentSequence,
     gotoLoginSequence,
+    gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
@@ -151,6 +156,7 @@ export const presenter = {
     refreshCaseSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
+    reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
@@ -198,6 +204,7 @@ export const presenter = {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
+    validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
@@ -206,7 +213,6 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,
     viewDocumentSequence,
-    workQueueClickedSequence,
   },
   state,
 };
