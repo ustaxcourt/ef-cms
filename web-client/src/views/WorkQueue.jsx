@@ -19,7 +19,9 @@ export const WorkQueue = connect(
           <h1 tabIndex="-1" id="work-queue-title">
             Work Queue
           </h1>
-          <span className="unread">{unreadCount}</span>
+          <span className="unread" aria-label="undread work item count">
+            {unreadCount}
+          </span>
         </div>
         <Tabs
           className="classic-horizontal"

@@ -79,6 +79,7 @@ class DocketRecordOverlayComponent extends React.Component {
             <button
               className="heading-1 text-style"
               onClick={() => closeFunc()}
+              aria-roledescription="button to return to docket record"
             >
               <FontAwesomeIcon icon="caret-left" />
               Document Details

@@ -6,6 +6,11 @@ export const caseDetailHelper = get => {
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const userRole = get(state.user.role);
+  const cases = get(state.cases);
+
+  const userAssociatedWithCase = cases.some(myCase => {
+    return myCase.caseId === caseDetail.caseId;
+  });
 
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
@@ -26,6 +31,8 @@ export const caseDetailHelper = get => {
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
+    showRequestAccessButton:
+      userRole === 'practitioner' && !userAssociatedWithCase,
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
   };
 };

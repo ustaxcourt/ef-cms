@@ -16,6 +16,7 @@ import { Header } from './Header';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
@@ -43,6 +44,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  RequestAccessWizard,
   SelectDocumentType,
   StartCase,
   StartCaseInternal,
