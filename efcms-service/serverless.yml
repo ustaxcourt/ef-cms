@@ -149,6 +149,8 @@ package:
     - cognito/**
     - node_modules/**
     - .cache/**
+    - .dynamodb/**
+    - .nyc_output/**
     - dist/**
     - src/handlers.js.map
 
