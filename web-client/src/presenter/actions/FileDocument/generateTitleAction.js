@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -16,7 +17,7 @@ export const generateTitleAction = ({ store, get, applicationContext }) => {
   });
   store.set(state.form.documentTitle, documentTitle);
 
-  if (documentMetadata.secondaryDocument) {
+  if (!isEmpty(documentMetadata.secondaryDocument)) {
     documentTitle = applicationContext.getUseCases().generateDocumentTitle({
       applicationContext,
       documentMetadata: documentMetadata.secondaryDocument,
@@ -24,7 +25,7 @@ export const generateTitleAction = ({ store, get, applicationContext }) => {
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
 
-  if (documentMetadata.supportingDocumentMetadata) {
+  if (!isEmpty(documentMetadata.supportingDocumentMetadata)) {
     documentTitle = applicationContext.getUseCases().generateDocumentTitle({
       applicationContext,
       documentMetadata: documentMetadata.supportingDocumentMetadata,
@@ -35,7 +36,7 @@ export const generateTitleAction = ({ store, get, applicationContext }) => {
     );
   }
 
-  if (documentMetadata.secondarySupportingDocumentMetadata) {
+  if (!isEmpty(documentMetadata.secondarySupportingDocumentMetadata)) {
     documentTitle = applicationContext.getUseCases().generateDocumentTitle({
       applicationContext,
       documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
