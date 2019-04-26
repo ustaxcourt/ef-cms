@@ -35,4 +35,24 @@ describe('getWorkItemsForUser', () => {
     });
     expect(result).toEqual({ unreadCount: 1 });
   });
+
+  it('returns an accurate unread count for legacy items marked complete', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getPersistenceGateway: () => ({
+        getReadMessagesForUser: async () => [],
+        getWorkItemsForUser: async () => [],
+      }),
+      getUseCases: () => ({
+        getWorkItemsForUser: () => {
+          return [{ ...mockWorkItem, completedAt: new Date() }];
+        },
+      }),
+    };
+    const result = await getNotifications({
+      applicationContext,
+      userId: 'docketclerk',
+    });
+    expect(result).toEqual({ unreadCount: 0 });
+  });
 });
