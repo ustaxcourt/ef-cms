@@ -13,6 +13,12 @@ class AppTimeoutModalComponent extends ModalDialog {
     };
   }
 
+  componentDidUpdate() {
+    if (this.props.shouldIdleLogout === true) {
+      this.props.idleLogoutSequence();
+    }
+  }
+
   renderBody() {
     return <div>Are you still there?</div>;
   }
@@ -21,6 +27,8 @@ class AppTimeoutModalComponent extends ModalDialog {
 export const AppTimeoutModal = connect(
   {
     confirmSequence: sequences.confirmStayLoggedInSequence,
+    idleLogoutSequence: sequences.signOutSequence,
+    shouldIdleLogout: state.shouldIdleLogout,
   },
   AppTimeoutModalComponent,
 );
