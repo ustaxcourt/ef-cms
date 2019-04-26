@@ -59,6 +59,7 @@ import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecor
 import { signOutSequence } from './sequences/signOutSequence';
 import { state } from './state';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
+import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -169,6 +170,7 @@ export const presenter = {
     showDocketRecordDetailModalSequence,
     signOutSequence,
     submitCaseDetailEditSaveSequence,
+    submitCaseSearchSequence,
     submitCompleteSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,

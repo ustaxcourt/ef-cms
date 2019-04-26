@@ -18,6 +18,7 @@ import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendi
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
+import { headerHelper } from './computeds/headerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -61,6 +62,7 @@ export const state = {
   formattedCases,
   formattedWorkQueue,
   getTrialCityName,
+  headerHelper,
   mobileMenu: {
     isVisible: false,
   },
