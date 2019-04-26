@@ -13,7 +13,9 @@ export const IdleActivityMonitor = connect(
   ({ currentUser, onIdle, showModal }) => {
     return (
       <div>
-        <IdleTimer debounce={250} timeout={5000} onIdle={onIdle} />
+        {currentUser && (
+          <IdleTimer debounce={250} timeout={5000} onIdle={onIdle} />
+        )}
         {showModal == 'AppTimeoutModal' && !!currentUser && <AppTimeoutModal />}
       </div>
     );
