@@ -8,9 +8,13 @@ import React from 'react';
 export const RequestAccessReview = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
+    submitCaseAssociationRequestSequence:
+      sequences.submitCaseAssociationRequestSequence,
   },
-  ({ formCancelToggleCancelSequence, submitExternalDocumentSequence }) => {
+  ({
+    formCancelToggleCancelSequence,
+    submitCaseAssociationRequestSequence,
+  }) => {
     return (
       <React.Fragment>
         <Focus>
@@ -44,7 +48,7 @@ export const RequestAccessReview = connect(
             type="submit"
             className="usa-button"
             onClick={() => {
-              submitExternalDocumentSequence();
+              submitCaseAssociationRequestSequence();
             }}
           >
             Submit Your Filing
