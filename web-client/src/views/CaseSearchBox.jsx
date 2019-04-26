@@ -25,7 +25,13 @@ export const CaseSearchBox = connect(
         >
           <p className="lead bold">Search For a Case</p>
           <p>To file an Entry of Appearance, Substitution of Counsel, etc.</p>
-          <fieldset className={form.searchError ? 'usa-input-error' : ''}>
+          <div
+            className={
+              form.searchError
+                ? 'usa-input-error usa-input-group'
+                : 'usa-input-group'
+            }
+          >
             <label htmlFor="docket-search-field">Docket Number</label>
             <input
               id="docket-search-field"
@@ -41,7 +47,7 @@ export const CaseSearchBox = connect(
             <p className="usa-input-error-message">
               No case was found. Check your docket number and try again.
             </p>
-          </fieldset>
+          </div>
           <button type="submit" className="usa-button-secondary">
             <span className="usa-search-submit-text">Search</span>
           </button>
