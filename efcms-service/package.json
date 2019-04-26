@@ -46,7 +46,7 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
-    "build": "parcel build --bundle-node-modules --target node src/handlers.js",
+    "build": "parcel build --no-source-maps --bundle-node-modules --target node src/handlers.js",
     "postinstall": "npm run install:dynamodb",
     "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
