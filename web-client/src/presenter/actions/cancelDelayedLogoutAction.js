@@ -10,4 +10,5 @@ export const cancelDelayedLogoutAction = ({ get, store }) => {
   const oldTimer = get(state.logoutTimer);
   clearTimeout(oldTimer);
   store.set(state.logoutTimer, null);
+  store.set(state.shouldIdleLogout, false);
 };
