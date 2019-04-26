@@ -204,6 +204,9 @@ const {
   updateWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  verifyCaseForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/verifyCaseForUser');
+const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
 
@@ -331,6 +334,7 @@ module.exports = (appContextUser = {}) => {
         sendPetitionToIRSHoldingQueue,
         setMessageAsRead: setMessageAsReadUC,
         updateCase: updateCaseUC,
+        verifyCaseForUser,
       };
     },
     irsGateway,

@@ -76,6 +76,7 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -141,6 +142,7 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
   validatePetitionFromPaper,
+  verifyCaseForUser,
 };
 tryCatchDecorator(allUseCases);
 
