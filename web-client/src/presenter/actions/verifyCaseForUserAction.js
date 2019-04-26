@@ -21,9 +21,5 @@ export const verifyCaseForUserAction = async ({
     caseId: get(state.caseDetail.caseId),
   });
 
-  if (caseDetail) {
-    store.set(state.screenMetadata.caseOwnedByUser, true);
-  } else {
-    store.set(state.screenMetadata.caseOwnedByUser, false);
-  }
+  store.set(state.screenMetadata.caseOwnedByUser, !!caseDetail);
 };
