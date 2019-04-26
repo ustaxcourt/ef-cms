@@ -147,6 +147,10 @@ package:
     - coverage/**
     - terraform/**
     - cognito/**
+    - node_modules/**
+    - .cache/**
+    - dist/**
+    - src/handlers.js.map
 
   excludeDevDependencies: true
 
