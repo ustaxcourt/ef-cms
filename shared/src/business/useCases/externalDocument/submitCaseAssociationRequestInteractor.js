@@ -16,10 +16,20 @@ exports.submitCaseAssociationRequest = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().createMappingRecord({
-    applicationContext,
-    pkId: user.userId,
-    skId: caseId,
-    type: 'case',
-  });
+  const isAssociated = await applicationContext
+    .getUseCases()
+    .verifyCaseForUser({
+      applicationContext,
+      caseId,
+      userId: user.userId,
+    });
+
+  if (!isAssociated) {
+    await applicationContext.getPersistenceGateway().createMappingRecord({
+      applicationContext,
+      pkId: user.userId,
+      skId: caseId,
+      type: 'case',
+    });
+  }
 };
