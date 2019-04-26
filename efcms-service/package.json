@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-xray-sdk": "^2.3.1",
-    "ef-cms-shared": "file:../shared",
     "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "uuid": "^3.3.2"
@@ -29,6 +28,7 @@
     "husky": "^2.1.0",
     "jest": "^24.7.1",
     "lambda-tester": "^3.5.0",
+    "parcel-bundler": "^1.12.3",
     "prettier": "^1.17.0",
     "proxyquire": "^2.1.0",
     "serverless": "^1.41.1",
@@ -46,6 +46,7 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
+    "build": "parcel build --no-source-maps --bundle-node-modules --target node src/handlers.js",
     "postinstall": "npm run install:dynamodb",
     "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
