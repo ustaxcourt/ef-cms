@@ -9,6 +9,6 @@ export const submitCaseSearchSequence = [
   caseExistsAction,
   {
     error: [set(state.form.searchError, true)],
-    success: [navigateToCaseDetailAction],
+    success: [set(state.form.searchError, false), navigateToCaseDetailAction],
   },
 ];
