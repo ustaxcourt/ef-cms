@@ -10,7 +10,7 @@ describe('submitCaseAssociationRequest', () => {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
-  it('should throw if not authorized', async () => {
+  it('should throw when not authorized', async () => {
     let error;
     try {
       applicationContext = {
@@ -40,34 +40,31 @@ describe('submitCaseAssociationRequest', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('add documents and workitems', async () => {
-    let error;
+  it('should add mapping', async () => {
     let createMappingRecordSpy = sinon.spy();
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Olivia Jade',
-            role: 'practitioner',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
-        getPersistenceGateway: () => ({
-          createMappingRecord: createMappingRecordSpy,
-        }),
-      };
-      await submitCaseAssociationRequest({
-        applicationContext,
-        documentMetadata: {
-          caseId: caseRecord.caseId,
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          name: 'Olivia Jade',
+          role: 'practitioner',
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        };
+      },
+      getPersistenceGateway: () => ({
+        createMappingRecord: createMappingRecordSpy,
+      }),
+    };
+
+    await submitCaseAssociationRequest({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
     expect(createMappingRecordSpy.called).toEqual(true);
   });
 });
