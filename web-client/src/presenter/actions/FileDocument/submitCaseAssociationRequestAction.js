@@ -36,7 +36,6 @@ export const submitCaseAssociationRequestAction = async ({
   await applicationContext.getUseCases().submitCaseAssociationRequest({
     applicationContext,
     caseId,
-    docketNumber,
   });
 
   for (let document of caseDetail.documents) {

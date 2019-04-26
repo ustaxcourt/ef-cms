@@ -192,6 +192,9 @@ const {
   setMessageAsRead: setMessageAsReadUC,
 } = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
+  submitCaseAssociationRequest,
+} = require('ef-cms-shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
+const {
   updateCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -330,6 +333,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         setMessageAsRead: setMessageAsReadUC,
+        submitCaseAssociationRequest,
         updateCase: updateCaseUC,
       };
     },
