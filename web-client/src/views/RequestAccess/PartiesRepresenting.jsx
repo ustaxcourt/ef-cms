@@ -7,8 +7,7 @@ export const PartiesRepresenting = connect(
     caseDetail: state.formattedCaseDetail,
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
   },
@@ -16,7 +15,7 @@ export const PartiesRepresenting = connect(
     caseDetail,
     requestAccessHelper,
     form,
-    updateFileDocumentWizardFormValueSequence,
+    updateFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {
     return (
@@ -40,9 +39,9 @@ export const PartiesRepresenting = connect(
                     type="checkbox"
                     name="partyPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary}
+                    checked={form.partyPrimary || false}
                     onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
+                      updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -60,9 +59,9 @@ export const PartiesRepresenting = connect(
                       type="checkbox"
                       aria-describedby="who-legend"
                       name="partySecondary"
-                      checked={form.partySecondary}
+                      checked={form.partySecondary || false}
                       onChange={e => {
-                        updateFileDocumentWizardFormValueSequence({
+                        updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
