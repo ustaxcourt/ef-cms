@@ -23,6 +23,7 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
+import { CaseAssociationRequest } from '../../shared/src/business/entities/CaseAssociationRequest';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -67,6 +68,7 @@ import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAs
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
+import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -132,6 +134,7 @@ const allUseCases = {
   setMessageAsRead,
   updateCase,
   uploadExternalDocument,
+  validateCaseAssociationRequest,
   validateCaseDetail,
   validateExternalDocument,
   validateExternalDocumentInformation,
@@ -176,6 +179,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    CaseAssociationRequest,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
