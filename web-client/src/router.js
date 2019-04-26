@@ -59,6 +59,13 @@ const router = {
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+    route(
+      '/case-detail/*/request-access',
+      checkLoggedIn(docketNumber => {
+        document.title = `Request access ${pageTitleSuffix}`;
+        app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+      }),
+    );
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = queryString.parse(location.search);
