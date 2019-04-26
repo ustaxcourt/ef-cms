@@ -13,8 +13,8 @@ export const RequestAccess = connect(
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateExternalDocumentInformationSequence:
-      sequences.validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence:
+      sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -23,7 +23,7 @@ export const RequestAccess = connect(
     reviewRequestAccessInformationSequence,
     validationErrors,
     updateFormValueSequence,
-    validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence,
   }) => {
     return (
       <React.Fragment>
@@ -51,13 +51,13 @@ export const RequestAccess = connect(
                   {
                     documentTitle: 'Entry of Appearance',
                     documentType: 'Entry of Appearance',
-                    eventCode: '123',
+                    eventCode: 'EA',
                     scenario: 'Standard',
                   },
                   {
                     documentTitle: 'Substitution of Counsel',
                     documentType: 'Substitution of Counsel',
-                    eventCode: '345',
+                    eventCode: 'SOC',
                     scenario: 'Standard',
                   },
                 ].map(option => (
@@ -85,7 +85,7 @@ export const RequestAccess = connect(
                           key: 'scenario',
                           value: option.scenario,
                         });
-                        validateExternalDocumentInformationSequence();
+                        validateCaseAssociationRequestSequence();
                       }}
                     />
                     <label htmlFor={`document-type-${option.documentType}`}>

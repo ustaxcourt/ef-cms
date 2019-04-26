@@ -28,10 +28,20 @@ export const validateCaseAssociationRequestAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayOrder = [
+      'documentType',
+      'primaryDocumentFile',
+      'certificateOfService',
+      'certificateOfServiceDate',
+      'objections',
+      'partyPrimary',
+      'partySecondary',
+    ];
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder,
       errors,
     });
   }
