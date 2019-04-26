@@ -59,6 +59,7 @@ const router = {
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+<<<<<<< HEAD
     route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
@@ -66,6 +67,11 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+=======
+    route('/idle-logout', () => {
+      app.getSequence('gotoIdleLogoutSequence')();
+    });
+>>>>>>> Add idleLogout route and idleLogoutSequence
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = queryString.parse(location.search);
