@@ -58,6 +58,7 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { state } from './state';
+import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
@@ -169,6 +170,7 @@ export const presenter = {
     setWorkItemActionSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
+    submitCaseAssociationRequestSequence,
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,

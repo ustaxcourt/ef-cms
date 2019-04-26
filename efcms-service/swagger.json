@@ -979,6 +979,22 @@
           }
         ]
       },
+      "put": {
+        "tags": ["cases"],
+        "summary": "add practitioner to case if not associated with the case",
+        "description": "Add practitioner to case if not associated with the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
