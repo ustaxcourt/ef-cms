@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * validates the petition.
+ * validates the case association request.
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context needed for getting the use case
