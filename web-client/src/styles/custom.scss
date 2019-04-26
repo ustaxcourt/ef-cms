@@ -192,9 +192,11 @@ select[disabled] {
   }
 }
 
-.push-right {
-  margin-right: 0;
-  float: right;
+@media only screen and (min-width: $medium-screen) {
+  .push-right {
+    margin-right: 0;
+    float: right;
+  }
 }
 
 .alert-blank-message {
