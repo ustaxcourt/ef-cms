@@ -1,5 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
-import { NotFoundError } from '../../../../shared/src/errors/errors';
+import { InvalidRequestError } from '../errors/InvalidRequestError';
+import { NotFoundError } from '../errors/NotFoundError';
 import { presenter } from '../presenter';
 import sinon from 'sinon';
 
@@ -20,6 +21,7 @@ presenter.providers.router = {
 
 test = CerebralTest(presenter);
 test.setState('searchTerm', '111-19');
+test.setState('form.searchError', 'BLAH');
 
 describe('submitCaseSearchSequence', () => {
   beforeEach(() => {
@@ -34,29 +36,31 @@ describe('submitCaseSearchSequence', () => {
     expect(routeStub.called).toBeTruthy();
   });
 
-  it('does not navigate if endpoint throws NotFoundError', async () => {
-    getCase = async () => {
-      return Promise.reject(new NotFoundError('cannot find that'));
+  it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
+    getCase = () => {
+      return Promise.reject(
+        new NotFoundError({ message: "404 Can't find it" }),
+      );
     };
 
-    expect(async () => {
-      await test.runSequence('submitCaseSearchSequence', {
-        searchTerm: '111-19',
-      });
-    }).not.toThrow();
+    await test.runSequence('submitCaseSearchSequence', {
+      searchTerm: '111-19',
+    });
     expect(routeStub.called).toBeFalsy();
     expect(test.getState('form.searchError')).toBeTruthy();
   });
 
   it('rethrows errors that are not NotFoundError instances', async () => {
     getCase = async () => {
-      throw new Error('something else went wrong');
+      return Promise.reject(
+        new InvalidRequestError('something else went wrong'),
+      );
     };
-    expect(async () => {
-      await test.runSequence('submitCaseSearchSequence', {
-        searchTerm: '111-19',
-      });
-    }).toThrow();
+    await expect(
+      test.runSequence('submitCaseSearchSequence', {
+        searchTerm: '000-00',
+      }),
+    ).rejects.toThrow(InvalidRequestError);
     expect(routeStub.called).toBeFalsy();
   });
 });
