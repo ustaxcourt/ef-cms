@@ -11,15 +11,15 @@ export const RequestAccessDocumentForm = connect(
     requestAccessHelper: state.requestAccessHelper,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence:
-      sequences.validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence:
+      sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
   ({
     requestAccessHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence,
     validationErrors,
   }) => {
     return (
@@ -76,7 +76,6 @@ export const RequestAccessDocumentForm = connect(
                   bind="validationErrors.primaryDocumentFile"
                 />
               </div>
-
               <div
                 className={`ustc-form-group ${
                   validationErrors.certificateOfService ? 'usa-input-error' : ''
@@ -102,7 +101,7 @@ export const RequestAccessDocumentForm = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                         <label htmlFor={`certificate-${option}`}>
@@ -117,7 +116,6 @@ export const RequestAccessDocumentForm = connect(
                   bind="validationErrors.certificateOfService"
                 />
               </div>
-
               {form.certificateOfService && (
                 <div
                   className={`ustc-form-group ${
@@ -150,7 +148,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -175,7 +173,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -200,7 +198,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -212,44 +210,47 @@ export const RequestAccessDocumentForm = connect(
                   />
                 </div>
               )}
-
-              <div
-                className={`ustc-form-group ${
-                  validationErrors.objections ? 'usa-input-error' : ''
-                }`}
-              >
-                <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend id="objections-legend">
-                    Are There Any Objections to This Document?
-                  </legend>
-                  <ul className="usa-unstyled-list">
-                    {['Yes', 'No', 'Unknown'].map(option => (
-                      <li key={option}>
-                        <input
-                          id={`objections-${option}`}
-                          type="radio"
-                          aria-describedby="objections-legend"
-                          name="objections"
-                          value={option}
-                          checked={form.objections === option}
-                          onChange={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            validateExternalDocumentInformationSequence();
-                          }}
-                        />
-                        <label htmlFor={`objections-${option}`}>{option}</label>
-                      </li>
-                    ))}
-                  </ul>
-                </fieldset>
-                <Text
-                  className="usa-input-error-message"
-                  bind="validationErrors.objections"
-                />
-              </div>
+              {form.documentType === 'Substitution of Counsel' && (
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.objections ? 'usa-input-error' : ''
+                  }`}
+                >
+                  <fieldset className="usa-fieldset-inputs usa-sans">
+                    <legend id="objections-legend">
+                      Are There Any Objections to This Document?
+                    </legend>
+                    <ul className="usa-unstyled-list">
+                      {['Yes', 'No', 'Unknown'].map(option => (
+                        <li key={option}>
+                          <input
+                            id={`objections-${option}`}
+                            type="radio"
+                            aria-describedby="objections-legend"
+                            name="objections"
+                            value={option}
+                            checked={form.objections === option}
+                            onChange={e => {
+                              updateFileDocumentWizardFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                              validateCaseAssociationRequestSequence();
+                            }}
+                          />
+                          <label htmlFor={`objections-${option}`}>
+                            {option}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </fieldset>
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.objections"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
