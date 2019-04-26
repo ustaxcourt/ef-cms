@@ -35,6 +35,9 @@ const {
   createDocument,
 } = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
 const {
+  createMappingRecord,
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/createMappingRecord');
+const {
   createUser,
 } = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
@@ -262,6 +265,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         createCase,
         createDocument,
+        createMappingRecord,
         createUser,
         createWorkItem,
         deleteDocument,
