@@ -2,6 +2,8 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
+import { CaseSearchBox } from './CaseSearchBox.jsx';
+
 export const CaseListPractitioner = connect(
   {
     caseList: state.formattedCases,
@@ -83,6 +85,9 @@ export const CaseListPractitioner = connect(
         <div className="usa-grid-full subsection">
           <div className="usa-width-two-thirds">
             {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+          </div>
+          <div className="usa-width-one-third">
+            {helper.showCaseSearch && <CaseSearchBox />}
           </div>
         </div>
       </>

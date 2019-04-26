@@ -7,12 +7,13 @@ import close from '../../node_modules/uswds/dist/img/close.svg';
 
 export const Header = connect(
   {
+    helper: state.headerHelper,
     mobileMenu: state.mobileMenu,
     signOutSequence: sequences.signOutSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({ mobileMenu, signOutSequence, toggleMobileMenuSequence, user }) => {
+  ({ helper, mobileMenu, signOutSequence, toggleMobileMenuSequence, user }) => {
     return (
       <>
         <div className="beta">
@@ -48,67 +49,14 @@ export const Header = connect(
               >
                 <img src={close} alt="close" />
               </button>
-              {/* <ul className="usa-nav-primary usa-accordion">
-              <li>
-                <button
-                  className="usa-accordion-button usa-nav-link"
-                  aria-expanded="false"
-                  aria-controls="extended-nav-section-one"
-                >
-                  <span>Section title</span>
-                </button>
-                <ul
-                  id="extended-nav-section-one"
-                  className="usa-nav-submenu"
-                  aria-hidden="true"
-                >
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <button
-                  className="usa-accordion-button usa-nav-link"
-                  aria-expanded="false"
-                  aria-controls="extended-nav-section-two"
-                >
-                  <span>Simple terms</span>
-                </button>
-                <ul
-                  id="extended-nav-section-two"
-                  className="usa-nav-submenu"
-                  aria-hidden="true"
-                >
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                  <li>
-                    <a href="/">Subsection title</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a className="usa-nav-link" href="/">
-                  <span>Distinct from each other</span>
-                </a>
-              </li>
-            </ul> */}
               {user && (
                 <div className="usa-nav-secondary">
                   <ul className="usa-unstyled-list usa-nav-secondary-links">
-                    <li role="search" className="usa-search">
-                      <SearchBox />
-                    </li>
+                    {helper.showSearchInHeader && (
+                      <li role="search" className="usa-search">
+                        <SearchBox />
+                      </li>
+                    )}
                     {user.userId && (
                       <li>
                         Hello, {user.name}
