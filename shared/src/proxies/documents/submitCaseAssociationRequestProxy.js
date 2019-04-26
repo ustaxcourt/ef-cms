@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+const { put } = require('../requests');
 
 /**
  * submitCaseAssociationRequestProxy
@@ -8,11 +8,9 @@ const { post } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.submitCaseAssociationRequest = ({ caseId, applicationContext }) => {
-  return post({
+  const user = applicationContext.getCurrentUser();
+  return put({
     applicationContext,
-    body: {
-      caseId,
-    },
-    endpoint: `/cases/${caseId}/practitioner-association`,
+    endpoint: `/users/${user.userId}/case/${caseId}`,
   });
 };
