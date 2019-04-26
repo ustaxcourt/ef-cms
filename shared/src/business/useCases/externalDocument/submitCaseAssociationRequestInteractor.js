@@ -1,8 +1,3 @@
-const {
-  isAuthorized,
-  FILE_EXTERNAL_DOCUMENT,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -17,7 +12,14 @@ exports.submitCaseAssociationRequest = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (user.role !== 'practitioner') {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  await applicationContext.getPersistenceGateway().createMappingRecord({
+    applicationContext,
+    pkId: user.userId,
+    skId: caseId,
+    type: 'case',
+  });
 };
