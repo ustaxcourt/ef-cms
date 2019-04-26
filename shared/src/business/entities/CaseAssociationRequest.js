@@ -19,7 +19,7 @@ function CaseAssociationRequest(rawProps) {
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
     primaryDocumentFile: joi.object().required(),
-    scenario: joi.boolean().required(),
+    scenario: joi.string().required(),
   };
 
   let schemaOptionalItems = {
@@ -51,10 +51,12 @@ function CaseAssociationRequest(rawProps) {
     ],
     documentTitle: 'Select a document.',
     documentType: 'Select a document.',
+    eventCode: 'Select a document.',
     objections: 'Enter selection for Objections.',
     partyPrimary: 'Select a party.',
     partySecondary: 'Select a party.',
     primaryDocumentFile: 'A file was not selected.',
+    scenario: 'Select a document.',
   };
 
   let customValidate;

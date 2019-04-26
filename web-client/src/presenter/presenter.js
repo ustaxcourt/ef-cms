@@ -90,6 +90,7 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
+import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
@@ -197,6 +198,7 @@ export const presenter = {
     updatePetitionValueSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
+    validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
