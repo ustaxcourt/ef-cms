@@ -13,12 +13,14 @@ export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    screenMetadata: state.screenMetadata,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
   },
   function CaseDetail({
     caseDetail,
     caseHelper,
+    screenMetadata,
     showDetails,
     togglePaymentDetailsSequence,
   }) {
@@ -39,7 +41,7 @@ export const CaseDetail = connect(
               <p>{caseDetail.caseTitle}</p>
             </div>
             <div className="usa-width-one-half">
-              {caseHelper.showRequestAccessButton && (
+              {!screenMetadata.caseOwnedByUser && (
                 <a
                   className="usa-button tablet-full-width push-right"
                   href={`/case-detail/${

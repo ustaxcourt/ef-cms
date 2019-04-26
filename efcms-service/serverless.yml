@@ -336,6 +336,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  verifyCaseForUser:
+    handler: src/cases/verifyCaseForUserLambda.handler
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCasesForRespondent:
     handler: src/cases/getCasesForRespondentLambda.handler
     events:
