@@ -11,15 +11,15 @@ export const RequestAccessDocumentForm = connect(
     requestAccessHelper: state.requestAccessHelper,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence:
-      sequences.validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence:
+      sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
   },
   ({
     requestAccessHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence,
     validationErrors,
   }) => {
     return (
@@ -102,7 +102,7 @@ export const RequestAccessDocumentForm = connect(
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                         <label htmlFor={`certificate-${option}`}>
@@ -150,7 +150,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -175,7 +175,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -200,7 +200,7 @@ export const RequestAccessDocumentForm = connect(
                             });
                           }}
                           onBlur={() => {
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                       </div>
@@ -237,7 +237,7 @@ export const RequestAccessDocumentForm = connect(
                               key: e.target.name,
                               value: e.target.value,
                             });
-                            validateExternalDocumentInformationSequence();
+                            validateCaseAssociationRequestSequence();
                           }}
                         />
                         <label htmlFor={`objections-${option}`}>{option}</label>

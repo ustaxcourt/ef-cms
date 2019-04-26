@@ -9,15 +9,15 @@ export const PartiesRepresenting = connect(
     requestAccessHelper: state.requestAccessHelper,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence:
-      sequences.validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence:
+      sequences.validateCaseAssociationRequestSequence,
   },
   ({
     caseDetail,
     requestAccessHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence,
+    validateCaseAssociationRequestSequence,
   }) => {
     return (
       <React.Fragment>
@@ -46,7 +46,7 @@ export const PartiesRepresenting = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      validateExternalDocumentInformationSequence();
+                      validateCaseAssociationRequestSequence();
                     }}
                   />
                   <label htmlFor="party-primary">
@@ -66,7 +66,7 @@ export const PartiesRepresenting = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateExternalDocumentInformationSequence();
+                        validateCaseAssociationRequestSequence();
                       }}
                     />
                     <label htmlFor="party-secondary">
