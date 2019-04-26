@@ -210,7 +210,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: src/handlers.getDocumentDownloadUrl
+    handler: src/handlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: v1/documents/{documentId}/documentDownloadUrl
