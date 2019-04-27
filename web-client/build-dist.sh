@@ -12,6 +12,6 @@ CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_I
 CLIENT_ID="${CLIENT_ID%\"}"
 CLIENT_ID="${CLIENT_ID#\"}"
 
-COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
+COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 
 API_URL="${API_URL}" COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" npm run dist

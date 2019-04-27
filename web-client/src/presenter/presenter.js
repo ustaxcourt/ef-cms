@@ -14,6 +14,7 @@ import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { refreshTokenSequence } from './sequences/refreshTokenSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
@@ -34,6 +35,7 @@ import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
+import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
@@ -164,6 +166,8 @@ export const presenter = {
     signOutSequence,
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
+    loginWithCodeSequence,
+    refreshTokenSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,

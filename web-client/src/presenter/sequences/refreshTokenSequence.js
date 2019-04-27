@@ -1,3 +1,4 @@
-import { refreshCaseAction } from '../actions/refreshCaseAction';
+import { refreshTokenAction } from '../actions/refreshTokenAction';
+import { setTokenAction } from '../actions/setTokenAction';
 
-export const refreshCaseSequence = [refreshCaseAction];
+export const refreshTokenSequence = [refreshTokenAction, setTokenAction];

@@ -10,9 +10,10 @@ export const WorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     runBatchProcessSequence: sequences.runBatchProcessSequence,
+    refreshTokenSequence: sequences.refreshTokenSequence,
     unreadCount: state.notifications.unreadCount,
   },
-  ({ chooseWorkQueueSequence, unreadCount, runBatchProcessSequence }) => {
+  ({ chooseWorkQueueSequence, unreadCount, runBatchProcessSequence, refreshTokenSequence}) => {
     return (
       <React.Fragment>
         <div>
@@ -56,7 +57,7 @@ export const WorkQueue = connect(
         <If bind="workQueueHelper.showRunBatchIRSProcessButton">
           <button
             className="usa-button-secondary"
-            onClick={() => runBatchProcessSequence()}
+            onClick={() => refreshTokenSequence()}
           >
             Run IRS Batch Process
           </button>
