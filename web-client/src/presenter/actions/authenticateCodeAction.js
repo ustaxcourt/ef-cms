@@ -11,17 +11,18 @@ import qs from 'qs';
  * @param {Function} providers.get the cerebral get helper function
  * @returns {undefined} currently doesn't return anything
  */
-export const refreshTokenAction = async ({
+export const authenticateCodeAction = async ({
   applicationContext,
   get,
   store,
   props,
 }) => {
-  const refreshToken = get(state.refreshToken);
-
+  const code = props.code;
+  
   const data = qs.stringify({
-    grant_type: 'refresh_token',
-    refresh_token: refreshToken,
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: 'http://localhost:1234/log-in', // TODO: replace with redirect uri
     client_id: '6tu6j1stv5ugcut7dqsqdurn8q', // TODO: replace with redirect client_id
   });
 
@@ -34,9 +35,8 @@ export const refreshTokenAction = async ({
     })
     .then(response => response.data);
 
-  console.log('response', response);
-
   return {
     token: response.id_token,
+    refreshToken: response.refresh_token,
   };
 };
