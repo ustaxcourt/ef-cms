@@ -13,6 +13,8 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 cd src && find . -type f -exec chmod -R ugo+r {} ";"
 cd ..
+npm run build
+cp dist/* src
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_domain --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}" --userPoolId "${USER_POOL_ID}" --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}" --verbose
 
