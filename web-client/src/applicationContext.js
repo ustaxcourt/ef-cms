@@ -23,6 +23,7 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
+import { CaseAssociationRequest } from '../../shared/src/business/entities/CaseAssociationRequest';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -64,9 +65,12 @@ import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/reca
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
+import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
+import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
+import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -74,6 +78,7 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -129,8 +134,11 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   setMessageAsRead,
+  submitCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
+  uploadExternalDocuments,
+  validateCaseAssociationRequest,
   validateCaseDetail,
   validateExternalDocument,
   validateExternalDocumentInformation,
@@ -138,6 +146,7 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
   validatePetitionFromPaper,
+  verifyCaseForUser,
 };
 tryCatchDecorator(allUseCases);
 
@@ -174,6 +183,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    CaseAssociationRequest,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
