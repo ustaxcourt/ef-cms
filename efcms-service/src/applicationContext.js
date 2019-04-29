@@ -7,12 +7,12 @@ const AWS =
 
 const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
-const docketNumberGenerator = require('ef-cms-shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const irsGateway = require('ef-cms-shared/src/external/irsGateway');
+const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
+const irsGateway = require('../../shared/src/external/irsGateway');
 
 const {
   addCoverToPDFDocument,
-} = require('ef-cms-shared/src/business/useCases/addCoverToPDFDocumentInteractor');
+} = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -36,7 +36,7 @@ const {
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
   createMappingRecord,
-} = require('ef-cms-shared/src/persistence/dynamo/helpers/createMappingRecord');
+} = require('../../shared/src/persistence/dynamo/helpers/createMappingRecord');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -102,10 +102,10 @@ const {
 } = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
   getNotifications,
-} = require('ef-cms-shared/src/business/useCases/getNotificationsInteractor');
+} = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
   getReadMessagesForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/messages/getReadMessagesForUser');
+} = require('../../shared/src/persistence/dynamo/messages/getReadMessagesForUser');
 const {
   getSentWorkItemsForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -175,7 +175,7 @@ const {
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
   saveDocument,
-} = require('ef-cms-shared/src/persistence/s3/saveDocument');
+} = require('../../shared/src/persistence/s3/saveDocument');
 const {
   saveWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
@@ -190,13 +190,13 @@ const {
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   setMessageAsRead,
-} = require('ef-cms-shared/src/persistence/dynamo/messages/setMessageAsRead');
+} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
   setMessageAsRead: setMessageAsReadUC,
-} = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
+} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
   submitCaseAssociationRequest,
-} = require('ef-cms-shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
+} = require('../../shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
@@ -205,18 +205,18 @@ const {
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
   updateDocumentProcessingStatus,
-} = require('ef-cms-shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+} = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
   verifyCaseForUser,
-} = require('ef-cms-shared/src/persistence/dynamo/cases/verifyCaseForUser');
+} = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
   zipDocuments,
-} = require('ef-cms-shared/src/persistence/s3/zipDocuments');
+} = require('../../shared/src/persistence/s3/zipDocuments');
 
-const { User } = require('ef-cms-shared/src/business/entities/User');
+const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
