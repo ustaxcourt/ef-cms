@@ -224,7 +224,7 @@ functions:
           cors: true
 
   setMessageAsRead:
-    handler: src/messages/setMessageAsReadLambda.handler
+    handler: src/handlers.setMessageAsReadLambda
     events:
       - http:
           path: v1/messages/{messageId}/read
@@ -244,7 +244,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   addCoversheet:
-    handler: src/documents/addCoversheetLambda.handler
+    handler: src/handlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
@@ -331,7 +331,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   verifyCaseForUser:
-    handler: src/cases/verifyCaseForUserLambda.handler
+    handler: src/handlers.verifyCaseForUserLambda
     events:
       - http:
           path: v1/users/{userId}/case/{caseId}
@@ -343,7 +343,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   practitionerCaseAssociation:
-    handler: src/cases/practitionerCaseAssociationLambda.handler
+    handler: src/handlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: v1/users/{userId}/case/{caseId}
@@ -551,7 +551,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getNotifications:
-    handler: src/users/getNotificationsLambda.handler
+    handler: src/handlers.getNotificationsLambda
     events:
       - http:
           path: v1/notifications
