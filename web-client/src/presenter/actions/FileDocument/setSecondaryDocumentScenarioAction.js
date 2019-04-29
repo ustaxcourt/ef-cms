@@ -27,5 +27,9 @@ export const setSecondaryDocumentScenarioAction = ({ store, get }) => {
       state.form.secondaryDocument.documentTitle,
       categoryInformation.documentTitle,
     );
+    store.set(
+      state.form.secondaryDocument.eventCode,
+      categoryInformation.eventCode,
+    );
   }
 };

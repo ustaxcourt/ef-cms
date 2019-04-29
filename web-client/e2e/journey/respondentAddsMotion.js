@@ -37,6 +37,8 @@ export default (test, fakeFile) => {
       'Motion for Continuance',
     );
 
+    expect(test.getState('form.partyPrimary')).toBeUndefined();
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
@@ -80,6 +82,11 @@ export default (test, fakeFile) => {
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocumentMetadata.previousDocument',
       value: 'Motion for Continuance',
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'partyPrimary',
+      value: true,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');

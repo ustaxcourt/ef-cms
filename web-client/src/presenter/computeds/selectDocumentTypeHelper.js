@@ -1,8 +1,12 @@
+import { isEmpty } from 'lodash';
 import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
+  if (!categoryInformation) {
+    return {}; // debugger-safe
+  }
 
   switch (categoryInformation.scenario) {
     case 'Standard': {
@@ -90,7 +94,7 @@ const getPreviouslyFiledDocuments = caseDetail => {
         document.documentType !== 'Statement of Taxpayer Identification',
     )
     .map(document => {
-      return document.documentType;
+      return document.documentTitle || document.documentType;
     });
 };
 
@@ -99,14 +103,17 @@ export const selectDocumentTypeHelper = get => {
   const form = get(state.form);
 
   let returnData = {};
+  if (isEmpty(caseDetail)) {
+    return {};
+  }
 
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
   const selectedDocumentCategory = form.category;
   const selectedDocumentType = form.documentType;
-  const categoryInformation = CATEGORY_MAP[selectedDocumentCategory].find(
-    entry => entry.documentType === selectedDocumentType,
-  );
+  const categoryInformation = (
+    CATEGORY_MAP[selectedDocumentCategory] || []
+  ).find(entry => entry.documentType === selectedDocumentType);
 
   returnData.primary = getOptionsForCategory(caseDetail, categoryInformation);
 

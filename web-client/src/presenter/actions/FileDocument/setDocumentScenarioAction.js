@@ -18,4 +18,5 @@ export const setDocumentScenarioAction = ({ store, get }) => {
 
   store.set(state.form.scenario, categoryInformation.scenario);
   store.set(state.form.documentTitle, categoryInformation.documentTitle);
+  store.set(state.form.eventCode, categoryInformation.eventCode);
 };

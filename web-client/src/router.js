@@ -42,10 +42,28 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/messages/*',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoDocumentDetailMessageSequence')({
+          docketNumber,
+          documentId,
+          messageId,
+        });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+      }),
+    );
+    route(
+      '/case-detail/*/request-access',
+      checkLoggedIn(docketNumber => {
+        document.title = `Request access ${pageTitleSuffix}`;
+        app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
     route('/log-in...', () => {

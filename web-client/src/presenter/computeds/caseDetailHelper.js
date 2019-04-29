@@ -6,6 +6,16 @@ export const caseDetailHelper = get => {
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const userRole = get(state.user.role);
+  const screenMetadata = get(state.screenMetadata);
+
+  let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
+  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
+    showFileDocumentButton = false;
+  }
+  let showRequestAccessToCaseButton = false;
+  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
+    showRequestAccessToCaseButton = true;
+  }
 
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
@@ -19,13 +29,14 @@ export const caseDetailHelper = get => {
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
-    showFileDocumentButton: ['CaseDetail'].includes(currentPage),
+    showFileDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
+    showRequestAccessToCaseButton,
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
   };
 };

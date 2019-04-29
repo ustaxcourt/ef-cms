@@ -39,6 +39,8 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
+  result.showUnreadIndicators = !result.readAt;
+
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
   switch (result.caseStatus.trim()) {
@@ -51,10 +53,6 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       result.statusIcon = 'iconStatusRecalled';
       break;
     case 'General Docket':
-      result.caseStatus = 'General Docket';
-      result.statusIcon = '';
-      result.showBatchedStatusIcon = false;
-      break;
     case 'New':
     default:
       result.statusIcon = '';
@@ -85,5 +83,6 @@ export const formattedWorkQueue = get => {
     .map(items => formatWorkItem(items, selectedWorkItems));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+
   return workQueue;
 };

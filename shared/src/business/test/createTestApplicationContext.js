@@ -13,6 +13,9 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getReadMessagesForUser,
+} = require('../../persistence/dynamo/messages/getReadMessagesForUser');
+const {
   getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -49,6 +52,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  setMessageAsRead,
+} = require('../../persistence/dynamo/messages/setMessageAsRead');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -83,6 +89,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         createWorkItem: createWorkItemPersistence,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
+        getReadMessagesForUser,
         getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
         getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
         getUserById: getUserByIdPersistence,
@@ -94,6 +101,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         saveWorkItem: saveWorkItemPersistence,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        setMessageAsRead,
         updateCase,
         updateWorkItem,
       };

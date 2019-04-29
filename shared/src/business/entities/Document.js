@@ -27,6 +27,7 @@ function Document(rawDocument) {
   Object.assign(this, rawDocument, {
     createdAt: rawDocument.createdAt || new Date().toISOString(),
   });
+  this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem),
   );
@@ -57,7 +58,11 @@ joiValidationDecorator(
       .string()
       .valid(getDocumentTypes())
       .required(),
+    eventCode: joi.string().optional(),
     filedBy: joi.string().optional(),
+    isPaper: joi.boolean().optional(),
+    lodged: joi.boolean().optional(),
+    processingStatus: joi.string().optional(),
     reviewDate: joi
       .date()
       .iso()
@@ -68,10 +73,7 @@ joiValidationDecorator(
       .iso()
       .optional(),
     status: joi.string().optional(),
-    userId: joi
-      .string()
-      // .uuid(uuidVersions)
-      .required(),
+    userId: joi.string().required(),
     validated: joi.boolean().optional(),
   }),
   function() {

@@ -8,6 +8,9 @@ const getWorkItemsBySectionStub = sinon.stub().returns({});
 presenter.providers.applicationContext = {
   getCurrentUser: setCurrentUserStub,
   getUseCases: () => ({
+    getNotifications: () => {
+      return {};
+    },
     getWorkItemsBySection: getWorkItemsBySectionStub,
   }),
   setCurrentUser: setCurrentUserStub,

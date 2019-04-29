@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.get the cerebral get function
  */
 export const computeCertificateOfServiceFormDateAction = ({ store, get }) => {
-  let formDate;
+  let formDate = null;
   const formMonth = get(state.form.certificateOfServiceMonth);
   const formDay = get(state.form.certificateOfServiceDay);
   const formYear = get(state.form.certificateOfServiceYear);
