@@ -6,14 +6,12 @@ describe('case detail computed', () => {
   it('should set showFileDocumentButton to true if current page is CaseDetail, user role is practitioner, and case is owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: {
-          caseOwnedByUser: true,
-        },
         user: {
           role: 'practitioner',
+          userId: '123',
         },
       },
     });
@@ -23,12 +21,9 @@ describe('case detail computed', () => {
   it('should set showFileDocumentButton to false if current page is CaseDetail, user role is practitioner, and case is not owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { practitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: {
-          caseOwnedByUser: false,
-        },
         user: {
           role: 'practitioner',
         },
@@ -43,9 +38,6 @@ describe('case detail computed', () => {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: {
-          caseOwnedByUser: false,
-        },
         user: {
           role: 'petitioner',
         },
@@ -60,9 +52,6 @@ describe('case detail computed', () => {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: {
-          caseOwnedByUser: false,
-        },
         user: {
           role: 'practitioner',
         },
@@ -74,14 +63,12 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: {
-          caseOwnedByUser: true,
-        },
         user: {
           role: 'practitioner',
+          userId: '123',
         },
       },
     });
