@@ -48,6 +48,9 @@ const router = {
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+    route('/idle-logout', () => {
+      app.getSequence('gotoIdleLogoutSequence')();
+    });
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = queryString.parse(location.search);
