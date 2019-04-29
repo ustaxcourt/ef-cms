@@ -17,6 +17,7 @@ import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { refreshTokenSequence } from './sequences/refreshTokenSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
@@ -31,6 +32,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
+import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
@@ -51,6 +53,7 @@ import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
+import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -128,6 +131,7 @@ export const presenter = {
     clickServeToIrsSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
+    confirmStayLoggedInSequence,
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
@@ -142,6 +146,7 @@ export const presenter = {
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
     gotoFileDocumentSequence,
+    gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoSelectDocumentTypeSequence,
     gotoStartCaseSequence,
@@ -159,6 +164,7 @@ export const presenter = {
     selectWorkItemSequence,
     setCaseCaptionSequence,
     setFocusedWorkItemSequence,
+    setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setWorkItemActionSequence,
