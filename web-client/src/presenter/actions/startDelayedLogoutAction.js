@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 /**
  * Starts a delayed auto log-out
  *
+ * @param {Object} providers the providers object
  * @param {Object} providers.get the cerebral get function to retrieve state values
  * @param {Object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
  */
