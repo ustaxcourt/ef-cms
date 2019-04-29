@@ -147,6 +147,12 @@ package:
     - coverage/**
     - terraform/**
     - cognito/**
+    - node_modules/**
+    - .cache/**
+    - .dynamodb/**
+    - .nyc_output/**
+    - dist/**
+    - src/handlers.js.map
 
   excludeDevDependencies: true
 
@@ -186,7 +192,7 @@ resources:
 
 functions:
   createDocument:
-    handler: src/documents/createDocumentLambda.handler
+    handler: src/handlers.createDocumentLambda
     events:
       - http:
           path: v1/cases/{caseId}/documents
@@ -198,7 +204,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getUploadPolicy:
-    handler: src/documents/getUploadPolicyLambda.handler
+    handler: src/handlers.getUploadPolicyLambda
     events:
       - http:
           path: v1/documents/uploadPolicy
@@ -210,7 +216,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: src/documents/getDocumentDownloadUrl.handler
+    handler: src/handlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: v1/documents/{documentId}/documentDownloadUrl
@@ -226,7 +232,7 @@ functions:
           cors: true
 
   getDownloadPolicyUrl:
-    handler: src/documents/downloadPolicyUrlLambda.handler
+    handler: src/handlers.downloadPolicyUrlLambda
     events:
       - http:
           path: v1/documents/{documentId}/downloadPolicyUrl
@@ -253,7 +259,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCase:
-    handler: src/cases/updateCaseLambda.handler
+    handler: src/handlers.updateCaseLambda
     events:
       - http:
           path: v1/cases/{caseId}
@@ -265,7 +271,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   runBatchProcess:
-    handler: src/cases/runBatchProcessLambda.handler
+    handler: src/handlers.runBatchProcessLambda
     events:
       - http:
           path: v1/runBatchProcess
@@ -277,7 +283,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCase:
-    handler: src/cases/createCaseLambda.handler
+    handler: src/handlers.createCaseLambda
     events:
       - http:
           path: v1/cases
@@ -289,7 +295,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseFromPaper:
-    handler: src/cases/createCaseFromPaperLambda.handler
+    handler: src/handlers.createCaseFromPaperLambda
     events:
       - http:
           path: v1/cases/paper
@@ -301,7 +307,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileExternalDocument:
-    handler: src/cases/fileExternalDocumentToCaseLambda.handler
+    handler: src/handlers.fileExternalDocumentToCaseLambda
     events:
       - http:
           path: v1/cases/{caseId}/external-document
@@ -313,7 +319,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCasesByUser:
-    handler: src/cases/getCasesByUserLambda.handler
+    handler: src/handlers.getCasesByUserLambda
     events:
       - http:
           path: v1/users/{userId}/cases
@@ -349,7 +355,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCasesForRespondent:
-    handler: src/cases/getCasesForRespondentLambda.handler
+    handler: src/handlers.getCasesForRespondentLambda
     events:
       - http:
           path: v1/respondents/{respondentId}/cases
@@ -361,7 +367,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCasesByStatus:
-    handler: src/cases/getCasesByStatusLambda.handler
+    handler: src/handlers.getCasesByStatusLambda
     events:
       - http:
           path: v1/statuses/{status}/cases
@@ -373,7 +379,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCase:
-    handler: src/cases/getCaseLambda.handler
+    handler: src/handlers.getCaseLambda
     events:
       - http:
           path: v1/cases/{caseId}
@@ -389,7 +395,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sendToIRS:
-    handler: src/cases/sendPetitionToIRSHoldingQueueLambda.handler
+    handler: src/handlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
           path: v1/cases/{caseId}/sendToIRSHoldingQueue
@@ -401,7 +407,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   recallFromIRS:
-    handler: src/cases/recallPetitionFromIRSHoldingQueueLambda.handler
+    handler: src/handlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
           path: v1/cases/{caseId}/recallFromIRSHoldingQueue
@@ -413,7 +419,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   assignWorkItems:
-    handler: src/workitems/assignWorkItemsLambda.handler
+    handler: src/handlers.assignWorkItemsLambda
     events:
       - http:
           path: v1/workitems
@@ -425,7 +431,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItem:
-    handler: src/workitems/getWorkItemLambda.handler
+    handler: src/handlers.getWorkItemLambda
     events:
       - http:
           path: v1/workitems/{workItemId}
@@ -437,7 +443,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   forwardWorkItem:
-    handler: src/workitems/forwardWorkItemLambda.handler
+    handler: src/handlers.forwardWorkItemLambda
     events:
       - http:
           path: v1/workitems/{workItemId}/assignee
@@ -449,7 +455,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   completeWorkItem:
-    handler: src/workitems/completeWorkItemLambda.handler
+    handler: src/handlers.completeWorkItemLambda
     events:
       - http:
           path: v1/workitems/{workItemId}/complete
@@ -461,7 +467,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createWorkItem:
-    handler: src/workitems/createWorkItemLambda.handler
+    handler: src/handlers.createWorkItemLambda
     events:
       - http:
           path: v1/cases/{caseId}/documents/{documentId}/workitems
@@ -473,7 +479,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getSentWorkItemsForSection:
-    handler: src/workitems/getSentWorkItemsForSectionLambda.handler
+    handler: src/handlers.getSentWorkItemsForSectionLambda
     events:
       - http:
           path: v1/sections/{section}/outbox
@@ -485,7 +491,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItemsBySection:
-    handler: src/workitems/getWorkItemsBySectionLambda.handler
+    handler: src/handlers.getWorkItemsBySectionLambda
     events:
       - http:
           path: v1/sections/{section}/inbox
@@ -497,7 +503,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getSentWorkItemsForUser:
-    handler: src/workitems/getSentWorkItemsForUserLambda.handler
+    handler: src/handlers.getSentWorkItemsForUserLambda
     events:
       - http:
           path: v1/users/{userId}/outbox
@@ -509,7 +515,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItemsForUser:
-    handler: src/workitems/getWorkItemsForUserLambda.handler
+    handler: src/handlers.getWorkItemsForUserLambda
     events:
       - http:
           path: v1/users/{userId}/inbox
@@ -521,7 +527,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getInternalUsers:
-    handler: src/users/getInternalUsersLambda.handler
+    handler: src/handlers.getInternalUsersLambda
     events:
       - http:
           path: v1/users/internal
@@ -533,7 +539,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getUsersInSection:
-    handler: src/users/getUsersInSectionLambda.handler
+    handler: src/handlers.getUsersInSectionLambda
     events:
       - http:
           path: v1/sections/{section}/users
@@ -557,7 +563,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createUser:
-    handler: src/users/createUserLambda.handler
+    handler: src/handlers.createUserLambda
     events:
       - http:
           path: v1/users
@@ -569,7 +575,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   swagger:
-    handler: src/swagger/swaggerLambda.handler
+    handler: src/handlers.swaggerLambda
     events:
       - http:
           path: v1/swagger
@@ -577,7 +583,7 @@ functions:
           cors: true
 
   swaggerJson:
-    handler: src/swagger/swaggerJsonLambda.handler
+    handler: src/handlers.swaggerJsonLambda
     events:
       - http:
           path: v1/swagger.json
