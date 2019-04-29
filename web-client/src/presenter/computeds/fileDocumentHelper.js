@@ -4,6 +4,9 @@ import moment from 'moment';
 export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
+  if (!caseDetail.partyType) {
+    return {};
+  }
   const form = get(state.form);
   const userRole = get(state.user.role);
   const validationErrors = get(state.validationErrors);

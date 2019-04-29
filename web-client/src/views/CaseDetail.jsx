@@ -31,10 +31,27 @@ export const CaseDetail = connect(
           </a>
         </div>
         <section className="usa-section usa-grid">
-          <h1 className="captioned" tabIndex="-1">
-            Docket Number: {caseDetail.docketNumberWithSuffix}
-          </h1>
-          <p>{caseDetail.caseTitle}</p>
+          <div className="usa-grid-full">
+            <div className="usa-width-one-half">
+              <h1 className="captioned" tabIndex="-1">
+                Docket Number: {caseDetail.docketNumberWithSuffix}
+              </h1>
+              <p>{caseDetail.caseTitle}</p>
+            </div>
+            <div className="usa-width-one-half">
+              {caseHelper.showRequestAccessToCaseButton && (
+                <a
+                  className="usa-button tablet-full-width push-right"
+                  href={`/case-detail/${
+                    caseDetail.docketNumber
+                  }/request-access`}
+                  id="button-request-access"
+                >
+                  Request Access to Case
+                </a>
+              )}
+            </div>
+          </div>
 
           <hr aria-hidden="true" />
 
