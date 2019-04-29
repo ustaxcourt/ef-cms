@@ -1,7 +1,14 @@
 # Electronic Filing / Case Management System
 
 ### Build Status
-[![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
+
+#### develop
+
+[![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) 
+
+#### staging
+
+[![CircleCI](https://circleci.com/gh/usataxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/usataxcourt/ef-cms/tree/staging) 
 
 API | Front-End | Shared Code
 --- | --------- | -----------
