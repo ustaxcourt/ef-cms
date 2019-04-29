@@ -59,7 +59,7 @@ exports.addCoverToPDFDocument = async ({
     minute: '2-digit',
     timeZone: 'America/New_York',
   })}`;
-  const dateFiled = new Date(caseEntity.createdAt);
+  const dateFiled = new Date(documentEntity.createdAt);
   const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
