@@ -32,10 +32,11 @@ describe('CaseAssociationRequest', () => {
       expect(errors().documentType).toEqual(undefined);
     });
 
-    it('should require document title', () => {
-      expect(errors().documentTitle).toEqual('Select a document.');
-      rawEntity.documentTitle = 'Entry of Appearance';
-      expect(errors().documentTitle).toEqual(undefined);
+    it('should require document title template', () => {
+      expect(errors().documentTitleTemplate).toEqual('Select a document.');
+      rawEntity.documentTitleTemplate =
+        'Entry of Appearance for [Petitioner Names]';
+      expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
     it('should require event code', () => {
@@ -75,7 +76,8 @@ describe('CaseAssociationRequest', () => {
 
     describe('Substitution of Counsel', () => {
       beforeEach(() => {
-        rawEntity.documentTitle = 'Substitution of Counsel';
+        rawEntity.documentTitleTemplate =
+          'Substitution of Counsel for [Petitioner Names]';
         rawEntity.documentType = 'Substitution of Counsel';
       });
 
@@ -86,10 +88,51 @@ describe('CaseAssociationRequest', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary] to be selected', () => {
-      expect(errors().partyPrimary).toEqual('Select a party.');
-      rawEntity.partySecondary = true;
-      expect(errors().partyPrimary).toEqual(undefined);
+    it('should require one of [representingPrimary, representingSecondary] to be selected', () => {
+      expect(errors().representingPrimary).toEqual('Select a party.');
+      rawEntity.representingSecondary = true;
+      expect(errors().representingPrimary).toEqual(undefined);
+    });
+
+    describe('title generation', () => {
+      it('should generate valid title for representingPrimary', () => {
+        const caseAssoc = CaseAssociationRequest({
+          documentTitleTemplate:
+            'Substitution of Counsel for [Petitioner Names]',
+          documentType: 'Substitution of Counsel',
+          representingPrimary: true,
+        });
+        expect(
+          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
+        ).toEqual('Substitution of Counsel for Petr. Test Petitioner');
+      });
+
+      it('should generate valid title for representingSecondary', () => {
+        const caseAssoc = CaseAssociationRequest({
+          documentTitleTemplate:
+            'Substitution of Counsel for [Petitioner Names]',
+          documentType: 'Substitution of Counsel',
+          representingSecondary: true,
+        });
+        expect(
+          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
+        ).toEqual('Substitution of Counsel for Petr. Another Petitioner');
+      });
+
+      it('should generate valid title for representingPrimary and representingSecondary', () => {
+        const caseAssoc = CaseAssociationRequest({
+          documentTitleTemplate:
+            'Substitution of Counsel for [Petitioner Names]',
+          documentType: 'Substitution of Counsel',
+          representingPrimary: true,
+          representingSecondary: true,
+        });
+        expect(
+          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
+        ).toEqual(
+          'Substitution of Counsel for Petrs. Test Petitioner & Another Petitioner',
+        );
+      });
     });
   });
 });
