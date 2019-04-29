@@ -164,10 +164,13 @@ const applicationContext = {
     }
   },
   getCognitoRedirectUrl: () => {
-    return 'http://localhost:1234/log-in';
+    return process.env.COGNITO_REDIRECT_URL || 'http://localhost:1234/log-in';
   },
   getCognitoTokenUrl: () => {
-    return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token';
+    return (
+      process.env.COGNITO_TOKEN_URL ||
+      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
+    );
   },
   getConstants: () => ({
     BUSINESS_TYPES,

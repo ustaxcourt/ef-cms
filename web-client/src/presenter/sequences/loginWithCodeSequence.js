@@ -5,6 +5,7 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
+import { startRefreshIntervalAction } from '../actions/startRefreshIntervalAction';
 
 /**
  * Combine several sequences; set login value, and
@@ -16,6 +17,7 @@ export const loginWithCodeSequence = [
   authenticateCodeAction,
   decodeTokenAction,
   setTokenAction,
+  startRefreshIntervalAction,
   getUserAction,
   setUserAction,
   setPathAction,
