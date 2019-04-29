@@ -88,4 +88,48 @@ describe('case detail computed', () => {
     });
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
+
+  it('should set userHasAccessToCase to true if user role is not practitioner', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(true);
+  });
+
+  it('should set userHasAccessToCase to true if user role is practitioner and the practitioner is associated with the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [{ userId: '123' }] },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'practitioner',
+          userId: '123',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(true);
+  });
+
+  it('should set userHasAccessToCase to false if user role is practitioner and the practitioner is not associated with the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [{ userId: '234' }] },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'practitioner',
+          userId: '123',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(false);
+  });
 });

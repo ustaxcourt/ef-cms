@@ -24,6 +24,18 @@ export const caseDetailHelper = get => {
     }
   }
 
+  let userHasAccessToCase = true;
+  if (userRole === 'practitioner') {
+    userHasAccessToCase = false;
+    if (
+      caseDetail &&
+      caseDetail.practitioners &&
+      some(caseDetail.practitioners, { userId: userId })
+    ) {
+      userHasAccessToCase = true;
+    }
+  }
+
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
     showCaptionEditButton:
@@ -45,5 +57,6 @@ export const caseDetailHelper = get => {
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showRequestAccessToCaseButton,
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
+    userHasAccessToCase,
   };
 };
