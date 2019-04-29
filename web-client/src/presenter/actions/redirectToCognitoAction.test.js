@@ -2,7 +2,6 @@ import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { redirectToCognitoAction } from './redirectToCognitoAction';
 import { runAction } from 'cerebral/test';
-import { signOutSequence } from '../sequences/signOutSequence';
 import sinon from 'sinon';
 
 presenter.providers.applicationContext = applicationContext;
