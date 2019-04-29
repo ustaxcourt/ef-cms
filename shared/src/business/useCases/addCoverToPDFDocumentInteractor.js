@@ -545,7 +545,9 @@ exports.addCoverToPDFDocument = async ({
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   applicationContext.logger.time('Saving Bytes');
-  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc, {
+    useObjectStreams: false,
+  });
   applicationContext.logger.timeEnd('Saving Bytes');
 
   documentEntity.processingStatus = 'complete';
