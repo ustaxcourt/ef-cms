@@ -5,7 +5,6 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('screenMetadata.caseOwnedByUser')).toEqual(true);
     expect(test.getState('caseDetail.practitioners.0.name')).toEqual(
       'Test Practitioner',
     );
