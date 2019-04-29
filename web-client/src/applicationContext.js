@@ -182,6 +182,7 @@ const applicationContext = {
   }),
   getCurrentUser,
   getCurrentUserToken,
+  getDebounce: () => 250,
   getEntityConstructors: () => ({
     CaseAssociationRequest,
     ExternalDocumentFactory,
@@ -202,6 +203,7 @@ const applicationContext = {
       uploadPdf,
     };
   },
+  getTimeout: () => 5000,
   getUniqueId: () => {
     return uuidv4();
   },
