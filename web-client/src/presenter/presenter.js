@@ -44,7 +44,6 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
-import { refreshTokenSequence } from './sequences/refreshTokenSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -163,7 +162,6 @@ export const presenter = {
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
     refreshCaseSequence,
-    refreshTokenSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
