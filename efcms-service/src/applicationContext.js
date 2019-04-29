@@ -241,7 +241,6 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
-    debounce: 250,
     docketNumberGenerator,
     environment,
     getCurrentUser,
@@ -309,10 +308,10 @@ module.exports = (appContextUser = {}) => {
       });
       return s3;
     },
+    // TODO: replace external calls to environment
     getUniqueId: () => {
       return uuidv4();
     },
-    // TODO: replace external calls to environment
     getUseCases: () => {
       return {
         addCoverToPDFDocument,
@@ -367,6 +366,5 @@ module.exports = (appContextUser = {}) => {
         console.timeEnd(key);
       },
     },
-    timeout: 5000,
   };
 };

@@ -4,6 +4,7 @@ import { decodeTokenAction } from '../actions/decodeTokenAction';
 import { getUserAction } from '../actions/getUserAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setTimeoutValuesAction } from '../actions/setTimeoutValuesAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
@@ -16,6 +17,7 @@ export const submitLoginSequence = [
   getUserAction,
   setUserAction,
   clearAlertsAction,
+  setTimeoutValuesAction,
   navigateToPathAction,
   unsetFormSubmittingAction,
 ];
