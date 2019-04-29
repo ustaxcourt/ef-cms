@@ -6,11 +6,16 @@ export const caseDetailHelper = get => {
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const userRole = get(state.user.role);
-  const cases = get(state.cases);
+  const screenMetadata = get(state.screenMetadata);
 
-  const userAssociatedWithCase = cases.some(myCase => {
-    return myCase.caseId === caseDetail.caseId;
-  });
+  let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
+  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
+    showFileDocumentButton = false;
+  }
+  let showRequestAccessToCaseButton = false;
+  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
+    showRequestAccessToCaseButton = true;
+  }
 
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
@@ -24,15 +29,14 @@ export const caseDetailHelper = get => {
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
-    showFileDocumentButton: ['CaseDetail'].includes(currentPage),
+    showFileDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
-    showRequestAccessButton:
-      userRole === 'practitioner' && !userAssociatedWithCase,
+    showRequestAccessToCaseButton,
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
   };
 };

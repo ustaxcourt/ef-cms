@@ -1,9 +1,9 @@
 import { sequences, state } from 'cerebral';
 
 import { ProcedureType } from '../StartCase/ProcedureType';
-import React from 'react';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const CaseInfo = connect(
   {
