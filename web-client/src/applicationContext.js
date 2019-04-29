@@ -23,6 +23,7 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
+import { CaseAssociationRequest } from '../../shared/src/business/entities/CaseAssociationRequest';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -35,6 +36,7 @@ import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkIt
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
+import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
@@ -50,6 +52,7 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
+import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
@@ -61,9 +64,13 @@ import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkI
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
+import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
+import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
+import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -71,6 +78,7 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -97,6 +105,7 @@ const allUseCases = {
   completeWorkItem,
   createCase,
   createCaseFromPaper,
+  createCoverSheet,
   createDocument,
   createWorkItem,
   downloadDocumentFile,
@@ -112,6 +121,7 @@ const allUseCases = {
   getCasesForRespondent,
   getFilingTypes,
   getInternalUsers,
+  getNotifications,
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
@@ -123,8 +133,12 @@ const allUseCases = {
   recallPetitionFromIRSHoldingQueue,
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
+  setMessageAsRead,
+  submitCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
+  uploadExternalDocuments,
+  validateCaseAssociationRequest,
   validateCaseDetail,
   validateExternalDocument,
   validateExternalDocumentInformation,
@@ -132,6 +146,7 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
   validatePetitionFromPaper,
+  verifyCaseForUser,
 };
 tryCatchDecorator(allUseCases);
 
@@ -168,6 +183,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    CaseAssociationRequest,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,

@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { setSupportingDocumentScenarioAction } from './setSupportingDocumentScenarioAction';
 
 describe('setSupportingDocumentScenarioAction', () => {
-  it('should set scenario and document type for supporting document', async () => {
+  it('should set scenario and document title for supporting document', async () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
       state: {
         constants: {

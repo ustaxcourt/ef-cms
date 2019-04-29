@@ -4,7 +4,11 @@ import moment from 'moment';
 export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
+  if (!caseDetail.partyType) {
+    return {};
+  }
   const form = get(state.form);
+  const userRole = get(state.user.role);
   const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
@@ -51,18 +55,33 @@ export const fileDocumentHelper = get => {
     form.certificateOfService || form.exhibits || form.attachments;
 
   const showFilingNotIncludes =
-    !form.certificateOfService || !form.exhibits || !form.attachments;
+    !form.certificateOfService ||
+    !form.exhibits ||
+    !form.attachments ||
+    !form.hasSupportingDocuments;
+
+  const showSecondaryFilingNotIncludes =
+    form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
+
+  let partyPrimaryLabel = 'Myself';
+  if (userRole === 'practitioner') {
+    partyPrimaryLabel = caseDetail.contactPrimary.name;
+  }
 
   let exported = {
     certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
+    partyPrimaryLabel,
     partyValidationError,
     showFilingIncludes,
     showFilingNotIncludes,
     showObjection: objectionDocumentTypes.includes(form.documentType),
+    showPractitionerParty: userRole === 'practitioner',
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showRespondentParty: !!caseDetail.respondent,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
+    showSecondaryFilingNotIncludes,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
     showSupportingDocumentValid: !!form.supportingDocumentFile,

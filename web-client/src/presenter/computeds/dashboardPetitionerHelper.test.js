@@ -10,6 +10,7 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(false);
     expect(result.showWhatToExpect).toEqual(true);
+    expect(result.showCaseSearch).toEqual(false);
   });
   it('shows case list but not "what to expect" when there is a case', () => {
     const result = runCompute(dashboardPetitionerHelper, {
@@ -19,5 +20,29 @@ describe('petitioner dashboard helper', () => {
     });
     expect(result.showCaseList).toEqual(true);
     expect(result.showWhatToExpect).toEqual(false);
+    expect(result.showCaseSearch).toEqual(false);
+  });
+  it('shows case search if defined user has practitioner role', () => {
+    const result = runCompute(dashboardPetitionerHelper, {
+      state: {
+        cases: [{ something: true }],
+        user: { role: 'practitioner' },
+      },
+    });
+    expect(result.showCaseList).toEqual(true);
+    expect(result.showWhatToExpect).toEqual(false);
+    expect(result.showCaseSearch).toEqual(true);
+  });
+
+  it('hides case search if defined user does not have practitioner role', () => {
+    const result = runCompute(dashboardPetitionerHelper, {
+      state: {
+        cases: [{ something: true }],
+        user: { role: 'petitionsclerk' },
+      },
+    });
+    expect(result.showCaseList).toEqual(true);
+    expect(result.showWhatToExpect).toEqual(false);
+    expect(result.showCaseSearch).toEqual(false);
   });
 });

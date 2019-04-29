@@ -127,23 +127,6 @@ function Case(rawCase) {
   this.orderForOds = this.orderForOds || false;
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
-
-  const trialRecord = this.docketRecord.find(
-    record => record.description.indexOf('Request for Place of Trial') !== -1,
-  );
-
-  if (this.preferredTrialCity) {
-    if (!trialRecord) {
-      this.addDocketRecord(
-        new DocketRecord({
-          description: `Request for Place of Trial at ${
-            this.preferredTrialCity
-          }`,
-          filingDate: this.receivedAt || this.createdAt,
-        }),
-      );
-    }
-  }
 }
 
 Case.name = 'Case';
@@ -594,9 +577,45 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 
 /**
  *
+ * @param {string} preferredTrialCity
+ * @returns {Case}
+ */
+Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
+  this.preferredTrialCity = preferredTrialCity;
+
+  let found;
+  let docketRecordIndex;
+
+  this.docketRecord.forEach((docketRecord, index) => {
+    found =
+      found ||
+      docketRecord.description.indexOf('Request for Place of Trial') !== -1;
+    docketRecordIndex = found ? index : docketRecordIndex;
+  });
+
+  if (preferredTrialCity && !found) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+        filingDate: this.receivedAt || this.createdAt,
+      }),
+    );
+  }
+  return this;
+};
+
+/**
+ *
  * @param docketRecordEntity
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
+  const nextIndex =
+    this.docketRecord.reduce(
+      (maxIndex, docketRecord, currentIndex) =>
+        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
+      0,
+    ) + 1;
+  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -669,6 +688,14 @@ Case.documentTypes = {
 };
 
 /**
+ * 531 doc type used when associating a user
+ */
+const practitionerAssociationDocumentType = [
+  'Entry of Appearance',
+  'Substitution of Counsel',
+];
+
+/**
  *
  * @param yearAmounts
  * @returns {boolean}
@@ -690,7 +717,7 @@ Case.getDocumentTypes = () => {
         (acc, section) => {
           return acc.concat(section.map(item => item.documentType));
         },
-        [],
+        practitionerAssociationDocumentType,
       ),
     );
 };

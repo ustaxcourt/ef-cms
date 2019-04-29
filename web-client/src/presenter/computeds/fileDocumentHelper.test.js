@@ -109,10 +109,11 @@ describe('fileDocumentHelper', () => {
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
-  it('does not show Filing Does Not Include if certOfService, exhibits, and attachments are all true', async () => {
+  it('does not show Filing Does Not Include if certOfService, exhibits, attachments, and hasSupportingDocuments are all true', async () => {
     state.form.certificateOfService = true;
     state.form.attachments = true;
     state.form.exhibits = true;
+    state.form.hasSupportingDocuments = true;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
   });
@@ -126,6 +127,41 @@ describe('fileDocumentHelper', () => {
     state.validationErrors = { partyPrimary: 'You did something bad.' };
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
+  });
+
+  it('shows practitioner option under Parties Filing for user role practitioner', async () => {
+    state.user = { role: 'practitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeTruthy();
+  });
+
+  it('does not show practitioner option under Parties Filing for user role petitioner', async () => {
+    state.user = { role: 'petitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+  });
+
+  it('does not show respondent option under Parties Filing if respondent is not associated with case', async () => {
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showRespondentParty).toBeFalsy();
+  });
+
+  it('shows respondent option under Parties Filing if respondent is associated with case', async () => {
+    state.caseDetail.respondent = { name: 'Test Respondent' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showRespondentParty).toBeTruthy();
+  });
+
+  it('shows Myself as party primary label for user role petitioner', async () => {
+    state.user = { role: 'petitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyPrimaryLabel).toEqual('Myself');
+  });
+
+  it('shows primary contact name as party primary label for user role practitioner', async () => {
+    state.user = { role: 'practitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
   });
 
   describe('supporting document', () => {

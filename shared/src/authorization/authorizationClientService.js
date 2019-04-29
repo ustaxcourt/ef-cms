@@ -8,6 +8,7 @@ exports.WORKITEM = 'workItem';
 exports.CREATE_USER = 'createUser';
 exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 exports.START_PAPER_CASE = 'startPaperCase';
+exports.GET_READ_MESSAGES = 'getReadMessages';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -20,6 +21,7 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
+    exports.GET_READ_MESSAGES,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
@@ -29,6 +31,7 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
+    exports.GET_READ_MESSAGES,
   ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
@@ -41,8 +44,14 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
+    exports.GET_READ_MESSAGES,
   ],
-  practitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
+
+  practitioner: [
+    exports.GET_CASE,
+    exports.PETITION,
+    exports.FILE_EXTERNAL_DOCUMENT,
+  ],
   respondent: [
     exports.GET_CASE,
     exports.GET_CASES_BY_STATUS,
@@ -56,6 +65,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.GET_READ_MESSAGES,
     exports.GET_USERS_IN_SECTION,
   ],
   taxpayer: [exports.PETITION],

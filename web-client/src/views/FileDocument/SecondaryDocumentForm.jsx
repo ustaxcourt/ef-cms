@@ -29,7 +29,10 @@ export const SecondaryDocumentForm = connect(
         <div className="blue-container">
           <div className="usa-grid-full">
             <div className="usa-width-seven-twelfths push-right">
-              <div id="document-secondary-upload-hint" className="alert-gold">
+              <div
+                id="document-secondary-upload-hint"
+                className="alert-gold add-bottom-margin"
+              >
                 <span className="usa-form-hint ustc-form-hint-with-svg">
                   <FontAwesomeIcon
                     icon={['far', 'arrow-alt-circle-left']}
@@ -82,52 +85,54 @@ export const SecondaryDocumentForm = connect(
                 />
               </div>
 
-              <div
-                className={`ustc-form-group ${
-                  validationErrors.hasSecondarySupportingDocuments
-                    ? 'usa-input-error'
-                    : ''
-                }`}
-              >
-                <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend id="secondary-support-docs">
-                    Do You Have Any Supporting Documents for This Filing?
-                  </legend>
-                  <ul className="usa-unstyled-list">
-                    {['Yes', 'No'].map(option => (
-                      <li key={option}>
-                        <input
-                          id={`secondary-supporting-documents-${option}`}
-                          type="radio"
-                          aria-describedby="secondary-support-docs"
-                          name="hasSecondarySupportingDocuments"
-                          value={option}
-                          checked={
-                            form.hasSecondarySupportingDocuments ===
-                            (option === 'Yes')
-                          }
-                          onChange={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'Yes',
-                            });
-                            validateExternalDocumentInformationSequence();
-                          }}
-                        />
-                        <label
-                          htmlFor={`secondary-supporting-documents-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </fieldset>
-                <Text
-                  className="usa-input-error-message"
-                  bind="validationErrors.hasSecondarySupportingDocuments"
-                />
-              </div>
+              {fileDocumentHelper.showSecondaryDocumentValid && (
+                <div
+                  className={`ustc-form-group ${
+                    validationErrors.hasSecondarySupportingDocuments
+                      ? 'usa-input-error'
+                      : ''
+                  }`}
+                >
+                  <fieldset className="usa-fieldset-inputs usa-sans">
+                    <legend id="secondary-support-docs">
+                      Do You Have Any Supporting Documents for This Filing?
+                    </legend>
+                    <ul className="usa-unstyled-list">
+                      {['Yes', 'No'].map(option => (
+                        <li key={option}>
+                          <input
+                            id={`secondary-supporting-documents-${option}`}
+                            type="radio"
+                            aria-describedby="secondary-support-docs"
+                            name="hasSecondarySupportingDocuments"
+                            value={option}
+                            checked={
+                              form.hasSecondarySupportingDocuments ===
+                              (option === 'Yes')
+                            }
+                            onChange={e => {
+                              updateFileDocumentWizardFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value === 'Yes',
+                              });
+                              validateExternalDocumentInformationSequence();
+                            }}
+                          />
+                          <label
+                            htmlFor={`secondary-supporting-documents-${option}`}
+                          >
+                            {option}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </fieldset>
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.hasSecondarySupportingDocuments"
+                  />
+                </div>
+              )}
 
               {form.hasSecondarySupportingDocuments && (
                 <div

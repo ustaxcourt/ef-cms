@@ -163,5 +163,6 @@ describe('formatted work queue computed', () => {
     });
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
     expect(result2[0].statusIcon).toEqual('iconStatusRecalled');
+    expect(result2[0].showUnreadIndicators).toEqual(true);
   });
 });

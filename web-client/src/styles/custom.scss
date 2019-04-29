@@ -10,9 +10,9 @@ hr {
   display: block;
   height: 1px;
   padding: 0;
-  margin: 20px 0;
   border: 0;
   border-top: 1px solid $color-gray-light;
+  margin: 20px 0;
 }
 
 .mr-1 {
@@ -75,16 +75,32 @@ iframe {
   border: 1px solid $color-gray-lightest;
 }
 
+.link.case-link-bold {
+  font-weight: $font-bold;
+}
+
 .case-list-header {
   margin-bottom: 20px;
 }
 
 .petitions-details {
-  margin-bottom: 120px;
+  margin-bottom: 15px;
+  @media only screen and (min-width: $medium-screen) {
+    margin-bottom: 120px;
+  }
 }
 
-.party-information p {
-  margin-bottom: 0.7rem;
+.party-information {
+  p {
+    margin-bottom: 0.7rem;
+  }
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .usa-width-one-sixth + .usa-width-one-sixth {
+      .label {
+        margin-top: 20px;
+      }
+    }
+  }
 }
 
 .address-line {
@@ -176,9 +192,11 @@ select[disabled] {
   }
 }
 
-.push-right {
-  margin-right: 0;
-  float: right;
+@media only screen and (min-width: $medium-screen) {
+  .push-right {
+    margin-right: 0;
+    float: right;
+  }
 }
 
 .alert-blank-message {
@@ -307,6 +325,24 @@ select[disabled] {
   &.add-bottom-margin {
     margin-bottom: 20px;
   }
+}
+
+.usa-label-uploading {
+  padding: 0.3rem 0.7rem;
+  margin-right: 0.5rem;
+  background-color: #5b616b;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+}
+
+.fa-spinner {
+  color: #5b616b;
+}
+
+.icon-column {
+  width: 40px;
 }
 
 .mini-success {
@@ -459,6 +495,10 @@ textarea#case-caption {
   .header-with-link-button {
     max-width: 80%;
   }
+
+  .tablet-full-width {
+    width: 100%;
+  }
 }
 
 .file-name {
@@ -473,4 +513,27 @@ textarea#case-caption {
   a {
     color: $color-black;
   }
+}
+
+.align-right {
+  margin-right: 0;
+}
+
+.view-pdf-button svg {
+  color: $color-white;
+}
+
+.unread {
+  display: inline-block;
+  min-width: 35px;
+  background: $color-primary;
+  border-radius: 20px;
+  color: $color-white;
+  font-weight: $font-bold;
+  text-align: center;
+}
+
+#work-queue-title {
+  display: inline-block;
+  margin-right: 10px;
 }

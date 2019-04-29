@@ -34,13 +34,34 @@ export const PartiesFiling = connect(
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
               <ul className="ustc-vertical-option-list">
+                {fileDocumentHelper.showPractitionerParty && (
+                  <li>
+                    <input
+                      id="party-practitioner"
+                      type="checkbox"
+                      name="partyPractitioner"
+                      aria-describedby="who-legend"
+                      checked={form.partyPractitioner || false}
+                      onChange={e => {
+                        updateFileDocumentWizardFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor="party-practitioner">
+                      Myself as Petitioner’s Counsel
+                    </label>
+                  </li>
+                )}
                 <li>
                   <input
                     id="party-primary"
                     type="checkbox"
                     name="partyPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary}
+                    checked={form.partyPrimary || false}
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
@@ -49,7 +70,9 @@ export const PartiesFiling = connect(
                       validateExternalDocumentInformationSequence();
                     }}
                   />
-                  <label htmlFor="party-primary">Myself</label>
+                  <label htmlFor="party-primary">
+                    {fileDocumentHelper.partyPrimaryLabel}
+                  </label>
                 </li>
                 {fileDocumentHelper.showSecondaryParty && (
                   <li>
@@ -58,7 +81,7 @@ export const PartiesFiling = connect(
                       type="checkbox"
                       aria-describedby="who-legend"
                       name="partySecondary"
-                      checked={form.partySecondary}
+                      checked={form.partySecondary || false}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -72,23 +95,25 @@ export const PartiesFiling = connect(
                     </label>
                   </li>
                 )}
-                <li>
-                  <input
-                    id="party-respondent"
-                    type="checkbox"
-                    aria-describedby="who-legend"
-                    name="partyRespondent"
-                    checked={form.partyRespondent}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label htmlFor="party-respondent">Respondent</label>
-                </li>
+                {fileDocumentHelper.showRespondentParty && (
+                  <li>
+                    <input
+                      id="party-respondent"
+                      type="checkbox"
+                      aria-describedby="who-legend"
+                      name="partyRespondent"
+                      checked={form.partyRespondent || false}
+                      onChange={e => {
+                        updateFileDocumentWizardFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateExternalDocumentInformationSequence();
+                      }}
+                    />
+                    <label htmlFor="party-respondent">Respondent</label>
+                  </li>
+                )}
               </ul>
             </fieldset>
             {fileDocumentHelper.partyValidationError && (

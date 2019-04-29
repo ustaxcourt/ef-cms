@@ -34,6 +34,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
+    partyPractitioner: joi.boolean(),
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
@@ -62,6 +63,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
+    partyPractitioner: 'Select a party.',
     partyPrimary: 'Select a party.',
     partyRespondent: 'Select a party.',
     partySecondary: 'Select a party.',
@@ -154,7 +156,9 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       makeRequired('secondaryDocumentFile');
     }
 
-    makeRequired('hasSecondarySupportingDocuments');
+    if (documentMetadata.secondaryDocumentFile) {
+      makeRequired('hasSecondarySupportingDocuments');
+    }
 
     if (documentMetadata.hasSecondarySupportingDocuments === true) {
       makeRequired('secondarySupportingDocument');
@@ -182,7 +186,8 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   if (
     documentMetadata.partyPrimary !== true &&
     documentMetadata.partySecondary !== true &&
-    documentMetadata.partyRespondent !== true
+    documentMetadata.partyRespondent !== true &&
+    documentMetadata.partyPractitioner !== true
   ) {
     addProperty(
       'partyPrimary',

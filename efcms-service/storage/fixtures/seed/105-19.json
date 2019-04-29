@@ -7,6 +7,7 @@
         "createdAt": "2019-03-27T21:53:00.297Z",
         "documentType": "Petition",
         "filedBy": "Test Practitioner",
+        "processingStatus": "complete",
         "workItems": [
           {
             "docketNumberSuffix": null,
@@ -45,6 +46,7 @@
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-27T21:53:00.298Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Practitioner",
@@ -104,11 +106,13 @@
         "description": "Petition",
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "filingDate": "2019-03-27T21:53:00.297Z",
-        "filedBy": "Test Practitioner"
+        "filedBy": "Test Practitioner",
+        "index": 1
       },
       {
         "description": "Request for Place of Trial at Jackson, Mississippi",
-        "filingDate": "2019-03-27T21:53:00.297Z"
+        "filingDate": "2019-03-27T21:53:00.297Z",
+        "index": 2
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,

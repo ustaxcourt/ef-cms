@@ -108,14 +108,14 @@ export default (test, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
+    expect(test.getState('form.partyPrimary')).toEqual(true);
+
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       attachments: 'Enter selection for Attachments.',
       certificateOfService: 'Enter selection for Certificate of Service.',
       exhibits: 'Enter selection for Exhibits.',
-      hasSecondarySupportingDocuments:
-        'Enter selection for Secondary Supporting Documents.',
       hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
@@ -132,11 +132,6 @@ export default (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSecondarySupportingDocuments',
-      value: true,
-    });
-
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       attachments: 'Enter selection for Attachments.',
@@ -145,8 +140,6 @@ export default (test, fakeFile) => {
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocument:
-        'Enter selection for Secondary Supporting Document.',
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
@@ -168,8 +161,6 @@ export default (test, fakeFile) => {
       certificateOfServiceDate: 'Enter a Certificate of Service Date.',
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocument:
-        'Enter selection for Secondary Supporting Document.',
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
@@ -192,8 +183,6 @@ export default (test, fakeFile) => {
         'Certificate of Service date is in the future. Please enter a valid date.',
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocument:
-        'Enter selection for Secondary Supporting Document.',
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
@@ -206,15 +195,9 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocument:
-        'Enter selection for Secondary Supporting Document.',
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'secondarySupportingDocument',
-      value: 'Declaration in Support',
-    });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocument',
       value: 'Affidavit in Support',
@@ -224,16 +207,10 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocumentFile: 'A file was not selected.',
-      secondarySupportingDocumentFreeText: 'Please provide a value.',
       supportingDocumentFile: 'A file was not selected.',
       supportingDocumentFreeText: 'Please provide a value.',
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'secondarySupportingDocumentFreeText',
-      value: 'Declaration in Support',
-    });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocumentFreeText',
       value: 'Affidavit in Support',
@@ -243,7 +220,6 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
-      secondarySupportingDocumentFile: 'A file was not selected.',
       supportingDocumentFile: 'A file was not selected.',
     });
 
@@ -256,12 +232,46 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'supportingDocumentFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('validateExternalDocumentInformationSequence');
+    expect(test.getState('validationErrors')).toEqual({
+      hasSecondarySupportingDocuments:
+        'Enter selection for Secondary Supporting Documents.',
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'hasSecondarySupportingDocuments',
+      value: true,
+    });
+
+    await test.runSequence('validateExternalDocumentInformationSequence');
+    expect(test.getState('validationErrors')).toEqual({
+      secondarySupportingDocument:
+        'Enter selection for Secondary Supporting Document.',
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondarySupportingDocument',
+      value: 'Declaration in Support',
+    });
+
+    await test.runSequence('validateExternalDocumentInformationSequence');
+    expect(test.getState('validationErrors')).toEqual({
+      secondarySupportingDocumentFile: 'A file was not selected.',
+      secondarySupportingDocumentFreeText: 'Please provide a value.',
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocumentFile',
       value: fakeFile,
     });
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocumentFile',
-      value: fakeFile,
+      key: 'secondarySupportingDocumentFreeText',
+      value: 'Declaration in Support',
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
