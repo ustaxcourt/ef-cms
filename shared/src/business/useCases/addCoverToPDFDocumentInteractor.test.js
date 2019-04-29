@@ -9,6 +9,7 @@ const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
 function testPdfDocBytes() {
+  // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 }
 
