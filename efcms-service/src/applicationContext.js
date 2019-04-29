@@ -196,7 +196,7 @@ const {
 } = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
   submitCaseAssociationRequest,
-} = require('ef-cms-shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
+} = require('ef-cms-shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
   updateCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');

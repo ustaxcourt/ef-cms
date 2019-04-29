@@ -395,6 +395,15 @@ Case.prototype.attachRespondent = function({ user }) {
 
   this.respondent = respondent;
 };
+
+Case.prototype.attachPractitioner = function({ user }) {
+  const practitioner = {
+    ...user,
+    practitionerId: user.userId,
+  };
+
+  this.practitioner = practitioner;
+};
 /**
  *
  * @param document
