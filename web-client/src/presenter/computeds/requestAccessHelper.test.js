@@ -61,7 +61,7 @@ describe('requestAccessHelper', () => {
   });
 
   it('shows party validation error if any one of the party validation errors exists', async () => {
-    state.validationErrors = { partyPrimary: 'You did something bad.' };
+    state.validationErrors = { representingPrimary: 'You did something bad.' };
     const result = await runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
