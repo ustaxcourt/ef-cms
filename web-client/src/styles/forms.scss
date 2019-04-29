@@ -300,9 +300,48 @@ label.ustc-upload {
 }
 
 .one-third-searchbox {
-  padding: 14px;
-  margin-left: 50px;
-  background-color: $color-gray-lightest;
+  /* big screen */
+  @media only screen and (min-width: $medium-screen) {
+    padding: 14px;
+    margin: 10px;
+    background-color: $color-gray-lightest;
+    button {
+      min-width: 130px;
+      margin-bottom: 5px;
+    }
+  }
+  #docket-search-field {
+    display: block;
+    width: 150px;
+  }
+
+  /* small screen */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .search-caption {
+      display: none;
+    }
+
+    .usa-input-error.usa-input-group {
+      border-left: 4px solid $color-secondary-dark;
+    }
+
+    .usa-input-group {
+      border-left: 4px solid transparent;
+    }
+    button[type="submit"] {
+      width: 45px;
+      background-image: none;
+    }
+    
+    .usa-input-error #docket-search-field-mobile {
+      width: calc(100% - 45px);
+      border-width: 1px;
+      box-shadow: 0px 0 0px 2px $color-secondary-dark;
+    }
+
+  }
+
+  min-width: 200px;
 
   .usa-input-error-message {
     display: none;
@@ -319,12 +358,4 @@ label.ustc-upload {
     }
   }
 
-  #docket-search-field {
-    display: block;
-    width: 150px;
-  }
-  button {
-    min-width: 130px;
-    margin-bottom: 5px;
-  }
 }

@@ -83,11 +83,11 @@ export const CaseListPractitioner = connect(
     return (
       <>
         <div className="usa-grid-full subsection">
+          <div className="usa-width-one-third push-right">
+            {helper.showCaseSearch && <CaseSearchBox />}
+          </div>
           <div className="usa-width-two-thirds">
             {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
-          </div>
-          <div className="usa-width-one-third">
-            {helper.showCaseSearch && <CaseSearchBox />}
           </div>
         </div>
       </>
