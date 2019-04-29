@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
@@ -8,6 +6,7 @@ const {
   drawLinesOfText,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
+const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
 /**
@@ -127,8 +126,7 @@ exports.addCoverToPDFDocument = async ({
 
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
-  const staticImgPath = path.join(__dirname, '../../../static/images/');
-  const ustcSealBytes = fs.readFileSync(staticImgPath + 'ustc_seal.png');
+  const ustcSealBytes = new Uint8Array(coverLogo);
   const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
 
