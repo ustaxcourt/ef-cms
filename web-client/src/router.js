@@ -59,6 +59,7 @@ const router = {
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
@@ -66,6 +67,7 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
