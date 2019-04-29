@@ -1,5 +1,7 @@
+const {
+  UnauthorizedError,
+} = require('../../../../../shared/src/errors/errors');
 const { createUser } = require('./createUserInteractor');
-const { UnauthorizedError } = require('ef-cms-shared/src/errors/errors');
 
 describe('create user', () => {
   it('creates the user', async () => {

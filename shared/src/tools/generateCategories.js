@@ -1,3 +1,9 @@
+/**
+ * This is a convenience utility for converting an Event Code CSV from the court
+ * to a JSON file that can be used by the application. It may never be used
+ * again, but we've kept it in the project just in case.
+ */
+
 const _ = require('lodash');
 const fs = require('fs');
 const parse = require('csv-parse');

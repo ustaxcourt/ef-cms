@@ -2,14 +2,14 @@ import { computeCertificateOfServiceFormDateAction } from './computeCertificateO
 import { runAction } from 'cerebral/test';
 
 describe('computeCertificateOfServiceFormDateAction', () => {
-  it('should set certificateOfServiceDate to undefined if state.form is empty', async () => {
+  it('should set certificateOfServiceDate to empty string if state.form is empty', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
       state: {
         form: {},
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual(undefined);
+    expect(result.state.form.certificateOfServiceDate).toEqual(null);
   });
 
   it('should set certificateOfServiceDate to YYYY-MM-DD if state.form has year, month, and day', async () => {
