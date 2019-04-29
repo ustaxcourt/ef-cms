@@ -1,4 +1,5 @@
 module.exports = {
+  addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
   assignWorkItemsLambda: require('./workitems/assignWorkItemsLambda').handler,
   completeWorkItemLambda: require('./workitems/completeWorkItemLambda').handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda').handler,
@@ -15,6 +16,7 @@ module.exports = {
   getCasesForRespondentLambda: require('./cases/getCasesForRespondentLambda').handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl').handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
+  getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda').handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda').handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
@@ -22,10 +24,13 @@ module.exports = {
   getWorkItemLambda: require('./workitems/getWorkItemLambda').handler,
   getWorkItemsBySectionLambda: require('./workitems/getWorkItemsBySectionLambda').handler,
   getWorkItemsForUserLambda: require('./workitems/getWorkItemsForUserLambda').handler,
+  practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda').handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda').handler,
+  setMessageAsReadLambda: require('./messages/setMessageAsReadLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
+  verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
 }
