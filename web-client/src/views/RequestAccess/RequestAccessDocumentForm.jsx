@@ -9,7 +9,8 @@ export const RequestAccessDocumentForm = connect(
   {
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
@@ -17,7 +18,7 @@ export const RequestAccessDocumentForm = connect(
   ({
     requestAccessHelper,
     form,
-    updateFormValueSequence,
+    updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
   }) => {
@@ -96,7 +97,7 @@ export const RequestAccessDocumentForm = connect(
                             form.certificateOfService === (option === 'Yes')
                           }
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateCaseAssociationFormValueSequence({
                               key: e.target.name,
                               value: e.target.value === 'Yes',
                             });
@@ -141,7 +142,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1"
                           max="12"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateCaseAssociationFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -166,7 +167,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1"
                           max="31"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateCaseAssociationFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -191,7 +192,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1900"
                           max="2100"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateCaseAssociationFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -230,7 +231,7 @@ export const RequestAccessDocumentForm = connect(
                             value={option}
                             checked={form.objections === option}
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateCaseAssociationFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });

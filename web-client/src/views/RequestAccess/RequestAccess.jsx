@@ -12,7 +12,8 @@ export const RequestAccess = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
     validationErrors: state.validationErrors,
@@ -22,7 +23,7 @@ export const RequestAccess = connect(
     formCancelToggleCancelSequence,
     reviewRequestAccessInformationSequence,
     validationErrors,
-    updateFormValueSequence,
+    updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {
     return (
@@ -69,19 +70,19 @@ export const RequestAccess = connect(
                       value={option.documentType}
                       checked={form.documentType === option.documentType}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: 'documentTitle',
                           value: e.target.value,
                         });
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: 'eventCode',
                           value: option.eventCode,
                         });
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: 'scenario',
                           value: option.scenario,
                         });

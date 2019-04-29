@@ -7,7 +7,8 @@ export const PartiesRepresenting = connect(
     caseDetail: state.formattedCaseDetail,
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
   },
@@ -15,7 +16,7 @@ export const PartiesRepresenting = connect(
     caseDetail,
     requestAccessHelper,
     form,
-    updateFormValueSequence,
+    updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {
     return (
@@ -41,7 +42,7 @@ export const PartiesRepresenting = connect(
                     aria-describedby="who-legend"
                     checked={form.partyPrimary || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateCaseAssociationFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -61,7 +62,7 @@ export const PartiesRepresenting = connect(
                       name="partySecondary"
                       checked={form.partySecondary || false}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
