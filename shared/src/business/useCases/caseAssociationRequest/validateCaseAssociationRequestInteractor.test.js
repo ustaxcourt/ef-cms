@@ -1,6 +1,6 @@
 const {
   CaseAssociationRequest,
-} = require('../entities/CaseAssociationRequest');
+} = require('../../entities/CaseAssociationRequest');
 const {
   validateCaseAssociationRequest,
 } = require('./validateCaseAssociationRequestInteractor');
@@ -18,12 +18,12 @@ describe('validateCaseAssociationRequest', () => {
 
     expect(Object.keys(errors)).toEqual([
       'certificateOfService',
-      'documentTitle',
+      'documentTitleTemplate',
       'documentType',
       'eventCode',
       'primaryDocumentFile',
       'scenario',
-      'partyPrimary',
+      'representingPrimary',
     ]);
   });
 
@@ -37,11 +37,11 @@ describe('validateCaseAssociationRequest', () => {
       caseAssociationRequest: {
         certificateOfService: true,
         certificateOfServiceDate: '1212-12-12',
-        documentTitle: 'Entry of Appearance',
+        documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
         documentType: 'Entry of Appearance',
         eventCode: '123',
-        partyPrimary: true,
         primaryDocumentFile: {},
+        representingPrimary: true,
         scenario: 'Standard',
       },
     });

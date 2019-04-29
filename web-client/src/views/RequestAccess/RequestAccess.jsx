@@ -49,13 +49,15 @@ export const RequestAccess = connect(
               <ul className="ustc-vertical-option-list">
                 {[
                   {
-                    documentTitle: 'Entry of Appearance',
+                    documentTitleTemplate:
+                      'Entry of Appearance for [Petitioner Names]',
                     documentType: 'Entry of Appearance',
                     eventCode: 'EA',
                     scenario: 'Standard',
                   },
                   {
-                    documentTitle: 'Substitution of Counsel',
+                    documentTitleTemplate:
+                      'Substitution of Counsel for [Petitioner Names]',
                     documentType: 'Substitution of Counsel',
                     eventCode: 'SOC',
                     scenario: 'Standard',
@@ -74,8 +76,8 @@ export const RequestAccess = connect(
                           value: e.target.value,
                         });
                         updateFormValueSequence({
-                          key: 'documentTitle',
-                          value: e.target.value,
+                          key: 'documentTitleTemplate',
+                          value: option.documentTitleTemplate,
                         });
                         updateFormValueSequence({
                           key: 'eventCode',
