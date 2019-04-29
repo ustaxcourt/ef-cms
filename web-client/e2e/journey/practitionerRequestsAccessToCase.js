@@ -16,19 +16,19 @@ export default (test, fakeFile) => {
       scenario: 'Select a document.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
       value: 'Entry of Appearance',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
       value: 'Entry of Appearance for [Petitioner Names]',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
       value: 'EA',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'scenario',
       value: 'Standard',
     });
@@ -40,7 +40,7 @@ export default (test, fakeFile) => {
       representingPrimary: 'Select a party.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
@@ -51,7 +51,7 @@ export default (test, fakeFile) => {
       representingPrimary: 'Select a party.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfService',
       value: true,
     });
@@ -62,15 +62,15 @@ export default (test, fakeFile) => {
       representingPrimary: 'Select a party.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceDay',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceYear',
       value: '5000',
     });
@@ -82,7 +82,7 @@ export default (test, fakeFile) => {
       representingPrimary: 'Select a party.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'certificateOfServiceYear',
       value: '2000',
     });
@@ -92,7 +92,7 @@ export default (test, fakeFile) => {
       representingPrimary: 'Select a party.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'representingSecondary',
       value: true,
     });
