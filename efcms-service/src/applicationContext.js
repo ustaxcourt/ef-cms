@@ -35,6 +35,9 @@ const {
   createDocument,
 } = require('ef-cms-shared/src/business/useCases/createDocumentInteractor');
 const {
+  createMappingRecord,
+} = require('ef-cms-shared/src/persistence/dynamo/helpers/createMappingRecord');
+const {
   createUser,
 } = require('ef-cms-shared/src/persistence/dynamo/users/createUser');
 const {
@@ -192,6 +195,9 @@ const {
   setMessageAsRead: setMessageAsReadUC,
 } = require('ef-cms-shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
+  submitCaseAssociationRequest,
+} = require('ef-cms-shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
+const {
   updateCase,
 } = require('ef-cms-shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -203,6 +209,9 @@ const {
 const {
   updateWorkItem,
 } = require('ef-cms-shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  verifyCaseForUser,
+} = require('ef-cms-shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
   zipDocuments,
 } = require('ef-cms-shared/src/persistence/s3/zipDocuments');
@@ -256,6 +265,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         createCase,
         createDocument,
+        createMappingRecord,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -330,7 +340,9 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
         setMessageAsRead: setMessageAsReadUC,
+        submitCaseAssociationRequest,
         updateCase: updateCaseUC,
+        verifyCaseForUser,
       };
     },
     irsGateway,

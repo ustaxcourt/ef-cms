@@ -41,7 +41,7 @@ export const PartiesFiling = connect(
                       type="checkbox"
                       name="partyPractitioner"
                       aria-describedby="who-legend"
-                      checked={form.partyPractitioner}
+                      checked={form.partyPractitioner || false}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -61,7 +61,7 @@ export const PartiesFiling = connect(
                     type="checkbox"
                     name="partyPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary}
+                    checked={form.partyPrimary || false}
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
@@ -81,7 +81,7 @@ export const PartiesFiling = connect(
                       type="checkbox"
                       aria-describedby="who-legend"
                       name="partySecondary"
-                      checked={form.partySecondary}
+                      checked={form.partySecondary || false}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -102,7 +102,7 @@ export const PartiesFiling = connect(
                       type="checkbox"
                       aria-describedby="who-legend"
                       name="partyRespondent"
-                      checked={form.partyRespondent}
+                      checked={form.partyRespondent || false}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
