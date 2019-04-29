@@ -1,4 +1,4 @@
-const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
+const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
 
