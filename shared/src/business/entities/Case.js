@@ -113,6 +113,10 @@ function Case(rawCase) {
     this.docketRecord = [];
   }
 
+  if (!Array.isArray(this.practitioners)) {
+    this.practitioners = [];
+  }
+
   const isNewCase = this.status === statusMap.new;
 
   if (!isNewCase) {
@@ -196,10 +200,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    practitioner: joi
-      .object()
-      .allow(null)
-      .optional(),
+    practitioners: joi.array().optional(),
     preferredTrialCity: joi
       .string()
       .optional()
@@ -402,7 +403,7 @@ Case.prototype.attachPractitioner = function({ user }) {
     practitionerId: user.userId,
   };
 
-  this.practitioner = practitioner;
+  this.practitioners.push(practitioner);
 };
 /**
  *

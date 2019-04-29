@@ -59,7 +59,10 @@ joiValidationDecorator(
       .valid(getDocumentTypes())
       .required(),
     eventCode: joi.string().optional(),
-    filedBy: joi.string().optional(),
+    filedBy: joi
+      .string()
+      .allow('')
+      .optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
@@ -87,6 +90,43 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+/**
+ * generates the filedBy string from parties selected for the document
+ * and contact info from the case detail
+ *
+ * @param caseDetail
+ */
+Document.prototype.generateFiledBy = function(caseDetail) {
+  if (!this.filedBy) {
+    let filedByArray = [];
+    if (this.partyRespondent) {
+      filedByArray.push('Resp.');
+    }
+    if (this.partyPractitioner && this.practitioner) {
+      filedByArray.push(`Counsel ${this.practitioner.name}`);
+    }
+    if (
+      this.partyPrimary &&
+      !this.partySecondary &&
+      caseDetail.contactPrimary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+    } else if (
+      this.partyPrimary &&
+      this.partySecondary &&
+      caseDetail.contactPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(
+        `Petrs. ${caseDetail.contactPrimary.name} & ${
+          caseDetail.contactSecondary.name
+        }`,
+      );
+    }
+    this.filedBy = filedByArray.join(' & ');
+  }
 };
 
 exports.Document = Document;
