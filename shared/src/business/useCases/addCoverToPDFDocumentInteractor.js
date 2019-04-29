@@ -1,4 +1,3 @@
-const { coverLogo } = require('../assets/coverLogo');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
@@ -7,6 +6,7 @@ const {
   drawLinesOfText,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
+const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
 /**
