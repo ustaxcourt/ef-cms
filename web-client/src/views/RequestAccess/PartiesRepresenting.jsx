@@ -38,9 +38,9 @@ export const PartiesRepresenting = connect(
                   <input
                     id="party-primary"
                     type="checkbox"
-                    name="partyPrimary"
+                    name="representingPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary || false}
+                    checked={form.representingPrimary || false}
                     onChange={e => {
                       updateCaseAssociationFormValueSequence({
                         key: e.target.name,
@@ -59,8 +59,8 @@ export const PartiesRepresenting = connect(
                       id="party-secondary"
                       type="checkbox"
                       aria-describedby="who-legend"
-                      name="partySecondary"
-                      checked={form.partySecondary || false}
+                      name="representingSecondary"
+                      checked={form.representingSecondary || false}
                       onChange={e => {
                         updateCaseAssociationFormValueSequence({
                           key: e.target.name,

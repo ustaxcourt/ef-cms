@@ -1,3 +1,4 @@
+const { Case } = require('../../entities/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -31,5 +32,25 @@ exports.submitCaseAssociationRequest = async ({
       skId: caseId,
       type: 'case',
     });
+
+    const caseToUpdate = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+
+    const caseEntity = new Case(caseToUpdate);
+
+    caseEntity.attachPractitioner({
+      user,
+    });
+
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+    return caseEntity.toRawObject();
   }
 };
