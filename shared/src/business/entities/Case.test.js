@@ -660,6 +660,19 @@ describe('Case entity', () => {
     });
   });
 
+  describe('attachPractitioner', () => {
+    it('adds the user to the practitioners', () => {
+      const caseToVerify = new Case({});
+      caseToVerify.attachPractitioner({
+        user: {
+          userId: 'practitioner',
+        },
+      });
+      expect(caseToVerify.practitioner).not.toBeNull();
+      expect(caseToVerify.practitioner.userId).toEqual('practitioner');
+    });
+  });
+
   describe('addDocument', () => {
     it('attaches the document to the case', () => {
       const caseToVerify = new Case({});

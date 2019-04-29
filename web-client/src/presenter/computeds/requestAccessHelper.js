@@ -19,7 +19,8 @@ export const requestAccessHelper = get => {
   }
 
   const partyValidationError =
-    validationErrors.partyPrimary || validationErrors.partySecondary;
+    validationErrors.representingPrimary ||
+    validationErrors.representingSecondary;
 
   let exported = {
     certificateOfServiceDateFormatted,

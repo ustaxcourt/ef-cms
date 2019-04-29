@@ -2,7 +2,7 @@ import { computeCertificateOfServiceFormDateAction } from './computeCertificateO
 import { runAction } from 'cerebral/test';
 
 describe('computeCertificateOfServiceFormDateAction', () => {
-  it('should set certificateOfServiceDate to empty string if state.form is empty', async () => {
+  it('should set certificateOfServiceDate to null if state.form is empty', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
       state: {
         form: {},

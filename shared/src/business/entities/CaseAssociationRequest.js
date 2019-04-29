@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { includes } = require('lodash');
+const { replaceBracketed } = require('../utilities/getDocumentTitle');
 
 /**
  * @param rawProps
@@ -10,12 +11,36 @@ const { includes } = require('lodash');
  */
 function CaseAssociationRequest(rawProps) {
   let entityConstructor = function(rawProps) {
+    rawProps.partyPractitioner = true;
     Object.assign(this, rawProps);
+  };
+
+  entityConstructor.prototype.getDocumentTitle = function(
+    contactPrimaryName,
+    contactSecondaryName,
+  ) {
+    const petitionerNamesArray = [];
+    if (rawProps.representingPrimary) {
+      petitionerNamesArray.push(contactPrimaryName);
+    }
+    if (rawProps.representingSecondary) {
+      petitionerNamesArray.push(contactSecondaryName);
+    }
+    let petitionerNames;
+    if (petitionerNamesArray.length > 1) {
+      petitionerNames = 'Petrs. ';
+    } else {
+      petitionerNames = 'Petr. ';
+    }
+    petitionerNames += petitionerNamesArray.join(' & ');
+
+    return replaceBracketed(this.documentTitleTemplate, petitionerNames);
   };
 
   let schema = {
     certificateOfService: joi.boolean().required(),
-    documentTitle: joi.string().required(),
+    documentTitle: joi.string().optional(),
+    documentTitleTemplate: joi.string().required(),
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
     primaryDocumentFile: joi.object().required(),
@@ -29,11 +54,11 @@ function CaseAssociationRequest(rawProps) {
       .max('now')
       .required(),
     objections: joi.string().required(),
-    partyPrimary: joi
+    representingPrimary: joi
       .boolean()
       .invalid(false)
       .required(),
-    partySecondary: joi
+    representingSecondary: joi
       .boolean()
       .invalid(false)
       .required(),
@@ -49,13 +74,13 @@ function CaseAssociationRequest(rawProps) {
       },
       'Enter a Certificate of Service Date.',
     ],
-    documentTitle: 'Select a document.',
+    documentTitleTemplate: 'Select a document.',
     documentType: 'Select a document.',
     eventCode: 'Select a document.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a party.',
-    partySecondary: 'Select a party.',
     primaryDocumentFile: 'A file was not selected.',
+    representingPrimary: 'Select a party.',
+    representingSecondary: 'Select a party.',
     scenario: 'Select a document.',
   };
 
@@ -75,8 +100,11 @@ function CaseAssociationRequest(rawProps) {
     makeRequired('objections');
   }
 
-  if (rawProps.partyPrimary !== true && rawProps.partySecondary !== true) {
-    makeRequired('partyPrimary');
+  if (
+    rawProps.representingPrimary !== true &&
+    rawProps.representingSecondary !== true
+  ) {
+    makeRequired('representingPrimary');
   }
 
   joiValidationDecorator(
