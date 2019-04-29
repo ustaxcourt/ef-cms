@@ -8,11 +8,11 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitle: 'Select a document.',
+      documentTitleTemplate: 'Select a document.',
       documentType: 'Select a document.',
       eventCode: 'Select a document.',
-      partyPrimary: 'Select a party.',
       primaryDocumentFile: 'A file was not selected.',
+      representingPrimary: 'Select a party.',
       scenario: 'Select a document.',
     });
 
@@ -21,8 +21,8 @@ export default (test, fakeFile) => {
       value: 'Entry of Appearance',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Entry of Appearance',
+      key: 'documentTitleTemplate',
+      value: 'Entry of Appearance for [Petitioner Names]',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'eventCode',
@@ -36,8 +36,8 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Enter selection for Certificate of Service.',
-      partyPrimary: 'Select a party.',
       primaryDocumentFile: 'A file was not selected.',
+      representingPrimary: 'Select a party.',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -48,7 +48,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Enter selection for Certificate of Service.',
-      partyPrimary: 'Select a party.',
+      representingPrimary: 'Select a party.',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -59,7 +59,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      partyPrimary: 'Select a party.',
+      representingPrimary: 'Select a party.',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -79,7 +79,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         'Certificate of Service date is in the future. Please enter a valid date.',
-      partyPrimary: 'Select a party.',
+      representingPrimary: 'Select a party.',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -89,11 +89,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      partyPrimary: 'Select a party.',
+      representingPrimary: 'Select a party.',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'partySecondary',
+      key: 'representingSecondary',
       value: true,
     });
 
@@ -101,6 +101,10 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('reviewRequestAccessInformationSequence');
+
+    expect(test.getState('form.documentTitle')).toEqual(
+      'Entry of Appearance for Petr. Test Person',
+    );
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitCaseAssociationRequestSequence');
