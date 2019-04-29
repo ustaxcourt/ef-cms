@@ -34,8 +34,8 @@ export const validateCaseAssociationRequestAction = ({
       'certificateOfService',
       'certificateOfServiceDate',
       'objections',
-      'partyPrimary',
-      'partySecondary',
+      'representingPrimary',
+      'representingSecondary',
     ];
     return path.error({
       alertError: {
