@@ -14,7 +14,6 @@ import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
-import { refreshTokenSequence } from './sequences/refreshTokenSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -43,6 +42,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { refreshTokenSequence } from './sequences/refreshTokenSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
@@ -151,10 +151,12 @@ export const presenter = {
     gotoSelectDocumentTypeSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
+    loginWithCodeSequence,
     loginWithTokenSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
     refreshCaseSequence,
+    refreshTokenSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
     runBatchProcessSequence,
@@ -172,8 +174,6 @@ export const presenter = {
     signOutSequence,
     submitCaseDetailEditSaveSequence,
     submitCompleteSequence,
-    loginWithCodeSequence,
-    refreshTokenSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,

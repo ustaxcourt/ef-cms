@@ -32,6 +32,7 @@ import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
+import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -61,6 +62,7 @@ import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
+import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
@@ -97,6 +99,7 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   assignWorkItems,
+  authorizeCode,
   completeWorkItem,
   createCase,
   createCaseFromPaper,
@@ -126,6 +129,7 @@ const allUseCases = {
   getWorkItemsBySection,
   getWorkItemsForUser,
   recallPetitionFromIRSHoldingQueue,
+  refreshToken,
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   setMessageAsRead,
@@ -146,8 +150,8 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
-  getCognitoTokenUrl: () => {
-    return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token';
+  getCognitoClientId: () => {
+    return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
   getCognitoLoginUrl: () => {
     if (process.env.COGNITO) {
@@ -158,6 +162,12 @@ const applicationContext = {
         'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
       );
     }
+  },
+  getCognitoRedirectUrl: () => {
+    return 'http://localhost:1234/log-in';
+  },
+  getCognitoTokenUrl: () => {
+    return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token';
   },
   getConstants: () => ({
     BUSINESS_TYPES,
