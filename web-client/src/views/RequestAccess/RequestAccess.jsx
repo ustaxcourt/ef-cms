@@ -60,10 +60,10 @@ export const RequestAccess = connect(
                     eventCode: 'SOC',
                     scenario: 'Standard',
                   },
-                ].map(option => (
+                ].map((option, index) => (
                   <li key={option.documentType}>
                     <input
-                      id={`document-type-${option.documentType}`}
+                      id={`document-type-${index}`}
                       type="radio"
                       name="documentType"
                       value={option.documentType}
@@ -88,7 +88,7 @@ export const RequestAccess = connect(
                         validateCaseAssociationRequestSequence();
                       }}
                     />
-                    <label htmlFor={`document-type-${option.documentType}`}>
+                    <label htmlFor={`document-type-${index}`}>
                       {option.documentType}
                     </label>
                   </li>
