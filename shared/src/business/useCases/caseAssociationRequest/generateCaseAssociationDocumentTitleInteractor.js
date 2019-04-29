@@ -2,7 +2,9 @@
  * generateDocumentTitle
  *
  * @param applicationContext
- * @param documentMetadata
+ * @param caseAssociationRequest
+ * @param contactPrimaryName
+ * @param contactSecondaryName
  * @returns {string} document title
  */
 exports.generateCaseAssociationDocumentTitle = ({
