@@ -46,32 +46,37 @@ export const DocketRecord = connect(
     ) {
       return (
         <React.Fragment>
-          <a
-            className="hide-on-mobile"
-            href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label={`View PDF: ${description}`}
-          >
-            {isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
-            {description}
-          </a>
-          <button
-            className="show-on-mobile link"
-            aria-roledescription="button to view document details"
-            onClick={() => {
-              showDocketRecordDetailModalSequence({
-                docketRecordIndex,
-                showModal: 'DocketRecordOverlay',
-              });
-            }}
-          >
-            {description}
-          </button>
+          {helper.userHasAccessToCase && (
+            <React.Fragment>
+              <a
+                className="hide-on-mobile"
+                href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`View PDF: ${description}`}
+              >
+                {isPaper && (
+                  <span className="filing-type-icon-mobile">
+                    <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                  </span>
+                )}
+                {description}
+              </a>
+              <button
+                className="show-on-mobile link"
+                aria-roledescription="button to view document details"
+                onClick={() => {
+                  showDocketRecordDetailModalSequence({
+                    docketRecordIndex,
+                    showModal: 'DocketRecordOverlay',
+                  });
+                }}
+              >
+                {description}
+              </button>
+            </React.Fragment>
+          )}
+          {!helper.userHasAccessToCase && description}
         </React.Fragment>
       );
     }

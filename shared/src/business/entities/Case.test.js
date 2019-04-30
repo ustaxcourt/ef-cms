@@ -668,8 +668,8 @@ describe('Case entity', () => {
           userId: 'practitioner',
         },
       });
-      expect(caseToVerify.practitioner).not.toBeNull();
-      expect(caseToVerify.practitioner.userId).toEqual('practitioner');
+      expect(caseToVerify.practitioners).not.toBeNull();
+      expect(caseToVerify.practitioners[0].userId).toEqual('practitioner');
     });
   });
 
