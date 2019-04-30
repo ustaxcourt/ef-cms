@@ -308,10 +308,10 @@ module.exports = (appContextUser = {}) => {
       });
       return s3;
     },
+    // TODO: replace external calls to environment
     getUniqueId: () => {
       return uuidv4();
     },
-    // TODO: replace external calls to environment
     getUseCases: () => {
       return {
         addCoverToPDFDocument,
