@@ -34,6 +34,15 @@ import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFr
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+
+import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
+import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
+import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
+
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -107,9 +116,11 @@ const allUseCases = {
   assignWorkItems,
   authorizeCode,
   completeWorkItem,
+
   createCase,
   createCaseFromPaper,
   createCoverSheet,
+
   createDocument,
   createWorkItem,
   downloadDocumentFile,
@@ -126,6 +137,7 @@ const allUseCases = {
   getCasesForRespondent,
   getFilingTypes,
   getInternalUsers,
+  getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
   getSentWorkItemsForSection,
@@ -137,8 +149,10 @@ const allUseCases = {
   getWorkItemsForUser,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
+  removeItem: removeItemUC,
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
+  setItem: setItemUC,
   setMessageAsRead,
   submitCaseAssociationRequest,
   updateCase,
@@ -220,6 +234,9 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return {
       getDocument,
+      getItem,
+      removeItem,
+      setItem,
       uploadDocument,
       uploadPdf,
     };

@@ -30,6 +30,7 @@ presenter.providers.applicationContext = {
     }),
     getUser: async () => USER,
     refreshToken: refreshTokenStub,
+    setItem: () => null,
   }),
 };
 

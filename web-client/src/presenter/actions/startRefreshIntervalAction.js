@@ -23,7 +23,12 @@ export const startRefreshIntervalAction = ({
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
-    window.localStorage.setItem('token', JSON.stringify(response.token));
+
+    await applicationContext.getUseCases().setItem({
+      applicationContext,
+      key: 'token',
+      value: response.token,
+    });
   }, time);
   store.set(state.refreshTokenInterval, interval);
 };
