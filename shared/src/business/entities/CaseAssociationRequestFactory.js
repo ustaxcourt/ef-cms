@@ -9,7 +9,7 @@ const { replaceBracketed } = require('../utilities/getDocumentTitle');
  * @param rawProps
  * @constructor
  */
-function CaseAssociationRequest(rawProps) {
+function CaseAssociationRequestFactory(rawProps) {
   let entityConstructor = function(rawProps) {
     rawProps.partyPractitioner = true;
     Object.assign(this, rawProps);
@@ -117,4 +117,4 @@ function CaseAssociationRequest(rawProps) {
   return new entityConstructor(rawProps);
 }
 
-module.exports = { CaseAssociationRequest };
+module.exports = { CaseAssociationRequestFactory };
