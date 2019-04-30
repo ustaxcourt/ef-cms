@@ -58,6 +58,7 @@ button.text-style {
   &:hover,
   &:active {
     background: inherit;
+    background-color: transparent;
     color: inherit;
   }
   &.heading-1 {
