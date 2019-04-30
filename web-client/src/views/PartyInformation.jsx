@@ -75,7 +75,7 @@ export const PartyInformation = connect(
           </div>
 
           {caseDetail.practitioners &&
-            caseDetail.practitioners.map((practititioner, index) => (
+            caseDetail.practitioners.map((practitioner, index) => (
               <div className="usa-width-one-sixth" key={index}>
                 {index === 0 && (
                   <p className="label" id="petitioner-label">
@@ -84,12 +84,12 @@ export const PartyInformation = connect(
                 )}
                 <div>
                   <address aria-labelledby="petitioner-label">
-                    {practititioner.name &&
+                    {practitioner.name &&
                       addressDisplay({
-                        ...practititioner,
-                        address1: practititioner.addressLine1,
-                        address2: practititioner.addressLine2,
-                        address3: practititioner.addressLine3,
+                        ...practitioner,
+                        address1: practitioner.addressLine1,
+                        address2: practitioner.addressLine2,
+                        address3: practitioner.addressLine3,
                       })}
                   </address>
                 </div>
