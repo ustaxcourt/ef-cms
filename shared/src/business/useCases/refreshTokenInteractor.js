@@ -1,7 +1,7 @@
 const qs = require('qs');
 
 /**
- * getCase
+ * Refresh the Cognito token
  *
  * @param user
  * @param caseId
