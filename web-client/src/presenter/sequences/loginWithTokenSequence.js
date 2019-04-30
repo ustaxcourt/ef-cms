@@ -2,7 +2,6 @@ import { decodeTokenAction } from '../actions/decodeTokenAction';
 import { getUserAction } from '../actions/getUserAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
-import { setTimeoutValuesAction } from '../actions/setTimeoutValuesAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 /**
@@ -17,6 +16,5 @@ export const loginWithTokenSequence = [
   getUserAction,
   setUserAction,
   setPathAction,
-  setTimeoutValuesAction,
   navigateToPathAction,
 ];

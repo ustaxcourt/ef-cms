@@ -196,11 +196,13 @@ const applicationContext = {
     OTHER_TYPES,
     PARTY_TYPES,
     SECTIONS,
+    SESSION_DEBOUNCE: 250,
+    SESSION_MODAL_TIMEOUT: 5000, //1000 * 60 * 55, // 55 minutes
+    SESSION_TIMEOUT: 5000, // 5000 * 60 // 5 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
-  getDebounce: () => 250,
   getEntityConstructors: () => ({
     CaseAssociationRequest,
     ExternalDocumentFactory,
@@ -221,7 +223,6 @@ const applicationContext = {
       uploadPdf,
     };
   },
-  getTimeout: () => 5000,
   getUniqueId: () => {
     return uuidv4();
   },

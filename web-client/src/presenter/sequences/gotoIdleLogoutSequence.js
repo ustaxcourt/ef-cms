@@ -1,11 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearUserAction } from '../actions/clearUserAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { redirectToIdleLogoutAction } from '../actions/redirectToIdleLogoutAction';
+
+import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
 export const gotoIdleLogoutSequence = [
   clearAlertsAction,
   clearModalAction,
   clearUserAction,
-  setCurrentPageAction('IdleLogout'),
+  set(state.shouldIdleLogout, false),
+  redirectToIdleLogoutAction,
 ];
