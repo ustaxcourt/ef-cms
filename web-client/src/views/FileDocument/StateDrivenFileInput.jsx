@@ -8,18 +8,16 @@ export const StateDrivenFileInput = connect(
     form: state.form,
     id: props.id,
     name: props.name,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence:
-      sequences.validateExternalDocumentInformationSequence,
+    updateFormValueSequence: sequences[props.updateFormValueSequence],
+    validationSequence: sequences[props.validationSequence],
   },
   ({
     ariaDescribedBy,
     form,
     id,
     name,
-    updateFileDocumentWizardFormValueSequence,
-    validateExternalDocumentInformationSequence,
+    updateFormValueSequence,
+    validationSequence,
   }) => {
     let inputRef;
 
@@ -39,11 +37,11 @@ export const StateDrivenFileInput = connect(
             if (form[name]) e.preventDefault();
           }}
           onChange={e => {
-            updateFileDocumentWizardFormValueSequence({
+            updateFormValueSequence({
               key: e.target.name,
               value: e.target.files[0],
             });
-            validateExternalDocumentInformationSequence();
+            validationSequence();
           }}
         />
 
@@ -53,7 +51,7 @@ export const StateDrivenFileInput = connect(
             <button
               className="link"
               onClick={() => {
-                updateFileDocumentWizardFormValueSequence({
+                updateFormValueSequence({
                   key: name,
                   value: null,
                 });
