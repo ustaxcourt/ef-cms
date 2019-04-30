@@ -21,6 +21,7 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
+import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -82,6 +83,7 @@ export const state = {
   showModal: '',
   showValidation: false,
   startCaseHelper,
+  showAppTimeoutModalHelper,
   submitting: false,
   trialCitiesHelper,
   usaBanner: {

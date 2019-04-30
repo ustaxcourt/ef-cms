@@ -10,9 +10,15 @@ export const IdleActivityMonitor = connect(
     currentUser: state.user,
     debounce: state.debounce,
     onIdle: sequences.setIdleStatusIdleSequence,
-    showModal: state.showModal,
+    showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
   },
-  ({ currentUser, onIdle, showModal, constants }) => {
+  ({
+    currentUser,
+    onIdle,
+    showModal,
+    constants,
+    showAppTimeoutModalHelper,
+  }) => {
     return (
       <>
         {currentUser && (
@@ -22,7 +28,7 @@ export const IdleActivityMonitor = connect(
             onIdle={onIdle}
           />
         )}
-        {showModal == 'AppTimeoutModal' && !!currentUser && <AppTimeoutModal />}
+        {showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}
       </>
     );
   },
