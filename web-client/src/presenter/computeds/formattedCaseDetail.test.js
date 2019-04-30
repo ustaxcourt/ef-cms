@@ -381,27 +381,15 @@ describe('formatYearAmounts', () => {
         constants,
       },
     });
-    expect(result.docketRecordWithDocument[0].document.filedBy).toEqual(
-      'Petr. Bob',
-    );
     expect(
       result.docketRecordWithDocument[0].record.filingsAndProceedings,
     ).toEqual('(No Objection)');
-    expect(result.docketRecordWithDocument[1].document.filedBy).toEqual(
-      'Resp. & Petr. Bob',
-    );
     expect(
       result.docketRecordWithDocument[1].record.filingsAndProceedings,
     ).toEqual('(Exhibit(s))');
-    expect(result.docketRecordWithDocument[2].document.filedBy).toEqual(
-      'Petrs. Bob & Bill',
-    );
     expect(
       result.docketRecordWithDocument[2].record.filingsAndProceedings,
     ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
-    expect(result.docketRecordWithDocument[3].document.filedBy).toEqual(
-      'Resp. & Counsel Test Practitioner',
-    );
     expect(
       result.docketRecordWithDocument[3].record.filingsAndProceedings,
     ).toEqual('(Lodged)');

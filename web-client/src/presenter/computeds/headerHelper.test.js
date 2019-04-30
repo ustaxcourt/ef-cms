@@ -1,18 +1,18 @@
 import { headerHelper } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 
-describe('mapValueHelper', () => {
-  it('should return an empty object', () => {
+describe('headerHelper', () => {
+  it('should show search in header for non-practitioners', () => {
     const result = runCompute(headerHelper, {
       state: {
         user: {
-          role: 'petitioner',
+          role: 'taxpayer',
         },
       },
     });
-    expect(result).toEqual({ showSearchInHeader: true });
+    expect(result.showSearchInHeader).toBeTruthy();
   });
-  it('should return an empty object', () => {
+  it('should NOT show search in header for practitioners', () => {
     const result = runCompute(headerHelper, {
       state: {
         user: {
@@ -20,6 +20,6 @@ describe('mapValueHelper', () => {
         },
       },
     });
-    expect(result).toEqual({ showSearchInHeader: false });
+    expect(result.showSearchInHeader).toBeFalsy();
   });
 });
