@@ -1,10 +1,10 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const IdleLogout = connect(
-  { loginUrl: state.cognitoLoginUrl },
-  ({ loginUrl }) => {
+  { redirectToLoginSequence: sequences.redirectToLoginSequence },
+  ({ redirectToLoginSequence }) => {
     return (
       <section className="usa-section usa-grid">
         <h1 tabIndex="-1">Session Timeout</h1>
@@ -15,9 +15,12 @@ export const IdleLogout = connect(
           United States Tax Court website for information on court services and
           contact information.
         </p>
-        <a href={loginUrl} className="usa-button align-right">
+        <button
+          onClick={() => redirectToLoginSequence()}
+          className="usa-button align-right"
+        >
           Log In
-        </a>{' '}
+        </button>{' '}
         <a
           href="https://www.ustaxcourt.gov/"
           className="usa-button usa-button-secondary align-right"
