@@ -1,9 +1,15 @@
 import { state } from 'cerebral';
 
-export const clearUserAction = ({ store, applicationContext }) => {
+export const clearUserAction = async ({ store, applicationContext }) => {
   store.set(state.user, null);
   store.set(state.token, null);
-  window.localStorage.removeItem('user');
-  window.localStorage.removeItem('token');
+  await applicationContext.getUseCases().removeItem({
+    applicationContext,
+    key: 'user',
+  });
+  await applicationContext.getUseCases().removeItem({
+    applicationContext,
+    key: 'token',
+  });
   applicationContext.setCurrentUser(null);
 };
