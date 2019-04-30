@@ -402,7 +402,7 @@ describe('fileExternalDocument integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       partyType: 'Petitioner',
-      practitioner: null,
+      practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
       procedureType: 'Small',
       status: 'New',
