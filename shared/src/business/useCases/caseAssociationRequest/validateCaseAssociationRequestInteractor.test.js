@@ -1,6 +1,6 @@
 const {
-  CaseAssociationRequest,
-} = require('../../entities/CaseAssociationRequest');
+  CaseAssociationRequestFactory,
+} = require('../../entities/CaseAssociationRequestFactory');
 const {
   validateCaseAssociationRequest,
 } = require('./validateCaseAssociationRequestInteractor');
@@ -10,7 +10,7 @@ describe('validateCaseAssociationRequest', () => {
     const errors = validateCaseAssociationRequest({
       applicationContext: {
         getEntityConstructors: () => ({
-          CaseAssociationRequest,
+          CaseAssociationRequestFactory,
         }),
       },
       caseAssociationRequest: {},
@@ -31,7 +31,7 @@ describe('validateCaseAssociationRequest', () => {
     const errors = validateCaseAssociationRequest({
       applicationContext: {
         getEntityConstructors: () => ({
-          CaseAssociationRequest,
+          CaseAssociationRequestFactory,
         }),
       },
       caseAssociationRequest: {
