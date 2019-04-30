@@ -195,10 +195,11 @@ const applicationContext = {
     ESTATE_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
+    REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
     SECTIONS,
     SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5000, //1000 * 60 * 55, // 55 minutes
-    SESSION_TIMEOUT: 5000, // 5000 * 60 // 5 minutes
+    SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
+    SESSION_TIMEOUT: 1000 * 60 * 55, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,

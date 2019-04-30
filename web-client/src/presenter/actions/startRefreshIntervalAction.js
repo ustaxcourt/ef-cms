@@ -14,7 +14,7 @@ export const startRefreshIntervalAction = ({
   const oldInterval = get(state.refreshTokenInterval);
   clearInterval(oldInterval);
   const refreshToken = get(state.refreshToken);
-  const time = 60 * 20 * 1000; // 20 minutes
+  const time = applicationContext.getConstants().REFRESH_INTERVAL;
   const interval = setInterval(async () => {
     const response = await applicationContext.getUseCases().refreshToken({
       applicationContext,
