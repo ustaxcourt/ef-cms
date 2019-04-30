@@ -241,7 +241,6 @@ module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
   return {
-    debounce: 250,
     docketNumberGenerator,
     environment,
     getCurrentUser,
@@ -367,6 +366,5 @@ module.exports = (appContextUser = {}) => {
         console.timeEnd(key);
       },
     },
-    timeout: 5000,
   };
 };
