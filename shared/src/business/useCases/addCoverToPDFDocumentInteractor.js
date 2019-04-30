@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   PDFDocumentFactory,
   PDFDocumentWriter,
@@ -8,6 +6,7 @@ const {
   drawLinesOfText,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
+const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
 /**
@@ -60,7 +59,7 @@ exports.addCoverToPDFDocument = async ({
     minute: '2-digit',
     timeZone: 'America/New_York',
   })}`;
-  const dateFiled = new Date(caseEntity.createdAt);
+  const dateFiled = new Date(documentEntity.createdAt);
   const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
@@ -127,8 +126,7 @@ exports.addCoverToPDFDocument = async ({
 
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
-  const staticImgPath = path.join(__dirname, '../../../static/images/');
-  const ustcSealBytes = fs.readFileSync(staticImgPath + 'ustc_seal.png');
+  const ustcSealBytes = new Uint8Array(coverLogo);
   const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
 
@@ -545,7 +543,9 @@ exports.addCoverToPDFDocument = async ({
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   applicationContext.logger.time('Saving Bytes');
-  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc);
+  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc, {
+    useObjectStreams: false,
+  });
   applicationContext.logger.timeEnd('Saving Bytes');
 
   documentEntity.processingStatus = 'complete';

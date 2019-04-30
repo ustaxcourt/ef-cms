@@ -196,7 +196,7 @@ const {
 } = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
   submitCaseAssociationRequest,
-} = require('../../shared/src/business/useCases/externalDocument/submitCaseAssociationRequestInteractor');
+} = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');

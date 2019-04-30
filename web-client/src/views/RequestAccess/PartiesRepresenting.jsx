@@ -7,7 +7,8 @@ export const PartiesRepresenting = connect(
     caseDetail: state.formattedCaseDetail,
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateCaseAssociationFormValueSequence:
+      sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
   },
@@ -15,7 +16,7 @@ export const PartiesRepresenting = connect(
     caseDetail,
     requestAccessHelper,
     form,
-    updateFormValueSequence,
+    updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {
     return (
@@ -37,11 +38,11 @@ export const PartiesRepresenting = connect(
                   <input
                     id="party-primary"
                     type="checkbox"
-                    name="partyPrimary"
+                    name="representingPrimary"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary || false}
+                    checked={form.representingPrimary || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateCaseAssociationFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -58,10 +59,10 @@ export const PartiesRepresenting = connect(
                       id="party-secondary"
                       type="checkbox"
                       aria-describedby="who-legend"
-                      name="partySecondary"
-                      checked={form.partySecondary || false}
+                      name="representingSecondary"
+                      checked={form.representingSecondary || false}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateCaseAssociationFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });

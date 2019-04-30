@@ -15,8 +15,8 @@ export const CaseListPractitioner = connect(
         <thead>
           <tr>
             <th>Docket Number</th>
+            <th>Petitioner Name</th>
             <th>Date Filed</th>
-            <th>Case Name</th>
           </tr>
         </thead>
         <tbody>
@@ -27,9 +27,10 @@ export const CaseListPractitioner = connect(
                   {item.docketNumberWithSuffix}
                 </a>
               </td>
+              <td className="hide-on-mobile">{item.caseName}</td>
               <td>{item.createdAtFormatted}</td>
-              <td>
-                <div className="show-on-mobile">
+              <td className="show-on-mobile">
+                <div>
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumberWithSuffix}
                   </a>
