@@ -38,7 +38,7 @@ exports.PARIS_CHAMBERS_SECTION = 'parisChambers';
 exports.PUGHS_CHAMBERS_SECTION = 'pughsChambers';
 exports.RUWES_CHAMBERS_SECTION = 'ruwesChambers';
 exports.THORTONS_CHAMBERS_SECTION = 'thortonsChambers';
-exports.URDAS_CHAMBES_SECTION = 'urdasChambes';
+exports.URDAS_CHAMBERS_SECTION = 'urdasChambers';
 exports.VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
 exports.WELLS_CHAMBERS_SECTION = 'wellsChambers';
 
@@ -83,7 +83,7 @@ exports.CHAMBERS_SECTIONS = sortBy([
   exports.PUGHS_CHAMBERS_SECTION,
   exports.RUWES_CHAMBERS_SECTION,
   exports.THORTONS_CHAMBERS_SECTION,
-  exports.URDAS_CHAMBES_SECTION,
+  exports.URDAS_CHAMBERS_SECTION,
   exports.VASQUEZS_CHAMBERS_SECTION,
   exports.WELLS_CHAMBERS_SECTION,
 ]);
