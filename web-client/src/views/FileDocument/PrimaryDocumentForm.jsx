@@ -70,6 +70,8 @@ export const PrimaryDocumentForm = connect(
                   id="primary-document"
                   name="primaryDocumentFile"
                   aria-describedby="primary-document-label"
+                  updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
                 />
                 <Text
                   className="usa-input-error-message"
@@ -505,6 +507,8 @@ export const PrimaryDocumentForm = connect(
                     id="supporting-document-file"
                     name="supportingDocumentFile"
                     aria-describedby="supporting-document-file-label"
+                    updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                    validationSequence="validateExternalDocumentInformationSequence"
                   />
                   <Text
                     className="usa-input-error-message"
