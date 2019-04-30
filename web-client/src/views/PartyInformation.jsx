@@ -74,25 +74,27 @@ export const PartyInformation = connect(
               )}{' '}
           </div>
 
-          {caseDetail.practitioners.map((practititioner, index) => (
-            <div className="usa-width-one-sixth" key={index}>
-              {index === 0 && (
-                <p className="label" id="petitioner-label">
-                  Petitioner Counsel
-                </p>
-              )}
-              <div>
-                <address aria-labelledby="petitioner-label">
-                  {practititioner.name &&
-                    addressDisplay({
-                      ...practititioner,
-                      name: practititioner.formattedName,
-                      address1: practititioner.address,
-                    })}
-                </address>
+          {caseDetail.practitioners &&
+            caseDetail.practitioners.map((practititioner, index) => (
+              <div className="usa-width-one-sixth" key={index}>
+                {index === 0 && (
+                  <p className="label" id="petitioner-label">
+                    Petitioner Counsel
+                  </p>
+                )}
+                <div>
+                  <address aria-labelledby="petitioner-label">
+                    {practititioner.name &&
+                      addressDisplay({
+                        ...practititioner,
+                        address1: practititioner.addressLine1,
+                        address2: practititioner.addressLine2,
+                        address3: practititioner.addressLine3,
+                      })}
+                  </address>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           <div className="usa-width-one-sixth">
             {caseDetail.respondent && (
