@@ -80,10 +80,10 @@ export const state = {
   searchTerm: '',
   selectDocumentTypeHelper,
   selectedWorkItems: [],
+  showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
   startCaseHelper,
-  showAppTimeoutModalHelper,
   submitting: false,
   trialCitiesHelper,
   usaBanner: {
