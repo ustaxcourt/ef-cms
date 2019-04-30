@@ -189,7 +189,7 @@ const applicationContext = {
     }
   },
   getCognitoRedirectUrl: () => {
-    return process.env.COGNITO_REDIRECT_URL || 'http://localhost:1234/log-in';
+    return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
   },
   getCognitoTokenUrl: () => {
     return (
