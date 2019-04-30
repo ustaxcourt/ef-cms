@@ -49,15 +49,18 @@ import ReactDOM from 'react-dom';
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: (applicationContext, debugTools) => {
+  initialize: async (applicationContext, debugTools) => {
     const user =
-      JSON.parse(window.localStorage.getItem('user') || 'null') ||
-      presenter.state.user;
+      (await applicationContext
+        .getUseCases()
+        .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
     const token =
-      JSON.parse(window.localStorage.getItem('token') || 'null') ||
+      (await applicationContext
+        .getUseCases()
+        .getItem({ applicationContext, key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
