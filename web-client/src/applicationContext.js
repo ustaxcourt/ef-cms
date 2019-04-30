@@ -33,6 +33,16 @@ import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
+import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+
+import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
+import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
+import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
+
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -63,6 +73,7 @@ import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
+import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
@@ -103,10 +114,13 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   assignWorkItems,
+  authorizeCode,
   completeWorkItem,
+
   createCase,
   createCaseFromPaper,
   createCoverSheet,
+
   createDocument,
   createWorkItem,
   downloadDocumentFile,
@@ -123,6 +137,7 @@ const allUseCases = {
   getCasesForRespondent,
   getFilingTypes,
   getInternalUsers,
+  getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
   getSentWorkItemsForSection,
@@ -133,8 +148,11 @@ const allUseCases = {
   getWorkItemsBySection,
   getWorkItemsForUser,
   recallPetitionFromIRSHoldingQueue,
+  refreshToken,
+  removeItem: removeItemUC,
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
+  setItem: setItemUC,
   setMessageAsRead,
   submitCaseAssociationRequest,
   updateCase,
@@ -157,15 +175,27 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000/v1';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCognitoClientId: () => {
+    return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
+  },
   getCognitoLoginUrl: () => {
     if (process.env.COGNITO) {
-      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
+      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
     } else {
       return (
         process.env.COGNITO_LOGIN_URL ||
         'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
       );
     }
+  },
+  getCognitoRedirectUrl: () => {
+    return process.env.COGNITO_REDIRECT_URL || 'http://localhost:1234/log-in';
+  },
+  getCognitoTokenUrl: () => {
+    return (
+      process.env.COGNITO_TOKEN_URL ||
+      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
+    );
   },
   getConstants: () => ({
     BUSINESS_TYPES,
@@ -179,7 +209,11 @@ const applicationContext = {
     ESTATE_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
+    REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
     SECTIONS,
+    SESSION_DEBOUNCE: 250,
+    SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
+    SESSION_TIMEOUT: 1000 * 60 * 55, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
@@ -200,6 +234,9 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return {
       getDocument,
+      getItem,
+      removeItem,
+      setItem,
       uploadDocument,
       uploadPdf,
     };

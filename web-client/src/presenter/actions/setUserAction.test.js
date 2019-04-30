@@ -6,6 +6,11 @@ import sinon from 'sinon';
 const setCurrentUserStub = sinon.stub().returns(null);
 
 presenter.providers.applicationContext = {
+  getUseCases: () => ({
+    setItem: ({ key, value }) => {
+      return window.localStorage.setItem(key, JSON.stringify(value));
+    },
+  }),
   setCurrentUser: setCurrentUserStub,
 };
 
