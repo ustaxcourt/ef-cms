@@ -1,11 +1,13 @@
 const moment = require('moment');
-const { CaseAssociationRequest } = require('./CaseAssociationRequest');
+const {
+  CaseAssociationRequestFactory,
+} = require('./CaseAssociationRequestFactory');
 
-describe('CaseAssociationRequest', () => {
+describe('CaseAssociationRequestFactory', () => {
   let rawEntity;
 
   const errors = () =>
-    CaseAssociationRequest(rawEntity).getFormattedValidationErrors();
+    CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors();
 
   describe('Base', () => {
     beforeEach(() => {
@@ -96,7 +98,7 @@ describe('CaseAssociationRequest', () => {
 
     describe('title generation', () => {
       it('should generate valid title for representingPrimary', () => {
-        const caseAssoc = CaseAssociationRequest({
+        const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
@@ -108,7 +110,7 @@ describe('CaseAssociationRequest', () => {
       });
 
       it('should generate valid title for representingSecondary', () => {
-        const caseAssoc = CaseAssociationRequest({
+        const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
@@ -120,7 +122,7 @@ describe('CaseAssociationRequest', () => {
       });
 
       it('should generate valid title for representingPrimary and representingSecondary', () => {
-        const caseAssoc = CaseAssociationRequest({
+        const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
