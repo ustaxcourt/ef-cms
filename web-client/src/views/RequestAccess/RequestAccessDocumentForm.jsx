@@ -70,6 +70,8 @@ export const RequestAccessDocumentForm = connect(
                   id="primary-document"
                   name="primaryDocumentFile"
                   aria-describedby="primary-document-label"
+                  updateFormValueSequence="updateCaseAssociationFormValueSequence"
+                  validationSequence="validateCaseAssociationRequestSequence"
                 />
                 <Text
                   className="usa-input-error-message"
