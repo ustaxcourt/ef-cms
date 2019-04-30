@@ -85,7 +85,7 @@ exports.createCase = async ({
     },
   );
 
-  let practitioner = null;
+  let practitioners = [];
   if (user.role === 'practitioner') {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
@@ -93,12 +93,12 @@ exports.createCase = async ({
         applicationContext,
         userId: user.userId,
       });
-    practitioner = practitionerUser;
+    practitioners = [practitionerUser];
   }
 
   const caseToAdd = new Case({
     userId: user.userId,
-    practitioner,
+    practitioners,
     ...petitionEntity.toRawObject(),
     docketNumber,
     isPaper: false,
@@ -110,8 +110,10 @@ exports.createCase = async ({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
     filedBy: user.name,
+    practitioner: practitioners[0],
     userId: user.userId,
   });
+  petitionDocumentEntity.generateFiledBy(caseToAdd);
   const newWorkItem = addDocumentToCase(
     user,
     caseToAdd,
@@ -131,8 +133,10 @@ exports.createCase = async ({
     documentId: stinFileId,
     documentType: Case.documentTypes.stin,
     filedBy: user.name,
+    practitioner: practitioners[0],
     userId: user.userId,
   });
+  stinDocumentEntity.generateFiledBy(caseToAdd);
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
@@ -140,8 +144,10 @@ exports.createCase = async ({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
       filedBy: user.name,
+      practitioner: practitioners[0],
       userId: user.userId,
     });
+    odsDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
