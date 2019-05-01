@@ -27,12 +27,12 @@ ExternalDocumentNonStandardG.errorToMessageMap = {
   ordinalValue: 'You must select an iteration.',
 };
 
-ExternalDocumentNonStandardG.schema = joi.object().keys({
+ExternalDocumentNonStandardG.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   ordinalValue: joi.string().required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentNonStandardG,
