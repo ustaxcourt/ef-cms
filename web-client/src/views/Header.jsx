@@ -40,7 +40,7 @@ export const Header = connect(
                   className="usa-button usa-button-outline usa-button-unstyled"
                   onClick={() => toggleBetaBarSequence()}
                 >
-                  <img src={close} />
+                  <img src={close} alt="close" />
                 </button>
               </div>
             </div>
