@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  * validates the docket entry form.
  *
  * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context needed for getting the validatePetition use case
+ * @param {Object} providers.applicationContext the application context needed for getting the validation use case
  * @param {Object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {Object} providers.get the cerebral get function used for getting state.form
  * @param {Object} providers.props the cerebral props object

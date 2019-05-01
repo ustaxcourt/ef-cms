@@ -20,7 +20,7 @@ function DocketEntryFactory(rawProps) {
     addToCoverSheet: joi.boolean(),
     additionalInfo1: joi.string(),
     additionalInfo2: joi.string(),
-    attachments: joi.boolean(), // could be boolean
+    attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     dateReceived: joi
       .date()
@@ -29,7 +29,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     eventCode: joi.string(),
     exhibits: joi.boolean(),
-    filingStatus: joi.string().required(),
+    filingStatus: joi.string().required(), // could be boolean
     hasSupportingDocuments: joi.boolean(),
     primaryDocumentFile: joi.object().required(),
   };
@@ -90,16 +90,12 @@ function DocketEntryFactory(rawProps) {
     exDoc.getSchema(),
     externalDocumentOmit,
   );
+  schema = { ...schema, ...docketEntryExternalDocumentSchema };
+
   const docketEntryExternalDocumentErrorToMessageMap = omit(
     exDoc.getErrorToMessageMap(),
     externalDocumentOmit,
   );
-
-  // console.log(JSON.stringify(Object.keys(schema), null, 2));
-  // console.log(
-  //   JSON.stringify(Object.keys(docketEntryExternalDocumentSchema), null, 2),
-  // );
-  schema = { ...schema, ...docketEntryExternalDocumentSchema };
   errorToMessageMap = {
     ...errorToMessageMap,
     ...docketEntryExternalDocumentErrorToMessageMap,
