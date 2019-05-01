@@ -30,6 +30,9 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 export const state = {
   alertHelper,
   assigneeId: null,
+  betaBar: {
+    isVisible: true,
+  },
   caseCaption: '',
   caseDetail: {},
   caseDetailEditContactsHelper,
