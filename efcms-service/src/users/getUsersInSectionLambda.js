@@ -11,12 +11,12 @@ const {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, () => {
+  handle(event, async () => {
     const section = (event.pathParameters || {}).section;
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext.getUseCases().getUsersInSection({
+      const results = await applicationContext.getUseCases().getUsersInSection({
         applicationContext,
         section,
       });

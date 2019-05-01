@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext.getUseCases().updateCase({
+      const results = await applicationContext.getUseCases().updateCase({
         caseId: event.pathParameters.caseId,
         caseToUpdate: JSON.parse(event.body),
         ...JSON.parse(event.body),

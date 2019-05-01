@@ -5,19 +5,22 @@ import sinon from 'sinon';
 
 describe('fileExternalDocumentAction', () => {
   let uploadExternalDocumentStub;
+  let createCoverSheetStub;
 
   beforeEach(() => {
     uploadExternalDocumentStub = sinon.stub();
+    createCoverSheetStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
+        createCoverSheet: createCoverSheetStub,
         uploadExternalDocument: uploadExternalDocumentStub,
       }),
     };
   });
 
   it('should call uploadExternalDocument', async () => {
-    uploadExternalDocumentStub.returns({});
+    uploadExternalDocumentStub.returns({ documents: [] });
     await runAction(fileExternalDocumentAction, {
       modules: {
         presenter,

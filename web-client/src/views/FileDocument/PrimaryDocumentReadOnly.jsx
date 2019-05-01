@@ -66,6 +66,7 @@ export const PrimaryDocumentReadOnly = connect(
                 {!form.certificateOfService && <li>Certificate of Service</li>}
                 {!form.exhibits && <li>Exhibit(s)</li>}
                 {!form.attachments && <li>Attachment(s)</li>}
+                {!form.hasSupportingDocuments && <li>Supporting Documents</li>}
               </ul>
             </div>
           )}

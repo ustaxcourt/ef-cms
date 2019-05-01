@@ -207,7 +207,7 @@ describe('can view case detail', () => {
   });
 
   it('shows docket record table and data', () => {
-    cy.get('table#docket-record tbody tr').should('exist');
+    cy.get('table.docket-record tbody tr').should('exist');
   });
 
   it('accordion header expands/collapses', () => {

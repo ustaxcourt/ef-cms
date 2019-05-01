@@ -7,6 +7,7 @@
         "createdAt": "2019-03-27T21:53:00.297Z",
         "documentType": "Petition",
         "filedBy": "Test Practitioner",
+        "processingStatus": "complete",
         "workItems": [
           {
             "docketNumberSuffix": null,
@@ -45,6 +46,7 @@
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-27T21:53:00.298Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Practitioner",
@@ -82,18 +84,20 @@
     "hasIrsNotice": true,
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "practitioner": {
-      "role": "practitioner",
-      "address": "123 Main Street Los Angeles, CA 98089",
-      "phone": "111-111-1111",
-      "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "name": "Test Practitioner",
-      "section": "practitioner",
-      "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "email": "practitioner",
-      "barnumber": "12345-67"
-    },
+    "practitioners": [
+      {
+        "role": "practitioner",
+        "address": "123 Main Street Los Angeles, CA 98089",
+        "phone": "111-111-1111",
+        "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "name": "Test Practitioner",
+        "section": "practitioner",
+        "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "email": "practitioner",
+        "barnumber": "12345-67"
+      }
+    ],
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "currentVersion": "1",
     "orderForAmendedPetition": false,
@@ -104,11 +108,13 @@
         "description": "Petition",
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "filingDate": "2019-03-27T21:53:00.297Z",
-        "filedBy": "Test Practitioner"
+        "filedBy": "Test Practitioner",
+        "index": 1
       },
       {
         "description": "Request for Place of Trial at Jackson, Mississippi",
-        "filingDate": "2019-03-27T21:53:00.297Z"
+        "filingDate": "2019-03-27T21:53:00.297Z",
+        "index": 2
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,

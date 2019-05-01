@@ -9,7 +9,7 @@ export const IndividualWorkQueueInbox = connect(
     setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
-  ({ documentHelper, setFocusedWorkItem, workQueue }) => {
+  ({ setFocusedWorkItem, workQueue, documentHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -19,11 +19,10 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th colSpan="2" aria-hidden="true">
-                &nbsp;
-              </th>
+              <th aria-hidden="true">&nbsp;</th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
+              <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
               <th>Status</th>
               <th>From</th>
@@ -49,17 +48,26 @@ export const IndividualWorkQueueInbox = connect(
                     aria-controls={`detail-${item.workItemId}`}
                   />
                 </td>
+                <td>{item.docketNumberWithSuffix}</td>
+                <td>{item.currentMessage.createdAtFormatted}</td>
                 <td className="has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
                       className={item.statusIcon}
                       aria-hidden="true"
+                      size="lg"
+                    />
+                  )}
+                  {!item.readAt && !item.showBatchedStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['fas', 'envelope']}
+                      className={`${item.statusIcon} iconStatusUnread`}
+                      aria-hidden="true"
+                      size="lg"
                     />
                   )}
                 </td>
-                <td>{item.docketNumberWithSuffix}</td>
-                <td>{item.currentMessage.createdAtFormatted}</td>
                 <td>
                   <a
                     onClick={e => {
@@ -68,8 +76,11 @@ export const IndividualWorkQueueInbox = connect(
                     href={documentHelper({
                       docketNumber: item.docketNumber,
                       documentId: item.document.documentId,
+                      messageId: item.currentMessage.messageId,
                     })}
-                    className="case-link"
+                    className={
+                      item.readAt ? 'case-link' : 'link case-link-bold'
+                    }
                   >
                     {item.document.documentType}
                   </a>

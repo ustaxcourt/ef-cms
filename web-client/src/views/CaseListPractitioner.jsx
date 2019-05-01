@@ -2,6 +2,8 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
+import { CaseSearchBox } from './CaseSearchBox.jsx';
+
 export const CaseListPractitioner = connect(
   {
     caseList: state.formattedCases,
@@ -13,25 +15,26 @@ export const CaseListPractitioner = connect(
         <thead>
           <tr>
             <th>Docket Number</th>
+            <th>Petitioner Name</th>
             <th>Date Filed</th>
-            <th>Case Name</th>
           </tr>
         </thead>
         <tbody>
           {caseList.map(item => (
             <tr key={item.docketNumber}>
-              <td className="responsive-title">
-                <span className="responsive-label">Docket Number</span>
+              <td className="hide-on-mobile">
                 <a href={'/case-detail/' + item.docketNumber}>
                   {item.docketNumberWithSuffix}
                 </a>
               </td>
-              <td>
-                <span className="responsive-label">Date Filed</span>
-                {item.createdAtFormatted}
-              </td>
-              <td>
-                <span className="responsive-label">Case Name</span>
+              <td className="hide-on-mobile">{item.caseName}</td>
+              <td>{item.createdAtFormatted}</td>
+              <td className="show-on-mobile">
+                <div>
+                  <a href={'/case-detail/' + item.docketNumber}>
+                    {item.docketNumberWithSuffix}
+                  </a>
+                </div>
                 {item.caseName}
               </td>
             </tr>
@@ -44,7 +47,10 @@ export const CaseListPractitioner = connect(
 
     const renderStartButton = () => (
       <a
-        className={'usa-button ' + (helper.showCaseList ? 'new-case' : '')}
+        className={
+          'usa-button tablet-full-width ' +
+          (helper.showCaseList ? 'new-case' : '')
+        }
         href="/start-a-case"
         id="init-file-petition"
       >
@@ -63,10 +69,13 @@ export const CaseListPractitioner = connect(
     const renderNonEmptyState = () => (
       <React.Fragment>
         <div className="usa-grid-full case-list-header">
-          <div className="usa-width-one-half">
+          <div className="usa-width-one-half hide-on-mobile">
             <h2>Your Cases</h2>
           </div>
           <div className="usa-width-one-half">{renderStartButton()}</div>
+        </div>
+        <div className="show-on-mobile">
+          <h2>Your Cases</h2>
         </div>
         {renderTable()}
       </React.Fragment>
@@ -75,6 +84,9 @@ export const CaseListPractitioner = connect(
     return (
       <>
         <div className="usa-grid-full subsection">
+          <div className="usa-width-one-third push-right">
+            {helper.showCaseSearch && <CaseSearchBox />}
+          </div>
           <div className="usa-width-two-thirds">
             {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
           </div>

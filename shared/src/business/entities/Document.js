@@ -27,6 +27,7 @@ function Document(rawDocument) {
   Object.assign(this, rawDocument, {
     createdAt: rawDocument.createdAt || new Date().toISOString(),
   });
+  this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem),
   );
@@ -57,7 +58,14 @@ joiValidationDecorator(
       .string()
       .valid(getDocumentTypes())
       .required(),
-    filedBy: joi.string().optional(),
+    eventCode: joi.string().optional(),
+    filedBy: joi
+      .string()
+      .allow('')
+      .optional(),
+    isPaper: joi.boolean().optional(),
+    lodged: joi.boolean().optional(),
+    processingStatus: joi.string().optional(),
     reviewDate: joi
       .date()
       .iso()
@@ -68,10 +76,7 @@ joiValidationDecorator(
       .iso()
       .optional(),
     status: joi.string().optional(),
-    userId: joi
-      .string()
-      // .uuid(uuidVersions)
-      .required(),
+    userId: joi.string().required(),
     validated: joi.boolean().optional(),
   }),
   function() {
@@ -85,6 +90,43 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+/**
+ * generates the filedBy string from parties selected for the document
+ * and contact info from the case detail
+ *
+ * @param caseDetail
+ */
+Document.prototype.generateFiledBy = function(caseDetail) {
+  if (!this.filedBy) {
+    let filedByArray = [];
+    if (this.partyRespondent) {
+      filedByArray.push('Resp.');
+    }
+    if (this.partyPractitioner && this.practitioner) {
+      filedByArray.push(`Counsel ${this.practitioner.name}`);
+    }
+    if (
+      this.partyPrimary &&
+      !this.partySecondary &&
+      caseDetail.contactPrimary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+    } else if (
+      this.partyPrimary &&
+      this.partySecondary &&
+      caseDetail.contactPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(
+        `Petrs. ${caseDetail.contactPrimary.name} & ${
+          caseDetail.contactSecondary.name
+        }`,
+      );
+    }
+    this.filedBy = filedByArray.join(' & ');
+  }
 };
 
 exports.Document = Document;

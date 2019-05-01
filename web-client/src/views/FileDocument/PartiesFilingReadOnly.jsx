@@ -7,9 +7,10 @@ export const PartiesFilingReadOnly = connect(
   {
     caseDetail: state.formattedCaseDetail,
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ chooseWizardStepSequence, caseDetail, form }) => {
+  ({ caseDetail, chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
         <h3 className="header-with-link-button">
@@ -27,9 +28,14 @@ export const PartiesFilingReadOnly = connect(
           <div className="ustc-form-group">
             <label htmlFor="filing-parties">Filing Parties</label>
             <ul className="ustc-unstyled-list without-margins">
-              {form.partyPrimary && <li>Myself</li>}
+              {form.partyPractitioner && (
+                <li>Myself as Petitioner’s Counsel</li>
+              )}
+              {form.partyPrimary && (
+                <li>{fileDocumentHelper.partyPrimaryLabel}</li>
+              )}
               {form.partySecondary && (
-                <li>${caseDetail.contactSecondary.name}</li>
+                <li>{caseDetail.contactSecondary.name}</li>
               )}
               {form.partyRespondent && <li>Respondent</li>}
             </ul>

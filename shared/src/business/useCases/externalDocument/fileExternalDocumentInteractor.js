@@ -9,7 +9,7 @@ const {
   isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
+const { capitalize, pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -54,19 +54,44 @@ exports.fileExternalDocument = async ({
     ...primaryDocumentMetadata
   } = documentMetadata;
 
+  const baseMetadata = pick(primaryDocumentMetadata, [
+    'partyPrimary',
+    'partySecondary',
+    'partyRespondent',
+    'practitioner',
+  ]);
+
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+  }
+  if (secondarySupportingDocumentMetadata) {
+    secondarySupportingDocumentMetadata.lodged = true;
+  }
+
   [
-    [primaryDocumentFileId, primaryDocumentMetadata],
-    [supportingDocumentFileId, supportingDocumentMetadata],
-    [secondaryDocumentFileId, secondaryDocument],
-    [secondarySupportingDocumentFileId, secondarySupportingDocumentMetadata],
-  ].forEach(([documentId, metadata]) => {
+    [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
+    [
+      supportingDocumentFileId,
+      supportingDocumentMetadata,
+      'primarySupportingDocument',
+    ],
+    [secondaryDocumentFileId, secondaryDocument, 'secondaryDocument'],
+    [
+      secondarySupportingDocumentFileId,
+      secondarySupportingDocumentMetadata,
+      'secondarySupportingDocument',
+    ],
+  ].forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
       const documentEntity = new Document({
+        ...baseMetadata,
         ...metadata,
-        documentId: documentId,
+        relationship,
+        documentId,
         documentType: metadata.documentType,
         userId: user.userId,
       });
+      documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem({
         assigneeId: null,

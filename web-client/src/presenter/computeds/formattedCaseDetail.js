@@ -15,6 +15,7 @@ export const formatDocument = document => {
 export const formatDocketRecord = docketRecord => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = moment.utc(result.filingDate).format('L');
+
   return result;
 };
 
@@ -82,23 +83,62 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
   }
 };
 
-const formatDocketRecordWithDocument = (docketRecords = [], documents = []) => {
+const formatDocketRecordWithDocument = (
+  caseDetail,
+  docketRecords = [],
+  documents = [],
+) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
     return acc;
   }, {});
 
-  return docketRecords.map((record, index) => {
+  return docketRecords.map(record => {
     let document;
+
+    const index = record.index;
 
     if (record.documentId) {
       document = documentMap[record.documentId];
+
+      if (document.certificateOfServiceDate) {
+        document.certificateOfServiceDateFormatted = moment
+          .utc(document.certificateOfServiceDate)
+          .format('L');
+      }
+
+      //filings and proceedings string
+      //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+      const filingsAndProceedingsArray = [
+        `${
+          document.certificateOfService
+            ? `(C/S ${document.certificateOfServiceDateFormatted})`
+            : ''
+        }`,
+        `${document.exhibits ? '(Exhibit(s))' : ''}`,
+        `${document.attachments ? '(Attachment(s))' : ''}`,
+        `${
+          document.objections === 'Yes'
+            ? '(Objection)'
+            : document.objections === 'No'
+            ? '(No Objection)'
+            : ''
+        }`,
+        `${document.lodged ? '(Lodged)' : ''}`,
+      ];
+      record.filingsAndProceedings = filingsAndProceedingsArray
+        .filter(item => item !== '')
+        .join(' ');
     }
+
     return { document, index, record };
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
+const formatCase = (caseDetail, caseDetailErrors) => {
+  if (_.isEmpty(caseDetail)) {
+    return {};
+  }
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -106,29 +146,14 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   if (result.docketRecord) {
     result.docketRecord = result.docketRecord.map(formatDocketRecord);
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
+      caseDetail,
       result.docketRecord,
       result.documents,
     );
   }
 
-  // sort to make petition first, place of trial second, and everything else in cronological order
-  const getScore = entry => {
-    const documentType = (entry.document || {}).documentType;
-    const description = entry.record.description || '';
-    if (documentType === documentTypesMap.petitionFile) return 1;
-    else if (description.indexOf('Request for Place of Trial') !== -1) return 2;
-    else if (documentType === documentTypesMap.ownershipDisclosure) return 3;
-    else return 4;
-  };
-
   result.docketRecordWithDocument.sort((a, b) => {
-    const aScore = getScore(a);
-    const bScore = getScore(b);
-    if (aScore === bScore) {
-      return new Date(a.record.filingDate) - new Date(b.record.filingDate);
-    } else {
-      return aScore - bScore;
-    }
+    return a.index - b.index;
   });
 
   if (result.respondent)
@@ -173,12 +198,6 @@ const formatCase = (caseDetail, caseDetailErrors, documentTypesMap) => {
   result.shouldShowYearAmounts =
     result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
 
-  // const postfixs = [', Petitioner', ', Petitioners', ', Petitioner(s)'];
-  result.caseName = (result.caseCaption || '').replace(
-    /\s*,\s*Petitioner(s|\(s\))?\s*$/,
-    '',
-  );
-
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
@@ -196,6 +215,5 @@ export const formattedCases = get => {
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
   const caseDetailErrors = get(state.caseDetailErrors);
-  const { DOCUMENT_TYPES_MAP } = get(state.constants);
-  return formatCase(caseDetail, caseDetailErrors, DOCUMENT_TYPES_MAP);
+  return formatCase(caseDetail, caseDetailErrors);
 };

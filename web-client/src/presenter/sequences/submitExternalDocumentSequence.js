@@ -4,9 +4,11 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 
 export const submitExternalDocumentSequence = [
+  setCurrentPageAction('Interstitial'),
   fileExternalDocumentAction,
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
