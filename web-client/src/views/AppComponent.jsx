@@ -13,6 +13,7 @@ import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
@@ -41,6 +42,7 @@ const pages = {
   DocumentDetail,
   Error,
   FileDocumentWizard,
+  IdleLogout,
   Interstitial,
   Loading,
   LogIn,

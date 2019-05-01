@@ -10,7 +10,7 @@ exports.validateCaseAssociationRequest = ({
 }) => {
   const errors = applicationContext
     .getEntityConstructors()
-    .CaseAssociationRequest(caseAssociationRequest)
+    .CaseAssociationRequestFactory(caseAssociationRequest)
     .getFormattedValidationErrors();
   if (!errors) return null;
 
