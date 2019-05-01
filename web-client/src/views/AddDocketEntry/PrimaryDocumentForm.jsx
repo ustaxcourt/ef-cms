@@ -105,7 +105,7 @@ export const PrimaryDocumentForm = connect(
                   aria-label="month, two digits"
                   aria-describedby="date-received-legend"
                   name="dateReceivedMonth"
-                  value={form.dateReceivedMonth}
+                  value={form.dateReceivedMonth || ''}
                   type="number"
                   min="1"
                   max="12"
@@ -126,7 +126,7 @@ export const PrimaryDocumentForm = connect(
                   className="usa-input-inline"
                   id="date-received-day"
                   name="dateReceivedDay"
-                  value={form.dateReceivedDay}
+                  value={form.dateReceivedDay || ''}
                   aria-label="day, two digits"
                   aria-describedby="date-received-legend"
                   type="number"
@@ -151,7 +151,7 @@ export const PrimaryDocumentForm = connect(
                   aria-label="year, four digits"
                   aria-describedby="date-received-legend"
                   name="dateReceivedYear"
-                  value={form.dateReceivedYear}
+                  value={form.dateReceivedYear || ''}
                   type="number"
                   min="1900"
                   max="2100"
@@ -277,11 +277,7 @@ export const PrimaryDocumentForm = connect(
           />
         </div>
 
-        <div
-          className={`ustc-form-group ${
-            validationErrors.inclusions ? 'usa-input-error' : ''
-          }`}
-        >
+        <div className="ustc-form-group">
           <fieldset className="usa-fieldset-inputs usa-sans">
             <legend>Inclusions</legend>
             <ul className="ustc-vertical-option-list">
@@ -411,16 +407,12 @@ export const PrimaryDocumentForm = connect(
                 )}
               </li>
             </ul>
-            <Text
-              className="usa-input-error-message"
-              bind="validationErrors.inclusions"
-            />
           </fieldset>
         </div>
 
         <div
           className={`ustc-form-group ${
-            validationErrors.partyValidationError ? 'usa-input-error' : ''
+            addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
           }`}
         >
           <fieldset className="usa-fieldset-inputs usa-sans">
@@ -431,7 +423,7 @@ export const PrimaryDocumentForm = connect(
                   id="party-primary"
                   type="checkbox"
                   name="partyPrimary"
-                  checked={form.partyPrimary}
+                  checked={form.partyPrimary || false}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -450,7 +442,7 @@ export const PrimaryDocumentForm = connect(
                     id="party-secondary"
                     type="checkbox"
                     name="partySecondary"
-                    checked={form.partySecondary}
+                    checked={form.partySecondary || false}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -470,7 +462,7 @@ export const PrimaryDocumentForm = connect(
                     id="party-respondent"
                     type="checkbox"
                     name="partyRespondent"
-                    checked={form.partyRespondent}
+                    checked={form.partyRespondent || false}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -485,7 +477,7 @@ export const PrimaryDocumentForm = connect(
             </ul>
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.partyValidationError"
+              bind="addDocketEntryHelper.partyValidationError"
             />
           </fieldset>
         </div>

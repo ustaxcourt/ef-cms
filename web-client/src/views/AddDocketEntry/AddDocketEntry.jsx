@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const AddDocketEntry = connect(
-  {},
-  () => {
+  { submitDocketEntrySequence: sequences.submitDocketEntrySequence },
+  ({ submitDocketEntrySequence }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -37,7 +38,9 @@ export const AddDocketEntry = connect(
               id="save-and-finish"
               type="submit"
               className="usa-button"
-              onClick={() => {}}
+              onClick={() => {
+                submitDocketEntrySequence();
+              }}
             >
               Save and Finish
             </button>
