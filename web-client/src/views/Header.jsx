@@ -7,22 +7,45 @@ import close from '../../node_modules/uswds/dist/img/close.svg';
 
 export const Header = connect(
   {
+    betaBar: state.betaBar,
     helper: state.headerHelper,
     mobileMenu: state.mobileMenu,
     signOutSequence: sequences.signOutSequence,
+    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
-  ({ helper, mobileMenu, signOutSequence, toggleMobileMenuSequence, user }) => {
+  ({
+    betaBar,
+    helper,
+    mobileMenu,
+    signOutSequence,
+    toggleBetaBarSequence,
+    toggleMobileMenuSequence,
+    user,
+  }) => {
     return (
       <>
-        <div className="beta">
-          <div className="usa-grid">
-            This is a testing site for the U.S. Tax Court and not intended for
-            public use. To learn more about starting a case, visit the{' '}
-            <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
+        {betaBar.isVisible && (
+          <div className="beta">
+            <div className="usa-grid">
+              <div className="usa-width-five-sixths">
+                This is a testing site for the U.S. Tax Court and not intended
+                public use. To learn more about starting a case, visit the{' '}
+                <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>
+                .
+              </div>
+              <div className="usa-width-one-sixth">
+                <button
+                  className="usa-button usa-button-outline usa-button-unstyled"
+                  onClick={() => toggleBetaBarSequence()}
+                >
+                  <img src={close} />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
         <header className="usa-header usa-header-extended" role="banner">
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
