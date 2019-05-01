@@ -71,3 +71,14 @@
     min-width: 150px;
   }
 }
+
+.app-timeout-modal {
+  > .modal-header,
+  .usa-button-secondary {
+    display: none;
+  }
+  padding: 60px 0;
+  background-color: $color-gold;
+  font-size: 30px;
+  text-align: center;
+}

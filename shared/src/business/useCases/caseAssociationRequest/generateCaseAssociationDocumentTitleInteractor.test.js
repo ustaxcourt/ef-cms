@@ -1,6 +1,6 @@
 const {
-  CaseAssociationRequest,
-} = require('../../entities/CaseAssociationRequest');
+  CaseAssociationRequestFactory,
+} = require('../../entities/CaseAssociationRequestFactory');
 const {
   generateCaseAssociationDocumentTitle,
 } = require('./generateCaseAssociationDocumentTitleInteractor');
@@ -12,7 +12,7 @@ describe('generateCaseAssociationDocumentTitle', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getEntityConstructors: () => ({
-        CaseAssociationRequest,
+        CaseAssociationRequestFactory,
       }),
     };
     const title = await generateCaseAssociationDocumentTitle({
