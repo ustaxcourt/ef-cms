@@ -246,11 +246,7 @@ export const PrimaryDocumentForm = connect(
           <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
         </div>
 
-        <div
-          className={`ustc-form-group ${
-            validationErrors.additionalInfo2 ? 'usa-input-error' : ''
-          }`}
-        >
+        <div className="ustc-form-group">
           <label htmlFor="additional-info2" id="additional-info-label">
             Additional Info 2
           </label>
@@ -270,10 +266,6 @@ export const PrimaryDocumentForm = connect(
             onBlur={() => {
               validateDocketEntrySequence();
             }}
-          />
-          <Text
-            className="usa-input-error-message"
-            bind="validationErrors.additionalInfo2"
           />
         </div>
 
