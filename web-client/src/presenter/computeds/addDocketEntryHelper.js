@@ -1,8 +1,22 @@
+import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
+const getInternalDocumentTypes = typeMap => {
+  let filteredTypeList = [];
+  Object.keys(typeMap).forEach(category => {
+    filteredTypeList.push(...typeMap[category]);
+  });
+  filteredTypeList = filteredTypeList.map(e => {
+    return { label: e.documentType, value: e.eventCode };
+  });
+  return orderBy(filteredTypeList, ['label'], ['asc']);
+};
+
 export const addDocketEntryHelper = get => {
-  const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
+  const { PARTY_TYPES, CATEGORY_MAP, INTERNAL_CATEGORY_MAP } = get(
+    state.constants,
+  );
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -12,6 +26,8 @@ export const addDocketEntryHelper = get => {
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+
+  const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
@@ -47,6 +63,7 @@ export const addDocketEntryHelper = get => {
 
   return {
     certificateOfServiceDateFormatted,
+    internalDocumentTypes,
     partyValidationError,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
