@@ -68,7 +68,8 @@ describe('fileDocumentHelper', () => {
     };
 
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showObjection).toBeTruthy();
+    expect(result.showPrimaryDocumentValid).toBeTruthy();
+    expect(result.showSecondaryDocumentValid).toBeTruthy();
   });
 
   it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', async () => {

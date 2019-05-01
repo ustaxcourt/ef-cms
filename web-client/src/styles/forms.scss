@@ -277,6 +277,9 @@ label.validated::after {
   &.ustc-secondary-question {
     margin-top: 20px;
   }
+  &.add-bottom-margin {
+    margin-bottom: 20px;
+  }
 }
 
 label.ustc-upload-petition,
