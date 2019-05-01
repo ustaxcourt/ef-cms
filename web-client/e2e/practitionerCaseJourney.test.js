@@ -12,8 +12,10 @@ import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 
+import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
 import practitionerLogin from './journey/practitionerLogIn';
+import practitionerNavigatesToCreateCase from './journey/practitionerNavigatesToCreateCase';
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
 import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
 import practitionerSignsOut from './journey/practitionerSignsOut';
@@ -82,6 +84,14 @@ describe('Practitioner requests access to case', () => {
     });
   });
 
+  //tests for practitioner starting a new case
+  practitionerLogin(test);
+  practitionerNavigatesToCreateCase(test);
+  practitionerCreatesNewCase(test, fakeFile);
+  practitionerViewsCaseDetailOfOwnedCase(test);
+  practitionerSignsOut(test);
+
+  //tests for practitioner requesting access to existing case
   //taxpayer must first create a case for practitioner to request access to
   taxpayerLogin(test);
   taxpayerCancelsCreateCase(test);
