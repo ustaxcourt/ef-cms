@@ -21,11 +21,11 @@ ExternalDocumentStandard.errorToMessageMap = {
   documentType: 'You must select a document type.',
 };
 
-ExternalDocumentStandard.schema = joi.object().keys({
+ExternalDocumentStandard.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentStandard,
