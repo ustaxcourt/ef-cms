@@ -189,6 +189,7 @@ export const PrimaryDocumentForm = connect(
             options={addDocketEntryHelper.internalDocumentTypes}
             name="documentType"
             id="document-type"
+            isClearable={true}
             aria-describedby="document-type-label"
             placeholder="- Select -"
             onChange={(inputValue, { action, name }) => {
@@ -196,36 +197,14 @@ export const PrimaryDocumentForm = connect(
                 case 'select-option':
                   updateFormValueSequence({
                     key: name,
-                    label: inputValue.label,
-                    value: inputValue.value,
+                    value: inputValue.label,
                   });
                   validateDocketEntrySequence();
                   break;
               }
               return true;
             }}
-            x-inputValue={form.documentType}
           />
-          {/*
-          <select
-            name="documentType"
-            id="document-type"
-            aria-describedby="document-type-label"
-            onChange={e => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              validateDocketEntrySequence();
-            }}
-            value={form.documentType || ''}
-          >
-            <option value="">- Select -</option>
-            <option value="Agreed Computation for Entry of Decision">
-              Agreed Computation for Entry of Decision
-            </option>
-          </select>
-          */}
           <Text
             className="usa-input-error-message"
             bind="validationErrors.documentType"
