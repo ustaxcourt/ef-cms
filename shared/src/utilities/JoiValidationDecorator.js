@@ -107,6 +107,10 @@ exports.joiValidationDecorator = function(
     return errorToMessageMap;
   };
 
+  entityConstructor.prototype.getSchema = function() {
+    return schema;
+  };
+
   entityConstructor.prototype.isValid = function isValid() {
     return (
       joi.validate(this, schema, { allowUnknown: true }).error === null &&
