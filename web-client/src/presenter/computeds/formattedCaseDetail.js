@@ -129,35 +129,6 @@ const formatDocketRecordWithDocument = (
       record.filingsAndProceedings = filingsAndProceedingsArray
         .filter(item => item !== '')
         .join(' ');
-
-      if (!document.filedBy) {
-        let filedByArray = [];
-        if (document.partyRespondent) {
-          filedByArray.push('Resp.');
-        }
-        if (document.partyPractitioner) {
-          filedByArray.push(`Counsel ${caseDetail.practitioner.name}`);
-        }
-        if (
-          document.partyPrimary &&
-          !document.partySecondary &&
-          caseDetail.contactPrimary
-        ) {
-          filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
-        } else if (
-          document.partyPrimary &&
-          document.partySecondary &&
-          caseDetail.contactPrimary &&
-          caseDetail.contactSecondary
-        ) {
-          filedByArray.push(
-            `Petrs. ${caseDetail.contactPrimary.name} & ${
-              caseDetail.contactSecondary.name
-            }`,
-          );
-        }
-        document.filedBy = filedByArray.join(' & ');
-      }
     }
 
     return { document, index, record };

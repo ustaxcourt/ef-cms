@@ -58,6 +58,7 @@ exports.fileExternalDocument = async ({
     'partyPrimary',
     'partySecondary',
     'partyRespondent',
+    'practitioner',
   ]);
 
   if (secondaryDocument) {
@@ -90,6 +91,7 @@ exports.fileExternalDocument = async ({
         documentType: metadata.documentType,
         userId: user.userId,
       });
+      documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem({
         assigneeId: null,

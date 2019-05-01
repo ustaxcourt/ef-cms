@@ -1,3 +1,4 @@
+import { some } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
@@ -6,15 +7,33 @@ export const caseDetailHelper = get => {
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const userRole = get(state.user.role);
-  const screenMetadata = get(state.screenMetadata);
+  const userId = get(state.user.userId);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
-  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
-    showFileDocumentButton = false;
-  }
   let showRequestAccessToCaseButton = false;
-  if (userRole === 'practitioner' && !screenMetadata.caseOwnedByUser) {
+  if (userRole === 'practitioner') {
+    showFileDocumentButton = false;
     showRequestAccessToCaseButton = true;
+    if (
+      caseDetail &&
+      caseDetail.practitioners &&
+      some(caseDetail.practitioners, { userId: userId })
+    ) {
+      showFileDocumentButton = true;
+      showRequestAccessToCaseButton = false;
+    }
+  }
+
+  let userHasAccessToCase = true;
+  if (userRole === 'practitioner') {
+    userHasAccessToCase = false;
+    if (
+      caseDetail &&
+      caseDetail.practitioners &&
+      some(caseDetail.practitioners, { userId: userId })
+    ) {
+      userHasAccessToCase = true;
+    }
   }
 
   return {
@@ -38,5 +57,6 @@ export const caseDetailHelper = get => {
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showRequestAccessToCaseButton,
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
+    userHasAccessToCase,
   };
 };
