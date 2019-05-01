@@ -25,6 +25,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -85,6 +86,7 @@ import { uploadExternalDocument } from '../../shared/src/business/useCases/exter
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateDocketEntry } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
@@ -161,6 +163,7 @@ const allUseCases = {
   uploadExternalDocuments,
   validateCaseAssociationRequest,
   validateCaseDetail,
+  validateDocketEntry,
   validateExternalDocument,
   validateExternalDocumentInformation,
   validateForwardMessage,
@@ -222,6 +225,7 @@ const applicationContext = {
   getCurrentUserToken,
   getEntityConstructors: () => ({
     CaseAssociationRequestFactory,
+    DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
