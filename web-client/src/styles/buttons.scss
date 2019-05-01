@@ -58,15 +58,25 @@ button.text-style {
   &:hover,
   &:active {
     background: inherit;
+    background-color: transparent;
     color: inherit;
   }
+  &.heading-1 {
+    svg {
+      margin-right: 12px;
+    }
+    color: $color-black;
+    font-weight: $font-bold;
+    text-align: left;
+  }
+
 }
 
 .recall-button-box {
   padding: 2px;
+  border: 1px solid $color-gold;
   margin-right: 2px;
   margin-bottom: 4px;
-  border: 1px solid $color-gold;
   float: right;
   font-family: $font-serif;
   svg {

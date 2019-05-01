@@ -9,6 +9,10 @@ const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
+
+const {
+  addCoverToPDFDocument,
+} = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -30,6 +34,9 @@ const {
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
+const {
+  createMappingRecord,
+} = require('../../shared/src/persistence/dynamo/helpers/createMappingRecord');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -93,6 +100,12 @@ const {
 const {
   getInternalUsers: getInternalUsersUC,
 } = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
+const {
+  getNotifications,
+} = require('../../shared/src/business/useCases/getNotificationsInteractor');
+const {
+  getReadMessagesForUser,
+} = require('../../shared/src/persistence/dynamo/messages/getReadMessagesForUser');
 const {
   getSentWorkItemsForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -161,6 +174,9 @@ const {
   runBatchProcess,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
+  saveDocument,
+} = require('../../shared/src/persistence/s3/saveDocument');
+const {
   saveWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
@@ -173,17 +189,33 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setMessageAsRead,
+} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+const {
+  setMessageAsRead: setMessageAsReadUC,
+} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
+  submitCaseAssociationRequest,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
   updateCase: updateCaseUC,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateDocumentProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  verifyCaseForUser,
+} = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -233,6 +265,7 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         createCase,
         createDocument,
+        createMappingRecord,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -245,6 +278,7 @@ module.exports = (appContextUser = {}) => {
         getCasesForRespondent,
         getDownloadPolicyUrl,
         getInternalUsers,
+        getReadMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
@@ -255,10 +289,13 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
+        saveDocument,
         saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        setMessageAsRead,
         updateCase,
+        updateDocumentProcessingStatus,
         updateWorkItem,
         zipDocuments,
       };
@@ -277,6 +314,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
+        addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
         completeWorkItem,
         createCase: createCaseUC,
@@ -290,6 +328,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
+        getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getUser,
@@ -300,7 +339,10 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
+        setMessageAsRead: setMessageAsReadUC,
+        submitCaseAssociationRequest,
         updateCase: updateCaseUC,
+        verifyCaseForUser,
       };
     },
     irsGateway,
@@ -314,6 +356,14 @@ module.exports = (appContextUser = {}) => {
       info: (key, value) => {
         // eslint-disable-next-line no-console
         console.info(key, JSON.stringify(value));
+      },
+      time: key => {
+        // eslint-disable-next-line no-console
+        console.time(key);
+      },
+      timeEnd: key => {
+        // eslint-disable-next-line no-console
+        console.timeEnd(key);
       },
     },
   };

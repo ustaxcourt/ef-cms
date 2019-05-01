@@ -223,6 +223,14 @@ functions:
           method: get
           cors: true
 
+  setMessageAsRead:
+    handler: src/handlers.setMessageAsReadLambda
+    events:
+      - http:
+          path: v1/messages/{messageId}/read
+          method: post
+          cors: true
+
   getDownloadPolicyUrl:
     handler: src/handlers.downloadPolicyUrlLambda
     events:
@@ -230,6 +238,21 @@ functions:
           path: v1/documents/{documentId}/downloadPolicyUrl
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  addCoversheet:
+    handler: src/handlers.addCoversheetLambda
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/coversheet
+          method: post
+          cors: true
+          async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -301,6 +324,30 @@ functions:
       - http:
           path: v1/users/{userId}/cases
           method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  verifyCaseForUser:
+    handler: src/handlers.verifyCaseForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  practitionerCaseAssociation:
+    handler: src/handlers.practitionerCaseAssociationLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -496,6 +543,18 @@ functions:
     events:
       - http:
           path: v1/sections/{section}/users
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getNotifications:
+    handler: src/handlers.getNotificationsLambda
+    events:
+      - http:
+          path: v1/notifications
           method: get
           cors: true
           authorizer:

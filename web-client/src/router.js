@@ -42,19 +42,47 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/messages/*',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoDocumentDetailMessageSequence')({
+          docketNumber,
+          documentId,
+          messageId,
+        });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+
+    route(
+      '/case-detail/*/request-access',
+      checkLoggedIn(docketNumber => {
+        document.title = `Request access ${pageTitleSuffix}`;
+        app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+      }),
+    );
+
+    route('/idle-logout', () => {
+      app.getSequence('gotoIdleLogoutSequence')();
+    });
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const query = queryString.parse(location.search);
       const hash = queryString.parse(location.hash); // cognito uses a # instead of ?
+      const code = query.code;
       const token = hash.id_token || query.token;
       const path = query.path || '/';
-      app.getSequence('loginWithTokenSequence')({ path, token });
+      if (code) {
+        app.getSequence('loginWithCodeSequence')({ code, path });
+      } else {
+        app.getSequence('loginWithTokenSequence')({ path, token });
+      }
     });
     route(
       '/before-starting-a-case',

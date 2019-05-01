@@ -61,6 +61,11 @@ export default (test, fakeFile) => {
       value: false,
     });
 
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'partyRespondent',
+      value: true,
+    });
+
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     await test.runSequence('submitExternalDocumentSequence');

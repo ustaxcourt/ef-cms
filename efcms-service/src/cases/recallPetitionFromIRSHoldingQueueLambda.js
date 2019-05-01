@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = applicationContext
+      const results = await applicationContext
         .getUseCases()
         .recallPetitionFromIRSHoldingQueue({
           applicationContext,

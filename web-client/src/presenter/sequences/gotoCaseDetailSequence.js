@@ -2,6 +2,7 @@ import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
@@ -11,6 +12,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
+  clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
   set(state.documentDetail.tab, 'docketRecord'),

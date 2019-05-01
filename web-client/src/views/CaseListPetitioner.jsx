@@ -10,18 +10,22 @@ export const CaseListPetitioner = connect(
     return (
       <>
         <div className="usa-grid-full subsection">
-          <div className="usa-width-one-half">
+          <div className="usa-width-one-half hide-on-mobile">
             <h2>Your Cases</h2>
           </div>
           <div className="usa-width-one-half">
             <a
-              className="usa-button new-case"
+              className="usa-button new-case tablet-full-width"
               href="/before-starting-a-case"
               id="init-file-petition"
             >
               Start a New Case
             </a>
           </div>
+        </div>
+
+        <div className="show-on-mobile">
+          <h2>Your Cases</h2>
         </div>
         <table className="responsive-table dashboard" id="case-list">
           <thead>
@@ -34,18 +38,18 @@ export const CaseListPetitioner = connect(
           <tbody>
             {caseList.map(item => (
               <tr key={item.docketNumber}>
-                <td className="responsive-title">
-                  <span className="responsive-label">Docket Number</span>
+                <td className="hide-on-mobile">
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
+                <td>{item.createdAtFormatted}</td>
                 <td>
-                  <span className="responsive-label">Date Filed</span>
-                  {item.createdAtFormatted}
-                </td>
-                <td>
-                  <span className="responsive-label">Case Name</span>
+                  <div className="show-on-mobile">
+                    <a href={'/case-detail/' + item.docketNumber}>
+                      {item.docketNumberWithSuffix}
+                    </a>
+                  </div>
                   {item.caseName}
                 </td>
               </tr>

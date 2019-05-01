@@ -45,7 +45,8 @@ describe('getWorkItemsForUser', () => {
         return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
-        getWorkItemsForUser: async () => null,
+        getReadMessagesForUser: async () => [],
+        getWorkItemsForUser: async () => [],
       }),
     };
     const result = await getWorkItemsForUser({
@@ -62,6 +63,7 @@ describe('getWorkItemsForUser', () => {
         return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
+        getReadMessagesForUser: async () => [],
         getWorkItemsForUser: async () => [mockWorkItem],
       }),
     };

@@ -2,6 +2,9 @@
   margin-right: 0.5em;
   color: $color-blue;
 }
+button .fa-file-pdf {
+  color: $color-white;
+}
 
 .fa-caret-left {
   margin-right: 0.5rem;
@@ -18,6 +21,10 @@
 
 .iconStatusRecalled {
   color: $color-red;
+}
+
+.iconStatusUnread {
+  color: $color-primary;
 }
 
 .fa-icon-gold {
