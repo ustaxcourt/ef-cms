@@ -11,7 +11,7 @@ export const caseDetailHelper = get => {
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
-    ['CaseDetail'].includes(currentPage) && userRole === 'docketclerk';
+    ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showRequestAccessToCaseButton = false;
   if (userRole === 'practitioner') {
     showFileDocumentButton = false;
