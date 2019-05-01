@@ -17,8 +17,8 @@ function DocketEntryFactory(rawProps) {
   };
 
   let schema = {
-    addToCoverSheet: joi.boolean(),
-    additionalInfo1: joi.string(),
+    addToCoversheet: joi.boolean(),
+    additionalInfo: joi.string(),
     additionalInfo2: joi.string(),
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
@@ -41,7 +41,6 @@ function DocketEntryFactory(rawProps) {
       .max('now')
       .required(),
     objections: joi.string(),
-    partyPractitioner: joi.boolean().required(),
     partyPrimary: joi.boolean().required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
@@ -69,7 +68,6 @@ function DocketEntryFactory(rawProps) {
     exhibits: 'Enter selection for Exhibits.',
     filingStatus: 'Enter selection for Filing Status.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    partyPractitioner: 'Select a filing party.',
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',

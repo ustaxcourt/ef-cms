@@ -63,14 +63,14 @@ describe('DocketEntryFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary] to be selected', () => {
+    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
       expect(errors().partyPrimary).toEqual('Select a filing party.');
       rawEntity.partySecondary = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
     it('should not require Additional Info 1', () => {
-      expect(errors().additionalInfo1).toEqual(undefined);
+      expect(errors().additionalInfo).toEqual(undefined);
     });
 
     it('should not require Additional Info 2', () => {
@@ -78,7 +78,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should not require add to cover sheet', () => {
-      expect(errors().addToCoverSheet).toEqual(undefined);
+      expect(errors().addToCoversheet).toEqual(undefined);
     });
 
     describe('Inclusions', () => {
@@ -111,6 +111,10 @@ describe('DocketEntryFactory', () => {
 
       it('should not require Exhibits', () => {
         expect(errors().exhibits).toEqual(undefined);
+      });
+
+      it('should not require Attachments', () => {
+        expect(errors().attachments).toEqual(undefined);
       });
 
       describe('Motion Document', () => {
