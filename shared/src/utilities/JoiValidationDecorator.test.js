@@ -75,7 +75,7 @@ describe('Joi Validation Decorator', () => {
     });
   });
 
-  it('should have access to schema', () => {
+  it('should have access to the schema', () => {
     const obj = new MockEntity2({});
     expect(obj.getSchema()).toEqual(MockEntity2Schema);
   });
