@@ -26,24 +26,24 @@ const MockEntity2 = function(raw) {
   Object.assign(this, raw);
 };
 
-joiValidationDecorator(
-  MockEntity2,
-  joi.object().keys({
-    arry1: joi
-      .array()
-      .items(joi.object().keys({ foo: joi.string().required() }))
-      .required(),
-    favoriteNumber: joi.number().required(),
-    hasNickname: joi.boolean().required(),
-    name: joi.string().required(),
-    obj1: joi
-      .object()
-      .keys({ foo: joi.string().required() })
-      .required(),
-  }),
-  undefined,
-  { arry1: 'That is required', foo: 'lend me some sugar' },
-);
+const MockEntity2Schema = joi.object().keys({
+  arry1: joi
+    .array()
+    .items(joi.object().keys({ foo: joi.string().required() }))
+    .required(),
+  favoriteNumber: joi.number().required(),
+  hasNickname: joi.boolean().required(),
+  name: joi.string().required(),
+  obj1: joi
+    .object()
+    .keys({ foo: joi.string().required() })
+    .required(),
+});
+
+joiValidationDecorator(MockEntity2, MockEntity2Schema, undefined, {
+  arry1: 'That is required',
+  foo: 'lend me some sugar',
+});
 
 describe('Joi Validation Decorator', () => {
   describe('validation errors with arrays', () => {
@@ -73,5 +73,10 @@ describe('Joi Validation Decorator', () => {
       const joiGeneratedMessageNotFromErrorToMessageMap = errors.hasNickname;
       expect(joiGeneratedMessageNotFromErrorToMessageMap).toBeDefined();
     });
+  });
+
+  it('should have access to the schema', () => {
+    const obj = new MockEntity2({});
+    expect(obj.getSchema()).toEqual(MockEntity2Schema);
   });
 });
