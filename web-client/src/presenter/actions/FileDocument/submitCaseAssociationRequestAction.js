@@ -15,6 +15,7 @@ export const submitCaseAssociationRequestAction = async ({
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
   const { primaryDocumentFileId } = props;
+  const user = get(state.user);
 
   let documentMetadata = omit(
     {
@@ -23,7 +24,12 @@ export const submitCaseAssociationRequestAction = async ({
     ['primaryDocumentFile'],
   );
 
-  documentMetadata = { ...documentMetadata, docketNumber, caseId };
+  documentMetadata = {
+    ...documentMetadata,
+    docketNumber,
+    caseId,
+    practitioner: user,
+  };
 
   const caseDetail = await applicationContext
     .getUseCases()

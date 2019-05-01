@@ -15,7 +15,7 @@ exports.generateCaseAssociationDocumentTitle = ({
 }) => {
   const caseAssociation = applicationContext
     .getEntityConstructors()
-    .CaseAssociationRequest(caseAssociationRequest);
+    .CaseAssociationRequestFactory(caseAssociationRequest);
   return caseAssociation.getDocumentTitle(
     contactPrimaryName,
     contactSecondaryName,
