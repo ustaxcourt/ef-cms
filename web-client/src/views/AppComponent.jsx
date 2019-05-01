@@ -1,3 +1,4 @@
+import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
@@ -29,6 +30,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const pages = {
+  AddDocketEntry,
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
