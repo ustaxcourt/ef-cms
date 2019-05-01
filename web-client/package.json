@@ -101,6 +101,7 @@
     "react-dom": "^16.8.6",
     "react-focus-lock": "^1.19.1",
     "react-idle-timer": "^4.2.5",
+    "react-select": "^2.4.3",
     "react-test-renderer": "^16.8.6",
     "riot": "^3.13.2",
     "riot-route": "^3.1.4",

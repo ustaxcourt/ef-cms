@@ -4,6 +4,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import Select from 'react-select';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -183,6 +184,29 @@ export const PrimaryDocumentForm = connect(
           <label htmlFor="document-type" id="document-type-label">
             Document Type
           </label>
+          <Select
+            className="select-react-element"
+            options={addDocketEntryHelper.internalDocumentTypes}
+            name="documentType"
+            id="document-type"
+            aria-describedby="document-type-label"
+            placeholder="- Select -"
+            onChange={(inputValue, { action, name }) => {
+              switch (action) {
+                case 'select-option':
+                  updateFormValueSequence({
+                    key: name,
+                    label: inputValue.label,
+                    value: inputValue.value,
+                  });
+                  validateDocketEntrySequence();
+                  break;
+              }
+              return true;
+            }}
+            x-inputValue={form.documentType}
+          />
+          {/*
           <select
             name="documentType"
             id="document-type"
@@ -201,6 +225,7 @@ export const PrimaryDocumentForm = connect(
               Agreed Computation for Entry of Decision
             </option>
           </select>
+          */}
           <Text
             className="usa-input-error-message"
             bind="validationErrors.documentType"

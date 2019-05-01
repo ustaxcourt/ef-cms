@@ -360,5 +360,19 @@ label.ustc-upload {
       }
     }
   }
+  
+}
 
+.select-react-element {
+  border: 1px solid $color-black;
+  > div, &:first-child {
+    border: 0 solid transparent;
+  }
+}
+
+#react-select-2-input {
+  &:hover, &:focus {
+    border: none;
+    box-shadow: none;
+  }
 }
