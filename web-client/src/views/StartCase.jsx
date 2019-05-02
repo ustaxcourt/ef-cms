@@ -121,10 +121,14 @@ export const StartCase = connect(
                     aria-describedby="petition-hint"
                     name="petitionFile"
                     onChange={e => {
-                      limitFileSize(e, () => {
+                      limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                         updatePetitionValueSequence({
                           key: e.target.name,
                           value: e.target.files[0],
+                        });
+                        updatePetitionValueSequence({
+                          key: `${e.target.name}Size`,
+                          value: e.target.files[0].size,
                         });
                         validateStartCaseSequence();
                       });
@@ -133,6 +137,10 @@ export const StartCase = connect(
                   <Text
                     className="usa-input-error-message"
                     bind="validationErrors.petitionFile"
+                  />
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.petitionFileSize"
                   />
                 </div>
               </div>

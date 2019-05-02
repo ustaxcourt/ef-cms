@@ -6,6 +6,7 @@ describe('PetitionFromPaper entity', () => {
       const petition = new PetitionFromPaper({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
         petitionFile: { anObject: true },
+        petitionFileSize: 1,
         receivedAt: new Date().toISOString(),
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
@@ -15,6 +16,7 @@ describe('PetitionFromPaper entity', () => {
       const petition = new PetitionFromPaper({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
         petitionFile: { anObject: true },
+        petitionFileSize: 1,
         receivedAt: new Date(Date.parse('9999-01-01')).toISOString(),
       });
       expect(petition.getFormattedValidationErrors()).not.toEqual(null);
