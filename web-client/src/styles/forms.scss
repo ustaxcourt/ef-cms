@@ -331,17 +331,16 @@ label.ustc-upload {
     .usa-input-group {
       border-left: 4px solid transparent;
     }
-    button[type="submit"] {
+    button[type='submit'] {
       width: 45px;
       background-image: none;
     }
-    
+
     .usa-input-error #docket-search-field-mobile {
       width: calc(100% - 45px);
       border-width: 1px;
       box-shadow: 0px 0 0px 2px $color-secondary-dark;
     }
-
   }
 
   min-width: 200px;
@@ -360,25 +359,39 @@ label.ustc-upload {
       }
     }
   }
-  
 }
 
 .select-react-element {
-  border: 1px solid $color-black;
-  // TODO: https://react-select.com/styles
-  &:hover {
-    border: 1px solid $color-primary;
-    box-shadow: 0 0 0 1px $color-primary;
+  .select-react-element__control {
+    border: 1px solid $color-gray;
+    border-radius: 0;
+
+    &:hover {
+      border: 1px solid $color-primary;
+      box-shadow: 0 0 0 1px $color-primary;
+    }
+
+    .select-react-element__value-container {
+      &:focus {
+        border: none;
+      }
+
+      .select-react-element__input input {
+        height: 3.4rem;
+        border: none;
+        box-shadow: none;
+      }
+    }
   }
-  > div, &:first-child {
-    border: 0 solid transparent;
-    box-shadow: none;
+
+  .select-react-element__control--menu-is-open {
+    outline: 2px dotted $color-gray-light !important;
+    outline-offset: 3px;
   }
 }
 
-#react-select-2-input {
-  &:hover, &:focus {
-    border: none;
-    box-shadow: none;
+.docket-entry-form {
+  .service-date {
+    margin-left: 30px;
   }
 }

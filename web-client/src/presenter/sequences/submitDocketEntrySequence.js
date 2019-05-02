@@ -1,4 +1,6 @@
+import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
@@ -29,13 +31,24 @@ export const submitDocketEntrySequence = [
     success: [
       set(state.showValidation, false),
       clearAlertsAction,
-      setCurrentPageAction('Interstitial'),
       uploadExternalDocumentsAction,
       submitDocketEntryAction,
-      getDocketEntryAlertSuccessAction,
-      setAlertSuccessAction,
-      set(state.saveAlertsForNavigation, true),
-      navigateToCaseDetailAction,
+      chooseNextStepAction,
+      {
+        caseDetail: [
+          setCurrentPageAction('Interstitial'),
+          getDocketEntryAlertSuccessAction,
+          setAlertSuccessAction,
+          set(state.saveAlertsForNavigation, true),
+          navigateToCaseDetailAction,
+        ],
+        supportingDocument: [
+          getDocketEntryAlertSuccessAction,
+          setAlertSuccessAction,
+          clearFormAction,
+          set(state.wizardStep, 'SupportingDocumentForm'),
+        ],
+      },
     ],
   },
 ];
