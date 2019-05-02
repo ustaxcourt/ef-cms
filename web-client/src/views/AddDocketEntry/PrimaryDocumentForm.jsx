@@ -187,7 +187,7 @@ export const PrimaryDocumentForm = connect(
 
           <div
             className={`ustc-form-group ${
-              validationErrors.documentType ? 'usa-input-error' : ''
+              validationErrors.eventCode ? 'usa-input-error' : ''
             }`}
           >
             <label htmlFor="document-type" id="document-type-label">
@@ -197,7 +197,7 @@ export const PrimaryDocumentForm = connect(
               className="select-react-element"
               classNamePrefix="select-react-element"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-              name="documentType"
+              name="eventCode"
               id="document-type"
               isClearable={true}
               aria-describedby="document-type-label"
@@ -214,16 +214,8 @@ export const PrimaryDocumentForm = connect(
                 switch (action) {
                   case 'select-option':
                     updateDocketEntryFormValueSequence({
-                      key: 'eventCode',
-                      value: inputValue.value,
-                    });
-                    updateDocketEntryFormValueSequence({
                       key: name,
-                      value: inputValue.label,
-                    });
-                    updateDocketEntryFormValueSequence({
-                      key: 'documentTitle',
-                      value: inputValue.label,
+                      value: inputValue.value,
                     });
                     validateDocketEntrySequence();
                     break;
@@ -233,7 +225,7 @@ export const PrimaryDocumentForm = connect(
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.documentType"
+              bind="validationErrors.eventCode"
             />
           </div>
           <div className="ustc-form-group">
