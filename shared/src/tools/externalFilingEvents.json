@@ -255,7 +255,7 @@
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
-      "labelFreeText": "",
+      "labelFreeText": "Date of Service",
       "ordinalField": ""
     },
     {

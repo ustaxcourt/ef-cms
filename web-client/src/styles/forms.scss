@@ -277,6 +277,9 @@ label.validated::after {
   &.ustc-secondary-question {
     margin-top: 20px;
   }
+  &.add-bottom-margin {
+    margin-bottom: 20px;
+  }
 }
 
 label.ustc-upload-petition,
@@ -328,17 +331,16 @@ label.ustc-upload {
     .usa-input-group {
       border-left: 4px solid transparent;
     }
-    button[type="submit"] {
+    button[type='submit'] {
       width: 45px;
       background-image: none;
     }
-    
+
     .usa-input-error #docket-search-field-mobile {
       width: calc(100% - 45px);
       border-width: 1px;
       box-shadow: 0px 0 0px 2px $color-secondary-dark;
     }
-
   }
 
   min-width: 200px;
@@ -357,5 +359,32 @@ label.ustc-upload {
       }
     }
   }
+}
 
+.select-react-element {
+  border: 1px solid $color-black;
+  // TODO: https://react-select.com/styles
+  &:hover {
+    border: 1px solid $color-primary;
+    box-shadow: 0 0 0 1px $color-primary;
+  }
+  > div,
+  &:first-child {
+    border: 0 solid transparent;
+    box-shadow: none;
+  }
+}
+
+#react-select-2-input {
+  &:hover,
+  &:focus {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.docket-entry-form {
+  .service-date {
+    margin-left: 30px;
+  }
 }
