@@ -10,14 +10,15 @@ export const SupportingDocumentForm = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryFormValueSequence:
+      sequences.updateDocketEntryFormValueSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
     addDocketEntryHelper,
     form,
-    updateFormValueSequence,
+    updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -49,7 +50,7 @@ export const SupportingDocumentForm = connect(
               id="supporting-document"
               name="supportingDocumentFile"
               aria-describedby="supporting-document-label"
-              updateFormValueSequence="updateFormValueSequence"
+              updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
@@ -71,11 +72,11 @@ export const SupportingDocumentForm = connect(
               id="document-type"
               aria-describedby="document-type-label"
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: 'documentTitle',
                   value: e.target.value,
                 });
@@ -112,7 +113,7 @@ export const SupportingDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -129,7 +130,7 @@ export const SupportingDocumentForm = connect(
               name="addToCoversheet"
               checked={form.addToCoversheet}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -151,7 +152,7 @@ export const SupportingDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo2 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -173,7 +174,7 @@ export const SupportingDocumentForm = connect(
                     name="exhibits"
                     checked={form.exhibits || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -189,7 +190,7 @@ export const SupportingDocumentForm = connect(
                     name="attachments"
                     checked={form.attachments || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -205,7 +206,7 @@ export const SupportingDocumentForm = connect(
                     name="certificateOfService"
                     checked={form.certificateOfService || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -231,7 +232,7 @@ export const SupportingDocumentForm = connect(
                             max="12"
                             placeholder="MM"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -254,7 +255,7 @@ export const SupportingDocumentForm = connect(
                             max="31"
                             placeholder="DD"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -277,7 +278,7 @@ export const SupportingDocumentForm = connect(
                             max="2100"
                             placeholder="YYYY"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });

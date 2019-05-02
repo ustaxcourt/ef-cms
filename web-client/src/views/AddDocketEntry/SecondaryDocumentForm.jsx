@@ -9,14 +9,15 @@ export const SecondaryDocumentForm = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryFormValueSequence:
+      sequences.updateDocketEntryFormValueSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
     addDocketEntryHelper,
     form,
-    updateFormValueSequence,
+    updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -48,7 +49,7 @@ export const SecondaryDocumentForm = connect(
               id="secondary-document"
               name="secondaryDocumentFile"
               aria-describedby="secondary-document-label"
-              updateFormValueSequence="updateFormValueSequence"
+              updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
@@ -69,7 +70,7 @@ export const SecondaryDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -86,7 +87,7 @@ export const SecondaryDocumentForm = connect(
               name="addToCoversheet"
               checked={form.addToCoversheet}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -108,7 +109,7 @@ export const SecondaryDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo2 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

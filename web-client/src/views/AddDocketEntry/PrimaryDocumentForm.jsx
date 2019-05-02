@@ -11,7 +11,8 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper: state.addDocketEntryHelper,
     caseDetail: state.caseDetail,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryFormValueSequence:
+      sequences.updateDocketEntryFormValueSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -19,7 +20,7 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper,
     caseDetail,
     form,
-    updateFormValueSequence,
+    updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -51,7 +52,7 @@ export const PrimaryDocumentForm = connect(
               id="primary-document"
               name="primaryDocumentFile"
               aria-describedby="primary-document-label"
-              updateFormValueSequence="updateFormValueSequence"
+              updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
@@ -77,7 +78,7 @@ export const PrimaryDocumentForm = connect(
                       value={option}
                       checked={form.lodged === (option === 'Lodge')}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value === 'Lodge',
                         });
@@ -116,7 +117,7 @@ export const PrimaryDocumentForm = connect(
                     max="12"
                     placeholder="MM"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -139,7 +140,7 @@ export const PrimaryDocumentForm = connect(
                     max="31"
                     placeholder="DD"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -162,7 +163,7 @@ export const PrimaryDocumentForm = connect(
                     max="2100"
                     placeholder="YYYY"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -190,6 +191,7 @@ export const PrimaryDocumentForm = connect(
             </label>
             <Select
               className="select-react-element"
+              classNamePrefix="select-react-element"
               options={addDocketEntryHelper.internalDocumentTypes}
               name="documentType"
               id="document-type"
@@ -199,11 +201,11 @@ export const PrimaryDocumentForm = connect(
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
-                    updateFormValueSequence({
+                    updateDocketEntryFormValueSequence({
                       key: name,
                       value: inputValue.label,
                     });
-                    updateFormValueSequence({
+                    updateDocketEntryFormValueSequence({
                       key: 'documentTitle',
                       value: inputValue.label,
                     });
@@ -230,7 +232,7 @@ export const PrimaryDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -247,7 +249,7 @@ export const PrimaryDocumentForm = connect(
               name="addToCoversheet"
               checked={form.addToCoversheet}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.checked,
                 });
@@ -269,7 +271,7 @@ export const PrimaryDocumentForm = connect(
               autoCapitalize="none"
               value={form.additionalInfo2 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -291,7 +293,7 @@ export const PrimaryDocumentForm = connect(
                     name="exhibits"
                     checked={form.exhibits || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -307,7 +309,7 @@ export const PrimaryDocumentForm = connect(
                     name="attachments"
                     checked={form.attachments || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -323,7 +325,7 @@ export const PrimaryDocumentForm = connect(
                     name="certificateOfService"
                     checked={form.certificateOfService || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -349,7 +351,7 @@ export const PrimaryDocumentForm = connect(
                             max="12"
                             placeholder="MM"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -372,7 +374,7 @@ export const PrimaryDocumentForm = connect(
                             max="31"
                             placeholder="DD"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -395,7 +397,7 @@ export const PrimaryDocumentForm = connect(
                             max="2100"
                             placeholder="YYYY"
                             onChange={e => {
-                              updateFormValueSequence({
+                              updateDocketEntryFormValueSequence({
                                 key: e.target.name,
                                 value: e.target.value,
                               });
@@ -428,7 +430,7 @@ export const PrimaryDocumentForm = connect(
                     name="partyPrimary"
                     checked={form.partyPrimary || false}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -447,7 +449,7 @@ export const PrimaryDocumentForm = connect(
                       name="partySecondary"
                       checked={form.partySecondary || false}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
@@ -467,7 +469,7 @@ export const PrimaryDocumentForm = connect(
                       name="partyRespondent"
                       checked={form.partyRespondent || false}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
@@ -505,7 +507,7 @@ export const PrimaryDocumentForm = connect(
                         value={option}
                         checked={form.objections === option}
                         onChange={e => {
-                          updateFormValueSequence({
+                          updateDocketEntryFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
