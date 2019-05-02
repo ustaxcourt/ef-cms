@@ -47,9 +47,9 @@ export const SupportingDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
-              id="supporting-document"
-              name="supportingDocumentFile"
-              aria-describedby="supporting-document-label"
+              id="primary-document"
+              name="primaryDocumentFile"
+              aria-describedby="primary-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
@@ -68,26 +68,22 @@ export const SupportingDocumentForm = connect(
               Document Type
             </label>
             <select
-              name="documentType"
-              id="document-type"
-              aria-describedby="document-type-label"
+              name="eventCode"
+              id="event-code"
+              aria-describedby="event-code-label"
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                updateDocketEntryFormValueSequence({
-                  key: 'documentTitle',
-                  value: e.target.value,
-                });
                 validateDocketEntrySequence();
               }}
-              value={form.documentType || ''}
+              value={form.eventCode || ''}
             >
               <option value="">- Select -</option>
               {addDocketEntryHelper.supportingDocumentTypeList.map(entry => {
                 return (
-                  <option key={entry.documentType} value={entry.documentType}>
+                  <option key={entry.eventCode} value={entry.eventCode}>
                     {entry.documentTypeDisplay}
                   </option>
                 );
