@@ -8,6 +8,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -33,6 +34,7 @@ export const submitDocketEntrySequence = [
       clearAlertsAction,
       uploadExternalDocumentsAction,
       submitDocketEntryAction,
+      setCaseAction,
       chooseNextStepAction,
       {
         caseDetail: [
@@ -45,7 +47,7 @@ export const submitDocketEntrySequence = [
         supportingDocument: [
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
-          clearFormAction,
+          set(state.form, {}),
           set(state.wizardStep, 'SupportingDocumentForm'),
         ],
       },

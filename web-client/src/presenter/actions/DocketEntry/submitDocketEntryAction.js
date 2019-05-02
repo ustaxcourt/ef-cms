@@ -51,10 +51,8 @@ export const submitDocketEntryAction = async ({
   }
 
   const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-  store.set(state.screenMetadata.filedDocumentIds, [
-    ...filedDocumentIds,
-    primaryDocumentFileId,
-  ]);
+  filedDocumentIds.push(primaryDocumentFileId);
+  store.set(state.screenMetadata.filedDocumentIds, filedDocumentIds);
 
   return {
     caseDetail,
