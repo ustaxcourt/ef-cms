@@ -27,13 +27,13 @@ export const setupPercentDone = (files, store) => {
     };
   };
 
-  const funs = {};
+  const uploadProgressCallbackMap = {};
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    funs[key] = createOnUploadProgress(key);
+    uploadProgressCallbackMap[key] = createOnUploadProgress(key);
   });
 
-  return funs;
+  return uploadProgressCallbackMap;
 };
 
 /**
