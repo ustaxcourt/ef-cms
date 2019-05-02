@@ -331,17 +331,16 @@ label.ustc-upload {
     .usa-input-group {
       border-left: 4px solid transparent;
     }
-    button[type="submit"] {
+    button[type='submit'] {
       width: 45px;
       background-image: none;
     }
-    
+
     .usa-input-error #docket-search-field-mobile {
       width: calc(100% - 45px);
       border-width: 1px;
       box-shadow: 0px 0 0px 2px $color-secondary-dark;
     }
-
   }
 
   min-width: 200px;
@@ -360,7 +359,6 @@ label.ustc-upload {
       }
     }
   }
-  
 }
 
 .select-react-element {
@@ -370,15 +368,23 @@ label.ustc-upload {
     border: 1px solid $color-primary;
     box-shadow: 0 0 0 1px $color-primary;
   }
-  > div, &:first-child {
+  > div,
+  &:first-child {
     border: 0 solid transparent;
     box-shadow: none;
   }
 }
 
 #react-select-2-input {
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     border: none;
     box-shadow: none;
+  }
+}
+
+.docket-entry-form {
+  .service-date {
+    margin-left: 30px;
   }
 }
