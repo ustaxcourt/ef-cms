@@ -11,8 +11,10 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper: state.addDocketEntryHelper,
     caseDetail: state.caseDetail,
     form: state.form,
+    internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -20,6 +22,8 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper,
     caseDetail,
     form,
+    internalTypesHelper,
+    updateScreenMetadataSequence,
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
@@ -192,15 +196,27 @@ export const PrimaryDocumentForm = connect(
             <Select
               className="select-react-element"
               classNamePrefix="select-react-element"
-              options={addDocketEntryHelper.internalDocumentTypes}
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               name="documentType"
               id="document-type"
               isClearable={true}
               aria-describedby="document-type-label"
               placeholder="- Select -"
+              onInputChange={(inputText, { action }) => {
+                if (action == 'input-change') {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
+                  });
+                }
+              }}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
+                    updateDocketEntryFormValueSequence({
+                      key: 'eventCode',
+                      value: inputValue.value,
+                    });
                     updateDocketEntryFormValueSequence({
                       key: name,
                       value: inputValue.label,

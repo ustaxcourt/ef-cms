@@ -2373,11 +2373,11 @@
       "ordinalField": ""
     }
   ],
-  "Seriatum Brief": [
+  "Seriatim Brief": [
     {
       "documentTitle": "Amended Seriatim Answering Brief",
       "documentType": "Amended Seriatim Answering Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ADSA",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2387,7 +2387,7 @@
     {
       "documentTitle": "Amended Seriatim Opening Brief",
       "documentType": "Amended Seriatim Opening Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "AEDS",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2397,7 +2397,7 @@
     {
       "documentTitle": "Amended Seriatim Reply Brief",
       "documentType": "Amended Seriatim Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ADSB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2407,7 +2407,7 @@
     {
       "documentTitle": "Amended Seriatim Sur-Reply Brief",
       "documentType": "Amended Seriatim Sur-Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ASRB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2417,7 +2417,7 @@
     {
       "documentTitle": "Amended Seriatim Sur-Reply Memorandum Brief",
       "documentType": "Amended Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "MBAD",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2427,7 +2427,7 @@
     {
       "documentTitle": "Amendment to Seriatim Answering Brief",
       "documentType": "Amendment to Seriatim Answering Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ADTS",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2437,7 +2437,7 @@
     {
       "documentTitle": "Amendment to Seriatim Opening Brief",
       "documentType": "Amendment to Seriatim Opening Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ASTF",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2447,7 +2447,7 @@
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Brief",
       "documentType": "Amendment to Seriatim Sur-Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "ATRB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2457,7 +2457,7 @@
     {
       "documentTitle": "Amendment to Seriatim Sur-Reply Memorandum Brief",
       "documentType": "Amendment to Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "MBAT",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2467,7 +2467,7 @@
     {
       "documentTitle": "Seriatim Answering Brief",
       "documentType": "Seriatim Answering Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SEAB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2477,7 +2477,7 @@
     {
       "documentTitle": "Seriatim Answering Memorandum Brief",
       "documentType": "Seriatim Answering Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SAMB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2487,7 +2487,7 @@
     {
       "documentTitle": "Seriatim Opening Brief",
       "documentType": "Seriatim Opening Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SEOB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2497,7 +2497,7 @@
     {
       "documentTitle": "Seriatim Opening Memorandum Brief",
       "documentType": "Seriatim Opening Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SOMB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2507,7 +2507,7 @@
     {
       "documentTitle": "Seriatim Reply Brief",
       "documentType": "Seriatim Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SERB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2517,7 +2517,7 @@
     {
       "documentTitle": "Seriatim Reply Memorandum Brief",
       "documentType": "Seriatim Reply Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SRMB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2527,7 +2527,7 @@
     {
       "documentTitle": "Seriatim Sur-Reply Brief",
       "documentType": "Seriatim Sur-Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SESB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2537,7 +2537,7 @@
     {
       "documentTitle": "Seriatim Sur-Reply Memorandum Brief",
       "documentType": "Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SSRB",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2547,7 +2547,7 @@
     {
       "documentTitle": "Supplement to Seriatim Answering Brief",
       "documentType": "Supplement to Seriatim Answering Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "STSA",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2557,7 +2557,7 @@
     {
       "documentTitle": "Supplement to Seriatim Opening Brief",
       "documentType": "Supplement to Seriatim Opening Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "STSO",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2567,7 +2567,7 @@
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Brief",
       "documentType": "Supplement to Seriatim Sur-Reply Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "SSSR",
       "scenario": "Standard",
       "labelPreviousDocument": "",
@@ -2577,7 +2577,7 @@
     {
       "documentTitle": "Supplement to Seriatim Sur-Reply Memorandum Brief",
       "documentType": "Supplement to Seriatim Sur-Reply Memorandum Brief",
-      "category": "Seriatum Brief",
+      "category": "Seriatim Brief",
       "eventCode": "MBSR",
       "scenario": "Standard",
       "labelPreviousDocument": "",
