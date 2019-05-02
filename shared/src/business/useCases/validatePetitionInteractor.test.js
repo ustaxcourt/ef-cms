@@ -11,7 +11,9 @@ describe('validatePetition', () => {
           Petition,
         }),
       },
-      petition: {},
+      petition: {
+        petitionFileSize: 1,
+      },
     });
 
     expect(errors).toEqual({
@@ -19,6 +21,7 @@ describe('validatePetition', () => {
         'ownershipDisclosureFile',
         'irsNoticeDate',
         'caseType',
+        'petitionFileSize',
       ]),
     });
   });
@@ -33,6 +36,8 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         hasIrsNotice: true,
+        petitionFile: new File([], 'test.png'),
+        petitionFileSize: 1,
       },
     });
     expect(errors).toEqual({
@@ -40,6 +45,8 @@ describe('validatePetition', () => {
         'caseType',
         'hasIrsNotice',
         'ownershipDisclosureFile',
+        'petitionFile',
+        'petitionFileSize',
       ]),
       irsNoticeDate: 'Notice Date is a required field.',
     });
