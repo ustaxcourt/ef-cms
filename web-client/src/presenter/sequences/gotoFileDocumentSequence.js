@@ -17,7 +17,7 @@ const gotoFileDocument = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  set(state.wizardStep, 'SelectDocumentType'),
+  set(state.wizardStep, 'PrimaryDocumentForm'),
   setCurrentPageAction('FileDocumentWizard'),
 ];
 

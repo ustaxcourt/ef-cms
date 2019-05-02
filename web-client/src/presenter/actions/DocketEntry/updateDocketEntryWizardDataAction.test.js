@@ -8,6 +8,9 @@ describe('updateDocketEntryWizardDataAction', () => {
         key: 'certificateOfService',
       },
       state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: [],
+        },
         form: {
           certificateOfServiceDate: '12-12-1212',
           certificateOfServiceDay: 12,
