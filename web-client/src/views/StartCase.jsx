@@ -8,7 +8,6 @@ import { ProcedureType } from './StartCase/ProcedureType';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
