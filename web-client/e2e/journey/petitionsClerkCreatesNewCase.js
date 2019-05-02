@@ -43,6 +43,11 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updatePetitionValueSequence', {
+      key: 'petitionFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('updatePetitionValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
