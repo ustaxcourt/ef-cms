@@ -190,6 +190,7 @@ export const PrimaryDocumentForm = connect(
             </label>
             <Select
               className="select-react-element"
+              classNamePrefix="select-react-element"
               options={addDocketEntryHelper.internalDocumentTypes}
               name="documentType"
               id="document-type"
