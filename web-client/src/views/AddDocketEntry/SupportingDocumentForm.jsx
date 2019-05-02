@@ -83,9 +83,13 @@ export const SupportingDocumentForm = connect(
               value={form.documentType || ''}
             >
               <option value="">- Select -</option>
-              <option value="Agreed Computation for Entry of Decision">
-                Agreed Computation for Entry of Decision
-              </option>
+              {addDocketEntryHelper.supportingDocumentTypeList.map(entry => {
+                return (
+                  <option key={entry.documentType} value={entry.documentType}>
+                    {entry.documentTypeDisplay}
+                  </option>
+                );
+              })}
             </select>
             <Text
               className="usa-input-error-message"
