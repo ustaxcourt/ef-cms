@@ -82,3 +82,83 @@
   font-size: 30px;
   text-align: center;
 }
+
+.file-upload-status-modal {
+  > .modal-header,
+  .button-container {
+    display: none;
+  }
+
+  .status-message {
+    margin-bottom: 10px;
+    font-size: 48px;
+    font-weight: $font-semibold;
+  }
+
+  .percent-complete {
+    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: $font-bold;
+  }
+
+  .progress-bar {
+    background: $color-white;
+    border-radius: 5px;
+    height: 40px;
+    margin: 5px auto;
+    width: 75%;
+  }
+
+  .progress-bar-fill {
+    background: $color-green-light;
+    border-radius: 5px;
+    height: 100%;
+  }
+
+  .cancel {
+    > a {
+      font-size: 17px;
+      font-weight: $font-semibold;
+      color: $color-white;
+    }
+  }
+
+  border-top: none;
+  color: $color-white;
+  padding: 60px 0;
+  background-color: $color-primary;
+  font-family: 'Source Sans Pro';
+  font-size: 30px;
+  text-align: center;
+}
+
+.file-upload-error {
+  > .modal-header {
+    display: none;
+  }
+
+  .uhoh {
+    color: $color-base;
+    font-size: 48px;
+    font-weight: $font-semibold;
+  }
+
+  .message {
+    color: $color-base;
+    font-size: 30px;
+    font-weight: $font-semibold;
+    width: 80%;
+    margin: auto;
+  }
+
+  button.usa-button-secondary {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  background-color: $color-gold;
+  color: $color-base;
+  font-size: 30px;
+  padding: 60px 0;
+  text-align: center;
+}
