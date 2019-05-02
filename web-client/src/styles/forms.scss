@@ -253,6 +253,10 @@ label.validated::after {
 
 .usa-date-of-birth .usa-form-group {
   margin-bottom: 0;
+
+  &.usa-form-group-month input {
+    width: 51px;
+  }
 }
 
 #orders-needed {
