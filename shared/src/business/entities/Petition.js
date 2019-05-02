@@ -36,6 +36,8 @@ Petition.errorToMessageMap = {
   ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
+  petitionFileSize:
+    'Your file size is too big. The maximum file size is 500MB.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',

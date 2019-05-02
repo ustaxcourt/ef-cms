@@ -17,6 +17,10 @@ import {
   CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+const {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} = require('../../shared/src/persistence/s3/getUploadPolicy');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import {
   CHAMBERS_SECTION,
@@ -210,6 +214,8 @@ const applicationContext = {
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
+    MAX_FILE_SIZE_BYTES,
+    MAX_FILE_SIZE_MB,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
