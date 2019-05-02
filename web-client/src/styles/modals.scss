@@ -102,32 +102,32 @@
   }
 
   .progress-bar {
-    background: $color-white;
-    border-radius: 5px;
+    width: 75%;
     height: 40px;
     margin: 5px auto;
-    width: 75%;
+    background: $color-white;
+    border-radius: 5px;
   }
 
   .progress-bar-fill {
+    height: 100%;
     background: $color-green-light;
     border-radius: 5px;
-    height: 100%;
   }
 
   .cancel {
     > a {
+      color: $color-white;
       font-size: 17px;
       font-weight: $font-semibold;
-      color: $color-white;
     }
   }
 
-  border-top: none;
-  color: $color-white;
   padding: 60px 0;
+  border-top: none;
   background-color: $color-primary;
-  font-family: 'Source Sans Pro';
+  color: $color-white;
+  font-family: 'Source Sans Pro', sans-serif;
   font-size: 30px;
   text-align: center;
 }
@@ -144,11 +144,11 @@
   }
 
   .message {
+    width: 80%;
+    margin: auto;
     color: $color-base;
     font-size: 30px;
     font-weight: $font-semibold;
-    width: 80%;
-    margin: auto;
   }
 
   button.usa-button-secondary {
@@ -156,9 +156,9 @@
     color: $color-white;
   }
 
+  padding: 60px 0;
   background-color: $color-gold;
   color: $color-base;
   font-size: 30px;
-  padding: 60px 0;
   text-align: center;
 }
