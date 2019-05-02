@@ -15,6 +15,7 @@ import uuidv4 from 'uuid/v4';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
@@ -210,6 +211,7 @@ const applicationContext = {
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
+    INTERNAL_CATEGORY_MAP,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes

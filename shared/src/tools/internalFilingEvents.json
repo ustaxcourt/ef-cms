@@ -155,6 +155,26 @@
   ],
   "Application": [
     {
+      "documentTitle": "Application [anything]",
+      "documentType": "Application",
+      "category": "Application",
+      "eventCode": "APPL",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Application For?",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Application for Examination Pursuant to Rule 73",
+      "documentType": "Application for Examination Pursuant to Rule 73",
+      "category": "Application",
+      "eventCode": "AFE",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Application for Waiver of Filing Fee",
       "documentType": "Application for Waiver of Filing Fee",
       "category": "Application",
@@ -225,6 +245,16 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
+    },
+    {
+      "documentTitle": "Stipulated Decision Entered [judge] [anything]",
+      "documentType": "Stipulated Decision Entered",
+      "category": "Decision",
+      "eventCode": "SDEC",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "First Field - Judge's Name Second Field - Decision Notes",
+      "ordinalField": ""
     }
   ],
   "Miscellaneous": [
@@ -267,6 +297,16 @@
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
       "ordinalField": "What Iteration Is This Filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Amendment to [anything]",
+      "documentType": "Amendment [anything]",
+      "category": "Miscellaneous",
+      "eventCode": "ADMT",
+      "scenario": "",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
@@ -346,6 +386,16 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Redacting?",
       "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Reference List of Redacted Information [anything]",
+      "documentType": "Reference List of Redacted Information",
+      "category": "Miscellaneous",
+      "eventCode": "RLRI",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Redacted Information Details",
       "ordinalField": ""
     },
     {
@@ -448,6 +498,16 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion [anything]",
+      "documentType": "Motion",
+      "category": "Motion",
+      "eventCode": "M000",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Motion For?",
       "ordinalField": ""
     },
     {
@@ -801,6 +861,26 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion for Review By the Full Court",
+      "documentType": "Motion for Review By the Full Court",
+      "category": "Motion",
+      "eventCode": "M031",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion for Review En Banc",
+      "documentType": "Motion for Review En Banc",
+      "category": "Motion",
+      "eventCode": "M032",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
       "documentType": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
       "category": "Motion",
@@ -941,6 +1021,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion to Be Exempt from E-Filing",
+      "documentType": "Motion to Be Exempt from E-Filing",
+      "category": "Motion",
+      "eventCode": "M048",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Be Recognized as Next Friend",
       "documentType": "Motion to Be Recognized as Next Friend",
       "category": "Motion",
@@ -1008,6 +1098,16 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Change Place of Hearing of Disclosure Case To [place]",
+      "documentType": "Motion to Change Place of Hearing of Disclosure Case",
+      "category": "Motion",
+      "eventCode": "M057",
+      "scenario": "Nonstandard E",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Requested Location",
       "ordinalField": ""
     },
     {
@@ -1261,6 +1361,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion to File Document Under Seal",
+      "documentType": "Motion to File Document Under Seal",
+      "category": "Motion",
+      "eventCode": "M079",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Impose a Penalty",
       "documentType": "Motion to Impose a Penalty",
       "category": "Motion",
@@ -1275,6 +1385,16 @@
       "documentType": "Motion to Impose Sanctions",
       "category": "Motion",
       "eventCode": "M081",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Intervene",
+      "documentType": "Motion to Intervene",
+      "category": "Motion",
+      "eventCode": "M082",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1325,6 +1445,16 @@
       "documentType": "Motion to Preclude",
       "category": "Motion",
       "eventCode": "M085",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Motion to Proceed Anonymously",
+      "documentType": "Motion to Proceed Anonymously",
+      "category": "Motion",
+      "eventCode": "M086",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1663,10 +1793,30 @@
   ],
   "Notice": [
     {
+      "documentTitle": "Notice [anything]",
+      "documentType": "Notice",
+      "category": "Notice",
+      "eventCode": "NOT",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Notice For?",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Notice of Abatement of Jeopardy Assessment",
       "documentType": "Notice of Abatement of Jeopardy Assessment",
       "category": "Notice",
       "eventCode": "NAJA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Appeal",
+      "documentType": "Notice of Appeal",
+      "category": "Notice",
+      "eventCode": "NOAG",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1687,6 +1837,16 @@
       "documentType": "Notice of Change of Address and Telephone Number",
       "category": "Notice",
       "eventCode": "NCAP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Change of Counsel for Non-Party",
+      "documentType": "Notice of Change of Counsel for Non-Party",
+      "category": "Notice",
+      "eventCode": "NCNP",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2005,6 +2165,26 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Petition",
+      "documentType": "Petition",
+      "category": "Petition",
+      "eventCode": "P",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Ratification of Petition",
+      "documentType": "Ratification of Petition",
+      "category": "Petition",
+      "eventCode": "RAT",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Redacted Petition Filed",
       "documentType": "Redacted Petition Filed",
       "category": "Petition",
@@ -2281,6 +2461,16 @@
   ],
   "Request": [
     {
+      "documentTitle": "Request [anything]",
+      "documentType": "Request",
+      "category": "Request",
+      "eventCode": "REQ",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Request For?",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "[First, Second, etc.] Request for Admissions",
       "documentType": "Request for Admissions",
       "category": "Request",
@@ -2295,6 +2485,16 @@
       "documentType": "Request for Judicial Notice",
       "category": "Request",
       "eventCode": "RJN",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Request for Place of Hearing of Disclosure Case",
+      "documentType": "Request for Place of Hearing of Disclosure Case",
+      "category": "Request",
+      "eventCode": "RQHD",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2353,6 +2553,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Objection [anything]",
+      "documentType": "Objection [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "OBJ",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is Being Objected To?",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Opposition to [Document Name]",
       "documentType": "Opposition",
       "category": "Response, Opposition or Objection",
@@ -2363,6 +2573,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Opposition [anything]",
+      "documentType": "Opposition [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "OP",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is Being Opposed?",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Response to [Document Name]",
       "documentType": "Response",
       "category": "Response, Opposition or Objection",
@@ -2370,6 +2590,16 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Responding To?",
       "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Response [anything]",
+      "documentType": "Response [anything]",
+      "category": "Response, Opposition or Objection",
+      "eventCode": "RESP",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Responding To?",
       "ordinalField": ""
     }
   ],
@@ -3103,6 +3333,16 @@
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
+      "documentTitle": "[First, Second, etc.] Supplement To [anything]",
+      "documentType": "Supplement To [anything]",
+      "category": "Supplement",
+      "eventCode": "SPMT",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What Is This Supplement For?",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
       "documentType": "Supplemental",
       "category": "Supplement",
@@ -3111,6 +3351,16 @@
       "labelPreviousDocument": "Which Document Is This Supplemental For?",
       "labelFreeText": "",
       "ordinalField": "What Iteration Is This Filing?"
+    },
+    {
+      "documentTitle": "[First, Second, etc.] Supplemental [anything]",
+      "documentType": "Supplemental [anything]",
+      "category": "Supplement",
+      "eventCode": "SATL",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "What is This Supplemental For?",
+      "ordinalField": ""
     }
   ],
   "Supporting Document": [
