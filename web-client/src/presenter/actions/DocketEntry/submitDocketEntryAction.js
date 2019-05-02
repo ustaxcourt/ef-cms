@@ -5,13 +5,11 @@ import { state } from 'cerebral';
  * submit a new docket entry
  *
  * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object
  * @param {Object} providers.applicationContext the application context
  * @param {Object} providers.props the cerebral props object
  */
 export const submitDocketEntryAction = async ({
   get,
-  store,
   props,
   applicationContext,
 }) => {
@@ -49,10 +47,6 @@ export const submitDocketEntryAction = async ({
       });
     }
   }
-
-  const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-  filedDocumentIds.push(primaryDocumentFileId);
-  store.set(state.screenMetadata.filedDocumentIds, filedDocumentIds);
 
   return {
     caseDetail,
