@@ -9,7 +9,7 @@ describe('limit file uploads', () => {
     const callback = () => {
       callbackTriggered = true;
     };
-    limitFileSize(e, callback);
+    limitFileSize(e, 500, callback);
     expect(callbackTriggered).toBeFalsy();
     expect(e.target.value).toBeFalsy();
   });
@@ -20,7 +20,7 @@ describe('limit file uploads', () => {
     const callback = () => {
       callbackTriggered = true;
     };
-    limitFileSize(e, callback);
+    limitFileSize(e, 500, callback);
     expect(callbackTriggered).toBeTruthy();
     expect(e.target.value).toBeTruthy();
   });
