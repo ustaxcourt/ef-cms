@@ -29,8 +29,8 @@ function DocketEntryFactory(rawProps) {
       .required(),
     eventCode: joi.string(),
     exhibits: joi.boolean(),
-    filingStatus: joi.string().required(), // could be boolean
     hasSupportingDocuments: joi.boolean(),
+    lodged: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
   };
 
@@ -66,8 +66,8 @@ function DocketEntryFactory(rawProps) {
     ],
     eventCode: 'Select a document.',
     exhibits: 'Enter selection for Exhibits.',
-    filingStatus: 'Enter selection for Filing Status.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+    lodged: 'Enter selection for Filing Status.',
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',

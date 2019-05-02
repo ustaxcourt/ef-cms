@@ -27,6 +27,7 @@ export const submitDocketEntryAction = async ({
     ...documentMetadata,
     docketNumber,
     caseId,
+    createdAt: documentMetadata.dateReceived,
   };
 
   const caseDetail = await applicationContext

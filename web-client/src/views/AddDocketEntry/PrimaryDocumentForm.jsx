@@ -4,6 +4,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import Select from 'react-select';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -58,7 +59,6 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.primaryDocumentFile"
             />
           </div>
-
           <div
             className={`ustc-form-group ${
               validationErrors.filingStatus ? 'usa-input-error' : ''
@@ -72,9 +72,9 @@ export const PrimaryDocumentForm = connect(
                     <input
                       id={`filing-status-${option}`}
                       type="radio"
-                      name="filingStatus"
+                      name="lodged"
                       value={option}
-                      checked={form.filingStatus === option}
+                      checked={form.lodged === (option === 'Lodge')}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -93,7 +93,6 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.filingStatus"
             />
           </div>
-
           <div
             className={`ustc-form-group ${
               validationErrors.dateReceived ? 'usa-input-error' : ''
@@ -117,7 +116,7 @@ export const PrimaryDocumentForm = connect(
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value === 'Lodge',
                       });
                     }}
                     onBlur={() => {
@@ -178,7 +177,6 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.dateReceived"
             />
           </div>
-
           <div
             className={`ustc-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
@@ -187,34 +185,36 @@ export const PrimaryDocumentForm = connect(
             <label htmlFor="document-type" id="document-type-label">
               Document Type
             </label>
-            <select
+            <Select
+              className="select-react-element"
+              options={addDocketEntryHelper.internalDocumentTypes}
               name="documentType"
               id="document-type"
+              isClearable={true}
               aria-describedby="document-type-label"
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                updateFormValueSequence({
-                  key: 'documentTitle',
-                  value: e.target.value,
-                });
-                validateDocketEntrySequence();
+              placeholder="- Select -"
+              onChange={(inputValue, { action, name }) => {
+                switch (action) {
+                  case 'select-option':
+                    updateFormValueSequence({
+                      key: name,
+                      value: inputValue.label,
+                    });
+                    updateFormValueSequence({
+                      key: 'documentTitle',
+                      value: inputValue.label,
+                    });
+                    validateDocketEntrySequence();
+                    break;
+                }
+                return true;
               }}
-              value={form.documentType || ''}
-            >
-              <option value="">- Select -</option>
-              <option value="Agreed Computation for Entry of Decision">
-                Agreed Computation for Entry of Decision
-              </option>
-            </select>
+            />
             <Text
               className="usa-input-error-message"
               bind="validationErrors.documentType"
             />
           </div>
-
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
@@ -276,7 +276,6 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </div>
-
           <div className="ustc-form-group">
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Inclusions</legend>
@@ -409,7 +408,6 @@ export const PrimaryDocumentForm = connect(
               </ul>
             </fieldset>
           </div>
-
           <div
             className={`ustc-form-group ${
               addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
@@ -481,7 +479,6 @@ export const PrimaryDocumentForm = connect(
               />
             </fieldset>
           </div>
-
           {addDocketEntryHelper.showObjection && (
             <div
               className={`ustc-form-group ${
