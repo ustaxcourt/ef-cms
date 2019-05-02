@@ -1,3 +1,4 @@
+import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -24,44 +25,25 @@ export const fileExternalDocumentAction = async ({
 
   documentMetadata = { ...documentMetadata, docketNumber, caseId };
 
-  let totalSize = 0;
-  let loadedAmounts = {};
-
-  const calculateTotalLoaded = () => {
-    return Object.keys(loadedAmounts).reduce((acc, key) => {
-      return loadedAmounts[key] + acc;
-    }, 0);
-  };
-
-  if (primaryDocumentFile) totalSize += primaryDocumentFile.size;
-  if (secondaryDocumentFile) totalSize += secondaryDocumentFile.size;
-  if (supportingDocumentFile) totalSize += supportingDocumentFile.size;
-  if (secondarySupportingDocumentFile)
-    totalSize += secondarySupportingDocumentFile.size;
-
-  const createOnUploadProgress = key => {
-    loadedAmounts[key] = 0;
-    return progressEvent => {
-      const { loaded } = progressEvent;
-      loadedAmounts[key] = loaded;
-      const percent = parseInt((calculateTotalLoaded() / totalSize) * 100);
-      store.set(state.percentComplete, percent);
-    };
-  };
+  const progressFunctions = setupPercentDone(
+    {
+      primary: primaryDocumentFile,
+      primarySupporting: supportingDocumentFile,
+      secondary: secondaryDocumentFile,
+      secondarySupporting: secondarySupportingDocumentFile,
+    },
+    store,
+  );
 
   const caseDetail = await applicationContext
     .getUseCases()
     .uploadExternalDocument({
       applicationContext,
       documentMetadata,
-      onPrimarySupportingUploadProgress: createOnUploadProgress(
-        'primary-supporting',
-      ),
-      onPrimaryUploadProgress: createOnUploadProgress('primary'),
-      onSecondarySupportUploadProgress: createOnUploadProgress(
-        'secondary-support',
-      ),
-      onSecondaryUploadProgress: createOnUploadProgress('secondary'),
+      onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
+      onPrimaryUploadProgress: progressFunctions.primary,
+      onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
+      onSecondaryUploadProgress: progressFunctions.secondary,
       primaryDocumentFile,
       secondaryDocumentFile,
       secondarySupportingDocumentFile,

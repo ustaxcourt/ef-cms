@@ -90,6 +90,7 @@ const fakeFile = new Buffer(fakeData, 'base64', {
   type: 'application/pdf',
 });
 fakeFile.name = 'fakeFile.pdf';
+fakeFile.size = 1000;
 
 test = CerebralTest(presenter);
 
