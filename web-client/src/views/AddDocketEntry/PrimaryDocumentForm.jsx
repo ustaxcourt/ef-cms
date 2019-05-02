@@ -11,7 +11,9 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper: state.addDocketEntryHelper,
     caseDetail: state.caseDetail,
     form: state.form,
+    internalTypesHelper: state.internalTypesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -19,7 +21,9 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper,
     caseDetail,
     form,
+    internalTypesHelper,
     updateFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -190,15 +194,27 @@ export const PrimaryDocumentForm = connect(
             </label>
             <Select
               className="select-react-element"
-              options={addDocketEntryHelper.internalDocumentTypes}
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               name="documentType"
               id="document-type"
               isClearable={true}
               aria-describedby="document-type-label"
               placeholder="- Select -"
+              onInputChange={(inputText, { action }) => {
+                if (action == 'input-change') {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
+                  });
+                }
+              }}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
+                    updateFormValueSequence({
+                      key: 'eventCode',
+                      value: inputValue.value,
+                    });
                     updateFormValueSequence({
                       key: name,
                       value: inputValue.label,
