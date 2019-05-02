@@ -13,6 +13,7 @@ import { state } from 'cerebral';
 export const createCaseFromPaperAction = async ({
   applicationContext,
   get,
+  store,
   props,
 }) => {
   const { petitionFile, ownershipDisclosureFile, stinFile } = get(
@@ -29,14 +30,40 @@ export const createCaseFromPaperAction = async ({
     ['year', 'month', 'day'],
   );
 
+  let totalSize = 0;
+  let loadedAmounts = {};
+
+  const calculateTotalLoaded = () => {
+    return Object.keys(loadedAmounts).reduce((acc, key) => {
+      return loadedAmounts[key] + acc;
+    }, 0);
+  };
+
+  if (petitionFile) totalSize += petitionFile.size;
+  if (ownershipDisclosureFile) totalSize += ownershipDisclosureFile.size;
+  if (stinFile) totalSize += stinFile.size;
+
+  const createOnUploadProgress = key => {
+    loadedAmounts[key] = 0;
+    return progressEvent => {
+      const { loaded } = progressEvent;
+      loadedAmounts[key] = loaded;
+      const percent = parseInt((calculateTotalLoaded() / totalSize) * 100);
+      store.set(state.percentComplete, percent);
+    };
+  };
+
   const caseDetail = await applicationContext
     .getUseCases()
     .filePetitionFromPaper({
       applicationContext,
       ownershipDisclosureFile,
+      ownershipDisclosureUploadProgress: createOnUploadProgress('ownership'),
       petitionFile,
       petitionMetadata: form,
+      petitionUploadProgress: createOnUploadProgress('petition'),
       stinFile,
+      stinUploadProgress: createOnUploadProgress('stin'),
     });
 
   for (let document of caseDetail.documents) {
