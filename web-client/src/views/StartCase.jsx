@@ -20,6 +20,7 @@ export const StartCase = connect(
     filingTypes: state.filingTypes,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    petition: state.petition,
     screenMetadata: state.screenMetadata,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
@@ -44,6 +45,7 @@ export const StartCase = connect(
     screenMetadata,
     showModal,
     formCancelToggleCancelSequence,
+    petition,
     startCaseHelper,
     submitFilePetitionSequence,
     toggleCaseDifferenceSequence,
@@ -113,6 +115,7 @@ export const StartCase = connect(
                   </label>
                   <span className="usa-form-hint">
                     File must be in PDF format (.pdf)
+                    {petition.petitionFileSize}
                   </span>
                   <input
                     id="petition-file"
@@ -121,13 +124,15 @@ export const StartCase = connect(
                     aria-describedby="petition-hint"
                     name="petitionFile"
                     onChange={e => {
-                      limitFileSize(e, () => {
-                        updatePetitionValueSequence({
-                          key: e.target.name,
-                          value: e.target.files[0],
-                        });
-                        validateStartCaseSequence();
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
                       });
+                      updatePetitionValueSequence({
+                        key: `${e.target.name}Size`,
+                        value: e.target.files[0].size,
+                      });
+                      validateStartCaseSequence();
                     }}
                   />
                   <Text
