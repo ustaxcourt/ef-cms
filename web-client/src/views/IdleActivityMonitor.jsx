@@ -13,11 +13,13 @@ export const IdleActivityMonitor = connect(
   ({ onIdle, constants, showAppTimeoutModalHelper }) => {
     return (
       <>
-        <IdleTimer
-          debounce={constants.SESSION_DEBOUNCE}
-          timeout={constants.SESSION_TIMEOUT}
-          onIdle={onIdle}
-        />
+        {showAppTimeoutModalHelper.beginIdleMonitor && (
+          <IdleTimer
+            debounce={constants.SESSION_DEBOUNCE}
+            timeout={constants.SESSION_TIMEOUT}
+            onIdle={onIdle}
+          />
+        )}
         {showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}
       </>
     );
