@@ -25,9 +25,6 @@ describe('submitDocketEntryAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        primaryDocumentFileId: 'Forward',
-      },
       state: {
         caseDetail: {},
         form: {
