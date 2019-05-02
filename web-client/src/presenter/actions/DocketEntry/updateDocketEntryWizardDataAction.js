@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object
  */
-export const clearDocketEntryWizardDataAction = ({ store, props }) => {
+export const updateDocketEntryWizardDataAction = ({ store, props }) => {
   switch (props.key) {
     case 'certificateOfService':
       store.set(state.form.certificateOfServiceDate, null);
