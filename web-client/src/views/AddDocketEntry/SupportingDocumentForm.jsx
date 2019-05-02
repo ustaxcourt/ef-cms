@@ -23,7 +23,7 @@ export const SupportingDocumentForm = connect(
     return (
       <React.Fragment>
         <h2>Add Supporting Document</h2>
-        <div className="blue-container">
+        <div className="blue-container docket-entry-form">
           <div
             className={`ustc-form-group ${
               validationErrors.supportingDocumentFile ? 'usa-input-error' : ''
