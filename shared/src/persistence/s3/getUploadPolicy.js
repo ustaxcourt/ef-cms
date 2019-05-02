@@ -11,6 +11,7 @@ exports.getUploadPolicy = ({ applicationContext }) =>
         Conditions: [
           ['starts-with', '$key', ''],
           ['starts-with', '$Content-Type', ''],
+          ['content-length-range', 0, 500 * 1024 * 1024],
         ],
       },
       (err, data) => {
