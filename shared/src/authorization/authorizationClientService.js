@@ -22,6 +22,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
+    exports.FILE_EXTERNAL_DOCUMENT,
   ],
   intakeclerk: [
     exports.CASE_METADATA,
