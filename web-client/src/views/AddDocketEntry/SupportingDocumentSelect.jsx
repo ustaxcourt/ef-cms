@@ -30,7 +30,7 @@ export const SupportingDocumentSelect = connect(
           }`}
         >
           <label htmlFor={'previous-document'}>
-            Which Document is this supporting?
+            Which Document is This Supporting?
           </label>
           <select
             name="previousDocument"
