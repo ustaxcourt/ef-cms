@@ -4,7 +4,12 @@
  * @param file
  * @returns {Promise<*>}
  */
-exports.uploadPdf = async ({ applicationContext, policy, file }) => {
+exports.uploadPdf = async ({
+  applicationContext,
+  policy,
+  file,
+  onUploadProgress,
+}) => {
   const documentId = applicationContext.getUniqueId();
   const formData = new FormData();
   formData.append('key', documentId);
@@ -24,6 +29,7 @@ exports.uploadPdf = async ({ applicationContext, policy, file }) => {
       /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
       'content-type': `multipart/form-data; boundary=${formData._boundary}`,
     },
+    onUploadProgress,
   });
   return documentId;
 };
