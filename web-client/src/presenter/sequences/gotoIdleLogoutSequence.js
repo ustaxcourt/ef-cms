@@ -4,6 +4,7 @@ import { clearUserAction } from '../actions/clearUserAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoIdleLogoutSequence = [
+  setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearModalAction,
   clearUserAction,
