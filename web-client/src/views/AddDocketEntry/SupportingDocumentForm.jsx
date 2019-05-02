@@ -47,9 +47,9 @@ export const SupportingDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
-              id="supporting-document"
-              name="supportingDocumentFile"
-              aria-describedby="supporting-document-label"
+              id="primary-document"
+              name="primaryDocumentFile"
+              aria-describedby="primary-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />

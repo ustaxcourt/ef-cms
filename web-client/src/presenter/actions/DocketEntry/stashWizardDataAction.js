@@ -12,9 +12,27 @@ export const stashWizardDataAction = async ({ get, props }) => {
   const { primaryDocumentFileId } = props;
 
   const filedDocumentIds = get(state.screenMetadata.filedDocumentIds) || [];
+
+  const {
+    dateReceived,
+    dateReceivedMonth,
+    dateReceivedDay,
+    dateReceivedYear,
+    partyPrimary,
+    partySecondary,
+    partyRespondent,
+  } = get(state.form);
+
   filedDocumentIds.push(primaryDocumentFileId);
 
   return {
+    dateReceived,
+    dateReceivedDay,
+    dateReceivedMonth,
+    dateReceivedYear,
     filedDocumentIds,
+    partyPrimary,
+    partyRespondent,
+    partySecondary,
   };
 };

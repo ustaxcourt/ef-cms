@@ -30,7 +30,7 @@ function DocketEntryFactory(rawProps) {
     eventCode: joi.string(),
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
-    lodged: joi.boolean().required(),
+    lodged: joi.boolean(),
     primaryDocumentFile: joi.object().required(),
   };
 
