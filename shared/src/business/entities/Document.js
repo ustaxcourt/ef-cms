@@ -14,9 +14,13 @@ const petitionDocumentTypes = ['Petition'];
 const { WorkItem } = require('./WorkItem');
 
 const documentMap = require('../../tools/externalFilingEvents.json');
+const internalDocumentMap = require('../../tools/internalFilingEvents.json');
 
 module.exports.CATEGORIES = Object.keys(documentMap);
 module.exports.CATEGORY_MAP = documentMap;
+
+module.exports.INTERNAL_CATEGORIES = Object.keys(internalDocumentMap);
+module.exports.INTERNAL_CATEGORY_MAP = internalDocumentMap;
 
 /**
  * constructor
