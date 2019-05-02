@@ -68,26 +68,22 @@ export const SupportingDocumentForm = connect(
               Document Type
             </label>
             <select
-              name="documentType"
-              id="document-type"
-              aria-describedby="document-type-label"
+              name="eventCode"
+              id="event-code"
+              aria-describedby="event-code-label"
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                updateDocketEntryFormValueSequence({
-                  key: 'documentTitle',
-                  value: e.target.value,
-                });
                 validateDocketEntrySequence();
               }}
-              value={form.documentType || ''}
+              value={form.eventCode || ''}
             >
               <option value="">- Select -</option>
               {addDocketEntryHelper.supportingDocumentTypeList.map(entry => {
                 return (
-                  <option key={entry.documentType} value={entry.documentType}>
+                  <option key={entry.eventCode} value={entry.eventCode}>
                     {entry.documentTypeDisplay}
                   </option>
                 );

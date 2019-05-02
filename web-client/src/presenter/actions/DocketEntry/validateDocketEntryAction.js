@@ -29,6 +29,8 @@ export const validateDocketEntryAction = ({
       'primaryDocumentFile',
       'dateReceived',
       'documentType',
+      'previousDocument',
+      'freeText',
       'certificateOfServiceDate',
       'objections',
       'partyPrimary',
