@@ -69,13 +69,13 @@ export const PrimaryDocumentForm = connect(
                   <input
                     id={`filing-status-${option}`}
                     type="radio"
-                    name="filingStatus"
+                    name="lodged"
                     value={option}
-                    checked={form.filingStatus === option}
+                    checked={form.lodged === (option === 'Lodge')}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value === 'Lodge',
                       });
                       validateDocketEntrySequence();
                     }}
@@ -199,6 +199,10 @@ export const PrimaryDocumentForm = connect(
                     key: name,
                     value: inputValue.label,
                   });
+                  updateFormValueSequence({
+                    key: 'documentTitle',
+                    value: inputValue.label,
+                  });
                   validateDocketEntrySequence();
                   break;
               }
@@ -282,7 +286,7 @@ export const PrimaryDocumentForm = connect(
                   id="exhibits"
                   type="checkbox"
                   name="exhibits"
-                  checked={form.exhibits}
+                  checked={form.exhibits || false}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -298,7 +302,7 @@ export const PrimaryDocumentForm = connect(
                   id="attachments"
                   type="checkbox"
                   name="attachments"
-                  checked={form.attachments}
+                  checked={form.attachments || false}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -314,7 +318,7 @@ export const PrimaryDocumentForm = connect(
                   id="certificate-of-service"
                   type="checkbox"
                   name="certificateOfService"
-                  checked={form.certificateOfService}
+                  checked={form.certificateOfService || false}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -336,7 +340,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="month, two digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceMonth"
-                          value={form.certificateOfServiceMonth}
+                          value={form.certificateOfServiceMonth || ''}
                           type="number"
                           min="1"
                           max="12"
@@ -357,7 +361,7 @@ export const PrimaryDocumentForm = connect(
                           className="usa-input-inline"
                           id="service-date-day"
                           name="certificateOfServiceDay"
-                          value={form.certificateOfServiceDay}
+                          value={form.certificateOfServiceDay || ''}
                           aria-label="day, two digits"
                           aria-describedby="service-date-legend"
                           type="number"
@@ -382,7 +386,7 @@ export const PrimaryDocumentForm = connect(
                           aria-label="year, four digits"
                           aria-describedby="service-date-legend"
                           name="certificateOfServiceYear"
-                          value={form.certificateOfServiceYear}
+                          value={form.certificateOfServiceYear || ''}
                           type="number"
                           min="1900"
                           max="2100"
