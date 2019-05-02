@@ -70,7 +70,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
-        petitionFileSize: 0,
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -88,7 +88,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
-        petitionFileSize: 0,
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -105,7 +105,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
-        petitionFileSize: 0,
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -122,7 +122,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
-        petitionFileSize: 0,
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
