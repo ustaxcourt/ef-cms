@@ -18,9 +18,7 @@ describe('DocketEntryFactory', () => {
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
-    it('should require a Filing Status selection', () => {
-      expect(errors().lodged).toEqual('Enter selection for Filing Status.');
-      rawEntity.lodged = false;
+    it('should not require a Filing Status selection', () => {
       expect(errors().lodged).toEqual(undefined);
     });
 

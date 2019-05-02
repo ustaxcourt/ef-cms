@@ -1,9 +1,9 @@
-import { restoreFiledWizardDocumentIdsAction } from './restoreFiledWizardDocumentIdsAction';
+import { restoreWizardDataAction } from './restoreWizardDataAction';
 import { runAction } from 'cerebral/test';
 
-describe('restoreFiledWizardDocumentIdsAction', () => {
+describe('restoreWizardDataAction', () => {
   it('should restore documentIds', async () => {
-    const result = await runAction(restoreFiledWizardDocumentIdsAction, {
+    const result = await runAction(restoreWizardDataAction, {
       props: {
         filedDocumentIds: ['Something', 'Forward'],
       },

@@ -17,7 +17,6 @@ describe('validateDocketEntry', () => {
     expect(errors).toEqual({
       dateReceived: 'Enter date received.',
       documentType: 'You must select a document type.',
-      lodged: 'Enter selection for Filing Status.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',
     });

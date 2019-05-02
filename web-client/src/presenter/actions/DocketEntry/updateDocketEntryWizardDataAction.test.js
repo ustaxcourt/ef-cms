@@ -1,13 +1,16 @@
-import { clearDocketEntryWizardDataAction } from './clearDocketEntryWizardDataAction';
 import { runAction } from 'cerebral/test';
+import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardDataAction';
 
-describe('clearDocketEntryWizardDataAction', () => {
+describe('updateDocketEntryWizardDataAction', () => {
   it('clear Certificate Of Service date items when certificateOfService is updated', async () => {
-    const result = await runAction(clearDocketEntryWizardDataAction, {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
       props: {
         key: 'certificateOfService',
       },
       state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: [],
+        },
         form: {
           certificateOfServiceDate: '12-12-1212',
           certificateOfServiceDay: 12,

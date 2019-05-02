@@ -1,3 +1,4 @@
+import { find, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -7,13 +8,28 @@ import { state } from 'cerebral';
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store object
  */
-export const clearDocketEntryWizardDataAction = ({ store, props }) => {
+export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
+  const { INTERNAL_CATEGORY_MAP } = get(state.constants);
+  let entry, form;
+  const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
+
   switch (props.key) {
     case 'certificateOfService':
       store.set(state.form.certificateOfServiceDate, null);
       store.set(state.form.certificateOfServiceMonth, null);
       store.set(state.form.certificateOfServiceDay, null);
       store.set(state.form.certificateOfServiceYear, null);
+      break;
+    case 'eventCode':
+      find(
+        INTERNAL_CATEGORY_MAP,
+        entries => (entry = find(entries, { eventCode: props.value })),
+      );
+      form = {
+        ...omit(get(state.form), ENTRY_PROPS),
+        ...pick(entry || {}, ENTRY_PROPS),
+      };
+      store.set(state.form, form);
       break;
   }
 };

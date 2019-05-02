@@ -3,9 +3,10 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { restoreFiledWizardDocumentIdsAction } from '../actions/DocketEntry/restoreFiledWizardDocumentIdsAction';
+import { restoreWizardDataAction } from '../actions/DocketEntry/restoreWizardDataAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -13,7 +14,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { stashFiledWizardDocumentIdsAction } from '../actions/DocketEntry/stashFiledWizardDocumentIdsAction';
+import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
 import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
@@ -32,16 +33,17 @@ export const submitDocketEntrySequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      setCurrentPageAction('Interstitial'),
+      generateTitleAction,
       set(state.showValidation, false),
       clearAlertsAction,
       uploadExternalDocumentsAction,
       submitDocketEntryAction,
-      stashFiledWizardDocumentIdsAction,
+      stashWizardDataAction,
       setCaseAction,
       chooseNextStepAction,
       {
         caseDetail: [
-          setCurrentPageAction('Interstitial'),
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
           set(state.saveAlertsForNavigation, true),
@@ -51,8 +53,9 @@ export const submitDocketEntrySequence = [
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
           clearFormAction,
-          restoreFiledWizardDocumentIdsAction,
+          restoreWizardDataAction,
           set(state.wizardStep, 'SupportingDocumentForm'),
+          setCurrentPageAction('AddDocketEntry'),
         ],
       },
     ],
