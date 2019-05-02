@@ -16,9 +16,7 @@ const getInternalDocumentTypes = typeMap => {
 };
 
 export const addDocketEntryHelper = get => {
-  const { PARTY_TYPES, CATEGORY_MAP, INTERNAL_CATEGORY_MAP } = get(
-    state.constants,
-  );
+  const { PARTY_TYPES, INTERNAL_CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -32,18 +30,18 @@ export const addDocketEntryHelper = get => {
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
-  const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
-    entry => {
-      entry.documentTypeDisplay = entry.documentType.replace(
-        /\sin\sSupport$/i,
-        '',
-      );
-      return entry;
-    },
-  );
+  const supportingDocumentTypeList = INTERNAL_CATEGORY_MAP[
+    'Supporting Document'
+  ].map(entry => {
+    entry.documentTypeDisplay = entry.documentType.replace(
+      /\sin\sSupport$/i,
+      '',
+    );
+    return entry;
+  });
 
   const objectionDocumentTypes = [
-    ...CATEGORY_MAP['Motion'].map(entry => {
+    ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
     'Motion to Withdraw Counsel (filed by petitioner)',
