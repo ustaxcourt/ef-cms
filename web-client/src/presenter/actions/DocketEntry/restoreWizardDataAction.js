@@ -7,7 +7,29 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store object
  * @param {Object} providers.props the cerebral props object
  */
-export const restoreWizardDataAction = async ({ store, props }) => {
-  const { filedDocumentIds } = props;
+export const restoreWizardDataAction = async ({ get, store, props }) => {
+  const {
+    filedDocumentIds,
+    dateReceived,
+    dateReceivedMonth,
+    dateReceivedDay,
+    dateReceivedYear,
+    partyPrimary,
+    partySecondary,
+    partyRespondent,
+  } = props;
   store.set(state.screenMetadata.filedDocumentIds, filedDocumentIds);
+
+  const form = {
+    ...get(state.form),
+    dateReceived,
+    dateReceivedMonth,
+    dateReceivedDay,
+    dateReceivedYear,
+    partyPrimary,
+    partySecondary,
+    partyRespondent,
+  };
+
+  store.set(state.form, form);
 };
