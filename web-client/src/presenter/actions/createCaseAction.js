@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
+import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from 'cerebral';
-
 /**
  * invokes the filePetition useCase.
  *
@@ -22,38 +22,24 @@ export const createCaseAction = async ({ applicationContext, store, get }) => {
 
   form.contactPrimary.email = get(state.user.email);
 
-  let totalSize = 0;
-  let loadedAmounts = {};
-
-  const calculateTotalLoaded = () => {
-    return Object.keys(loadedAmounts).reduce((acc, key) => {
-      return loadedAmounts[key] + acc;
-    }, 0);
-  };
-
-  if (petitionFile) totalSize += petitionFile.size;
-  if (ownershipDisclosureFile) totalSize += ownershipDisclosureFile.size;
-  if (stinFile) totalSize += stinFile.size;
-
-  const createOnUploadProgress = key => {
-    loadedAmounts[key] = 0;
-    return progressEvent => {
-      const { loaded } = progressEvent;
-      loadedAmounts[key] = loaded;
-      const percent = parseInt((calculateTotalLoaded() / totalSize) * 100);
-      store.set(state.percentComplete, percent);
-    };
-  };
+  const progressFunctions = setupPercentDone(
+    {
+      ownership: ownershipDisclosureFile,
+      petition: petitionFile,
+      stin: stinFile,
+    },
+    store,
+  );
 
   const caseDetail = await applicationContext.getUseCases().filePetition({
     applicationContext,
     ownershipDisclosureFile,
-    ownershipDisclosureUploadProgress: createOnUploadProgress('ownership'),
+    ownershipDisclosureUploadProgress: progressFunctions.ownership,
     petitionFile,
     petitionMetadata: form,
-    petitionUploadProgress: createOnUploadProgress('petition'),
+    petitionUploadProgress: progressFunctions.petition,
     stinFile,
-    stinUploadProgress: createOnUploadProgress('stin'),
+    stinUploadProgress: progressFunctions.stin,
   });
 
   for (let document of caseDetail.documents) {
