@@ -199,12 +199,20 @@ export const StartCaseInternal = connect(
                     key: e.target.name,
                     value: e.target.files[0],
                   });
+                  updatePetitionValueSequence({
+                    key: `${e.target.name}Size`,
+                    value: e.target.files[0].size,
+                  });
                   validatePetitionFromPaperSequence();
                 }}
               />
               <Text
                 className="usa-input-error-message"
                 bind="validationErrors.petitionFile"
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.petitionFileSize"
               />
             </div>
           </div>
