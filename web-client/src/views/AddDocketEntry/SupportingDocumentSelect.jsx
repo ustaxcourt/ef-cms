@@ -8,14 +8,15 @@ export const SupportingDocumentSelect = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateDocketEntryFormValueSequence:
+      sequences.updateDocketEntryFormValueSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
     addDocketEntryHelper,
     form,
-    updateFormValueSequence,
+    updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -37,7 +38,7 @@ export const SupportingDocumentSelect = connect(
             value={get(form, 'previousDocument', '')}
             aria-label="previousDocument"
             onChange={e => {
-              updateFormValueSequence({
+              updateDocketEntryFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
