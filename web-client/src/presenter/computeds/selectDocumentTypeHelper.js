@@ -87,11 +87,19 @@ const getOptionsForCategory = (caseDetail, categoryInformation) => {
   return options;
 };
 
-const getPreviouslyFiledDocuments = caseDetail => {
+export const getPreviouslyFiledDocuments = (
+  caseDetail,
+  documentIdWhitelist,
+) => {
   return caseDetail.documents
     .filter(
       document =>
         document.documentType !== 'Statement of Taxpayer Identification',
+    )
+    .filter(
+      document =>
+        !documentIdWhitelist ||
+        documentIdWhitelist.indexOf(document.documentId) > -1,
     )
     .map(document => {
       return document.documentTitle || document.documentType;
