@@ -17,7 +17,7 @@ describe('validateDocketEntry', () => {
     expect(errors).toEqual({
       dateReceived: 'Enter date received.',
       documentType: 'You must select a document type.',
-      filingStatus: 'Enter selection for Filing Status.',
+      lodged: 'Enter selection for Filing Status.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',
     });
@@ -35,7 +35,7 @@ describe('validateDocketEntry', () => {
         dateReceived: '1212-12-12',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Amendment to Answer',
-        filingStatus: 'Filed',
+        lodged: false,
         ordinalValue: 'First',
         partyPrimary: true,
         primaryDocumentFile: {},

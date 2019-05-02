@@ -17,7 +17,7 @@ const gotoAddDocketEntry = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  set(state.form.filingStatus, 'File'),
+  set(state.form.lodged, false),
   setCurrentPageAction('AddDocketEntry'),
 ];
 
