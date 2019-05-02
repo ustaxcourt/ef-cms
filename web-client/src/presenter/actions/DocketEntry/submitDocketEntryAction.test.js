@@ -21,18 +21,25 @@ describe('submitDocketEntryAction', () => {
 
   it('should call fileExternalDocument', async () => {
     fileExternalDocumentStub.returns({ documents: [] });
-    await runAction(submitDocketEntryAction, {
+    const result = await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
+      },
+      props: {
+        primaryDocumentFileId: 'Forward',
       },
       state: {
         caseDetail: {},
         form: {
           primaryDocumentFile: {},
         },
+        screenMetadata: {
+          filedDocumentIds: [],
+        },
       },
     });
 
     expect(fileExternalDocumentStub.calledOnce).toEqual(true);
+    expect(result.state.screenMetadata.filedDocumentIds).toEqual(['Forward']);
   });
 });

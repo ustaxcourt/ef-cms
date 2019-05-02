@@ -2,6 +2,8 @@ import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
+import { getPreviouslyFiledDocuments } from './selectDocumentTypeHelper';
+
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
   Object.keys(typeMap).forEach(category => {
@@ -21,6 +23,7 @@ export const addDocketEntryHelper = get => {
   if (!caseDetail.partyType) {
     return {};
   }
+  const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
@@ -61,10 +64,16 @@ export const addDocketEntryHelper = get => {
       .format('L');
   }
 
+  const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
+    caseDetail,
+    documentIdWhitelist,
+  );
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
     partyValidationError,
+    previouslyFiledWizardDocuments,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty: !!caseDetail.respondent,
