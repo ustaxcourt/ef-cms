@@ -15,6 +15,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: 'Enter date received.',
       documentType: 'You must select a document type.',
+      eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',
     });
@@ -43,9 +44,11 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Administrative Record',
+      key: 'eventCode',
+      value: 'ADMR',
     });
+
+    expect(test.getState('form.documentType')).toEqual('Administrative Record');
 
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,

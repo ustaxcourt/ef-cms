@@ -5,6 +5,7 @@ import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -110,6 +111,7 @@ describe('Case journey', () => {
       CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Case.documentTypes,
+      INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
       TRIAL_CITIES,
     });
