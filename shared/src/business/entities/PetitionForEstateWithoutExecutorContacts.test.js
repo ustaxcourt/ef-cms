@@ -11,6 +11,7 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -39,6 +40,7 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -68,6 +70,7 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
