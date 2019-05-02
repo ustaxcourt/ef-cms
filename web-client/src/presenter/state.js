@@ -20,6 +20,7 @@ import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
@@ -69,6 +70,7 @@ export const state = {
   formattedWorkQueue,
   getTrialCityName,
   headerHelper,
+  internalTypesHelper,
   mobileMenu: {
     isVisible: false,
   },

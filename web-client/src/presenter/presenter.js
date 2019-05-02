@@ -101,6 +101,7 @@ import { updateForwardFormValueSequence } from './sequences/updateForwardFormVal
 import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
+import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
@@ -223,6 +224,7 @@ export const presenter = {
     updateHasIrsNoticeFormValueSequence,
     updateMessageValueSequence,
     updatePetitionValueSequence,
+    updateScreenMetadataSequence,
     updateSearchTermSequence,
     updateStartCaseFormValueSequence,
     validateCaseAssociationRequestSequence,
