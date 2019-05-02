@@ -27,13 +27,13 @@ export const validateDocketEntryAction = ({
   } else {
     const errorDisplayOrder = [
       'primaryDocumentFile',
+      'dateReceived',
+      'documentType',
+      'certificateOfServiceDate',
+      'objections',
       'partyPrimary',
       'partySecondary',
       'partyRespondent',
-      'certificateOfService',
-      'certificateOfServiceDate',
-      'exhibits',
-      'objections',
     ];
 
     return path.error({

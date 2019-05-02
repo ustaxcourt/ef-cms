@@ -19,11 +19,9 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require a Filing Status selection', () => {
-      expect(errors().filingStatus).toEqual(
-        'Enter selection for Filing Status.',
-      );
-      rawEntity.filingStatus = 'Filed';
-      expect(errors().filingStatus).toEqual(undefined);
+      expect(errors().lodged).toEqual('Enter selection for Filing Status.');
+      rawEntity.lodged = false;
+      expect(errors().lodged).toEqual(undefined);
     });
 
     it('should require received date be entered', () => {

@@ -15,6 +15,7 @@ import uuidv4 from 'uuid/v4';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const {
@@ -214,6 +215,7 @@ const applicationContext = {
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
+    INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
     MAX_FILE_SIZE_MB,
     OTHER_TYPES,
