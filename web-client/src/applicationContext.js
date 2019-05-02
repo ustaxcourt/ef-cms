@@ -15,6 +15,7 @@ import uuidv4 from 'uuid/v4';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
@@ -24,6 +25,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -84,6 +86,7 @@ import { uploadExternalDocument } from '../../shared/src/business/useCases/exter
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateDocketEntry } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
@@ -160,6 +163,7 @@ const allUseCases = {
   uploadExternalDocuments,
   validateCaseAssociationRequest,
   validateCaseDetail,
+  validateDocketEntry,
   validateExternalDocument,
   validateExternalDocumentInformation,
   validateForwardMessage,
@@ -207,6 +211,7 @@ const applicationContext = {
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
+    INTERNAL_CATEGORY_MAP,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
@@ -220,6 +225,7 @@ const applicationContext = {
   getCurrentUserToken,
   getEntityConstructors: () => ({
     CaseAssociationRequestFactory,
+    DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,

@@ -83,6 +83,15 @@ export const DocketRecord = connect(
 
     return (
       <React.Fragment>
+        {helper.showAddDocketEntryButton && (
+          <a
+            className="usa-button tablet-full-width"
+            href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
+            id="button-add-record"
+          >
+            <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Docket Entry
+          </a>
+        )}
         {helper.showFileDocumentButton && (
           <a
             className="usa-button tablet-full-width"

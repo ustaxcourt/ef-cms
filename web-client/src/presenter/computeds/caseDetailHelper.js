@@ -10,6 +10,8 @@ export const caseDetailHelper = get => {
   const userId = get(state.user.userId);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
+  let showAddDocketEntryButton =
+    ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showRequestAccessToCaseButton = false;
   if (userRole === 'practitioner') {
     showFileDocumentButton = false;
@@ -38,6 +40,7 @@ export const caseDetailHelper = get => {
 
   return {
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
+    showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' &&
       userRole !== 'petitioner' &&

@@ -59,6 +59,13 @@ const router = {
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
       }),
     );
+    route(
+      '/case-detail/*/add-docket-entry',
+      checkLoggedIn(docketNumber => {
+        document.title = `Add docket entry ${pageTitleSuffix}`;
+        app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+      }),
+    );
 
     route(
       '/case-detail/*/request-access',

@@ -2,7 +2,7 @@ Document Name (Concatenation Mapping),Document Type (Option),Document Type Categ
 Motion to Withdraw as Counsel,Motion to Withdraw as Counsel,Appearance and Representation,TRUE,TRUE,FALSE,M112,Standard,,,
 "[First, Second, etc.] Amended [Document Name]",Amended,Miscellaneous,TRUE,TRUE,TRUE,ADED,Nonstandard F,Which Document Are You Amending?,,What Iteration Is This Filing?
 Agreed Computation for Entry of Decision,Agreed Computation for Entry of Decision,Decision,TRUE,TRUE,TRUE,ACED,Standard,,,
-Amended Certificate of Service of [Document Name],Amended Certificate of Service,Miscellaneous,TRUE,TRUE,TRUE,AMDC,Nonstandard D,Which Document Is This Certificate of Service For?,,
+Amended Certificate of Service of [Document Name],Amended Certificate of Service,Miscellaneous,TRUE,TRUE,TRUE,AMDC,Nonstandard D,Which Document Is This Certificate of Service For?,Date of Service,
 "[First, Second, etc.] Amendment to [Document Name]",Amendment,Miscellaneous,TRUE,TRUE,TRUE,AMNT,Nonstandard F,Which Document Are You Amending?,,What Iteration Is This Filing?
 "[First, Second, etc.] Amendment to Answer",Amendment to Answer,Answer (filed by respondent only),TRUE,FALSE,FALSE,ATAN,Nonstandard G,,,What Iteration Is This Filing?
 "[First, Second, etc.] Request for Admissions",Request for Admissions,Request,TRUE,TRUE,TRUE,REQA,Nonstandard G,,,What Iteration Is This Filing?

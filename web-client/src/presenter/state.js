@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
@@ -28,8 +29,12 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
+  addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  betaBar: {
+    isVisible: true,
+  },
   caseCaption: '',
   caseDetail: {},
   caseDetailEditContactsHelper,
