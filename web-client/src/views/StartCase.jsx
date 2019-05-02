@@ -8,6 +8,7 @@ import { ProcedureType } from './StartCase/ProcedureType';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -120,15 +121,17 @@ export const StartCase = connect(
                     aria-describedby="petition-hint"
                     name="petitionFile"
                     onChange={e => {
-                      updatePetitionValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
+                      limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                        updatePetitionValueSequence({
+                          key: e.target.name,
+                          value: e.target.files[0],
+                        });
+                        updatePetitionValueSequence({
+                          key: `${e.target.name}Size`,
+                          value: e.target.files[0].size,
+                        });
+                        validateStartCaseSequence();
                       });
-                      updatePetitionValueSequence({
-                        key: `${e.target.name}Size`,
-                        value: e.target.files[0].size,
-                      });
-                      validateStartCaseSequence();
                     }}
                   />
                   <Text
