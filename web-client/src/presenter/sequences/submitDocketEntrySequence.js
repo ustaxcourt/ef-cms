@@ -3,6 +3,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { restoreWizardDataAction } from '../actions/DocketEntry/restoreWizardDataAction';
@@ -32,6 +33,8 @@ export const submitDocketEntrySequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      setCurrentPageAction('Interstitial'),
+      generateTitleAction,
       set(state.showValidation, false),
       clearAlertsAction,
       uploadExternalDocumentsAction,
@@ -41,7 +44,6 @@ export const submitDocketEntrySequence = [
       chooseNextStepAction,
       {
         caseDetail: [
-          setCurrentPageAction('Interstitial'),
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
           set(state.saveAlertsForNavigation, true),
@@ -53,6 +55,7 @@ export const submitDocketEntrySequence = [
           clearFormAction,
           restoreWizardDataAction,
           set(state.wizardStep, 'SupportingDocumentForm'),
+          setCurrentPageAction('AddDocketEntry'),
         ],
       },
     ],

@@ -26,7 +26,7 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         entries => (entry = find(entries, { eventCode: props.value })),
       );
       form = {
-        ...omit(form, ENTRY_PROPS),
+        ...omit(get(state.form), ENTRY_PROPS),
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
