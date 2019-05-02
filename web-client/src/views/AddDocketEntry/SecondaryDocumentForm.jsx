@@ -49,7 +49,7 @@ export const SecondaryDocumentForm = connect(
               id="secondary-document"
               name="secondaryDocumentFile"
               aria-describedby="secondary-document-label"
-              updateDocketEntryFormValueSequence="updateDocketEntryFormValueSequence"
+              updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text

@@ -48,7 +48,7 @@ export const PrimaryDocumentForm = connect(
             id="primary-document"
             name="primaryDocumentFile"
             aria-describedby="primary-document-label"
-            updateDocketEntryFormValueSequence="updateDocketEntryFormValueSequence"
+            updateFormValueSequence="updateDocketEntryFormValueSequence"
             validationSequence="validateDocketEntrySequence"
           />
           <Text
