@@ -26,7 +26,7 @@ export const PrimaryDocumentForm = connect(
     return (
       <React.Fragment>
         <h2>Add Docket Entry</h2>
-        <div className="blue-container">
+        <div className="blue-container primary-document-form">
           <div
             className={`ustc-form-group ${
               validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
