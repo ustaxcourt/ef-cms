@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { stashFiledWizardDocumentIdsAction } from './stashFiledWizardDocumentIdsAction';
+import { stashWizardDataAction } from './stashWizardDataAction';
 
-describe('stashFiledWizardDocumentIdsAction', () => {
+describe('stashWizardDataAction', () => {
   it('should stash documentId', async () => {
-    const result = await runAction(stashFiledWizardDocumentIdsAction, {
+    const result = await runAction(stashWizardDataAction, {
       props: {
         primaryDocumentFileId: 'Forward',
       },
