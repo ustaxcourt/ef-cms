@@ -69,13 +69,13 @@ export const PrimaryDocumentForm = connect(
                   <input
                     id={`filing-status-${option}`}
                     type="radio"
-                    name="filingStatus"
+                    name="lodged"
                     value={option}
-                    checked={form.filingStatus === option}
+                    checked={form.lodged === (option === 'Lodge')}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value === 'Lodge',
                       });
                       validateDocketEntrySequence();
                     }}
