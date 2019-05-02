@@ -3,6 +3,8 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SuccessNotification } from '../SuccessNotification';
+import { SupportingDocumentForm } from './SupportingDocumentForm';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
@@ -21,14 +23,24 @@ export const AddDocketEntry = connect(
         <section className="usa-section usa-grid DocumentDetail">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
-          <h2 className="heading-1">Add Docket Entry</h2>
 
           <SuccessNotification />
           <ErrorNotification />
 
           <div className="usa-grid-full add-bottom-margin">
             <div className="usa-width-one-third">
-              <PrimaryDocumentForm />
+              <Tabs
+                asSwitch
+                defaultActiveTab="PrimaryDocumentForm"
+                bind="wizardStep"
+              >
+                <Tab tabName="PrimaryDocumentForm">
+                  <PrimaryDocumentForm />
+                </Tab>
+                <Tab tabName="SupportingDocumentForm">
+                  <SupportingDocumentForm />
+                </Tab>
+              </Tabs>
             </div>
             <div className="usa-width-two-thirds" />
           </div>
@@ -39,7 +51,9 @@ export const AddDocketEntry = connect(
               type="submit"
               className="usa-button"
               onClick={() => {
-                submitDocketEntrySequence();
+                submitDocketEntrySequence({
+                  supportingDocument: false,
+                });
               }}
             >
               Save and Finish
@@ -47,7 +61,11 @@ export const AddDocketEntry = connect(
             <button
               type="button"
               className="usa-button-secondary"
-              onClick={() => {}}
+              onClick={() => {
+                submitDocketEntrySequence({
+                  supportingDocument: true,
+                });
+              }}
             >
               Save and Add Supporting Document(s)
             </button>
