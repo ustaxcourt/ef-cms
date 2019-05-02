@@ -140,14 +140,33 @@ describe('Petition entity', () => {
         irsNoticeDate: '3009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-        petitionFile: {},
+        petitionFile: new File([], 'test.pdf'),
         petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
       });
       expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
-        `Your file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      );
+    });
+
+    it('should inform you if petition file size is zero', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        petitionFileSize: 0,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
+        `Your Petition file size is empty.`,
       );
     });
   });
