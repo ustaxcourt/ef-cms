@@ -1,3 +1,7 @@
+const {
+  MAX_FILE_SIZE_MB,
+  MAX_FILE_SIZE_BYTES,
+} = require('../../persistence/s3/getUploadPolicy');
 const { Petition } = require('./Petition');
 
 describe('Petition entity', () => {
@@ -66,6 +70,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -83,6 +88,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -99,6 +105,7 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -115,12 +122,32 @@ describe('Petition entity', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
       });
       expect(petition.getFormattedValidationErrors().irsNoticeDate).toEqual(
         'Notice Date is in the future. Please enter a valid date.',
+      );
+    });
+
+    it('should inform you if petition file size is greater than 500MB', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: {},
+        petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
+        `Your file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
   });
