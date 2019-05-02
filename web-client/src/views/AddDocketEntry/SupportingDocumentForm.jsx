@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { SupportingDocumentSelect } from './SupportingDocumentSelect';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -97,6 +98,8 @@ export const SupportingDocumentForm = connect(
               bind="validationErrors.documentType"
             />
           </div>
+
+          <SupportingDocumentSelect />
 
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
