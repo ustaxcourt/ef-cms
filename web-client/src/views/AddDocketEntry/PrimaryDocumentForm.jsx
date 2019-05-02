@@ -59,9 +59,10 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.primaryDocumentFile"
             />
           </div>
+
           <div
             className={`ustc-form-group ${
-              validationErrors.filingStatus ? 'usa-input-error' : ''
+              validationErrors.lodged ? 'usa-input-error' : ''
             }`}
           >
             <fieldset className="usa-fieldset-inputs usa-sans">
@@ -78,7 +79,7 @@ export const PrimaryDocumentForm = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: e.target.value === 'Lodge',
                         });
                         validateDocketEntrySequence();
                       }}
@@ -90,9 +91,10 @@ export const PrimaryDocumentForm = connect(
             </fieldset>
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.filingStatus"
+              bind="validationErrors.lodged"
             />
           </div>
+
           <div
             className={`ustc-form-group ${
               validationErrors.dateReceived ? 'usa-input-error' : ''
@@ -116,7 +118,7 @@ export const PrimaryDocumentForm = connect(
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value === 'Lodge',
+                        value: e.target.value,
                       });
                     }}
                     onBlur={() => {
@@ -177,6 +179,7 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.dateReceived"
             />
           </div>
+
           <div
             className={`ustc-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
@@ -276,6 +279,7 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </div>
+
           <div className="ustc-form-group">
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Inclusions</legend>
@@ -408,6 +412,7 @@ export const PrimaryDocumentForm = connect(
               </ul>
             </fieldset>
           </div>
+
           <div
             className={`ustc-form-group ${
               addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
