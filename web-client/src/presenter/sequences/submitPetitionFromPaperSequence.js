@@ -2,7 +2,7 @@ import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearModalAction } from '../actions/clearModalAction';
+import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
@@ -33,7 +33,7 @@ export const submitPetitionFromPaperSequence = [
       setCaseAction,
       setPetitionIdAction,
       unsetFormSubmittingAction,
-      clearModalAction,
+      closeFileUploadStatusModalAction,
       ...gotoDocumentDetailSequence,
     ],
   },
