@@ -45,8 +45,11 @@ export const SecondaryDocumentTypeReadOnly = connect(
         </div>
         {selectDocumentTypeHelper.secondary.showNonstandardForm && (
           <NonstandardForm
+            helper="selectDocumentTypeHelper"
             level="secondary"
             namespace="secondaryDocument"
+            updateSequence="updateFileDocumentWizardFormValueSequence"
+            validateSequence="validateSelectDocumentTypeSequence"
             validationErrors="validationErrors.secondaryDocument"
           />
         )}

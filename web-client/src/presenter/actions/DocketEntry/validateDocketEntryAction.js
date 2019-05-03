@@ -30,6 +30,8 @@ export const validateDocketEntryAction = ({
       'dateReceived',
       'eventCode',
       'previousDocument',
+      'ordinalValue',
+      'serviceDate',
       'freeText',
       'certificateOfServiceDate',
       'objections',
