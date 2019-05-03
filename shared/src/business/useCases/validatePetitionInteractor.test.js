@@ -13,6 +13,7 @@ describe('validatePetition', () => {
       },
       petition: {
         petitionFileSize: 1,
+        stinFileSize: 1,
       },
     });
 
@@ -22,6 +23,7 @@ describe('validatePetition', () => {
         'irsNoticeDate',
         'caseType',
         'petitionFileSize',
+        'stinFileSize',
       ]),
     });
   });
@@ -38,6 +40,8 @@ describe('validatePetition', () => {
         hasIrsNotice: true,
         petitionFile: new File([], 'test.png'),
         petitionFileSize: 1,
+        stinFile: new File([], 'test.png'),
+        stinFileSize: 1,
       },
     });
     expect(errors).toEqual({
@@ -47,6 +51,8 @@ describe('validatePetition', () => {
         'ownershipDisclosureFile',
         'petitionFile',
         'petitionFileSize',
+        'stinFile',
+        'stinFileSize',
       ]),
       irsNoticeDate: 'Notice Date is a required field.',
     });
@@ -70,7 +76,8 @@ describe('validatePetition', () => {
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
-        stinFile: {},
+        stinFile: new File([], 'testStinFile.pdf'),
+        stinFileSize: 1,
       },
     });
     expect(errors).toEqual(null);
@@ -96,7 +103,8 @@ describe('validatePetition', () => {
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
-        stinFile: {},
+        stinFile: new File([], 'testStinFile.pdf'),
+        stinFileSize: 1,
       },
     });
 

@@ -94,6 +94,11 @@ async function createCase(test) {
     value: fakeFile,
   });
 
+  await test.runSequence('updatePetitionValueSequence', {
+    key: 'stinFileSize',
+    value: 1,
+  });
+
   await test.runSequence('submitFilePetitionSequence');
   return await waitForRouter();
 }

@@ -22,6 +22,11 @@ export default (test, fakeFile) => {
       value: fakeFile,
     });
 
+    await test.runSequence('updatePetitionValueSequence', {
+      key: 'stinFileSize',
+      value: 1,
+    });
+
     let result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
