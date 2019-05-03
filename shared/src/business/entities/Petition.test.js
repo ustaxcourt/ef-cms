@@ -131,7 +131,9 @@ describe('Petition entity', () => {
         'Notice Date is in the future. Please enter a valid date.',
       );
     });
+  });
 
+  describe('Petition file size', () => {
     it('should inform you if petition file size is greater than 500MB', () => {
       const petition = new Petition({
         caseType: 'other',
@@ -167,6 +169,46 @@ describe('Petition entity', () => {
       });
       expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
         `Your Petition file size is empty.`,
+      );
+    });
+  });
+
+  describe('STIN file size', () => {
+    it('should inform you if stin file size is greater than 500MB', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: MAX_FILE_SIZE_BYTES + 5,
+      });
+      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+        `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      );
+    });
+
+    it('should inform you if stin file size is zero', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 0,
+      });
+      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+        `Your STIN file size is empty.`,
       );
     });
   });

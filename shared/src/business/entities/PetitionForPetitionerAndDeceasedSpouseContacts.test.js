@@ -15,6 +15,7 @@ describe('Petition', () => {
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -51,6 +52,7 @@ describe('Petition', () => {
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
