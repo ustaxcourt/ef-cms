@@ -17,6 +17,7 @@ import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
@@ -63,6 +64,7 @@ export const state = {
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
+  fileUploadStatusHelper,
   filingTypes: [],
   form: {},
   formattedCaseDetail,
@@ -80,6 +82,7 @@ export const state = {
   paymentInfo: {
     showDetails: false,
   },
+  percentComplete: 0,
   petition: {},
   procedureTypes: [],
   requestAccessHelper,
@@ -92,6 +95,7 @@ export const state = {
   showValidation: false,
   startCaseHelper,
   submitting: false,
+  timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
   usaBanner: {
     showDetails: false,
