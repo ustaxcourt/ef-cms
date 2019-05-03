@@ -2,6 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  MAX_FILE_SIZE_MB,
+  MAX_FILE_SIZE_BYTES,
+} = require('../../../persistence/s3/getUploadPolicy');
 const { includes } = require('lodash');
 
 /**
@@ -25,6 +29,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
+    primaryDocumentFileSize: joi
+      .number()
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
   };
 
   let schemaOptionalItems = {
@@ -39,6 +49,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
+    secondaryDocumentFileSize: joi
+      .number()
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
     secondarySupportingDocument: joi.string(),
     secondarySupportingDocumentFile: joi.object(),
     secondarySupportingDocumentFreeText: joi.string(),
@@ -68,7 +84,21 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyRespondent: 'Select a party.',
     partySecondary: 'Select a party.',
     primaryDocumentFile: 'A file was not selected.',
+    primaryDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your Primary Document file size is empty.',
+    ],
     secondaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your Secondary Document file size is empty.',
+    ],
     secondarySupportingDocument:
       'Enter selection for Secondary Supporting Document.',
     secondarySupportingDocumentFile: 'A file was not selected.',
