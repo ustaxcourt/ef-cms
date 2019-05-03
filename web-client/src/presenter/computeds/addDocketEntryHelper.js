@@ -84,6 +84,11 @@ export const addDocketEntryHelper = get => {
     categoryInformation,
   );
 
+  if (optionsForCategory.showSecondaryDocumentSelect) {
+    optionsForCategory.showSecondaryDocumentSelect = false;
+    optionsForCategory.showSecondaryDocumentForm = true;
+  }
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,

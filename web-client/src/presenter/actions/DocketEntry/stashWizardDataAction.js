@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.props the cerebral props object
  */
 export const stashWizardDataAction = async ({ get, props }) => {
-  const { primaryDocumentFileId } = props;
+  const { primaryDocumentFileId, secondaryDocumentFileId } = props;
 
   const filedDocumentIds = get(state.screenMetadata.filedDocumentIds) || [];
 
@@ -24,6 +24,9 @@ export const stashWizardDataAction = async ({ get, props }) => {
   } = get(state.form);
 
   filedDocumentIds.push(primaryDocumentFileId);
+  if (secondaryDocumentFileId) {
+    filedDocumentIds.push(secondaryDocumentFileId);
+  }
 
   return {
     dateReceived,
