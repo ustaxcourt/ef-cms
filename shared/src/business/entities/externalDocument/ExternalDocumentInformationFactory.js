@@ -119,7 +119,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         contains: 'must be less than or equal to',
         message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
-      'Your Secondary Document file size is empty.',
+      'Your Secondary Supporting Document file size is empty.',
     ],
     secondarySupportingDocumentFreeText: 'Please provide a value.',
     supportingDocument: 'Enter selection for Supporting Document.',
@@ -127,7 +127,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     supportingDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
-        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
       'Your Secondary Document file size is empty.',
     ],
