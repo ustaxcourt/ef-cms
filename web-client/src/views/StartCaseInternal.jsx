@@ -1,4 +1,5 @@
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
@@ -45,7 +46,9 @@ export const StartCaseInternal = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Upload Documents to Create a Case
           </h1>
-          {showModal && <FormCancelModalDialog />}
+          {showModal === 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <ErrorNotification />
           <h2>Petition Documents</h2>
 
@@ -303,6 +306,7 @@ export const StartCaseInternal = connect(
             Cancel
           </button>
         </form>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
       </section>
     );
   },
