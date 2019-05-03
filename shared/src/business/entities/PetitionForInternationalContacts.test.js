@@ -25,6 +25,7 @@ describe('Petition', () => {
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual({
         contactPrimary: { country: 'Country is a required field.' },
@@ -55,6 +56,7 @@ describe('Petition', () => {
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
