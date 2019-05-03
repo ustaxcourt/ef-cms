@@ -23,9 +23,12 @@ export const stashWizardDataAction = async ({ get, props }) => {
     partyRespondent,
   } = get(state.form);
 
-  filedDocumentIds.push(primaryDocumentFileId);
-  if (secondaryDocumentFileId) {
-    filedDocumentIds.push(secondaryDocumentFileId);
+  const supporting = get(state.screenMetadata.supporting);
+  if (!supporting) {
+    filedDocumentIds.push(primaryDocumentFileId);
+    if (secondaryDocumentFileId) {
+      filedDocumentIds.push(secondaryDocumentFileId);
+    }
   }
 
   return {
