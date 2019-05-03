@@ -171,6 +171,41 @@ describe('Petition entity', () => {
         `Your Petition file size is empty.`,
       );
     });
+
+    it('should not error on petitionFileSize when petitionFile is undefined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().petitionFileSize,
+      ).toBeUndefined();
+    });
+
+    it('should error on petitionFileSize when petitionFile is defined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        petitionFile: new File([], 'testPetitionFile.pdf'),
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
+        `Your Petition file size is empty.`,
+      );
+    });
   });
 
   describe('STIN file size', () => {
@@ -206,6 +241,41 @@ describe('Petition entity', () => {
         signature: true,
         stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
+      });
+      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+        `Your STIN file size is empty.`,
+      );
+    });
+
+    it('should not error on stinFileSize when stinFile is undefined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().stinFileSize,
+      ).toBeUndefined();
+    });
+
+    it('should error on stinFileSize when stinFile is defined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: new File([], 'testStinFile.pdf'),
       });
       expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
         `Your STIN file size is empty.`,

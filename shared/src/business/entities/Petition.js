@@ -91,22 +91,30 @@ joiValidationDecorator(
     }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
-    petitionFileSize: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    petitionFileSize: joi.when('petitionFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
     signature: joi.boolean().required(),
     stinFile: joi.object().required(),
-    stinFileSize: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    stinFileSize: joi.when('stinFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
   }),
   function() {
     return !this.getFormattedValidationErrors();
