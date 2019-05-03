@@ -82,3 +82,83 @@
   font-size: 30px;
   text-align: center;
 }
+
+.file-upload-status-modal {
+  > .modal-header,
+  .button-container {
+    display: none;
+  }
+
+  .status-message {
+    margin-bottom: 10px;
+    font-size: 48px;
+    font-weight: $font-semibold;
+  }
+
+  .percent-complete {
+    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: $font-bold;
+  }
+
+  .progress-bar {
+    width: 75%;
+    height: 40px;
+    margin: 5px auto;
+    background: $color-white;
+    border-radius: 5px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: $color-green-light;
+    border-radius: 5px;
+  }
+
+  .cancel {
+    > a {
+      color: $color-white;
+      font-size: 17px;
+      font-weight: $font-semibold;
+    }
+  }
+
+  padding: 60px 0;
+  border-top: none;
+  background-color: $color-primary;
+  color: $color-white;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 30px;
+  text-align: center;
+}
+
+.file-upload-error {
+  > .modal-header {
+    display: none;
+  }
+
+  .uhoh {
+    color: $color-base;
+    font-size: 48px;
+    font-weight: $font-semibold;
+  }
+
+  .message {
+    width: 80%;
+    margin: auto;
+    color: $color-base;
+    font-size: 30px;
+    font-weight: $font-semibold;
+  }
+
+  button.usa-button-secondary {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  padding: 60px 0;
+  background-color: $color-gold;
+  color: $color-base;
+  font-size: 30px;
+  text-align: center;
+}
