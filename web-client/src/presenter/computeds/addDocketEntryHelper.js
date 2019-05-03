@@ -1,8 +1,11 @@
-import { orderBy } from 'lodash';
+import { find, orderBy } from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
-import { getPreviouslyFiledDocuments } from './selectDocumentTypeHelper';
+import {
+  getOptionsForCategory,
+  getPreviouslyFiledDocuments,
+} from './selectDocumentTypeHelper';
 
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
@@ -67,11 +70,26 @@ export const addDocketEntryHelper = get => {
     documentIdWhitelist,
   );
 
+  const selectedEventCode = form.eventCode;
+
+  let categoryInformation;
+  find(
+    INTERNAL_CATEGORY_MAP,
+    entries =>
+      (categoryInformation = find(entries, { eventCode: selectedEventCode })),
+  );
+
+  const optionsForCategory = getOptionsForCategory(
+    caseDetail,
+    categoryInformation,
+  );
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
     partyValidationError,
     previouslyFiledWizardDocuments,
+    primary: optionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty: !!caseDetail.respondent,
