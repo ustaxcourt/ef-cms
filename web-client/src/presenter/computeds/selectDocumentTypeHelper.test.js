@@ -1,19 +1,13 @@
 import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
-import { getTrialCityName } from './formattedTrialCity';
 import { runCompute } from 'cerebral/test';
 import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
-import { trialCitiesHelper } from './trialCitiesHelper';
 
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
     CATEGORY_MAP,
-    TRIAL_CITIES,
   },
-  getTrialCityName,
-  trialCitiesHelper,
 };
 
 describe('selectDocumentTypeHelper', () => {
@@ -120,9 +114,6 @@ describe('selectDocumentTypeHelper', () => {
         showNonstandardForm: true,
         showTrialLocationSelect: true,
         textInputLabel: 'Requested Location',
-      },
-      trialCities: {
-        Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
       },
     });
   });
