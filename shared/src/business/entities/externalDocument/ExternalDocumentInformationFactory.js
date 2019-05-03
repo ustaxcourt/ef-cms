@@ -30,11 +30,11 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
+      .integer()
       .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+      .min(1)
+      .number()
+      .optional(),
   };
 
   let schemaOptionalItems = {
@@ -50,16 +50,28 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
+      .integer()
       .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+      .min(1)
+      .number()
+      .optional(),
     secondarySupportingDocument: joi.string(),
     secondarySupportingDocumentFile: joi.object(),
+    secondarySupportingDocumentFileSize: joi
+      .integer()
+      .max(MAX_FILE_SIZE_BYTES)
+      .min(1)
+      .number()
+      .optional(),
     secondarySupportingDocumentFreeText: joi.string(),
     supportingDocument: joi.string(),
     supportingDocumentFile: joi.object(),
+    supportingDocumentFileSize: joi
+      .integer()
+      .max(MAX_FILE_SIZE_BYTES)
+      .min(1)
+      .number()
+      .optional(),
     supportingDocumentFreeText: joi.string(),
   };
 
@@ -102,9 +114,23 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     secondarySupportingDocument:
       'Enter selection for Secondary Supporting Document.',
     secondarySupportingDocumentFile: 'A file was not selected.',
+    secondarySupportingDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your Secondary Document file size is empty.',
+    ],
     secondarySupportingDocumentFreeText: 'Please provide a value.',
     supportingDocument: 'Enter selection for Supporting Document.',
     supportingDocumentFile: 'A file was not selected.',
+    supportingDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your Secondary Document file size is empty.',
+    ],
     supportingDocumentFreeText: 'Please provide a value.',
   };
 
