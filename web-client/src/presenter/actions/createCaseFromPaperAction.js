@@ -4,7 +4,8 @@ import { state } from 'cerebral';
 
 export const setupPercentDone = (files, store) => {
   let totalSize = 0;
-  let loadedAmounts = {};
+  const loadedAmounts = {};
+  const startTime = new Date();
 
   const calculateTotalLoaded = () => {
     return Object.keys(loadedAmounts).reduce((acc, key) => {
@@ -21,9 +22,16 @@ export const setupPercentDone = (files, store) => {
     loadedAmounts[key] = 0;
     return progressEvent => {
       const { loaded } = progressEvent;
+      const timeElapsed = new Date() - startTime;
+      const uploadedBytes = calculateTotalLoaded();
+      const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
+      const timeRemaining = Math.floor(
+        (totalSize - uploadedBytes) / uploadSpeed,
+      );
       loadedAmounts[key] = loaded;
-      const percent = parseInt((calculateTotalLoaded() / totalSize) * 100);
+      const percent = parseInt((uploadedBytes / totalSize) * 100);
       store.set(state.percentComplete, percent);
+      store.set(state.timeRemaining, timeRemaining);
     };
   };
 

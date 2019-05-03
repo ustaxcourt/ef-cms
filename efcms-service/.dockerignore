@@ -5,3 +5,5 @@ coverage
 .dynamodb
 terraform/main/.terraform
 terraform/template/.terraform
+.cache
+dist
