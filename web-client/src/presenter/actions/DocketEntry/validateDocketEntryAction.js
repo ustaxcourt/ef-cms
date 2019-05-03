@@ -28,7 +28,7 @@ export const validateDocketEntryAction = ({
     const errorDisplayOrder = [
       'primaryDocumentFile',
       'dateReceived',
-      'documentType',
+      'eventCode',
       'previousDocument',
       'freeText',
       'certificateOfServiceDate',
