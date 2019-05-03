@@ -1,5 +1,4 @@
 import { isEmpty } from 'lodash';
-import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const getOptionsForCategory = (caseDetail, categoryInformation) => {
