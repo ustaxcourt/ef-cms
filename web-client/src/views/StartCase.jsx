@@ -2,6 +2,7 @@ import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
@@ -69,7 +70,9 @@ export const StartCase = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <FormCancelModalDialog />}
+          {showModal === 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <ErrorNotification />
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
@@ -879,6 +882,7 @@ export const StartCase = connect(
             Cancel
           </button>
         </form>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
       </section>
     );
   },
