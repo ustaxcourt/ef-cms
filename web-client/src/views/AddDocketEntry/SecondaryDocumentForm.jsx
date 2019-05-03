@@ -23,7 +23,7 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Entry for [Secondary Document]</h2>
+        <h2>Add Entry for {form.secondaryDocument.documentType}</h2>
         <div className="blue-container">
           <div
             className={`ustc-form-group ${
