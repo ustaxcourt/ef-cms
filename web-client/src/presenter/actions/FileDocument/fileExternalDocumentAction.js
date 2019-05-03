@@ -1,3 +1,4 @@
+import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -9,6 +10,7 @@ import { state } from 'cerebral';
  */
 export const fileExternalDocumentAction = async ({
   get,
+  store,
   applicationContext,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
@@ -23,11 +25,25 @@ export const fileExternalDocumentAction = async ({
 
   documentMetadata = { ...documentMetadata, docketNumber, caseId };
 
+  const progressFunctions = setupPercentDone(
+    {
+      primary: primaryDocumentFile,
+      primarySupporting: supportingDocumentFile,
+      secondary: secondaryDocumentFile,
+      secondarySupporting: secondarySupportingDocumentFile,
+    },
+    store,
+  );
+
   const caseDetail = await applicationContext
     .getUseCases()
     .uploadExternalDocument({
       applicationContext,
       documentMetadata,
+      onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
+      onPrimaryUploadProgress: progressFunctions.primary,
+      onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
+      onSecondaryUploadProgress: progressFunctions.secondary,
       primaryDocumentFile,
       secondaryDocumentFile,
       secondarySupportingDocumentFile,
