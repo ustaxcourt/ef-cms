@@ -178,16 +178,26 @@ export const StartCase = connect(
                 accept=".pdf"
                 name="stinFile"
                 onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
+                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    updatePetitionValueSequence({
+                      key: `${e.target.name}Size`,
+                      value: e.target.files[0].size,
+                    });
+                    validateStartCaseSequence();
                   });
-                  validateStartCaseSequence();
                 }}
               />
               <Text
                 className="usa-input-error-message"
                 bind="validationErrors.stinFile"
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
