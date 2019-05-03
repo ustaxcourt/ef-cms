@@ -51,6 +51,13 @@ Petition.errorToMessageMap = {
   procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',
   stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your STIN file size is empty.',
+  ],
 };
 
 joiValidationDecorator(
@@ -84,16 +91,30 @@ joiValidationDecorator(
     }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
-    petitionFileSize: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    petitionFileSize: joi.when('petitionFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
     signature: joi.boolean().required(),
     stinFile: joi.object().required(),
+    stinFileSize: joi.when('stinFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
   }),
   function() {
     return !this.getFormattedValidationErrors();

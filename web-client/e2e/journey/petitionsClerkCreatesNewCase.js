@@ -53,6 +53,11 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updatePetitionValueSequence', {
+      key: 'stinFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('updatePetitionValueSequence', {
       key: 'ownershipDisclosureFile',
       value: fakeFile,
     });

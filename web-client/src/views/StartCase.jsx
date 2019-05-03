@@ -2,6 +2,7 @@ import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
@@ -69,7 +70,9 @@ export const StartCase = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <FormCancelModalDialog />}
+          {showModal === 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <ErrorNotification />
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
@@ -175,16 +178,26 @@ export const StartCase = connect(
                 accept=".pdf"
                 name="stinFile"
                 onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
+                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    updatePetitionValueSequence({
+                      key: `${e.target.name}Size`,
+                      value: e.target.files[0].size,
+                    });
+                    validateStartCaseSequence();
                   });
-                  validateStartCaseSequence();
                 }}
               />
               <Text
                 className="usa-input-error-message"
                 bind="validationErrors.stinFile"
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
@@ -869,6 +882,7 @@ export const StartCase = connect(
             Cancel
           </button>
         </form>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
       </section>
     );
   },
