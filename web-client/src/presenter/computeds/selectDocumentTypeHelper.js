@@ -1,8 +1,7 @@
 import { isEmpty } from 'lodash';
-import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
-const getOptionsForCategory = (caseDetail, categoryInformation) => {
+export const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
@@ -150,28 +149,6 @@ export const selectDocumentTypeHelper = get => {
         );
       }
     }
-  }
-
-  if (
-    returnData.primary.showTrialLocationSelect ||
-    (returnData.secondary && returnData.secondary.showTrialLocationSelect)
-  ) {
-    const { TRIAL_CITIES } = get(state.constants);
-    let trialCities =
-      caseDetail.procedureType === 'Small'
-        ? TRIAL_CITIES.SMALL
-        : TRIAL_CITIES.REGULAR;
-    trialCities = sortBy(trialCities, ['state', 'city']);
-    const getTrialCityName = get(state.getTrialCityName);
-    const states = {};
-    trialCities.forEach(
-      trialCity =>
-        (states[trialCity.state] = [
-          ...(states[trialCity.state] || []),
-          getTrialCityName(trialCity),
-        ]),
-    );
-    returnData.trialCities = states;
   }
 
   return returnData;

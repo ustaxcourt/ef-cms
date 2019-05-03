@@ -9,31 +9,33 @@ import React from 'react';
 
 export const NonstandardForm = connect(
   {
+    caseDetail: state.caseDetail,
     form: state.form,
+    helper: state[props.helper],
     level: props.level,
     namespace: props.namespace,
     screenMetadata: state.screenMetadata,
-    selectDocumentTypeHelper: state.selectDocumentTypeHelper,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
-    validateSelectDocumentTypeSequence:
-      sequences.validateSelectDocumentTypeSequence,
+    trialCitiesHelper: state.trialCitiesHelper,
+    updateSequence: sequences[props.updateSequence],
+    validateSequence: sequences[props.validateSequence],
     validationErrors: state[props.validationErrors],
   },
   ({
-    selectDocumentTypeHelper,
+    caseDetail,
     form,
+    helper,
     level,
     namespace,
     screenMetadata,
-    updateFileDocumentWizardFormValueSequence,
+    trialCitiesHelper,
+    updateSequence,
     validationErrors,
-    validateSelectDocumentTypeSequence,
+    validateSequence,
   }) => {
     namespace = namespace ? `${namespace}.` : '';
     return (
       <React.Fragment>
-        {selectDocumentTypeHelper[level].showTextInput && (
+        {helper[level].showTextInput && (
           <div
             className={`ustc-form-group ${
               validationErrors && validationErrors.freeText
@@ -42,7 +44,7 @@ export const NonstandardForm = connect(
             }`}
           >
             <label htmlFor={`${namespace}free-text`}>
-              {selectDocumentTypeHelper[level].textInputLabel}
+              {helper[level].textInputLabel}
             </label>
             <input
               id={`${namespace}free-text`}
@@ -51,13 +53,13 @@ export const NonstandardForm = connect(
               autoCapitalize="none"
               value={get(form, `${namespace}freeText`, '')}
               onChange={e => {
-                updateFileDocumentWizardFormValueSequence({
+                updateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
               onBlur={() => {
-                validateSelectDocumentTypeSequence();
+                validateSequence();
               }}
             />
             <Text
@@ -67,7 +69,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {selectDocumentTypeHelper[level].previousDocumentSelectLabel && (
+        {helper[level].previousDocumentSelectLabel && (
           <div
             className={`ustc-form-group ${
               validationErrors && validationErrors.previousDocument
@@ -76,7 +78,7 @@ export const NonstandardForm = connect(
             }`}
           >
             <label htmlFor={`${namespace}previous-document`}>
-              {selectDocumentTypeHelper[level].previousDocumentSelectLabel}
+              {helper[level].previousDocumentSelectLabel}
             </label>
             <select
               name={`${namespace}previousDocument`}
@@ -84,15 +86,15 @@ export const NonstandardForm = connect(
               value={get(form, `${namespace}previousDocument`, '')}
               aria-label="previousDocument"
               onChange={e => {
-                updateFileDocumentWizardFormValueSequence({
+                updateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-                validateSelectDocumentTypeSequence();
+                validateSequence();
               }}
             >
               <option value="">- Select -</option>
-              {selectDocumentTypeHelper[level].previouslyFiledDocuments.map(
+              {helper[level].previouslyFiledDocuments.map(
                 (documentTitle, idx) => {
                   return (
                     <option key={idx} value={documentTitle}>
@@ -109,7 +111,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {selectDocumentTypeHelper[level].showDateFields && (
+        {helper[level].showDateFields && (
           <div
             className={
               'ustc-form-group ' +
@@ -141,13 +143,13 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}month`, '')}
                     type="number"
                     onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
+                      updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
                     onBlur={() => {
-                      validateSelectDocumentTypeSequence();
+                      validateSequence();
                     }}
                   />
                 </div>
@@ -171,13 +173,13 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}day`, '')}
                     type="number"
                     onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
+                      updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
                     onBlur={() => {
-                      validateSelectDocumentTypeSequence();
+                      validateSequence();
                     }}
                   />
                 </div>
@@ -201,13 +203,13 @@ export const NonstandardForm = connect(
                     name={`${namespace}year`}
                     type="number"
                     onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
+                      updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
                     onBlur={() => {
-                      validateSelectDocumentTypeSequence();
+                      validateSequence();
                     }}
                   />
                 </div>
@@ -220,7 +222,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {selectDocumentTypeHelper[level].showTrialLocationSelect && (
+        {helper[level].showTrialLocationSelect && (
           <div
             className={`ustc-form-group ${
               validationErrors && validationErrors.trialLocation
@@ -229,18 +231,20 @@ export const NonstandardForm = connect(
             }`}
           >
             <TrialCity
-              label={selectDocumentTypeHelper[level].textInputLabel}
+              label={helper[level].textInputLabel}
               showSmallTrialCitiesHint={false}
               showRegularTrialCitiesHint={false}
               showDefaultOption={true}
               value={get(form, `${namespace}trialLocation`, '')}
-              trialCitiesByState={selectDocumentTypeHelper.trialCities}
+              trialCitiesByState={
+                trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
+              }
               onChange={e => {
-                updateFileDocumentWizardFormValueSequence({
+                updateSequence({
                   key: `${namespace}trialLocation`,
                   value: e.target.value,
                 });
-                validateSelectDocumentTypeSequence();
+                validateSequence();
               }}
             />
             <Text
@@ -250,7 +254,7 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {selectDocumentTypeHelper[level].ordinalField && (
+        {helper[level].ordinalField && (
           <div
             className={
               'ustc-form-group ' +
@@ -264,7 +268,7 @@ export const NonstandardForm = connect(
               className="usa-fieldset-inputs usa-sans"
             >
               <legend htmlFor={`${namespace}ordinal-field-radios`}>
-                {selectDocumentTypeHelper[level].ordinalField}
+                {helper[level].ordinalField}
               </legend>
               <ul className="usa-unstyled-list">
                 {['First', 'Second', 'Third'].map(ordinalValue => (
@@ -279,11 +283,11 @@ export const NonstandardForm = connect(
                         ordinalValue
                       }
                       onChange={e => {
-                        updateFileDocumentWizardFormValueSequence({
+                        updateSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateSelectDocumentTypeSequence();
+                        validateSequence();
                       }}
                     />
                     <label htmlFor={`${namespace}${ordinalValue}`}>
@@ -300,12 +304,12 @@ export const NonstandardForm = connect(
           </div>
         )}
 
-        {selectDocumentTypeHelper[level].showSecondaryDocumentSelect &&
+        {helper[level].showSecondaryDocumentSelect &&
           !screenMetadata.isSecondaryDocumentTypeSelected && (
             <SecondaryDocumentType />
           )}
 
-        {selectDocumentTypeHelper[level].showSecondaryDocumentSelect &&
+        {helper[level].showSecondaryDocumentSelect &&
           screenMetadata.isSecondaryDocumentTypeSelected && (
             <SecondaryDocumentTypeReadOnly />
           )}
