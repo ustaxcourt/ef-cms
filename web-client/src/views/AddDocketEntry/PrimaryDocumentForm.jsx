@@ -231,7 +231,13 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           {addDocketEntryHelper.primary.showNonstandardForm && (
-            <NonstandardForm level="primary" />
+            <NonstandardForm
+              helper="addDocketEntryHelper"
+              level="primary"
+              updateSequence="updateDocketEntryFormValueSequence"
+              validateSequence="validateDocketEntrySequence"
+              validationErrors="validationErrors"
+            />
           )}
 
           <div className="ustc-form-group">
@@ -261,7 +267,7 @@ export const PrimaryDocumentForm = connect(
               id="add-to-coversheet"
               type="checkbox"
               name="addToCoversheet"
-              checked={form.addToCoversheet}
+              checked={form.addToCoversheet || false}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -350,7 +356,14 @@ export const PrimaryDocumentForm = connect(
                     Certificate of Service
                   </label>
                   {form.certificateOfService && (
-                    <fieldset className="service-date">
+                    <fieldset
+                      className={`service-date
+                        ${
+                          validationErrors.certificateOfServiceDate
+                            ? 'usa-input-error'
+                            : ''
+                        }`}
+                    >
                       <div className="usa-date-of-birth">
                         <div className="usa-form-group usa-form-group-month">
                           <input
@@ -422,6 +435,10 @@ export const PrimaryDocumentForm = connect(
                           />
                         </div>
                       </div>
+                      <Text
+                        className="usa-input-error-message"
+                        bind="validationErrors.certificateOfServiceDate"
+                      />
                     </fieldset>
                   )}
                 </li>
