@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -23,8 +24,8 @@ export const PrimaryDocumentForm = connect(
     caseDetail,
     form,
     internalTypesHelper,
-    updateScreenMetadataSequence,
     updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -228,6 +229,11 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.eventCode"
             />
           </div>
+
+          {addDocketEntryHelper.primary.showNonstandardForm && (
+            <NonstandardForm level="primary" />
+          )}
+
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1

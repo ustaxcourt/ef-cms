@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
-const getOptionsForCategory = (caseDetail, categoryInformation) => {
+export const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
