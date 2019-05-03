@@ -204,7 +204,7 @@ describe('Petition entity', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
-        stinFile: {},
+        stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
       });
       expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
