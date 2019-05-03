@@ -30,11 +30,11 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
-      .integer()
-      .max(MAX_FILE_SIZE_BYTES)
-      .min(1)
       .number()
-      .optional(),
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
   };
 
   let schemaOptionalItems = {
@@ -50,28 +50,28 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
-      .integer()
-      .max(MAX_FILE_SIZE_BYTES)
-      .min(1)
       .number()
-      .optional(),
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
     secondarySupportingDocument: joi.string(),
     secondarySupportingDocumentFile: joi.object(),
     secondarySupportingDocumentFileSize: joi
-      .integer()
-      .max(MAX_FILE_SIZE_BYTES)
-      .min(1)
       .number()
-      .optional(),
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
     secondarySupportingDocumentFreeText: joi.string(),
     supportingDocument: joi.string(),
     supportingDocumentFile: joi.object(),
     supportingDocumentFileSize: joi
-      .integer()
-      .max(MAX_FILE_SIZE_BYTES)
-      .min(1)
       .number()
-      .optional(),
+      .optional()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
     supportingDocumentFreeText: joi.string(),
   };
 
