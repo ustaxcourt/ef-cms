@@ -1,5 +1,6 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 class FileUploadStatusComponent extends ModalDialog {
@@ -11,10 +12,10 @@ class FileUploadStatusComponent extends ModalDialog {
   }
 
   renderBody() {
-    const { cancelSequence, percentComplete, statusMessage } = this.props;
+    const { cancelSequence, percentComplete, helper } = this.props;
     return (
       <div>
-        <div className="status-message">{statusMessage}</div>
+        <div className="status-message">{helper.statusMessage}</div>
         <div className="percent-complete">{percentComplete}%</div>
         <div className="progress-bar">
           <div
@@ -24,14 +25,15 @@ class FileUploadStatusComponent extends ModalDialog {
         </div>
         {percentComplete < 100 && (
           <div className="cancel">
-            <a
+            <button
               onClick={e => {
                 e.stopPropagation();
+                cancelSequence();
               }}
-              href={cancelSequence()}
+              className="link"
             >
               Cancel Upload
-            </a>
+            </button>
           </div>
         )}
       </div>
@@ -41,9 +43,9 @@ class FileUploadStatusComponent extends ModalDialog {
 
 export const FileUploadStatusModal = connect(
   {
-    cancelSequence: () => null,
-    percentComplete: null || 0,
-    statusMessage: null || '',
+    cancelSequence: sequences.gotoIdleLogoutSequence, // TODO: replace with a real cancel sequence
+    helper: state.fileUploadStatusHelper,
+    percentComplete: state.percentComplete,
   },
   FileUploadStatusComponent,
 );
