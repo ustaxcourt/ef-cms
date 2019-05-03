@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -23,8 +24,8 @@ export const PrimaryDocumentForm = connect(
     caseDetail,
     form,
     internalTypesHelper,
-    updateScreenMetadataSequence,
     updateDocketEntryFormValueSequence,
+    updateScreenMetadataSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
@@ -228,6 +229,17 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.eventCode"
             />
           </div>
+
+          {addDocketEntryHelper.primary.showNonstandardForm && (
+            <NonstandardForm
+              helper="addDocketEntryHelper"
+              level="primary"
+              updateSequence="updateDocketEntryFormValueSequence"
+              validateSequence="validateDocketEntrySequence"
+              validationErrors="validationErrors"
+            />
+          )}
+
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
@@ -255,7 +267,7 @@ export const PrimaryDocumentForm = connect(
               id="add-to-coversheet"
               type="checkbox"
               name="addToCoversheet"
-              checked={form.addToCoversheet}
+              checked={form.addToCoversheet || false}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -344,7 +356,14 @@ export const PrimaryDocumentForm = connect(
                     Certificate of Service
                   </label>
                   {form.certificateOfService && (
-                    <fieldset className="service-date">
+                    <fieldset
+                      className={`service-date
+                        ${
+                          validationErrors.certificateOfServiceDate
+                            ? 'usa-input-error'
+                            : ''
+                        }`}
+                    >
                       <div className="usa-date-of-birth">
                         <div className="usa-form-group usa-form-group-month">
                           <input
@@ -416,6 +435,10 @@ export const PrimaryDocumentForm = connect(
                           />
                         </div>
                       </div>
+                      <Text
+                        className="usa-input-error-message"
+                        bind="validationErrors.certificateOfServiceDate"
+                      />
                     </fieldset>
                   )}
                 </li>
