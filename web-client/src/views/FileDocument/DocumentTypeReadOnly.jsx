@@ -49,7 +49,10 @@ export const DocumentTypeReadOnly = connect(
           </div>
           {selectDocumentTypeHelper.primary.showNonstandardForm && (
             <NonstandardForm
+              helper="selectDocumentTypeHelper"
               level="primary"
+              updateSequence="updateFileDocumentWizardFormValueSequence"
+              validateSequence="validateSelectDocumentTypeSequence"
               validationErrors="validationErrors"
             />
           )}
