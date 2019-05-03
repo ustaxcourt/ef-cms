@@ -37,8 +37,8 @@ describe('DocketEntryFactory', () => {
       );
     });
 
-    it('should not require event code', () => {
-      expect(errors().eventCode).toEqual(undefined);
+    it('should require event code', () => {
+      expect(errors().eventCode).toBeDefined();
     });
 
     describe('Document Type', () => {
