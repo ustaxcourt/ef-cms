@@ -35,6 +35,9 @@ export const setupPercentDone = (files, store) => {
     };
   };
 
+  store.set(state.percentComplete, 0);
+  store.set(state.timeRemaining, Number.POSITIVE_INFINITY);
+
   const uploadProgressCallbackMap = {};
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
