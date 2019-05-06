@@ -78,7 +78,6 @@ export const RequestAccessDocumentForm = connect(
                   aria-describedby="primary-document-label"
                   updateFormValueSequence="updateCaseAssociationFormValueSequence"
                   validationSequence="validateCaseAssociationRequestSequence"
-                  maxFileSize={constants.MAX_FILE_SIZE_BYTES}
                 />
                 <Text
                   className="usa-input-error-message"
