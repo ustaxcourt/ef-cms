@@ -6,8 +6,10 @@ import React from 'react';
 class FileUploadStatusComponent extends ModalDialog {
   constructor(props) {
     super(props);
+    this.ariaLiveMode = 'polite';
     this.modal = {
       classNames: 'file-upload-status-modal',
+      title: '', // keep this so voice over will automatically start reading the modal
     };
   }
 
@@ -16,8 +18,10 @@ class FileUploadStatusComponent extends ModalDialog {
     return (
       <div>
         <div className="status-message">{helper.statusMessage}</div>
-        <div className="percent-complete">{percentComplete}%</div>
-        <div className="progress-bar">
+        <div className="percent-complete" aria-hidden="true">
+          {percentComplete}%
+        </div>
+        <div className="progress-bar" aria-hidden="true">
           <div
             className="progress-bar-fill"
             style={{ width: `${percentComplete}%` }}
