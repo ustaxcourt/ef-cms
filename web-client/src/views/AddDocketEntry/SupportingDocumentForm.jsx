@@ -47,9 +47,9 @@ export const SupportingDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
-              id="primary-document"
+              id="supporting-document"
               name="primaryDocumentFile"
-              aria-describedby="primary-document-label"
+              aria-describedby="supporting-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
@@ -64,7 +64,7 @@ export const SupportingDocumentForm = connect(
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="document-type" id="document-type-label">
+            <label htmlFor="event-code" id="event-code-label">
               Document Type
             </label>
             <select
@@ -170,13 +170,13 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label">
+            <label htmlFor="additional-info2" id="additional-info-label2">
               Additional Info 2
             </label>
             <input
               id="additional-info2"
               type="text"
-              aria-describedby="additional-info2-label"
+              aria-describedby="additional-info2-label2"
               name="additionalInfo2"
               autoCapitalize="none"
               value={form.additionalInfo2 || ''}

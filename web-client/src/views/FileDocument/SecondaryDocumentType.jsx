@@ -78,9 +78,11 @@ export const SecondaryDocumentType = connect(
                   : ''
               }`}
             >
-              <label htmlFor="secondary-document-type">Document Type</label>
+              <label htmlFor="secondary-doc-secondary-document-type">
+                Document Type
+              </label>
               <select
-                id="secondary-document-type"
+                id="secondary-doc-secondary-document-type"
                 name="secondaryDocument.documentType"
                 className="secondaryDocumentType"
                 onChange={e => {
