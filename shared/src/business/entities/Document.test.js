@@ -171,7 +171,7 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
+    it('should generate correct filedBy string for partyRespondent and partyPractitioner (as an object, legacy data)', () => {
       const document = new Document({
         category: 'Supporting Document',
         createdAt: '2019-04-19T17:29:13.122Z',
@@ -192,7 +192,125 @@ describe('Document entity', () => {
         scenario: 'Nonstandard C',
       });
       document.generateFiledBy(caseDetail);
+      expect(document.filedBy).toEqual('Resp.');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and partyPractitioner', () => {
+      const document = new Document({
+        category: 'Supporting Document',
+        createdAt: '2019-04-19T17:29:13.122Z',
+        documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+        documentTitle:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+        documentType: 'Unsworn Declaration under Penalty of Perjury in Support',
+        eventCode: 'USDL',
+        freeText: 'Test',
+        lodged: true,
+        partyPractitioner: true,
+        partyRespondent: true,
+        practitioner: [
+          {
+            name: 'Test Practitioner',
+            partyPractitioner: true,
+          },
+        ],
+        previousDocument: 'Amended Petition',
+        relationship: 'primarySupportingDocument',
+        scenario: 'Nonstandard C',
+      });
+      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and partyPractitioner set to false', () => {
+      const document = new Document({
+        category: 'Supporting Document',
+        createdAt: '2019-04-19T17:29:13.122Z',
+        documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+        documentTitle:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+        documentType: 'Unsworn Declaration under Penalty of Perjury in Support',
+        eventCode: 'USDL',
+        freeText: 'Test',
+        lodged: true,
+        partyPractitioner: true,
+        partyRespondent: true,
+        practitioner: [
+          {
+            name: 'Test Practitioner',
+            partyPractitioner: false,
+          },
+        ],
+        previousDocument: 'Amended Petition',
+        relationship: 'primarySupportingDocument',
+        scenario: 'Nonstandard C',
+      });
+      document.generateFiledBy(caseDetail);
+      expect(document.filedBy).toEqual('Resp.');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners', () => {
+      const document = new Document({
+        category: 'Supporting Document',
+        createdAt: '2019-04-19T17:29:13.122Z',
+        documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+        documentTitle:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+        documentType: 'Unsworn Declaration under Penalty of Perjury in Support',
+        eventCode: 'USDL',
+        freeText: 'Test',
+        lodged: true,
+        partyPractitioner: true,
+        partyRespondent: true,
+        practitioner: [
+          {
+            name: 'Test Practitioner',
+            partyPractitioner: true,
+          },
+          {
+            name: 'Test Practitioner1',
+            partyPractitioner: true,
+          },
+        ],
+        previousDocument: 'Amended Petition',
+        relationship: 'primarySupportingDocument',
+        scenario: 'Nonstandard C',
+      });
+      document.generateFiledBy(caseDetail);
+      expect(document.filedBy).toEqual(
+        'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
+      );
+    });
+
+    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners with one set to false', () => {
+      const document = new Document({
+        category: 'Supporting Document',
+        createdAt: '2019-04-19T17:29:13.122Z',
+        documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+        documentTitle:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+        documentType: 'Unsworn Declaration under Penalty of Perjury in Support',
+        eventCode: 'USDL',
+        freeText: 'Test',
+        lodged: true,
+        partyPractitioner: true,
+        partyRespondent: true,
+        practitioner: [
+          {
+            name: 'Test Practitioner',
+            partyPractitioner: false,
+          },
+          {
+            name: 'Test Practitioner1',
+            partyPractitioner: true,
+          },
+        ],
+        previousDocument: 'Amended Petition',
+        relationship: 'primarySupportingDocument',
+        scenario: 'Nonstandard C',
+      });
+      document.generateFiledBy(caseDetail);
+      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
   });
 });
