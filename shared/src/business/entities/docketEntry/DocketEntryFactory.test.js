@@ -65,6 +65,36 @@ describe('DocketEntryFactory', () => {
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
+    it('should require one of [partyPrimary, partySecondary, partyRespondent, partyPractitioner] to be selected', () => {
+      rawEntity.practitioner = [
+        {
+          name: 'Test Practitioner',
+          partyPractitioner: false,
+        },
+        {
+          name: 'Test Practitioner1',
+          partyPractitioner: false,
+        },
+      ];
+      rawEntity.partyPrimary = false;
+      expect(errors().partyPrimary).toEqual('Select a filing party.');
+    });
+
+    it('should have no errors if a single partyPractitioner is true', () => {
+      rawEntity.practitioner = [
+        {
+          name: 'Test Practitioner',
+          partyPractitioner: true,
+        },
+        {
+          name: 'Test Practitioner1',
+          partyPractitioner: false,
+        },
+      ];
+      rawEntity.partyPrimary = false;
+      expect(errors().partyPrimary).toEqual(undefined);
+    });
+
     it('should not require Additional Info 1', () => {
       expect(errors().additionalInfo).toEqual(undefined);
     });
