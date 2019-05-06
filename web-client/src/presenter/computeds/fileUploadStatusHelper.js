@@ -2,9 +2,12 @@ import { state } from 'cerebral';
 
 export const fileUploadStatusHelper = get => {
   const timeRemaining = get(state.timeRemaining);
+  const percentComplete = get(state.percentComplete);
   let statusMessage;
 
-  if (!Number.isFinite(timeRemaining)) {
+  if (percentComplete === 100) {
+    statusMessage = 'All Done!';
+  } else if (!Number.isFinite(timeRemaining)) {
     statusMessage = 'Preparing Upload';
   } else if (timeRemaining < 60) {
     statusMessage = 'Less than 1 Minute Left';

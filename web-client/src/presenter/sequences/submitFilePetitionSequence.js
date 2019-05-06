@@ -2,7 +2,7 @@ import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearModalAction } from '../actions/clearModalAction';
+import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeIrsNoticeDateAction } from '../actions/computeIrsNoticeDateAction';
 import { createCaseAction } from '../actions/createCaseAction';
 import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
@@ -31,9 +31,9 @@ export const submitFilePetitionSequence = [
       openFileUploadStatusModalAction,
       createCaseAction,
       setCaseAction,
+      closeFileUploadStatusModalAction,
       getCreateCaseAlertSuccessAction,
       setAlertSuccessAction,
-      clearModalAction,
       navigateToDashboardAction,
     ],
   },

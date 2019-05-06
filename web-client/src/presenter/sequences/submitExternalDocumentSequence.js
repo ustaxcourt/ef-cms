@@ -1,4 +1,4 @@
-import { clearModalAction } from '../actions/clearModalAction';
+import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { fileExternalDocumentAction } from '../actions/FileDocument/fileExternalDocumentAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -13,8 +13,8 @@ export const submitExternalDocumentSequence = [
   fileExternalDocumentAction,
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
-  setAlertSuccessAction,
+  closeFileUploadStatusModalAction,
   set(state.saveAlertsForNavigation, true),
-  clearModalAction,
+  setAlertSuccessAction,
   navigateToCaseDetailAction,
 ];
