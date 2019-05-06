@@ -30,6 +30,18 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
+      store.set(state.form.secondaryDocument, null);
+      break;
+    case 'secondaryDocument.eventCode':
+      find(
+        INTERNAL_CATEGORY_MAP,
+        entries => (entry = find(entries, { eventCode: props.value })),
+      );
+      form = {
+        ...omit(get(state.form.secondaryDocument), ENTRY_PROPS),
+        ...pick(entry || {}, ENTRY_PROPS),
+      };
+      store.set(state.form.secondaryDocument, form);
       break;
   }
 };

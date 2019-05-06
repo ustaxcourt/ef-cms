@@ -21,5 +21,27 @@ describe('PetitionFromPaper entity', () => {
       });
       expect(petition.getFormattedValidationErrors()).not.toEqual(null);
     });
+    it('fails validation if petitionFile is set, but petitionFileSize is not', () => {
+      const petition = new PetitionFromPaper({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        petitionFile: new File([], 'test.pdf'),
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
+        'Your Petition file size is empty.',
+      );
+    });
+    it('fails validation if stinFile is set, but stinFileSize is not', () => {
+      const petition = new PetitionFromPaper({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        receivedAt: new Date().toISOString(),
+        stinFile: new File([], 'test.pdf'),
+      });
+
+      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+        'Your STIN file size is empty.',
+      );
+    });
   });
 });

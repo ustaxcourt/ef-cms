@@ -11,10 +11,7 @@ describe('validatePetition', () => {
           Petition,
         }),
       },
-      petition: {
-        petitionFileSize: 1,
-        stinFileSize: 1,
-      },
+      petition: {},
     });
 
     expect(errors).toEqual({

@@ -6,21 +6,21 @@ import React from 'react';
 export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
+    constants: state.constants,
     form: state.form,
     id: props.id,
-    maxFileSize: props.maxFileSize,
     name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validationSequence: sequences[props.validationSequence],
   },
   ({
     ariaDescribedBy,
+    constants,
     form,
     id,
     name,
     updateFormValueSequence,
     validationSequence,
-    maxFileSize,
   }) => {
     let inputRef;
 
@@ -40,14 +40,14 @@ export const StateDrivenFileInput = connect(
             if (form[name]) e.preventDefault();
           }}
           onChange={e => {
-            limitFileSize(e, maxFileSize, () => {
+            limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.files[0],
               });
               updateFormValueSequence({
                 key: `${e.target.name}Size`,
-                value: e.target.files[0],
+                value: e.target.files[0].size,
               });
               validationSequence();
             });
