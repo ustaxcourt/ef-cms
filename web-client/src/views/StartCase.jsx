@@ -578,6 +578,14 @@ export const StartCase = connect(
                     });
                   }}
                 />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFile"
+                />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFileSize"
+                />
               </div>
             </div>
           )}
