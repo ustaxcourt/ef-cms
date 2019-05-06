@@ -103,6 +103,15 @@ export const addDocketEntryHelper = get => {
     secondaryCategoryInformation,
   );
 
+  const previousDocument =
+    form.previousDocument &&
+    find(
+      caseDetail.documents,
+      doc => (doc.documentTitle || doc.documentType) === form.previousDocument,
+    );
+  const showSupportingInclusions =
+    previousDocument && previousDocument.relationship !== 'secondaryDocument';
+
   if (optionsForCategory.showSecondaryDocumentSelect) {
     optionsForCategory.showSecondaryDocumentSelect = false;
     optionsForCategory.showSecondaryDocumentForm = true;
@@ -137,6 +146,7 @@ export const addDocketEntryHelper = get => {
       form.documentType,
     ),
     showSupportingDocumentValid: !!form.supportingDocumentFile,
+    showSupportingInclusions,
     supportingDocumentTypeList,
   };
 };
