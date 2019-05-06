@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
+import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -229,6 +230,60 @@ export const PrimaryDocumentForm = connect(
               bind="validationErrors.eventCode"
             />
           </div>
+
+          {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
+            <div
+              className={`ustc-form-group ${
+                validationErrors.secondaryDocument &&
+                validationErrors.secondaryDocument.eventCode
+                  ? 'usa-input-error'
+                  : ''
+              }`}
+            >
+              <label
+                htmlFor="secondary-document-type"
+                id="secondary-document-type-label"
+              >
+                Which Document Is This Motion for Leave For?
+              </label>
+              <Select
+                className="select-react-element"
+                classNamePrefix="select-react-element"
+                options={
+                  internalTypesHelper.internalDocumentTypesForSelectSorted
+                }
+                name="secondaryDocument.eventCode"
+                id="secondary-document-type"
+                isClearable={true}
+                aria-describedby="secondary-document-type-label"
+                placeholder="- Select -"
+                onInputChange={(inputText, { action }) => {
+                  if (action == 'input-change') {
+                    updateScreenMetadataSequence({
+                      key: 'searchText',
+                      value: inputText,
+                    });
+                  }
+                }}
+                onChange={(inputValue, { action, name }) => {
+                  switch (action) {
+                    case 'select-option':
+                      updateDocketEntryFormValueSequence({
+                        key: name,
+                        value: inputValue.value,
+                      });
+                      validateDocketEntrySequence();
+                      break;
+                  }
+                  return true;
+                }}
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.secondaryDocument.eventCode"
+              />
+            </div>
+          )}
 
           {addDocketEntryHelper.primary.showNonstandardForm && (
             <NonstandardForm
@@ -557,6 +612,8 @@ export const PrimaryDocumentForm = connect(
             </div>
           )}
         </div>
+
+        {form.secondaryDocument && <SecondaryDocumentForm />}
       </React.Fragment>
     );
   },
