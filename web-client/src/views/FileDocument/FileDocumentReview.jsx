@@ -1,3 +1,4 @@
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFilingReadOnly } from './PartiesFilingReadOnly';
@@ -71,6 +72,11 @@ export const FileDocumentReview = connect(
           </button>
         </div>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal
+            confirmSequence={submitExternalDocumentSequence}
+          />
+        )}
       </React.Fragment>
     );
   },

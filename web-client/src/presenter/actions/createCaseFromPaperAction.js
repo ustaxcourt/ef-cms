@@ -60,6 +60,7 @@ export const createCaseFromPaperAction = async ({
   get,
   store,
   props,
+  path,
 }) => {
   const { petitionFile, ownershipDisclosureFile, stinFile } = get(
     state.petition,
@@ -84,9 +85,10 @@ export const createCaseFromPaperAction = async ({
     store,
   );
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .filePetitionFromPaper({
+  let caseDetail;
+
+  try {
+    caseDetail = await applicationContext.getUseCases().filePetitionFromPaper({
       applicationContext,
       ownershipDisclosureFile,
       ownershipDisclosureUploadProgress: progressFunctions.ownership,
@@ -96,6 +98,9 @@ export const createCaseFromPaperAction = async ({
       stinFile,
       stinUploadProgress: progressFunctions.stin,
     });
+  } catch (err) {
+    return path.error();
+  }
 
   for (let document of caseDetail.documents) {
     await applicationContext.getUseCases().createCoverSheet({
@@ -105,7 +110,7 @@ export const createCaseFromPaperAction = async ({
     });
   }
 
-  return {
+  return path.success({
     caseDetail,
-  };
+  });
 };

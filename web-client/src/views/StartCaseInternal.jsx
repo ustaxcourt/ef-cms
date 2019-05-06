@@ -1,4 +1,5 @@
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
@@ -326,6 +327,11 @@ export const StartCaseInternal = connect(
           </button>
         </form>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal
+            confirmSequence={submitPetitionFromPaperSequence}
+          />
+        )}
       </section>
     );
   },

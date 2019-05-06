@@ -17,6 +17,11 @@ describe('fileExternalDocumentAction', () => {
         uploadExternalDocument: uploadExternalDocumentStub,
       }),
     };
+
+    presenter.providers.path = {
+      error: () => null,
+      success: () => null,
+    };
   });
 
   it('should call uploadExternalDocument', async () => {
