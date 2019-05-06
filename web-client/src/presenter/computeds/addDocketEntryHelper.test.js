@@ -128,4 +128,10 @@ describe('addDocketEntryHelper', () => {
       'Test Practitioner1',
     ]);
   });
+
+  it("shows should show inclusions when previous document isn't secondary", async () => {
+    state.form.previousDocument = 'Statement of Taxpayer Identification';
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showSupportingInclusions).toBeTruthy();
+  });
 });
