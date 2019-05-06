@@ -115,7 +115,8 @@ export const StartCase = connect(
                     </span>
                   </label>
                   <span className="usa-form-hint">
-                    File must be in PDF format (.pdf)
+                    File must be in PDF format (.pdf). Max file size{' '}
+                    {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <input
                     id="petition-file"
@@ -170,7 +171,8 @@ export const StartCase = connect(
                 </span>
               </label>
               <span className="usa-form-hint">
-                File must be in PDF format (.pdf)
+                File must be in PDF format (.pdf). Max file size{' '}
+                {constants.MAX_FILE_SIZE_MB}MB.
               </span>
               <input
                 id="stin-file"
@@ -554,7 +556,8 @@ export const StartCase = connect(
                   </span>
                 </label>
                 <span className="usa-form-hint">
-                  File must be in PDF format (.pdf).
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <input
                   id="ownership-disclosure-file"

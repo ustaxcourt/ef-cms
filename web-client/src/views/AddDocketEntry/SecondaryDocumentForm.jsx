@@ -8,6 +8,7 @@ import React from 'react';
 export const SecondaryDocumentForm = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
@@ -20,6 +21,7 @@ export const SecondaryDocumentForm = connect(
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
+    constants,
   }) => {
     return (
       <React.Fragment>
@@ -34,7 +36,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'ustc-upload ' +
+                'ustc-upload with-hint' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -45,6 +47,10 @@ export const SecondaryDocumentForm = connect(
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
+            <span className="usa-form-hint">
+              File must be in PDF format (.pdf). Max file size{' '}
+              {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
             <StateDrivenFileInput
               id="secondary-document"
               name="secondaryDocumentFile"
