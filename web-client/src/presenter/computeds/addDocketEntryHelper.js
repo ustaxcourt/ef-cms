@@ -6,6 +6,7 @@ import {
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
+import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
@@ -132,6 +133,9 @@ export const addDocketEntryHelper = get => {
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
+    showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
+      form.documentType,
+    ),
     showSupportingDocumentValid: !!form.supportingDocumentFile,
     supportingDocumentTypeList,
   };
