@@ -6,6 +6,7 @@ import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStat
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
+import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -30,11 +31,16 @@ export const submitPetitionFromPaperSequence = [
       set(state.showValidation, false),
       openFileUploadStatusModalAction,
       createCaseFromPaperAction,
-      setCaseAction,
-      setPetitionIdAction,
-      unsetFormSubmittingAction,
-      closeFileUploadStatusModalAction,
-      ...gotoDocumentDetailSequence,
+      {
+        error: [openFileUploadErrorModal],
+        success: [
+          setCaseAction,
+          setPetitionIdAction,
+          unsetFormSubmittingAction,
+          closeFileUploadStatusModalAction,
+          ...gotoDocumentDetailSequence,
+        ],
+      },
     ],
   },
 ];
