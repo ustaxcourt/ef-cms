@@ -30,6 +30,11 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
+      store.set(state.form.previousDocument, null);
+      store.set(state.form.serviceDate, null);
+      store.set(state.form.trialLocation, null);
+      store.set(state.form.ordinalValue, null);
+      store.set(state.form.freeText, null);
       store.set(state.form.secondaryDocument, null);
       break;
     case 'secondaryDocument.eventCode':
@@ -42,6 +47,11 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form.secondaryDocument, form);
+      store.set(state.form.secondaryDocument.previousDocument, null);
+      store.set(state.form.secondaryDocument.serviceDate, null);
+      store.set(state.form.secondaryDocument.trialLocation, null);
+      store.set(state.form.secondaryDocument.ordinalValue, null);
+      store.set(state.form.secondaryDocument.freeText, null);
       break;
   }
 };

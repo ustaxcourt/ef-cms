@@ -3,6 +3,8 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
+import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -23,6 +25,8 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 export const submitDocketEntrySequence = [
   clearAlertsAction,
   set(state.showValidation, true),
+  computeFormDateAction,
+  computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
   validateDocketEntryAction,
