@@ -84,9 +84,9 @@ export const SecondaryDocumentForm = connect(
               id="additional-info"
               type="text"
               aria-describedby="additional-info-label"
-              name="additionalInfo"
+              name="secondaryDocument.additionalInfo"
               autoCapitalize="none"
-              value={form.additionalInfo || ''}
+              value={form.secondaryDocument.additionalInfo || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -102,8 +102,8 @@ export const SecondaryDocumentForm = connect(
             <input
               id="add-to-coversheet"
               type="checkbox"
-              name="addToCoversheet"
-              checked={form.addToCoversheet}
+              name="secondaryDocument.addToCoversheet"
+              checked={form.secondaryDocument.addToCoversheet}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -123,9 +123,9 @@ export const SecondaryDocumentForm = connect(
               id="additional-info2"
               type="text"
               aria-describedby="additional-info2-label"
-              name="additionalInfo2"
+              name="secondaryDocument.additionalInfo2"
               autoCapitalize="none"
-              value={form.additionalInfo2 || ''}
+              value={form.secondaryDocument.additionalInfo2 || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,

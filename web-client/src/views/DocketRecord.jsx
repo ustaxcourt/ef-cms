@@ -42,6 +42,7 @@ export const DocketRecord = connect(
       documentId,
       description,
       isPaper,
+      additionalInfo,
       docketRecordIndex = 0,
     ) {
       return (
@@ -60,7 +61,7 @@ export const DocketRecord = connect(
                     <FontAwesomeIcon icon={['fas', 'file-alt']} />
                   </span>
                 )}
-                {description}
+                {description} {additionalInfo}
               </a>
               <button
                 className="show-on-mobile link"
@@ -72,7 +73,7 @@ export const DocketRecord = connect(
                   });
                 }}
               >
-                {description}
+                {description} {additionalInfo}
               </button>
             </React.Fragment>
           )}
@@ -153,6 +154,7 @@ export const DocketRecord = connect(
                         document.documentId,
                         record.description,
                         document.isPaper,
+                        document.additionalInfo,
                         arrayIndex,
                       )}
                     {document &&
@@ -165,7 +167,8 @@ export const DocketRecord = connect(
                           >
                             <span aria-hidden="true">Uploading</span>
                           </span>
-                          {record.description}
+                          {record.description}{' '}
+                          {document && document.additionalInfo}
                         </React.Fragment>
                       )}
                     {document && helper.showDocumentDetailLink && (
@@ -181,7 +184,8 @@ export const DocketRecord = connect(
                             <FontAwesomeIcon icon={['fas', 'file-alt']} />
                           </span>
                         )}
-                        {record.description}
+                        {record.description}{' '}
+                        {document && document.additionalInfo}
                       </a>
                     )}
                     {!document &&
@@ -190,6 +194,7 @@ export const DocketRecord = connect(
                         record.documentId,
                         record.description,
                         false,
+                        document.additionalInfo,
                         arrayIndex,
                       )}
                     {!document && !record.documentId && record.description}
@@ -197,7 +202,8 @@ export const DocketRecord = connect(
                       <>
                         {' '}
                         <span className="filings-and-proceedings">
-                          {record.filingsAndProceedings}
+                          {record.filingsAndProceedings}{' '}
+                          {document && document.additionalInfo2}
                         </span>
                       </>
                     )}
