@@ -542,3 +542,44 @@ textarea#case-caption {
   padding-right: 45px;
   padding-left: 45px;
 }
+header.usa-header {
+  height: 115px;
+
+  nav.usa-nav-primary {
+    display: block;
+    padding-top: 43px;
+  }
+}
+
+nav.usa-nav {
+  .usa-nav-primary {
+    position: absolute;
+    top: -9.75rem;
+    left: 140px;
+
+    a,
+    :hover {
+      background: none;
+      color: $color-primary;
+    }
+
+    .usa-nav__primary {
+      li.active,
+      li:hover {
+        border-bottom: 2px solid $color-primary;
+      }
+    }
+  }
+  .usa-nav-secondary {
+    margin-top: -17px;
+  }
+
+  .usa-nav-secondary-links li:not(:last-child)::after {
+    content: '';
+    padding-left: 0;
+  }
+
+  .user-dropdown {
+    margin-top: -7px;
+  }
+}
