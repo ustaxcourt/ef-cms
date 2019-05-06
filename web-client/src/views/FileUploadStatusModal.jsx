@@ -12,7 +12,7 @@ class FileUploadStatusComponent extends ModalDialog {
   }
 
   renderBody() {
-    const { cancelSequence, percentComplete, helper } = this.props;
+    const { cancelUploadSequence, percentComplete, helper } = this.props;
     return (
       <div>
         <div className="status-message">{helper.statusMessage}</div>
@@ -23,12 +23,12 @@ class FileUploadStatusComponent extends ModalDialog {
             style={{ width: `${percentComplete}%` }}
           />
         </div>
-        {percentComplete < 100 && (
+        {helper.isCancelable && (
           <div className="cancel">
             <button
               onClick={e => {
                 e.stopPropagation();
-                cancelSequence();
+                cancelUploadSequence();
               }}
               className="link"
             >
@@ -43,7 +43,7 @@ class FileUploadStatusComponent extends ModalDialog {
 
 export const FileUploadStatusModal = connect(
   {
-    cancelSequence: sequences.gotoIdleLogoutSequence, // TODO: replace with a real cancel sequence
+    cancelUploadSequence: sequences.cancelFileUploadSequence, // TODO: replace with a real cancel sequence
     helper: state.fileUploadStatusHelper,
     percentComplete: state.percentComplete,
   },
