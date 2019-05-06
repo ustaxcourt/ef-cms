@@ -192,7 +192,7 @@ export const PrimaryDocumentForm = connect(
               validationErrors.eventCode ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="document-type" id="document-type-label">
+            <label htmlFor="react-select-2-input" id="document-type-label">
               Document Type
             </label>
             <Select
@@ -241,7 +241,7 @@ export const PrimaryDocumentForm = connect(
               }`}
             >
               <label
-                htmlFor="secondary-document-type"
+                htmlFor="react-select-3-input"
                 id="secondary-document-type-label"
               >
                 Which Document Is This Motion for Leave For?
@@ -335,7 +335,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label">
+            <label htmlFor="additional-info2" id="additional-info2-label">
               Additional Info 2
             </label>
             <input
@@ -419,6 +419,9 @@ export const PrimaryDocumentForm = connect(
                             : ''
                         }`}
                     >
+                      <legend id="service-date-legend" className="usa-sr-only">
+                        Certificate of Service
+                      </legend>
                       <div className="usa-date-of-birth">
                         <div className="usa-form-group usa-form-group-month">
                           <input

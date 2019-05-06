@@ -442,6 +442,16 @@
         "wait for form.forward-form[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible"
       ]
     },
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry",
+    {
+      "notes": "reveal all secondary drop-downs and inputs ",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs",
+      "actions": [
+        "wait for element #certificate-of-service to be visible",
+        "check field #certificate-of-service",
+        "wait for element #service-date-month to be visible"
+      ]
+    }
 
     "http://localhost:1234/mock-login?token=seniorattorney&path=/",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19",
