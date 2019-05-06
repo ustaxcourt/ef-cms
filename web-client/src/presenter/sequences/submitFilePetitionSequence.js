@@ -7,6 +7,7 @@ import { computeIrsNoticeDateAction } from '../actions/computeIrsNoticeDateActio
 import { createCaseAction } from '../actions/createCaseAction';
 import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -30,11 +31,16 @@ export const submitFilePetitionSequence = [
       set(state.showValidation, false),
       openFileUploadStatusModalAction,
       createCaseAction,
-      setCaseAction,
-      closeFileUploadStatusModalAction,
-      getCreateCaseAlertSuccessAction,
-      setAlertSuccessAction,
-      navigateToDashboardAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: [
+          setCaseAction,
+          closeFileUploadStatusModalAction,
+          getCreateCaseAlertSuccessAction,
+          setAlertSuccessAction,
+          navigateToDashboardAction,
+        ],
+      },
     ],
   },
 ];
