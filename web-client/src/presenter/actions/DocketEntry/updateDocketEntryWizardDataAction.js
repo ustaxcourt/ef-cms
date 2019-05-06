@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
   let entry, form;
+  let supporting = get(state.screenMetadata.supporting);
   const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
 
   switch (props.key) {
@@ -42,6 +43,17 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form.secondaryDocument, form);
+      break;
+    case 'previousDocument':
+      if (supporting) {
+        store.set(state.form.exhibits, null);
+        store.set(state.form.attachments, null);
+        store.set(state.form.certificateOfService, null);
+        store.set(state.form.certificateOfServiceDate, null);
+        store.set(state.form.certificateOfServiceMonth, null);
+        store.set(state.form.certificateOfServiceDay, null);
+        store.set(state.form.certificateOfServiceYear, null);
+      }
       break;
   }
 };
