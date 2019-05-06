@@ -70,6 +70,12 @@ exports.addCoverToPDFDocument = async ({
   const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
+  let documentTitle =
+    documentEntity.documentTitle || documentEntity.documentType;
+  if (documentEntity.additionalInfo && documentEntity.addToCoversheet) {
+    documentTitle += ` ${documentEntity.additionalInfo}`;
+  }
+
   const coverSheetData = {
     caseCaptionPetitioner: caseCaptionNames,
     caseCaptionRespondent: 'Commissioner of Internal Revenue',
@@ -79,7 +85,7 @@ exports.addCoverToPDFDocument = async ({
     dateServed: dateServedFormatted,
     docketNumber:
       caseEntity.docketNumber + (caseEntity.docketNumberSuffix || ''),
-    documentTitle: documentEntity.documentTitle || documentEntity.documentType,
+    documentTitle: documentTitle,
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
     originallyFiledElectronically: !caseEntity.isPaper,
