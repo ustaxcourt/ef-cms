@@ -50,6 +50,7 @@ export const submitDocketEntrySequence = [
           navigateToCaseDetailAction,
         ],
         supportingDocument: [
+          set(state.screenMetadata.supporting, true),
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
           clearFormAction,

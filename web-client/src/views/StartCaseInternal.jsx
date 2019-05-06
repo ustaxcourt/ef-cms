@@ -248,16 +248,26 @@ export const StartCaseInternal = connect(
                 accept=".pdf"
                 name="stinFile"
                 onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
+                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    updatePetitionValueSequence({
+                      key: `${e.target.name}Size`,
+                      value: e.target.files[0].size,
+                    });
+                    validatePetitionFromPaperSequence();
                   });
-                  validatePetitionFromPaperSequence();
                 }}
               />
               <Text
                 className="usa-input-error-message"
                 bind="validationErrors.stinFile"
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
@@ -284,14 +294,23 @@ export const StartCaseInternal = connect(
               accept=".pdf"
               name="ownershipDisclosureFile"
               onChange={e => {
-                updatePetitionValueSequence({
-                  key: e.target.name,
-                  value: e.target.files[0],
+                limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                  updatePetitionValueSequence({
+                    key: e.target.name,
+                    value: e.target.files[0],
+                  });
+                  updatePetitionValueSequence({
+                    key: `${e.target.name}Size`,
+                    value: e.target.files[0].size,
+                  });
                 });
               }}
             />
+            <Text
+              className="usa-input-error-message"
+              bind="validationErrors.ownershipDisclosureFileSize"
+            />
           </div>
-
           <button id="submit-case" type="submit" className="usa-button">
             Create Case
           </button>

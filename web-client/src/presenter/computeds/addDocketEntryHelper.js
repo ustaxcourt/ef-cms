@@ -71,12 +71,25 @@ export const addDocketEntryHelper = get => {
   );
 
   const selectedEventCode = form.eventCode;
+  const secondarySelectedEventCode = get(
+    state.form.secondaryDocument.eventCode,
+  );
 
   let categoryInformation;
+  let secondaryCategoryInformation;
+
   find(
     INTERNAL_CATEGORY_MAP,
     entries =>
       (categoryInformation = find(entries, { eventCode: selectedEventCode })),
+  );
+
+  find(
+    INTERNAL_CATEGORY_MAP,
+    entries =>
+      (secondaryCategoryInformation = find(entries, {
+        eventCode: secondarySelectedEventCode,
+      })),
   );
 
   const optionsForCategory = getOptionsForCategory(
@@ -84,12 +97,23 @@ export const addDocketEntryHelper = get => {
     categoryInformation,
   );
 
+  const secondaryOptionsForCategory = getOptionsForCategory(
+    caseDetail,
+    secondaryCategoryInformation,
+  );
+
+  if (optionsForCategory.showSecondaryDocumentSelect) {
+    optionsForCategory.showSecondaryDocumentSelect = false;
+    optionsForCategory.showSecondaryDocumentForm = true;
+  }
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
     partyValidationError,
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
+    secondary: secondaryOptionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty: !!caseDetail.respondent,
