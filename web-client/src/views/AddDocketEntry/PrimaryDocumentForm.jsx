@@ -221,6 +221,13 @@ export const PrimaryDocumentForm = connect(
                     });
                     validateDocketEntrySequence();
                     break;
+                  case 'clear':
+                    updateDocketEntryFormValueSequence({
+                      key: name,
+                      value: '',
+                    });
+                    validateDocketEntrySequence();
+                    break;
                 }
                 return true;
               }}
