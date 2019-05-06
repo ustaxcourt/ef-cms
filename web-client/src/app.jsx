@@ -1,3 +1,5 @@
+import { queryStringDeocder } from './queryStringDecoder';
+
 import {
   faArrowAltCircleLeft,
   faCheckCircle as faCheckCircleRegular,
@@ -35,6 +37,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { route, router } from './router';
+import queryString from 'query-string';
 
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
@@ -66,6 +69,13 @@ const app = {
     applicationContext.setCurrentUserToken(token);
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+
+    const { code, token: queryToken } = queryStringDeocder();
+
+    if (process.env.USTC_ENV === 'prod' && (!user && !code && !queryToken)) {
+      window.location.replace(presenter.state.cognitoLoginUrl);
+      return;
+    }
 
     presenter.state.constants = applicationContext.getConstants();
 
