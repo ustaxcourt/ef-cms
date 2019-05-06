@@ -38,6 +38,13 @@ Petition.errorToMessageMap = {
     'Notice Date is a required field.',
   ],
   ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Ownership Disclosure Statement file size is empty.',
+  ],
   partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
   petitionFileSize: [
@@ -88,6 +95,16 @@ joiValidationDecorator(
       is: 'A business',
       otherwise: joi.optional().allow(null),
       then: joi.required(),
+    }),
+    ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
     }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),

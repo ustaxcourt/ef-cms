@@ -17,6 +17,7 @@ describe('validatePetition', () => {
     expect(errors).toEqual({
       ...omit(Petition.errorToMessageMap, [
         'ownershipDisclosureFile',
+        'ownershipDisclosureFileSize',
         'irsNoticeDate',
         'caseType',
         'petitionFileSize',
@@ -46,6 +47,7 @@ describe('validatePetition', () => {
         'caseType',
         'hasIrsNotice',
         'ownershipDisclosureFile',
+        'ownershipDisclosureFileSize',
         'petitionFile',
         'petitionFileSize',
         'stinFile',
