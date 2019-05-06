@@ -64,7 +64,7 @@ exports.uploadExternalDocument = async ({
   }
 
   if (user.role === 'practitioner') {
-    documentMetadata.practitioner = user;
+    documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
   }
 
   return await applicationContext.getUseCases().fileExternalDocument({

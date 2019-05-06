@@ -107,14 +107,26 @@ export const addDocketEntryHelper = get => {
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
+  let showPractitionerParty = false;
+  let practitionerNames = [];
+  if (caseDetail.practitioners && caseDetail.practitioners.length) {
+    showPractitionerParty = true;
+
+    caseDetail.practitioners.forEach(practitioner => {
+      practitionerNames.push(practitioner.name);
+    });
+  }
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
     partyValidationError,
+    practitionerNames,
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
+    showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty: !!caseDetail.respondent,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
