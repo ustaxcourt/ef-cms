@@ -28,15 +28,15 @@ export const SupportingDocumentForm = connect(
         <div className="blue-container docket-entry-form">
           <div
             className={`ustc-form-group ${
-              validationErrors.supportingDocumentFile ? 'usa-input-error' : ''
+              validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
             <label
-              htmlFor="supporting-document"
-              id="supporting-document-label"
+              htmlFor="primary-document"
+              id="primary-document-label"
               className={
                 'ustc-upload ' +
-                (addDocketEntryHelper.showSupportingDocumentValid
+                (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
               }
@@ -55,7 +55,7 @@ export const SupportingDocumentForm = connect(
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.supportingDocumentFile"
+              bind="validationErrors.primaryDocumentFile"
             />
           </div>
 
