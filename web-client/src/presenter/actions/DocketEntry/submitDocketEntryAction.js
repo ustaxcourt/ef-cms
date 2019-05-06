@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -32,7 +32,19 @@ export const submitDocketEntryAction = async ({
   };
 
   if (documentMetadata.secondaryDocument) {
-    documentMetadata.secondaryDocument.isPaper = true;
+    const COPY_PROPS = [
+      'isPaper',
+      'createdAt',
+      'lodged',
+      'partyPrimary',
+      'partySecondary',
+      'partyRespondent',
+    ];
+
+    documentMetadata.secondaryDocument = {
+      ...documentMetadata.secondaryDocument,
+      ...pick(documentMetadata, COPY_PROPS),
+    };
   }
 
   const caseDetail = await applicationContext
