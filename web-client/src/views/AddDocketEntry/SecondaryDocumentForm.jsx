@@ -9,6 +9,7 @@ import React from 'react';
 export const SecondaryDocumentForm = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
@@ -21,6 +22,7 @@ export const SecondaryDocumentForm = connect(
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
+    constants,
   }) => {
     return (
       <React.Fragment>
@@ -35,7 +37,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'ustc-upload ' +
+                'ustc-upload with-hint' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -46,6 +48,10 @@ export const SecondaryDocumentForm = connect(
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
+            <span className="usa-form-hint">
+              File must be in PDF format (.pdf). Max file size{' '}
+              {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
             <StateDrivenFileInput
               id="secondary-document"
               name="secondaryDocumentFile"
@@ -78,9 +84,9 @@ export const SecondaryDocumentForm = connect(
               id="additional-info"
               type="text"
               aria-describedby="additional-info-label"
-              name="additionalInfo"
+              name="secondaryDocument.additionalInfo"
               autoCapitalize="none"
-              value={form.additionalInfo || ''}
+              value={form.secondaryDocument.additionalInfo || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -96,8 +102,8 @@ export const SecondaryDocumentForm = connect(
             <input
               id="add-to-coversheet"
               type="checkbox"
-              name="addToCoversheet"
-              checked={form.addToCoversheet}
+              name="secondaryDocument.addToCoversheet"
+              checked={form.secondaryDocument.addToCoversheet}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -117,9 +123,9 @@ export const SecondaryDocumentForm = connect(
               id="additional-info2"
               type="text"
               aria-describedby="additional-info2-label"
-              name="additionalInfo2"
+              name="secondaryDocument.additionalInfo2"
               autoCapitalize="none"
-              value={form.additionalInfo2 || ''}
+              value={form.secondaryDocument.additionalInfo2 || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,

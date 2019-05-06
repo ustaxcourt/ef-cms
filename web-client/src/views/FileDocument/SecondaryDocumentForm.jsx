@@ -8,6 +8,7 @@ import React from 'react';
 
 export const SecondaryDocumentForm = connect(
   {
+    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFileDocumentWizardFormValueSequence:
@@ -22,6 +23,7 @@ export const SecondaryDocumentForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
+    constants,
   }) => {
     return (
       <React.Fragment>
@@ -72,7 +74,10 @@ export const SecondaryDocumentForm = connect(
                     <span className="usa-form-hint">(optional)</span>
                   )}
                 </label>
-
+                <span className="usa-form-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
                 <StateDrivenFileInput
                   id="secondary-document"
                   name="secondaryDocumentFile"
@@ -251,7 +256,7 @@ export const SecondaryDocumentForm = connect(
                     htmlFor="secondary-supporting-document-file"
                     id="secondary-supporting-document-file-label"
                     className={
-                      'ustc-upload ' +
+                      'ustc-upload with-hint' +
                       (fileDocumentHelper.showSecondarySupportingDocumentValid
                         ? 'validated'
                         : '')
@@ -262,7 +267,10 @@ export const SecondaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-
+                  <span className="usa-form-hint">
+                    File must be in PDF format (.pdf). Max file size{' '}
+                    {constants.MAX_FILE_SIZE_MB}MB.
+                  </span>
                   <StateDrivenFileInput
                     id="secondary-supporting-document-file"
                     name="secondarySupportingDocumentFile"

@@ -18,6 +18,7 @@ const gotoAddDocketEntry = [
   getCaseAction,
   setCaseAction,
   set(state.form.lodged, false),
+  set(state.form.practitioner, []),
   set(state.wizardStep, 'PrimaryDocumentForm'),
   setCurrentPageAction('AddDocketEntry'),
 ];

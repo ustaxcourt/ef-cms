@@ -509,6 +509,38 @@ export const PrimaryDocumentForm = connect(
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Who Is Filing This Document?</legend>
               <ul className="ustc-vertical-option-list">
+                {addDocketEntryHelper.showPractitionerParty &&
+                  addDocketEntryHelper.practitionerNames.map(
+                    (practitionerName, idx) => {
+                      return (
+                        <li key={idx}>
+                          <input
+                            id={`party-practitioner-${idx}`}
+                            type="checkbox"
+                            name={`practitioner.${idx}`}
+                            checked={
+                              (form.practitioner[idx] &&
+                                form.practitioner[idx].partyPractitioner) ||
+                              false
+                            }
+                            onChange={e => {
+                              updateDocketEntryFormValueSequence({
+                                key: e.target.name,
+                                value: {
+                                  name: practitionerName,
+                                  partyPractitioner: e.target.checked,
+                                },
+                              });
+                              validateDocketEntrySequence();
+                            }}
+                          />
+                          <label htmlFor={`party-practitioner-${idx}`}>
+                            Counsel {practitionerName}
+                          </label>
+                        </li>
+                      );
+                    },
+                  )}
                 <li>
                   <input
                     id="party-primary"
