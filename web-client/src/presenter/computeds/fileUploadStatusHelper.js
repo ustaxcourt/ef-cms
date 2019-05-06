@@ -3,6 +3,9 @@ import { state } from 'cerebral';
 export const fileUploadStatusHelper = get => {
   const timeRemaining = get(state.timeRemaining);
   const percentComplete = get(state.percentComplete);
+  const isCancelable = !!(
+    Number.isFinite(timeRemaining) && percentComplete < 100
+  );
   let statusMessage;
 
   if (percentComplete === 100) {
@@ -20,6 +23,7 @@ export const fileUploadStatusHelper = get => {
   }
 
   return {
+    isCancelable,
     statusMessage,
   };
 };
