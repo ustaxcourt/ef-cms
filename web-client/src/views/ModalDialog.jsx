@@ -85,12 +85,17 @@ export class ModalDialog extends React.Component {
     const { modal } = this;
     return (
       <FocusLock>
-        <dialog open className="modal-screen" onClick={this.blurDialog}>
+        <dialog
+          open
+          className="modal-screen"
+          onClick={this.blurDialog}
+          role="dialog"
+        >
           <div
             className={`modal-dialog ${modal.classNames}`}
-            data-aria-live="assertive"
+            aria-live={this.ariaLiveMode || 'assertive'}
             aria-modal="true"
-            role="dialog"
+            role="status"
             onClick={event => event.stopPropagation()}
           >
             <div className="modal-header">
