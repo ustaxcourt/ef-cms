@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
+import { limitFileSize } from '../limitFileSize';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
