@@ -451,7 +451,7 @@
         "check field #certificate-of-service",
         "wait for element #service-date-month to be visible"
       ]
-    }
+    },
 
     "http://localhost:1234/mock-login?token=seniorattorney&path=/",
     "http://localhost:1234/mock-login?token=seniorattorney&path=/case-detail/101-19",
