@@ -4,6 +4,29 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
+import seal from '../images/ustc_seal.svg';
+
+const getNavigationList = helper => {
+  return (
+    <ul className="usa-nav__primary usa-unstyled-list">
+      {helper.showMessages && (
+        <li className="usa-nav__primary-item">
+          <a href="/">Messages</a>
+        </li>
+      )}
+      {helper.showDocumentQC && (
+        <li className="usa-nav__primary-item">
+          <a href="/">Document QC</a>
+        </li>
+      )}
+      {helper.showMyCases && (
+        <li className="usa-nav__primary-item">
+          <a href="/">My Cases</a>
+        </li>
+      )}
+    </ul>
+  );
+};
 
 export const Header = connect(
   {
@@ -49,9 +72,9 @@ export const Header = connect(
         <header className="usa-header usa-header-extended" role="banner">
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
-              <em className="usa-logo-text">
-                <a href="/">United States Tax Court</a>
-              </em>
+              <a href="/">
+                <img src={seal} width="75" height="75" alt="USTC Seal" />
+              </a>
             </div>
             <button
               className="usa-menu-btn"
@@ -72,6 +95,7 @@ export const Header = connect(
               >
                 <img src={close} alt="close" />
               </button>
+              <div className="usa-nav-primary">{getNavigationList(helper)}</div>
               {user && (
                 <div className="usa-nav-secondary">
                   <ul className="usa-unstyled-list usa-nav-secondary-links">
@@ -81,7 +105,7 @@ export const Header = connect(
                       </li>
                     )}
                     {user.userId && (
-                      <li>
+                      <li className="user-dropdown">
                         Hello, {user.name}
                         <button
                           type="button"
