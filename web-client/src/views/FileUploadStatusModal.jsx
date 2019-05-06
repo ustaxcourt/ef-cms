@@ -43,7 +43,7 @@ class FileUploadStatusComponent extends ModalDialog {
 
 export const FileUploadStatusModal = connect(
   {
-    cancelSequence: sequences.gotoIdleLogoutSequence, // TODO: replace with a real cancel sequence
+    cancelSequence: sequences.cancelFileUploadSequence, // TODO: replace with a real cancel sequence
     helper: state.fileUploadStatusHelper,
     percentComplete: state.percentComplete,
   },
