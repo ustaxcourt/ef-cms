@@ -143,13 +143,19 @@ describe('DocketEntryFactory', () => {
         expect(errors().attachments).toEqual(undefined);
       });
 
+      it('should not require Objections', () => {
+        expect(errors().objections).toEqual(undefined);
+      });
+
       describe('Motion Document', () => {
         beforeEach(() => {
           rawEntity.category = 'Motion';
         });
 
-        it('should not require Objections', () => {
-          expect(errors().objections).toEqual(undefined);
+        it('should require Objections', () => {
+          expect(errors().objections).toEqual(
+            'Enter selection for Objections.',
+          );
         });
       });
     });
