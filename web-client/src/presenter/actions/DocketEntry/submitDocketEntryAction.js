@@ -14,13 +14,13 @@ export const submitDocketEntryAction = async ({
   applicationContext,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
+  const { primaryDocumentFileId, secondaryDocumentFileId } = props;
 
   let documentMetadata = omit(
     {
       ...get(state.form),
     },
-    ['primaryDocumentFile'],
+    ['primaryDocumentFile', 'secondaryDocumentFile'],
   );
 
   documentMetadata = {
@@ -36,6 +36,7 @@ export const submitDocketEntryAction = async ({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
+      secondaryDocumentFileId,
     });
 
   for (let document of caseDetail.documents) {

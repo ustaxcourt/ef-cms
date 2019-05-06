@@ -10,9 +10,9 @@ export const uploadExternalDocumentsAction = async ({
   get,
   applicationContext,
 }) => {
-  const { primaryDocumentFile } = get(state.form);
+  const { primaryDocumentFile, secondaryDocumentFile } = get(state.form);
 
-  const documentFiles = [primaryDocumentFile];
+  const documentFiles = [primaryDocumentFile, secondaryDocumentFile];
 
   const documentIds = await applicationContext
     .getUseCases()
@@ -21,7 +21,7 @@ export const uploadExternalDocumentsAction = async ({
       documentFiles,
     });
 
-  const [primaryDocumentFileId] = documentIds;
+  const [primaryDocumentFileId, secondaryDocumentFileId] = documentIds;
 
-  return { primaryDocumentFileId };
+  return { primaryDocumentFileId, secondaryDocumentFileId };
 };
