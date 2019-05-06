@@ -134,15 +134,29 @@ export default (test, fakeFile) => {
       value: 'Amendment to Seriatim Opening Brief',
     });
 
+    //this section needs to be removed when inclusions validation is fixed
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'exhibits',
-      value: true,
+      value: false,
     });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'attachments',
+      value: false,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'certificateOfService',
+      value: false,
+    });
+    //end section to remove
 
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
       supportingDocument: true,
     });
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('alertSuccess').title).toEqual(
       'Your entry has been added to the docket record.',
@@ -174,9 +188,23 @@ export default (test, fakeFile) => {
       value: false,
     });
 
+    //this section needs to be removed when inclusions validation is fixed
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'exhibits',
+      value: false,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'certificateOfService',
+      value: false,
+    });
+    //end section to remove
+
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('alertSuccess').title).toEqual(
       'Your docket entry is complete.',
