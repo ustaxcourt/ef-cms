@@ -109,8 +109,7 @@ const router = {
       }),
     );
     route('/mock-login...', () => {
-      const query = queryString.parse(location.search);
-      const { token, path } = query;
+      const { token, path } = queryStringDecoder();
       if (token) {
         document.title = `Mock Login ${pageTitleSuffix}`;
         app.getSequence('submitLoginSequence')({ path, token });
