@@ -12,6 +12,7 @@ export const fileExternalDocumentAction = async ({
   get,
   store,
   applicationContext,
+  path,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
 
@@ -35,9 +36,10 @@ export const fileExternalDocumentAction = async ({
     store,
   );
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .uploadExternalDocument({
+  let caseDetail;
+
+  try {
+    caseDetail = await applicationContext.getUseCases().uploadExternalDocument({
       applicationContext,
       documentMetadata,
       onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
@@ -49,6 +51,9 @@ export const fileExternalDocumentAction = async ({
       secondarySupportingDocumentFile,
       supportingDocumentFile,
     });
+  } catch (err) {
+    return path.error();
+  }
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
@@ -60,8 +65,8 @@ export const fileExternalDocumentAction = async ({
     }
   }
 
-  return {
+  return path.success({
     caseDetail,
     caseId: docketNumber,
-  };
+  });
 };
