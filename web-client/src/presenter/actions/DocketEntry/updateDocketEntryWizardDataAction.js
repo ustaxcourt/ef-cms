@@ -30,6 +30,7 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
+      store.set(state.form.secondaryDocument, null);
       break;
     case 'secondaryDocument.eventCode':
       find(
