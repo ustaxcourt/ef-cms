@@ -117,7 +117,8 @@ export const StartCase = connect(
                     </span>
                   </label>
                   <span className="usa-form-hint">
-                    File must be in PDF format (.pdf)
+                    File must be in PDF format (.pdf). Max file size{' '}
+                    {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <input
                     id="petition-file"
@@ -172,7 +173,8 @@ export const StartCase = connect(
                 </span>
               </label>
               <span className="usa-form-hint">
-                File must be in PDF format (.pdf)
+                File must be in PDF format (.pdf). Max file size{' '}
+                {constants.MAX_FILE_SIZE_MB}MB.
               </span>
               <input
                 id="stin-file"
@@ -556,7 +558,8 @@ export const StartCase = connect(
                   </span>
                 </label>
                 <span className="usa-form-hint">
-                  File must be in PDF format (.pdf).
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <input
                   id="ownership-disclosure-file"
@@ -564,11 +567,26 @@ export const StartCase = connect(
                   accept=".pdf"
                   name="ownershipDisclosureFile"
                   onChange={e => {
-                    updatePetitionValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
+                    limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      updatePetitionValueSequence({
+                        key: `${e.target.name}Size`,
+                        value: e.target.files[0].size,
+                      });
+                      validateStartCaseSequence();
                     });
                   }}
+                />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFile"
+                />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFileSize"
                 />
               </div>
             </div>

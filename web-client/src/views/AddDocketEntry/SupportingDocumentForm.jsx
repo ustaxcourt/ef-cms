@@ -95,6 +95,39 @@ export const SupportingDocumentForm = connect(
             />
           </div>
 
+          {addDocketEntryHelper.showSupportingDocumentFreeText && (
+            <div
+              className={`ustc-form-group ${
+                validationErrors.freeText ? 'usa-input-error' : ''
+              }`}
+            >
+              <label htmlFor="free-text" id="free-text-label">
+                Supporting Document Signed By
+              </label>
+              <input
+                id="free-text"
+                type="text"
+                aria-describedby="free-text-label"
+                name="freeText"
+                autoCapitalize="none"
+                value={form.freeText || ''}
+                onChange={e => {
+                  updateDocketEntryFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+                onBlur={() => {
+                  validateDocketEntrySequence();
+                }}
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.freeText"
+              />
+            </div>
+          )}
+
           <SupportingDocumentSelect />
 
           <div className="ustc-form-group">

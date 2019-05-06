@@ -1,6 +1,12 @@
 import { state } from 'cerebral';
 import moment from 'moment';
 
+export const supportingDocumentFreeTextTypes = [
+  'Affidavit in Support',
+  'Declaration in Support',
+  'Unsworn Declaration under Penalty of Perjury in Support',
+];
+
 export const fileDocumentHelper = get => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
@@ -24,11 +30,6 @@ export const fileDocumentHelper = get => {
     },
   );
 
-  const supportingDocumentFreeTextTypes = [
-    'Affidavit in Support',
-    'Declaration in Support',
-    'Unsworn Declaration under Penalty of Perjury in Support',
-  ];
   const objectionDocumentTypes = [
     ...CATEGORY_MAP['Motion'].map(entry => {
       return entry.documentType;

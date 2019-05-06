@@ -41,7 +41,10 @@ function DocketEntryFactory(rawProps) {
       .max('now')
       .required(),
     objections: joi.string(),
-    partyPrimary: joi.boolean().required(),
+    partyPrimary: joi
+      .boolean()
+      .invalid(false)
+      .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
   };
@@ -116,11 +119,21 @@ function DocketEntryFactory(rawProps) {
   ) {
     addToSchema('objections');
   }
+
+  let partyPractitioner = false;
+  if (Array.isArray(rawProps.practitioner)) {
+    rawProps.practitioner.forEach(practitioner => {
+      if (practitioner.partyPractitioner) {
+        partyPractitioner = true;
+      }
+    });
+  }
+
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
     rawProps.partyRespondent !== true &&
-    rawProps.partyPractitioner !== true
+    partyPractitioner !== true
   ) {
     addToSchema('partyPrimary');
   }
