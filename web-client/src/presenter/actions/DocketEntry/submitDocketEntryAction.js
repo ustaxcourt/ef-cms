@@ -25,10 +25,15 @@ export const submitDocketEntryAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
+    isPaper: true,
     docketNumber,
     caseId,
     createdAt: documentMetadata.dateReceived,
   };
+
+  if (documentMetadata.secondaryDocument) {
+    documentMetadata.secondaryDocument.isPaper = true;
+  }
 
   const caseDetail = await applicationContext
     .getUseCases()
