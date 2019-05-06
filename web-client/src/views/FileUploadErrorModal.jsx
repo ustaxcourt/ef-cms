@@ -10,7 +10,6 @@ class FileUploadErrorModalComponent extends ModalDialog {
       cancelLabel: 'Cancel Upload',
       classNames: 'file-upload-error',
       confirmLabel: 'Try Again',
-      title: '', // keep this so voice over will automatically start reading the modal
     };
   }
 

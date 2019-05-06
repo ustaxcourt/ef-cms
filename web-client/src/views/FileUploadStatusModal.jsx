@@ -9,7 +9,6 @@ class FileUploadStatusComponent extends ModalDialog {
     this.ariaLiveMode = 'polite';
     this.modal = {
       classNames: 'file-upload-status-modal',
-      title: '', // keep this so voice over will automatically start reading the modal
     };
   }
 
