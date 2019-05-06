@@ -13,7 +13,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
 
 export const submitPetitionFromPaperSequence = [
@@ -36,7 +35,6 @@ export const submitPetitionFromPaperSequence = [
         success: [
           setCaseAction,
           setPetitionIdAction,
-          unsetFormSubmittingAction,
           closeFileUploadStatusModalAction,
           ...gotoDocumentDetailSequence,
         ],
