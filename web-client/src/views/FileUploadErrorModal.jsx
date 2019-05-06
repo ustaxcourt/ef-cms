@@ -1,5 +1,6 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 class FileUploadErrorModalComponent extends ModalDialog {
@@ -26,6 +27,8 @@ class FileUploadErrorModalComponent extends ModalDialog {
 }
 
 export const FileUploadErrorModal = connect(
-  { cancelSequence: () => null, confirmSequence: () => null },
+  {
+    cancelSequence: sequences.cancelFileUploadSequence,
+  },
   FileUploadErrorModalComponent,
 );

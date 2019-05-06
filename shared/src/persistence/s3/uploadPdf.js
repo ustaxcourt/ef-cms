@@ -24,6 +24,7 @@ exports.uploadPdf = async ({
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
+  throw new Error('gg'); // TODO: remove me
   await applicationContext.getHttpClient().post(policy.url, formData, {
     headers: {
       /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */

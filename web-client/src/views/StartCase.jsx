@@ -2,6 +2,7 @@ import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
@@ -11,6 +12,7 @@ import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const StartCase = connect(
@@ -883,6 +885,9 @@ export const StartCase = connect(
           </button>
         </form>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
+        )}
       </section>
     );
   },
