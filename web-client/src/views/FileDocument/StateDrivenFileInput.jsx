@@ -1,4 +1,5 @@
 import { connect } from '@cerebral/react';
+import { limitFileSize } from '../limitFileSize';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -7,6 +8,7 @@ export const StateDrivenFileInput = connect(
     ariaDescribedBy: props.ariaDescribedBy,
     form: state.form,
     id: props.id,
+    maxFileSize: props.maxFileSize,
     name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validationSequence: sequences[props.validationSequence],
@@ -18,6 +20,7 @@ export const StateDrivenFileInput = connect(
     name,
     updateFormValueSequence,
     validationSequence,
+    maxFileSize,
   }) => {
     let inputRef;
 
@@ -37,11 +40,17 @@ export const StateDrivenFileInput = connect(
             if (form[name]) e.preventDefault();
           }}
           onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.files[0],
+            limitFileSize(e, maxFileSize, () => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.files[0],
+              });
+              updateFormValueSequence({
+                key: `${e.target.name}Size`,
+                value: e.target.files[0],
+              });
+              validationSequence();
             });
-            validationSequence();
           }}
         />
 
