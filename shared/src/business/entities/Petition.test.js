@@ -282,4 +282,81 @@ describe('Petition entity', () => {
       );
     });
   });
+
+  describe('ownership disclosure file size', () => {
+    it('should inform you if ownership disclosure file size is greater than 500MB', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        ownershipDisclosureFile: new File([], 'odsFile.pdf'),
+        ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+      ).toEqual(
+        `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      );
+    });
+
+    it('should inform you if ownership disclosure file size is zero', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        ownershipDisclosureFile: new File([], 'test.pdf'),
+        ownershipDisclosureFileSize: 0,
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+      ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+    });
+
+    it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+      ).toBeUndefined();
+    });
+
+    it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
+      const petition = new Petition({
+        caseType: 'other',
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '3009-10-13',
+        ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
+        partyType:
+          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+      });
+      expect(
+        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+      ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+    });
+  });
 });
