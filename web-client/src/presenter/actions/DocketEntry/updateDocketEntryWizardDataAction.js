@@ -31,7 +31,9 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
-      store.unset(state.form.previousDocument);
+      if (!supporting) {
+        store.unset(state.form.previousDocument);
+      }
       store.unset(state.form.serviceDate);
       store.unset(state.form.trialLocation);
       store.unset(state.form.ordinalValue);

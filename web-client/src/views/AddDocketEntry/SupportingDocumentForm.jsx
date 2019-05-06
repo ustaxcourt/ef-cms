@@ -247,7 +247,14 @@ export const SupportingDocumentForm = connect(
                       Certificate of Service
                     </label>
                     {form.certificateOfService && (
-                      <fieldset className="service-date">
+                      <fieldset
+                        className={`service-date
+                        ${
+                          validationErrors.certificateOfServiceDate
+                            ? 'usa-input-error'
+                            : ''
+                        }`}
+                      >
                         <div className="usa-date-of-birth">
                           <div className="usa-form-group usa-form-group-month">
                             <input
@@ -319,6 +326,10 @@ export const SupportingDocumentForm = connect(
                             />
                           </div>
                         </div>
+                        <Text
+                          className="usa-input-error-message"
+                          bind="validationErrors.certificateOfServiceDate"
+                        />
                       </fieldset>
                     )}
                   </li>
