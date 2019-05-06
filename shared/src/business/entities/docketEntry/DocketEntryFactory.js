@@ -40,7 +40,7 @@ function DocketEntryFactory(rawProps) {
       .iso()
       .max('now')
       .required(),
-    objections: joi.string(),
+    objections: joi.string().required(),
     partyPrimary: joi
       .boolean()
       .invalid(false)
@@ -71,6 +71,7 @@ function DocketEntryFactory(rawProps) {
     exhibits: 'Enter selection for Exhibits.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     lodged: 'Enter selection for Filing Status.',
+    objections: 'Enter selection for Objections.',
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',

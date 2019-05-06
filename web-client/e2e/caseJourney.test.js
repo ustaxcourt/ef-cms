@@ -13,7 +13,7 @@ import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 
-import docketClerkAddsDocketEntry from './journey/docketClerkAddsDocketEntry';
+import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
@@ -165,7 +165,7 @@ describe('Case journey', () => {
   docketClerkForwardWorkItem(test);
   docketClerkViewsDashboardAfterForward(test);
   docketClerkViewsOutboxAfterForward(test);
-  docketClerkAddsDocketEntry(test, fakeFile);
+  docketClerkAddsDocketEntries(test, fakeFile);
 
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);
