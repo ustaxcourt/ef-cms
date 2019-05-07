@@ -8,15 +8,6 @@ const {
 } = require('./authorizationClientService');
 
 describe('Authorization client service', () => {
-  it('should authorize a petitions clerk for getCasesByStatus', () => {
-    expect(
-      isAuthorized(
-        { role: 'petitionsclerk', userId: 'petitionsclerk' },
-        GET_CASES_BY_STATUS,
-      ),
-    ).toBeTruthy();
-  });
-
   it('returns true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
       isAuthorized(
