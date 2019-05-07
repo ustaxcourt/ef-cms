@@ -58,7 +58,7 @@ describe('CaseAssociationRequestFactory', () => {
         rawEntity.certificateOfService = true;
       });
 
-      it('should require certificate of service date be entered', () => {
+      it('should require certificate of service date to be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
           'Enter a Certificate of Service Date.',
         );
@@ -66,7 +66,7 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().certificateOfServiceDate).toEqual(undefined);
       });
 
-      it('should not allow certificate of service date be in the future', () => {
+      it('should not allow certificate of service date to be in the future', () => {
         rawEntity.certificateOfServiceDate = moment()
           .add(1, 'days')
           .format();

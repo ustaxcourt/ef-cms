@@ -6,7 +6,7 @@ const { generateDocumentTitle } = require('./generateDocumentTitleInteractor');
 describe('generateDocumentTitle', () => {
   let applicationContext;
 
-  it('throws an error when an unauthorized user tries to access the use case', async () => {
+  it('generates a document title from passed metadata', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getEntityConstructors: () => ({

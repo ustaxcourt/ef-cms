@@ -8,7 +8,7 @@ const {
 describe('generateCaseAssociationDocumentTitle', () => {
   let applicationContext;
 
-  it('throws an error when an unauthorized user tries to access the use case', async () => {
+  it('generates a document title', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getEntityConstructors: () => ({
